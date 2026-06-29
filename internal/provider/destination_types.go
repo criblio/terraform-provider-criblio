@@ -17,261 +17,264 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type DestinationModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationResourceModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationDataSourceModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationAPIModel struct {
@@ -1897,6 +1900,61 @@ func OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes() map[string]attr.Type 
 	}
 }
 
+type OutputGoogleCloudObservabilityMetadataModel struct {
+	Key   types.String `tfsdk:"key" json:"key,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputGoogleCloudObservabilityMetadataAPIModel struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key":   types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputGoogleCloudObservabilityTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type OutputGoogleCloudObservabilityTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"certificate_name":    types.StringType,
+		"ca_path":             types.StringType,
+		"priv_key_path":       types.StringType,
+		"cert_path":           types.StringType,
+		"passphrase":          types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
 type OutputExabeamRetrySettingsModel struct {
 	Enabled           types.Bool    `tfsdk:"enabled" json:"enabled,omitempty"`
 	InitialBackoffMs  types.Float64 `tfsdk:"initial_backoff_ms" json:"initialBackoffMs,omitempty"`
@@ -1980,18 +2038,59 @@ func OutputKafkaKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputKafkaKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputKafkaKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputKafkaKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputKafkaKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputKafkaKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2251,18 +2350,59 @@ func OutputConfluentCloudKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputConfluentCloudKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputConfluentCloudKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputConfluentCloudKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2440,18 +2580,59 @@ func OutputMskKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputMskKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputMskKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputMskKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputMskKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputMskKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -4705,34 +4886,40 @@ func OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes() map[string]attr.Typ
 }
 
 type OutputLocalSearchStorageStatsDestinationModel struct {
-	URL         types.String `tfsdk:"url" json:"url,omitempty"`
-	Database    types.String `tfsdk:"database" json:"database,omitempty"`
-	TableName   types.String `tfsdk:"table_name" json:"tableName,omitempty"`
-	AuthType    types.String `tfsdk:"auth_type" json:"authType,omitempty"`
-	Username    types.String `tfsdk:"username" json:"username,omitempty"`
-	SqlUsername types.String `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
-	Password    types.String `tfsdk:"password" json:"password,omitempty"`
+	URL                 types.String  `tfsdk:"url" json:"url,omitempty"`
+	Database            types.String  `tfsdk:"database" json:"database,omitempty"`
+	TableName           types.String  `tfsdk:"table_name" json:"tableName,omitempty"`
+	AuthType            types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Username            types.String  `tfsdk:"username" json:"username,omitempty"`
+	SqlUsername         types.String  `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
+	Password            types.String  `tfsdk:"password" json:"password,omitempty"`
+	WaitForAsyncInserts types.Bool    `tfsdk:"wait_for_async_inserts" json:"waitForAsyncInserts,omitempty"`
+	Concurrency         types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 }
 
 type OutputLocalSearchStorageStatsDestinationAPIModel struct {
-	URL         *string `json:"url,omitempty"`
-	Database    *string `json:"database,omitempty"`
-	TableName   *string `json:"tableName,omitempty"`
-	AuthType    *string `json:"authType,omitempty"`
-	Username    *string `json:"username,omitempty"`
-	SqlUsername *string `json:"sqlUsername,omitempty"`
-	Password    *string `json:"password,omitempty"`
+	URL                 *string  `json:"url,omitempty"`
+	Database            *string  `json:"database,omitempty"`
+	TableName           *string  `json:"tableName,omitempty"`
+	AuthType            *string  `json:"authType,omitempty"`
+	Username            *string  `json:"username,omitempty"`
+	SqlUsername         *string  `json:"sqlUsername,omitempty"`
+	Password            *string  `json:"password,omitempty"`
+	WaitForAsyncInserts *bool    `json:"waitForAsyncInserts,omitempty"`
+	Concurrency         *float64 `json:"concurrency,omitempty"`
 }
 
 func OutputLocalSearchStorageStatsDestinationAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"url":          types.StringType,
-		"database":     types.StringType,
-		"table_name":   types.StringType,
-		"auth_type":    types.StringType,
-		"username":     types.StringType,
-		"sql_username": types.StringType,
-		"password":     types.StringType,
+		"url":                    types.StringType,
+		"database":               types.StringType,
+		"table_name":             types.StringType,
+		"auth_type":              types.StringType,
+		"username":               types.StringType,
+		"sql_username":           types.StringType,
+		"password":               types.StringType,
+		"wait_for_async_inserts": types.BoolType,
+		"concurrency":            types.Float64Type,
 	}
 }
 
@@ -6167,6 +6354,15 @@ func (m DestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputGoogleCloudObservability != nil {
+		value, err := m.OutputGoogleCloudObservability.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputGooglePubsub != nil {
 		value, err := m.OutputGooglePubsub.terraformPayload()
 		if err != nil {
@@ -6813,6 +7009,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "google_cloud_logging":
 		m.OutputGoogleCloudLogging = &OutputGoogleCloudLoggingModel{}
 		if err := m.OutputGoogleCloudLogging.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "google_cloud_observability":
+		m.OutputGoogleCloudObservability = &OutputGoogleCloudObservabilityModel{}
+		if err := m.OutputGoogleCloudObservability.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "google_pubsub":
@@ -26183,6 +26384,689 @@ func (m *OutputGoogleCloudLoggingModel) unmarshalPayload(input map[string]any) e
 		m.PayloadExpression = value.(types.String)
 	} else {
 		m.PayloadExpression = types.StringNull()
+	}
+	if item, ok := input["pqStrictOrdering"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqStrictOrdering from API value: %v", err)
+		}
+		m.PqStrictOrdering = value.(types.Bool)
+	} else {
+		m.PqStrictOrdering = types.BoolNull()
+	}
+	if item, ok := input["pqRatePerSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqRatePerSec from API value: %v", err)
+		}
+		m.PqRatePerSec = value.(types.Float64)
+	} else {
+		m.PqRatePerSec = types.Float64Null()
+	}
+	if item, ok := input["pqMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMode from API value: %v", err)
+		}
+		m.PqMode = value.(types.String)
+	} else {
+		m.PqMode = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSize from API value: %v", err)
+		}
+		m.PqMaxBufferSize = value.(types.Float64)
+	} else {
+		m.PqMaxBufferSize = types.Float64Null()
+	}
+	if item, ok := input["pqMaxBackpressureSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBackpressureSec from API value: %v", err)
+		}
+		m.PqMaxBackpressureSec = value.(types.Float64)
+	} else {
+		m.PqMaxBackpressureSec = types.Float64Null()
+	}
+	if item, ok := input["pqMaxFileSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxFileSize from API value: %v", err)
+		}
+		m.PqMaxFileSize = value.(types.String)
+	} else {
+		m.PqMaxFileSize = types.StringNull()
+	}
+	if item, ok := input["pqMaxSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxSize from API value: %v", err)
+		}
+		m.PqMaxSize = value.(types.String)
+	} else {
+		m.PqMaxSize = types.StringNull()
+	}
+	if item, ok := input["pqPath"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqPath from API value: %v", err)
+		}
+		m.PqPath = value.(types.String)
+	} else {
+		m.PqPath = types.StringNull()
+	}
+	if item, ok := input["pqCompress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqCompress from API value: %v", err)
+		}
+		m.PqCompress = value.(types.String)
+	} else {
+		m.PqCompress = types.StringNull()
+	}
+	if item, ok := input["pqOnBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqOnBackpressure from API value: %v", err)
+		}
+		m.PqOnBackpressure = value.(types.String)
+	} else {
+		m.PqOnBackpressure = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSizeBytes"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSizeBytes from API value: %v", err)
+		}
+		m.PqMaxBufferSizeBytes = value.(types.String)
+	} else {
+		m.PqMaxBufferSizeBytes = types.StringNull()
+	}
+	if item, ok := input["pqControls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert pqControls from API value: %v", err)
+		}
+		m.PqControls = value.(types.Map)
+	} else {
+		m.PqControls = types.MapNull(types.StringType)
+	}
+	return nil
+}
+
+type OutputGoogleCloudObservabilityModel struct {
+	ID                       types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                     types.String  `tfsdk:"type" json:"type,omitempty"`
+	Pipeline                 types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields             types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment              types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags               types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Protocol                 types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
+	OtlpVersion              types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
+	Endpoint                 types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	GoogleAuthMethod         types.String  `tfsdk:"google_auth_method" json:"googleAuthMethod,omitempty"`
+	Metadata                 types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	DynamicHeadersEnabled    types.Bool    `tfsdk:"dynamic_headers_enabled" json:"dynamicHeadersEnabled,omitempty"`
+	DynamicHeadersField      types.String  `tfsdk:"dynamic_headers_field" json:"dynamicHeadersField,omitempty"`
+	Concurrency              types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
+	MaxPayloadSizeKB         types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
+	TimeoutSec               types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	FlushPeriodSec           types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
+	FailedRequestLoggingMode types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
+	ConnectionTimeout        types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	KeepAliveTime            types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	TLS                      types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxPayloadEvents         types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
+	OnBackpressure           types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	Description              types.String  `tfsdk:"description" json:"description,omitempty"`
+	Secret                   types.String  `tfsdk:"secret" json:"secret,omitempty"`
+	PqStrictOrdering         types.Bool    `tfsdk:"pq_strict_ordering" json:"pqStrictOrdering,omitempty"`
+	PqRatePerSec             types.Float64 `tfsdk:"pq_rate_per_sec" json:"pqRatePerSec,omitempty"`
+	PqMode                   types.String  `tfsdk:"pq_mode" json:"pqMode,omitempty"`
+	PqMaxBufferSize          types.Float64 `tfsdk:"pq_max_buffer_size" json:"pqMaxBufferSize,omitempty"`
+	PqMaxBackpressureSec     types.Float64 `tfsdk:"pq_max_backpressure_sec" json:"pqMaxBackpressureSec,omitempty"`
+	PqMaxFileSize            types.String  `tfsdk:"pq_max_file_size" json:"pqMaxFileSize,omitempty"`
+	PqMaxSize                types.String  `tfsdk:"pq_max_size" json:"pqMaxSize,omitempty"`
+	PqPath                   types.String  `tfsdk:"pq_path" json:"pqPath,omitempty"`
+	PqCompress               types.String  `tfsdk:"pq_compress" json:"pqCompress,omitempty"`
+	PqOnBackpressure         types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
+	PqMaxBufferSizeBytes     types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls               types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"pipeline":                    types.StringType,
+		"system_fields":               types.ListType{ElemType: types.StringType},
+		"environment":                 types.StringType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"protocol":                    types.StringType,
+		"otlp_version":                types.StringType,
+		"endpoint":                    types.StringType,
+		"google_auth_method":          types.StringType,
+		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}},
+		"dynamic_headers_enabled":     types.BoolType,
+		"dynamic_headers_field":       types.StringType,
+		"concurrency":                 types.Float64Type,
+		"max_payload_size_kb":         types.Float64Type,
+		"timeout_sec":                 types.Float64Type,
+		"flush_period_sec":            types.Float64Type,
+		"failed_request_logging_mode": types.StringType,
+		"connection_timeout":          types.Float64Type,
+		"keep_alive_time":             types.Float64Type,
+		"tls":                         types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityTLSAttrTypes()},
+		"max_payload_events":          types.Float64Type,
+		"on_backpressure":             types.StringType,
+		"description":                 types.StringType,
+		"secret":                      types.StringType,
+		"pq_strict_ordering":          types.BoolType,
+		"pq_rate_per_sec":             types.Float64Type,
+		"pq_mode":                     types.StringType,
+		"pq_max_buffer_size":          types.Float64Type,
+		"pq_max_backpressure_sec":     types.Float64Type,
+		"pq_max_file_size":            types.StringType,
+		"pq_max_size":                 types.StringType,
+		"pq_path":                     types.StringType,
+		"pq_compress":                 types.StringType,
+		"pq_on_backpressure":          types.StringType,
+		"pq_max_buffer_size_bytes":    types.StringType,
+		"pq_controls":                 types.MapType{ElemType: types.StringType},
+	}
+}
+
+func (m OutputGoogleCloudObservabilityModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SystemFields.IsNull() && !m.SystemFields.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SystemFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert system_fields to API value: %v", err)
+		}
+		output["systemFields"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.Protocol.IsNull() && !m.Protocol.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Protocol)
+		if err != nil {
+			return nil, fmt.Errorf("convert protocol to API value: %v", err)
+		}
+		output["protocol"] = value
+	}
+	if !m.OtlpVersion.IsNull() && !m.OtlpVersion.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OtlpVersion)
+		if err != nil {
+			return nil, fmt.Errorf("convert otlp_version to API value: %v", err)
+		}
+		output["otlpVersion"] = value
+	}
+	if !m.Endpoint.IsNull() && !m.Endpoint.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Endpoint)
+		if err != nil {
+			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
+		}
+		output["endpoint"] = value
+	}
+	if !m.GoogleAuthMethod.IsNull() && !m.GoogleAuthMethod.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.GoogleAuthMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert google_auth_method to API value: %v", err)
+		}
+		output["googleAuthMethod"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.DynamicHeadersEnabled.IsNull() && !m.DynamicHeadersEnabled.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_enabled to API value: %v", err)
+		}
+		output["dynamicHeadersEnabled"] = value
+	}
+	if !m.DynamicHeadersField.IsNull() && !m.DynamicHeadersField.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersField)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_field to API value: %v", err)
+		}
+		output["dynamicHeadersField"] = value
+	}
+	if !m.Concurrency.IsNull() && !m.Concurrency.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Concurrency)
+		if err != nil {
+			return nil, fmt.Errorf("convert concurrency to API value: %v", err)
+		}
+		output["concurrency"] = value
+	}
+	if !m.MaxPayloadSizeKB.IsNull() && !m.MaxPayloadSizeKB.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxPayloadSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_payload_size_kb to API value: %v", err)
+		}
+		output["maxPayloadSizeKB"] = value
+	}
+	if !m.TimeoutSec.IsNull() && !m.TimeoutSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TimeoutSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
+		}
+		output["timeoutSec"] = value
+	}
+	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert flush_period_sec to API value: %v", err)
+		}
+		output["flushPeriodSec"] = value
+	}
+	if !m.FailedRequestLoggingMode.IsNull() && !m.FailedRequestLoggingMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FailedRequestLoggingMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert failed_request_logging_mode to API value: %v", err)
+		}
+		output["failedRequestLoggingMode"] = value
+	}
+	if !m.ConnectionTimeout.IsNull() && !m.ConnectionTimeout.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ConnectionTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert connection_timeout to API value: %v", err)
+		}
+		output["connectionTimeout"] = value
+	}
+	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.KeepAliveTime)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_time to API value: %v", err)
+		}
+		output["keepAliveTime"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxPayloadEvents.IsNull() && !m.MaxPayloadEvents.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxPayloadEvents)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_payload_events to API value: %v", err)
+		}
+		output["maxPayloadEvents"] = value
+	}
+	if !m.OnBackpressure.IsNull() && !m.OnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
+		}
+		output["onBackpressure"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Secret)
+		if err != nil {
+			return nil, fmt.Errorf("convert secret to API value: %v", err)
+		}
+		output["secret"] = value
+	}
+	if !m.PqStrictOrdering.IsNull() && !m.PqStrictOrdering.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqStrictOrdering)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_strict_ordering to API value: %v", err)
+		}
+		output["pqStrictOrdering"] = value
+	}
+	if !m.PqRatePerSec.IsNull() && !m.PqRatePerSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqRatePerSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_rate_per_sec to API value: %v", err)
+		}
+		output["pqRatePerSec"] = value
+	}
+	if !m.PqMode.IsNull() && !m.PqMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_mode to API value: %v", err)
+		}
+		output["pqMode"] = value
+	}
+	if !m.PqMaxBufferSize.IsNull() && !m.PqMaxBufferSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size to API value: %v", err)
+		}
+		output["pqMaxBufferSize"] = value
+	}
+	if !m.PqMaxBackpressureSec.IsNull() && !m.PqMaxBackpressureSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBackpressureSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_backpressure_sec to API value: %v", err)
+		}
+		output["pqMaxBackpressureSec"] = value
+	}
+	if !m.PqMaxFileSize.IsNull() && !m.PqMaxFileSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxFileSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_file_size to API value: %v", err)
+		}
+		output["pqMaxFileSize"] = value
+	}
+	if !m.PqMaxSize.IsNull() && !m.PqMaxSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_size to API value: %v", err)
+		}
+		output["pqMaxSize"] = value
+	}
+	if !m.PqPath.IsNull() && !m.PqPath.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_path to API value: %v", err)
+		}
+		output["pqPath"] = value
+	}
+	if !m.PqCompress.IsNull() && !m.PqCompress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqCompress)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_compress to API value: %v", err)
+		}
+		output["pqCompress"] = value
+	}
+	if !m.PqOnBackpressure.IsNull() && !m.PqOnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqOnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_on_backpressure to API value: %v", err)
+		}
+		output["pqOnBackpressure"] = value
+	}
+	if !m.PqMaxBufferSizeBytes.IsNull() && !m.PqMaxBufferSizeBytes.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSizeBytes)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size_bytes to API value: %v", err)
+		}
+		output["pqMaxBufferSizeBytes"] = value
+	}
+	if !m.PqControls.IsNull() && !m.PqControls.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqControls)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
+		}
+		output["pqControls"] = value
+	}
+	return output, nil
+}
+
+func (m *OutputGoogleCloudObservabilityModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["systemFields"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert systemFields from API value: %v", err)
+		}
+		m.SystemFields = value.(types.List)
+	} else {
+		m.SystemFields = types.ListNull(types.StringType)
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["protocol"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert protocol from API value: %v", err)
+		}
+		m.Protocol = value.(types.String)
+	} else {
+		m.Protocol = types.StringNull()
+	}
+	if item, ok := input["otlpVersion"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert otlpVersion from API value: %v", err)
+		}
+		m.OtlpVersion = value.(types.String)
+	} else {
+		m.OtlpVersion = types.StringNull()
+	}
+	if item, ok := input["endpoint"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert endpoint from API value: %v", err)
+		}
+		m.Endpoint = value.(types.String)
+	} else {
+		m.Endpoint = types.StringNull()
+	}
+	if item, ok := input["googleAuthMethod"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert googleAuthMethod from API value: %v", err)
+		}
+		m.GoogleAuthMethod = value.(types.String)
+	} else {
+		m.GoogleAuthMethod = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()})
+	}
+	if item, ok := input["dynamicHeadersEnabled"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersEnabled from API value: %v", err)
+		}
+		m.DynamicHeadersEnabled = value.(types.Bool)
+	} else {
+		m.DynamicHeadersEnabled = types.BoolNull()
+	}
+	if item, ok := input["dynamicHeadersField"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersField from API value: %v", err)
+		}
+		m.DynamicHeadersField = value.(types.String)
+	} else {
+		m.DynamicHeadersField = types.StringNull()
+	}
+	if item, ok := input["concurrency"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert concurrency from API value: %v", err)
+		}
+		m.Concurrency = value.(types.Float64)
+	} else {
+		m.Concurrency = types.Float64Null()
+	}
+	if item, ok := input["maxPayloadSizeKB"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxPayloadSizeKB from API value: %v", err)
+		}
+		m.MaxPayloadSizeKB = value.(types.Float64)
+	} else {
+		m.MaxPayloadSizeKB = types.Float64Null()
+	}
+	if item, ok := input["timeoutSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeoutSec from API value: %v", err)
+		}
+		m.TimeoutSec = value.(types.Float64)
+	} else {
+		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["flushPeriodSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert flushPeriodSec from API value: %v", err)
+		}
+		m.FlushPeriodSec = value.(types.Float64)
+	} else {
+		m.FlushPeriodSec = types.Float64Null()
+	}
+	if item, ok := input["failedRequestLoggingMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert failedRequestLoggingMode from API value: %v", err)
+		}
+		m.FailedRequestLoggingMode = value.(types.String)
+	} else {
+		m.FailedRequestLoggingMode = types.StringNull()
+	}
+	if item, ok := input["connectionTimeout"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert connectionTimeout from API value: %v", err)
+		}
+		m.ConnectionTimeout = value.(types.Float64)
+	} else {
+		m.ConnectionTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTime"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTime from API value: %v", err)
+		}
+		m.KeepAliveTime = value.(types.Float64)
+	} else {
+		m.KeepAliveTime = types.Float64Null()
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(OutputGoogleCloudObservabilityTLSAttrTypes())
+	}
+	if item, ok := input["maxPayloadEvents"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxPayloadEvents from API value: %v", err)
+		}
+		m.MaxPayloadEvents = value.(types.Float64)
+	} else {
+		m.MaxPayloadEvents = types.Float64Null()
+	}
+	if item, ok := input["onBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert onBackpressure from API value: %v", err)
+		}
+		m.OnBackpressure = value.(types.String)
+	} else {
+		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["secret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert secret from API value: %v", err)
+		}
+		m.Secret = value.(types.String)
+	} else {
+		m.Secret = types.StringNull()
 	}
 	if item, ok := input["pqStrictOrdering"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
@@ -53575,6 +54459,7 @@ type OutputClickHouseModel struct {
 	ResponseRetrySettings         types.List    `tfsdk:"response_retry_settings" json:"responseRetrySettings,omitempty"`
 	TimeoutRetrySettings          types.Object  `tfsdk:"timeout_retry_settings" json:"timeoutRetrySettings,omitempty"`
 	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
+	Workload                      types.String  `tfsdk:"workload" json:"workload,omitempty"`
 	DumpFormatErrorsToDisk        types.Bool    `tfsdk:"dump_format_errors_to_disk" json:"dumpFormatErrorsToDisk,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
@@ -53630,6 +54515,7 @@ func OutputClickHouseModelAttrTypes() map[string]attr.Type {
 		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputClickHouseResponseRetrySettingsAttrTypes()}},
 		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputClickHouseTimeoutRetrySettingsAttrTypes()},
 		"response_honor_retry_after_header": types.BoolType,
+		"workload":                          types.StringType,
 		"dump_format_errors_to_disk":        types.BoolType,
 		"on_backpressure":                   types.StringType,
 		"description":                       types.StringType,
@@ -53853,6 +54739,13 @@ func (m OutputClickHouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert response_honor_retry_after_header to API value: %v", err)
 		}
 		output["responseHonorRetryAfterHeader"] = value
+	}
+	if !m.Workload.IsNull() && !m.Workload.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Workload)
+		if err != nil {
+			return nil, fmt.Errorf("convert workload to API value: %v", err)
+		}
+		output["workload"] = value
 	}
 	if !m.DumpFormatErrorsToDisk.IsNull() && !m.DumpFormatErrorsToDisk.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.DumpFormatErrorsToDisk)
@@ -54271,6 +55164,15 @@ func (m *OutputClickHouseModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ResponseHonorRetryAfterHeader = types.BoolNull()
 	}
+	if item, ok := input["workload"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workload from API value: %v", err)
+		}
+		m.Workload = value.(types.String)
+	} else {
+		m.Workload = types.StringNull()
+	}
 	if item, ok := input["dumpFormatErrorsToDisk"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
 		if err != nil {
@@ -54510,6 +55412,7 @@ type OutputLocalSearchStorageModel struct {
 	ResponseRetrySettings         types.List    `tfsdk:"response_retry_settings" json:"responseRetrySettings,omitempty"`
 	TimeoutRetrySettings          types.Object  `tfsdk:"timeout_retry_settings" json:"timeoutRetrySettings,omitempty"`
 	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
+	Workload                      types.String  `tfsdk:"workload" json:"workload,omitempty"`
 	DumpFormatErrorsToDisk        types.Bool    `tfsdk:"dump_format_errors_to_disk" json:"dumpFormatErrorsToDisk,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	StatsDestination              types.Object  `tfsdk:"stats_destination" json:"statsDestination,omitempty"`
@@ -54566,6 +55469,7 @@ func OutputLocalSearchStorageModelAttrTypes() map[string]attr.Type {
 		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageResponseRetrySettingsAttrTypes()}},
 		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes()},
 		"response_honor_retry_after_header": types.BoolType,
+		"workload":                          types.StringType,
 		"dump_format_errors_to_disk":        types.BoolType,
 		"on_backpressure":                   types.StringType,
 		"stats_destination":                 types.ObjectType{AttrTypes: OutputLocalSearchStorageStatsDestinationAttrTypes()},
@@ -54790,6 +55694,13 @@ func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert response_honor_retry_after_header to API value: %v", err)
 		}
 		output["responseHonorRetryAfterHeader"] = value
+	}
+	if !m.Workload.IsNull() && !m.Workload.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Workload)
+		if err != nil {
+			return nil, fmt.Errorf("convert workload to API value: %v", err)
+		}
+		output["workload"] = value
 	}
 	if !m.DumpFormatErrorsToDisk.IsNull() && !m.DumpFormatErrorsToDisk.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.DumpFormatErrorsToDisk)
@@ -55214,6 +56125,15 @@ func (m *OutputLocalSearchStorageModel) unmarshalPayload(input map[string]any) e
 		m.ResponseHonorRetryAfterHeader = value.(types.Bool)
 	} else {
 		m.ResponseHonorRetryAfterHeader = types.BoolNull()
+	}
+	if item, ok := input["workload"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workload from API value: %v", err)
+		}
+		m.Workload = value.(types.String)
+	} else {
+		m.Workload = types.StringNull()
 	}
 	if item, ok := input["dumpFormatErrorsToDisk"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)

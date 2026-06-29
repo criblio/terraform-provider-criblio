@@ -36,6 +36,7 @@ type InstanceSettingsAPIModel struct {
 
 type InstanceSettingsCloudWorkspaceModel struct {
 	AuthToken             types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
+	AuthTokenRotated      types.Bool    `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
 	Compression           types.String  `tfsdk:"compression" json:"compression,omitempty"`
 	ConfigBundles         types.Object  `tfsdk:"config_bundles" json:"configBundles,omitempty"`
 	ConfigHelperSocketDir types.String  `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
@@ -59,6 +60,7 @@ type InstanceSettingsCloudWorkspaceModel struct {
 
 type InstanceSettingsCloudWorkspaceAPIModel struct {
 	AuthToken             *string  `json:"authToken,omitempty"`
+	AuthTokenRotated      *bool    `json:"authTokenRotated,omitempty"`
 	Compression           *string  `json:"compression,omitempty"`
 	ConfigBundles         any      `json:"configBundles,omitempty"`
 	ConfigHelperSocketDir *string  `json:"configHelperSocketDir,omitempty"`
@@ -83,6 +85,7 @@ type InstanceSettingsCloudWorkspaceAPIModel struct {
 func InstanceSettingsCloudWorkspaceAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"auth_token":               types.StringType,
+		"auth_token_rotated":       types.BoolType,
 		"compression":              types.StringType,
 		"config_bundles":           types.ObjectType{AttrTypes: InstanceSettingsCloudWorkspaceConfigBundlesAttrTypes()},
 		"config_helper_socket_dir": types.StringType,
@@ -217,6 +220,7 @@ func InstanceSettingsCloudWorkspaceTLSAttrTypes() map[string]attr.Type {
 
 type InstanceSettingsMasterModel struct {
 	AuthToken             types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
+	AuthTokenRotated      types.Bool    `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
 	Compression           types.String  `tfsdk:"compression" json:"compression,omitempty"`
 	ConfigBundles         types.Object  `tfsdk:"config_bundles" json:"configBundles,omitempty"`
 	ConfigHelperSocketDir types.String  `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
@@ -238,6 +242,7 @@ type InstanceSettingsMasterModel struct {
 
 type InstanceSettingsMasterAPIModel struct {
 	AuthToken             *string  `json:"authToken,omitempty"`
+	AuthTokenRotated      *bool    `json:"authTokenRotated,omitempty"`
 	Compression           *string  `json:"compression,omitempty"`
 	ConfigBundles         any      `json:"configBundles,omitempty"`
 	ConfigHelperSocketDir *string  `json:"configHelperSocketDir,omitempty"`
@@ -260,6 +265,7 @@ type InstanceSettingsMasterAPIModel struct {
 func InstanceSettingsMasterAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"auth_token":               types.StringType,
+		"auth_token_rotated":       types.BoolType,
 		"compression":              types.StringType,
 		"config_bundles":           types.ObjectType{AttrTypes: InstanceSettingsMasterConfigBundlesAttrTypes()},
 		"config_helper_socket_dir": types.StringType,

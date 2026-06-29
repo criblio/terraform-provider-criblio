@@ -360,7 +360,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -720,7 +720,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -1002,7 +1002,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -1175,7 +1175,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -1454,7 +1454,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -1746,7 +1746,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -1992,7 +1992,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -2211,7 +2211,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -2421,7 +2421,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -2622,7 +2622,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -3848,7 +3848,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -4048,7 +4048,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -4219,7 +4219,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -4411,7 +4411,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -4639,7 +4639,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -4906,7 +4906,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -5469,7 +5469,200 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_google_cloud_observability": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Tags for filtering and grouping in @{product}`,
+						ElementType: types.StringType,
+					},
+					"protocol": schema.StringAttribute{
+						Computed: true,
+					},
+					"otlp_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.`,
+					},
+					"google_auth_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Computed: true,
+								},
+								"value": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"dynamic_headers_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Batch event data upon dynamic metadata (whether presented or not)`,
+					},
+					"dynamic_headers_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body sent to Google Cloud Observability`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"connection_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+					},
+					"keep_alive_time": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How often the sender should ping the peer to keep the connection open`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Computed: true,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Computed: true,
+								Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
+								Computed: true,
+							},
+							"max_version": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+					},
+					"secret": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Select or create a stored text secret`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -5602,7 +5795,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -5876,6 +6069,47 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									"disabled": schema.BoolAttribute{
 										Computed: true,
 									},
+									"oauth_enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+									},
 									"credentials_secret": schema.StringAttribute{
 										Computed:    true,
 										Description: `Select or create a secret that references your credentials`,
@@ -6149,7 +6383,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -6287,6 +6521,47 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 									"disabled": schema.BoolAttribute{
 										Computed: true,
 									},
+									"oauth_enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+									},
 									"credentials_secret": schema.StringAttribute{
 										Computed:    true,
 										Description: `Select or create a secret that references your credentials`,
@@ -6516,7 +6791,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -6609,6 +6884,47 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed: true,
+									},
+									"oauth_enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed:    true,
@@ -6845,7 +7161,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -7136,7 +7452,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -7377,7 +7693,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -7598,7 +7914,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -7809,7 +8125,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -8039,7 +8355,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -8206,7 +8522,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -8593,7 +8909,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -8709,7 +9025,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -8825,7 +9141,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -9021,7 +9337,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -9184,7 +9500,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -9442,7 +9758,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -9682,7 +9998,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -9969,7 +10285,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -10212,7 +10528,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -10416,7 +10732,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -10854,7 +11170,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -11140,7 +11456,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -11360,7 +11676,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -11596,7 +11912,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -11890,7 +12206,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -12184,7 +12500,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -12388,7 +12704,7 @@ func (d *DestinationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -12592,7 +12908,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -13639,6 +13955,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"workload": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
 					"dump_format_errors_to_disk": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Log the most recent event that fails to match the table schema`,
@@ -13735,7 +14055,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -13940,6 +14260,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"workload": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
 					"dump_format_errors_to_disk": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Log the most recent event that fails to match the table schema`,
@@ -13971,6 +14295,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							"password": schema.StringAttribute{
 								Computed:  true,
 								Sensitive: true,
+							},
+							"wait_for_async_inserts": schema.BoolAttribute{
+								Computed: true,
+							},
+							"concurrency": schema.Float64Attribute{
+								Computed: true,
 							},
 						},
 					},
@@ -14063,7 +14393,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -14300,7 +14630,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -14570,7 +14900,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -14842,7 +15172,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -15103,7 +15433,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -15355,7 +15685,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
@@ -15812,7 +16142,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,

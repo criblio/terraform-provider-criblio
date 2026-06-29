@@ -50,7 +50,7 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 						},
 						"app_platform_enabled": schema.BoolAttribute{
 							Computed:    true,
-							Description: `Workspace-level App Platform kill switch. When <code>false</code>, App Platform routes are not registered and the UI hides the Apps navigation. Toggling requires a leader restart. Defaults to <code>true</code> when the <code>apps.enabled</code> system setting is unset.`,
+							Description: `Consolidated App Platform enablement status. <code>true</code> only when all of the following are true: the workspace-level App Platform kill switch (<code>apps.enabled</code>) is on, the <code>feature-app-platform</code> feature flag is enabled, the node is running in leader (master) mode, and the license permits App Platform. When <code>false</code>, App Platform routes are not registered and the UI hides the Apps navigation. Acts as the single source of truth for the product UI and Cloud Portal.`,
 						},
 						"build": schema.MapAttribute{
 							Computed:    true,

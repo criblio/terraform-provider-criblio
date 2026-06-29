@@ -78,6 +78,7 @@ variable "aws_secret_key" {
 - `output_google_chronicle` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle))
 - `output_google_cloud_storage` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage))
 - `output_google_cloud_logging` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_logging))
+- `output_google_cloud_observability` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_observability))
 - `output_google_pubsub` (Attributes) (see [below for nested schema](#nestedatt--output_google_pubsub))
 - `output_exabeam` (Attributes) (see [below for nested schema](#nestedatt--output_exabeam))
 - `output_kafka` (Attributes) (see [below for nested schema](#nestedatt--output_kafka))
@@ -201,7 +202,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `username` (String)
 - `password` (String, Sensitive)
@@ -278,7 +279,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
@@ -343,7 +344,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_splunk"></a>
@@ -383,7 +384,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `auth_token` (String, Sensitive) Shared secret token to use when establishing a connection to a Splunk indexer.
 - `text_secret` (String) Select or create a stored text secret
@@ -431,7 +432,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `auth_token` (String, Sensitive) Shared secret token to use when establishing a connection to a Splunk indexer.
 - `text_secret` (String) Select or create a stored text secret
@@ -488,7 +489,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_wiz_hec"></a>
@@ -537,7 +538,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `token` (String, Sensitive) Wiz Defend Auth token
 - `text_secret` (String) Select or create a stored text secret
@@ -582,7 +583,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `auth_token` (String, Sensitive) Optional authentication token to include as part of the connection header
 - `text_secret` (String) Select or create a stored text secret
@@ -630,7 +631,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_signalfx"></a>
@@ -676,7 +677,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_filesystem"></a>
@@ -954,7 +955,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_azure_logs"></a>
@@ -1000,7 +1001,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
 - `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
@@ -1049,7 +1050,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_honeycomb"></a>
@@ -1093,7 +1094,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `team` (String) Team API key where the dataset belongs
 - `text_secret` (String) Select or create a stored text secret
@@ -1138,7 +1139,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_google_chronicle"></a>
@@ -1196,7 +1197,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_google_cloud_storage"></a>
@@ -1334,7 +1335,50 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
+- `pq_controls` (Map of String)
+
+<a id="nestedatt--output_google_cloud_observability"></a>
+### Nested Schema for `output_google_cloud_observability`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String)
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `protocol` (String)
+- `otlp_version` (String)
+- `endpoint` (String) Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.
+- `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.
+- `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_google_cloud_observability--metadata))
+- `dynamic_headers_enabled` (Boolean) Batch event data upon dynamic metadata (whether presented or not)
+- `dynamic_headers_field` (String) When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.
+- `concurrency` (Number) Maximum number of ongoing requests before blocking
+- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body sent to Google Cloud Observability
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `failed_request_logging_mode` (String)
+- `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
+- `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_observability--tls))
+- `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.
+- `on_backpressure` (String)
+- `description` (String)
+- `secret` (String, Sensitive) Select or create a stored text secret
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_google_pubsub"></a>
@@ -1373,7 +1417,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_exabeam"></a>
@@ -1464,7 +1508,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_confluent_cloud"></a>
@@ -1511,7 +1555,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_msk"></a>
@@ -1569,7 +1613,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_elastic"></a>
@@ -1626,7 +1670,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_elastic_cloud"></a>
@@ -1673,7 +1717,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_newrelic"></a>
@@ -1722,7 +1766,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `api_key` (String, Sensitive) New Relic API key. Can be overridden using __newRelic_apiKey field.
 - `text_secret` (String) Select or create a stored text secret
@@ -1771,7 +1815,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `api_key` (String, Sensitive) New Relic API key. Can be overridden using __newRelic_apiKey field.
 - `text_secret` (String) Select or create a stored text secret
@@ -1824,7 +1868,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `username` (String)
 - `password` (String, Sensitive)
@@ -1872,7 +1916,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_minio"></a>
@@ -1972,7 +2016,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_statsd_ext"></a>
@@ -2007,7 +2051,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_graphite"></a>
@@ -2042,7 +2086,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_router"></a>
@@ -2097,7 +2141,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_sqs"></a>
@@ -2144,7 +2188,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_snmp"></a>
@@ -2206,7 +2250,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_datadog"></a>
@@ -2262,7 +2306,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `api_key` (String, Sensitive) Organization's API key in Datadog
 - `text_secret` (String) Select or create a stored text secret
@@ -2314,7 +2358,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_loki"></a>
@@ -2368,7 +2412,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_prometheus"></a>
@@ -2415,7 +2459,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `username` (String)
 - `password` (String, Sensitive)
@@ -2509,7 +2553,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_service_now"></a>
@@ -2566,7 +2610,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_dataset"></a>
@@ -2617,7 +2661,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `api_key` (String, Sensitive) A 'Log Write Access' API key for the DataSet account
 - `text_secret` (String) Select or create a stored text secret
@@ -2662,7 +2706,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_cribl_http"></a>
@@ -2715,7 +2759,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_cribl_search_engine"></a>
@@ -2768,7 +2812,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_humio_hec"></a>
@@ -2815,7 +2859,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem"></a>
@@ -2863,7 +2907,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_dl_s3"></a>
@@ -3109,6 +3153,7 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `workload` (String) Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
 - `on_backpressure` (String)
 - `description` (String)
@@ -3130,7 +3175,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_local_search_storage"></a>
@@ -3168,6 +3213,7 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_local_search_storage--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `workload` (String) Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
 - `on_backpressure` (String)
 - `stats_destination` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination))
@@ -3190,7 +3236,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_xsiam"></a>
@@ -3243,7 +3289,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_netflow"></a>
@@ -3309,7 +3355,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `text_secret` (String) Select or create a stored text secret
@@ -3371,7 +3417,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_sentinel_one_ai_siem"></a>
@@ -3432,7 +3478,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_chronicle"></a>
@@ -3488,7 +3534,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_databricks"></a>
@@ -3590,7 +3636,7 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
 - `pq_controls` (Map of String)
 
 <a id="nestedatt--output_cloudflare_r2"></a>
@@ -4786,6 +4832,30 @@ Optional:
 - `label` (String) Label name
 - `value_expression` (String) JavaScript expression to compute the label's value.
 
+<a id="nestedatt--output_google_cloud_observability--metadata"></a>
+### Nested Schema for `output_google_cloud_observability.metadata`
+
+Optional:
+
+- `key` (String)
+- `value` (String)
+
+<a id="nestedatt--output_google_cloud_observability--tls"></a>
+### Nested Schema for `output_google_cloud_observability.tls`
+
+Optional:
+
+- `disabled` (Boolean)
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
+- `certificate_name` (String) The name of the predefined certificate
+- `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
+- `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
+- `passphrase` (String, Sensitive) Passphrase to use to decrypt private key
+- `min_version` (String)
+- `max_version` (String)
+
 <a id="nestedatt--output_exabeam--retry_settings"></a>
 ### Nested Schema for `output_exabeam.retry_settings`
 
@@ -4826,7 +4896,23 @@ Optional:
 Optional:
 
 - `disabled` (Boolean)
+- `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
+- `token_url` (String) URL of the token endpoint to use for OAuth authentication
+- `client_id` (String) Client ID to use for OAuth authentication
+- `oauth_secret_type` (String)
+- `client_text_secret` (String) Select or create a stored text secret
+- `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--output_kafka--kafka_schema_registry--auth--oauth_params))
+- `identity_pool_id` (String) Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.
+- `logical_cluster` (String) Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.
 - `credentials_secret` (String) Select or create a secret that references your credentials
+
+<a id="nestedatt--output_kafka--kafka_schema_registry--auth--oauth_params"></a>
+### Nested Schema for `output_kafka.kafka_schema_registry.auth.oauth_params`
+
+Optional:
+
+- `name` (String)
+- `value` (String)
 
 <a id="nestedatt--output_kafka--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_kafka.kafka_schema_registry.tls`
@@ -4938,7 +5024,23 @@ Optional:
 Optional:
 
 - `disabled` (Boolean)
+- `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
+- `token_url` (String) URL of the token endpoint to use for OAuth authentication
+- `client_id` (String) Client ID to use for OAuth authentication
+- `oauth_secret_type` (String)
+- `client_text_secret` (String) Select or create a stored text secret
+- `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--output_confluent_cloud--kafka_schema_registry--auth--oauth_params))
+- `identity_pool_id` (String) Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.
+- `logical_cluster` (String) Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.
 - `credentials_secret` (String) Select or create a secret that references your credentials
+
+<a id="nestedatt--output_confluent_cloud--kafka_schema_registry--auth--oauth_params"></a>
+### Nested Schema for `output_confluent_cloud.kafka_schema_registry.auth.oauth_params`
+
+Optional:
+
+- `name` (String)
+- `value` (String)
 
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_confluent_cloud.kafka_schema_registry.tls`
@@ -5016,7 +5118,23 @@ Optional:
 Optional:
 
 - `disabled` (Boolean)
+- `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
+- `token_url` (String) URL of the token endpoint to use for OAuth authentication
+- `client_id` (String) Client ID to use for OAuth authentication
+- `oauth_secret_type` (String)
+- `client_text_secret` (String) Select or create a stored text secret
+- `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--output_msk--kafka_schema_registry--auth--oauth_params))
+- `identity_pool_id` (String) Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.
+- `logical_cluster` (String) Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.
 - `credentials_secret` (String) Select or create a secret that references your credentials
+
+<a id="nestedatt--output_msk--kafka_schema_registry--auth--oauth_params"></a>
+### Nested Schema for `output_msk.kafka_schema_registry.auth.oauth_params`
+
+Optional:
+
+- `name` (String)
+- `value` (String)
 
 <a id="nestedatt--output_msk--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_msk.kafka_schema_registry.tls`
@@ -6020,6 +6138,8 @@ Optional:
 - `username` (String)
 - `sql_username` (String)
 - `password` (String, Sensitive)
+- `wait_for_async_inserts` (Boolean)
+- `concurrency` (Number)
 
 <a id="nestedatt--output_local_search_storage--column_mappings"></a>
 ### Nested Schema for `output_local_search_storage.column_mappings`

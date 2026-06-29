@@ -370,7 +370,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -730,7 +730,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -1012,7 +1012,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -1185,7 +1185,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -1464,7 +1464,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -1756,7 +1756,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -2002,7 +2002,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -2221,7 +2221,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -2431,7 +2431,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -2632,7 +2632,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -3858,7 +3858,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -4058,7 +4058,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -4229,7 +4229,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -4421,7 +4421,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -4649,7 +4649,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -4916,7 +4916,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -5479,7 +5479,200 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								},
+								"pq_controls": schema.MapAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+							},
+						},
+						"output_google_cloud_observability": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping in @{product}`,
+									ElementType: types.StringType,
+								},
+								"protocol": schema.StringAttribute{
+									Computed: true,
+								},
+								"otlp_version": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.`,
+								},
+								"google_auth_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+								"dynamic_headers_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Batch event data upon dynamic metadata (whether presented or not)`,
+								},
+								"dynamic_headers_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body sent to Google Cloud Observability`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed: true,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the sender should ping the peer to keep the connection open`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Sensitive:   true,
+									Description: `Select or create a stored text secret`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed: true,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed: true,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed: true,
+								},
+								"pq_max_buffer_size_bytes": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -5612,7 +5805,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -5886,6 +6079,47 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 												"disabled": schema.BoolAttribute{
 													Computed: true,
 												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
 													Description: `Select or create a secret that references your credentials`,
@@ -6159,7 +6393,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -6297,6 +6531,47 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 												"disabled": schema.BoolAttribute{
 													Computed: true,
 												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
 													Description: `Select or create a secret that references your credentials`,
@@ -6526,7 +6801,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -6619,6 +6894,47 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed: true,
+												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
@@ -6855,7 +7171,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -7146,7 +7462,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -7387,7 +7703,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -7608,7 +7924,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -7819,7 +8135,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -8049,7 +8365,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -8216,7 +8532,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -8603,7 +8919,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -8719,7 +9035,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -8835,7 +9151,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -9031,7 +9347,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -9194,7 +9510,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -9452,7 +9768,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -9692,7 +10008,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -9979,7 +10295,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -10222,7 +10538,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -10426,7 +10742,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -10864,7 +11180,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -11150,7 +11466,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -11370,7 +11686,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -11606,7 +11922,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -11900,7 +12216,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -12194,7 +12510,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -12398,7 +12714,7 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -12602,7 +12918,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -13649,6 +13965,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 								},
+								"workload": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+								},
 								"dump_format_errors_to_disk": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Log the most recent event that fails to match the table schema`,
@@ -13745,7 +14065,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -13950,6 +14270,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Computed:    true,
 									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 								},
+								"workload": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+								},
 								"dump_format_errors_to_disk": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Log the most recent event that fails to match the table schema`,
@@ -13981,6 +14305,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 										"password": schema.StringAttribute{
 											Computed:  true,
 											Sensitive: true,
+										},
+										"wait_for_async_inserts": schema.BoolAttribute{
+											Computed: true,
+										},
+										"concurrency": schema.Float64Attribute{
+											Computed: true,
 										},
 									},
 								},
@@ -14073,7 +14403,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -14310,7 +14640,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -14580,7 +14910,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -14852,7 +15182,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -15113,7 +15443,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -15365,7 +15695,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -15822,7 +16152,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								},
 								"pq_max_buffer_size_bytes": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+									Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 								},
 								"pq_controls": schema.MapAttribute{
 									Computed:    true,
@@ -17906,7 +18236,7 @@ func (d *DestinationsDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3)}))
+			values = append(values, types.ObjectValueMust(DestinationsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "id": item.ID, "pipeline": item.Pipeline, "type": item.Type, "output_default": DestinationsOutputDefaultObjectValue(item.OutputDefault), "output_webhook": DestinationsOutputWebhookObjectValue(item.OutputWebhook), "output_sentinel": DestinationsOutputSentinelObjectValue(item.OutputSentinel), "output_devnull": DestinationsOutputDevnullObjectValue(item.OutputDevnull), "output_syslog": DestinationsOutputSyslogObjectValue(item.OutputSyslog), "output_splunk": DestinationsOutputSplunkObjectValue(item.OutputSplunk), "output_splunk_lb": DestinationsOutputSplunkLbObjectValue(item.OutputSplunkLb), "output_splunk_hec": DestinationsOutputSplunkHecObjectValue(item.OutputSplunkHec), "output_wiz_hec": DestinationsOutputWizHecObjectValue(item.OutputWizHec), "output_tcpjson": DestinationsOutputTcpjsonObjectValue(item.OutputTcpjson), "output_wavefront": DestinationsOutputWavefrontObjectValue(item.OutputWavefront), "output_signalfx": DestinationsOutputSignalfxObjectValue(item.OutputSignalfx), "output_filesystem": DestinationsOutputFilesystemObjectValue(item.OutputFilesystem), "output_s3": DestinationsOutputS3ObjectValue(item.OutputS3), "output_azure_blob": DestinationsOutputAzureBlobObjectValue(item.OutputAzureBlob), "output_azure_data_explorer": DestinationsOutputAzureDataExplorerObjectValue(item.OutputAzureDataExplorer), "output_azure_logs": DestinationsOutputAzureLogsObjectValue(item.OutputAzureLogs), "output_kinesis": DestinationsOutputKinesisObjectValue(item.OutputKinesis), "output_honeycomb": DestinationsOutputHoneycombObjectValue(item.OutputHoneycomb), "output_azure_eventhub": DestinationsOutputAzureEventhubObjectValue(item.OutputAzureEventhub), "output_google_chronicle": DestinationsOutputGoogleChronicleObjectValue(item.OutputGoogleChronicle), "output_google_cloud_storage": DestinationsOutputGoogleCloudStorageObjectValue(item.OutputGoogleCloudStorage), "output_google_cloud_logging": DestinationsOutputGoogleCloudLoggingObjectValue(item.OutputGoogleCloudLogging), "output_google_cloud_observability": DestinationsOutputGoogleCloudObservabilityObjectValue(item.OutputGoogleCloudObservability), "output_google_pubsub": DestinationsOutputGooglePubsubObjectValue(item.OutputGooglePubsub), "output_exabeam": DestinationsOutputExabeamObjectValue(item.OutputExabeam), "output_kafka": DestinationsOutputKafkaObjectValue(item.OutputKafka), "output_confluent_cloud": DestinationsOutputConfluentCloudObjectValue(item.OutputConfluentCloud), "output_msk": DestinationsOutputMskObjectValue(item.OutputMsk), "output_elastic": DestinationsOutputElasticObjectValue(item.OutputElastic), "output_elastic_cloud": DestinationsOutputElasticCloudObjectValue(item.OutputElasticCloud), "output_newrelic": DestinationsOutputNewrelicObjectValue(item.OutputNewrelic), "output_newrelic_events": DestinationsOutputNewrelicEventsObjectValue(item.OutputNewrelicEvents), "output_influxdb": DestinationsOutputInfluxdbObjectValue(item.OutputInfluxdb), "output_cloudwatch": DestinationsOutputCloudwatchObjectValue(item.OutputCloudwatch), "output_minio": DestinationsOutputMinioObjectValue(item.OutputMinio), "output_statsd": DestinationsOutputStatsdObjectValue(item.OutputStatsd), "output_statsd_ext": DestinationsOutputStatsdExtObjectValue(item.OutputStatsdExt), "output_graphite": DestinationsOutputGraphiteObjectValue(item.OutputGraphite), "output_router": DestinationsOutputRouterObjectValue(item.OutputRouter), "output_sns": DestinationsOutputSnsObjectValue(item.OutputSns), "output_sqs": DestinationsOutputSqsObjectValue(item.OutputSqs), "output_snmp": DestinationsOutputSnmpObjectValue(item.OutputSnmp), "output_sumo_logic": DestinationsOutputSumoLogicObjectValue(item.OutputSumoLogic), "output_datadog": DestinationsOutputDatadogObjectValue(item.OutputDatadog), "output_grafana_cloud": DestinationsOutputGrafanaCloudObjectValue(item.OutputGrafanaCloud), "output_loki": DestinationsOutputLokiObjectValue(item.OutputLoki), "output_prometheus": DestinationsOutputPrometheusObjectValue(item.OutputPrometheus), "output_ring": DestinationsOutputRingObjectValue(item.OutputRing), "output_open_telemetry": DestinationsOutputOpenTelemetryObjectValue(item.OutputOpenTelemetry), "output_service_now": DestinationsOutputServiceNowObjectValue(item.OutputServiceNow), "output_dataset": DestinationsOutputDatasetObjectValue(item.OutputDataset), "output_cribl_tcp": DestinationsOutputCriblTcpObjectValue(item.OutputCriblTcp), "output_cribl_http": DestinationsOutputCriblHttpObjectValue(item.OutputCriblHttp), "output_cribl_search_engine": DestinationsOutputCriblSearchEngineObjectValue(item.OutputCriblSearchEngine), "output_humio_hec": DestinationsOutputHumioHecObjectValue(item.OutputHumioHec), "output_crowdstrike_next_gen_siem": DestinationsOutputCrowdstrikeNextGenSiemObjectValue(item.OutputCrowdstrikeNextGenSiem), "output_dl_s3": DestinationsOutputDlS3ObjectValue(item.OutputDlS3), "output_security_lake": DestinationsOutputSecurityLakeObjectValue(item.OutputSecurityLake), "output_cribl_lake": DestinationsOutputCriblLakeObjectValue(item.OutputCriblLake), "output_disk_spool": DestinationsOutputDiskSpoolObjectValue(item.OutputDiskSpool), "output_click_house": DestinationsOutputClickHouseObjectValue(item.OutputClickHouse), "output_local_search_storage": DestinationsOutputLocalSearchStorageObjectValue(item.OutputLocalSearchStorage), "output_xsiam": DestinationsOutputXsiamObjectValue(item.OutputXsiam), "output_netflow": DestinationsOutputNetflowObjectValue(item.OutputNetflow), "output_dynatrace_http": DestinationsOutputDynatraceHttpObjectValue(item.OutputDynatraceHttp), "output_dynatrace_otlp": DestinationsOutputDynatraceOtlpObjectValue(item.OutputDynatraceOtlp), "output_sentinel_one_ai_siem": DestinationsOutputSentinelOneAiSiemObjectValue(item.OutputSentinelOneAiSiem), "output_chronicle": DestinationsOutputChronicleObjectValue(item.OutputChronicle), "output_databricks": DestinationsOutputDatabricksObjectValue(item.OutputDatabricks), "output_microsoft_fabric": DestinationsOutputMicrosoftFabricObjectValue(item.OutputMicrosoftFabric), "output_cloudflare_r2": DestinationsOutputCloudflareR2ObjectValue(item.OutputCloudflareR2), "output_nutanix_objects": DestinationsOutputNutanixObjectsObjectValue(item.OutputNutanixObjects), "output_storj_s3": DestinationsOutputStorjS3ObjectValue(item.OutputStorjS3), "output_alphasoc_s3": DestinationsOutputAlphasocS3ObjectValue(item.OutputAlphasocS3), "output_dell_s3": DestinationsOutputDellS3ObjectValue(item.OutputDellS3), "output_cloudian_s3": DestinationsOutputCloudianS3ObjectValue(item.OutputCloudianS3), "output_scality_s3": DestinationsOutputScalityS3ObjectValue(item.OutputScalityS3), "output_alibaba_cloud_s3": DestinationsOutputAlibabaCloudS3ObjectValue(item.OutputAlibabaCloudS3)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: DestinationsItemAttrTypes()}, values)
@@ -17915,88 +18245,89 @@ func (d *DestinationsDataSource) Read(ctx context.Context, req datasource.ReadRe
 
 func DestinationsItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"environment":                      types.StringType,
-		"id":                               types.StringType,
-		"pipeline":                         types.StringType,
-		"type":                             types.StringType,
-		"output_default":                   types.ObjectType{AttrTypes: OutputDefaultModelAttrTypes()},
-		"output_webhook":                   types.ObjectType{AttrTypes: OutputWebhookModelAttrTypes()},
-		"output_sentinel":                  types.ObjectType{AttrTypes: OutputSentinelModelAttrTypes()},
-		"output_devnull":                   types.ObjectType{AttrTypes: OutputDevnullModelAttrTypes()},
-		"output_syslog":                    types.ObjectType{AttrTypes: OutputSyslogModelAttrTypes()},
-		"output_splunk":                    types.ObjectType{AttrTypes: OutputSplunkModelAttrTypes()},
-		"output_splunk_lb":                 types.ObjectType{AttrTypes: OutputSplunkLbModelAttrTypes()},
-		"output_splunk_hec":                types.ObjectType{AttrTypes: OutputSplunkHecModelAttrTypes()},
-		"output_wiz_hec":                   types.ObjectType{AttrTypes: OutputWizHecModelAttrTypes()},
-		"output_tcpjson":                   types.ObjectType{AttrTypes: OutputTcpjsonModelAttrTypes()},
-		"output_wavefront":                 types.ObjectType{AttrTypes: OutputWavefrontModelAttrTypes()},
-		"output_signalfx":                  types.ObjectType{AttrTypes: OutputSignalfxModelAttrTypes()},
-		"output_filesystem":                types.ObjectType{AttrTypes: OutputFilesystemModelAttrTypes()},
-		"output_s3":                        types.ObjectType{AttrTypes: OutputS3ModelAttrTypes()},
-		"output_azure_blob":                types.ObjectType{AttrTypes: OutputAzureBlobModelAttrTypes()},
-		"output_azure_data_explorer":       types.ObjectType{AttrTypes: OutputAzureDataExplorerModelAttrTypes()},
-		"output_azure_logs":                types.ObjectType{AttrTypes: OutputAzureLogsModelAttrTypes()},
-		"output_kinesis":                   types.ObjectType{AttrTypes: OutputKinesisModelAttrTypes()},
-		"output_honeycomb":                 types.ObjectType{AttrTypes: OutputHoneycombModelAttrTypes()},
-		"output_azure_eventhub":            types.ObjectType{AttrTypes: OutputAzureEventhubModelAttrTypes()},
-		"output_google_chronicle":          types.ObjectType{AttrTypes: OutputGoogleChronicleModelAttrTypes()},
-		"output_google_cloud_storage":      types.ObjectType{AttrTypes: OutputGoogleCloudStorageModelAttrTypes()},
-		"output_google_cloud_logging":      types.ObjectType{AttrTypes: OutputGoogleCloudLoggingModelAttrTypes()},
-		"output_google_pubsub":             types.ObjectType{AttrTypes: OutputGooglePubsubModelAttrTypes()},
-		"output_exabeam":                   types.ObjectType{AttrTypes: OutputExabeamModelAttrTypes()},
-		"output_kafka":                     types.ObjectType{AttrTypes: OutputKafkaModelAttrTypes()},
-		"output_confluent_cloud":           types.ObjectType{AttrTypes: OutputConfluentCloudModelAttrTypes()},
-		"output_msk":                       types.ObjectType{AttrTypes: OutputMskModelAttrTypes()},
-		"output_elastic":                   types.ObjectType{AttrTypes: OutputElasticModelAttrTypes()},
-		"output_elastic_cloud":             types.ObjectType{AttrTypes: OutputElasticCloudModelAttrTypes()},
-		"output_newrelic":                  types.ObjectType{AttrTypes: OutputNewrelicModelAttrTypes()},
-		"output_newrelic_events":           types.ObjectType{AttrTypes: OutputNewrelicEventsModelAttrTypes()},
-		"output_influxdb":                  types.ObjectType{AttrTypes: OutputInfluxdbModelAttrTypes()},
-		"output_cloudwatch":                types.ObjectType{AttrTypes: OutputCloudwatchModelAttrTypes()},
-		"output_minio":                     types.ObjectType{AttrTypes: OutputMinioModelAttrTypes()},
-		"output_statsd":                    types.ObjectType{AttrTypes: OutputStatsdModelAttrTypes()},
-		"output_statsd_ext":                types.ObjectType{AttrTypes: OutputStatsdExtModelAttrTypes()},
-		"output_graphite":                  types.ObjectType{AttrTypes: OutputGraphiteModelAttrTypes()},
-		"output_router":                    types.ObjectType{AttrTypes: OutputRouterModelAttrTypes()},
-		"output_sns":                       types.ObjectType{AttrTypes: OutputSnsModelAttrTypes()},
-		"output_sqs":                       types.ObjectType{AttrTypes: OutputSqsModelAttrTypes()},
-		"output_snmp":                      types.ObjectType{AttrTypes: OutputSnmpModelAttrTypes()},
-		"output_sumo_logic":                types.ObjectType{AttrTypes: OutputSumoLogicModelAttrTypes()},
-		"output_datadog":                   types.ObjectType{AttrTypes: OutputDatadogModelAttrTypes()},
-		"output_grafana_cloud":             types.ObjectType{AttrTypes: OutputGrafanaCloudModelAttrTypes()},
-		"output_loki":                      types.ObjectType{AttrTypes: OutputLokiModelAttrTypes()},
-		"output_prometheus":                types.ObjectType{AttrTypes: OutputPrometheusModelAttrTypes()},
-		"output_ring":                      types.ObjectType{AttrTypes: OutputRingModelAttrTypes()},
-		"output_open_telemetry":            types.ObjectType{AttrTypes: OutputOpenTelemetryModelAttrTypes()},
-		"output_service_now":               types.ObjectType{AttrTypes: OutputServiceNowModelAttrTypes()},
-		"output_dataset":                   types.ObjectType{AttrTypes: OutputDatasetModelAttrTypes()},
-		"output_cribl_tcp":                 types.ObjectType{AttrTypes: OutputCriblTcpModelAttrTypes()},
-		"output_cribl_http":                types.ObjectType{AttrTypes: OutputCriblHttpModelAttrTypes()},
-		"output_cribl_search_engine":       types.ObjectType{AttrTypes: OutputCriblSearchEngineModelAttrTypes()},
-		"output_humio_hec":                 types.ObjectType{AttrTypes: OutputHumioHecModelAttrTypes()},
-		"output_crowdstrike_next_gen_siem": types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemModelAttrTypes()},
-		"output_dl_s3":                     types.ObjectType{AttrTypes: OutputDlS3ModelAttrTypes()},
-		"output_security_lake":             types.ObjectType{AttrTypes: OutputSecurityLakeModelAttrTypes()},
-		"output_cribl_lake":                types.ObjectType{AttrTypes: OutputCriblLakeModelAttrTypes()},
-		"output_disk_spool":                types.ObjectType{AttrTypes: OutputDiskSpoolModelAttrTypes()},
-		"output_click_house":               types.ObjectType{AttrTypes: OutputClickHouseModelAttrTypes()},
-		"output_local_search_storage":      types.ObjectType{AttrTypes: OutputLocalSearchStorageModelAttrTypes()},
-		"output_xsiam":                     types.ObjectType{AttrTypes: OutputXsiamModelAttrTypes()},
-		"output_netflow":                   types.ObjectType{AttrTypes: OutputNetflowModelAttrTypes()},
-		"output_dynatrace_http":            types.ObjectType{AttrTypes: OutputDynatraceHttpModelAttrTypes()},
-		"output_dynatrace_otlp":            types.ObjectType{AttrTypes: OutputDynatraceOtlpModelAttrTypes()},
-		"output_sentinel_one_ai_siem":      types.ObjectType{AttrTypes: OutputSentinelOneAiSiemModelAttrTypes()},
-		"output_chronicle":                 types.ObjectType{AttrTypes: OutputChronicleModelAttrTypes()},
-		"output_databricks":                types.ObjectType{AttrTypes: OutputDatabricksModelAttrTypes()},
-		"output_microsoft_fabric":          types.ObjectType{AttrTypes: OutputMicrosoftFabricModelAttrTypes()},
-		"output_cloudflare_r2":             types.ObjectType{AttrTypes: OutputCloudflareR2ModelAttrTypes()},
-		"output_nutanix_objects":           types.ObjectType{AttrTypes: OutputNutanixObjectsModelAttrTypes()},
-		"output_storj_s3":                  types.ObjectType{AttrTypes: OutputStorjS3ModelAttrTypes()},
-		"output_alphasoc_s3":               types.ObjectType{AttrTypes: OutputAlphasocS3ModelAttrTypes()},
-		"output_dell_s3":                   types.ObjectType{AttrTypes: OutputDellS3ModelAttrTypes()},
-		"output_cloudian_s3":               types.ObjectType{AttrTypes: OutputCloudianS3ModelAttrTypes()},
-		"output_scality_s3":                types.ObjectType{AttrTypes: OutputScalityS3ModelAttrTypes()},
-		"output_alibaba_cloud_s3":          types.ObjectType{AttrTypes: OutputAlibabaCloudS3ModelAttrTypes()},
+		"environment":                       types.StringType,
+		"id":                                types.StringType,
+		"pipeline":                          types.StringType,
+		"type":                              types.StringType,
+		"output_default":                    types.ObjectType{AttrTypes: OutputDefaultModelAttrTypes()},
+		"output_webhook":                    types.ObjectType{AttrTypes: OutputWebhookModelAttrTypes()},
+		"output_sentinel":                   types.ObjectType{AttrTypes: OutputSentinelModelAttrTypes()},
+		"output_devnull":                    types.ObjectType{AttrTypes: OutputDevnullModelAttrTypes()},
+		"output_syslog":                     types.ObjectType{AttrTypes: OutputSyslogModelAttrTypes()},
+		"output_splunk":                     types.ObjectType{AttrTypes: OutputSplunkModelAttrTypes()},
+		"output_splunk_lb":                  types.ObjectType{AttrTypes: OutputSplunkLbModelAttrTypes()},
+		"output_splunk_hec":                 types.ObjectType{AttrTypes: OutputSplunkHecModelAttrTypes()},
+		"output_wiz_hec":                    types.ObjectType{AttrTypes: OutputWizHecModelAttrTypes()},
+		"output_tcpjson":                    types.ObjectType{AttrTypes: OutputTcpjsonModelAttrTypes()},
+		"output_wavefront":                  types.ObjectType{AttrTypes: OutputWavefrontModelAttrTypes()},
+		"output_signalfx":                   types.ObjectType{AttrTypes: OutputSignalfxModelAttrTypes()},
+		"output_filesystem":                 types.ObjectType{AttrTypes: OutputFilesystemModelAttrTypes()},
+		"output_s3":                         types.ObjectType{AttrTypes: OutputS3ModelAttrTypes()},
+		"output_azure_blob":                 types.ObjectType{AttrTypes: OutputAzureBlobModelAttrTypes()},
+		"output_azure_data_explorer":        types.ObjectType{AttrTypes: OutputAzureDataExplorerModelAttrTypes()},
+		"output_azure_logs":                 types.ObjectType{AttrTypes: OutputAzureLogsModelAttrTypes()},
+		"output_kinesis":                    types.ObjectType{AttrTypes: OutputKinesisModelAttrTypes()},
+		"output_honeycomb":                  types.ObjectType{AttrTypes: OutputHoneycombModelAttrTypes()},
+		"output_azure_eventhub":             types.ObjectType{AttrTypes: OutputAzureEventhubModelAttrTypes()},
+		"output_google_chronicle":           types.ObjectType{AttrTypes: OutputGoogleChronicleModelAttrTypes()},
+		"output_google_cloud_storage":       types.ObjectType{AttrTypes: OutputGoogleCloudStorageModelAttrTypes()},
+		"output_google_cloud_logging":       types.ObjectType{AttrTypes: OutputGoogleCloudLoggingModelAttrTypes()},
+		"output_google_cloud_observability": types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityModelAttrTypes()},
+		"output_google_pubsub":              types.ObjectType{AttrTypes: OutputGooglePubsubModelAttrTypes()},
+		"output_exabeam":                    types.ObjectType{AttrTypes: OutputExabeamModelAttrTypes()},
+		"output_kafka":                      types.ObjectType{AttrTypes: OutputKafkaModelAttrTypes()},
+		"output_confluent_cloud":            types.ObjectType{AttrTypes: OutputConfluentCloudModelAttrTypes()},
+		"output_msk":                        types.ObjectType{AttrTypes: OutputMskModelAttrTypes()},
+		"output_elastic":                    types.ObjectType{AttrTypes: OutputElasticModelAttrTypes()},
+		"output_elastic_cloud":              types.ObjectType{AttrTypes: OutputElasticCloudModelAttrTypes()},
+		"output_newrelic":                   types.ObjectType{AttrTypes: OutputNewrelicModelAttrTypes()},
+		"output_newrelic_events":            types.ObjectType{AttrTypes: OutputNewrelicEventsModelAttrTypes()},
+		"output_influxdb":                   types.ObjectType{AttrTypes: OutputInfluxdbModelAttrTypes()},
+		"output_cloudwatch":                 types.ObjectType{AttrTypes: OutputCloudwatchModelAttrTypes()},
+		"output_minio":                      types.ObjectType{AttrTypes: OutputMinioModelAttrTypes()},
+		"output_statsd":                     types.ObjectType{AttrTypes: OutputStatsdModelAttrTypes()},
+		"output_statsd_ext":                 types.ObjectType{AttrTypes: OutputStatsdExtModelAttrTypes()},
+		"output_graphite":                   types.ObjectType{AttrTypes: OutputGraphiteModelAttrTypes()},
+		"output_router":                     types.ObjectType{AttrTypes: OutputRouterModelAttrTypes()},
+		"output_sns":                        types.ObjectType{AttrTypes: OutputSnsModelAttrTypes()},
+		"output_sqs":                        types.ObjectType{AttrTypes: OutputSqsModelAttrTypes()},
+		"output_snmp":                       types.ObjectType{AttrTypes: OutputSnmpModelAttrTypes()},
+		"output_sumo_logic":                 types.ObjectType{AttrTypes: OutputSumoLogicModelAttrTypes()},
+		"output_datadog":                    types.ObjectType{AttrTypes: OutputDatadogModelAttrTypes()},
+		"output_grafana_cloud":              types.ObjectType{AttrTypes: OutputGrafanaCloudModelAttrTypes()},
+		"output_loki":                       types.ObjectType{AttrTypes: OutputLokiModelAttrTypes()},
+		"output_prometheus":                 types.ObjectType{AttrTypes: OutputPrometheusModelAttrTypes()},
+		"output_ring":                       types.ObjectType{AttrTypes: OutputRingModelAttrTypes()},
+		"output_open_telemetry":             types.ObjectType{AttrTypes: OutputOpenTelemetryModelAttrTypes()},
+		"output_service_now":                types.ObjectType{AttrTypes: OutputServiceNowModelAttrTypes()},
+		"output_dataset":                    types.ObjectType{AttrTypes: OutputDatasetModelAttrTypes()},
+		"output_cribl_tcp":                  types.ObjectType{AttrTypes: OutputCriblTcpModelAttrTypes()},
+		"output_cribl_http":                 types.ObjectType{AttrTypes: OutputCriblHttpModelAttrTypes()},
+		"output_cribl_search_engine":        types.ObjectType{AttrTypes: OutputCriblSearchEngineModelAttrTypes()},
+		"output_humio_hec":                  types.ObjectType{AttrTypes: OutputHumioHecModelAttrTypes()},
+		"output_crowdstrike_next_gen_siem":  types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemModelAttrTypes()},
+		"output_dl_s3":                      types.ObjectType{AttrTypes: OutputDlS3ModelAttrTypes()},
+		"output_security_lake":              types.ObjectType{AttrTypes: OutputSecurityLakeModelAttrTypes()},
+		"output_cribl_lake":                 types.ObjectType{AttrTypes: OutputCriblLakeModelAttrTypes()},
+		"output_disk_spool":                 types.ObjectType{AttrTypes: OutputDiskSpoolModelAttrTypes()},
+		"output_click_house":                types.ObjectType{AttrTypes: OutputClickHouseModelAttrTypes()},
+		"output_local_search_storage":       types.ObjectType{AttrTypes: OutputLocalSearchStorageModelAttrTypes()},
+		"output_xsiam":                      types.ObjectType{AttrTypes: OutputXsiamModelAttrTypes()},
+		"output_netflow":                    types.ObjectType{AttrTypes: OutputNetflowModelAttrTypes()},
+		"output_dynatrace_http":             types.ObjectType{AttrTypes: OutputDynatraceHttpModelAttrTypes()},
+		"output_dynatrace_otlp":             types.ObjectType{AttrTypes: OutputDynatraceOtlpModelAttrTypes()},
+		"output_sentinel_one_ai_siem":       types.ObjectType{AttrTypes: OutputSentinelOneAiSiemModelAttrTypes()},
+		"output_chronicle":                  types.ObjectType{AttrTypes: OutputChronicleModelAttrTypes()},
+		"output_databricks":                 types.ObjectType{AttrTypes: OutputDatabricksModelAttrTypes()},
+		"output_microsoft_fabric":           types.ObjectType{AttrTypes: OutputMicrosoftFabricModelAttrTypes()},
+		"output_cloudflare_r2":              types.ObjectType{AttrTypes: OutputCloudflareR2ModelAttrTypes()},
+		"output_nutanix_objects":            types.ObjectType{AttrTypes: OutputNutanixObjectsModelAttrTypes()},
+		"output_storj_s3":                   types.ObjectType{AttrTypes: OutputStorjS3ModelAttrTypes()},
+		"output_alphasoc_s3":                types.ObjectType{AttrTypes: OutputAlphasocS3ModelAttrTypes()},
+		"output_dell_s3":                    types.ObjectType{AttrTypes: OutputDellS3ModelAttrTypes()},
+		"output_cloudian_s3":                types.ObjectType{AttrTypes: OutputCloudianS3ModelAttrTypes()},
+		"output_scality_s3":                 types.ObjectType{AttrTypes: OutputScalityS3ModelAttrTypes()},
+		"output_alibaba_cloud_s3":           types.ObjectType{AttrTypes: OutputAlibabaCloudS3ModelAttrTypes()},
 	}
 }
 
@@ -19214,6 +19545,51 @@ func DestinationsOutputGoogleCloudLoggingObjectValue(item *OutputGoogleCloudLogg
 		"description":                 item.Description,
 		"log_location_expression":     item.LogLocationExpression,
 		"payload_expression":          item.PayloadExpression,
+		"pq_strict_ordering":          item.PqStrictOrdering,
+		"pq_rate_per_sec":             item.PqRatePerSec,
+		"pq_mode":                     item.PqMode,
+		"pq_max_buffer_size":          item.PqMaxBufferSize,
+		"pq_max_backpressure_sec":     item.PqMaxBackpressureSec,
+		"pq_max_file_size":            item.PqMaxFileSize,
+		"pq_max_size":                 item.PqMaxSize,
+		"pq_path":                     item.PqPath,
+		"pq_compress":                 item.PqCompress,
+		"pq_on_backpressure":          item.PqOnBackpressure,
+		"pq_max_buffer_size_bytes":    item.PqMaxBufferSizeBytes,
+		"pq_controls":                 item.PqControls,
+	})
+}
+
+func DestinationsOutputGoogleCloudObservabilityObjectValue(item *OutputGoogleCloudObservabilityModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(OutputGoogleCloudObservabilityModelAttrTypes())
+	}
+	return types.ObjectValueMust(OutputGoogleCloudObservabilityModelAttrTypes(), map[string]attr.Value{
+		"id":                          item.ID,
+		"type":                        item.Type,
+		"pipeline":                    item.Pipeline,
+		"system_fields":               item.SystemFields,
+		"environment":                 item.Environment,
+		"streamtags":                  item.Streamtags,
+		"protocol":                    item.Protocol,
+		"otlp_version":                item.OtlpVersion,
+		"endpoint":                    item.Endpoint,
+		"google_auth_method":          item.GoogleAuthMethod,
+		"metadata":                    item.Metadata,
+		"dynamic_headers_enabled":     item.DynamicHeadersEnabled,
+		"dynamic_headers_field":       item.DynamicHeadersField,
+		"concurrency":                 item.Concurrency,
+		"max_payload_size_kb":         item.MaxPayloadSizeKB,
+		"timeout_sec":                 item.TimeoutSec,
+		"flush_period_sec":            item.FlushPeriodSec,
+		"failed_request_logging_mode": item.FailedRequestLoggingMode,
+		"connection_timeout":          item.ConnectionTimeout,
+		"keep_alive_time":             item.KeepAliveTime,
+		"tls":                         item.TLS,
+		"max_payload_events":          item.MaxPayloadEvents,
+		"on_backpressure":             item.OnBackpressure,
+		"description":                 item.Description,
+		"secret":                      item.Secret,
 		"pq_strict_ordering":          item.PqStrictOrdering,
 		"pq_rate_per_sec":             item.PqRatePerSec,
 		"pq_mode":                     item.PqMode,
@@ -21037,6 +21413,7 @@ func DestinationsOutputClickHouseObjectValue(item *OutputClickHouseModel) attr.V
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"workload":                          item.Workload,
 		"dump_format_errors_to_disk":        item.DumpFormatErrorsToDisk,
 		"on_backpressure":                   item.OnBackpressure,
 		"description":                       item.Description,
@@ -21096,6 +21473,7 @@ func DestinationsOutputLocalSearchStorageObjectValue(item *OutputLocalSearchStor
 		"response_retry_settings":           item.ResponseRetrySettings,
 		"timeout_retry_settings":            item.TimeoutRetrySettings,
 		"response_honor_retry_after_header": item.ResponseHonorRetryAfterHeader,
+		"workload":                          item.Workload,
 		"dump_format_errors_to_disk":        item.DumpFormatErrorsToDisk,
 		"on_backpressure":                   item.OnBackpressure,
 		"stats_destination":                 item.StatsDestination,

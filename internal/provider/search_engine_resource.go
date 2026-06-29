@@ -91,9 +91,10 @@ func (r *SearchEngineResource) Schema(_ context.Context, _ resource.SchemaReques
 				Description: `If <code>true</code>, the lakehouse engine currently owns the main Dataset.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),

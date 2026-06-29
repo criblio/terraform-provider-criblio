@@ -36,7 +36,7 @@ resource "criblio_project" "my_project" {
 
 - `destinations` (List of String)
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier.
 - `subscriptions` (List of String)
 
 ### Optional

@@ -59,6 +59,11 @@ func searchDatasetID(model SearchDatasetModel) string {
 			return model.DatasetAPIHttp.ID.ValueString()
 		}
 	}
+	if model.DatasetAPILogAnalytics != nil {
+		if !model.DatasetAPILogAnalytics.ID.IsNull() && !model.DatasetAPILogAnalytics.ID.IsUnknown() && model.DatasetAPILogAnalytics.ID.ValueString() != "" {
+			return model.DatasetAPILogAnalytics.ID.ValueString()
+		}
+	}
 	if model.DatasetAPIMsgraph != nil {
 		if !model.DatasetAPIMsgraph.ID.IsNull() && !model.DatasetAPIMsgraph.ID.IsUnknown() && model.DatasetAPIMsgraph.ID.ValueString() != "" {
 			return model.DatasetAPIMsgraph.ID.ValueString()

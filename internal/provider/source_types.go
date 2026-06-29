@@ -537,18 +537,59 @@ func InputKafkaKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputKafkaKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputKafkaKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputKafkaKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputKafkaKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputKafkaKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -870,18 +911,59 @@ func InputMskKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputMskKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputMskKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputMskKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputMskKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputMskKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2086,18 +2168,59 @@ func InputConfluentCloudKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputConfluentCloudKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputConfluentCloudKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputConfluentCloudKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2827,6 +2950,23 @@ func InputPrometheusSearchFilterAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputPrometheusHttpDiscoveryHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputPrometheusHttpDiscoveryHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputPrometheusHttpDiscoveryHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
 type InputEdgePrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
@@ -2999,6 +3139,23 @@ func InputEdgePrometheusPodFilterAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"filter":      types.StringType,
 		"description": types.StringType,
+	}
+}
+
+type InputEdgePrometheusHttpDiscoveryHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputEdgePrometheusHttpDiscoveryHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputEdgePrometheusHttpDiscoveryHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -3894,15 +4051,24 @@ func InputEventhubAmqpAuthAttrTypes() map[string]attr.Type {
 
 type InputEventhubAmqpAuthCertificateModel struct {
 	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CertPath        types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	PrivKeyPath     types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase      types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 }
 
 type InputEventhubAmqpAuthCertificateAPIModel struct {
 	CertificateName *string `json:"certificateName,omitempty"`
+	CertPath        *string `json:"certPath,omitempty"`
+	PrivKeyPath     *string `json:"privKeyPath,omitempty"`
+	Passphrase      *string `json:"passphrase,omitempty"`
 }
 
 func InputEventhubAmqpAuthCertificateAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"certificate_name": types.StringType,
+		"cert_path":        types.StringType,
+		"priv_key_path":    types.StringType,
+		"passphrase":       types.StringType,
 	}
 }
 
@@ -10607,6 +10773,7 @@ func InputCloudflareHecPqAttrTypes() map[string]attr.Type {
 type InputCloudflareHecAuthTokensModel struct {
 	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
 	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
@@ -10616,6 +10783,7 @@ type InputCloudflareHecAuthTokensModel struct {
 type InputCloudflareHecAuthTokensAPIModel struct {
 	AuthType              *string  `json:"authType,omitempty"`
 	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
 	Enabled               *bool    `json:"enabled,omitempty"`
 	Description           *string  `json:"description,omitempty"`
 	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
@@ -10626,6 +10794,7 @@ func InputCloudflareHecAuthTokensAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"auth_type":                types.StringType,
 		"token_secret":             types.StringType,
+		"token":                    types.StringType,
 		"enabled":                  types.BoolType,
 		"description":              types.StringType,
 		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
@@ -20613,106 +20782,114 @@ func (m *InputPrometheusRwModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputPrometheusModel struct {
-	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled                types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes            types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled               types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance   types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections             types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                      types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	DimensionList           types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
-	FieldPerMetric          types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
-	DiscoveryType           types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
-	Interval                types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
-	LogLevel                types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
-	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	Timeout                 types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
-	KeepAliveTime           types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
-	JobTimeout              types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
-	MaxMissedKeepAlives     types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
-	Ttl                     types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit    types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	AuthType                types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
-	TargetList              types.List    `tfsdk:"target_list" json:"targetList,omitempty"`
-	RecordType              types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
-	ScrapePort              types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
-	NameList                types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
-	ScrapeProtocol          types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
-	ScrapePath              types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
-	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	UsePublicIp             types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
-	SearchFilter            types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
-	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
-	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	EnableAssumeRole        types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
-	AssumeRoleArn           types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
-	AssumeRoleExternalID    types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
-	DurationSeconds         types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
-	Username                types.String  `tfsdk:"username" json:"username,omitempty"`
-	Password                types.String  `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret       types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	ID                              types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                            types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                        types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                        types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                    types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                     types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                       types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                      types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance           types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                     types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                              types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	DimensionList                   types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
+	FieldPerMetric                  types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
+	DiscoveryType                   types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
+	Interval                        types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	LogLevel                        types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
+	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Timeout                         types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	KeepAliveTime                   types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	JobTimeout                      types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	MaxMissedKeepAlives             types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
+	Ttl                             types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit            types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	Metadata                        types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AuthType                        types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Description                     types.String  `tfsdk:"description" json:"description,omitempty"`
+	TargetList                      types.List    `tfsdk:"target_list" json:"targetList,omitempty"`
+	RecordType                      types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
+	ScrapePort                      types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
+	NameList                        types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
+	ScrapeProtocol                  types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
+	ScrapePath                      types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
+	AwsAuthenticationMethod         types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                       types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                       types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	UsePublicIp                     types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
+	SearchFilter                    types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
+	AwsSecretKey                    types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                          types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                        types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections                types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	EnableAssumeRole                types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn                   types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID            types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds                 types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	HttpDiscoveryURL                types.String  `tfsdk:"http_discovery_url" json:"httpDiscoveryUrl,omitempty"`
+	HttpDiscoveryHeaders            types.List    `tfsdk:"http_discovery_headers" json:"httpDiscoveryHeaders,omitempty"`
+	HttpDiscoveryRejectUnauthorized types.Bool    `tfsdk:"http_discovery_reject_unauthorized" json:"httpDiscoveryRejectUnauthorized,omitempty"`
+	MaxResponseBodySize             types.String  `tfsdk:"max_response_body_size" json:"maxResponseBodySize,omitempty"`
+	Username                        types.String  `tfsdk:"username" json:"username,omitempty"`
+	Password                        types.String  `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret               types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 func InputPrometheusModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                        types.StringType,
-		"type":                      types.StringType,
-		"disabled":                  types.BoolType,
-		"pipeline":                  types.StringType,
-		"send_to_routes":            types.BoolType,
-		"environment":               types.StringType,
-		"pq_enabled":                types.BoolType,
-		"streamtags":                types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputPrometheusCriblSourceProvenanceAttrTypes()},
-		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()}},
-		"pq":                        types.ObjectType{AttrTypes: InputPrometheusPqAttrTypes()},
-		"dimension_list":            types.ListType{ElemType: types.StringType},
-		"field_per_metric":          types.BoolType,
-		"discovery_type":            types.StringType,
-		"interval":                  types.Float64Type,
-		"log_level":                 types.StringType,
-		"reject_unauthorized":       types.BoolType,
-		"timeout":                   types.Float64Type,
-		"keep_alive_time":           types.Float64Type,
-		"job_timeout":               types.StringType,
-		"max_missed_keep_alives":    types.Float64Type,
-		"ttl":                       types.StringType,
-		"ignore_group_jobs_limit":   types.BoolType,
-		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()}},
-		"auth_type":                 types.StringType,
-		"description":               types.StringType,
-		"target_list":               types.ListType{ElemType: types.StringType},
-		"record_type":               types.StringType,
-		"scrape_port":               types.Float64Type,
-		"name_list":                 types.ListType{ElemType: types.StringType},
-		"scrape_protocol":           types.StringType,
-		"scrape_path":               types.StringType,
-		"aws_authentication_method": types.StringType,
-		"aws_api_key":               types.StringType,
-		"aws_secret":                types.StringType,
-		"use_public_ip":             types.BoolType,
-		"search_filter":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()}},
-		"aws_secret_key":            types.StringType,
-		"region":                    types.StringType,
-		"endpoint":                  types.StringType,
-		"reuse_connections":         types.BoolType,
-		"enable_assume_role":        types.BoolType,
-		"assume_role_arn":           types.StringType,
-		"assume_role_external_id":   types.StringType,
-		"duration_seconds":          types.Float64Type,
-		"username":                  types.StringType,
-		"password":                  types.StringType,
-		"credentials_secret":        types.StringType,
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"disabled":                           types.BoolType,
+		"pipeline":                           types.StringType,
+		"send_to_routes":                     types.BoolType,
+		"environment":                        types.StringType,
+		"pq_enabled":                         types.BoolType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":            types.ObjectType{AttrTypes: InputPrometheusCriblSourceProvenanceAttrTypes()},
+		"connections":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()}},
+		"pq":                                 types.ObjectType{AttrTypes: InputPrometheusPqAttrTypes()},
+		"dimension_list":                     types.ListType{ElemType: types.StringType},
+		"field_per_metric":                   types.BoolType,
+		"discovery_type":                     types.StringType,
+		"interval":                           types.Float64Type,
+		"log_level":                          types.StringType,
+		"reject_unauthorized":                types.BoolType,
+		"timeout":                            types.Float64Type,
+		"keep_alive_time":                    types.Float64Type,
+		"job_timeout":                        types.StringType,
+		"max_missed_keep_alives":             types.Float64Type,
+		"ttl":                                types.StringType,
+		"ignore_group_jobs_limit":            types.BoolType,
+		"metadata":                           types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()}},
+		"auth_type":                          types.StringType,
+		"description":                        types.StringType,
+		"target_list":                        types.ListType{ElemType: types.StringType},
+		"record_type":                        types.StringType,
+		"scrape_port":                        types.Float64Type,
+		"name_list":                          types.ListType{ElemType: types.StringType},
+		"scrape_protocol":                    types.StringType,
+		"scrape_path":                        types.StringType,
+		"aws_authentication_method":          types.StringType,
+		"aws_api_key":                        types.StringType,
+		"aws_secret":                         types.StringType,
+		"use_public_ip":                      types.BoolType,
+		"search_filter":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()}},
+		"aws_secret_key":                     types.StringType,
+		"region":                             types.StringType,
+		"endpoint":                           types.StringType,
+		"reuse_connections":                  types.BoolType,
+		"enable_assume_role":                 types.BoolType,
+		"assume_role_arn":                    types.StringType,
+		"assume_role_external_id":            types.StringType,
+		"duration_seconds":                   types.Float64Type,
+		"http_discovery_url":                 types.StringType,
+		"http_discovery_headers":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()}},
+		"http_discovery_reject_unauthorized": types.BoolType,
+		"max_response_body_size":             types.StringType,
+		"username":                           types.StringType,
+		"password":                           types.StringType,
+		"credentials_secret":                 types.StringType,
 	}
 }
 
@@ -21032,6 +21209,34 @@ func (m InputPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert duration_seconds to API value: %v", err)
 		}
 		output["durationSeconds"] = value
+	}
+	if !m.HttpDiscoveryURL.IsNull() && !m.HttpDiscoveryURL.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_url to API value: %v", err)
+		}
+		output["httpDiscoveryUrl"] = value
+	}
+	if !m.HttpDiscoveryHeaders.IsNull() && !m.HttpDiscoveryHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_headers to API value: %v", err)
+		}
+		output["httpDiscoveryHeaders"] = value
+	}
+	if !m.HttpDiscoveryRejectUnauthorized.IsNull() && !m.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryRejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_reject_unauthorized to API value: %v", err)
+		}
+		output["httpDiscoveryRejectUnauthorized"] = value
+	}
+	if !m.MaxResponseBodySize.IsNull() && !m.MaxResponseBodySize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxResponseBodySize)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_response_body_size to API value: %v", err)
+		}
+		output["maxResponseBodySize"] = value
 	}
 	if !m.Username.IsNull() && !m.Username.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Username)
@@ -21463,6 +21668,42 @@ func (m *InputPrometheusModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.DurationSeconds = types.Float64Null()
 	}
+	if item, ok := input["httpDiscoveryUrl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryUrl from API value: %v", err)
+		}
+		m.HttpDiscoveryURL = value.(types.String)
+	} else {
+		m.HttpDiscoveryURL = types.StringNull()
+	}
+	if item, ok := input["httpDiscoveryHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryHeaders from API value: %v", err)
+		}
+		m.HttpDiscoveryHeaders = value.(types.List)
+	} else {
+		m.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()})
+	}
+	if item, ok := input["httpDiscoveryRejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryRejectUnauthorized from API value: %v", err)
+		}
+		m.HttpDiscoveryRejectUnauthorized = value.(types.Bool)
+	} else {
+		m.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["maxResponseBodySize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert maxResponseBodySize from API value: %v", err)
+		}
+		m.MaxResponseBodySize = value.(types.String)
+	} else {
+		m.MaxResponseBodySize = types.StringNull()
+	}
 	if item, ok := input["username"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -21494,106 +21735,114 @@ func (m *InputPrometheusModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputEdgePrometheusModel struct {
-	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled                types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes            types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled               types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance   types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections             types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                      types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	DimensionList           types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
-	FieldPerMetric          types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
-	DiscoveryType           types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
-	Interval                types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
-	Timeout                 types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
-	Persistence             types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
-	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	AuthType                types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
-	Targets                 types.List    `tfsdk:"targets" json:"targets,omitempty"`
-	RecordType              types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
-	ScrapePort              types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
-	NameList                types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
-	ScrapeProtocol          types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
-	ScrapePath              types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
-	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	UsePublicIp             types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
-	SearchFilter            types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
-	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
-	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	EnableAssumeRole        types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
-	AssumeRoleArn           types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
-	AssumeRoleExternalID    types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
-	DurationSeconds         types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
-	ServiceMonitorNamespace types.String  `tfsdk:"service_monitor_namespace" json:"serviceMonitorNamespace,omitempty"`
-	ScrapeProtocolExpr      types.String  `tfsdk:"scrape_protocol_expr" json:"scrapeProtocolExpr,omitempty"`
-	ScrapePortExpr          types.String  `tfsdk:"scrape_port_expr" json:"scrapePortExpr,omitempty"`
-	ScrapePathExpr          types.String  `tfsdk:"scrape_path_expr" json:"scrapePathExpr,omitempty"`
-	PodFilter               types.List    `tfsdk:"pod_filter" json:"podFilter,omitempty"`
-	Username                types.String  `tfsdk:"username" json:"username,omitempty"`
-	Password                types.String  `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret       types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	ID                              types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                            types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                        types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                        types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                    types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                     types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                       types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                      types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance           types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                     types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                              types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	DimensionList                   types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
+	FieldPerMetric                  types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
+	DiscoveryType                   types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
+	Interval                        types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Timeout                         types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	Persistence                     types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
+	Metadata                        types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AuthType                        types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Description                     types.String  `tfsdk:"description" json:"description,omitempty"`
+	Targets                         types.List    `tfsdk:"targets" json:"targets,omitempty"`
+	RecordType                      types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
+	ScrapePort                      types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
+	NameList                        types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
+	ScrapeProtocol                  types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
+	ScrapePath                      types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
+	AwsAuthenticationMethod         types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                       types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                       types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	UsePublicIp                     types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
+	SearchFilter                    types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
+	AwsSecretKey                    types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                          types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                        types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections                types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	EnableAssumeRole                types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn                   types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID            types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds                 types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	ServiceMonitorNamespace         types.String  `tfsdk:"service_monitor_namespace" json:"serviceMonitorNamespace,omitempty"`
+	ScrapeProtocolExpr              types.String  `tfsdk:"scrape_protocol_expr" json:"scrapeProtocolExpr,omitempty"`
+	ScrapePortExpr                  types.String  `tfsdk:"scrape_port_expr" json:"scrapePortExpr,omitempty"`
+	ScrapePathExpr                  types.String  `tfsdk:"scrape_path_expr" json:"scrapePathExpr,omitempty"`
+	PodFilter                       types.List    `tfsdk:"pod_filter" json:"podFilter,omitempty"`
+	HttpDiscoveryURL                types.String  `tfsdk:"http_discovery_url" json:"httpDiscoveryUrl,omitempty"`
+	HttpDiscoveryHeaders            types.List    `tfsdk:"http_discovery_headers" json:"httpDiscoveryHeaders,omitempty"`
+	HttpDiscoveryRejectUnauthorized types.Bool    `tfsdk:"http_discovery_reject_unauthorized" json:"httpDiscoveryRejectUnauthorized,omitempty"`
+	MaxResponseBodySize             types.String  `tfsdk:"max_response_body_size" json:"maxResponseBodySize,omitempty"`
+	Username                        types.String  `tfsdk:"username" json:"username,omitempty"`
+	Password                        types.String  `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret               types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 func InputEdgePrometheusModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                        types.StringType,
-		"type":                      types.StringType,
-		"disabled":                  types.BoolType,
-		"pipeline":                  types.StringType,
-		"send_to_routes":            types.BoolType,
-		"environment":               types.StringType,
-		"pq_enabled":                types.BoolType,
-		"streamtags":                types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputEdgePrometheusCriblSourceProvenanceAttrTypes()},
-		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()}},
-		"pq":                        types.ObjectType{AttrTypes: InputEdgePrometheusPqAttrTypes()},
-		"dimension_list":            types.ListType{ElemType: types.StringType},
-		"field_per_metric":          types.BoolType,
-		"discovery_type":            types.StringType,
-		"interval":                  types.Float64Type,
-		"timeout":                   types.Float64Type,
-		"persistence":               types.ObjectType{AttrTypes: InputEdgePrometheusPersistenceAttrTypes()},
-		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()}},
-		"auth_type":                 types.StringType,
-		"description":               types.StringType,
-		"targets":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()}},
-		"record_type":               types.StringType,
-		"scrape_port":               types.Float64Type,
-		"name_list":                 types.ListType{ElemType: types.StringType},
-		"scrape_protocol":           types.StringType,
-		"scrape_path":               types.StringType,
-		"aws_authentication_method": types.StringType,
-		"aws_api_key":               types.StringType,
-		"aws_secret":                types.StringType,
-		"use_public_ip":             types.BoolType,
-		"search_filter":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()}},
-		"aws_secret_key":            types.StringType,
-		"region":                    types.StringType,
-		"endpoint":                  types.StringType,
-		"reuse_connections":         types.BoolType,
-		"reject_unauthorized":       types.BoolType,
-		"enable_assume_role":        types.BoolType,
-		"assume_role_arn":           types.StringType,
-		"assume_role_external_id":   types.StringType,
-		"duration_seconds":          types.Float64Type,
-		"service_monitor_namespace": types.StringType,
-		"scrape_protocol_expr":      types.StringType,
-		"scrape_port_expr":          types.StringType,
-		"scrape_path_expr":          types.StringType,
-		"pod_filter":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()}},
-		"username":                  types.StringType,
-		"password":                  types.StringType,
-		"credentials_secret":        types.StringType,
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"disabled":                           types.BoolType,
+		"pipeline":                           types.StringType,
+		"send_to_routes":                     types.BoolType,
+		"environment":                        types.StringType,
+		"pq_enabled":                         types.BoolType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":            types.ObjectType{AttrTypes: InputEdgePrometheusCriblSourceProvenanceAttrTypes()},
+		"connections":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()}},
+		"pq":                                 types.ObjectType{AttrTypes: InputEdgePrometheusPqAttrTypes()},
+		"dimension_list":                     types.ListType{ElemType: types.StringType},
+		"field_per_metric":                   types.BoolType,
+		"discovery_type":                     types.StringType,
+		"interval":                           types.Float64Type,
+		"timeout":                            types.Float64Type,
+		"persistence":                        types.ObjectType{AttrTypes: InputEdgePrometheusPersistenceAttrTypes()},
+		"metadata":                           types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()}},
+		"auth_type":                          types.StringType,
+		"description":                        types.StringType,
+		"targets":                            types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()}},
+		"record_type":                        types.StringType,
+		"scrape_port":                        types.Float64Type,
+		"name_list":                          types.ListType{ElemType: types.StringType},
+		"scrape_protocol":                    types.StringType,
+		"scrape_path":                        types.StringType,
+		"aws_authentication_method":          types.StringType,
+		"aws_api_key":                        types.StringType,
+		"aws_secret":                         types.StringType,
+		"use_public_ip":                      types.BoolType,
+		"search_filter":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()}},
+		"aws_secret_key":                     types.StringType,
+		"region":                             types.StringType,
+		"endpoint":                           types.StringType,
+		"reuse_connections":                  types.BoolType,
+		"reject_unauthorized":                types.BoolType,
+		"enable_assume_role":                 types.BoolType,
+		"assume_role_arn":                    types.StringType,
+		"assume_role_external_id":            types.StringType,
+		"duration_seconds":                   types.Float64Type,
+		"service_monitor_namespace":          types.StringType,
+		"scrape_protocol_expr":               types.StringType,
+		"scrape_port_expr":                   types.StringType,
+		"scrape_path_expr":                   types.StringType,
+		"pod_filter":                         types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()}},
+		"http_discovery_url":                 types.StringType,
+		"http_discovery_headers":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()}},
+		"http_discovery_reject_unauthorized": types.BoolType,
+		"max_response_body_size":             types.StringType,
+		"username":                           types.StringType,
+		"password":                           types.StringType,
+		"credentials_secret":                 types.StringType,
 	}
 }
 
@@ -21913,6 +22162,34 @@ func (m InputEdgePrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pod_filter to API value: %v", err)
 		}
 		output["podFilter"] = value
+	}
+	if !m.HttpDiscoveryURL.IsNull() && !m.HttpDiscoveryURL.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_url to API value: %v", err)
+		}
+		output["httpDiscoveryUrl"] = value
+	}
+	if !m.HttpDiscoveryHeaders.IsNull() && !m.HttpDiscoveryHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_headers to API value: %v", err)
+		}
+		output["httpDiscoveryHeaders"] = value
+	}
+	if !m.HttpDiscoveryRejectUnauthorized.IsNull() && !m.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryRejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_reject_unauthorized to API value: %v", err)
+		}
+		output["httpDiscoveryRejectUnauthorized"] = value
+	}
+	if !m.MaxResponseBodySize.IsNull() && !m.MaxResponseBodySize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxResponseBodySize)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_response_body_size to API value: %v", err)
+		}
+		output["maxResponseBodySize"] = value
 	}
 	if !m.Username.IsNull() && !m.Username.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Username)
@@ -22343,6 +22620,42 @@ func (m *InputEdgePrometheusModel) unmarshalPayload(input map[string]any) error 
 		m.PodFilter = value.(types.List)
 	} else {
 		m.PodFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()})
+	}
+	if item, ok := input["httpDiscoveryUrl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryUrl from API value: %v", err)
+		}
+		m.HttpDiscoveryURL = value.(types.String)
+	} else {
+		m.HttpDiscoveryURL = types.StringNull()
+	}
+	if item, ok := input["httpDiscoveryHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryHeaders from API value: %v", err)
+		}
+		m.HttpDiscoveryHeaders = value.(types.List)
+	} else {
+		m.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()})
+	}
+	if item, ok := input["httpDiscoveryRejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryRejectUnauthorized from API value: %v", err)
+		}
+		m.HttpDiscoveryRejectUnauthorized = value.(types.Bool)
+	} else {
+		m.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["maxResponseBodySize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert maxResponseBodySize from API value: %v", err)
+		}
+		m.MaxResponseBodySize = value.(types.String)
+	} else {
+		m.MaxResponseBodySize = types.StringNull()
 	}
 	if item, ok := input["username"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -30778,6 +31091,8 @@ type InputKubeLogsModel struct {
 	Interval              types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
 	Rules                 types.List    `tfsdk:"rules" json:"rules,omitempty"`
 	Timestamps            types.Bool    `tfsdk:"timestamps" json:"timestamps,omitempty"`
+	LineBufferLimit       types.Float64 `tfsdk:"line_buffer_limit" json:"lineBufferLimit,omitempty"`
+	LBDisableAssembly     types.Bool    `tfsdk:"__lbdisable_assembly" json:"__LBDisableAssembly,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Persistence           types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
@@ -30802,6 +31117,8 @@ func InputKubeLogsModelAttrTypes() map[string]attr.Type {
 		"interval":                types.Float64Type,
 		"rules":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()}},
 		"timestamps":              types.BoolType,
+		"line_buffer_limit":       types.Float64Type,
+		"__lbdisable_assembly":    types.BoolType,
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}},
 		"persistence":             types.ObjectType{AttrTypes: InputKubeLogsPersistenceAttrTypes()},
 		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
@@ -30910,6 +31227,20 @@ func (m InputKubeLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timestamps to API value: %v", err)
 		}
 		output["timestamps"] = value
+	}
+	if !m.LineBufferLimit.IsNull() && !m.LineBufferLimit.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.LineBufferLimit)
+		if err != nil {
+			return nil, fmt.Errorf("convert line_buffer_limit to API value: %v", err)
+		}
+		output["lineBufferLimit"] = value
+	}
+	if !m.LBDisableAssembly.IsNull() && !m.LBDisableAssembly.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.LBDisableAssembly)
+		if err != nil {
+			return nil, fmt.Errorf("convert __lbdisable_assembly to API value: %v", err)
+		}
+		output["__LBDisableAssembly"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
@@ -31082,6 +31413,24 @@ func (m *InputKubeLogsModel) unmarshalPayload(input map[string]any) error {
 		m.Timestamps = value.(types.Bool)
 	} else {
 		m.Timestamps = types.BoolNull()
+	}
+	if item, ok := input["lineBufferLimit"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert lineBufferLimit from API value: %v", err)
+		}
+		m.LineBufferLimit = value.(types.Float64)
+	} else {
+		m.LineBufferLimit = types.Float64Null()
+	}
+	if item, ok := input["__LBDisableAssembly"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert __LBDisableAssembly from API value: %v", err)
+		}
+		m.LBDisableAssembly = value.(types.Bool)
+	} else {
+		m.LBDisableAssembly = types.BoolNull()
 	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}})

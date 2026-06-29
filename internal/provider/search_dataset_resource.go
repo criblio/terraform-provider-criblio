@@ -112,13 +112,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -130,7 +130,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -180,7 +180,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -311,13 +311,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -329,7 +329,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -379,7 +379,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -510,13 +510,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -528,7 +528,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -578,7 +578,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -696,10 +696,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Description: `Column holding event time.`,
 					},
 					"timestamp_field_contents": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Encoding of <code>timestampField</code> values.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -731,13 +730,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -749,7 +748,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -799,7 +798,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -928,13 +927,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -946,7 +945,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -996,7 +995,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -1135,13 +1134,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -1153,7 +1152,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -1203,7 +1202,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -1326,13 +1325,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -1344,7 +1343,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -1394,7 +1393,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -1517,13 +1516,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -1535,7 +1534,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -1585,7 +1584,209 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
+							},
+							"field_list": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.`,
+								ElementType: types.StringType,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Details from the most recent acceleration scan.`,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the earliest event that was observed during the scan (seconds).`,
+									},
+									"finished_at": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) when the acceleration run finished (milliseconds).`,
+									},
+									"latest_scanned_time": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Timestamp (in Unix time) for the latest event that was observed during the scan (seconds).`,
+									},
+									"object_count": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Number of objects on the acceleration manifest after the scan completed.`,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Identifier for the Dataset Provider that the Dataset uses.`,
+					},
+					"search_version": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Search execution version for the Dataset.`,
+					},
+					"tags": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional comma-separated tags for organizing and filtering Datasets.`,
+					},
+					"view_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Lakehouse cache view name, when applicable.`,
+					},
+				},
+			},
+			"dataset_api_log_analytics": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"type": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Default:  stringdefault.StaticString("api_log_analytics"),
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_log_analytics"),
+						},
+					},
+					"table": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Table name or KQL query to use as the data source.`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column holding event time.`,
+					},
+					"timestamp_field_contents": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Event breaker rulesets that are applied when reading events from the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"cache_connection_info": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache.`,
+						Attributes: map[string]schema.Attribute{
+							"accelerated_fields": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Accelerated fields (materialized columns) for the cache connection.`,
+								ElementType: types.StringType,
+							},
+							"backfill_status": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Backfill status for data being loaded into the cache.`,
+							},
+							"cache_ref": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
+							},
+							"created_at": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
+							},
+							"lakehouse_connection_type": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.`,
+							},
+							"migration_query_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
+							},
+							"retention_in_days": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retention period for the Lakehouse cache connection, in days.`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Brief description of the Dataset.`,
+					},
+					"exclude_internal_fields": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.`,
+					},
+					"filter": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Filter expression that is evaluated against each object path to determine inclusion.`,
+					},
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique identifier for the Dataset.`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Dataset acceleration and metadata collection configuration.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Rolling time window that defines how far back acceleration scans.`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -1708,13 +1909,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -1726,7 +1927,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -1776,7 +1977,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -1899,13 +2100,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -1917,7 +2118,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -1967,7 +2168,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -2096,13 +2297,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -2114,7 +2315,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -2164,7 +2365,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -2287,13 +2488,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -2305,7 +2506,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -2355,7 +2556,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -2478,13 +2679,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -2496,7 +2697,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -2546,7 +2747,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -2663,13 +2864,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -2681,7 +2882,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -2731,7 +2932,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -2866,13 +3067,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -2884,7 +3085,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -2934,7 +3135,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -3074,13 +3275,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -3092,7 +3293,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -3136,7 +3337,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -3253,13 +3454,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -3271,7 +3472,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -3321,7 +3522,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -3471,13 +3672,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -3489,7 +3690,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -3533,7 +3734,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -3650,13 +3851,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -3668,7 +3869,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -3718,7 +3919,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -3841,13 +4042,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -3859,7 +4060,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -3909,7 +4110,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -4026,13 +4227,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -4044,7 +4245,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -4094,7 +4295,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -4280,13 +4481,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -4298,7 +4499,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -4342,7 +4543,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -4477,13 +4678,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -4495,7 +4696,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -4545,7 +4746,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -4662,13 +4863,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -4680,7 +4881,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -4730,7 +4931,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -4960,13 +5161,13 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Identifier of the Lakehouse cache referenced by the Dataset.`,
+								Description: `Unique identifier for the Lakehouse cache referenced by the Dataset.`,
 							},
 							"created_at": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).`,
+								Description: `Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.`,
 							},
 							"lakehouse_connection_type": schema.StringAttribute{
 								Required:    false,
@@ -4978,7 +5179,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.`,
+								Description: `Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.`,
 							},
 							"retention_in_days": schema.Float64Attribute{
 								Required:    false,
@@ -5028,7 +5229,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
-								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.`,
+								Description: `If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.`,
 							},
 							"field_list": schema.ListAttribute{
 								Required:    false,
@@ -5827,6 +6028,86 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIHttp.ViewName = api.DatasetAPIHttp.ViewName
 		} else if state.DatasetAPIHttp.ViewName.IsNull() || state.DatasetAPIHttp.ViewName.IsUnknown() {
 			state.DatasetAPIHttp.ViewName = types.StringNull()
+		}
+	}
+	if api.DatasetAPILogAnalytics != nil {
+		if state.DatasetAPILogAnalytics == nil {
+			state.DatasetAPILogAnalytics = &DatasetAPILogAnalyticsModel{}
+		}
+		if !api.DatasetAPILogAnalytics.Type.IsNull() && !api.DatasetAPILogAnalytics.Type.IsUnknown() {
+			state.DatasetAPILogAnalytics.Type = api.DatasetAPILogAnalytics.Type
+		} else if state.DatasetAPILogAnalytics.Type.IsNull() || state.DatasetAPILogAnalytics.Type.IsUnknown() {
+			state.DatasetAPILogAnalytics.Type = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.Table.IsNull() && !api.DatasetAPILogAnalytics.Table.IsUnknown() {
+			state.DatasetAPILogAnalytics.Table = api.DatasetAPILogAnalytics.Table
+		} else if state.DatasetAPILogAnalytics.Table.IsNull() || state.DatasetAPILogAnalytics.Table.IsUnknown() {
+			state.DatasetAPILogAnalytics.Table = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.TimestampField.IsNull() && !api.DatasetAPILogAnalytics.TimestampField.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimestampField = api.DatasetAPILogAnalytics.TimestampField
+		} else if state.DatasetAPILogAnalytics.TimestampField.IsNull() || state.DatasetAPILogAnalytics.TimestampField.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimestampField = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.TimestampFieldContents.IsNull() && !api.DatasetAPILogAnalytics.TimestampFieldContents.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimestampFieldContents = api.DatasetAPILogAnalytics.TimestampFieldContents
+		} else if state.DatasetAPILogAnalytics.TimestampFieldContents.IsNull() || state.DatasetAPILogAnalytics.TimestampFieldContents.IsUnknown() {
+			state.DatasetAPILogAnalytics.TimestampFieldContents = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.BreakerRulesets.IsNull() && !api.DatasetAPILogAnalytics.BreakerRulesets.IsUnknown() {
+			state.DatasetAPILogAnalytics.BreakerRulesets = api.DatasetAPILogAnalytics.BreakerRulesets
+		} else if state.DatasetAPILogAnalytics.BreakerRulesets.IsNull() || state.DatasetAPILogAnalytics.BreakerRulesets.IsUnknown() {
+			state.DatasetAPILogAnalytics.BreakerRulesets = types.ListNull(types.StringType)
+		}
+		if !api.DatasetAPILogAnalytics.CacheConnectionInfo.IsNull() && !api.DatasetAPILogAnalytics.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPILogAnalytics.CacheConnectionInfo = api.DatasetAPILogAnalytics.CacheConnectionInfo
+		} else if state.DatasetAPILogAnalytics.CacheConnectionInfo.IsNull() || state.DatasetAPILogAnalytics.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPILogAnalytics.CacheConnectionInfo = types.ObjectNull(DatasetApiLogAnalyticsCacheConnectionInfoAttrTypes())
+		}
+		if !api.DatasetAPILogAnalytics.Description.IsNull() && !api.DatasetAPILogAnalytics.Description.IsUnknown() {
+			state.DatasetAPILogAnalytics.Description = api.DatasetAPILogAnalytics.Description
+		} else if state.DatasetAPILogAnalytics.Description.IsNull() || state.DatasetAPILogAnalytics.Description.IsUnknown() {
+			state.DatasetAPILogAnalytics.Description = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.ExcludeInternalFields.IsNull() && !api.DatasetAPILogAnalytics.ExcludeInternalFields.IsUnknown() {
+			state.DatasetAPILogAnalytics.ExcludeInternalFields = api.DatasetAPILogAnalytics.ExcludeInternalFields
+		} else if state.DatasetAPILogAnalytics.ExcludeInternalFields.IsNull() || state.DatasetAPILogAnalytics.ExcludeInternalFields.IsUnknown() {
+			state.DatasetAPILogAnalytics.ExcludeInternalFields = types.BoolNull()
+		}
+		if !api.DatasetAPILogAnalytics.Filter.IsNull() && !api.DatasetAPILogAnalytics.Filter.IsUnknown() {
+			state.DatasetAPILogAnalytics.Filter = api.DatasetAPILogAnalytics.Filter
+		} else if state.DatasetAPILogAnalytics.Filter.IsNull() || state.DatasetAPILogAnalytics.Filter.IsUnknown() {
+			state.DatasetAPILogAnalytics.Filter = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.ID.IsNull() && !api.DatasetAPILogAnalytics.ID.IsUnknown() {
+			state.DatasetAPILogAnalytics.ID = api.DatasetAPILogAnalytics.ID
+		} else if state.DatasetAPILogAnalytics.ID.IsNull() || state.DatasetAPILogAnalytics.ID.IsUnknown() {
+			state.DatasetAPILogAnalytics.ID = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.Metadata.IsNull() && !api.DatasetAPILogAnalytics.Metadata.IsUnknown() {
+			state.DatasetAPILogAnalytics.Metadata = api.DatasetAPILogAnalytics.Metadata
+		} else if state.DatasetAPILogAnalytics.Metadata.IsNull() || state.DatasetAPILogAnalytics.Metadata.IsUnknown() {
+			state.DatasetAPILogAnalytics.Metadata = types.ObjectNull(DatasetApiLogAnalyticsMetadataAttrTypes())
+		}
+		if !api.DatasetAPILogAnalytics.ProviderID.IsNull() && !api.DatasetAPILogAnalytics.ProviderID.IsUnknown() {
+			state.DatasetAPILogAnalytics.ProviderID = api.DatasetAPILogAnalytics.ProviderID
+		} else if state.DatasetAPILogAnalytics.ProviderID.IsNull() || state.DatasetAPILogAnalytics.ProviderID.IsUnknown() {
+			state.DatasetAPILogAnalytics.ProviderID = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.SearchVersion.IsNull() && !api.DatasetAPILogAnalytics.SearchVersion.IsUnknown() {
+			state.DatasetAPILogAnalytics.SearchVersion = api.DatasetAPILogAnalytics.SearchVersion
+		} else if state.DatasetAPILogAnalytics.SearchVersion.IsNull() || state.DatasetAPILogAnalytics.SearchVersion.IsUnknown() {
+			state.DatasetAPILogAnalytics.SearchVersion = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.Tags.IsNull() && !api.DatasetAPILogAnalytics.Tags.IsUnknown() {
+			state.DatasetAPILogAnalytics.Tags = api.DatasetAPILogAnalytics.Tags
+		} else if state.DatasetAPILogAnalytics.Tags.IsNull() || state.DatasetAPILogAnalytics.Tags.IsUnknown() {
+			state.DatasetAPILogAnalytics.Tags = types.StringNull()
+		}
+		if !api.DatasetAPILogAnalytics.ViewName.IsNull() && !api.DatasetAPILogAnalytics.ViewName.IsUnknown() {
+			state.DatasetAPILogAnalytics.ViewName = api.DatasetAPILogAnalytics.ViewName
+		} else if state.DatasetAPILogAnalytics.ViewName.IsNull() || state.DatasetAPILogAnalytics.ViewName.IsUnknown() {
+			state.DatasetAPILogAnalytics.ViewName = types.StringNull()
 		}
 	}
 	if api.DatasetAPIMsgraph != nil {

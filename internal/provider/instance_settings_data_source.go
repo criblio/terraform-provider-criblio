@@ -54,6 +54,10 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 										"auth_token": schema.StringAttribute{
 											Computed: true,
 										},
+										"auth_token_rotated": schema.BoolAttribute{
+											Computed:    true,
+											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the node token via RESTProxy.`,
+										},
 										"compression": schema.StringAttribute{
 											Computed: true,
 										},
@@ -202,6 +206,10 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 									Attributes: map[string]schema.Attribute{
 										"auth_token": schema.StringAttribute{
 											Computed: true,
+										},
+										"auth_token_rotated": schema.BoolAttribute{
+											Computed:    true,
+											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the node token via RESTProxy.`,
 										},
 										"compression": schema.StringAttribute{
 											Computed: true,

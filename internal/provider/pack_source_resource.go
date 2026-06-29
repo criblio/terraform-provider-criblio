@@ -146,7 +146,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -301,7 +301,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -377,6 +377,47 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed: true,
+												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
@@ -723,7 +764,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -837,6 +878,47 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed: true,
+												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
@@ -1107,7 +1189,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -1379,7 +1461,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -1625,7 +1707,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -1914,7 +1996,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -2226,7 +2308,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -2439,7 +2521,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -2745,7 +2827,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -2864,6 +2946,47 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed: true,
+												},
+												"oauth_enabled": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+												},
+												"token_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL of the token endpoint to use for OAuth authentication`,
+												},
+												"client_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Client ID to use for OAuth authentication`,
+												},
+												"oauth_secret_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"client_text_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a stored text secret`,
+												},
+												"oauth_params": schema.ListNestedAttribute{
+													Computed:    true,
+													Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"identity_pool_id": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+												},
+												"logical_cluster": schema.StringAttribute{
+													Computed:    true,
+													Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 												},
 												"credentials_secret": schema.StringAttribute{
 													Computed:    true,
@@ -3167,7 +3290,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -3449,7 +3572,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -3696,7 +3819,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -3943,7 +4066,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -4130,6 +4253,32 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Computed:    true,
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
+								"http_discovery_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to fetch target groups from (must be http or https)`,
+								},
+								"http_discovery_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Extra headers to send with the discovery request`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+								"http_discovery_reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject TLS certificates that cannot be verified for the discovery endpoint. Falls back to the source-level setting if not specified.`,
+								},
+								"max_response_body_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum size of the HTTP SD response body. Responses exceeding this limit will be rejected. Defaults to 20 MB.`,
+								},
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `Username for Prometheus Basic authentication`,
@@ -4217,7 +4366,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -4458,6 +4607,32 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 									},
 								},
+								"http_discovery_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to fetch target groups from (must be http or https)`,
+								},
+								"http_discovery_headers": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Extra headers to send with the discovery request`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+								"http_discovery_reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject TLS certificates that cannot be verified for the discovery endpoint. Falls back to the source-level setting if not specified.`,
+								},
+								"max_response_body_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum size of the HTTP SD response body. Responses exceeding this limit will be rejected. Defaults to 20 MB.`,
+								},
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `Username for Prometheus Basic authentication`,
@@ -4545,7 +4720,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -4785,7 +4960,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -5017,7 +5192,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -5293,7 +5468,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -5562,7 +5737,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -5859,7 +6034,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -5921,6 +6096,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 												"certificate_name": schema.StringAttribute{
 													Computed:    true,
 													Description: `The certificate you registered as credentials for your app in the Azure portal`,
+												},
+												"cert_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"priv_key_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"passphrase": schema.StringAttribute{
+													Computed:    true,
+													Description: `Passphrase to use to decrypt private key`,
 												},
 											},
 										},
@@ -6132,7 +6319,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -6289,7 +6476,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -6516,7 +6703,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -6691,7 +6878,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -6818,7 +7005,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -7039,7 +7226,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -7280,7 +7467,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -7576,7 +7763,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -7793,7 +7980,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -8150,7 +8337,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -8418,7 +8605,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -8598,7 +8785,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -8652,6 +8839,14 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								"timestamps": schema.BoolAttribute{
 									Computed:    true,
 									Description: `For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted.`,
+								},
+								"line_buffer_limit": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
+								},
+								"__lbdisable_assembly": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Internal flag to disable LB worker payload reassembly.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -8783,7 +8978,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -8923,7 +9118,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -9229,7 +9424,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -9496,7 +9691,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -9735,7 +9930,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -9873,7 +10068,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -10149,7 +10344,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -10358,7 +10553,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -10490,7 +10685,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -10688,7 +10883,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -10964,7 +11159,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -11247,7 +11442,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -11435,7 +11630,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -11741,7 +11936,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -11927,7 +12122,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -12128,7 +12323,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -12379,7 +12574,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -12588,7 +12783,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -12831,7 +13026,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13122,7 +13317,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13454,7 +13649,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13615,7 +13810,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13648,7 +13843,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"predicate": schema.StringAttribute{
 									Computed:    true,
-									Description: `String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Predicate format reference](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/AdditionalChapters/Introduction.html) for more information.`,
+									Description: `String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Common Log Types and Predicates](https://docs.cribl.io/edge/sources-apple-unified-logs/#examples) for more information.`,
 								},
 								"read_mode": schema.StringAttribute{
 									Computed:    true,
@@ -13747,7 +13942,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13899,7 +14094,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -13961,7 +14156,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								},
 								"current_boot": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Skip log messages that are not part of the current boot session.`,
+									Description: `Skip log messages that are not part of the current boot session`,
 								},
 								"max_age_dur": schema.StringAttribute{
 									Computed:    true,
@@ -14063,7 +14258,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -14340,7 +14535,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -14646,7 +14841,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -14922,7 +15117,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -15086,7 +15281,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -15361,7 +15556,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -15681,7 +15876,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -15971,7 +16166,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -16022,6 +16217,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
 												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
 												Computed: true,
@@ -16264,7 +16463,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -16520,7 +16719,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -16756,7 +16955,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
-											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
@@ -17005,7 +17204,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -17232,7 +17431,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -17346,6 +17545,67 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required: true,
 										Optional: false,
 										Computed: false,
+									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: false,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+												"value": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
@@ -17856,7 +18116,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -18020,6 +18280,67 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required: true,
 										Optional: false,
 										Computed: false,
+									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: false,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+												"value": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
@@ -18424,7 +18745,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -18826,7 +19147,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -19190,7 +19511,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -19617,7 +19938,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -20077,7 +20398,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -20392,7 +20713,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -20848,7 +21169,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -21027,6 +21348,67 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Required: true,
 										Optional: false,
 										Computed: false,
+									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: false,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+												"value": schema.StringAttribute{
+													Required: true,
+													Optional: false,
+													Computed: false,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
@@ -21472,7 +21854,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -21894,7 +22276,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -22263,7 +22645,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -22632,7 +23014,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -22909,6 +23291,44 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
+					"http_discovery_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `URL to fetch target groups from (must be http or https)`,
+					},
+					"http_discovery_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Extra headers to send with the discovery request`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+									Optional: false,
+									Computed: false,
+								},
+								"value": schema.StringAttribute{
+									Required: true,
+									Optional: false,
+									Computed: false,
+								},
+							},
+						},
+					},
+					"http_discovery_reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reject TLS certificates that cannot be verified for the discovery endpoint. Falls back to the source-level setting if not specified.`,
+					},
+					"max_response_body_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum size of the HTTP SD response body. Responses exceeding this limit will be rejected. Defaults to 20 MB.`,
+					},
 					"username": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -23038,7 +23458,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -23391,6 +23811,44 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 							},
 						},
 					},
+					"http_discovery_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `URL to fetch target groups from (must be http or https)`,
+					},
+					"http_discovery_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Extra headers to send with the discovery request`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+									Optional: false,
+									Computed: false,
+								},
+								"value": schema.StringAttribute{
+									Required: true,
+									Optional: false,
+									Computed: false,
+								},
+							},
+						},
+					},
+					"http_discovery_reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reject TLS certificates that cannot be verified for the discovery endpoint. Falls back to the source-level setting if not specified.`,
+					},
+					"max_response_body_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum size of the HTTP SD response body. Responses exceeding this limit will be rejected. Defaults to 20 MB.`,
+					},
 					"username": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -23520,7 +23978,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -23876,7 +24334,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -24220,7 +24678,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -24630,7 +25088,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -25029,7 +25487,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -25468,7 +25926,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -25562,6 +26020,24 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Optional:    false,
 										Computed:    false,
 										Description: `The certificate you registered as credentials for your app in the Azure portal`,
+									},
+									"cert_path": schema.StringAttribute{
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+									},
+									"priv_key_path": schema.StringAttribute{
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+									},
+									"passphrase": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Passphrase to use to decrypt private key`,
 									},
 								},
 							},
@@ -25873,7 +26349,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -26104,7 +26580,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -26441,7 +26917,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -26700,7 +27176,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -26887,7 +27363,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -27214,7 +27690,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -27571,7 +28047,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -28011,7 +28487,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -28334,7 +28810,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -28857,7 +29333,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -29249,7 +29725,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -29513,7 +29989,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -29591,6 +30067,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted.`,
+					},
+					"line_buffer_limit": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
+					},
+					"__lbdisable_assembly": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Internal flag to disable LB worker payload reassembly.`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -29784,7 +30272,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -29988,7 +30476,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -30438,7 +30926,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -30835,7 +31323,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -31190,7 +31678,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -31392,7 +31880,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -31798,7 +32286,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -32109,7 +32597,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -32303,7 +32791,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -32597,7 +33085,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -33007,7 +33495,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -33428,7 +33916,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -33706,7 +34194,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -34162,7 +34650,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -34438,7 +34926,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -34737,7 +35225,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -35110,7 +35598,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -35419,7 +35907,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -35780,7 +36268,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -36211,7 +36699,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -36701,7 +37189,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -36938,7 +37426,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -36987,7 +37475,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
-						Description: `String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Predicate format reference](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/AdditionalChapters/Introduction.html) for more information.`,
+						Description: `String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Common Log Types and Predicates](https://docs.cribl.io/edge/sources-apple-unified-logs/#examples) for more information.`,
 					},
 					"read_mode": schema.StringAttribute{
 						Required:    false,
@@ -37132,7 +37620,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -37356,7 +37844,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -37446,7 +37934,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Skip log messages that are not part of the current boot session.`,
+						Description: `Skip log messages that are not part of the current boot session`,
 					},
 					"max_age_dur": schema.StringAttribute{
 						Required:    false,
@@ -37596,7 +38084,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -38007,7 +38495,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -38461,7 +38949,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -38867,7 +39355,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -39109,7 +39597,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -39518,7 +40006,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -39990,7 +40478,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -40418,7 +40906,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -40493,6 +40981,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Select or create a stored text secret`,
+								},
+								"token": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"enabled": schema.BoolAttribute{
 									Required: false,
@@ -40849,7 +41343,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -41229,7 +41723,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -41579,7 +42073,7 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
@@ -45454,6 +45948,34 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputPrometheus.DurationSeconds = types.Float64Null()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.HttpDiscoveryURL.IsNull() || state.InputPrometheus.HttpDiscoveryURL.IsUnknown())) {
+			if !api.InputPrometheus.HttpDiscoveryURL.IsNull() && !api.InputPrometheus.HttpDiscoveryURL.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryURL = api.InputPrometheus.HttpDiscoveryURL
+			} else if state.InputPrometheus.HttpDiscoveryURL.IsNull() || state.InputPrometheus.HttpDiscoveryURL.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryURL = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.HttpDiscoveryHeaders.IsNull() || state.InputPrometheus.HttpDiscoveryHeaders.IsUnknown())) {
+			if !api.InputPrometheus.HttpDiscoveryHeaders.IsNull() && !api.InputPrometheus.HttpDiscoveryHeaders.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryHeaders = api.InputPrometheus.HttpDiscoveryHeaders
+			} else if state.InputPrometheus.HttpDiscoveryHeaders.IsNull() || state.InputPrometheus.HttpDiscoveryHeaders.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown())) {
+			if !api.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsNull() && !api.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryRejectUnauthorized = api.InputPrometheus.HttpDiscoveryRejectUnauthorized
+			} else if state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+				state.InputPrometheus.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.MaxResponseBodySize.IsNull() || state.InputPrometheus.MaxResponseBodySize.IsUnknown())) {
+			if !api.InputPrometheus.MaxResponseBodySize.IsNull() && !api.InputPrometheus.MaxResponseBodySize.IsUnknown() {
+				state.InputPrometheus.MaxResponseBodySize = api.InputPrometheus.MaxResponseBodySize
+			} else if state.InputPrometheus.MaxResponseBodySize.IsNull() || state.InputPrometheus.MaxResponseBodySize.IsUnknown() {
+				state.InputPrometheus.MaxResponseBodySize = types.StringNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.Username.IsNull() || state.InputPrometheus.Username.IsUnknown())) {
 			if !api.InputPrometheus.Username.IsNull() && !api.InputPrometheus.Username.IsUnknown() {
 				state.InputPrometheus.Username = api.InputPrometheus.Username
@@ -45793,6 +46315,34 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputEdgePrometheus.PodFilter = api.InputEdgePrometheus.PodFilter
 			} else if state.InputEdgePrometheus.PodFilter.IsNull() || state.InputEdgePrometheus.PodFilter.IsUnknown() {
 				state.InputEdgePrometheus.PodFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.HttpDiscoveryURL.IsNull() || state.InputEdgePrometheus.HttpDiscoveryURL.IsUnknown())) {
+			if !api.InputEdgePrometheus.HttpDiscoveryURL.IsNull() && !api.InputEdgePrometheus.HttpDiscoveryURL.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryURL = api.InputEdgePrometheus.HttpDiscoveryURL
+			} else if state.InputEdgePrometheus.HttpDiscoveryURL.IsNull() || state.InputEdgePrometheus.HttpDiscoveryURL.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryURL = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.HttpDiscoveryHeaders.IsNull() || state.InputEdgePrometheus.HttpDiscoveryHeaders.IsUnknown())) {
+			if !api.InputEdgePrometheus.HttpDiscoveryHeaders.IsNull() && !api.InputEdgePrometheus.HttpDiscoveryHeaders.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryHeaders = api.InputEdgePrometheus.HttpDiscoveryHeaders
+			} else if state.InputEdgePrometheus.HttpDiscoveryHeaders.IsNull() || state.InputEdgePrometheus.HttpDiscoveryHeaders.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown())) {
+			if !api.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsNull() && !api.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized = api.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized
+			} else if state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+				state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.MaxResponseBodySize.IsNull() || state.InputEdgePrometheus.MaxResponseBodySize.IsUnknown())) {
+			if !api.InputEdgePrometheus.MaxResponseBodySize.IsNull() && !api.InputEdgePrometheus.MaxResponseBodySize.IsUnknown() {
+				state.InputEdgePrometheus.MaxResponseBodySize = api.InputEdgePrometheus.MaxResponseBodySize
+			} else if state.InputEdgePrometheus.MaxResponseBodySize.IsNull() || state.InputEdgePrometheus.MaxResponseBodySize.IsUnknown() {
+				state.InputEdgePrometheus.MaxResponseBodySize = types.StringNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Username.IsNull() || state.InputEdgePrometheus.Username.IsUnknown())) {
@@ -49152,6 +49702,20 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKubeLogs.Timestamps = api.InputKubeLogs.Timestamps
 			} else if state.InputKubeLogs.Timestamps.IsNull() || state.InputKubeLogs.Timestamps.IsUnknown() {
 				state.InputKubeLogs.Timestamps = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.LineBufferLimit.IsNull() || state.InputKubeLogs.LineBufferLimit.IsUnknown())) {
+			if !api.InputKubeLogs.LineBufferLimit.IsNull() && !api.InputKubeLogs.LineBufferLimit.IsUnknown() {
+				state.InputKubeLogs.LineBufferLimit = api.InputKubeLogs.LineBufferLimit
+			} else if state.InputKubeLogs.LineBufferLimit.IsNull() || state.InputKubeLogs.LineBufferLimit.IsUnknown() {
+				state.InputKubeLogs.LineBufferLimit = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.LBDisableAssembly.IsNull() || state.InputKubeLogs.LBDisableAssembly.IsUnknown())) {
+			if !api.InputKubeLogs.LBDisableAssembly.IsNull() && !api.InputKubeLogs.LBDisableAssembly.IsUnknown() {
+				state.InputKubeLogs.LBDisableAssembly = api.InputKubeLogs.LBDisableAssembly
+			} else if state.InputKubeLogs.LBDisableAssembly.IsNull() || state.InputKubeLogs.LBDisableAssembly.IsUnknown() {
+				state.InputKubeLogs.LBDisableAssembly = types.BoolNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Metadata.IsNull() || state.InputKubeLogs.Metadata.IsUnknown())) {
