@@ -101,7 +101,6 @@ func searchDashboardConfig(t *testing.T, id, description string) string {
 	return config + `
 
 data "criblio_search_dashboard" "by_id" {
-  group_id = "default_search"
   id = criblio_search_dashboard.my_searchdashboard.id
   depends_on = [criblio_search_dashboard.my_searchdashboard]
 }

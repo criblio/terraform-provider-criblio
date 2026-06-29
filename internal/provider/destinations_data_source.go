@@ -49,6 +49,22 @@ func (d *DestinationsDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"environment": schema.StringAttribute{
+							Computed:    true,
+							Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique ID for this output`,
+						},
+						"pipeline": schema.StringAttribute{
+							Computed:    true,
+							Description: `Pipeline to process data before sending out to this output`,
+						},
+						"type": schema.StringAttribute{
+							Computed: true,
+						},
+
 						"output_default": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

@@ -44,6 +44,7 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+
 						"instance_settings_schema1": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

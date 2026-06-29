@@ -2159,6 +2159,7 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 {{- if .OneOfVariants }}
+{{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
 {{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t\t" }}
 {{- else }}
 {{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}

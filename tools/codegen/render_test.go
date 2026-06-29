@@ -278,6 +278,10 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
+	destinationListDataSource := renderTemplate(t, "list_data_source", destination)
+	assertContains(t, destinationListDataSource, `"id": schema.StringAttribute{`)
+	assertContains(t, destinationListDataSource, `"output_azure_blob": schema.SingleNestedAttribute{`)
+	assertContains(t, destinationListDataSource, `"id": item.ID,`)
 
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
@@ -340,6 +344,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, searchDatasetProviderTest, `data "criblio_search_dataset_providers" "all"`)
 	assertContains(t, searchDatasetProviderTest, `resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.api_http", "id", "criblio_search_dataset_provider.my_searchdatasetprovider", "id")`)
 	assertContains(t, searchDatasetProviderTest, `testCheckListDataSourceHasItems("data.criblio_search_dataset_providers.all")`)
+	assertNotContains(t, searchDatasetProviderTest, `group_id = "default_search"`)
 
 	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
 	mappingRulesetResource := renderTemplate(t, "resource", mappingRuleset)

@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -9,9 +8,7 @@ import (
 )
 
 func TestInstanceSettings(t *testing.T) {
-	if os.Getenv("DEPLOYMENT") != "onprem" {
-		t.Skip("Skipping data source for Cloud deployments as it is not supported")
-	}
+	t.Skip("Skipping instance settings data source until /system/instance is available in supported test deployments")
 
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{

@@ -131,7 +131,6 @@ resource "criblio_search_dataset_provider" "my_s3_provider" {
 
 
 data "criblio_search_dataset_provider" "api_http" {
-  group_id = "default_search"
   id = criblio_search_dataset_provider.my_searchdatasetprovider.id
   depends_on = [criblio_search_dataset_provider.my_searchdatasetprovider]
 }
@@ -142,14 +141,12 @@ data "criblio_search_dataset_providers" "all" {
 
 
 data "criblio_search_dataset_provider" "elastic" {
-  group_id = "default_search"
   id = criblio_search_dataset_provider.my_elastic_provider.id
   depends_on = [criblio_search_dataset_provider.my_elastic_provider]
 }
 
 
 data "criblio_search_dataset_provider" "s3" {
-  group_id = "default_search"
   id = criblio_search_dataset_provider.my_s3_provider.id
   depends_on = [criblio_search_dataset_provider.my_s3_provider]
 }

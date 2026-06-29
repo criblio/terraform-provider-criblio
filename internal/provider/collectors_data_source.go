@@ -49,6 +49,22 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"environment": schema.StringAttribute{
+							Computed: true,
+						},
+						"ignore_group_jobs_limit": schema.BoolAttribute{
+							Computed: true,
+						},
+						"resume_on_boot": schema.BoolAttribute{
+							Computed: true,
+						},
+						"ttl": schema.StringAttribute{
+							Computed: true,
+						},
+						"worker_affinity": schema.BoolAttribute{
+							Computed: true,
+						},
+
 						"input_collector_splunk": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

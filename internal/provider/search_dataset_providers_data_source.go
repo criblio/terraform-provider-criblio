@@ -44,6 +44,19 @@ func (d *SearchDatasetProvidersDataSource) Schema(_ context.Context, _ datasourc
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed:    true,
+							Description: `Description of the provider`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique identifier for the provider`,
+						},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Type of the provider`,
+						},
+
 						"apihttp": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

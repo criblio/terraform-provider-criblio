@@ -49,6 +49,11 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique ID for this input`,
+						},
+
 						"input_collection": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

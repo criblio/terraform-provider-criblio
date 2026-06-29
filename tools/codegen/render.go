@@ -1107,7 +1107,7 @@ func acceptanceDataSources(resource parser.ResourceDef, resourceAddress, label s
 	if resourceAddress != "" && hasGeneratedReadDataSource(resource) {
 		fmt.Fprintf(&output, "\n\ndata %q %q {\n", resource.TypeName, label)
 		for _, field := range resource.Read.PathParams {
-			if field.FixedValue != "" {
+			if field.FixedValue != "" || fixedPathParamValue(resource, field) != "" {
 				continue
 			}
 			fmt.Fprintf(&output, "  %s = %s\n", field.TerraformName, acceptanceDataSourceFieldValue(resource, resourceAddress, field))
@@ -1148,7 +1148,8 @@ func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
 func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
 	return strings.HasPrefix(resource.TypeName, "criblio_search_") ||
 		resource.StructName == "Subscription" ||
-		resource.StructName == "SystemInfo"
+		resource.StructName == "SystemInfo" ||
+		resource.StructName == "InstanceSettings"
 }
 
 func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {

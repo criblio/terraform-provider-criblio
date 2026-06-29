@@ -44,6 +44,11 @@ func (d *NotificationTargetsDataSource) Schema(_ context.Context, _ datasource.S
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Notification target type, hoisted from the active target block.`,
+						},
+
 						"webhook_target": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
