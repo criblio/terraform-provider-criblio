@@ -283,6 +283,23 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationListDataSource, `"output_azure_blob": schema.SingleNestedAttribute{`)
 	assertContains(t, destinationListDataSource, `"id": item.ID,`)
 
+	source := parser.ResourceDef{
+		StructName: "Source",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{
+				TerraformName: "input_collection",
+				ModelName:     "InputCollectionModel",
+				Fields:        []parser.FieldDef{{TerraformName: "id", GoName: "ID", Type: "string"}},
+			},
+		},
+	}
+	sourceTypes := renderTemplate(t, "types", source)
+	assertContains(t, sourceTypes, "Items types.List")
+	assertContains(t, sourceTypes, "func SourceLegacyItemsAttrTypes() map[string]attr.Type")
+	sourceResource := renderTemplate(t, "resource", source)
+	assertContains(t, sourceResource, `"items": schema.ListNestedAttribute{`)
+	assertContains(t, sourceResource, `"input_collection": schema.SingleNestedAttribute{`)
+
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
 		Read: parser.OperationDef{

@@ -25,7 +25,7 @@ type {{ .StructName }}Model struct {
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
-	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
@@ -37,7 +37,7 @@ type {{ .StructName }}ResourceModel struct {
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
-	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
@@ -49,7 +49,7 @@ type {{ .StructName }}DataSourceModel struct {
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
-	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
@@ -61,6 +61,16 @@ type {{ .StructName }}APIModel struct {
 	{{ .GoName }} {{ apiType . }} ` + "`json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 }
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+
+func {{ .StructName }}LegacyItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range .OneOfVariants }}
+		"{{ .TerraformName }}": types.ObjectType{AttrTypes: {{ .ModelName }}AttrTypes()},
+{{- end }}
+	}
+}
+{{- end }}
 {{ range nestedObjectFields . }}
 
 type {{ .NestedModelName }} struct {
@@ -1460,8 +1470,13 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
-			"items": schema.DynamicAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t" }}
+					},
+				},
 				Description: "Legacy computed mirror of the API oneOf source payload. Configure type-specific input_* blocks instead.",
 			},
 {{- end }}
@@ -2053,8 +2068,13 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 		Attributes: map[string]schema.Attribute{
 {{ dataSourceAttributes .Fields "\t\t\t" }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
-			"items": schema.DynamicAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t" }}
+					},
+				},
 				Description: "Legacy computed mirror of the API oneOf source payload. Use type-specific input_* blocks for new references.",
 			},
 {{- end }}

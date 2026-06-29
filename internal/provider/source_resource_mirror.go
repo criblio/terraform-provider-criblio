@@ -166,14 +166,14 @@ func setSourceLegacyItemsFromRaw(model *SourceModel, raw map[string]any) {
 	if model == nil {
 		return
 	}
-	model.Items = sourceLegacyItemsFromRaw(raw)
+	model.Items = sourceLegacyItemsFromRaw(raw, SourceLegacyItemsAttrTypes())
 }
 
 func setPackSourceLegacyItemsFromRaw(model *PackSourceModel, raw map[string]any) {
 	if model == nil {
 		return
 	}
-	model.Items = sourceLegacyItemsFromRaw(raw)
+	model.Items = sourceLegacyItemsFromRaw(raw, PackSourceLegacyItemsAttrTypes())
 }
 
 func syncSourceLegacyItems(api *SourceModel, state *SourceModel) {
@@ -202,20 +202,20 @@ func syncPackSourceLegacyItems(api *PackSourceModel, state *PackSourceModel) {
 	}
 }
 
-func sourceLegacyItemsFromModel(model SourceModel) types.Dynamic {
+func sourceLegacyItemsFromModel(model SourceModel) types.List {
 	raw, err := legacySourcePayloadMap(model)
 	if err != nil {
-		return types.DynamicNull()
+		return sourceLegacyItemsNull(SourceLegacyItemsAttrTypes())
 	}
-	return sourceLegacyItemsFromRaw(raw)
+	return sourceLegacyItemsFromRaw(raw, SourceLegacyItemsAttrTypes())
 }
 
-func packSourceLegacyItemsFromModel(model PackSourceModel) types.Dynamic {
+func packSourceLegacyItemsFromModel(model PackSourceModel) types.List {
 	raw, err := legacySourcePayloadMap(model)
 	if err != nil {
-		return types.DynamicNull()
+		return sourceLegacyItemsNull(PackSourceLegacyItemsAttrTypes())
 	}
-	return sourceLegacyItemsFromRaw(raw)
+	return sourceLegacyItemsFromRaw(raw, PackSourceLegacyItemsAttrTypes())
 }
 
 func legacySourcePayloadMap(model any) (map[string]any, error) {
@@ -230,53 +230,31 @@ func legacySourcePayloadMap(model any) (map[string]any, error) {
 	return raw, nil
 }
 
-func sourceLegacyItemsFromRaw(raw map[string]any) types.Dynamic {
+func sourceLegacyItemsFromRaw(raw map[string]any, attrTypes map[string]attr.Type) types.List {
 	if len(raw) == 0 {
-		return types.DynamicNull()
+		return sourceLegacyItemsNull(attrTypes)
 	}
-	item := legacyDynamicValueFromAny(raw)
-	list, diags := types.ListValue(types.DynamicType, []attr.Value{item})
+	values := make(map[string]attr.Value, len(attrTypes))
+	for name, attrType := range attrTypes {
+		value, err := SourceTerraformNullValue(attrType)
+		if err != nil {
+			return sourceLegacyItemsNull(attrTypes)
+		}
+		values[name] = value
+	}
+	item, diags := types.ObjectValue(attrTypes, values)
 	if diags.HasError() {
-		return types.DynamicNull()
+		return sourceLegacyItemsNull(attrTypes)
 	}
-	return types.DynamicValue(list)
+	list, diags := types.ListValue(types.ObjectType{AttrTypes: attrTypes}, []attr.Value{item})
+	if diags.HasError() {
+		return sourceLegacyItemsNull(attrTypes)
+	}
+	return list
 }
 
-func legacyDynamicValueFromAny(value any) types.Dynamic {
-	switch typed := value.(type) {
-	case nil:
-		return types.DynamicNull()
-	case string:
-		return types.DynamicValue(types.StringValue(typed))
-	case bool:
-		return types.DynamicValue(types.BoolValue(typed))
-	case float64:
-		return types.DynamicValue(types.Float64Value(typed))
-	case map[string]any:
-		attrTypes := make(map[string]attr.Type, len(typed))
-		values := make(map[string]attr.Value, len(typed))
-		for key, item := range typed {
-			attrTypes[key] = types.DynamicType
-			values[key] = legacyDynamicValueFromAny(item)
-		}
-		object, diags := types.ObjectValue(attrTypes, values)
-		if diags.HasError() {
-			return types.DynamicNull()
-		}
-		return types.DynamicValue(object)
-	case []any:
-		values := make([]attr.Value, 0, len(typed))
-		for _, item := range typed {
-			values = append(values, legacyDynamicValueFromAny(item))
-		}
-		list, diags := types.ListValue(types.DynamicType, values)
-		if diags.HasError() {
-			return types.DynamicNull()
-		}
-		return types.DynamicValue(list)
-	default:
-		return types.DynamicValue(types.StringValue(""))
-	}
+func sourceLegacyItemsNull(attrTypes map[string]attr.Type) types.List {
+	return types.ListNull(types.ObjectType{AttrTypes: attrTypes})
 }
 
 func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {

@@ -20,7 +20,7 @@ type PackSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -95,7 +95,7 @@ type PackSourceResourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -170,7 +170,7 @@ type PackSourceDataSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
-	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -245,6 +245,79 @@ type PackSourceAPIModel struct {
 	GroupID *string `json:"groupId,omitempty"`
 	ID      *string `json:"id,omitempty"`
 	Pack    *string `json:"pack,omitempty"`
+}
+
+func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"input_collection":             types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
+		"input_kafka":                  types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
+		"input_msk":                    types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
+		"input_http":                   types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
+		"input_splunk":                 types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
+		"input_splunk_search":          types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
+		"input_splunk_hec":             types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
+		"input_azure_blob":             types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
+		"input_elastic":                types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
+		"input_confluent_cloud":        types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
+		"input_grafana":                types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
+		"input_loki":                   types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
+		"input_prometheus_rw":          types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
+		"input_prometheus":             types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
+		"input_edge_prometheus":        types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
+		"input_office365_mgmt":         types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
+		"input_office365_service":      types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
+		"input_office365_msg_trace":    types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
+		"input_microsoft_graph":        types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
+		"input_eventhub":               types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
+		"input_eventhub_amqp":          types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
+		"input_exec":                   types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
+		"input_firehose":               types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
+		"input_google_pubsub":          types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
+		"input_cribl":                  types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
+		"input_cribl_tcp":              types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
+		"input_cribl_http":             types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
+		"input_cribl_lake_http":        types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
+		"input_tcpjson":                types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
+		"input_system_metrics":         types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
+		"input_system_state":           types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
+		"input_kube_metrics":           types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
+		"input_kube_logs":              types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
+		"input_kube_events":            types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
+		"input_windows_metrics":        types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
+		"input_crowdstrike":            types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
+		"input_datadog_agent":          types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
+		"input_datagen":                types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
+		"input_http_raw":               types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
+		"input_kinesis":                types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
+		"input_criblmetrics":           types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
+		"input_metrics":                types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
+		"input_s3":                     types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
+		"input_s3_inventory":           types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
+		"input_snmp":                   types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
+		"input_open_telemetry":         types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
+		"input_model_driven_telemetry": types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
+		"input_sqs":                    types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
+		"input_syslog":                 types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_file":                   types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
+		"input_tcp":                    types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
+		"input_appscope":               types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
+		"input_wef":                    types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
+		"input_win_event_logs":         types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
+		"input_apple_unified_logs":     types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
+		"input_raw_udp":                types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
+		"input_journal_files":          types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
+		"input_wiz":                    types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
+		"input_openai":                 types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
+		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
+		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
+		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
+		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
+		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
+		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
+		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+	}
 }
 
 func PackSourceTerraformValueToJSON(value attr.Value) (any, error) {
