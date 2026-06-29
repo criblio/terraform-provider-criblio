@@ -3,12 +3,16 @@ package converter
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
@@ -31,6 +35,37 @@ func TestRefreshFromMethodName(t *testing.T) {
 			assert.Equal(t, tt.want, got)
 		})
 	}
+}
+
+func TestConvertUsesRESTGetPath(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "/api/v1/m/default/pipelines/p1", r.URL.Path)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"items":[{"id":"p1","conf":{}}]}`))
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	e, ok := reg.ByTypeName("criblio_pipeline")
+	require.True(t, ok)
+	require.NotEmpty(t, e.RESTGetPath)
+
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	model, err := Convert(context.Background(), client, e, map[string]string{
+		"GroupID": "default",
+		"ID":      "p1",
+	})
+	require.NoError(t, err)
+	pipeline, ok := model.(*provider.PipelineResourceModel)
+	require.True(t, ok)
+	assert.Equal(t, "p1", pipeline.ID.ValueString())
+	assert.Equal(t, "default", pipeline.GroupID.ValueString())
 }
 
 func TestConvertFromResponseBody_source(t *testing.T) {
@@ -104,6 +139,40 @@ func TestResourceModelTypes_hasEntriesForSupportedTypes(t *testing.T) {
 	assert.Contains(t, types, "SourceResourceModel")
 	assert.Contains(t, types, "PipelineResourceModel")
 	assert.Contains(t, types, "RoutesResourceModel")
+}
+
+func TestGeneratedModelTypes_hasOneOfMigrationEntries(t *testing.T) {
+	types := GeneratedModelTypes()
+	require.NotEmpty(t, types)
+	assert.Contains(t, types, "NotificationTargetResourceModel")
+	assert.Contains(t, types, "SearchDatasetProviderResourceModel")
+}
+
+func TestConvertGeneratedNotificationTargetPopulatesOneOfBlock(t *testing.T) {
+	e := registry.Entry{
+		TypeName:      "criblio_notification_target",
+		ModelTypeName: "NotificationTargetResourceModel",
+		GetMethod:     "GetNotificationTargetByID",
+	}
+	responseBody := struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "slack-1",
+				"type": "slack",
+			},
+		},
+	}
+
+	model, err := convertGeneratedModelFromResponseBody(e, reflect.TypeOf((*provider.NotificationTargetResourceModel)(nil)).Elem(), responseBody)
+	require.NoError(t, err)
+
+	target, ok := model.(*provider.NotificationTargetResourceModel)
+	require.True(t, ok)
+	require.NotNil(t, target.SlackTarget)
+	assert.Equal(t, "slack-1", target.SlackTarget.ID.ValueString())
+	assert.True(t, target.SlackTarget.URL.IsNull())
 }
 
 func TestObjectListValue(t *testing.T) {

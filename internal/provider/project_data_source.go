@@ -74,7 +74,8 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier.`,
 			},
 			"subscriptions": schema.ListAttribute{
 				Computed:    true,

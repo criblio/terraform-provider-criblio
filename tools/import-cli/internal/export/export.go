@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
@@ -55,7 +55,7 @@ type ProgressFunc func(format string, args ...interface{})
 // Caller should set result.DiscoveredTotal to the sum of discovery counts for reporting.
 // groupFilter is the CLI --group slice; when non-empty, export only resources whose output folder
 // matches a resolved worker/search group (see skipExportForGroupFilter).
-func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, excludeDefaults bool, includeOverride IncludeOverride, progress ProgressFunc) (result *ExportResult, err error) {
+func ToResourceItems(ctx context.Context, client *importclient.Client, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, excludeDefaults bool, includeOverride IncludeOverride, progress ProgressFunc) (result *ExportResult, err error) {
 	if parallel < 1 {
 		parallel = 1
 	}

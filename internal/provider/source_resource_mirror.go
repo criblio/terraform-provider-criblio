@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -159,6 +160,101 @@ func cloneSourceStringValues(values []types.String) []types.String {
 	out := make([]types.String, len(values))
 	copy(out, values)
 	return out
+}
+
+func setSourceLegacyItemsFromRaw(model *SourceModel, raw map[string]any) {
+	if model == nil {
+		return
+	}
+	model.Items = sourceLegacyItemsFromRaw(raw, SourceLegacyItemsAttrTypes())
+}
+
+func setPackSourceLegacyItemsFromRaw(model *PackSourceModel, raw map[string]any) {
+	if model == nil {
+		return
+	}
+	model.Items = sourceLegacyItemsFromRaw(raw, PackSourceLegacyItemsAttrTypes())
+}
+
+func syncSourceLegacyItems(api *SourceModel, state *SourceModel) {
+	if state == nil {
+		return
+	}
+	if api != nil && !api.Items.IsNull() && !api.Items.IsUnknown() {
+		state.Items = api.Items
+		return
+	}
+	if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = sourceLegacyItemsFromModel(*state)
+	}
+}
+
+func syncPackSourceLegacyItems(api *PackSourceModel, state *PackSourceModel) {
+	if state == nil {
+		return
+	}
+	if api != nil && !api.Items.IsNull() && !api.Items.IsUnknown() {
+		state.Items = api.Items
+		return
+	}
+	if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = packSourceLegacyItemsFromModel(*state)
+	}
+}
+
+func sourceLegacyItemsFromModel(model SourceModel) types.List {
+	raw, err := legacySourcePayloadMap(model)
+	if err != nil {
+		return sourceLegacyItemsNull(SourceLegacyItemsAttrTypes())
+	}
+	return sourceLegacyItemsFromRaw(raw, SourceLegacyItemsAttrTypes())
+}
+
+func packSourceLegacyItemsFromModel(model PackSourceModel) types.List {
+	raw, err := legacySourcePayloadMap(model)
+	if err != nil {
+		return sourceLegacyItemsNull(PackSourceLegacyItemsAttrTypes())
+	}
+	return sourceLegacyItemsFromRaw(raw, PackSourceLegacyItemsAttrTypes())
+}
+
+func legacySourcePayloadMap(model any) (map[string]any, error) {
+	data, err := json.Marshal(model)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+	return raw, nil
+}
+
+func sourceLegacyItemsFromRaw(raw map[string]any, attrTypes map[string]attr.Type) types.List {
+	if len(raw) == 0 {
+		return sourceLegacyItemsNull(attrTypes)
+	}
+	values := make(map[string]attr.Value, len(attrTypes))
+	for name, attrType := range attrTypes {
+		value, err := SourceTerraformNullValue(attrType)
+		if err != nil {
+			return sourceLegacyItemsNull(attrTypes)
+		}
+		values[name] = value
+	}
+	item, diags := types.ObjectValue(attrTypes, values)
+	if diags.HasError() {
+		return sourceLegacyItemsNull(attrTypes)
+	}
+	list, diags := types.ListValue(types.ObjectType{AttrTypes: attrTypes}, []attr.Value{item})
+	if diags.HasError() {
+		return sourceLegacyItemsNull(attrTypes)
+	}
+	return list
+}
+
+func sourceLegacyItemsNull(attrTypes map[string]attr.Type) types.List {
+	return types.ListNull(types.ObjectType{AttrTypes: attrTypes})
 }
 
 func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {

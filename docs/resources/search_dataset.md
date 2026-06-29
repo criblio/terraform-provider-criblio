@@ -57,6 +57,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
 - `api_gcp_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_gcp_dataset))
 - `api_google_workspace_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_google_workspace_dataset))
 - `apihttp_dataset` (Attributes) (see [below for nested schema](#nestedatt--apihttp_dataset))
+- `dataset_api_log_analytics` (Attributes) (see [below for nested schema](#nestedatt--dataset_api_log_analytics))
 - `api_ms_graph_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_dataset))
 - `api_okta_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_okta_dataset))
 - `api_open_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_dataset))
@@ -140,7 +141,7 @@ Optional:
 - `location` (String) Azure region code for the cluster.
 - `table` (String) Table name.
 - `timestamp_field` (String) Column holding event time.
-- `timestamp_field_contents` (String) Encoding of <code>timestampField</code> values.
+- `timestamp_field_contents` (String)
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -221,6 +222,26 @@ Optional:
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--apihttp_dataset--metadata))
+- `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
+- `search_version` (String) Search execution version for the Dataset.
+- `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
+- `view_name` (String) Lakehouse cache view name, when applicable.
+
+<a id="nestedatt--dataset_api_log_analytics"></a>
+### Nested Schema for `dataset_api_log_analytics`
+
+Optional:
+
+- `table` (String) Table name or KQL query to use as the data source.
+- `timestamp_field` (String) Column holding event time.
+- `timestamp_field_contents` (String)
+- `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
+- `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--dataset_api_log_analytics--cache_connection_info))
+- `description` (String) Brief description of the Dataset.
+- `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
+- `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
+- `id` (String) Unique identifier for the Dataset.
+- `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--dataset_api_log_analytics--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
@@ -559,10 +580,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--aws_security_lake_dataset--metadata"></a>
@@ -571,7 +592,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -593,10 +614,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_aws_dataset--metadata"></a>
@@ -605,7 +626,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_aws_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -627,10 +648,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_azure_dataset--metadata"></a>
@@ -639,7 +660,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_azure_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -661,10 +682,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_azure_data_explorer_dataset--metadata"></a>
@@ -673,7 +694,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -695,10 +716,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_elastic_search_dataset--metadata"></a>
@@ -707,7 +728,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_elastic_search_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -737,10 +758,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_gcp_dataset--metadata"></a>
@@ -749,7 +770,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_gcp_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -771,10 +792,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_google_workspace_dataset--metadata"></a>
@@ -783,7 +804,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_google_workspace_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -805,10 +826,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--apihttp_dataset--metadata"></a>
@@ -817,13 +838,47 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--apihttp_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
 
 <a id="nestedatt--apihttp_dataset--metadata--latest_run_info"></a>
 ### Nested Schema for `apihttp_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Integer) Timestamp (in Unix time) for the earliest event that was observed during the scan (seconds).
+- `finished_at` (Integer) Timestamp (in Unix time) when the acceleration run finished (milliseconds).
+- `latest_scanned_time` (Integer) Timestamp (in Unix time) for the latest event that was observed during the scan (seconds).
+- `object_count` (Integer) Number of objects on the acceleration manifest after the scan completed.
+
+<a id="nestedatt--dataset_api_log_analytics--cache_connection_info"></a>
+### Nested Schema for `dataset_api_log_analytics.cache_connection_info`
+
+Optional:
+
+- `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
+- `backfill_status` (String) Backfill status for data being loaded into the cache.
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
+- `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
+- `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
+
+<a id="nestedatt--dataset_api_log_analytics--metadata"></a>
+### Nested Schema for `dataset_api_log_analytics.metadata`
+
+Optional:
+
+- `earliest` (String) Rolling time window that defines how far back acceleration scans.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
+- `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
+- `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--dataset_api_log_analytics--metadata--latest_run_info))
+- `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
+
+<a id="nestedatt--dataset_api_log_analytics--metadata--latest_run_info"></a>
+### Nested Schema for `dataset_api_log_analytics.metadata.latest_run_info`
 
 Optional:
 
@@ -839,10 +894,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_ms_graph_dataset--metadata"></a>
@@ -851,7 +906,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -873,10 +928,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_okta_dataset--metadata"></a>
@@ -885,7 +940,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_okta_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -907,10 +962,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_open_search_dataset--metadata"></a>
@@ -919,7 +974,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_open_search_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -941,10 +996,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_tailscale_dataset--metadata"></a>
@@ -953,7 +1008,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_tailscale_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -975,10 +1030,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--api_zoom_dataset--metadata"></a>
@@ -987,7 +1042,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--api_zoom_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1009,10 +1064,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--azure_blob_dataset--metadata"></a>
@@ -1021,7 +1076,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--azure_blob_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1043,10 +1098,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--click_house_dataset--metadata"></a>
@@ -1055,7 +1110,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--click_house_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1077,10 +1132,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--edge_dataset--metadata"></a>
@@ -1089,7 +1144,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--edge_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1111,10 +1166,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--cribl_lake_dataset--metadata"></a>
@@ -1123,7 +1178,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--cribl_lake_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1153,10 +1208,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--cribl_leader_dataset--metadata"></a>
@@ -1165,7 +1220,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1187,10 +1242,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--cribl_local_dataset--metadata"></a>
@@ -1199,7 +1254,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--cribl_local_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1221,10 +1276,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--meta_dataset--metadata"></a>
@@ -1233,7 +1288,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--meta_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1255,10 +1310,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--cribl_search_dataset--metadata"></a>
@@ -1267,7 +1322,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--cribl_search_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1299,10 +1354,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--gcs_dataset--metadata"></a>
@@ -1311,7 +1366,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--gcs_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1333,10 +1388,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--prometheus_dataset--metadata"></a>
@@ -1345,7 +1400,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--prometheus_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1367,10 +1422,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--s3_dataset--metadata"></a>
@@ -1379,7 +1434,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--s3_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.
@@ -1412,10 +1467,10 @@ Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
 - `backfill_status` (String) Backfill status for data being loaded into the cache.
-- `cache_ref` (String) Identifier of the Lakehouse cache referenced by the Dataset.
-- `created_at` (Number) Timestamp when the continuous data feed to the Lakehouse cache started, in Unix time (milliseconds).
+- `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
+- `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
-- `migration_query_id` (String) Query identifier of the active Lakehouse migration. Omitted if no migration is in progress.
+- `migration_query_id` (String) Unique identifier for the active Lakehouse migration query. Omitted if no migration is in progress.
 - `retention_in_days` (Number) Retention period for the Lakehouse cache connection, in days.
 
 <a id="nestedatt--snowflake_dataset--metadata"></a>
@@ -1424,7 +1479,7 @@ Optional:
 Optional:
 
 - `earliest` (String) Rolling time window that defines how far back acceleration scans.
-- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata.
+- `enable_acceleration` (Boolean) If <code>true</code>, the system automatically backfills and refreshes Dataset metadata. Otherwise, <code>false</code>.
 - `field_list` (List of String) Fields for which acceleration gathers statistics. Required when scan mode is <code>detailed</code>.
 - `latest_run_info` (Attributes) Details from the most recent acceleration scan. (see [below for nested schema](#nestedatt--snowflake_dataset--metadata--latest_run_info))
 - `scan_mode` (String) Acceleration scan mode. <code>quick</code> collects object-level metadata; <code>detailed</code> also collects field-level statistics.

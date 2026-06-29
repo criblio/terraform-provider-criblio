@@ -24,6 +24,9 @@ type {{ .StructName }}Model struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
+{{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
@@ -33,6 +36,9 @@ type {{ .StructName }}ResourceModel struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
+{{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
@@ -41,6 +47,9 @@ type {{ .StructName }}ResourceModel struct {
 type {{ .StructName }}DataSourceModel struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
+{{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.List ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
@@ -52,6 +61,16 @@ type {{ .StructName }}APIModel struct {
 	{{ .GoName }} {{ apiType . }} ` + "`json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 }
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+
+func {{ .StructName }}LegacyItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range .OneOfVariants }}
+		"{{ .TerraformName }}": types.ObjectType{AttrTypes: {{ .ModelName }}AttrTypes()},
+{{- end }}
+	}
+}
+{{- end }}
 {{ range nestedObjectFields . }}
 
 type {{ .NestedModelName }} struct {
@@ -686,6 +705,9 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	set{{ .StructName }}LegacyItemsFromRaw(m, raw)
+{{- end }}
 {{- end }}
 	var input {{ .StructName }}APIModel
 	if err := json.Unmarshal(data, &input); err != nil {
@@ -809,6 +831,11 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- end }}
 {{- end }}
 	}
+{{- if noDiscriminatorVariants . }}
+	if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
+		return err
+	}
+{{- end }}
 {{- end }}
 	return nil
 }
@@ -818,6 +845,14 @@ type {{ .ModelName }} struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+}
+
+func {{ .ModelName }}AttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range .Fields }}
+		"{{ .TerraformName }}": {{ attrType . }},
+{{- end }}
+	}
 }
 
 func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
@@ -875,6 +910,38 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 	}
 	return ""
 }
+{{- if noDiscriminatorVariants . }}
+
+func (m *{{ .StructName }}Model) unmarshal{{ .StructName }}OneOfByShape(raw map[string]any) (bool, error) {
+{{- range noDiscriminatorVariants . }}
+	if {{ $.StructName }}OneOfShapeMatches(raw, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+		m.{{ .GoName }} = &{{ .ModelName }}{}
+		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+{{- end }}
+	return false, nil
+}
+
+func {{ .StructName }}OneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
+	for _, name := range required {
+		if _, ok := raw[name]; !ok {
+			return false
+		}
+	}
+	if len(required) > 0 {
+		return true
+	}
+	for _, name := range known {
+		if _, ok := raw[name]; ok {
+			return true
+		}
+	}
+	return false
+}
+{{- end }}
 {{- end }}
 `
 
@@ -912,6 +979,26 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 
 {{- if eq .StructName "SearchDataset" }}
 func searchDatasetID(model SearchDatasetModel) string {
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		return model.ID.ValueString()
+	}
+{{- range .OneOfVariants }}
+	{{- $variant := . }}
+	if model.{{ .GoName }} != nil {
+	{{- range .Fields }}
+		{{- if eq .TerraformName "id" }}
+		if !model.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !model.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() && model.{{ $variant.GoName }}.{{ .GoName }}.ValueString() != "" {
+			return model.{{ $variant.GoName }}.{{ .GoName }}.ValueString()
+		}
+		{{- end }}
+	{{- end }}
+	}
+{{- end }}
+	return ""
+}
+
+{{- else if eq .StructName "SearchDatasetProvider" }}
+func searchDatasetProviderID(model SearchDatasetProviderModel) string {
 	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
 		return model.ID.ValueString()
 	}
@@ -1382,6 +1469,17 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t" }}
+					},
+				},
+				Description: "Legacy computed mirror of the API oneOf source payload. Configure type-specific input_* blocks instead.",
+			},
+{{- end }}
 {{ oneOfSchemaAttributes .OneOfVariants "\t\t\t" -}}
 		},
 	}
@@ -1490,6 +1588,14 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "SearchDatasetProvider") }}
+	plannedDescription := model.Description
+	plannedID := model.ID
+	plannedType := model.Type
+{{- if eq .StructName "SearchDataset" }}
+	plannedProviderID := model.ProviderID
+{{- end }}
+{{- end }}
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
@@ -1514,6 +1620,22 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "SearchDatasetProvider") }}
+	if !plannedDescription.IsNull() && !plannedDescription.IsUnknown() {
+		model.Description = plannedDescription
+	}
+	if !plannedID.IsNull() && !plannedID.IsUnknown() {
+		model.ID = plannedID
+	}
+	if !plannedType.IsNull() && !plannedType.IsUnknown() {
+		model.Type = plannedType
+	}
+{{- if eq .StructName "SearchDataset" }}
+	if !plannedProviderID.IsNull() && !plannedProviderID.IsUnknown() {
+		model.ProviderID = plannedProviderID
+	}
+{{- end }}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -1689,6 +1811,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if api == nil || state == nil {
 		return
 	}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	sync{{ .StructName }}LegacyItems(api, state)
+{{- end }}
 {{- range .Fields }}
 {{- if not .Computed }}
 	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())){{- if nestedObjectList . }} || (!api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() && !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0){{- end }} {
@@ -1769,7 +1894,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
 		state.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
-{{- else if eq .Type "object" }}
+{{- else if and (eq .Type "object") (not (objectAsJSON .)) }}
 	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 		state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal({{ listElementAttrType . }}) {
@@ -1942,6 +2067,17 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{ dataSourceAttributes .Fields "\t\t\t" }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t" }}
+					},
+				},
+				Description: "Legacy computed mirror of the API oneOf source payload. Use type-specific input_* blocks for new references.",
+			},
+{{- end }}
 {{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t" }}
 		},
 	}
@@ -2018,7 +2154,7 @@ type {{ .ListStructName }}DataSource struct {
 	client *restclient.Client
 }
 
-type {{ .ListStructName }}DataSourceModel struct {
+type {{ .ListStructName }}ListDataSourceModel struct {
 {{- range listConfigFields . }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\"`" + `
 {{- end }}
@@ -2042,7 +2178,12 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+{{- if .OneOfVariants }}
 {{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t\t" }}
+{{- else }}
+{{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
+{{- end }}
 					},
 				},
 			},
@@ -2066,7 +2207,7 @@ func (d *{{ .ListStructName }}DataSource) Configure(_ context.Context, req datas
 }
 
 func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model {{ .ListStructName }}DataSourceModel
+	var model {{ .ListStructName }}ListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -2089,11 +2230,24 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 
 func {{ .ListStructName }}ItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-{{- range listItemFields . }}
-		"{{ .TerraformName }}": {{ attrType . }},
+{{- range listItemAttrTypes . }}
+		{{ . }},
 {{- end }}
 	}
 }
+{{- range .OneOfVariants }}
+
+func {{ $.ListStructName }}{{ .GoName }}ObjectValue(item *{{ .ModelName }}) attr.Value {
+	if item == nil {
+		return types.ObjectNull({{ .ModelName }}AttrTypes())
+	}
+	return types.ObjectValueMust({{ .ModelName }}AttrTypes(), map[string]attr.Value{
+{{- range .Fields }}
+		"{{ .TerraformName }}": item.{{ .GoName }},
+{{- end }}
+	})
+}
+{{- end }}
 `
 
 const docTemplate = `---
@@ -2146,7 +2300,9 @@ package tests
 
 {{- if eq .Name "certificate" }}
 import (
+{{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"
+{{- end }}
 	"testing"
 	"time"
 
@@ -2235,6 +2391,7 @@ func TestGlobalVar(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "description", "test updated"),
 						resource.TestCheckResourceAttr(resourceName, "value", "200"),
 						resource.TestCheckResourceAttr(resourceName, "args.#", "1"),
+{{ acceptanceDataSourceChecks . "criblio_global_var.my_globalvar" "by_id" true }}
 					),
 				},
 				{
@@ -2267,10 +2424,13 @@ const globalVarUpdatedConfig = ` + "`" + `resource "criblio_global_var" "my_glob
   type        = "number"
   value       = "200"
 }
+{{ acceptanceDataSources . "criblio_global_var.my_globalvar" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Grok" }}
 import (
+{{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"
+{{- end }}
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -2293,6 +2453,7 @@ func TestGrok(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_grok"),
+{{ acceptanceDataSourceChecks . "criblio_grok.my_grok" "by_id" true }}
 					),
 				},
 				{
@@ -2324,6 +2485,7 @@ const grokUpdatedConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
 UPDATEDWORD [a-zA-Z]+
 EOT
 }
+{{ acceptanceDataSources . "criblio_grok.my_grok" "by_id" true }}
 ` + "`" + `
 
 const grokConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
@@ -2333,6 +2495,7 @@ const grokConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
 TESTWORD [a-zA-Z]+
 EOT
 }
+{{ acceptanceDataSources . "criblio_grok.my_grok" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Regex" }}
 import (
@@ -2371,6 +2534,7 @@ func TestRegex(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "test_regex_updated"),
 						resource.TestCheckResourceAttr(resourceName, "sample_data", "10.0.0.1"),
+{{ acceptanceDataSourceChecks . "criblio_regex.my_regex" "by_id" true }}
 					),
 				},
 				{
@@ -2397,6 +2561,7 @@ const regexUpdatedConfig = ` + "`" + `resource "criblio_regex" "my_regex" {
   sample_data = "10.0.0.1"
   tags        = "test"
 }
+{{ acceptanceDataSources . "criblio_regex.my_regex" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Schema" }}
 import (
@@ -2431,6 +2596,7 @@ func TestSchema(t *testing.T) {
 					Config: schemaUpdatedConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "test schema updated"),
+{{ acceptanceDataSourceChecks . "criblio_schema.my_schema" "by_id" true }}
 					),
 				},
 				{
@@ -2478,6 +2644,7 @@ const schemaUpdatedConfig = ` + "`" + `resource "criblio_schema" "my_schema" {
 }
 EOT
 }
+{{ acceptanceDataSources . "criblio_schema.my_schema" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Collector" }}
 import (
@@ -2518,6 +2685,8 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
+{{ acceptanceDataSourceChecks . "criblio_collector.splunk_access_log_collector" "splunk" false }}
+{{ acceptanceDataSourceChecks . "criblio_collector.rest_api_collector" "rest" false }}
 					),
 				},
 				{
@@ -2539,6 +2708,8 @@ func collectorConfig(t *testing.T, suffix string) string {
 	config := string(content)
 	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
 	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
+	config += ` + "`" + `{{ acceptanceDataSources . "criblio_collector.splunk_access_log_collector" "splunk" false }}
+{{ acceptanceDataSources . "criblio_collector.rest_api_collector" "rest" false }}` + "`" + `
 	return config
 }
 {{- else if eq .StructName "Pipeline" }}
@@ -2575,6 +2746,7 @@ func TestPipeline(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "conf.output", "default"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.0.id", "code"),
+{{ acceptanceDataSourceChecks . "criblio_pipeline.my_pipeline" "by_id" true }}
 					),
 				},
 				{
@@ -2623,6 +2795,7 @@ func pipelineConfig(id, description string) string {
     ]
   }
 }
+{{ acceptanceDataSources . "criblio_pipeline.my_pipeline" "by_id" true }}
 ` + "`" + `, id, description)
 }
 {{- else if eq .StructName "SearchDashboard" }}
@@ -2660,6 +2833,7 @@ func TestSearchDashboard(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "elements.#", "8"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.type", "counter.single"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.search.search_query_inline.query", "dataset=\"$vt_dummy\" event<42 | count"),
+{{ acceptanceDataSourceChecks . "criblio_search_dashboard.my_searchdashboard" "by_id" true }}
 					),
 				},
 				{
@@ -2719,7 +2893,223 @@ func searchDashboardConfig(t *testing.T, id, description string) string {
 		config = strings.Replace(config, old, replacement, 1)
 	}
 
-	return config
+	return config + ` + "`" + `{{ acceptanceDataSources . "criblio_search_dashboard.my_searchdashboard" "by_id" true }}` + "`" + `
+}
+{{- else if eq .StructName "NotificationTarget" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestNotificationTarget(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
+	}
+
+	id := "tf-nt-" + acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	resourceName := "criblio_notification_target.my_notificationtarget"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: notificationTargetConfig(id, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "id", id),
+						resource.TestCheckResourceAttr(resourceName, "sns_target.id", id),
+						resource.TestCheckResourceAttr(resourceName, "sns_target.type", "sns"),
+						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-created"),
+{{ acceptanceDataSourceChecks . "criblio_notification_target.my_notificationtarget" "by_id" true }}
+					),
+				},
+				{
+					Config: notificationTargetConfig(id, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-updated"),
+					),
+				},
+				{
+					Config:   notificationTargetConfig(id, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           id,
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: notificationTargetImportStateVerifyIgnore(),
+				},
+			},
+		})
+	})
+}
+
+func notificationTargetConfig(id, suffix string) string {
+	return fmt.Sprintf(` + "`" + `
+resource "criblio_notification_target" "my_notificationtarget" {
+  id = %[1]q
+  sns_target = {
+    id                        = %[1]q
+    type                      = "sns"
+    region                    = "us-east-1"
+    destination_type          = "topic"
+    topic_type                = "fifo"
+    topic_arn                 = "arn:aws:sns:us-east-1:123456789012:example-topic.fifo"
+    message_group_id          = "cribl-notifications-%[2]s"
+    endpoint                  = "https://sns.us-east-1.amazonaws.com"
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-sns-notify"
+    assume_role_external_id   = "cribl-example"
+    aws_authentication_method = "auto"
+    allowlist                 = []
+    system_fields = [
+      "cribl_host",
+    ]
+  }
+}
+{{ acceptanceDataSources . "criblio_notification_target.my_notificationtarget" "by_id" true }}
+` + "`" + `, id, suffix)
+}
+
+func notificationTargetImportStateVerifyIgnore() []string {
+	return []string{
+		"sns_target.aws_api_key",
+		"sns_target.aws_secret_key",
+		"sns_target.phone_number",
+	}
+}
+{{- else if eq .StructName "SearchDatasetProvider" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestSearchDatasetProvider(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is not supported")
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	apiHTTPID := "tf_api_http_" + suffix
+	elasticID := "tf_elastic_" + suffix
+	s3ID := "tf_s3_" + suffix
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "id", apiHTTPID),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "apihttp.id", apiHTTPID),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "id", elasticID),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.id", elasticID),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "id", s3ID),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "s3.id", s3ID),
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_searchdatasetprovider" "api_http" true }}
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_elastic_provider" "elastic" false }}
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_s3_provider" "s3" false }}
+					),
+				},
+				{
+					Config: searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "apihttp.description", "Example API HTTP search dataset provider updated"),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.description", "Example Elasticsearch provider updated"),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "s3.description", "Example S3 search dataset provider updated"),
+					),
+				},
+				{
+					Config:   searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:      "criblio_search_dataset_provider.my_searchdatasetprovider",
+					ImportState:       true,
+					ImportStateId:     apiHTTPID,
+					ImportStateVerify: true,
+					ImportStateVerifyIgnore: []string{
+						"description",
+					},
+				},
+			},
+		})
+	})
+}
+
+func searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, descriptionSuffix string) string {
+	return fmt.Sprintf(` + "`" + `
+resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
+  apihttp = {
+    authentication_method = "none"
+    available_endpoints = [
+      {
+        data_field = "results"
+        headers = [
+          {
+            name  = "Content-Type"
+            value = "application/json"
+          }
+        ]
+        method = "POST"
+        name   = "search"
+        url    = "http://localhost:8080/api/search"
+      }
+    ]
+    description = "Example API HTTP search dataset provider %[4]s"
+    id          = %[1]q
+    type        = "api_http"
+  }
+}
+
+resource "criblio_search_dataset_provider" "my_elastic_provider" {
+  api_elasticsearch = {
+    description = "Example Elasticsearch provider %[4]s"
+    endpoint    = "https://localhost:9200"
+    id          = %[2]q
+    password    = "changeme"
+    type        = "api_elasticsearch"
+    username    = "elastic"
+  }
+}
+
+resource "criblio_search_dataset_provider" "my_s3_provider" {
+  s3 = {
+    assume_role_arn           = "arn:aws:iam::123456789012:role/example-role"
+    assume_role_external_id   = "example-external-id"
+    aws_api_key               = "AKIAEXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret_key            = "example-secret"
+    bucket                    = "example-bucket"
+    bucket_path_suggestion    = "logs/"
+    description               = "Example S3 search dataset provider %[4]s"
+    enable_abac_tagging       = true
+    enable_assume_role        = false
+    endpoint                  = "https://s3.us-east-1.amazonaws.com"
+    id                        = %[3]q
+    region                    = "us-east-1"
+    reject_unauthorized       = true
+    reuse_connections         = false
+    session_token             = "example-session-token"
+    signature_version         = "v4"
+    type                      = "s3"
+  }
+}
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_searchdatasetprovider" "api_http" true }}
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_elastic_provider" "elastic" false }}
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_s3_provider" "s3" false }}
+` + "`" + `, apiHTTPID, elasticID, s3ID, descriptionSuffix)
 }
 {{- else if eq .StructName "Routes" }}
 import (
@@ -2746,6 +3136,7 @@ func TestRoutes(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "routes.0.pipeline", "main"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_2"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.pipeline", "main"),
+{{ acceptanceDataSourceChecks . "criblio_routes.my_routes" "by_id" false }}
 					),
 				},
 				{
@@ -2785,6 +3176,7 @@ func routesConfig(first, second string) string {
     }
   ]
 }
+{{ acceptanceDataSources . "criblio_routes.my_routes" "by_id" false }}
 ` + "`" + `
 }
 {{- else }}
@@ -2796,6 +3188,45 @@ func TestAcc{{ .StructName }}Scaffold(t *testing.T) {
 {{- end }}
 `
 
+const dataSourceTestTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
+
+package tests
+
+import (
+{{- if or (acceptanceDataSourceSkipsCloud .) (acceptanceDataSourceSkipsOnPrem .) }}
+	"os"
+{{- end }}
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func Test{{ .StructName }}DataSources(t *testing.T) {
+{{- if acceptanceDataSourceSkipsCloud . }}
+	if os.Getenv("DEPLOYMENT") != "onprem" {
+		t.Skip("Skipping data source acceptance test for Cloud deployments as it is not supported")
+	}
+{{- end }}
+{{- if acceptanceDataSourceSkipsOnPrem . }}
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
+	}
+{{- end }}
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: {{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
+				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . "" "by_id" true }}
+				),
+			},
+		},
+	})
+}
+`
+
 var templateBodies = map[string]string{
 	"types":            typesTemplate,
 	"client":           clientTemplate,
@@ -2804,4 +3235,5 @@ var templateBodies = map[string]string{
 	"list_data_source": listDataSourceTemplate,
 	"doc":              docTemplate,
 	"test":             testTemplate,
+	"data_source_test": dataSourceTestTemplate,
 }

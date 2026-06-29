@@ -23,7 +23,7 @@ type PipelinesDataSource struct {
 	client *restclient.Client
 }
 
-type PipelinesDataSourceModel struct {
+type PipelinesListDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
 	Items   types.List   `tfsdk:"items"`
 }
@@ -152,7 +152,7 @@ func (d *PipelinesDataSource) Configure(_ context.Context, req datasource.Config
 }
 
 func (d *PipelinesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model PipelinesDataSourceModel
+	var model PipelinesListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return

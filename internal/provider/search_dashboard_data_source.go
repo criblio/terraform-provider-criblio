@@ -610,10 +610,6 @@ func (d *SearchDashboardDataSource) Schema(_ context.Context, _ datasource.Schem
 													Computed:    true,
 													Description: `Persistent queue usage threshold.`,
 												},
-												"__worker_group": schema.StringAttribute{
-													Computed:    true,
-													Description: `Optional scope to a specific worker group.`,
-												},
 											},
 										},
 										"metadata": schema.ListNestedAttribute{

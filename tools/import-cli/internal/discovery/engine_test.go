@@ -10,8 +10,10 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/stretchr/testify/assert"
@@ -46,13 +48,24 @@ func criblMockServer(t *testing.T) *httptest.Server {
 	}))
 }
 
+func criblMockClient(server *httptest.Server) *importclient.Client {
+	return &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+		SDK: sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client())),
+	}
+}
+
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
 	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
+	client := criblMockClient(server)
 
 	results, err := Discover(ctx, client, reg, nil, nil, nil, false)
 	require.NoError(t, err)
@@ -82,7 +95,7 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
+	client := criblMockClient(server)
 
 	// Only criblio_source and criblio_pipeline
 	results, err := Discover(ctx, client, reg, []string{"criblio_source", "criblio_pipeline"}, nil, nil, false)
@@ -109,7 +122,7 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
+	client := criblMockClient(server)
 
 	results, err := Discover(ctx, client, reg, []string{"criblio_source"}, nil, nil, false)
 	require.NoError(t, err)
@@ -128,7 +141,7 @@ func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
+	client := criblMockClient(server)
 
 	// Include only a type that doesn't exist
 	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil, false)
@@ -173,6 +186,29 @@ func TestIdentifiersFromItems_skipsLibCribl(t *testing.T) {
 	assert.Len(t, ids, 1)
 	assert.Equal(t, "user-one", ids[0]["id"])
 	assert.Equal(t, "default", ids[0]["group_id"])
+}
+
+func TestGetIDFromItem_handlesWrappedMapAndStructFields(t *testing.T) {
+	items := []any{
+		map[string]any{"id": "from-map"},
+		idFieldOnly{ID: "from-field"},
+		keyIDFieldOnly{KeyID: "from-key-field"},
+		map[string]any{"name": "from-map-name"},
+		nameMethodOnly{Name: "from-method-name"},
+	}
+
+	assert.Equal(t, "from-map", getIDFromItem(reflect.ValueOf(items).Index(0), ""))
+	assert.Equal(t, "from-field", getIDFromItem(reflect.ValueOf(items).Index(1), ""))
+	assert.Equal(t, "from-key-field", getIDFromItem(reflect.ValueOf(items).Index(2), ""))
+	assert.Equal(t, "from-map-name", getIDFromItem(reflect.ValueOf(items).Index(3), ""))
+	assert.Equal(t, "from-method-name", getIDFromItem(reflect.ValueOf(items).Index(4), ""))
+}
+
+func TestGetIDFromItem_handlesUnionGetNameFallback(t *testing.T) {
+	name := "from-name"
+	item := nameOnlyUnion{NameOnly: &nameOnly{Name: &name}}
+
+	assert.Equal(t, "from-name", getIDFromItem(reflect.ValueOf(item), ""))
 }
 
 // TestRegistryListMethodsExistOnSDK ensures every registry entry that has SDKService and
@@ -265,3 +301,34 @@ func errFromString(s string) error {
 type errString struct{ s string }
 
 func (e *errString) Error() string { return e.s }
+
+type idFieldOnly struct {
+	ID string
+}
+
+type keyIDFieldOnly struct {
+	KeyID string
+}
+
+type nameMethodOnly struct {
+	Name string
+}
+
+func (n nameMethodOnly) GetName() string {
+	return n.Name
+}
+
+type nameOnly struct {
+	Name *string
+}
+
+func (n *nameOnly) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+type nameOnlyUnion struct {
+	NameOnly *nameOnly
+}

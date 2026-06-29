@@ -561,7 +561,6 @@ type InputCollectorRestCollectorConfModel struct {
 	Discovery                       types.Object `tfsdk:"discovery" json:"discovery,omitempty"`
 	Pagination                      types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
 	RetryRules                      types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
-	Scheduling                      types.Object `tfsdk:"__scheduling" json:"__scheduling,omitempty"`
 }
 
 type InputCollectorRestCollectorConfAPIModel struct {
@@ -598,7 +597,6 @@ type InputCollectorRestCollectorConfAPIModel struct {
 	Discovery                       any      `json:"discovery,omitempty"`
 	Pagination                      any      `json:"pagination,omitempty"`
 	RetryRules                      any      `json:"retryRules,omitempty"`
-	Scheduling                      any      `json:"__scheduling,omitempty"`
 }
 
 func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
@@ -636,7 +634,6 @@ func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
 		"discovery":                          types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryAttrTypes()},
 		"pagination":                         types.ObjectType{AttrTypes: InputCollectorRestCollectorConfPaginationAttrTypes()},
 		"retry_rules":                        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRetryRulesAttrTypes()},
-		"__scheduling":                       types.ObjectType{AttrTypes: InputCollectorRestCollectorConfSchedulingAttrTypes()},
 	}
 }
 
@@ -939,20 +936,6 @@ func InputCollectorRestCollectorConfRetryRulesAttrTypes() map[string]attr.Type {
 		"retry_connect_timeout": types.BoolType,
 		"retry_connect_reset":   types.BoolType,
 		"retry_header_name":     types.StringType,
-	}
-}
-
-type InputCollectorRestCollectorConfSchedulingModel struct {
-	StateTracking types.Map `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
-}
-
-type InputCollectorRestCollectorConfSchedulingAPIModel struct {
-	StateTracking map[string]string `json:"stateTracking,omitempty"`
-}
-
-func InputCollectorRestCollectorConfSchedulingAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"state_tracking": types.MapType{ElemType: types.StringType},
 	}
 }
 
@@ -2989,6 +2972,23 @@ type InputCollectorSplunkModel struct {
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
+func InputCollectorSplunkModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorSplunkScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorSplunkInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorSplunkCollectorAttrTypes()},
+	}
+}
+
 func (m InputCollectorSplunkModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -3203,6 +3203,23 @@ type InputCollectorRestModel struct {
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+}
+
+func InputCollectorRestModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorRestScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorRestInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorRestCollectorAttrTypes()},
+	}
 }
 
 func (m InputCollectorRestModel) terraformPayload() (map[string]any, error) {
@@ -3421,6 +3438,23 @@ type InputCollectorS3Model struct {
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
+func InputCollectorS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorS3ScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorS3InputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorS3CollectorAttrTypes()},
+	}
+}
+
 func (m InputCollectorS3Model) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -3635,6 +3669,23 @@ type InputCollectorAzureBlobModel struct {
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+}
+
+func InputCollectorAzureBlobModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorAzureBlobScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorAzureBlobInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorAttrTypes()},
+	}
 }
 
 func (m InputCollectorAzureBlobModel) terraformPayload() (map[string]any, error) {
@@ -3853,6 +3904,23 @@ type InputCollectorCriblLakeModel struct {
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
+func InputCollectorCriblLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorCriblLakeScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorCriblLakeInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorCriblLakeCollectorAttrTypes()},
+	}
+}
+
 func (m InputCollectorCriblLakeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -4067,6 +4135,23 @@ type InputCollectorDatabaseModel struct {
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+}
+
+func InputCollectorDatabaseModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorDatabaseScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorDatabaseInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorDatabaseCollectorAttrTypes()},
+	}
 }
 
 func (m InputCollectorDatabaseModel) terraformPayload() (map[string]any, error) {
@@ -4285,6 +4370,23 @@ type InputCollectorGCSModel struct {
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
+func InputCollectorGCSModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorGCSScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorGCSInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorGCSCollectorAttrTypes()},
+	}
+}
+
 func (m InputCollectorGCSModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -4501,6 +4603,23 @@ type InputCollectorHealthCheckModel struct {
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
 }
 
+func InputCollectorHealthCheckModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorHealthCheckScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorHealthCheckInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorHealthCheckCollectorAttrTypes()},
+	}
+}
+
 func (m InputCollectorHealthCheckModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -4715,6 +4834,23 @@ type InputCollectorScriptModel struct {
 	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
 	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
 	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+}
+
+func InputCollectorScriptModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorScriptScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorScriptInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorScriptCollectorAttrTypes()},
+	}
 }
 
 func (m InputCollectorScriptModel) terraformPayload() (map[string]any, error) {

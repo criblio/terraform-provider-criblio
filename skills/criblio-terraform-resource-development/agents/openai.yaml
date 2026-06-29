@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cribl Terraform Resource Development"
+  short_description: "Generate provider resources from Cribl API specs"
+  default_prompt: "Use $criblio-terraform-resource-development to add a Cribl API endpoint as a generated Terraform resource with tests, docs, import-cli support, and PR prep."
+policy:
+  allow_implicit_invocation: true

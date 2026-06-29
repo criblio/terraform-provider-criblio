@@ -89,6 +89,7 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Computed:      true,
 				PlanModifiers: collectorWorkerAffinityPlanModifiers(),
 			},
+
 			"input_collector_splunk": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -1338,19 +1339,6 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 												Required: false,
 												Optional: true,
 												Computed: true,
-											},
-										},
-									},
-									"__scheduling": schema.SingleNestedAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
-										Attributes: map[string]schema.Attribute{
-											"state_tracking": schema.MapAttribute{
-												Required:    false,
-												Optional:    true,
-												Computed:    true,
-												ElementType: types.StringType,
 											},
 										},
 									},

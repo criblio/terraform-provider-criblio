@@ -6,13 +6,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"reflect"
 	"strings"
 	"unicode"
 
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -38,9 +41,12 @@ func RefreshFromMethodName(getMethod string) string {
 // For criblio_search_dataset and criblio_search_dataset_provider, if the list response was
 // cached (SDK union unmarshal failed for cribl_lake), we build the model from the cached
 // list item instead of calling Get—same pattern as reusing list response for usage group.
-func Convert(ctx context.Context, client *sdk.CriblIo, e registry.Entry, requestParams map[string]string) (model interface{}, err error) {
+func Convert(ctx context.Context, client *importclient.Client, e registry.Entry, requestParams map[string]string) (model interface{}, err error) {
 	if e.GetMethod == "" {
 		return nil, fmt.Errorf("%s: no GetMethod in registry", e.TypeName)
+	}
+	if client == nil {
+		return nil, fmt.Errorf("client is nil")
 	}
 	modelTypes := ResourceModelTypes()
 	modelType, ok := modelTypes[e.ModelTypeName]
@@ -48,10 +54,26 @@ func Convert(ctx context.Context, client *sdk.CriblIo, e registry.Entry, request
 		return nil, fmt.Errorf("%s: unknown model type %q", e.TypeName, e.ModelTypeName)
 	}
 
+	if e.RESTGetPath != "" {
+		raw, restErr := callRESTGetByID(ctx, client, e, requestParams)
+		if restErr == nil {
+			converted, convErr := convertGeneratedModelFromRawItem(e, modelType, raw)
+			if convErr == nil {
+				if injErr := InjectRequiredIdentifiers(converted, requestParams); injErr != nil {
+					return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
+				}
+				return converted, nil
+			}
+		}
+	}
+
 	// Call SDK Get* first so we get full response (type-specific blocks like s3_provider, apihttp_provider).
 	// For search_dataset/search_dataset_provider, only fall back to cached list item when Get fails
 	// (e.g. SDK unmarshal error for cribl_lake); list item has only id/description/type so HCL would be empty.
-	respBody, err := callGetByID(ctx, client, e, requestParams)
+	if client.SDK == nil {
+		return nil, fmt.Errorf("legacy SDK client is nil")
+	}
+	respBody, err := callGetByID(ctx, client.SDK, e, requestParams)
 	// criblio_pack_destination: SDK GetPackOutputByIDResponseBody is empty; use captured raw response (same shape as GetOutputByID).
 	// Store raw items[0] so export can emit the oneOf block (e.g. output_cribl_lake) when the model has no Items field.
 	if err == nil && e.TypeName == "criblio_pack_destination" {
@@ -240,6 +262,10 @@ func convertGeneratedModelFromResponseBody(e registry.Entry, modelType reflect.T
 	if err != nil {
 		return nil, fmt.Errorf("%s: marshal response item: %w", e.TypeName, err)
 	}
+	return convertGeneratedModelFromRawItem(e, modelType, itemJSON)
+}
+
+func convertGeneratedModelFromRawItem(e registry.Entry, modelType reflect.Type, itemJSON json.RawMessage) (interface{}, error) {
 	var values map[string]json.RawMessage
 	if err := json.Unmarshal(itemJSON, &values); err != nil {
 		return nil, fmt.Errorf("%s: decode response item: %w", e.TypeName, err)
@@ -257,6 +283,38 @@ func convertGeneratedModelFromResponseBody(e registry.Entry, modelType reflect.T
 		return nil, fmt.Errorf("%s: populate generated model: %w", e.TypeName, err)
 	}
 	return modelVal.Interface(), nil
+}
+
+func callRESTGetByID(ctx context.Context, client *importclient.Client, e registry.Entry, requestParams map[string]string) (json.RawMessage, error) {
+	if client == nil || client.REST == nil {
+		return nil, fmt.Errorf("REST client is nil")
+	}
+	path := renderRESTPath(e.RESTGetPath, restPathValues(requestParams))
+	items, err := restclient.Get[[]json.RawMessage](ctx, client.REST, path)
+	if err != nil {
+		return nil, err
+	}
+	if items == nil || len(*items) == 0 {
+		return nil, fmt.Errorf("%s: empty REST response", e.TypeName)
+	}
+	return (*items)[0], nil
+}
+
+func restPathValues(requestParams map[string]string) map[string]string {
+	return map[string]string{
+		"group_id": requestParams["GroupID"],
+		"id":       requestParams["ID"],
+		"pack":     requestParams["Pack"],
+		"lake_id":  requestParams["LakeID"],
+	}
+}
+
+func renderRESTPath(path string, values map[string]string) string {
+	rendered := path
+	for key, value := range values {
+		rendered = strings.ReplaceAll(rendered, "{"+key+"}", url.PathEscape(value))
+	}
+	return rendered
 }
 
 func copyMatchingFields(dst, src reflect.Value) {

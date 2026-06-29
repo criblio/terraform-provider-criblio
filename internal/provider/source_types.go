@@ -19,6 +19,7 @@ var _ = jsontypes.NormalizedType{}
 type SourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -92,6 +93,7 @@ type SourceModel struct {
 type SourceResourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -165,6 +167,7 @@ type SourceResourceModel struct {
 type SourceDataSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.List                      `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -238,6 +241,79 @@ type SourceDataSourceModel struct {
 type SourceAPIModel struct {
 	GroupID *string `json:"groupId,omitempty"`
 	ID      *string `json:"id,omitempty"`
+}
+
+func SourceLegacyItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"input_collection":             types.ObjectType{AttrTypes: InputCollectionModelAttrTypes()},
+		"input_kafka":                  types.ObjectType{AttrTypes: InputKafkaModelAttrTypes()},
+		"input_msk":                    types.ObjectType{AttrTypes: InputMskModelAttrTypes()},
+		"input_http":                   types.ObjectType{AttrTypes: InputHttpModelAttrTypes()},
+		"input_splunk":                 types.ObjectType{AttrTypes: InputSplunkModelAttrTypes()},
+		"input_splunk_search":          types.ObjectType{AttrTypes: InputSplunkSearchModelAttrTypes()},
+		"input_splunk_hec":             types.ObjectType{AttrTypes: InputSplunkHecModelAttrTypes()},
+		"input_azure_blob":             types.ObjectType{AttrTypes: InputAzureBlobModelAttrTypes()},
+		"input_elastic":                types.ObjectType{AttrTypes: InputElasticModelAttrTypes()},
+		"input_confluent_cloud":        types.ObjectType{AttrTypes: InputConfluentCloudModelAttrTypes()},
+		"input_grafana":                types.ObjectType{AttrTypes: InputGrafanaModelAttrTypes()},
+		"input_loki":                   types.ObjectType{AttrTypes: InputLokiModelAttrTypes()},
+		"input_prometheus_rw":          types.ObjectType{AttrTypes: InputPrometheusRwModelAttrTypes()},
+		"input_prometheus":             types.ObjectType{AttrTypes: InputPrometheusModelAttrTypes()},
+		"input_edge_prometheus":        types.ObjectType{AttrTypes: InputEdgePrometheusModelAttrTypes()},
+		"input_office365_mgmt":         types.ObjectType{AttrTypes: InputOffice365MgmtModelAttrTypes()},
+		"input_office365_service":      types.ObjectType{AttrTypes: InputOffice365ServiceModelAttrTypes()},
+		"input_office365_msg_trace":    types.ObjectType{AttrTypes: InputOffice365MsgTraceModelAttrTypes()},
+		"input_microsoft_graph":        types.ObjectType{AttrTypes: InputMicrosoftGraphModelAttrTypes()},
+		"input_eventhub":               types.ObjectType{AttrTypes: InputEventhubModelAttrTypes()},
+		"input_eventhub_amqp":          types.ObjectType{AttrTypes: InputEventhubAmqpModelAttrTypes()},
+		"input_exec":                   types.ObjectType{AttrTypes: InputExecModelAttrTypes()},
+		"input_firehose":               types.ObjectType{AttrTypes: InputFirehoseModelAttrTypes()},
+		"input_google_pubsub":          types.ObjectType{AttrTypes: InputGooglePubsubModelAttrTypes()},
+		"input_cribl":                  types.ObjectType{AttrTypes: InputCriblModelAttrTypes()},
+		"input_cribl_tcp":              types.ObjectType{AttrTypes: InputCriblTcpModelAttrTypes()},
+		"input_cribl_http":             types.ObjectType{AttrTypes: InputCriblHttpModelAttrTypes()},
+		"input_cribl_lake_http":        types.ObjectType{AttrTypes: InputCriblLakeHttpModelAttrTypes()},
+		"input_tcpjson":                types.ObjectType{AttrTypes: InputTcpjsonModelAttrTypes()},
+		"input_system_metrics":         types.ObjectType{AttrTypes: InputSystemMetricsModelAttrTypes()},
+		"input_system_state":           types.ObjectType{AttrTypes: InputSystemStateModelAttrTypes()},
+		"input_kube_metrics":           types.ObjectType{AttrTypes: InputKubeMetricsModelAttrTypes()},
+		"input_kube_logs":              types.ObjectType{AttrTypes: InputKubeLogsModelAttrTypes()},
+		"input_kube_events":            types.ObjectType{AttrTypes: InputKubeEventsModelAttrTypes()},
+		"input_windows_metrics":        types.ObjectType{AttrTypes: InputWindowsMetricsModelAttrTypes()},
+		"input_crowdstrike":            types.ObjectType{AttrTypes: InputCrowdstrikeModelAttrTypes()},
+		"input_datadog_agent":          types.ObjectType{AttrTypes: InputDatadogAgentModelAttrTypes()},
+		"input_datagen":                types.ObjectType{AttrTypes: InputDatagenModelAttrTypes()},
+		"input_http_raw":               types.ObjectType{AttrTypes: InputHttpRawModelAttrTypes()},
+		"input_kinesis":                types.ObjectType{AttrTypes: InputKinesisModelAttrTypes()},
+		"input_criblmetrics":           types.ObjectType{AttrTypes: InputCriblmetricsModelAttrTypes()},
+		"input_metrics":                types.ObjectType{AttrTypes: InputMetricsModelAttrTypes()},
+		"input_s3":                     types.ObjectType{AttrTypes: InputS3ModelAttrTypes()},
+		"input_s3_inventory":           types.ObjectType{AttrTypes: InputS3InventoryModelAttrTypes()},
+		"input_snmp":                   types.ObjectType{AttrTypes: InputSnmpModelAttrTypes()},
+		"input_open_telemetry":         types.ObjectType{AttrTypes: InputOpenTelemetryModelAttrTypes()},
+		"input_model_driven_telemetry": types.ObjectType{AttrTypes: InputModelDrivenTelemetryModelAttrTypes()},
+		"input_sqs":                    types.ObjectType{AttrTypes: InputSqsModelAttrTypes()},
+		"input_syslog":                 types.ObjectType{AttrTypes: InputSyslogModelAttrTypes()},
+		"input_file":                   types.ObjectType{AttrTypes: InputFileModelAttrTypes()},
+		"input_tcp":                    types.ObjectType{AttrTypes: InputTcpModelAttrTypes()},
+		"input_appscope":               types.ObjectType{AttrTypes: InputAppscopeModelAttrTypes()},
+		"input_wef":                    types.ObjectType{AttrTypes: InputWefModelAttrTypes()},
+		"input_win_event_logs":         types.ObjectType{AttrTypes: InputWinEventLogsModelAttrTypes()},
+		"input_apple_unified_logs":     types.ObjectType{AttrTypes: InputAppleUnifiedLogsModelAttrTypes()},
+		"input_raw_udp":                types.ObjectType{AttrTypes: InputRawUdpModelAttrTypes()},
+		"input_journal_files":          types.ObjectType{AttrTypes: InputJournalFilesModelAttrTypes()},
+		"input_wiz":                    types.ObjectType{AttrTypes: InputWizModelAttrTypes()},
+		"input_openai":                 types.ObjectType{AttrTypes: InputOpenaiModelAttrTypes()},
+		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
+		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
+		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
+		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
+		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
+		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
+		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
+	}
 }
 
 type InputCollectionCriblSourceProvenanceModel struct {
@@ -461,18 +537,59 @@ func InputKafkaKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputKafkaKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputKafkaKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputKafkaKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputKafkaKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputKafkaKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -794,18 +911,59 @@ func InputMskKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputMskKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputMskKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputMskKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputMskKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputMskKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2010,18 +2168,59 @@ func InputConfluentCloudKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type InputConfluentCloudKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type InputConfluentCloudKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func InputConfluentCloudKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2751,6 +2950,23 @@ func InputPrometheusSearchFilterAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputPrometheusHttpDiscoveryHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputPrometheusHttpDiscoveryHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputPrometheusHttpDiscoveryHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
 type InputEdgePrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
@@ -2923,6 +3139,23 @@ func InputEdgePrometheusPodFilterAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"filter":      types.StringType,
 		"description": types.StringType,
+	}
+}
+
+type InputEdgePrometheusHttpDiscoveryHeadersModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputEdgePrometheusHttpDiscoveryHeadersAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputEdgePrometheusHttpDiscoveryHeadersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -3818,15 +4051,24 @@ func InputEventhubAmqpAuthAttrTypes() map[string]attr.Type {
 
 type InputEventhubAmqpAuthCertificateModel struct {
 	CertificateName types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CertPath        types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	PrivKeyPath     types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase      types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 }
 
 type InputEventhubAmqpAuthCertificateAPIModel struct {
 	CertificateName *string `json:"certificateName,omitempty"`
+	CertPath        *string `json:"certPath,omitempty"`
+	PrivKeyPath     *string `json:"privKeyPath,omitempty"`
+	Passphrase      *string `json:"passphrase,omitempty"`
 }
 
 func InputEventhubAmqpAuthCertificateAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"certificate_name": types.StringType,
+		"cert_path":        types.StringType,
+		"priv_key_path":    types.StringType,
+		"passphrase":       types.StringType,
 	}
 }
 
@@ -10531,6 +10773,7 @@ func InputCloudflareHecPqAttrTypes() map[string]attr.Type {
 type InputCloudflareHecAuthTokensModel struct {
 	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
 	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
 	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
@@ -10540,6 +10783,7 @@ type InputCloudflareHecAuthTokensModel struct {
 type InputCloudflareHecAuthTokensAPIModel struct {
 	AuthType              *string  `json:"authType,omitempty"`
 	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
 	Enabled               *bool    `json:"enabled,omitempty"`
 	Description           *string  `json:"description,omitempty"`
 	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
@@ -10550,6 +10794,7 @@ func InputCloudflareHecAuthTokensAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"auth_type":                types.StringType,
 		"token_secret":             types.StringType,
+		"token":                    types.StringType,
 		"enabled":                  types.BoolType,
 		"description":              types.StringType,
 		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
@@ -11891,6 +12136,7 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	setSourceLegacyItemsFromRaw(m, raw)
 	var input SourceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
@@ -12270,6 +12516,28 @@ type InputCollectionModel struct {
 	Output                types.String  `tfsdk:"output" json:"output,omitempty"`
 }
 
+func InputCollectionModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputCollectionCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectionConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputCollectionPqAttrTypes()},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"preprocess":              types.ObjectType{AttrTypes: InputCollectionPreprocessAttrTypes()},
+		"throttle_rate_per_sec":   types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectionMetadataAttrTypes()}},
+		"output":                  types.StringType,
+	}
+}
+
 func (m InputCollectionModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -12588,6 +12856,47 @@ type InputKafkaModel struct {
 	MaxSocketErrors           types.Float64 `tfsdk:"max_socket_errors" json:"maxSocketErrors,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputKafkaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"disabled":                   types.BoolType,
+		"pipeline":                   types.StringType,
+		"send_to_routes":             types.BoolType,
+		"environment":                types.StringType,
+		"pq_enabled":                 types.BoolType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":    types.ObjectType{AttrTypes: InputKafkaCriblSourceProvenanceAttrTypes()},
+		"connections":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKafkaConnectionsAttrTypes()}},
+		"pq":                         types.ObjectType{AttrTypes: InputKafkaPqAttrTypes()},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topics":                     types.ListType{ElemType: types.StringType},
+		"group_id":                   types.StringType,
+		"from_beginning":             types.BoolType,
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: InputKafkaKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: InputKafkaSaslAttrTypes()},
+		"tls":                        types.ObjectType{AttrTypes: InputKafkaTLSAttrTypes()},
+		"session_timeout":            types.Float64Type,
+		"rebalance_timeout":          types.Float64Type,
+		"heartbeat_interval":         types.Float64Type,
+		"auto_commit_interval":       types.Float64Type,
+		"auto_commit_threshold":      types.Float64Type,
+		"max_bytes_per_partition":    types.Float64Type,
+		"max_bytes":                  types.Float64Type,
+		"max_socket_errors":          types.Float64Type,
+		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()}},
+		"description":                types.StringType,
+	}
 }
 
 func (m InputKafkaModel) terraformPayload() (map[string]any, error) {
@@ -13223,6 +13532,58 @@ type InputMskModel struct {
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                 types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                 types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+}
+
+func InputMskModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"disabled":                   types.BoolType,
+		"pipeline":                   types.StringType,
+		"send_to_routes":             types.BoolType,
+		"environment":                types.StringType,
+		"pq_enabled":                 types.BoolType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":    types.ObjectType{AttrTypes: InputMskCriblSourceProvenanceAttrTypes()},
+		"connections":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputMskConnectionsAttrTypes()}},
+		"pq":                         types.ObjectType{AttrTypes: InputMskPqAttrTypes()},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topics":                     types.ListType{ElemType: types.StringType},
+		"group_id":                   types.StringType,
+		"from_beginning":             types.BoolType,
+		"session_timeout":            types.Float64Type,
+		"rebalance_timeout":          types.Float64Type,
+		"heartbeat_interval":         types.Float64Type,
+		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputMskMetadataAttrTypes()}},
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: InputMskKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"aws_authentication_method":  types.StringType,
+		"aws_secret_key":             types.StringType,
+		"region":                     types.StringType,
+		"endpoint":                   types.StringType,
+		"reuse_connections":          types.BoolType,
+		"reject_unauthorized":        types.BoolType,
+		"enable_assume_role":         types.BoolType,
+		"assume_role_arn":            types.StringType,
+		"assume_role_external_id":    types.StringType,
+		"duration_seconds":           types.Float64Type,
+		"tls":                        types.ObjectType{AttrTypes: InputMskTLSAttrTypes()},
+		"auto_commit_interval":       types.Float64Type,
+		"auto_commit_threshold":      types.Float64Type,
+		"max_bytes_per_partition":    types.Float64Type,
+		"max_bytes":                  types.Float64Type,
+		"max_socket_errors":          types.Float64Type,
+		"description":                types.StringType,
+		"aws_api_key":                types.StringType,
+		"aws_secret":                 types.StringType,
+	}
 }
 
 func (m InputMskModel) terraformPayload() (map[string]any, error) {
@@ -14022,6 +14383,44 @@ type InputHttpModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputHttpCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputHttpPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"tls":                      types.ObjectType{AttrTypes: InputHttpTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"cribl_api":                types.StringType,
+		"elastic_api":              types.StringType,
+		"splunk_hec_api":           types.StringType,
+		"splunk_hec_acks":          types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpMetadataAttrTypes()}},
+		"auth_tokens_ext":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpAuthTokensExtAttrTypes()}},
+		"description":              types.StringType,
+	}
+}
+
 func (m InputHttpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -14592,6 +14991,41 @@ type InputSplunkModel struct {
 	Compress              types.String  `tfsdk:"compress" json:"compress,omitempty"`
 }
 
+func InputSplunkModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputSplunkCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputSplunkPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputSplunkTLSAttrTypes()},
+		"ip_whitelist_regex":      types.StringType,
+		"max_active_cxn":          types.Float64Type,
+		"socket_idle_timeout":     types.Float64Type,
+		"socket_ending_max_wait":  types.Float64Type,
+		"socket_max_lifespan":     types.Float64Type,
+		"enable_proxy_header":     types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkMetadataAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"auth_tokens":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()}},
+		"max_s2_sversion":         types.StringType,
+		"description":             types.StringType,
+		"use_fwd_timezone":        types.BoolType,
+		"drop_control_fields":     types.BoolType,
+		"extract_metrics":         types.BoolType,
+		"compress":                types.StringType,
+	}
+}
+
 func (m InputSplunkModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -15123,6 +15557,52 @@ type InputSplunkSearchModel struct {
 	Token                 types.String  `tfsdk:"token" json:"token,omitempty"`
 	CredentialsSecret     types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func InputSplunkSearchModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputSplunkSearchCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkSearchConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputSplunkSearchPqAttrTypes()},
+		"search_head":             types.StringType,
+		"search":                  types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"cron_schedule":           types.StringType,
+		"endpoint":                types.StringType,
+		"output_mode":             types.StringType,
+		"endpoint_params":         types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkSearchEndpointParamsAttrTypes()}},
+		"endpoint_headers":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkSearchEndpointHeadersAttrTypes()}},
+		"log_level":               types.StringType,
+		"request_timeout":         types.Float64Type,
+		"use_round_robin_dns":     types.BoolType,
+		"reject_unauthorized":     types.BoolType,
+		"encoding":                types.StringType,
+		"keep_alive_time":         types.Float64Type,
+		"job_timeout":             types.StringType,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkSearchMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputSplunkSearchRetryRulesAttrTypes()},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"username":                types.StringType,
+		"password":                types.StringType,
+		"token":                   types.StringType,
+		"credentials_secret":      types.StringType,
+		"text_secret":             types.StringType,
+	}
 }
 
 func (m InputSplunkSearchModel) terraformPayload() (map[string]any, error) {
@@ -15831,6 +16311,49 @@ type InputSplunkHecModel struct {
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputSplunkHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputSplunkHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputSplunkHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputSplunkHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"splunk_hec_api":               types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputSplunkHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"splunk_hec_acks":              types.BoolType,
+		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":       types.Float64Type,
+		"use_fwd_timezone":             types.BoolType,
+		"drop_control_fields":          types.BoolType,
+		"extract_metrics":              types.BoolType,
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
 func (m InputSplunkHecModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -16485,6 +17008,45 @@ type InputAzureBlobModel struct {
 	Certificate                 types.Object  `tfsdk:"certificate" json:"certificate,omitempty"`
 }
 
+func InputAzureBlobModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputAzureBlobCriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureBlobConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputAzureBlobPqAttrTypes()},
+		"queue_name":                     types.StringType,
+		"file_filter":                    types.StringType,
+		"visibility_timeout":             types.Float64Type,
+		"num_receivers":                  types.Float64Type,
+		"max_messages":                   types.Float64Type,
+		"service_period_secs":            types.Float64Type,
+		"skip_on_error":                  types.BoolType,
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()}},
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":         types.Float64Type,
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"auth_type":                      types.StringType,
+		"description":                    types.StringType,
+		"connection_string":              types.StringType,
+		"text_secret":                    types.StringType,
+		"storage_account_name":           types.StringType,
+		"tenant_id":                      types.StringType,
+		"client_id":                      types.StringType,
+		"azure_cloud":                    types.StringType,
+		"endpoint_suffix":                types.StringType,
+		"client_text_secret":             types.StringType,
+		"certificate":                    types.ObjectType{AttrTypes: InputAzureBlobCertificateAttrTypes()},
+	}
+}
+
 func (m InputAzureBlobModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -17076,6 +17638,48 @@ type InputElasticModel struct {
 	CredentialsSecret     types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
 	CustomAPIVersion      types.String  `tfsdk:"custom_apiversion" json:"customAPIVersion,omitempty"`
+}
+
+func InputElasticModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputElasticCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputElasticConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputElasticPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: InputElasticTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"elastic_api":              types.StringType,
+		"auth_type":                types.StringType,
+		"api_version":              types.StringType,
+		"extra_http_headers":       types.ListType{ElemType: types.ObjectType{AttrTypes: InputElasticExtraHttpHeadersAttrTypes()}},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputElasticMetadataAttrTypes()}},
+		"proxy_mode":               types.ObjectType{AttrTypes: InputElasticProxyModeAttrTypes()},
+		"description":              types.StringType,
+		"username":                 types.StringType,
+		"password":                 types.StringType,
+		"credentials_secret":       types.StringType,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"custom_apiversion":        types.StringType,
+	}
 }
 
 func (m InputElasticModel) terraformPayload() (map[string]any, error) {
@@ -17718,6 +18322,47 @@ type InputConfluentCloudModel struct {
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputConfluentCloudModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"disabled":                   types.BoolType,
+		"pipeline":                   types.StringType,
+		"send_to_routes":             types.BoolType,
+		"environment":                types.StringType,
+		"pq_enabled":                 types.BoolType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":    types.ObjectType{AttrTypes: InputConfluentCloudCriblSourceProvenanceAttrTypes()},
+		"connections":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputConfluentCloudConnectionsAttrTypes()}},
+		"pq":                         types.ObjectType{AttrTypes: InputConfluentCloudPqAttrTypes()},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"tls":                        types.ObjectType{AttrTypes: InputConfluentCloudTLSAttrTypes()},
+		"topics":                     types.ListType{ElemType: types.StringType},
+		"group_id":                   types.StringType,
+		"from_beginning":             types.BoolType,
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: InputConfluentCloudKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: InputConfluentCloudSaslAttrTypes()},
+		"session_timeout":            types.Float64Type,
+		"rebalance_timeout":          types.Float64Type,
+		"heartbeat_interval":         types.Float64Type,
+		"auto_commit_interval":       types.Float64Type,
+		"auto_commit_threshold":      types.Float64Type,
+		"max_bytes_per_partition":    types.Float64Type,
+		"max_bytes":                  types.Float64Type,
+		"max_socket_errors":          types.Float64Type,
+		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()}},
+		"description":                types.StringType,
+	}
+}
+
 func (m InputConfluentCloudModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -18337,6 +18982,42 @@ type InputGrafanaModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputGrafanaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputGrafanaCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputGrafanaConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputGrafanaPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: InputGrafanaTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"prometheus_api":           types.StringType,
+		"loki_api":                 types.StringType,
+		"prometheus_auth":          types.ObjectType{AttrTypes: InputGrafanaPrometheusAuthAttrTypes()},
+		"loki_auth":                types.ObjectType{AttrTypes: InputGrafanaLokiAuthAttrTypes()},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputGrafanaMetadataAttrTypes()}},
+		"description":              types.StringType,
+	}
+}
+
 func (m InputGrafanaModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -18877,6 +19558,45 @@ type InputLokiModel struct {
 	Token                 types.String  `tfsdk:"token" json:"token,omitempty"`
 	CredentialsSecret     types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func InputLokiModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputLokiCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputLokiConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputLokiPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: InputLokiTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"loki_api":                 types.StringType,
+		"auth_type":                types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputLokiMetadataAttrTypes()}},
+		"description":              types.StringType,
+		"username":                 types.StringType,
+		"password":                 types.StringType,
+		"token":                    types.StringType,
+		"credentials_secret":       types.StringType,
+		"text_secret":              types.StringType,
+	}
 }
 
 func (m InputLokiModel) terraformPayload() (map[string]any, error) {
@@ -19469,6 +20189,45 @@ type InputPrometheusRwModel struct {
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func InputPrometheusRwModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputPrometheusRwCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusRwConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputPrometheusRwPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: InputPrometheusRwTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"prometheus_api":           types.StringType,
+		"auth_type":                types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusRwMetadataAttrTypes()}},
+		"description":              types.StringType,
+		"username":                 types.StringType,
+		"password":                 types.StringType,
+		"token":                    types.StringType,
+		"credentials_secret":       types.StringType,
+		"text_secret":              types.StringType,
+	}
+}
+
 func (m InputPrometheusRwModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -20023,54 +20782,115 @@ func (m *InputPrometheusRwModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputPrometheusModel struct {
-	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled                types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes            types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled               types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance   types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections             types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                      types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	DimensionList           types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
-	FieldPerMetric          types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
-	DiscoveryType           types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
-	Interval                types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
-	LogLevel                types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
-	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	Timeout                 types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
-	KeepAliveTime           types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
-	JobTimeout              types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
-	MaxMissedKeepAlives     types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
-	Ttl                     types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
-	IgnoreGroupJobsLimit    types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
-	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	AuthType                types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
-	TargetList              types.List    `tfsdk:"target_list" json:"targetList,omitempty"`
-	RecordType              types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
-	ScrapePort              types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
-	NameList                types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
-	ScrapeProtocol          types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
-	ScrapePath              types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
-	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	UsePublicIp             types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
-	SearchFilter            types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
-	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
-	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	EnableAssumeRole        types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
-	AssumeRoleArn           types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
-	AssumeRoleExternalID    types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
-	DurationSeconds         types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
-	Username                types.String  `tfsdk:"username" json:"username,omitempty"`
-	Password                types.String  `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret       types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	ID                              types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                            types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                        types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                        types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                    types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                     types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                       types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                      types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance           types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                     types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                              types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	DimensionList                   types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
+	FieldPerMetric                  types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
+	DiscoveryType                   types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
+	Interval                        types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	LogLevel                        types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
+	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Timeout                         types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	KeepAliveTime                   types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	JobTimeout                      types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	MaxMissedKeepAlives             types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
+	Ttl                             types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit            types.Bool    `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	Metadata                        types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AuthType                        types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Description                     types.String  `tfsdk:"description" json:"description,omitempty"`
+	TargetList                      types.List    `tfsdk:"target_list" json:"targetList,omitempty"`
+	RecordType                      types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
+	ScrapePort                      types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
+	NameList                        types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
+	ScrapeProtocol                  types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
+	ScrapePath                      types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
+	AwsAuthenticationMethod         types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                       types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                       types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	UsePublicIp                     types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
+	SearchFilter                    types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
+	AwsSecretKey                    types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                          types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                        types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections                types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	EnableAssumeRole                types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn                   types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID            types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds                 types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	HttpDiscoveryURL                types.String  `tfsdk:"http_discovery_url" json:"httpDiscoveryUrl,omitempty"`
+	HttpDiscoveryHeaders            types.List    `tfsdk:"http_discovery_headers" json:"httpDiscoveryHeaders,omitempty"`
+	HttpDiscoveryRejectUnauthorized types.Bool    `tfsdk:"http_discovery_reject_unauthorized" json:"httpDiscoveryRejectUnauthorized,omitempty"`
+	MaxResponseBodySize             types.String  `tfsdk:"max_response_body_size" json:"maxResponseBodySize,omitempty"`
+	Username                        types.String  `tfsdk:"username" json:"username,omitempty"`
+	Password                        types.String  `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret               types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+}
+
+func InputPrometheusModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"disabled":                           types.BoolType,
+		"pipeline":                           types.StringType,
+		"send_to_routes":                     types.BoolType,
+		"environment":                        types.StringType,
+		"pq_enabled":                         types.BoolType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":            types.ObjectType{AttrTypes: InputPrometheusCriblSourceProvenanceAttrTypes()},
+		"connections":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()}},
+		"pq":                                 types.ObjectType{AttrTypes: InputPrometheusPqAttrTypes()},
+		"dimension_list":                     types.ListType{ElemType: types.StringType},
+		"field_per_metric":                   types.BoolType,
+		"discovery_type":                     types.StringType,
+		"interval":                           types.Float64Type,
+		"log_level":                          types.StringType,
+		"reject_unauthorized":                types.BoolType,
+		"timeout":                            types.Float64Type,
+		"keep_alive_time":                    types.Float64Type,
+		"job_timeout":                        types.StringType,
+		"max_missed_keep_alives":             types.Float64Type,
+		"ttl":                                types.StringType,
+		"ignore_group_jobs_limit":            types.BoolType,
+		"metadata":                           types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()}},
+		"auth_type":                          types.StringType,
+		"description":                        types.StringType,
+		"target_list":                        types.ListType{ElemType: types.StringType},
+		"record_type":                        types.StringType,
+		"scrape_port":                        types.Float64Type,
+		"name_list":                          types.ListType{ElemType: types.StringType},
+		"scrape_protocol":                    types.StringType,
+		"scrape_path":                        types.StringType,
+		"aws_authentication_method":          types.StringType,
+		"aws_api_key":                        types.StringType,
+		"aws_secret":                         types.StringType,
+		"use_public_ip":                      types.BoolType,
+		"search_filter":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()}},
+		"aws_secret_key":                     types.StringType,
+		"region":                             types.StringType,
+		"endpoint":                           types.StringType,
+		"reuse_connections":                  types.BoolType,
+		"enable_assume_role":                 types.BoolType,
+		"assume_role_arn":                    types.StringType,
+		"assume_role_external_id":            types.StringType,
+		"duration_seconds":                   types.Float64Type,
+		"http_discovery_url":                 types.StringType,
+		"http_discovery_headers":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()}},
+		"http_discovery_reject_unauthorized": types.BoolType,
+		"max_response_body_size":             types.StringType,
+		"username":                           types.StringType,
+		"password":                           types.StringType,
+		"credentials_secret":                 types.StringType,
+	}
 }
 
 func (m InputPrometheusModel) terraformPayload() (map[string]any, error) {
@@ -20389,6 +21209,34 @@ func (m InputPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert duration_seconds to API value: %v", err)
 		}
 		output["durationSeconds"] = value
+	}
+	if !m.HttpDiscoveryURL.IsNull() && !m.HttpDiscoveryURL.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_url to API value: %v", err)
+		}
+		output["httpDiscoveryUrl"] = value
+	}
+	if !m.HttpDiscoveryHeaders.IsNull() && !m.HttpDiscoveryHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_headers to API value: %v", err)
+		}
+		output["httpDiscoveryHeaders"] = value
+	}
+	if !m.HttpDiscoveryRejectUnauthorized.IsNull() && !m.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryRejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_reject_unauthorized to API value: %v", err)
+		}
+		output["httpDiscoveryRejectUnauthorized"] = value
+	}
+	if !m.MaxResponseBodySize.IsNull() && !m.MaxResponseBodySize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxResponseBodySize)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_response_body_size to API value: %v", err)
+		}
+		output["maxResponseBodySize"] = value
 	}
 	if !m.Username.IsNull() && !m.Username.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Username)
@@ -20820,6 +21668,42 @@ func (m *InputPrometheusModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.DurationSeconds = types.Float64Null()
 	}
+	if item, ok := input["httpDiscoveryUrl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryUrl from API value: %v", err)
+		}
+		m.HttpDiscoveryURL = value.(types.String)
+	} else {
+		m.HttpDiscoveryURL = types.StringNull()
+	}
+	if item, ok := input["httpDiscoveryHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryHeaders from API value: %v", err)
+		}
+		m.HttpDiscoveryHeaders = value.(types.List)
+	} else {
+		m.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()})
+	}
+	if item, ok := input["httpDiscoveryRejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryRejectUnauthorized from API value: %v", err)
+		}
+		m.HttpDiscoveryRejectUnauthorized = value.(types.Bool)
+	} else {
+		m.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["maxResponseBodySize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert maxResponseBodySize from API value: %v", err)
+		}
+		m.MaxResponseBodySize = value.(types.String)
+	} else {
+		m.MaxResponseBodySize = types.StringNull()
+	}
 	if item, ok := input["username"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -20851,54 +21735,115 @@ func (m *InputPrometheusModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputEdgePrometheusModel struct {
-	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled                types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes            types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled               types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance   types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections             types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                      types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	DimensionList           types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
-	FieldPerMetric          types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
-	DiscoveryType           types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
-	Interval                types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
-	Timeout                 types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
-	Persistence             types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
-	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	AuthType                types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
-	Targets                 types.List    `tfsdk:"targets" json:"targets,omitempty"`
-	RecordType              types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
-	ScrapePort              types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
-	NameList                types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
-	ScrapeProtocol          types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
-	ScrapePath              types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
-	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	UsePublicIp             types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
-	SearchFilter            types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
-	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
-	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	EnableAssumeRole        types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
-	AssumeRoleArn           types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
-	AssumeRoleExternalID    types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
-	DurationSeconds         types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
-	ServiceMonitorNamespace types.String  `tfsdk:"service_monitor_namespace" json:"serviceMonitorNamespace,omitempty"`
-	ScrapeProtocolExpr      types.String  `tfsdk:"scrape_protocol_expr" json:"scrapeProtocolExpr,omitempty"`
-	ScrapePortExpr          types.String  `tfsdk:"scrape_port_expr" json:"scrapePortExpr,omitempty"`
-	ScrapePathExpr          types.String  `tfsdk:"scrape_path_expr" json:"scrapePathExpr,omitempty"`
-	PodFilter               types.List    `tfsdk:"pod_filter" json:"podFilter,omitempty"`
-	Username                types.String  `tfsdk:"username" json:"username,omitempty"`
-	Password                types.String  `tfsdk:"password" json:"password,omitempty"`
-	CredentialsSecret       types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+	ID                              types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                            types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                        types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                        types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                    types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                     types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                       types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                      types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance           types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                     types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                              types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	DimensionList                   types.List    `tfsdk:"dimension_list" json:"dimensionList,omitempty"`
+	FieldPerMetric                  types.Bool    `tfsdk:"field_per_metric" json:"fieldPerMetric,omitempty"`
+	DiscoveryType                   types.String  `tfsdk:"discovery_type" json:"discoveryType,omitempty"`
+	Interval                        types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	Timeout                         types.Float64 `tfsdk:"timeout" json:"timeout,omitempty"`
+	Persistence                     types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
+	Metadata                        types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AuthType                        types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Description                     types.String  `tfsdk:"description" json:"description,omitempty"`
+	Targets                         types.List    `tfsdk:"targets" json:"targets,omitempty"`
+	RecordType                      types.String  `tfsdk:"record_type" json:"recordType,omitempty"`
+	ScrapePort                      types.Float64 `tfsdk:"scrape_port" json:"scrapePort,omitempty"`
+	NameList                        types.List    `tfsdk:"name_list" json:"nameList,omitempty"`
+	ScrapeProtocol                  types.String  `tfsdk:"scrape_protocol" json:"scrapeProtocol,omitempty"`
+	ScrapePath                      types.String  `tfsdk:"scrape_path" json:"scrapePath,omitempty"`
+	AwsAuthenticationMethod         types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsAPIKey                       types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                       types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	UsePublicIp                     types.Bool    `tfsdk:"use_public_ip" json:"usePublicIp,omitempty"`
+	SearchFilter                    types.List    `tfsdk:"search_filter" json:"searchFilter,omitempty"`
+	AwsSecretKey                    types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                          types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                        types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections                types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	EnableAssumeRole                types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn                   types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID            types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds                 types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	ServiceMonitorNamespace         types.String  `tfsdk:"service_monitor_namespace" json:"serviceMonitorNamespace,omitempty"`
+	ScrapeProtocolExpr              types.String  `tfsdk:"scrape_protocol_expr" json:"scrapeProtocolExpr,omitempty"`
+	ScrapePortExpr                  types.String  `tfsdk:"scrape_port_expr" json:"scrapePortExpr,omitempty"`
+	ScrapePathExpr                  types.String  `tfsdk:"scrape_path_expr" json:"scrapePathExpr,omitempty"`
+	PodFilter                       types.List    `tfsdk:"pod_filter" json:"podFilter,omitempty"`
+	HttpDiscoveryURL                types.String  `tfsdk:"http_discovery_url" json:"httpDiscoveryUrl,omitempty"`
+	HttpDiscoveryHeaders            types.List    `tfsdk:"http_discovery_headers" json:"httpDiscoveryHeaders,omitempty"`
+	HttpDiscoveryRejectUnauthorized types.Bool    `tfsdk:"http_discovery_reject_unauthorized" json:"httpDiscoveryRejectUnauthorized,omitempty"`
+	MaxResponseBodySize             types.String  `tfsdk:"max_response_body_size" json:"maxResponseBodySize,omitempty"`
+	Username                        types.String  `tfsdk:"username" json:"username,omitempty"`
+	Password                        types.String  `tfsdk:"password" json:"password,omitempty"`
+	CredentialsSecret               types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
+}
+
+func InputEdgePrometheusModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"disabled":                           types.BoolType,
+		"pipeline":                           types.StringType,
+		"send_to_routes":                     types.BoolType,
+		"environment":                        types.StringType,
+		"pq_enabled":                         types.BoolType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":            types.ObjectType{AttrTypes: InputEdgePrometheusCriblSourceProvenanceAttrTypes()},
+		"connections":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()}},
+		"pq":                                 types.ObjectType{AttrTypes: InputEdgePrometheusPqAttrTypes()},
+		"dimension_list":                     types.ListType{ElemType: types.StringType},
+		"field_per_metric":                   types.BoolType,
+		"discovery_type":                     types.StringType,
+		"interval":                           types.Float64Type,
+		"timeout":                            types.Float64Type,
+		"persistence":                        types.ObjectType{AttrTypes: InputEdgePrometheusPersistenceAttrTypes()},
+		"metadata":                           types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()}},
+		"auth_type":                          types.StringType,
+		"description":                        types.StringType,
+		"targets":                            types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()}},
+		"record_type":                        types.StringType,
+		"scrape_port":                        types.Float64Type,
+		"name_list":                          types.ListType{ElemType: types.StringType},
+		"scrape_protocol":                    types.StringType,
+		"scrape_path":                        types.StringType,
+		"aws_authentication_method":          types.StringType,
+		"aws_api_key":                        types.StringType,
+		"aws_secret":                         types.StringType,
+		"use_public_ip":                      types.BoolType,
+		"search_filter":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()}},
+		"aws_secret_key":                     types.StringType,
+		"region":                             types.StringType,
+		"endpoint":                           types.StringType,
+		"reuse_connections":                  types.BoolType,
+		"reject_unauthorized":                types.BoolType,
+		"enable_assume_role":                 types.BoolType,
+		"assume_role_arn":                    types.StringType,
+		"assume_role_external_id":            types.StringType,
+		"duration_seconds":                   types.Float64Type,
+		"service_monitor_namespace":          types.StringType,
+		"scrape_protocol_expr":               types.StringType,
+		"scrape_port_expr":                   types.StringType,
+		"scrape_path_expr":                   types.StringType,
+		"pod_filter":                         types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()}},
+		"http_discovery_url":                 types.StringType,
+		"http_discovery_headers":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()}},
+		"http_discovery_reject_unauthorized": types.BoolType,
+		"max_response_body_size":             types.StringType,
+		"username":                           types.StringType,
+		"password":                           types.StringType,
+		"credentials_secret":                 types.StringType,
+	}
 }
 
 func (m InputEdgePrometheusModel) terraformPayload() (map[string]any, error) {
@@ -21217,6 +22162,34 @@ func (m InputEdgePrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pod_filter to API value: %v", err)
 		}
 		output["podFilter"] = value
+	}
+	if !m.HttpDiscoveryURL.IsNull() && !m.HttpDiscoveryURL.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryURL)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_url to API value: %v", err)
+		}
+		output["httpDiscoveryUrl"] = value
+	}
+	if !m.HttpDiscoveryHeaders.IsNull() && !m.HttpDiscoveryHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_headers to API value: %v", err)
+		}
+		output["httpDiscoveryHeaders"] = value
+	}
+	if !m.HttpDiscoveryRejectUnauthorized.IsNull() && !m.HttpDiscoveryRejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HttpDiscoveryRejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert http_discovery_reject_unauthorized to API value: %v", err)
+		}
+		output["httpDiscoveryRejectUnauthorized"] = value
+	}
+	if !m.MaxResponseBodySize.IsNull() && !m.MaxResponseBodySize.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxResponseBodySize)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_response_body_size to API value: %v", err)
+		}
+		output["maxResponseBodySize"] = value
 	}
 	if !m.Username.IsNull() && !m.Username.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Username)
@@ -21648,6 +22621,42 @@ func (m *InputEdgePrometheusModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.PodFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()})
 	}
+	if item, ok := input["httpDiscoveryUrl"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryUrl from API value: %v", err)
+		}
+		m.HttpDiscoveryURL = value.(types.String)
+	} else {
+		m.HttpDiscoveryURL = types.StringNull()
+	}
+	if item, ok := input["httpDiscoveryHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryHeaders from API value: %v", err)
+		}
+		m.HttpDiscoveryHeaders = value.(types.List)
+	} else {
+		m.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()})
+	}
+	if item, ok := input["httpDiscoveryRejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert httpDiscoveryRejectUnauthorized from API value: %v", err)
+		}
+		m.HttpDiscoveryRejectUnauthorized = value.(types.Bool)
+	} else {
+		m.HttpDiscoveryRejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["maxResponseBodySize"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert maxResponseBodySize from API value: %v", err)
+		}
+		m.MaxResponseBodySize = value.(types.String)
+	} else {
+		m.MaxResponseBodySize = types.StringNull()
+	}
 	if item, ok := input["username"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -21708,6 +22717,40 @@ type InputOffice365MgmtModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 	ClientSecret          types.String  `tfsdk:"client_secret" json:"clientSecret,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func InputOffice365MgmtModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOffice365MgmtCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365MgmtConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputOffice365MgmtPqAttrTypes()},
+		"plan_type":               types.StringType,
+		"tenant_id":               types.StringType,
+		"app_id":                  types.StringType,
+		"timeout":                 types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"job_timeout":             types.StringType,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365MgmtMetadataAttrTypes()}},
+		"publisher_identifier":    types.StringType,
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365MgmtContentConfigAttrTypes()}},
+		"ingestion_lag":           types.Float64Type,
+		"retry_rules":             types.ObjectType{AttrTypes: InputOffice365MgmtRetryRulesAttrTypes()},
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"client_secret":           types.StringType,
+		"text_secret":             types.StringType,
+	}
 }
 
 func (m InputOffice365MgmtModel) terraformPayload() (map[string]any, error) {
@@ -22213,6 +23256,38 @@ type InputOffice365ServiceModel struct {
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func InputOffice365ServiceModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOffice365ServiceCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365ServiceConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputOffice365ServicePqAttrTypes()},
+		"plan_type":               types.StringType,
+		"tenant_id":               types.StringType,
+		"app_id":                  types.StringType,
+		"timeout":                 types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"job_timeout":             types.StringType,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365ServiceMetadataAttrTypes()}},
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365ServiceContentConfigAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputOffice365ServiceRetryRulesAttrTypes()},
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"client_secret":           types.StringType,
+		"text_secret":             types.StringType,
+	}
+}
+
 func (m InputOffice365ServiceModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -22694,6 +23769,50 @@ type InputOffice365MsgTraceModel struct {
 	PlanType               types.String  `tfsdk:"plan_type" json:"planType,omitempty"`
 	TextSecret             types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	CertOptions            types.Object  `tfsdk:"cert_options" json:"certOptions,omitempty"`
+}
+
+func InputOffice365MsgTraceModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputOffice365MsgTraceCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365MsgTraceConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputOffice365MsgTracePqAttrTypes()},
+		"url":                      types.StringType,
+		"interval":                 types.Int64Type,
+		"start_date":               types.StringType,
+		"end_date":                 types.StringType,
+		"timeout":                  types.Float64Type,
+		"disable_time_filter":      types.BoolType,
+		"auth_type":                types.StringType,
+		"keep_alive_time":          types.Float64Type,
+		"job_timeout":              types.StringType,
+		"max_missed_keep_alives":   types.Float64Type,
+		"ttl":                      types.StringType,
+		"ignore_group_jobs_limit":  types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputOffice365MsgTraceMetadataAttrTypes()}},
+		"reschedule_dropped_tasks": types.BoolType,
+		"max_task_reschedule":      types.Float64Type,
+		"log_level":                types.StringType,
+		"retry_rules":              types.ObjectType{AttrTypes: InputOffice365MsgTraceRetryRulesAttrTypes()},
+		"description":              types.StringType,
+		"username":                 types.StringType,
+		"password":                 types.StringType,
+		"credentials_secret":       types.StringType,
+		"client_secret":            types.StringType,
+		"tenant_id":                types.StringType,
+		"client_id":                types.StringType,
+		"resource":                 types.StringType,
+		"plan_type":                types.StringType,
+		"text_secret":              types.StringType,
+		"cert_options":             types.ObjectType{AttrTypes: InputOffice365MsgTraceCertOptionsAttrTypes()},
+	}
 }
 
 func (m InputOffice365MsgTraceModel) terraformPayload() (map[string]any, error) {
@@ -23369,6 +24488,48 @@ type InputMicrosoftGraphModel struct {
 	CertOptions            types.Object  `tfsdk:"cert_options" json:"certOptions,omitempty"`
 }
 
+func InputMicrosoftGraphModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputMicrosoftGraphCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftGraphConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputMicrosoftGraphPqAttrTypes()},
+		"url":                      types.StringType,
+		"interval":                 types.Int64Type,
+		"start_date":               types.StringType,
+		"end_date":                 types.StringType,
+		"timeout":                  types.Float64Type,
+		"disable_time_filter":      types.BoolType,
+		"max_pages":                types.Int64Type,
+		"auth_type":                types.StringType,
+		"keep_alive_time":          types.Float64Type,
+		"job_timeout":              types.StringType,
+		"max_missed_keep_alives":   types.Float64Type,
+		"ttl":                      types.StringType,
+		"ignore_group_jobs_limit":  types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputMicrosoftGraphMetadataAttrTypes()}},
+		"reschedule_dropped_tasks": types.BoolType,
+		"max_task_reschedule":      types.Float64Type,
+		"log_level":                types.StringType,
+		"retry_rules":              types.ObjectType{AttrTypes: InputMicrosoftGraphRetryRulesAttrTypes()},
+		"description":              types.StringType,
+		"client_secret":            types.StringType,
+		"tenant_id":                types.StringType,
+		"client_id":                types.StringType,
+		"resource":                 types.StringType,
+		"plan_type":                types.StringType,
+		"text_secret":              types.StringType,
+		"cert_options":             types.ObjectType{AttrTypes: InputMicrosoftGraphCertOptionsAttrTypes()},
+	}
+}
+
 func (m InputMicrosoftGraphModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -24009,6 +25170,47 @@ type InputEventhubModel struct {
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputEventhubModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"disabled":                   types.BoolType,
+		"pipeline":                   types.StringType,
+		"send_to_routes":             types.BoolType,
+		"environment":                types.StringType,
+		"pq_enabled":                 types.BoolType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":    types.ObjectType{AttrTypes: InputEventhubCriblSourceProvenanceAttrTypes()},
+		"connections":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubConnectionsAttrTypes()}},
+		"pq":                         types.ObjectType{AttrTypes: InputEventhubPqAttrTypes()},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topics":                     types.ListType{ElemType: types.StringType},
+		"group_id":                   types.StringType,
+		"from_beginning":             types.BoolType,
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: InputEventhubSaslAttrTypes()},
+		"tls":                        types.ObjectType{AttrTypes: InputEventhubTLSAttrTypes()},
+		"session_timeout":            types.Float64Type,
+		"rebalance_timeout":          types.Float64Type,
+		"heartbeat_interval":         types.Float64Type,
+		"auto_commit_interval":       types.Float64Type,
+		"auto_commit_threshold":      types.Float64Type,
+		"max_bytes_per_partition":    types.Float64Type,
+		"max_bytes":                  types.Float64Type,
+		"max_socket_errors":          types.Float64Type,
+		"minimize_duplicates":        types.BoolType,
+		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()}},
+		"description":                types.StringType,
+	}
+}
+
 func (m InputEventhubModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -24625,6 +25827,39 @@ type InputEventhubAmqpModel struct {
 	Description              types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputEventhubAmqpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"disabled":                   types.BoolType,
+		"pipeline":                   types.StringType,
+		"send_to_routes":             types.BoolType,
+		"environment":                types.StringType,
+		"pq_enabled":                 types.BoolType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":    types.ObjectType{AttrTypes: InputEventhubAmqpCriblSourceProvenanceAttrTypes()},
+		"connections":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubAmqpConnectionsAttrTypes()}},
+		"pq":                         types.ObjectType{AttrTypes: InputEventhubAmqpPqAttrTypes()},
+		"event_hub_name":             types.StringType,
+		"consumer_group":             types.StringType,
+		"auth":                       types.ObjectType{AttrTypes: InputEventhubAmqpAuthAttrTypes()},
+		"checkpointing":              types.ObjectType{AttrTypes: InputEventhubAmqpCheckpointingAttrTypes()},
+		"from_beginning":             types.BoolType,
+		"max_batch_size":             types.Int64Type,
+		"max_wait_time_in_seconds":   types.Int64Type,
+		"prefetch_count":             types.Int64Type,
+		"max_retries":                types.Int64Type,
+		"initial_backoff":            types.Int64Type,
+		"max_backoff":                types.Int64Type,
+		"timeout_in_ms":              types.Int64Type,
+		"connection_initial_backoff": types.Int64Type,
+		"connection_max_backoff":     types.Int64Type,
+		"connection_timeout_in_ms":   types.Int64Type,
+		"metadata":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()}},
+		"description":                types.StringType,
+	}
+}
+
 func (m InputEventhubAmqpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -25106,6 +26341,32 @@ type InputExecModel struct {
 	CronSchedule          types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
 }
 
+func InputExecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputExecCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputExecConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputExecPqAttrTypes()},
+		"command":                 types.StringType,
+		"script":                  types.StringType,
+		"retries":                 types.Float64Type,
+		"schedule_type":           types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()}},
+		"description":             types.StringType,
+		"interval":                types.Float64Type,
+		"cron_schedule":           types.StringType,
+	}
+}
+
 func (m InputExecModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -25480,6 +26741,39 @@ type InputFirehoseModel struct {
 	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputFirehoseModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputFirehoseCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputFirehoseConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputFirehosePqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"tls":                      types.ObjectType{AttrTypes: InputFirehoseTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputFirehoseMetadataAttrTypes()}},
+		"description":              types.StringType,
+	}
 }
 
 func (m InputFirehoseModel) terraformPayload() (map[string]any, error) {
@@ -25968,6 +27262,37 @@ type InputGooglePubsubModel struct {
 	OrderedDelivery           types.Bool    `tfsdk:"ordered_delivery" json:"orderedDelivery,omitempty"`
 }
 
+func InputGooglePubsubModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"disabled":                    types.BoolType,
+		"pipeline":                    types.StringType,
+		"send_to_routes":              types.BoolType,
+		"environment":                 types.StringType,
+		"pq_enabled":                  types.BoolType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":     types.ObjectType{AttrTypes: InputGooglePubsubCriblSourceProvenanceAttrTypes()},
+		"connections":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputGooglePubsubConnectionsAttrTypes()}},
+		"pq":                          types.ObjectType{AttrTypes: InputGooglePubsubPqAttrTypes()},
+		"topic_name":                  types.StringType,
+		"subscription_name":           types.StringType,
+		"monitor_subscription":        types.BoolType,
+		"create_topic":                types.BoolType,
+		"create_subscription":         types.BoolType,
+		"region":                      types.StringType,
+		"google_auth_method":          types.StringType,
+		"service_account_credentials": types.StringType,
+		"secret":                      types.StringType,
+		"max_backlog":                 types.Float64Type,
+		"concurrency":                 types.Float64Type,
+		"request_timeout":             types.Float64Type,
+		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()}},
+		"description":                 types.StringType,
+		"ordered_delivery":            types.BoolType,
+	}
+}
+
 func (m InputGooglePubsubModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -26410,6 +27735,25 @@ type InputCriblModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputCriblModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputCriblCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputCriblPqAttrTypes()},
+		"filter":                  types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputCriblModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -26667,6 +28011,34 @@ type InputCriblTcpModel struct {
 	EnableLoadBalancing   types.Bool    `tfsdk:"enable_load_balancing" json:"enableLoadBalancing,omitempty"`
 	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputCriblTcpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputCriblTcpCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblTcpConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputCriblTcpPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputCriblTcpTLSAttrTypes()},
+		"max_active_cxn":          types.Float64Type,
+		"socket_idle_timeout":     types.Float64Type,
+		"socket_ending_max_wait":  types.Float64Type,
+		"socket_max_lifespan":     types.Float64Type,
+		"enable_proxy_header":     types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblTcpMetadataAttrTypes()}},
+		"enable_load_balancing":   types.BoolType,
+		"auth_tokens":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblTcpAuthTokensAttrTypes()}},
+		"description":             types.StringType,
+	}
 }
 
 func (m InputCriblTcpModel) terraformPayload() (map[string]any, error) {
@@ -27075,6 +28447,39 @@ type InputCriblHttpModel struct {
 	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputCriblHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputCriblHttpCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblHttpConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputCriblHttpPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblHttpAuthTokensAttrTypes()}},
+		"tls":                      types.ObjectType{AttrTypes: InputCriblHttpTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblHttpMetadataAttrTypes()}},
+		"description":              types.StringType,
+	}
 }
 
 func (m InputCriblHttpModel) terraformPayload() (map[string]any, error) {
@@ -27568,6 +28973,44 @@ type InputCriblLakeHttpModel struct {
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	AuthTokensExt         types.List    `tfsdk:"auth_tokens_ext" json:"authTokensExt,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputCriblLakeHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputCriblLakeHttpCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblLakeHttpConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputCriblLakeHttpPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"tls":                      types.ObjectType{AttrTypes: InputCriblLakeHttpTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"cribl_api":                types.StringType,
+		"elastic_api":              types.StringType,
+		"splunk_hec_api":           types.StringType,
+		"splunk_hec_acks":          types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblLakeHttpMetadataAttrTypes()}},
+		"auth_tokens_ext":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtAttrTypes()}},
+		"description":              types.StringType,
+	}
 }
 
 func (m InputCriblLakeHttpModel) terraformPayload() (map[string]any, error) {
@@ -28136,6 +29579,37 @@ type InputTcpjsonModel struct {
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func InputTcpjsonModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputTcpjsonCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputTcpjsonConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputTcpjsonPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputTcpjsonTLSAttrTypes()},
+		"ip_whitelist_regex":      types.StringType,
+		"max_active_cxn":          types.Float64Type,
+		"socket_idle_timeout":     types.Float64Type,
+		"socket_ending_max_wait":  types.Float64Type,
+		"socket_max_lifespan":     types.Float64Type,
+		"enable_proxy_header":     types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputTcpjsonMetadataAttrTypes()}},
+		"enable_load_balancing":   types.BoolType,
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"auth_token":              types.StringType,
+		"text_secret":             types.StringType,
+	}
+}
+
 func (m InputTcpjsonModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -28583,6 +30057,30 @@ type InputSystemMetricsModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputSystemMetricsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputSystemMetricsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSystemMetricsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputSystemMetricsPqAttrTypes()},
+		"interval":                types.Float64Type,
+		"host":                    types.ObjectType{AttrTypes: InputSystemMetricsHostAttrTypes()},
+		"process":                 types.ObjectType{AttrTypes: InputSystemMetricsProcessAttrTypes()},
+		"container":               types.ObjectType{AttrTypes: InputSystemMetricsContainerAttrTypes()},
+		"gpu":                     types.ObjectType{AttrTypes: InputSystemMetricsGpuAttrTypes()},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputSystemMetricsMetadataAttrTypes()}},
+		"persistence":             types.ObjectType{AttrTypes: InputSystemMetricsPersistenceAttrTypes()},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputSystemMetricsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -28917,6 +30415,29 @@ type InputSystemStateModel struct {
 	Description                types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputSystemStateModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputSystemStateCriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputSystemStateConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputSystemStatePqAttrTypes()},
+		"interval":                       types.Float64Type,
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputSystemStateMetadataAttrTypes()}},
+		"collectors":                     types.ObjectType{AttrTypes: InputSystemStateCollectorsAttrTypes()},
+		"persistence":                    types.ObjectType{AttrTypes: InputSystemStatePersistenceAttrTypes()},
+		"disable_native_module":          types.BoolType,
+		"disable_native_last_log_module": types.BoolType,
+		"description":                    types.StringType,
+	}
+}
+
 func (m InputSystemStateModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -29235,6 +30756,29 @@ type InputKubeMetricsModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputKubeMetricsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputKubeMetricsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeMetricsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputKubeMetricsPqAttrTypes()},
+		"interval":                types.Float64Type,
+		"scrape_kubelet":          types.BoolType,
+		"scrape_cadvisor":         types.BoolType,
+		"rules":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeMetricsRulesAttrTypes()}},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeMetricsMetadataAttrTypes()}},
+		"persistence":             types.ObjectType{AttrTypes: InputKubeMetricsPersistenceAttrTypes()},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputKubeMetricsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -29547,12 +31091,39 @@ type InputKubeLogsModel struct {
 	Interval              types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
 	Rules                 types.List    `tfsdk:"rules" json:"rules,omitempty"`
 	Timestamps            types.Bool    `tfsdk:"timestamps" json:"timestamps,omitempty"`
+	LineBufferLimit       types.Float64 `tfsdk:"line_buffer_limit" json:"lineBufferLimit,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Persistence           types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
 	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	EnableLoadBalancing   types.Bool    `tfsdk:"enable_load_balancing" json:"enableLoadBalancing,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputKubeLogsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputKubeLogsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputKubeLogsPqAttrTypes()},
+		"interval":                types.Float64Type,
+		"rules":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()}},
+		"timestamps":              types.BoolType,
+		"line_buffer_limit":       types.Float64Type,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}},
+		"persistence":             types.ObjectType{AttrTypes: InputKubeLogsPersistenceAttrTypes()},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"enable_load_balancing":   types.BoolType,
+		"description":             types.StringType,
+	}
 }
 
 func (m InputKubeLogsModel) terraformPayload() (map[string]any, error) {
@@ -29654,6 +31225,13 @@ func (m InputKubeLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timestamps to API value: %v", err)
 		}
 		output["timestamps"] = value
+	}
+	if !m.LineBufferLimit.IsNull() && !m.LineBufferLimit.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.LineBufferLimit)
+		if err != nil {
+			return nil, fmt.Errorf("convert line_buffer_limit to API value: %v", err)
+		}
+		output["lineBufferLimit"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
@@ -29827,6 +31405,15 @@ func (m *InputKubeLogsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Timestamps = types.BoolNull()
 	}
+	if item, ok := input["lineBufferLimit"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert lineBufferLimit from API value: %v", err)
+		}
+		m.LineBufferLimit = value.(types.Float64)
+	} else {
+		m.LineBufferLimit = types.Float64Null()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}})
 		if err != nil {
@@ -29899,6 +31486,25 @@ type InputKubeEventsModel struct {
 	Rules                 types.List   `tfsdk:"rules" json:"rules,omitempty"`
 	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputKubeEventsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputKubeEventsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeEventsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputKubeEventsPqAttrTypes()},
+		"rules":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeEventsRulesAttrTypes()}},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeEventsMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
 }
 
 func (m InputKubeEventsModel) terraformPayload() (map[string]any, error) {
@@ -30154,6 +31760,30 @@ type InputWindowsMetricsModel struct {
 	Persistence           types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
 	DisableNativeModule   types.Bool    `tfsdk:"disable_native_module" json:"disableNativeModule,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputWindowsMetricsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputWindowsMetricsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputWindowsMetricsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputWindowsMetricsPqAttrTypes()},
+		"interval":                types.Float64Type,
+		"host":                    types.ObjectType{AttrTypes: InputWindowsMetricsHostAttrTypes()},
+		"process":                 types.ObjectType{AttrTypes: InputWindowsMetricsProcessAttrTypes()},
+		"gpu":                     types.ObjectType{AttrTypes: InputWindowsMetricsGpuAttrTypes()},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputWindowsMetricsMetadataAttrTypes()}},
+		"persistence":             types.ObjectType{AttrTypes: InputWindowsMetricsPersistenceAttrTypes()},
+		"disable_native_module":   types.BoolType,
+		"description":             types.StringType,
+	}
 }
 
 func (m InputWindowsMetricsModel) terraformPayload() (map[string]any, error) {
@@ -30514,6 +32144,55 @@ type InputCrowdstrikeModel struct {
 	TagAfterProcessing      types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
 	ProcessedTagKey         types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue       types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+}
+
+func InputCrowdstrikeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"disabled":                  types.BoolType,
+		"pipeline":                  types.StringType,
+		"send_to_routes":            types.BoolType,
+		"environment":               types.StringType,
+		"pq_enabled":                types.BoolType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputCrowdstrikeCriblSourceProvenanceAttrTypes()},
+		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()}},
+		"pq":                        types.ObjectType{AttrTypes: InputCrowdstrikePqAttrTypes()},
+		"queue_name":                types.StringType,
+		"file_filter":               types.StringType,
+		"aws_account_id":            types.StringType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"breaker_rulesets":          types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":    types.Float64Type,
+		"max_messages":              types.Float64Type,
+		"visibility_timeout":        types.Float64Type,
+		"num_receivers":             types.Float64Type,
+		"socket_timeout":            types.Float64Type,
+		"skip_on_error":             types.BoolType,
+		"include_sqs_metadata":      types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"enable_sqsassume_role":     types.BoolType,
+		"preprocess":                types.ObjectType{AttrTypes: InputCrowdstrikePreprocessAttrTypes()},
+		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()}},
+		"checkpointing":             types.ObjectType{AttrTypes: InputCrowdstrikeCheckpointingAttrTypes()},
+		"poll_timeout":              types.Float64Type,
+		"encoding":                  types.StringType,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"tag_after_processing":      types.StringType,
+		"processed_tag_key":         types.StringType,
+		"processed_tag_value":       types.StringType,
+	}
 }
 
 func (m InputCrowdstrikeModel) terraformPayload() (map[string]any, error) {
@@ -31261,6 +32940,40 @@ type InputDatadogAgentModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputDatadogAgentModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputDatadogAgentCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputDatadogAgentPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: InputDatadogAgentTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"extract_metrics":          types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()}},
+		"proxy_mode":               types.ObjectType{AttrTypes: InputDatadogAgentProxyModeAttrTypes()},
+		"description":              types.StringType,
+	}
+}
+
 func (m InputDatadogAgentModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -31751,6 +33464,25 @@ type InputDatagenModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputDatagenModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputDatagenCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatagenConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputDatagenPqAttrTypes()},
+		"samples":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatagenSamplesAttrTypes()}},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatagenMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputDatagenModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -32018,6 +33750,44 @@ type InputHttpRawModel struct {
 	AllowedMethods        types.List    `tfsdk:"allowed_methods" json:"allowedMethods,omitempty"`
 	AuthTokensExt         types.List    `tfsdk:"auth_tokens_ext" json:"authTokensExt,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputHttpRawModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputHttpRawCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputHttpRawPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"tls":                      types.ObjectType{AttrTypes: InputHttpRawTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":   types.Float64Type,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}},
+		"allowed_paths":            types.ListType{ElemType: types.StringType},
+		"allowed_methods":          types.ListType{ElemType: types.StringType},
+		"auth_tokens_ext":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()}},
+		"description":              types.StringType,
+	}
 }
 
 func (m InputHttpRawModel) terraformPayload() (map[string]any, error) {
@@ -32593,6 +34363,46 @@ type InputKinesisModel struct {
 	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+}
+
+func InputKinesisModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"disabled":                  types.BoolType,
+		"pipeline":                  types.StringType,
+		"send_to_routes":            types.BoolType,
+		"environment":               types.StringType,
+		"pq_enabled":                types.BoolType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputKinesisCriblSourceProvenanceAttrTypes()},
+		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputKinesisConnectionsAttrTypes()}},
+		"pq":                        types.ObjectType{AttrTypes: InputKinesisPqAttrTypes()},
+		"stream_name":               types.StringType,
+		"service_interval":          types.Float64Type,
+		"shard_expr":                types.StringType,
+		"shard_iterator_type":       types.StringType,
+		"payload_format":            types.StringType,
+		"get_records_limit":         types.Float64Type,
+		"get_records_limit_total":   types.Float64Type,
+		"load_balancing_algorithm":  types.StringType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"verify_kplcheck_sums":      types.BoolType,
+		"avoid_duplicates":          types.BoolType,
+		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()}},
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+	}
 }
 
 func (m InputKinesisModel) terraformPayload() (map[string]any, error) {
@@ -33182,6 +34992,26 @@ type InputCriblmetricsModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputCriblmetricsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputCriblmetricsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblmetricsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputCriblmetricsPqAttrTypes()},
+		"prefix":                  types.StringType,
+		"full_fidelity":           types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputCriblmetricsMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputCriblmetricsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -33453,6 +35283,32 @@ type InputMetricsModel struct {
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	UdpSocketRxBufSize    types.Float64 `tfsdk:"udp_socket_rx_buf_size" json:"udpSocketRxBufSize,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputMetricsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputMetricsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputMetricsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputMetricsPqAttrTypes()},
+		"host":                    types.StringType,
+		"udp_port":                types.Float64Type,
+		"tcp_port":                types.Float64Type,
+		"max_buffer_size":         types.Float64Type,
+		"ip_whitelist_regex":      types.StringType,
+		"enable_proxy_header":     types.BoolType,
+		"tls":                     types.ObjectType{AttrTypes: InputMetricsTLSAttrTypes()},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputMetricsMetadataAttrTypes()}},
+		"udp_socket_rx_buf_size":  types.Float64Type,
+		"description":             types.StringType,
+	}
 }
 
 func (m InputMetricsModel) terraformPayload() (map[string]any, error) {
@@ -33847,6 +35703,57 @@ type InputS3Model struct {
 	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+}
+
+func InputS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputS3CriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3ConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputS3PqAttrTypes()},
+		"queue_name":                     types.StringType,
+		"file_filter":                    types.StringType,
+		"aws_account_id":                 types.StringType,
+		"aws_authentication_method":      types.StringType,
+		"aws_secret_key":                 types.StringType,
+		"region":                         types.StringType,
+		"endpoint":                       types.StringType,
+		"reuse_connections":              types.BoolType,
+		"reject_unauthorized":            types.BoolType,
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":         types.Float64Type,
+		"max_messages":                   types.Float64Type,
+		"visibility_timeout":             types.Float64Type,
+		"num_receivers":                  types.Float64Type,
+		"socket_timeout":                 types.Float64Type,
+		"skip_on_error":                  types.BoolType,
+		"include_sqs_metadata":           types.BoolType,
+		"enable_assume_role":             types.BoolType,
+		"assume_role_arn":                types.StringType,
+		"assume_role_external_id":        types.StringType,
+		"duration_seconds":               types.Float64Type,
+		"enable_sqsassume_role":          types.BoolType,
+		"preprocess":                     types.ObjectType{AttrTypes: InputS3PreprocessAttrTypes()},
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3MetadataAttrTypes()}},
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"checkpointing":                  types.ObjectType{AttrTypes: InputS3CheckpointingAttrTypes()},
+		"poll_timeout":                   types.Float64Type,
+		"encoding":                       types.StringType,
+		"tag_after_processing":           types.BoolType,
+		"description":                    types.StringType,
+		"aws_api_key":                    types.StringType,
+		"aws_secret":                     types.StringType,
+		"processed_tag_key":              types.StringType,
+		"processed_tag_value":            types.StringType,
+	}
 }
 
 func (m InputS3Model) terraformPayload() (map[string]any, error) {
@@ -34643,6 +36550,59 @@ type InputS3InventoryModel struct {
 	TagAfterProcessing          types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+}
+
+func InputS3InventoryModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputS3InventoryCriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3InventoryConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputS3InventoryPqAttrTypes()},
+		"queue_name":                     types.StringType,
+		"file_filter":                    types.StringType,
+		"aws_account_id":                 types.StringType,
+		"aws_authentication_method":      types.StringType,
+		"aws_secret_key":                 types.StringType,
+		"region":                         types.StringType,
+		"endpoint":                       types.StringType,
+		"reuse_connections":              types.BoolType,
+		"reject_unauthorized":            types.BoolType,
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":         types.Float64Type,
+		"max_messages":                   types.Float64Type,
+		"visibility_timeout":             types.Float64Type,
+		"num_receivers":                  types.Float64Type,
+		"socket_timeout":                 types.Float64Type,
+		"skip_on_error":                  types.BoolType,
+		"include_sqs_metadata":           types.BoolType,
+		"enable_assume_role":             types.BoolType,
+		"assume_role_arn":                types.StringType,
+		"assume_role_external_id":        types.StringType,
+		"duration_seconds":               types.Float64Type,
+		"enable_sqsassume_role":          types.BoolType,
+		"preprocess":                     types.ObjectType{AttrTypes: InputS3InventoryPreprocessAttrTypes()},
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3InventoryMetadataAttrTypes()}},
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"checkpointing":                  types.ObjectType{AttrTypes: InputS3InventoryCheckpointingAttrTypes()},
+		"poll_timeout":                   types.Float64Type,
+		"checksum_suffix":                types.StringType,
+		"max_manifest_size_kb":           types.Int64Type,
+		"validate_inventory_files":       types.BoolType,
+		"description":                    types.StringType,
+		"aws_api_key":                    types.StringType,
+		"aws_secret":                     types.StringType,
+		"tag_after_processing":           types.StringType,
+		"processed_tag_key":              types.StringType,
+		"processed_tag_value":            types.StringType,
+	}
 }
 
 func (m InputS3InventoryModel) terraformPayload() (map[string]any, error) {
@@ -35446,6 +37406,32 @@ type InputSnmpModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputSnmpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputSnmpCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSnmpConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputSnmpPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"snmp_v3_auth":            types.ObjectType{AttrTypes: InputSnmpSnmpV3AuthAttrTypes()},
+		"max_buffer_size":         types.Float64Type,
+		"ip_whitelist_regex":      types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputSnmpMetadataAttrTypes()}},
+		"udp_socket_rx_buf_size":  types.Float64Type,
+		"varbinds_with_types":     types.BoolType,
+		"best_effort_parsing":     types.BoolType,
+		"description":             types.StringType,
+	}
+}
+
 func (m InputSnmpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -35829,6 +37815,48 @@ type InputOpenTelemetryModel struct {
 	CredentialsSecret     types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 	ExtractLogs           types.Bool    `tfsdk:"extract_logs" json:"extractLogs,omitempty"`
+}
+
+func InputOpenTelemetryModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOpenTelemetryCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputOpenTelemetryPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputOpenTelemetryTLSAttrTypes()},
+		"max_active_req":          types.Float64Type,
+		"max_requests_per_socket": types.Int64Type,
+		"request_timeout":         types.Float64Type,
+		"socket_timeout":          types.Float64Type,
+		"keep_alive_timeout":      types.Float64Type,
+		"enable_health_check":     types.BoolType,
+		"ip_allowlist_regex":      types.StringType,
+		"ip_denylist_regex":       types.StringType,
+		"protocol":                types.StringType,
+		"extract_spans":           types.BoolType,
+		"extract_metrics":         types.BoolType,
+		"otlp_version":            types.StringType,
+		"auth_type":               types.StringType,
+		"auth_methods_ext":        types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()}},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()}},
+		"max_active_cxn":          types.Float64Type,
+		"description":             types.StringType,
+		"username":                types.StringType,
+		"password":                types.StringType,
+		"token":                   types.StringType,
+		"credentials_secret":      types.StringType,
+		"text_secret":             types.StringType,
+		"extract_logs":            types.BoolType,
+	}
 }
 
 func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
@@ -36453,6 +38481,29 @@ type InputModelDrivenTelemetryModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputModelDrivenTelemetryModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputModelDrivenTelemetryConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputModelDrivenTelemetryPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputModelDrivenTelemetryTLSAttrTypes()},
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputModelDrivenTelemetryMetadataAttrTypes()}},
+		"max_active_cxn":          types.Float64Type,
+		"shutdown_timeout_ms":     types.Float64Type,
+		"description":             types.StringType,
+	}
+}
+
 func (m InputModelDrivenTelemetryModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -36784,6 +38835,44 @@ type InputSqsModel struct {
 	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
 	NumReceivers            types.Float64 `tfsdk:"num_receivers" json:"numReceivers,omitempty"`
+}
+
+func InputSqsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"disabled":                  types.BoolType,
+		"pipeline":                  types.StringType,
+		"send_to_routes":            types.BoolType,
+		"environment":               types.StringType,
+		"pq_enabled":                types.BoolType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputSqsCriblSourceProvenanceAttrTypes()},
+		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputSqsConnectionsAttrTypes()}},
+		"pq":                        types.ObjectType{AttrTypes: InputSqsPqAttrTypes()},
+		"queue_name":                types.StringType,
+		"queue_type":                types.StringType,
+		"aws_account_id":            types.StringType,
+		"create_queue":              types.BoolType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"max_messages":              types.Float64Type,
+		"visibility_timeout":        types.Float64Type,
+		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSqsMetadataAttrTypes()}},
+		"poll_timeout":              types.Float64Type,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"num_receivers":             types.Float64Type,
+	}
 }
 
 func (m InputSqsModel) terraformPayload() (map[string]any, error) {
@@ -37358,6 +39447,45 @@ type InputSyslogModel struct {
 	EnableLoadBalancing              types.Bool    `tfsdk:"enable_load_balancing" json:"enableLoadBalancing,omitempty"`
 	Description                      types.String  `tfsdk:"description" json:"description,omitempty"`
 	EnableEnhancedProxyHeaderParsing types.Bool    `tfsdk:"enable_enhanced_proxy_header_parsing" json:"enableEnhancedProxyHeaderParsing,omitempty"`
+}
+
+func InputSyslogModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                   types.StringType,
+		"type":                                 types.StringType,
+		"disabled":                             types.BoolType,
+		"pipeline":                             types.StringType,
+		"send_to_routes":                       types.BoolType,
+		"environment":                          types.StringType,
+		"pq_enabled":                           types.BoolType,
+		"streamtags":                           types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":              types.ObjectType{AttrTypes: InputSyslogCriblSourceProvenanceAttrTypes()},
+		"connections":                          types.ListType{ElemType: types.ObjectType{AttrTypes: InputSyslogConnectionsAttrTypes()}},
+		"pq":                                   types.ObjectType{AttrTypes: InputSyslogPqAttrTypes()},
+		"host":                                 types.StringType,
+		"udp_port":                             types.Float64Type,
+		"tcp_port":                             types.Float64Type,
+		"max_buffer_size":                      types.Float64Type,
+		"ip_whitelist_regex":                   types.StringType,
+		"timestamp_timezone":                   types.StringType,
+		"single_msg_udp_packets":               types.BoolType,
+		"enable_proxy_header":                  types.BoolType,
+		"keep_fields_list":                     types.ListType{ElemType: types.StringType},
+		"octet_counting":                       types.BoolType,
+		"infer_framing":                        types.BoolType,
+		"strictly_infer_octet_counting":        types.BoolType,
+		"allow_non_standard_app_name":          types.BoolType,
+		"max_active_cxn":                       types.Float64Type,
+		"socket_idle_timeout":                  types.Float64Type,
+		"socket_ending_max_wait":               types.Float64Type,
+		"socket_max_lifespan":                  types.Float64Type,
+		"tls":                                  types.ObjectType{AttrTypes: InputSyslogTLSAttrTypes()},
+		"metadata":                             types.ListType{ElemType: types.ObjectType{AttrTypes: InputSyslogMetadataAttrTypes()}},
+		"udp_socket_rx_buf_size":               types.Float64Type,
+		"enable_load_balancing":                types.BoolType,
+		"description":                          types.StringType,
+		"enable_enhanced_proxy_header_parsing": types.BoolType,
+	}
 }
 
 func (m InputSyslogModel) terraformPayload() (map[string]any, error) {
@@ -37950,6 +40078,45 @@ type InputFileModel struct {
 	IncludeUnidentifiableBinary types.Bool    `tfsdk:"include_unidentifiable_binary" json:"includeUnidentifiableBinary,omitempty"`
 }
 
+func InputFileModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                            types.StringType,
+		"type":                          types.StringType,
+		"disabled":                      types.BoolType,
+		"pipeline":                      types.StringType,
+		"send_to_routes":                types.BoolType,
+		"environment":                   types.StringType,
+		"pq_enabled":                    types.BoolType,
+		"streamtags":                    types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":       types.ObjectType{AttrTypes: InputFileCriblSourceProvenanceAttrTypes()},
+		"connections":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()}},
+		"pq":                            types.ObjectType{AttrTypes: InputFilePqAttrTypes()},
+		"mode":                          types.StringType,
+		"interval":                      types.Float64Type,
+		"filenames":                     types.ListType{ElemType: types.StringType},
+		"filter_archived_files":         types.BoolType,
+		"tail_only":                     types.BoolType,
+		"idle_timeout":                  types.Float64Type,
+		"min_age_dur":                   types.StringType,
+		"max_age_dur":                   types.StringType,
+		"check_file_mod_time":           types.BoolType,
+		"force_text":                    types.BoolType,
+		"hash_len":                      types.Float64Type,
+		"metadata":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()}},
+		"breaker_rulesets":              types.ListType{ElemType: types.StringType},
+		"disable_stale_channel_flush":   types.BoolType,
+		"stale_channel_flush_ms":        types.Float64Type,
+		"description":                   types.StringType,
+		"path":                          types.StringType,
+		"depth":                         types.Float64Type,
+		"suppress_missing_path_errors":  types.BoolType,
+		"delete_files":                  types.BoolType,
+		"salt_hash":                     types.BoolType,
+		"optimize_leaf_directories":     types.BoolType,
+		"include_unidentifiable_binary": types.BoolType,
+	}
+}
+
 func (m InputFileModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -38535,6 +40702,40 @@ type InputTcpModel struct {
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func InputTcpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputTcpCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputTcpConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputTcpPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputTcpTLSAttrTypes()},
+		"ip_whitelist_regex":      types.StringType,
+		"max_active_cxn":          types.Float64Type,
+		"socket_idle_timeout":     types.Float64Type,
+		"socket_ending_max_wait":  types.Float64Type,
+		"socket_max_lifespan":     types.Float64Type,
+		"enable_proxy_header":     types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputTcpMetadataAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"enable_header":           types.BoolType,
+		"preprocess":              types.ObjectType{AttrTypes: InputTcpPreprocessAttrTypes()},
+		"description":             types.StringType,
+		"auth_token":              types.StringType,
+		"auth_type":               types.StringType,
+		"text_secret":             types.StringType,
+	}
+}
+
 func (m InputTcpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -39041,6 +41242,43 @@ type InputAppscopeModel struct {
 	UnixSocketPerms       types.String  `tfsdk:"unix_socket_perms" json:"unixSocketPerms,omitempty"`
 	AuthToken             types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func InputAppscopeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputAppscopeCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputAppscopeConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputAppscopePqAttrTypes()},
+		"ip_whitelist_regex":      types.StringType,
+		"max_active_cxn":          types.Float64Type,
+		"socket_idle_timeout":     types.Float64Type,
+		"socket_ending_max_wait":  types.Float64Type,
+		"socket_max_lifespan":     types.Float64Type,
+		"enable_proxy_header":     types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputAppscopeMetadataAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"enable_unix_path":        types.BoolType,
+		"filter":                  types.ObjectType{AttrTypes: InputAppscopeFilterAttrTypes()},
+		"persistence":             types.ObjectType{AttrTypes: InputAppscopePersistenceAttrTypes()},
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"tls":                     types.ObjectType{AttrTypes: InputAppscopeTLSAttrTypes()},
+		"unix_socket_path":        types.StringType,
+		"unix_socket_perms":       types.StringType,
+		"auth_token":              types.StringType,
+		"text_secret":             types.StringType,
+	}
 }
 
 func (m InputAppscopeModel) terraformPayload() (map[string]any, error) {
@@ -39599,6 +41837,43 @@ type InputWefModel struct {
 	LogFingerprintMismatch types.Bool    `tfsdk:"log_fingerprint_mismatch" json:"logFingerprintMismatch,omitempty"`
 }
 
+func InputWefModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"disabled":                  types.BoolType,
+		"pipeline":                  types.StringType,
+		"send_to_routes":            types.BoolType,
+		"environment":               types.StringType,
+		"pq_enabled":                types.BoolType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputWefCriblSourceProvenanceAttrTypes()},
+		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputWefConnectionsAttrTypes()}},
+		"pq":                        types.ObjectType{AttrTypes: InputWefPqAttrTypes()},
+		"host":                      types.StringType,
+		"port":                      types.Float64Type,
+		"auth_method":               types.StringType,
+		"tls":                       types.ObjectType{AttrTypes: InputWefTLSAttrTypes()},
+		"max_active_req":            types.Float64Type,
+		"max_requests_per_socket":   types.Int64Type,
+		"enable_proxy_header":       types.BoolType,
+		"capture_headers":           types.BoolType,
+		"keep_alive_timeout":        types.Float64Type,
+		"enable_health_check":       types.BoolType,
+		"ip_allowlist_regex":        types.StringType,
+		"ip_denylist_regex":         types.StringType,
+		"socket_timeout":            types.Float64Type,
+		"ca_fingerprint":            types.StringType,
+		"keytab":                    types.StringType,
+		"principal":                 types.StringType,
+		"allow_machine_id_mismatch": types.BoolType,
+		"subscriptions":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputWefSubscriptionsAttrTypes()}},
+		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputWefMetadataAttrTypes()}},
+		"description":               types.StringType,
+		"log_fingerprint_mismatch":  types.BoolType,
+	}
+}
+
 func (m InputWefModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -40145,6 +42420,33 @@ type InputWinEventLogsModel struct {
 	DisableXmlRendering   types.Bool    `tfsdk:"disable_xml_rendering" json:"disableXmlRendering,omitempty"`
 }
 
+func InputWinEventLogsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputWinEventLogsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputWinEventLogsPqAttrTypes()},
+		"log_names":               types.ListType{ElemType: types.StringType},
+		"read_mode":               types.StringType,
+		"event_format":            types.StringType,
+		"disable_native_module":   types.BoolType,
+		"interval":                types.Float64Type,
+		"batch_size":              types.Float64Type,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()}},
+		"max_event_bytes":         types.Float64Type,
+		"description":             types.StringType,
+		"disable_json_rendering":  types.BoolType,
+		"disable_xml_rendering":   types.BoolType,
+	}
+}
+
 func (m InputWinEventLogsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -40524,6 +42826,26 @@ type InputAppleUnifiedLogsModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputAppleUnifiedLogsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputAppleUnifiedLogsConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputAppleUnifiedLogsPqAttrTypes()},
+		"predicate":               types.StringType,
+		"read_mode":               types.StringType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputAppleUnifiedLogsMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputAppleUnifiedLogsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -40794,6 +43116,31 @@ type InputRawUdpModel struct {
 	UdpSocketRxBufSize    types.Float64 `tfsdk:"udp_socket_rx_buf_size" json:"udpSocketRxBufSize,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputRawUdpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputRawUdpCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputRawUdpConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputRawUdpPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"max_buffer_size":         types.Float64Type,
+		"ip_whitelist_regex":      types.StringType,
+		"single_msg_udp_packets":  types.BoolType,
+		"ingest_raw_bytes":        types.BoolType,
+		"udp_socket_rx_buf_size":  types.Float64Type,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
 }
 
 func (m InputRawUdpModel) terraformPayload() (map[string]any, error) {
@@ -41146,6 +43493,31 @@ type InputJournalFilesModel struct {
 	SuppressMissingPathErrors types.Bool    `tfsdk:"suppress_missing_path_errors" json:"suppressMissingPathErrors,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputJournalFilesModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputJournalFilesCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputJournalFilesConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputJournalFilesPqAttrTypes()},
+		"path":                         types.StringType,
+		"interval":                     types.Float64Type,
+		"journals":                     types.ListType{ElemType: types.StringType},
+		"rules":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputJournalFilesRulesAttrTypes()}},
+		"current_boot":                 types.BoolType,
+		"max_age_dur":                  types.StringType,
+		"suppress_missing_path_errors": types.BoolType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()}},
+		"description":                  types.StringType,
+	}
 }
 
 func (m InputJournalFilesModel) terraformPayload() (map[string]any, error) {
@@ -41507,6 +43879,40 @@ type InputWizModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 	ClientSecret          types.String  `tfsdk:"client_secret" json:"clientSecret,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func InputWizModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputWizCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputWizPqAttrTypes()},
+		"endpoint":                types.StringType,
+		"auth_url":                types.StringType,
+		"auth_audience_override":  types.StringType,
+		"client_id":               types.StringType,
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizContentConfigAttrTypes()}},
+		"request_timeout":         types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizMetadataAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
+		"retry_rules":             types.ObjectType{AttrTypes: InputWizRetryRulesAttrTypes()},
+		"auth_type":               types.StringType,
+		"description":             types.StringType,
+		"client_secret":           types.StringType,
+		"text_secret":             types.StringType,
+	}
 }
 
 func (m InputWizModel) terraformPayload() (map[string]any, error) {
@@ -42009,6 +44415,35 @@ type InputOpenaiModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputOpenaiModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOpenaiCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenaiConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputOpenaiPqAttrTypes()},
+		"openai_organization":     types.StringType,
+		"openai_project":          types.StringType,
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenaiContentConfigAttrTypes()}},
+		"request_timeout":         types.Float64Type,
+		"api_key":                 types.StringType,
+		"text_secret":             types.StringType,
+		"keep_alive_time":         types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenaiMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputOpenaiRetryRulesAttrTypes()},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputOpenaiModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -42436,6 +44871,44 @@ type InputWizWebhookModel struct {
 	AllowedMethods        types.List    `tfsdk:"allowed_methods" json:"allowedMethods,omitempty"`
 	AuthTokensExt         types.List    `tfsdk:"auth_tokens_ext" json:"authTokensExt,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputWizWebhookModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputWizWebhookCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizWebhookConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputWizWebhookPqAttrTypes()},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"auth_tokens":              types.ListType{ElemType: types.StringType},
+		"tls":                      types.ObjectType{AttrTypes: InputWizWebhookTLSAttrTypes()},
+		"max_active_req":           types.Float64Type,
+		"max_requests_per_socket":  types.Int64Type,
+		"enable_proxy_header":      types.BoolType,
+		"capture_headers":          types.BoolType,
+		"activity_log_sample_rate": types.Float64Type,
+		"request_timeout":          types.Float64Type,
+		"socket_timeout":           types.Float64Type,
+		"keep_alive_timeout":       types.Float64Type,
+		"enable_health_check":      types.BoolType,
+		"ip_allowlist_regex":       types.StringType,
+		"ip_denylist_regex":        types.StringType,
+		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":   types.Float64Type,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizWebhookMetadataAttrTypes()}},
+		"allowed_paths":            types.ListType{ElemType: types.StringType},
+		"allowed_methods":          types.ListType{ElemType: types.StringType},
+		"auth_tokens_ext":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtAttrTypes()}},
+		"description":              types.StringType,
+	}
 }
 
 func (m InputWizWebhookModel) terraformPayload() (map[string]any, error) {
@@ -43001,6 +45474,34 @@ type InputNetflowModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputNetflowModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputNetflowCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputNetflowConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputNetflowPqAttrTypes()},
+		"host":                    types.StringType,
+		"port":                    types.Float64Type,
+		"enable_pass_through":     types.BoolType,
+		"ip_allowlist_regex":      types.StringType,
+		"ip_denylist_regex":       types.StringType,
+		"udp_socket_rx_buf_size":  types.Float64Type,
+		"template_cache_minutes":  types.Float64Type,
+		"v5_enabled":              types.BoolType,
+		"v9_enabled":              types.BoolType,
+		"ipfix_enabled":           types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputNetflowMetadataAttrTypes()}},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputNetflowModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -43425,6 +45926,57 @@ type InputSecurityLakeModel struct {
 	TagAfterProcessing          types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+}
+
+func InputSecurityLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputSecurityLakeCriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputSecurityLakeConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputSecurityLakePqAttrTypes()},
+		"queue_name":                     types.StringType,
+		"file_filter":                    types.StringType,
+		"aws_account_id":                 types.StringType,
+		"aws_authentication_method":      types.StringType,
+		"aws_secret_key":                 types.StringType,
+		"region":                         types.StringType,
+		"endpoint":                       types.StringType,
+		"reuse_connections":              types.BoolType,
+		"reject_unauthorized":            types.BoolType,
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":         types.Float64Type,
+		"max_messages":                   types.Float64Type,
+		"visibility_timeout":             types.Float64Type,
+		"num_receivers":                  types.Float64Type,
+		"socket_timeout":                 types.Float64Type,
+		"skip_on_error":                  types.BoolType,
+		"include_sqs_metadata":           types.BoolType,
+		"enable_assume_role":             types.BoolType,
+		"assume_role_arn":                types.StringType,
+		"assume_role_external_id":        types.StringType,
+		"duration_seconds":               types.Float64Type,
+		"enable_sqsassume_role":          types.BoolType,
+		"preprocess":                     types.ObjectType{AttrTypes: InputSecurityLakePreprocessAttrTypes()},
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputSecurityLakeMetadataAttrTypes()}},
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"checkpointing":                  types.ObjectType{AttrTypes: InputSecurityLakeCheckpointingAttrTypes()},
+		"poll_timeout":                   types.Float64Type,
+		"encoding":                       types.StringType,
+		"description":                    types.StringType,
+		"aws_api_key":                    types.StringType,
+		"aws_secret":                     types.StringType,
+		"tag_after_processing":           types.StringType,
+		"processed_tag_key":              types.StringType,
+		"processed_tag_value":            types.StringType,
+	}
 }
 
 func (m InputSecurityLakeModel) terraformPayload() (map[string]any, error) {
@@ -44221,6 +46773,59 @@ type InputServicenowTableModel struct {
 	StateUpdateExpression         types.String  `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
 	StateMergeExpression          types.String  `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
 	ManageState                   types.Map     `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+func InputServicenowTableModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"disabled":                           types.BoolType,
+		"pipeline":                           types.StringType,
+		"send_to_routes":                     types.BoolType,
+		"environment":                        types.StringType,
+		"pq_enabled":                         types.BoolType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":            types.ObjectType{AttrTypes: InputServicenowTableCriblSourceProvenanceAttrTypes()},
+		"connections":                        types.ListType{ElemType: types.ObjectType{AttrTypes: InputServicenowTableConnectionsAttrTypes()}},
+		"pq":                                 types.ObjectType{AttrTypes: InputServicenowTablePqAttrTypes()},
+		"instance":                           types.StringType,
+		"table_name":                         types.StringType,
+		"fields":                             types.ListType{ElemType: types.StringType},
+		"order_by_field":                     types.StringType,
+		"order_by_direction":                 types.StringType,
+		"query":                              types.StringType,
+		"page_size":                          types.Int64Type,
+		"max_pages":                          types.Int64Type,
+		"reject_unauthorized":                types.BoolType,
+		"auth_type":                          types.StringType,
+		"cron_schedule":                      types.StringType,
+		"earliest":                           types.StringType,
+		"latest":                             types.StringType,
+		"state_tracking":                     types.BoolType,
+		"log_level":                          types.StringType,
+		"request_timeout":                    types.Float64Type,
+		"use_round_robin_dns":                types.BoolType,
+		"keep_alive_time":                    types.Float64Type,
+		"job_timeout":                        types.StringType,
+		"max_missed_keep_alives":             types.Float64Type,
+		"ttl":                                types.StringType,
+		"ignore_group_jobs_limit":            types.BoolType,
+		"metadata":                           types.ListType{ElemType: types.ObjectType{AttrTypes: InputServicenowTableMetadataAttrTypes()}},
+		"retry_rules":                        types.ObjectType{AttrTypes: InputServicenowTableRetryRulesAttrTypes()},
+		"description":                        types.StringType,
+		"credentials_secret":                 types.StringType,
+		"oauth_grant_type":                   types.StringType,
+		"username":                           types.StringType,
+		"text_secret":                        types.StringType,
+		"use_custom_oauth_params_or_headers": types.BoolType,
+		"oauth_params":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputServicenowTableOauthParamsAttrTypes()}},
+		"oauth_headers":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputServicenowTableOauthHeadersAttrTypes()}},
+		"client_id":                          types.StringType,
+		"client_text_secret":                 types.StringType,
+		"state_update_expression":            types.StringType,
+		"state_merge_expression":             types.StringType,
+		"manage_state":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m InputServicenowTableModel) terraformPayload() (map[string]any, error) {
@@ -45036,6 +47641,44 @@ type InputZscalerHecModel struct {
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputZscalerHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputZscalerHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputZscalerHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputZscalerHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputZscalerHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputZscalerHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputZscalerHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"hec_acks":                     types.BoolType,
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
 func (m InputZscalerHecModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -45608,6 +48251,45 @@ type InputCloudflareHecModel struct {
 	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
 	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputCloudflareHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputCloudflareHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCloudflareHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputCloudflareHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCloudflareHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputCloudflareHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCloudflareHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":       types.Float64Type,
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
 }
 
 func (m InputCloudflareHecModel) terraformPayload() (map[string]any, error) {
@@ -46202,6 +48884,49 @@ type InputOpenaiComplianceLogsModel struct {
 	StateUpdateExpression  types.String  `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
 	StateMergeExpression   types.String  `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
 	ManageState            types.Map     `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+func InputOpenaiComplianceLogsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"disabled":                 types.BoolType,
+		"pipeline":                 types.StringType,
+		"send_to_routes":           types.BoolType,
+		"environment":              types.StringType,
+		"pq_enabled":               types.BoolType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes()},
+		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenaiComplianceLogsConnectionsAttrTypes()}},
+		"pq":                       types.ObjectType{AttrTypes: InputOpenaiComplianceLogsPqAttrTypes()},
+		"api_key":                  types.StringType,
+		"text_secret":              types.StringType,
+		"account_type":             types.StringType,
+		"cron_schedule":            types.StringType,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
+		"job_timeout":              types.StringType,
+		"log_level":                types.StringType,
+		"max_pages":                types.Float64Type,
+		"state_tracking":           types.BoolType,
+		"request_timeout":          types.Float64Type,
+		"keep_alive_time":          types.Float64Type,
+		"max_missed_keep_alives":   types.Float64Type,
+		"ttl":                      types.StringType,
+		"ignore_group_jobs_limit":  types.BoolType,
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputOpenaiComplianceLogsMetadataAttrTypes()}},
+		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":   types.Float64Type,
+		"retry_rules":              types.ObjectType{AttrTypes: InputOpenaiComplianceLogsRetryRulesAttrTypes()},
+		"description":              types.StringType,
+		"workspace_id":             types.StringType,
+		"workspace_event_types":    types.ListType{ElemType: types.StringType},
+		"organization_id":          types.StringType,
+		"organization_event_types": types.ListType{ElemType: types.StringType},
+		"state_update_expression":  types.StringType,
+		"state_merge_expression":   types.StringType,
+		"manage_state":             types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m InputOpenaiComplianceLogsModel) terraformPayload() (map[string]any, error) {
@@ -46846,6 +49571,33 @@ type InputAnthropicComplianceModel struct {
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func InputAnthropicComplianceModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputAnthropicComplianceCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicComplianceConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputAnthropicCompliancePqAttrTypes()},
+		"api_key":                 types.StringType,
+		"text_secret":             types.StringType,
+		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicComplianceContentConfigAttrTypes()}},
+		"request_timeout":         types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicComplianceMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputAnthropicComplianceRetryRulesAttrTypes()},
+		"description":             types.StringType,
+	}
+}
+
 func (m InputAnthropicComplianceModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -47234,6 +49986,37 @@ type InputOktaModel struct {
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	RetryRules            types.Object  `tfsdk:"retry_rules" json:"retryRules,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputOktaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"type":                    types.StringType,
+		"disabled":                types.BoolType,
+		"pipeline":                types.StringType,
+		"send_to_routes":          types.BoolType,
+		"environment":             types.StringType,
+		"pq_enabled":              types.BoolType,
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance": types.ObjectType{AttrTypes: InputOktaCriblSourceProvenanceAttrTypes()},
+		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputOktaConnectionsAttrTypes()}},
+		"pq":                      types.ObjectType{AttrTypes: InputOktaPqAttrTypes()},
+		"okta_domain":             types.StringType,
+		"okta_token":              types.StringType,
+		"text_secret":             types.StringType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"job_timeout":             types.StringType,
+		"request_timeout":         types.Float64Type,
+		"keep_alive_time":         types.Float64Type,
+		"max_missed_keep_alives":  types.Float64Type,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputOktaMetadataAttrTypes()}},
+		"retry_rules":             types.ObjectType{AttrTypes: InputOktaRetryRulesAttrTypes()},
+		"description":             types.StringType,
+	}
 }
 
 func (m InputOktaModel) terraformPayload() (map[string]any, error) {

@@ -288,6 +288,57 @@ actions: []
 	assertContains(t, merged, `$ref: "#/components/schemas/Child"`)
 }
 
+func TestRunImportsSchemasKeepsExistingOnConflict(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "upstream-openapi.yml")
+	overlay := filepath.Join(dir, "terraform-overlay.yml")
+	source := filepath.Join(dir, "reference-openapi.yml")
+	output := filepath.Join(dir, "merged-spec.yml")
+	cloudOnlyOutput := filepath.Join(dir, "cloud_only_paths.go")
+
+	writeFile(t, input, `openapi: 3.1.0
+paths: {}
+components:
+  schemas:
+    Existing:
+      type: object
+      properties:
+        fromInput:
+          type: string
+`)
+	writeFile(t, source, `openapi: 3.1.0
+paths: {}
+components:
+  schemas:
+    Parent:
+      type: object
+      properties:
+        existing:
+          $ref: "#/components/schemas/Existing"
+    Existing:
+      type: object
+      properties:
+        fromSource:
+          type: string
+`)
+	writeFile(t, overlay, `schema_imports:
+  - source: `+source+`
+    on_conflict: keep
+    schemas:
+      - Parent
+actions: []
+`)
+
+	if err := run(input, overlay, output, cloudOnlyOutput); err != nil {
+		t.Fatalf("run returned error: %v", err)
+	}
+
+	merged := readFile(t, output)
+	assertContains(t, merged, "Parent:")
+	assertContains(t, merged, "fromInput:")
+	assertNotContains(t, merged, "fromSource:")
+}
+
 func writeFile(t *testing.T, filename, content string) {
 	t.Helper()
 

@@ -114,12 +114,6 @@ func (r *NotificationResource) Schema(_ context.Context, _ resource.SchemaReques
 						Computed:    false,
 						Description: `Persistent queue usage threshold.`,
 					},
-					"__worker_group": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `Optional scope to a specific worker group.`,
-					},
 				},
 			},
 			"disabled": schema.BoolAttribute{

@@ -23,7 +23,7 @@ type CollectorsDataSource struct {
 	client *restclient.Client
 }
 
-type CollectorsDataSourceModel struct {
+type CollectorsListDataSourceModel struct {
 	GroupID types.String `tfsdk:"group_id"`
 	Items   types.List   `tfsdk:"items"`
 }
@@ -64,6 +64,2481 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 						"worker_affinity": schema.BoolAttribute{
 							Computed: true,
 						},
+
+						"input_collector_splunk": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"search_head": schema.StringAttribute{
+													Computed:    true,
+													Description: `Search head base URL`,
+												},
+												"search": schema.StringAttribute{
+													Computed:    true,
+													Description: `Splunk search query`,
+												},
+												"earliest": schema.StringAttribute{
+													Computed:    true,
+													Description: `Earliest time boundary for the search`,
+												},
+												"latest": schema.StringAttribute{
+													Computed:    true,
+													Description: `Latest time boundary for the search`,
+												},
+												"endpoint": schema.StringAttribute{
+													Computed:    true,
+													Description: `REST API endpoint used to create a search`,
+												},
+												"output_mode": schema.StringAttribute{
+													Computed: true,
+												},
+												"authentication": schema.StringAttribute{
+													Computed: true,
+												},
+												"timeout": schema.Int64Attribute{
+													Computed: true,
+												},
+												"use_round_robin_dns": schema.BoolAttribute{
+													Computed: true,
+												},
+												"disable_time_filter": schema.BoolAttribute{
+													Computed: true,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+												},
+												"handle_escaped_chars": schema.BoolAttribute{
+													Computed: true,
+												},
+												"username": schema.StringAttribute{
+													Computed: true,
+												},
+												"password": schema.StringAttribute{
+													Computed: true,
+												},
+												"credentials_secret": schema.StringAttribute{
+													Computed: true,
+												},
+												"token": schema.StringAttribute{
+													Computed: true,
+												},
+												"token_secret": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_rest": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"authentication": schema.StringAttribute{
+													Computed: true,
+												},
+												"username": schema.StringAttribute{
+													Computed: true,
+												},
+												"password": schema.StringAttribute{
+													Computed: true,
+												},
+												"credentials_secret": schema.StringAttribute{
+													Computed: true,
+												},
+												"token": schema.StringAttribute{
+													Computed: true,
+												},
+												"token_secret": schema.StringAttribute{
+													Computed: true,
+												},
+												"scopes": schema.ListAttribute{
+													Computed:    true,
+													Description: `OAuth scopes when authentication is google_oauth or google_oauthSecret`,
+													ElementType: types.StringType,
+												},
+												"subject": schema.StringAttribute{
+													Computed:    true,
+													Description: `Subject (e.g. admin user) for Google OAuth with domain-wide delegation`,
+												},
+												"service_account_credentials": schema.StringAttribute{
+													Computed:    true,
+													Description: `Service account key JSON (or path reference) for google_oauth`,
+												},
+												"service_account_credentials_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Secret reference for service account key when using google_oauthSecret`,
+												},
+												"login_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL for authentication login`,
+												},
+												"login_body": schema.StringAttribute{
+													Computed:    true,
+													Description: `Body content for login request`,
+												},
+												"auth_header_key": schema.StringAttribute{
+													Computed:    true,
+													Description: `Header key for authentication`,
+												},
+												"auth_header_expr": schema.StringAttribute{
+													Computed:    true,
+													Description: `Expression for auth header value`,
+												},
+												"client_secret_param_name": schema.StringAttribute{
+													Computed: true,
+												},
+												"auth_request_params": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"token_resp_attribute": schema.StringAttribute{
+													Computed:    true,
+													Description: `Attribute name for token in response`,
+												},
+												"auth_request_headers": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"collect_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL to use for the Collect operation`,
+												},
+												"collect_method": schema.StringAttribute{
+													Computed: true,
+												},
+												"collect_request_headers": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"collect_request_params": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"collect_body": schema.StringAttribute{
+													Computed:    true,
+													Description: `Body content for the collect request, used with the post_with_body collect method`,
+												},
+												"timeout": schema.Int64Attribute{
+													Computed: true,
+												},
+												"use_round_robin_dns": schema.BoolAttribute{
+													Computed: true,
+												},
+												"disable_time_filter": schema.BoolAttribute{
+													Computed: true,
+												},
+												"decode_url": schema.BoolAttribute{
+													Computed: true,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+												},
+												"capture_headers": schema.BoolAttribute{
+													Computed: true,
+												},
+												"safe_headers": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+												"discovery": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"discover_type": schema.StringAttribute{
+															Computed: true,
+														},
+														"discover_method": schema.StringAttribute{
+															Computed:    true,
+															Description: `protocol used for http discovery, required for 'http' type`,
+														},
+														"pagination": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"type": schema.StringAttribute{
+																	Computed: true,
+																},
+																"offset_field": schema.StringAttribute{
+																	Computed: true,
+																},
+																"limit_field": schema.StringAttribute{
+																	Computed: true,
+																},
+																"limit": schema.Int64Attribute{
+																	Computed: true,
+																},
+																"max_pages": schema.Int64Attribute{
+																	Computed: true,
+																},
+																"zero_indexed": schema.BoolAttribute{
+																	Computed: true,
+																},
+																"page_field": schema.StringAttribute{
+																	Computed: true,
+																},
+																"size_field": schema.StringAttribute{
+																	Computed: true,
+																},
+																"size": schema.Int64Attribute{
+																	Computed: true,
+																},
+																"attribute": schema.ListAttribute{
+																	Computed:    true,
+																	ElementType: types.StringType,
+																},
+																"last_page_expr": schema.StringAttribute{
+																	Computed: true,
+																},
+																"offset": schema.Int64Attribute{
+																	Computed: true,
+																},
+																"total_record_field": schema.StringAttribute{
+																	Computed: true,
+																},
+																"next_relation_attribute": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
+																},
+																"cur_relation_attribute": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Optional relation for the current page in Link header pagination`,
+																},
+															},
+														},
+														"enable_discover_code": schema.BoolAttribute{
+															Computed: true,
+														},
+														"item_list": schema.ListAttribute{
+															Computed:    true,
+															Description: `comma separated list of strings to return from discovery section required for 'list' discoverType`,
+															ElementType: types.StringType,
+														},
+														"discover_url": schema.StringAttribute{
+															Computed:    true,
+															Description: `URL to hit for rest type collectors, required for 'http' discoverType`,
+														},
+														"discover_request_headers": schema.ListNestedAttribute{
+															Computed: true,
+															NestedObject: schema.NestedAttributeObject{
+																Attributes: map[string]schema.Attribute{
+																	"name": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"value": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+														},
+														"manual_discover_result": schema.StringAttribute{
+															Computed:    true,
+															Description: `json payload to return manually, required for 'json' discoverType`,
+														},
+														"discover_request_params": schema.ListNestedAttribute{
+															Computed: true,
+															NestedObject: schema.NestedAttributeObject{
+																Attributes: map[string]schema.Attribute{
+																	"name": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"value": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+														},
+														"discover_body": schema.StringAttribute{
+															Computed: true,
+														},
+														"format_result_code": schema.StringAttribute{
+															Computed: true,
+														},
+														"discover_data_field": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"pagination": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+														"offset_field": schema.StringAttribute{
+															Computed: true,
+														},
+														"limit_field": schema.StringAttribute{
+															Computed: true,
+														},
+														"limit": schema.Int64Attribute{
+															Computed: true,
+														},
+														"max_pages": schema.Int64Attribute{
+															Computed: true,
+														},
+														"zero_indexed": schema.BoolAttribute{
+															Computed: true,
+														},
+														"page_field": schema.StringAttribute{
+															Computed: true,
+														},
+														"size_field": schema.StringAttribute{
+															Computed: true,
+														},
+														"size": schema.Int64Attribute{
+															Computed: true,
+														},
+														"attribute": schema.ListAttribute{
+															Computed:    true,
+															ElementType: types.StringType,
+														},
+														"last_page_expr": schema.StringAttribute{
+															Computed: true,
+														},
+														"offset": schema.Int64Attribute{
+															Computed: true,
+														},
+														"total_record_field": schema.StringAttribute{
+															Computed: true,
+														},
+														"next_relation_attribute": schema.StringAttribute{
+															Computed:    true,
+															Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
+														},
+														"cur_relation_attribute": schema.StringAttribute{
+															Computed:    true,
+															Description: `Optional relation for the current page in Link header pagination`,
+														},
+													},
+												},
+												"retry_rules": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+														"interval": schema.Int64Attribute{
+															Computed: true,
+														},
+														"limit": schema.Int64Attribute{
+															Computed: true,
+														},
+														"multiplier": schema.Float64Attribute{
+															Computed: true,
+														},
+														"max_interval_ms": schema.Int64Attribute{
+															Computed: true,
+														},
+														"codes": schema.ListAttribute{
+															Computed:    true,
+															ElementType: types.Int64Type,
+														},
+														"enable_header": schema.BoolAttribute{
+															Computed: true,
+														},
+														"retry_connect_timeout": schema.BoolAttribute{
+															Computed: true,
+														},
+														"retry_connect_reset": schema.BoolAttribute{
+															Computed: true,
+														},
+														"retry_header_name": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"bucket": schema.StringAttribute{
+													Computed:    true,
+													Description: `S3 Bucket from which to collect data`,
+												},
+												"region": schema.StringAttribute{
+													Computed:    true,
+													Description: `AWS region from which to retrieve data`,
+												},
+												"path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Directory where data will be collected`,
+												},
+												"aws_authentication_method": schema.StringAttribute{
+													Computed: true,
+												},
+												"aws_api_key": schema.StringAttribute{
+													Computed: true,
+												},
+												"aws_secret_key": schema.StringAttribute{
+													Computed: true,
+												},
+												"aws_secret": schema.StringAttribute{
+													Computed: true,
+												},
+												"recurse": schema.BoolAttribute{
+													Computed: true,
+												},
+												"extractors": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Name of the extracted field`,
+															},
+															"expression": schema.StringAttribute{
+																Computed:    true,
+																Description: `JavaScript expression to compute the value from the path`,
+															},
+															"pattern": schema.StringAttribute{
+																Computed:    true,
+																Description: `Regex pattern to match paths (alternative to key/expression)`,
+															},
+														},
+													},
+												},
+												"max_batch_size": schema.Int64Attribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_azure_blob": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"container_name": schema.StringAttribute{
+													Computed:    true,
+													Description: `Azure container to collect from`,
+												},
+												"storage_account_name": schema.StringAttribute{
+													Computed: true,
+												},
+												"connection_string": schema.StringAttribute{
+													Computed:    true,
+													Description: `Azure storage account Connection String`,
+												},
+												"auth_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Directory where data will be collected`,
+												},
+												"recurse": schema.BoolAttribute{
+													Computed: true,
+												},
+												"extractors": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Name of the extracted field`,
+															},
+															"expression": schema.StringAttribute{
+																Computed:    true,
+																Description: `JavaScript expression to compute the value from the path`,
+															},
+															"pattern": schema.StringAttribute{
+																Computed:    true,
+																Description: `Regex pattern to match paths (alternative to key/expression)`,
+															},
+														},
+													},
+												},
+												"max_batch_size": schema.Int64Attribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_cribl_lake": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"dataset": schema.StringAttribute{
+													Computed:    true,
+													Description: `Lake dataset to collect data from`,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_database": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"connection_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select an existing Database Connection`,
+												},
+												"query": schema.StringAttribute{
+													Computed:    true,
+													Description: `Query string for selecting data from the database`,
+												},
+												"query_validation_enabled": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_gcs": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"service_account_credentials": schema.StringAttribute{
+													Computed: true,
+												},
+												"bucket": schema.StringAttribute{
+													Computed:    true,
+													Description: `GCS Bucket from which to collect data`,
+												},
+												"path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Directory where data will be collected`,
+												},
+												"auth_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"recurse": schema.BoolAttribute{
+													Computed: true,
+												},
+												"extractors": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"key": schema.StringAttribute{
+																Computed:    true,
+																Description: `Name of the extracted field`,
+															},
+															"expression": schema.StringAttribute{
+																Computed:    true,
+																Description: `JavaScript expression to compute the value from the path`,
+															},
+															"pattern": schema.StringAttribute{
+																Computed:    true,
+																Description: `Regex pattern to match paths (alternative to key/expression)`,
+															},
+														},
+													},
+												},
+												"max_batch_size": schema.Int64Attribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_health_check": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"collect_url": schema.StringAttribute{
+													Computed:    true,
+													Description: `URL to use for the Collect operation`,
+												},
+												"collect_method": schema.StringAttribute{
+													Computed: true,
+												},
+												"authentication": schema.StringAttribute{
+													Computed: true,
+												},
+												"timeout": schema.Int64Attribute{
+													Computed: true,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+												},
+												"username": schema.StringAttribute{
+													Computed: true,
+												},
+												"password": schema.StringAttribute{
+													Computed: true,
+												},
+												"credentials_secret": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"input_collector_script": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+								},
+								"ttl": schema.StringAttribute{
+									Computed: true,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed: true,
+								},
+								"remove_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"resume_on_boot": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed: true,
+								},
+								"saved_state": schema.MapAttribute{
+									Computed:    true,
+									Description: `Saved state for the collector`,
+									ElementType: types.StringType,
+								},
+								"schedule": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for a scheduled job`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable to configure scheduling for this Collector`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `A cron schedule on which to run this job`,
+										},
+										"max_concurrent_runs": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+										},
+										"skippable": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+										},
+										"resume_missed": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume missed scheduled runs`,
+										},
+										"run": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"reschedule_dropped_tasks": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Reschedule tasks that failed with non-fatal errors`,
+												},
+												"max_task_reschedule": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum number of times a task can be rescheduled`,
+												},
+												"log_level": schema.StringAttribute{
+													Computed:    true,
+													Description: `Level at which to set task logging`,
+												},
+												"job_timeout": schema.StringAttribute{
+													Computed:    true,
+													Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+												},
+												"mode": schema.StringAttribute{
+													Computed:    true,
+													Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+												},
+												"time_range_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"earliest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Earliest time to collect data for the selected timezone`,
+												},
+												"latest": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Latest time to collect data for the selected timezone`,
+												},
+												"expression": schema.StringAttribute{
+													Computed:    true,
+													Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+												},
+												"min_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+												},
+												"max_task_size": schema.StringAttribute{
+													Computed:    true,
+													Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+												},
+												"time_warning": schema.MapAttribute{
+													Computed:    true,
+													Description: `Time warning configuration`,
+													ElementType: types.StringType,
+												},
+												"state_tracking": schema.SingleNestedAttribute{
+													Computed:    true,
+													Description: `State tracking configuration`,
+													Attributes: map[string]schema.Attribute{
+														"state_update_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"state_merge_expression": schema.StringAttribute{
+															Computed: true,
+														},
+														"enabled": schema.BoolAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Tags for filtering and grouping`,
+									ElementType: types.StringType,
+								},
+								"worker_affinity": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, tasks are created and run by the same Worker Node`,
+								},
+								"input": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"breaker_rulesets": schema.ListAttribute{
+											Computed:    true,
+											Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+											ElementType: types.StringType,
+										},
+										"stale_channel_flush_ms": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+										},
+										"send_to_routes": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+										},
+										"preprocess": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"command": schema.StringAttribute{
+													Computed:    true,
+													Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+												},
+												"args": schema.ListAttribute{
+													Computed:    true,
+													Description: `Arguments to be added to the custom command`,
+													ElementType: types.StringType,
+												},
+											},
+										},
+										"throttle_rate_per_sec": schema.StringAttribute{
+											Computed:    true,
+											Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+										},
+										"metadata": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `Fields to add to events from this input`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+													},
+												},
+											},
+										},
+										"pipeline": schema.StringAttribute{
+											Computed:    true,
+											Description: `Pipeline to process results`,
+										},
+										"output": schema.StringAttribute{
+											Computed:    true,
+											Description: `Destination to send results to`,
+										},
+									},
+								},
+								"collector": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"conf": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"shell": schema.StringAttribute{
+													Computed: true,
+												},
+												"discover_script": schema.StringAttribute{
+													Computed: true,
+												},
+												"collect_script": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -87,7 +2562,7 @@ func (d *CollectorsDataSource) Configure(_ context.Context, req datasource.Confi
 }
 
 func (d *CollectorsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model CollectorsDataSourceModel
+	var model CollectorsListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -101,7 +2576,7 @@ func (d *CollectorsDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(CollectorsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "ignore_group_jobs_limit": item.IgnoreGroupJobsLimit, "resume_on_boot": item.ResumeOnBoot, "ttl": item.Ttl, "worker_affinity": item.WorkerAffinity}))
+			values = append(values, types.ObjectValueMust(CollectorsItemAttrTypes(), map[string]attr.Value{"environment": item.Environment, "ignore_group_jobs_limit": item.IgnoreGroupJobsLimit, "resume_on_boot": item.ResumeOnBoot, "ttl": item.Ttl, "worker_affinity": item.WorkerAffinity, "input_collector_splunk": CollectorsInputCollectorSplunkObjectValue(item.InputCollectorSplunk), "input_collector_rest": CollectorsInputCollectorRestObjectValue(item.InputCollectorRest), "input_collector_s3": CollectorsInputCollectorS3ObjectValue(item.InputCollectorS3), "input_collector_azure_blob": CollectorsInputCollectorAzureBlobObjectValue(item.InputCollectorAzureBlob), "input_collector_cribl_lake": CollectorsInputCollectorCriblLakeObjectValue(item.InputCollectorCriblLake), "input_collector_database": CollectorsInputCollectorDatabaseObjectValue(item.InputCollectorDatabase), "input_collector_gcs": CollectorsInputCollectorGCSObjectValue(item.InputCollectorGCS), "input_collector_health_check": CollectorsInputCollectorHealthCheckObjectValue(item.InputCollectorHealthCheck), "input_collector_script": CollectorsInputCollectorScriptObjectValue(item.InputCollectorScript)}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: CollectorsItemAttrTypes()}, values)
@@ -110,10 +2585,199 @@ func (d *CollectorsDataSource) Read(ctx context.Context, req datasource.ReadRequ
 
 func CollectorsItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"environment":             types.StringType,
-		"ignore_group_jobs_limit": types.BoolType,
-		"resume_on_boot":          types.BoolType,
-		"ttl":                     types.StringType,
-		"worker_affinity":         types.BoolType,
+		"environment":                  types.StringType,
+		"ignore_group_jobs_limit":      types.BoolType,
+		"resume_on_boot":               types.BoolType,
+		"ttl":                          types.StringType,
+		"worker_affinity":              types.BoolType,
+		"input_collector_splunk":       types.ObjectType{AttrTypes: InputCollectorSplunkModelAttrTypes()},
+		"input_collector_rest":         types.ObjectType{AttrTypes: InputCollectorRestModelAttrTypes()},
+		"input_collector_s3":           types.ObjectType{AttrTypes: InputCollectorS3ModelAttrTypes()},
+		"input_collector_azure_blob":   types.ObjectType{AttrTypes: InputCollectorAzureBlobModelAttrTypes()},
+		"input_collector_cribl_lake":   types.ObjectType{AttrTypes: InputCollectorCriblLakeModelAttrTypes()},
+		"input_collector_database":     types.ObjectType{AttrTypes: InputCollectorDatabaseModelAttrTypes()},
+		"input_collector_gcs":          types.ObjectType{AttrTypes: InputCollectorGCSModelAttrTypes()},
+		"input_collector_health_check": types.ObjectType{AttrTypes: InputCollectorHealthCheckModelAttrTypes()},
+		"input_collector_script":       types.ObjectType{AttrTypes: InputCollectorScriptModelAttrTypes()},
 	}
+}
+
+func CollectorsInputCollectorSplunkObjectValue(item *InputCollectorSplunkModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorSplunkModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorSplunkModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorRestObjectValue(item *InputCollectorRestModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorRestModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorRestModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorS3ObjectValue(item *InputCollectorS3Model) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorS3ModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorS3ModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorAzureBlobObjectValue(item *InputCollectorAzureBlobModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorAzureBlobModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorAzureBlobModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorCriblLakeObjectValue(item *InputCollectorCriblLakeModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorCriblLakeModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorCriblLakeModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorDatabaseObjectValue(item *InputCollectorDatabaseModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorDatabaseModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorDatabaseModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorGCSObjectValue(item *InputCollectorGCSModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorGCSModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorGCSModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorHealthCheckObjectValue(item *InputCollectorHealthCheckModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorHealthCheckModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorHealthCheckModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
+}
+
+func CollectorsInputCollectorScriptObjectValue(item *InputCollectorScriptModel) attr.Value {
+	if item == nil {
+		return types.ObjectNull(InputCollectorScriptModelAttrTypes())
+	}
+	return types.ObjectValueMust(InputCollectorScriptModelAttrTypes(), map[string]attr.Value{
+		"id":                      item.ID,
+		"ttl":                     item.Ttl,
+		"ignore_group_jobs_limit": item.IgnoreGroupJobsLimit,
+		"remove_fields":           item.RemoveFields,
+		"resume_on_boot":          item.ResumeOnBoot,
+		"environment":             item.Environment,
+		"saved_state":             item.SavedState,
+		"schedule":                item.Schedule,
+		"streamtags":              item.Streamtags,
+		"worker_affinity":         item.WorkerAffinity,
+		"input":                   item.Input,
+		"collector":               item.Collector,
+	})
 }

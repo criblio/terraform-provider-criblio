@@ -36,6 +36,9 @@ func TestSearchDashboard(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "elements.#", "8"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.type", "counter.single"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.search.search_query_inline.query", "dataset=\"$vt_dummy\" event<42 | count"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_search_dashboard.by_id", "id", "criblio_search_dashboard.my_searchdashboard", "id"),
+						testCheckListDataSourceHasItems("data.criblio_search_dashboards.all"),
 					),
 				},
 				{
@@ -95,5 +98,14 @@ func searchDashboardConfig(t *testing.T, id, description string) string {
 		config = strings.Replace(config, old, replacement, 1)
 	}
 
-	return config
+	return config + `
+
+data "criblio_search_dashboard" "by_id" {
+  id = criblio_search_dashboard.my_searchdashboard.id
+  depends_on = [criblio_search_dashboard.my_searchdashboard]
+}
+
+data "criblio_search_dashboards" "all" {
+  depends_on = [criblio_search_dashboard.my_searchdashboard]
+}`
 }

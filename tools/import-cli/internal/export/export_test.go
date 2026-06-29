@@ -252,6 +252,52 @@ func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {
 	assert.False(t, opts.SkipAttributes["ca"])
 }
 
+func TestHCLOptionsForType_lookupFilesSkipComputedFields(t *testing.T) {
+	for _, typeName := range []string{"criblio_lookup_file", "criblio_pack_lookups"} {
+		t.Run(typeName, func(t *testing.T) {
+			opts := hclOptionsForType(typeName, registry.Entry{})
+			require.NotNil(t, opts)
+
+			assert.True(t, opts.SkipAttributes["pending_task"])
+			assert.True(t, opts.SkipAttributes["version"])
+			assert.False(t, opts.SkipAttributes["content"])
+		})
+	}
+}
+
+func TestEnsureNotificationTargetSecretPlaceholders(t *testing.T) {
+	tests := []struct {
+		name string
+		url  hcl.Value
+	}{
+		{name: "missing"},
+		{name: "present", url: hcl.Value{Kind: hcl.KindString, String: "https://hooks.slack.com/services/real"}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			attrs := map[string]hcl.Value{
+				"slack_target": {
+					Kind: hcl.KindMap,
+					Map: map[string]hcl.Value{
+						"id":   {Kind: hcl.KindString, String: "slack-1"},
+						"type": {Kind: hcl.KindString, String: "slack"},
+					},
+				},
+			}
+			if test.url.Kind != hcl.KindNull {
+				attrs["slack_target"].Map["url"] = test.url
+			}
+
+			ensureNotificationTargetSecretPlaceholders("criblio_notification_target", attrs, "notification_target_slack_1")
+
+			url := attrs["slack_target"].Map["url"]
+			require.Equal(t, hcl.KindVariableRef, url.Kind)
+			assert.Equal(t, "notification_target_slack_1_slack_target_url", url.VarName)
+		})
+	}
+}
+
 func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip by exclusions.SkipExportIDs", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))

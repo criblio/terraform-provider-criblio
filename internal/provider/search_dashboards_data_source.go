@@ -23,7 +23,7 @@ type SearchDashboardsDataSource struct {
 	client *restclient.Client
 }
 
-type SearchDashboardsDataSourceModel struct {
+type SearchDashboardsListDataSourceModel struct {
 	Items types.List `tfsdk:"items"`
 }
 
@@ -619,10 +619,6 @@ func (d *SearchDashboardsDataSource) Schema(_ context.Context, _ datasource.Sche
 																Computed:    true,
 																Description: `Persistent queue usage threshold.`,
 															},
-															"__worker_group": schema.StringAttribute{
-																Computed:    true,
-																Description: `Optional scope to a specific worker group.`,
-															},
 														},
 													},
 													"metadata": schema.ListNestedAttribute{
@@ -701,7 +697,7 @@ func (d *SearchDashboardsDataSource) Configure(_ context.Context, req datasource
 }
 
 func (d *SearchDashboardsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model SearchDashboardsDataSourceModel
+	var model SearchDashboardsListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return

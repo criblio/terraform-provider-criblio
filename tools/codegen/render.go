@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"sort"
 	"strconv"
@@ -35,11 +36,15 @@ func newRenderer(outputDir string, ignored ignoreSet) renderer {
 
 func (r renderer) render(resources []parser.ResourceDef) ([]renderedFile, error) {
 	var files []renderedFile
+	expectedDataSourceTests := map[string]struct{}{}
 	for _, resource := range resources {
 		for _, output := range outputFiles(resource) {
 			path := output.Path
 			if r.outputDir != "" {
 				path = filepath.Join(r.outputDir, path)
+			}
+			if output.Kind == "data_source_test" {
+				expectedDataSourceTests[path] = struct{}{}
 			}
 			if r.ignored.ignored(output.Path) || r.ignored.ignored(path) {
 				files = append(files, renderedFile{Path: path, Skipped: true})
@@ -66,7 +71,37 @@ func (r renderer) render(resources []parser.ResourceDef) ([]renderedFile, error)
 			files = append(files, renderedFile{Path: path})
 		}
 	}
+	if err := r.cleanupStaleDataSourceTests(expectedDataSourceTests); err != nil {
+		return nil, err
+	}
 	return files, nil
+}
+
+func (r renderer) cleanupStaleDataSourceTests(expected map[string]struct{}) error {
+	dir := "tests/acceptance"
+	if r.outputDir != "" {
+		dir = filepath.Join(r.outputDir, dir)
+	}
+	paths, err := filepath.Glob(filepath.Join(dir, "*_data_source_test.go"))
+	if err != nil {
+		return fmt.Errorf("glob data source acceptance tests: %v", err)
+	}
+	for _, path := range paths {
+		if _, ok := expected[path]; ok {
+			continue
+		}
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read stale data source acceptance test %s: %v", path, err)
+		}
+		if !bytes.Contains(content, []byte(generatedHeader)) {
+			continue
+		}
+		if err := os.Remove(path); err != nil {
+			return fmt.Errorf("remove stale data source acceptance test %s: %v", path, err)
+		}
+	}
+	return nil
 }
 
 func shouldSkipExistingOutput(path string, output parser.OutputFile) (bool, error) {
@@ -87,18 +122,25 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	prefix := "internal/provider/" + resource.FileStem
 	files := []parser.OutputFile{
 		{Path: prefix + "_types.go", Kind: "types"},
-		{Path: prefix + "_client.go", Kind: "client"},
-		{Path: prefix + "_resource.go", Kind: "resource"},
-		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
 	}
-	if shouldGenerateAcceptanceTest(resource) {
-		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
-	}
-	if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
-		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+	if resource.Create.Path != "" {
+		files = append(files,
+			parser.OutputFile{Path: prefix + "_client.go", Kind: "client"},
+			parser.OutputFile{Path: prefix + "_resource.go", Kind: "resource"},
+			parser.OutputFile{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
+		)
+		if shouldGenerateAcceptanceTest(resource) {
+			files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
+		}
+		if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
+			files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+		}
 	}
 	if resource.List.Path != "" {
 		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
+	}
+	if shouldGenerateDataSourceAcceptanceTest(resource) {
+		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_data_source_test.go", Kind: "data_source_test"})
 	}
 	return files
 }
@@ -107,76 +149,110 @@ func shouldGenerateAcceptanceTest(resource parser.ResourceDef) bool {
 	return !resource.Action && !strings.HasPrefix(resource.Create.Path, "/v1/organizations/")
 }
 
+func shouldGenerateDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
+	if resource.Action || strings.HasPrefix(resource.Read.Path, "/v1/organizations/") || strings.HasPrefix(resource.List.Path, "/v1/organizations/") {
+		return false
+	}
+	return canGenerateStandaloneListDataSourceAcceptanceTest(resource)
+}
+
+func canGenerateStandaloneListDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
+	if !hasGeneratedListDataSource(resource) {
+		return false
+	}
+	if resource.Create.Path != "" {
+		return false
+	}
+	for _, field := range listConfigFields(resource) {
+		if acceptanceDataSourceFieldValue(resource, "", field) == "" {
+			return false
+		}
+	}
+	return true
+}
+
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 	body, ok := templateBodies[kind]
 	if !ok {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":                         goType,
-		"schemaAttribute":                schemaAttribute,
-		"schemaTypeName":                 schemaTypeName,
-		"schemaSections":                 schemaSections,
-		"zeroValue":                      zeroValue,
-		"nullValue":                      nullValue,
-		"pathExpr":                       pathExpr,
-		"jsonName":                       jsonName,
-		"apiType":                        apiType,
-		"legacyGoType":                   legacyGoType,
-		"resourceType":                   resourceType,
-		"typeNameSuffix":                 typeNameSuffix,
-		"exampleUsage":                   exampleUsage,
-		"importBlock":                    importBlock,
-		"importCommand":                  importCommand,
-		"importPassthroughAttribute":     importPassthroughAttribute,
-		"singletonLegacyImportField":     singletonLegacyImportField,
-		"docSchema":                      docSchema,
-		"joinDocFields":                  joinDocFields,
-		"needsFmt":                       needsFmt,
-		"needsClientFmt":                 needsClientFmt,
-		"needsAttr":                      needsAttr,
-		"needsResourceAttr":              needsResourceAttr,
-		"needsNestedObject":              needsNestedObject,
-		"needsPlanModifier":              needsPlanModifier,
-		"hasJSONNormalized":              hasJSONNormalized,
-		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
-		"needsStringDefault":             needsStringDefault,
-		"needsCustomPlanModifier":        needsCustomPlanModifier,
-		"needsValidator":                 needsValidator,
-		"needsStringValidator":           needsStringValidator,
-		"needsCustomStringValidator":     needsCustomStringValidator,
-		"needsCustomJSONValidator":       needsCustomJSONValidator,
-		"planModifierType":               planModifierType,
-		"planModifierCalls":              planModifierCalls,
-		"stringValidatorCalls":           stringValidatorCalls,
-		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
-		"schemaAttributes":               schemaAttributes,
-		"oneOfSchemaAttributes":          oneOfSchemaAttributes,
-		"dataSourceAttributes":           dataSourceAttributes,
-		"oneOfDataSourceAttributes":      oneOfDataSourceAttributes,
-		"listDataSourceConfigAttributes": listDataSourceConfigAttributes,
-		"listDataSourceItemAttributes":   listDataSourceItemAttributes,
-		"importSentinelFields":           importSentinelFields,
-		"pathParamFields":                pathParamFields,
-		"jsonImport":                     jsonImport,
-		"nestedObjectList":               nestedObjectList,
-		"nestedObjectMap":                nestedObjectMap,
-		"nestedObject":                   nestedObject,
-		"objectAsJSON":                   objectAsJSON,
-		"normalizedString":               normalizedString,
-		"hasObjectAsJSON":                hasObjectAsJSON,
-		"nestedObjectFields":             nestedObjectFields,
-		"attrType":                       attrType,
-		"restWriteCall":                  restWriteCall,
-		"resourceHasQueryParams":         resourceHasQueryParams,
-		"listHasQueryParams":             listHasQueryParams,
-		"listConfigFields":               listConfigFields,
-		"listItemFields":                 listItemFields,
-		"listTypeNameSuffix":             listTypeNameSuffix,
-		"listItemObjectValue":            listItemObjectValue,
-		"listElementAttrType":            listElementAttrType,
-		"emptyJSONValue":                 emptyJSONValue,
-		"goValueLiteral":                 goValueLiteral,
+		"goType":                           goType,
+		"schemaAttribute":                  schemaAttribute,
+		"schemaTypeName":                   schemaTypeName,
+		"schemaSections":                   schemaSections,
+		"zeroValue":                        zeroValue,
+		"nullValue":                        nullValue,
+		"pathExpr":                         pathExpr,
+		"jsonName":                         jsonName,
+		"apiType":                          apiType,
+		"legacyGoType":                     legacyGoType,
+		"resourceType":                     resourceType,
+		"typeNameSuffix":                   typeNameSuffix,
+		"exampleUsage":                     exampleUsage,
+		"importBlock":                      importBlock,
+		"importCommand":                    importCommand,
+		"importPassthroughAttribute":       importPassthroughAttribute,
+		"singletonLegacyImportField":       singletonLegacyImportField,
+		"docSchema":                        docSchema,
+		"joinDocFields":                    joinDocFields,
+		"needsFmt":                         needsFmt,
+		"needsClientFmt":                   needsClientFmt,
+		"needsAttr":                        needsAttr,
+		"needsResourceAttr":                needsResourceAttr,
+		"needsNestedObject":                needsNestedObject,
+		"needsPlanModifier":                needsPlanModifier,
+		"hasJSONNormalized":                hasJSONNormalized,
+		"needsFrameworkPlanModifier":       needsFrameworkPlanModifier,
+		"needsStringDefault":               needsStringDefault,
+		"needsCustomPlanModifier":          needsCustomPlanModifier,
+		"needsValidator":                   needsValidator,
+		"needsStringValidator":             needsStringValidator,
+		"needsCustomStringValidator":       needsCustomStringValidator,
+		"needsCustomJSONValidator":         needsCustomJSONValidator,
+		"planModifierType":                 planModifierType,
+		"planModifierCalls":                planModifierCalls,
+		"stringValidatorCalls":             stringValidatorCalls,
+		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
+		"schemaAttributes":                 schemaAttributes,
+		"oneOfSchemaAttributes":            oneOfSchemaAttributes,
+		"dataSourceAttributes":             dataSourceAttributes,
+		"oneOfDataSourceAttributes":        oneOfDataSourceAttributes,
+		"listDataSourceConfigAttributes":   listDataSourceConfigAttributes,
+		"listDataSourceItemAttributes":     listDataSourceItemAttributes,
+		"importSentinelFields":             importSentinelFields,
+		"pathParamFields":                  pathParamFields,
+		"jsonImport":                       jsonImport,
+		"nestedObjectList":                 nestedObjectList,
+		"nestedObjectMap":                  nestedObjectMap,
+		"nestedObject":                     nestedObject,
+		"objectAsJSON":                     objectAsJSON,
+		"normalizedString":                 normalizedString,
+		"hasObjectAsJSON":                  hasObjectAsJSON,
+		"nestedObjectFields":               nestedObjectFields,
+		"attrType":                         attrType,
+		"restWriteCall":                    restWriteCall,
+		"resourceHasQueryParams":           resourceHasQueryParams,
+		"listHasQueryParams":               listHasQueryParams,
+		"listConfigFields":                 listConfigFields,
+		"listItemFields":                   listItemFields,
+		"listTypeNameSuffix":               listTypeNameSuffix,
+		"listItemAttrTypes":                listItemAttrTypes,
+		"listItemObjectValue":              listItemObjectValue,
+		"acceptanceDataSources":            acceptanceDataSources,
+		"acceptanceDataSourceChecks":       acceptanceDataSourceChecks,
+		"acceptanceDataSourceTestConfig":   acceptanceDataSourceTestConfig,
+		"acceptancePrimaryResourceAddress": acceptancePrimaryResourceAddress,
+		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
+		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
+		"noDiscriminatorVariants":          noDiscriminatorVariants,
+		"variantAPINames":                  variantAPINames,
+		"variantRequiredAPINames":          variantRequiredAPINames,
+		"goStringSliceLiteral":             goStringSliceLiteral,
+		"goStringLiteral":                  goStringLiteral,
+		"listElementAttrType":              listElementAttrType,
+		"emptyJSONValue":                   emptyJSONValue,
+		"goValueLiteral":                   goValueLiteral,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -816,7 +892,7 @@ func needsFmt(resource parser.ResourceDef) bool {
 }
 
 func needsClientFmt(resource parser.ResourceDef) bool {
-	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" {
+	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" || resource.StructName == "SearchDatasetProvider" {
 		return true
 	}
 	for _, op := range []parser.OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete} {
@@ -1018,10 +1094,111 @@ func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 	return fields
 }
 
+func hasGeneratedReadDataSource(resource parser.ResourceDef) bool {
+	return resource.Create.Path != "" && resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead
+}
+
+func hasGeneratedListDataSource(resource parser.ResourceDef) bool {
+	return resource.List.Path != ""
+}
+
+func acceptanceDataSources(resource parser.ResourceDef, resourceAddress, label string, includeList bool) string {
+	var output strings.Builder
+	if resourceAddress != "" && hasGeneratedReadDataSource(resource) {
+		fmt.Fprintf(&output, "\n\ndata %q %q {\n", resource.TypeName, label)
+		for _, field := range resource.Read.PathParams {
+			if field.FixedValue != "" || fixedPathParamValue(resource, field) != "" {
+				continue
+			}
+			fmt.Fprintf(&output, "  %s = %s\n", field.TerraformName, acceptanceDataSourceFieldValue(resource, resourceAddress, field))
+		}
+		fmt.Fprintf(&output, "  depends_on = [%s]\n", resourceAddress)
+		output.WriteString("}")
+	}
+	if includeList && hasGeneratedListDataSource(resource) {
+		fmt.Fprintf(&output, "\n\ndata %q %q {\n", resource.ListTypeName, "all")
+		for _, field := range listConfigFields(resource) {
+			fmt.Fprintf(&output, "  %s = %s\n", field.TerraformName, acceptanceDataSourceFieldValue(resource, resourceAddress, field))
+		}
+		if resourceAddress != "" {
+			fmt.Fprintf(&output, "  depends_on = [%s]\n", resourceAddress)
+		}
+		output.WriteString("}")
+	}
+	return output.String()
+}
+
+func acceptanceDataSourceTestConfig(resource parser.ResourceDef) string {
+	return strings.TrimSpace(acceptanceDataSources(resource, "", "by_id", true))
+}
+
+func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
+	if resource.Create.Path == "" {
+		return ""
+	}
+	config := exampleUsage(resource)
+	re := regexp.MustCompile(`(?m)resource\s+"` + regexp.QuoteMeta(resource.TypeName) + `"\s+"([^"]+)"`)
+	match := re.FindStringSubmatch(config)
+	if len(match) != 2 {
+		return ""
+	}
+	return resource.TypeName + "." + match[1]
+}
+
+func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
+	return strings.HasPrefix(resource.TypeName, "criblio_search_") ||
+		resource.StructName == "Subscription" ||
+		resource.StructName == "SystemInfo" ||
+		resource.StructName == "InstanceSettings"
+}
+
+func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {
+	return resource.StructName == "InstanceSettings"
+}
+
+func acceptanceDataSourceChecks(resource parser.ResourceDef, resourceAddress, label string, includeList bool) string {
+	var output strings.Builder
+	if resourceAddress != "" && hasGeneratedReadDataSource(resource) {
+		dataAddress := fmt.Sprintf("data.%s.%s", resource.TypeName, label)
+		for _, field := range resource.Read.PathParams {
+			if field.FixedValue != "" || !resourceHasTopLevelField(resource, field.TerraformName) {
+				continue
+			}
+			fmt.Fprintf(&output, "\n\t\t\t\t\t\tresource.TestCheckResourceAttrPair(%q, %q, %q, %q),", dataAddress, field.TerraformName, resourceAddress, field.TerraformName)
+		}
+		if output.Len() == 0 && resourceHasTopLevelField(resource, "id") {
+			fmt.Fprintf(&output, "\n\t\t\t\t\t\tresource.TestCheckResourceAttrSet(%q, %q),", dataAddress, "id")
+		}
+	}
+	if includeList && hasGeneratedListDataSource(resource) {
+		fmt.Fprintf(&output, "\n\t\t\t\t\t\ttestCheckListDataSourceHasItems(%q),", fmt.Sprintf("data.%s.%s", resource.ListTypeName, "all"))
+	}
+	return output.String()
+}
+
+func acceptanceDataSourceFieldValue(resource parser.ResourceDef, resourceAddress string, field parser.FieldDef) string {
+	if resourceAddress != "" && resourceHasTopLevelField(resource, field.TerraformName) {
+		return resourceAddress + "." + field.TerraformName
+	}
+	return fmt.Sprintf("%q", exampleValue(resource, field))
+}
+
+func resourceHasTopLevelField(resource parser.ResourceDef, terraformName string) bool {
+	for _, field := range resource.Fields {
+		if field.TerraformName == terraformName {
+			return true
+		}
+	}
+	return false
+}
+
 func listItemFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range resource.Fields {
-		if field.QueryParam || field.APIName == "groupId" || field.APIName == "organizationId" {
+		if field.QueryParam || field.APIName == "organizationId" || field.APIName == "product" {
+			continue
+		}
+		if field.APIName == "groupId" && resource.StructName != "Key" {
 			continue
 		}
 		fields = append(fields, field)
@@ -1035,8 +1212,61 @@ func listItemObjectValue(resource parser.ResourceDef) string {
 	for _, field := range listItemFields(resource) {
 		fmt.Fprintf(&output, "%q: item.%s, ", field.TerraformName, field.GoName)
 	}
+	for _, variant := range resource.OneOfVariants {
+		fmt.Fprintf(&output, "%q: %s%sObjectValue(item.%s), ", variant.TerraformName, resource.ListStructName, variant.GoName, variant.GoName)
+	}
 	output.WriteString("})")
 	return output.String()
+}
+
+func listItemAttrTypes(resource parser.ResourceDef) []string {
+	var lines []string
+	for _, field := range listItemFields(resource) {
+		lines = append(lines, fmt.Sprintf("%q: %s", field.TerraformName, attrType(field)))
+	}
+	for _, variant := range resource.OneOfVariants {
+		lines = append(lines, fmt.Sprintf("%q: types.ObjectType{AttrTypes: %sAttrTypes()}", variant.TerraformName, variant.ModelName))
+	}
+	return lines
+}
+
+func noDiscriminatorVariants(resource parser.ResourceDef) []parser.OneOfVariantDef {
+	var variants []parser.OneOfVariantDef
+	for _, variant := range resource.OneOfVariants {
+		if variant.DiscriminatorValue == "" {
+			variants = append(variants, variant)
+		}
+	}
+	return variants
+}
+
+func variantRequiredAPINames(variant parser.OneOfVariantDef) []string {
+	var names []string
+	for _, field := range variant.Fields {
+		if field.Required {
+			names = append(names, field.APIName)
+		}
+	}
+	return names
+}
+
+func variantAPINames(variant parser.OneOfVariantDef) []string {
+	names := make([]string, 0, len(variant.Fields))
+	for _, field := range variant.Fields {
+		names = append(names, field.APIName)
+	}
+	return names
+}
+
+func goStringSliceLiteral(values []string) string {
+	if len(values) == 0 {
+		return "nil"
+	}
+	quoted := make([]string, 0, len(values))
+	for _, value := range values {
+		quoted = append(quoted, fmt.Sprintf("%q", value))
+	}
+	return "[]string{" + strings.Join(quoted, ", ") + "}"
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {
@@ -1786,14 +2016,23 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return `"default_search"`
 	}
+	if (resource.StructName == "InstanceSettings" || resource.StructName == "SystemInfo") && param.TerraformName == "group_id" {
+		return `"default"`
+	}
 	if resource.StructName == "SearchDataset" && param.TerraformName == "id" {
 		return "searchDatasetID(model)"
+	}
+	if resource.StructName == "SearchDatasetProvider" && param.TerraformName == "id" {
+		return "searchDatasetProviderID(model)"
 	}
 	if resource.StructName == "Notification" && param.TerraformName == "group_id" {
 		if resource.List.OperationID != "" && op.OperationID == resource.List.OperationID {
 			return ""
 		}
 		return "notificationGroupID(model)"
+	}
+	if resource.StructName == "NotificationTarget" && param.TerraformName == "group_id" {
+		return `"default"`
 	}
 	if param.TerraformName == "pack" {
 		return "resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())"
@@ -1804,6 +2043,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 func fixedPathParamValue(resource parser.ResourceDef, param parser.FieldDef) string {
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return "default_search"
+	}
+	if (resource.StructName == "InstanceSettings" || resource.StructName == "SystemInfo") && param.TerraformName == "group_id" {
+		return "default"
 	}
 	return ""
 }

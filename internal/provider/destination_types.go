@@ -17,261 +17,264 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type DestinationModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationResourceModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationDataSourceModel struct {
-	Environment                  types.String                       `tfsdk:"environment" json:"environment,omitempty"`
-	GroupID                      types.String                       `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                           types.String                       `tfsdk:"id" json:"id,omitempty"`
-	Pipeline                     types.String                       `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	Type                         types.String                       `tfsdk:"type" json:"type,omitempty"`
-	OutputDefault                *OutputDefaultModel                `tfsdk:"output_default" json:"OutputDefault,omitempty"`
-	OutputWebhook                *OutputWebhookModel                `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
-	OutputSentinel               *OutputSentinelModel               `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
-	OutputDevnull                *OutputDevnullModel                `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
-	OutputSyslog                 *OutputSyslogModel                 `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
-	OutputSplunk                 *OutputSplunkModel                 `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
-	OutputSplunkLb               *OutputSplunkLbModel               `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
-	OutputSplunkHec              *OutputSplunkHecModel              `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
-	OutputWizHec                 *OutputWizHecModel                 `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
-	OutputTcpjson                *OutputTcpjsonModel                `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
-	OutputWavefront              *OutputWavefrontModel              `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
-	OutputSignalfx               *OutputSignalfxModel               `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
-	OutputFilesystem             *OutputFilesystemModel             `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
-	OutputS3                     *OutputS3Model                     `tfsdk:"output_s3" json:"OutputS3,omitempty"`
-	OutputAzureBlob              *OutputAzureBlobModel              `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorerModel      `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
-	OutputAzureLogs              *OutputAzureLogsModel              `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
-	OutputKinesis                *OutputKinesisModel                `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
-	OutputHoneycomb              *OutputHoneycombModel              `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
-	OutputAzureEventhub          *OutputAzureEventhubModel          `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
-	OutputGoogleChronicle        *OutputGoogleChronicleModel        `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorageModel     `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLoggingModel     `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
-	OutputGooglePubsub           *OutputGooglePubsubModel           `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
-	OutputExabeam                *OutputExabeamModel                `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
-	OutputKafka                  *OutputKafkaModel                  `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
-	OutputConfluentCloud         *OutputConfluentCloudModel         `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
-	OutputMsk                    *OutputMskModel                    `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
-	OutputElastic                *OutputElasticModel                `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
-	OutputElasticCloud           *OutputElasticCloudModel           `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
-	OutputNewrelic               *OutputNewrelicModel               `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
-	OutputNewrelicEvents         *OutputNewrelicEventsModel         `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
-	OutputInfluxdb               *OutputInfluxdbModel               `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
-	OutputCloudwatch             *OutputCloudwatchModel             `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
-	OutputMinio                  *OutputMinioModel                  `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
-	OutputStatsd                 *OutputStatsdModel                 `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
-	OutputStatsdExt              *OutputStatsdExtModel              `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
-	OutputGraphite               *OutputGraphiteModel               `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
-	OutputRouter                 *OutputRouterModel                 `tfsdk:"output_router" json:"OutputRouter,omitempty"`
-	OutputSns                    *OutputSnsModel                    `tfsdk:"output_sns" json:"OutputSns,omitempty"`
-	OutputSqs                    *OutputSqsModel                    `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
-	OutputSnmp                   *OutputSnmpModel                   `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
-	OutputSumoLogic              *OutputSumoLogicModel              `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
-	OutputDatadog                *OutputDatadogModel                `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
-	OutputGrafanaCloud           *OutputGrafanaCloudModel           `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
-	OutputLoki                   *OutputLokiModel                   `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
-	OutputPrometheus             *OutputPrometheusModel             `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
-	OutputRing                   *OutputRingModel                   `tfsdk:"output_ring" json:"OutputRing,omitempty"`
-	OutputOpenTelemetry          *OutputOpenTelemetryModel          `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
-	OutputServiceNow             *OutputServiceNowModel             `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
-	OutputDataset                *OutputDatasetModel                `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
-	OutputCriblTcp               *OutputCriblTcpModel               `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
-	OutputCriblHttp              *OutputCriblHttpModel              `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngineModel      `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
-	OutputHumioHec               *OutputHumioHecModel               `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiemModel `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
-	OutputDlS3                   *OutputDlS3Model                   `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
-	OutputSecurityLake           *OutputSecurityLakeModel           `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
-	OutputCriblLake              *OutputCriblLakeModel              `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
-	OutputDiskSpool              *OutputDiskSpoolModel              `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
-	OutputClickHouse             *OutputClickHouseModel             `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorageModel     `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
-	OutputXsiam                  *OutputXsiamModel                  `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
-	OutputNetflow                *OutputNetflowModel                `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
-	OutputDynatraceHttp          *OutputDynatraceHttpModel          `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlpModel          `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiemModel      `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
-	OutputChronicle              *OutputChronicleModel              `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
-	OutputDatabricks             *OutputDatabricksModel             `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabricModel        `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
-	OutputCloudflareR2           *OutputCloudflareR2Model           `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
-	OutputNutanixObjects         *OutputNutanixObjectsModel         `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
-	OutputStorjS3                *OutputStorjS3Model                `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
-	OutputAlphasocS3             *OutputAlphasocS3Model             `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
-	OutputDellS3                 *OutputDellS3Model                 `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
-	OutputCloudianS3             *OutputCloudianS3Model             `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
-	OutputScalityS3              *OutputScalityS3Model              `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
-	OutputAlibabaCloudS3         *OutputAlibabaCloudS3Model         `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	Environment                    types.String                         `tfsdk:"environment" json:"environment,omitempty"`
+	GroupID                        types.String                         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                             types.String                         `tfsdk:"id" json:"id,omitempty"`
+	Pipeline                       types.String                         `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Type                           types.String                         `tfsdk:"type" json:"type,omitempty"`
+	OutputDefault                  *OutputDefaultModel                  `tfsdk:"output_default" json:"OutputDefault,omitempty"`
+	OutputWebhook                  *OutputWebhookModel                  `tfsdk:"output_webhook" json:"OutputWebhook,omitempty"`
+	OutputSentinel                 *OutputSentinelModel                 `tfsdk:"output_sentinel" json:"OutputSentinel,omitempty"`
+	OutputDevnull                  *OutputDevnullModel                  `tfsdk:"output_devnull" json:"OutputDevnull,omitempty"`
+	OutputSyslog                   *OutputSyslogModel                   `tfsdk:"output_syslog" json:"OutputSyslog,omitempty"`
+	OutputSplunk                   *OutputSplunkModel                   `tfsdk:"output_splunk" json:"OutputSplunk,omitempty"`
+	OutputSplunkLb                 *OutputSplunkLbModel                 `tfsdk:"output_splunk_lb" json:"OutputSplunkLb,omitempty"`
+	OutputSplunkHec                *OutputSplunkHecModel                `tfsdk:"output_splunk_hec" json:"OutputSplunkHec,omitempty"`
+	OutputWizHec                   *OutputWizHecModel                   `tfsdk:"output_wiz_hec" json:"OutputWizHec,omitempty"`
+	OutputTcpjson                  *OutputTcpjsonModel                  `tfsdk:"output_tcpjson" json:"OutputTcpjson,omitempty"`
+	OutputWavefront                *OutputWavefrontModel                `tfsdk:"output_wavefront" json:"OutputWavefront,omitempty"`
+	OutputSignalfx                 *OutputSignalfxModel                 `tfsdk:"output_signalfx" json:"OutputSignalfx,omitempty"`
+	OutputFilesystem               *OutputFilesystemModel               `tfsdk:"output_filesystem" json:"OutputFilesystem,omitempty"`
+	OutputS3                       *OutputS3Model                       `tfsdk:"output_s3" json:"OutputS3,omitempty"`
+	OutputAzureBlob                *OutputAzureBlobModel                `tfsdk:"output_azure_blob" json:"OutputAzureBlob,omitempty"`
+	OutputAzureDataExplorer        *OutputAzureDataExplorerModel        `tfsdk:"output_azure_data_explorer" json:"OutputAzureDataExplorer,omitempty"`
+	OutputAzureLogs                *OutputAzureLogsModel                `tfsdk:"output_azure_logs" json:"OutputAzureLogs,omitempty"`
+	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
+	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
+	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
+	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
+	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
+	OutputGoogleCloudObservability *OutputGoogleCloudObservabilityModel `tfsdk:"output_google_cloud_observability" json:"OutputGoogleCloudObservability,omitempty"`
+	OutputGooglePubsub             *OutputGooglePubsubModel             `tfsdk:"output_google_pubsub" json:"OutputGooglePubsub,omitempty"`
+	OutputExabeam                  *OutputExabeamModel                  `tfsdk:"output_exabeam" json:"OutputExabeam,omitempty"`
+	OutputKafka                    *OutputKafkaModel                    `tfsdk:"output_kafka" json:"OutputKafka,omitempty"`
+	OutputConfluentCloud           *OutputConfluentCloudModel           `tfsdk:"output_confluent_cloud" json:"OutputConfluentCloud,omitempty"`
+	OutputMsk                      *OutputMskModel                      `tfsdk:"output_msk" json:"OutputMsk,omitempty"`
+	OutputElastic                  *OutputElasticModel                  `tfsdk:"output_elastic" json:"OutputElastic,omitempty"`
+	OutputElasticCloud             *OutputElasticCloudModel             `tfsdk:"output_elastic_cloud" json:"OutputElasticCloud,omitempty"`
+	OutputNewrelic                 *OutputNewrelicModel                 `tfsdk:"output_newrelic" json:"OutputNewrelic,omitempty"`
+	OutputNewrelicEvents           *OutputNewrelicEventsModel           `tfsdk:"output_newrelic_events" json:"OutputNewrelicEvents,omitempty"`
+	OutputInfluxdb                 *OutputInfluxdbModel                 `tfsdk:"output_influxdb" json:"OutputInfluxdb,omitempty"`
+	OutputCloudwatch               *OutputCloudwatchModel               `tfsdk:"output_cloudwatch" json:"OutputCloudwatch,omitempty"`
+	OutputMinio                    *OutputMinioModel                    `tfsdk:"output_minio" json:"OutputMinio,omitempty"`
+	OutputStatsd                   *OutputStatsdModel                   `tfsdk:"output_statsd" json:"OutputStatsd,omitempty"`
+	OutputStatsdExt                *OutputStatsdExtModel                `tfsdk:"output_statsd_ext" json:"OutputStatsdExt,omitempty"`
+	OutputGraphite                 *OutputGraphiteModel                 `tfsdk:"output_graphite" json:"OutputGraphite,omitempty"`
+	OutputRouter                   *OutputRouterModel                   `tfsdk:"output_router" json:"OutputRouter,omitempty"`
+	OutputSns                      *OutputSnsModel                      `tfsdk:"output_sns" json:"OutputSns,omitempty"`
+	OutputSqs                      *OutputSqsModel                      `tfsdk:"output_sqs" json:"OutputSqs,omitempty"`
+	OutputSnmp                     *OutputSnmpModel                     `tfsdk:"output_snmp" json:"OutputSnmp,omitempty"`
+	OutputSumoLogic                *OutputSumoLogicModel                `tfsdk:"output_sumo_logic" json:"OutputSumoLogic,omitempty"`
+	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
+	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
+	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
+	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
+	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
+	OutputServiceNow               *OutputServiceNowModel               `tfsdk:"output_service_now" json:"OutputServiceNow,omitempty"`
+	OutputDataset                  *OutputDatasetModel                  `tfsdk:"output_dataset" json:"OutputDataset,omitempty"`
+	OutputCriblTcp                 *OutputCriblTcpModel                 `tfsdk:"output_cribl_tcp" json:"OutputCriblTcp,omitempty"`
+	OutputCriblHttp                *OutputCriblHttpModel                `tfsdk:"output_cribl_http" json:"OutputCriblHttp,omitempty"`
+	OutputCriblSearchEngine        *OutputCriblSearchEngineModel        `tfsdk:"output_cribl_search_engine" json:"OutputCriblSearchEngine,omitempty"`
+	OutputHumioHec                 *OutputHumioHecModel                 `tfsdk:"output_humio_hec" json:"OutputHumioHec,omitempty"`
+	OutputCrowdstrikeNextGenSiem   *OutputCrowdstrikeNextGenSiemModel   `tfsdk:"output_crowdstrike_next_gen_siem" json:"OutputCrowdstrikeNextGenSiem,omitempty"`
+	OutputDlS3                     *OutputDlS3Model                     `tfsdk:"output_dl_s3" json:"OutputDlS3,omitempty"`
+	OutputSecurityLake             *OutputSecurityLakeModel             `tfsdk:"output_security_lake" json:"OutputSecurityLake,omitempty"`
+	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
+	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
+	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
+	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
+	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
+	OutputDynatraceHttp            *OutputDynatraceHttpModel            `tfsdk:"output_dynatrace_http" json:"OutputDynatraceHttp,omitempty"`
+	OutputDynatraceOtlp            *OutputDynatraceOtlpModel            `tfsdk:"output_dynatrace_otlp" json:"OutputDynatraceOtlp,omitempty"`
+	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
+	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
+	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
+	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
+	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
+	OutputStorjS3                  *OutputStorjS3Model                  `tfsdk:"output_storj_s3" json:"OutputStorjS3,omitempty"`
+	OutputAlphasocS3               *OutputAlphasocS3Model               `tfsdk:"output_alphasoc_s3" json:"OutputAlphasocS3,omitempty"`
+	OutputDellS3                   *OutputDellS3Model                   `tfsdk:"output_dell_s3" json:"OutputDellS3,omitempty"`
+	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
+	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
+	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
 }
 
 type DestinationAPIModel struct {
@@ -1897,6 +1900,61 @@ func OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes() map[string]attr.Type 
 	}
 }
 
+type OutputGoogleCloudObservabilityMetadataModel struct {
+	Key   types.String `tfsdk:"key" json:"key,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputGoogleCloudObservabilityMetadataAPIModel struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key":   types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type OutputGoogleCloudObservabilityTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type OutputGoogleCloudObservabilityTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"certificate_name":    types.StringType,
+		"ca_path":             types.StringType,
+		"priv_key_path":       types.StringType,
+		"cert_path":           types.StringType,
+		"passphrase":          types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
 type OutputExabeamRetrySettingsModel struct {
 	Enabled           types.Bool    `tfsdk:"enabled" json:"enabled,omitempty"`
 	InitialBackoffMs  types.Float64 `tfsdk:"initial_backoff_ms" json:"initialBackoffMs,omitempty"`
@@ -1980,18 +2038,59 @@ func OutputKafkaKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputKafkaKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputKafkaKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputKafkaKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputKafkaKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputKafkaKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputKafkaKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2251,18 +2350,59 @@ func OutputConfluentCloudKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputConfluentCloudKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputConfluentCloudKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputConfluentCloudKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputConfluentCloudKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -2440,18 +2580,59 @@ func OutputMskKafkaSchemaRegistryAttrTypes() map[string]attr.Type {
 
 type OutputMskKafkaSchemaRegistryAuthModel struct {
 	Disabled          types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	OauthEnabled      types.Bool   `tfsdk:"oauth_enabled" json:"oauthEnabled,omitempty"`
+	TokenURL          types.String `tfsdk:"token_url" json:"tokenUrl,omitempty"`
+	ClientID          types.String `tfsdk:"client_id" json:"clientId,omitempty"`
+	OauthSecretType   types.String `tfsdk:"oauth_secret_type" json:"oauthSecretType,omitempty"`
+	ClientTextSecret  types.String `tfsdk:"client_text_secret" json:"clientTextSecret,omitempty"`
+	OauthParams       types.List   `tfsdk:"oauth_params" json:"oauthParams,omitempty"`
+	IDentityPoolID    types.String `tfsdk:"identity_pool_id" json:"identityPoolId,omitempty"`
+	LogicalCluster    types.String `tfsdk:"logical_cluster" json:"logicalCluster,omitempty"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 }
 
 type OutputMskKafkaSchemaRegistryAuthAPIModel struct {
 	Disabled          *bool   `json:"disabled,omitempty"`
+	OauthEnabled      *bool   `json:"oauthEnabled,omitempty"`
+	TokenURL          *string `json:"tokenUrl,omitempty"`
+	ClientID          *string `json:"clientId,omitempty"`
+	OauthSecretType   *string `json:"oauthSecretType,omitempty"`
+	ClientTextSecret  *string `json:"clientTextSecret,omitempty"`
+	OauthParams       any     `json:"oauthParams,omitempty"`
+	IDentityPoolID    *string `json:"identityPoolId,omitempty"`
+	LogicalCluster    *string `json:"logicalCluster,omitempty"`
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
 func OutputMskKafkaSchemaRegistryAuthAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"disabled":           types.BoolType,
+		"oauth_enabled":      types.BoolType,
+		"token_url":          types.StringType,
+		"client_id":          types.StringType,
+		"oauth_secret_type":  types.StringType,
+		"client_text_secret": types.StringType,
+		"oauth_params":       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes()}},
+		"identity_pool_id":   types.StringType,
+		"logical_cluster":    types.StringType,
 		"credentials_secret": types.StringType,
+	}
+}
+
+type OutputMskKafkaSchemaRegistryAuthOauthParamsModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type OutputMskKafkaSchemaRegistryAuthOauthParamsAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func OutputMskKafkaSchemaRegistryAuthOauthParamsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
 	}
 }
 
@@ -4705,34 +4886,40 @@ func OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes() map[string]attr.Typ
 }
 
 type OutputLocalSearchStorageStatsDestinationModel struct {
-	URL         types.String `tfsdk:"url" json:"url,omitempty"`
-	Database    types.String `tfsdk:"database" json:"database,omitempty"`
-	TableName   types.String `tfsdk:"table_name" json:"tableName,omitempty"`
-	AuthType    types.String `tfsdk:"auth_type" json:"authType,omitempty"`
-	Username    types.String `tfsdk:"username" json:"username,omitempty"`
-	SqlUsername types.String `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
-	Password    types.String `tfsdk:"password" json:"password,omitempty"`
+	URL                 types.String  `tfsdk:"url" json:"url,omitempty"`
+	Database            types.String  `tfsdk:"database" json:"database,omitempty"`
+	TableName           types.String  `tfsdk:"table_name" json:"tableName,omitempty"`
+	AuthType            types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Username            types.String  `tfsdk:"username" json:"username,omitempty"`
+	SqlUsername         types.String  `tfsdk:"sql_username" json:"sqlUsername,omitempty"`
+	Password            types.String  `tfsdk:"password" json:"password,omitempty"`
+	WaitForAsyncInserts types.Bool    `tfsdk:"wait_for_async_inserts" json:"waitForAsyncInserts,omitempty"`
+	Concurrency         types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 }
 
 type OutputLocalSearchStorageStatsDestinationAPIModel struct {
-	URL         *string `json:"url,omitempty"`
-	Database    *string `json:"database,omitempty"`
-	TableName   *string `json:"tableName,omitempty"`
-	AuthType    *string `json:"authType,omitempty"`
-	Username    *string `json:"username,omitempty"`
-	SqlUsername *string `json:"sqlUsername,omitempty"`
-	Password    *string `json:"password,omitempty"`
+	URL                 *string  `json:"url,omitempty"`
+	Database            *string  `json:"database,omitempty"`
+	TableName           *string  `json:"tableName,omitempty"`
+	AuthType            *string  `json:"authType,omitempty"`
+	Username            *string  `json:"username,omitempty"`
+	SqlUsername         *string  `json:"sqlUsername,omitempty"`
+	Password            *string  `json:"password,omitempty"`
+	WaitForAsyncInserts *bool    `json:"waitForAsyncInserts,omitempty"`
+	Concurrency         *float64 `json:"concurrency,omitempty"`
 }
 
 func OutputLocalSearchStorageStatsDestinationAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"url":          types.StringType,
-		"database":     types.StringType,
-		"table_name":   types.StringType,
-		"auth_type":    types.StringType,
-		"username":     types.StringType,
-		"sql_username": types.StringType,
-		"password":     types.StringType,
+		"url":                    types.StringType,
+		"database":               types.StringType,
+		"table_name":             types.StringType,
+		"auth_type":              types.StringType,
+		"username":               types.StringType,
+		"sql_username":           types.StringType,
+		"password":               types.StringType,
+		"wait_for_async_inserts": types.BoolType,
+		"concurrency":            types.Float64Type,
 	}
 }
 
@@ -6167,6 +6354,15 @@ func (m DestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputGoogleCloudObservability != nil {
+		value, err := m.OutputGoogleCloudObservability.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputGooglePubsub != nil {
 		value, err := m.OutputGooglePubsub.terraformPayload()
 		if err != nil {
@@ -6815,6 +7011,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputGoogleCloudLogging.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "google_cloud_observability":
+		m.OutputGoogleCloudObservability = &OutputGoogleCloudObservabilityModel{}
+		if err := m.OutputGoogleCloudObservability.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "google_pubsub":
 		m.OutputGooglePubsub = &OutputGooglePubsubModel{}
 		if err := m.OutputGooglePubsub.unmarshalPayload(raw); err != nil {
@@ -7104,6 +7305,18 @@ type OutputDefaultModel struct {
 	DefaultID    types.String `tfsdk:"default_id" json:"defaultId,omitempty"`
 }
 
+func OutputDefaultModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"pipeline":      types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"environment":   types.StringType,
+		"streamtags":    types.ListType{ElemType: types.StringType},
+		"default_id":    types.StringType,
+	}
+}
+
 func (m OutputDefaultModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -7293,6 +7506,78 @@ type OutputWebhookModel struct {
 	URLs                          types.List    `tfsdk:"urls" json:"urls,omitempty"`
 	DnsResolvePeriodSec           types.Float64 `tfsdk:"dns_resolve_period_sec" json:"dnsResolvePeriodSec,omitempty"`
 	LoadBalanceStatsPeriodSec     types.Float64 `tfsdk:"load_balance_stats_period_sec" json:"loadBalanceStatsPeriodSec,omitempty"`
+}
+
+func OutputWebhookModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"method":                            types.StringType,
+		"format":                            types.StringType,
+		"keep_alive":                        types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputWebhookTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"tls":                               types.ObjectType{AttrTypes: OutputWebhookTLSAttrTypes()},
+		"total_memory_limit_kb":             types.Float64Type,
+		"load_balanced":                     types.BoolType,
+		"description":                       types.StringType,
+		"custom_source_expression":          types.StringType,
+		"custom_drop_when_null":             types.BoolType,
+		"custom_event_delimiter":            types.StringType,
+		"custom_content_type":               types.StringType,
+		"custom_payload_expression":         types.StringType,
+		"advanced_content_type":             types.StringType,
+		"format_event_code":                 types.StringType,
+		"format_payload_code":               types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"token":                             types.StringType,
+		"credentials_secret":                types.StringType,
+		"text_secret":                       types.StringType,
+		"login_url":                         types.StringType,
+		"secret_param_name":                 types.StringType,
+		"secret":                            types.StringType,
+		"token_attribute_name":              types.StringType,
+		"auth_header_expr":                  types.StringType,
+		"token_timeout_secs":                types.Float64Type,
+		"oauth_params":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookOauthParamsAttrTypes()}},
+		"oauth_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookOauthHeadersAttrTypes()}},
+		"url":                               types.StringType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+	}
 }
 
 func (m OutputWebhookModel) terraformPayload() (map[string]any, error) {
@@ -8434,6 +8719,66 @@ type OutputSentinelModel struct {
 	StreamName                    types.String  `tfsdk:"stream_name" json:"streamName,omitempty"`
 }
 
+func OutputSentinelModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"keep_alive":                        types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputSentinelTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"login_url":                         types.StringType,
+		"secret":                            types.StringType,
+		"client_id":                         types.StringType,
+		"scope":                             types.StringType,
+		"endpoint_urlconfiguration":         types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"format":                            types.StringType,
+		"custom_source_expression":          types.StringType,
+		"custom_drop_when_null":             types.BoolType,
+		"custom_event_delimiter":            types.StringType,
+		"custom_content_type":               types.StringType,
+		"custom_payload_expression":         types.StringType,
+		"advanced_content_type":             types.StringType,
+		"format_event_code":                 types.StringType,
+		"format_payload_code":               types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"dcr_id":                            types.StringType,
+		"dce_endpoint":                      types.StringType,
+		"stream_name":                       types.StringType,
+	}
+}
+
 func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -9332,6 +9677,17 @@ type OutputDevnullModel struct {
 	Streamtags   types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
 }
 
+func OutputDevnullModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"pipeline":      types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"environment":   types.StringType,
+		"streamtags":    types.ListType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputDevnullModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -9481,6 +9837,54 @@ type OutputSyslogModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSyslogModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                            types.StringType,
+		"type":                          types.StringType,
+		"pipeline":                      types.StringType,
+		"system_fields":                 types.ListType{ElemType: types.StringType},
+		"environment":                   types.StringType,
+		"streamtags":                    types.ListType{ElemType: types.StringType},
+		"protocol":                      types.StringType,
+		"facility":                      types.Int64Type,
+		"severity":                      types.Int64Type,
+		"app_name":                      types.StringType,
+		"message_format":                types.StringType,
+		"timestamp_format":              types.StringType,
+		"throttle_rate_per_sec":         types.StringType,
+		"octet_count_framing":           types.BoolType,
+		"log_failed_requests":           types.BoolType,
+		"description":                   types.StringType,
+		"load_balanced":                 types.BoolType,
+		"host":                          types.StringType,
+		"port":                          types.Float64Type,
+		"exclude_self":                  types.BoolType,
+		"hosts":                         types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSyslogHostsAttrTypes()}},
+		"dns_resolve_period_sec":        types.Float64Type,
+		"load_balance_stats_period_sec": types.Float64Type,
+		"max_concurrent_senders":        types.Float64Type,
+		"connection_timeout":            types.Float64Type,
+		"write_timeout":                 types.Float64Type,
+		"tls":                           types.ObjectType{AttrTypes: OutputSyslogTLSAttrTypes()},
+		"on_backpressure":               types.StringType,
+		"max_record_size":               types.Float64Type,
+		"udp_dns_resolve_period_sec":    types.Float64Type,
+		"enable_ip_spoofing":            types.BoolType,
+		"pq_strict_ordering":            types.BoolType,
+		"pq_rate_per_sec":               types.Float64Type,
+		"pq_mode":                       types.StringType,
+		"pq_max_buffer_size":            types.Float64Type,
+		"pq_max_backpressure_sec":       types.Float64Type,
+		"pq_max_file_size":              types.StringType,
+		"pq_max_size":                   types.StringType,
+		"pq_path":                       types.StringType,
+		"pq_compress":                   types.StringType,
+		"pq_on_backpressure":            types.StringType,
+		"pq_max_buffer_size_bytes":      types.StringType,
+		"pq_controls":                   types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSyslogModel) terraformPayload() (map[string]any, error) {
@@ -10219,6 +10623,47 @@ type OutputSplunkModel struct {
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputSplunkModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"pipeline":                 types.StringType,
+		"system_fields":            types.ListType{ElemType: types.StringType},
+		"environment":              types.StringType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"nested_fields":            types.StringType,
+		"throttle_rate_per_sec":    types.StringType,
+		"connection_timeout":       types.Float64Type,
+		"write_timeout":            types.Float64Type,
+		"tls":                      types.ObjectType{AttrTypes: OutputSplunkTLSAttrTypes()},
+		"enable_multi_metrics":     types.BoolType,
+		"enable_ack":               types.BoolType,
+		"log_failed_requests":      types.BoolType,
+		"max_s2_sversion":          types.StringType,
+		"on_backpressure":          types.StringType,
+		"auth_type":                types.StringType,
+		"description":              types.StringType,
+		"max_failed_health_checks": types.Float64Type,
+		"compress":                 types.StringType,
+		"pq_strict_ordering":       types.BoolType,
+		"pq_rate_per_sec":          types.Float64Type,
+		"pq_mode":                  types.StringType,
+		"pq_max_buffer_size":       types.Float64Type,
+		"pq_max_backpressure_sec":  types.Float64Type,
+		"pq_max_file_size":         types.StringType,
+		"pq_max_size":              types.StringType,
+		"pq_path":                  types.StringType,
+		"pq_compress":              types.StringType,
+		"pq_on_backpressure":       types.StringType,
+		"pq_max_buffer_size_bytes": types.StringType,
+		"pq_controls":              types.MapType{ElemType: types.StringType},
+		"auth_token":               types.StringType,
+		"text_secret":              types.StringType,
+	}
+}
+
 func (m OutputSplunkModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -10847,6 +11292,53 @@ type OutputSplunkLbModel struct {
 	PqControls                   types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 	AuthToken                    types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
 	TextSecret                   types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func OutputSplunkLbModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                              types.StringType,
+		"type":                            types.StringType,
+		"pipeline":                        types.StringType,
+		"system_fields":                   types.ListType{ElemType: types.StringType},
+		"environment":                     types.StringType,
+		"streamtags":                      types.ListType{ElemType: types.StringType},
+		"dns_resolve_period_sec":          types.Float64Type,
+		"load_balance_stats_period_sec":   types.Float64Type,
+		"max_concurrent_senders":          types.Float64Type,
+		"nested_fields":                   types.StringType,
+		"throttle_rate_per_sec":           types.StringType,
+		"connection_timeout":              types.Float64Type,
+		"write_timeout":                   types.Float64Type,
+		"tls":                             types.ObjectType{AttrTypes: OutputSplunkLbTLSAttrTypes()},
+		"enable_multi_metrics":            types.BoolType,
+		"enable_ack":                      types.BoolType,
+		"log_failed_requests":             types.BoolType,
+		"max_s2_sversion":                 types.StringType,
+		"on_backpressure":                 types.StringType,
+		"indexer_discovery":               types.BoolType,
+		"sender_unhealthy_time_allowance": types.Float64Type,
+		"auth_type":                       types.StringType,
+		"description":                     types.StringType,
+		"max_failed_health_checks":        types.Float64Type,
+		"compress":                        types.StringType,
+		"indexer_discovery_configs":       types.ObjectType{AttrTypes: OutputSplunkLbIndexerDiscoveryConfigsAttrTypes()},
+		"exclude_self":                    types.BoolType,
+		"hosts":                           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSplunkLbHostsAttrTypes()}},
+		"pq_strict_ordering":              types.BoolType,
+		"pq_rate_per_sec":                 types.Float64Type,
+		"pq_mode":                         types.StringType,
+		"pq_max_buffer_size":              types.Float64Type,
+		"pq_max_backpressure_sec":         types.Float64Type,
+		"pq_max_file_size":                types.StringType,
+		"pq_max_size":                     types.StringType,
+		"pq_path":                         types.StringType,
+		"pq_compress":                     types.StringType,
+		"pq_on_backpressure":              types.StringType,
+		"pq_max_buffer_size_bytes":        types.StringType,
+		"pq_controls":                     types.MapType{ElemType: types.StringType},
+		"auth_token":                      types.StringType,
+		"text_secret":                     types.StringType,
+	}
 }
 
 func (m OutputSplunkLbModel) terraformPayload() (map[string]any, error) {
@@ -11578,6 +12070,58 @@ type OutputSplunkHecModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSplunkHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"load_balanced":                     types.BoolType,
+		"next_queue":                        types.StringType,
+		"tcp_routing":                       types.StringType,
+		"tls":                               types.ObjectType{AttrTypes: OutputSplunkHecTLSAttrTypes()},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSplunkHecExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"enable_multi_metrics":              types.BoolType,
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSplunkHecResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputSplunkHecTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"url":                               types.StringType,
+		"use_round_robin_dns":               types.BoolType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSplunkHecURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSplunkHecModel) terraformPayload() (map[string]any, error) {
@@ -12387,6 +12931,54 @@ type OutputWizHecModel struct {
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputWizHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"next_queue":                        types.StringType,
+		"tcp_routing":                       types.StringType,
+		"tls":                               types.ObjectType{AttrTypes: OutputWizHecTLSAttrTypes()},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWizHecExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWizHecResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputWizHecTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"wiz_connector_id":                  types.StringType,
+		"wiz_environment":                   types.StringType,
+		"data_center":                       types.StringType,
+		"wiz_sourcetype":                    types.StringType,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+	}
+}
+
 func (m OutputWizHecModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -13126,6 +13718,50 @@ type OutputTcpjsonModel struct {
 	TextSecret                types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputTcpjsonModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                            types.StringType,
+		"type":                          types.StringType,
+		"pipeline":                      types.StringType,
+		"system_fields":                 types.ListType{ElemType: types.StringType},
+		"environment":                   types.StringType,
+		"streamtags":                    types.ListType{ElemType: types.StringType},
+		"load_balanced":                 types.BoolType,
+		"compression":                   types.StringType,
+		"log_failed_requests":           types.BoolType,
+		"throttle_rate_per_sec":         types.StringType,
+		"tls":                           types.ObjectType{AttrTypes: OutputTcpjsonTLSAttrTypes()},
+		"connection_timeout":            types.Float64Type,
+		"write_timeout":                 types.Float64Type,
+		"token_ttlminutes":              types.Float64Type,
+		"send_header":                   types.BoolType,
+		"on_backpressure":               types.StringType,
+		"auth_type":                     types.StringType,
+		"description":                   types.StringType,
+		"host":                          types.StringType,
+		"port":                          types.Float64Type,
+		"exclude_self":                  types.BoolType,
+		"hosts":                         types.ListType{ElemType: types.ObjectType{AttrTypes: OutputTcpjsonHostsAttrTypes()}},
+		"dns_resolve_period_sec":        types.Float64Type,
+		"load_balance_stats_period_sec": types.Float64Type,
+		"max_concurrent_senders":        types.Float64Type,
+		"pq_strict_ordering":            types.BoolType,
+		"pq_rate_per_sec":               types.Float64Type,
+		"pq_mode":                       types.StringType,
+		"pq_max_buffer_size":            types.Float64Type,
+		"pq_max_backpressure_sec":       types.Float64Type,
+		"pq_max_file_size":              types.StringType,
+		"pq_max_size":                   types.StringType,
+		"pq_path":                       types.StringType,
+		"pq_compress":                   types.StringType,
+		"pq_on_backpressure":            types.StringType,
+		"pq_max_buffer_size_bytes":      types.StringType,
+		"pq_controls":                   types.MapType{ElemType: types.StringType},
+		"auth_token":                    types.StringType,
+		"text_secret":                   types.StringType,
+	}
+}
+
 func (m OutputTcpjsonModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -13800,6 +14436,49 @@ type OutputWavefrontModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputWavefrontModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"domain":                            types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWavefrontExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWavefrontResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputWavefrontTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputWavefrontModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -14456,6 +15135,49 @@ type OutputSignalfxModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSignalfxModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"realm":                             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSignalfxExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSignalfxResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputSignalfxTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSignalfxModel) terraformPayload() (map[string]any, error) {
@@ -15120,6 +15842,55 @@ type OutputFilesystemModel struct {
 	DirectoryBatchSize     types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath         types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum            types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputFilesystemModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"dest_path":                 types.StringType,
+		"stage_path":                types.StringType,
+		"add_id_to_stage_path":      types.BoolType,
+		"remove_empty_dirs":         types.BoolType,
+		"partition_expr":            types.StringType,
+		"format":                    types.StringType,
+		"base_file_name":            types.StringType,
+		"file_name_suffix":          types.StringType,
+		"max_file_size_mb":          types.Float64Type,
+		"max_file_open_time_sec":    types.Float64Type,
+		"max_file_idle_time_sec":    types.Float64Type,
+		"max_open_files":            types.Float64Type,
+		"header_line":               types.StringType,
+		"write_high_water_mark":     types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"deadletter_enabled":        types.BoolType,
+		"on_disk_full_backpressure": types.StringType,
+		"force_close_on_shutdown":   types.BoolType,
+		"retry_settings":            types.ObjectType{AttrTypes: OutputFilesystemRetrySettingsAttrTypes()},
+		"orphans":                   types.ObjectType{AttrTypes: OutputFilesystemOrphansAttrTypes()},
+		"description":               types.StringType,
+		"compress":                  types.StringType,
+		"compression_level":         types.StringType,
+		"automatic_schema":          types.BoolType,
+		"parquet_schema":            types.StringType,
+		"parquet_version":           types.StringType,
+		"parquet_data_page_version": types.StringType,
+		"parquet_row_group_length":  types.Float64Type,
+		"parquet_page_size":         types.StringType,
+		"should_log_invalid_rows":   types.BoolType,
+		"key_value_metadata":        types.ListType{ElemType: types.ObjectType{AttrTypes: OutputFilesystemKeyValueMetadataAttrTypes()}},
+		"enable_statistics":         types.BoolType,
+		"enable_write_page_index":   types.BoolType,
+		"enable_page_checksum":      types.BoolType,
+		"empty_dir_cleanup_sec":     types.Float64Type,
+		"directory_batch_size":      types.Float64Type,
+		"deadletter_path":           types.StringType,
+		"max_retry_num":             types.Float64Type,
+	}
 }
 
 func (m OutputFilesystemModel) terraformPayload() (map[string]any, error) {
@@ -15900,6 +16671,75 @@ type OutputS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"enable_assume_role":                types.BoolType,
+		"assume_role_arn":                   types.StringType,
+		"assume_role_external_id":           types.StringType,
+		"duration_seconds":                  types.Float64Type,
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputS3OrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"kms_key_id":                        types.StringType,
+		"description":                       types.StringType,
+		"aws_api_key":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputS3Model) terraformPayload() (map[string]any, error) {
@@ -16996,6 +17836,69 @@ type OutputAzureBlobModel struct {
 	Certificate            types.Object  `tfsdk:"certificate" json:"certificate,omitempty"`
 }
 
+func OutputAzureBlobModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"container_name":            types.StringType,
+		"create_container":          types.BoolType,
+		"dest_path":                 types.StringType,
+		"stage_path":                types.StringType,
+		"add_id_to_stage_path":      types.BoolType,
+		"max_concurrent_file_parts": types.Float64Type,
+		"remove_empty_dirs":         types.BoolType,
+		"partition_expr":            types.StringType,
+		"format":                    types.StringType,
+		"base_file_name":            types.StringType,
+		"file_name_suffix":          types.StringType,
+		"max_file_size_mb":          types.Float64Type,
+		"max_file_open_time_sec":    types.Float64Type,
+		"max_file_idle_time_sec":    types.Float64Type,
+		"max_open_files":            types.Float64Type,
+		"header_line":               types.StringType,
+		"write_high_water_mark":     types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"deadletter_enabled":        types.BoolType,
+		"on_disk_full_backpressure": types.StringType,
+		"force_close_on_shutdown":   types.BoolType,
+		"retry_settings":            types.ObjectType{AttrTypes: OutputAzureBlobRetrySettingsAttrTypes()},
+		"orphans":                   types.ObjectType{AttrTypes: OutputAzureBlobOrphansAttrTypes()},
+		"auth_type":                 types.StringType,
+		"storage_class":             types.StringType,
+		"description":               types.StringType,
+		"compress":                  types.StringType,
+		"compression_level":         types.StringType,
+		"automatic_schema":          types.BoolType,
+		"parquet_schema":            types.StringType,
+		"parquet_version":           types.StringType,
+		"parquet_data_page_version": types.StringType,
+		"parquet_row_group_length":  types.Float64Type,
+		"parquet_page_size":         types.StringType,
+		"should_log_invalid_rows":   types.BoolType,
+		"key_value_metadata":        types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureBlobKeyValueMetadataAttrTypes()}},
+		"enable_statistics":         types.BoolType,
+		"enable_write_page_index":   types.BoolType,
+		"enable_page_checksum":      types.BoolType,
+		"empty_dir_cleanup_sec":     types.Float64Type,
+		"directory_batch_size":      types.Float64Type,
+		"deadletter_path":           types.StringType,
+		"max_retry_num":             types.Float64Type,
+		"connection_string":         types.StringType,
+		"text_secret":               types.StringType,
+		"storage_account_name":      types.StringType,
+		"tenant_id":                 types.StringType,
+		"client_id":                 types.StringType,
+		"azure_cloud":               types.StringType,
+		"endpoint_suffix":           types.StringType,
+		"client_text_secret":        types.StringType,
+		"certificate":               types.ObjectType{AttrTypes: OutputAzureBlobCertificateAttrTypes()},
+	}
+}
+
 func (m OutputAzureBlobModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -18020,6 +18923,97 @@ type OutputAzureDataExplorerModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputAzureDataExplorerModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"cluster_url":                       types.StringType,
+		"database":                          types.StringType,
+		"table":                             types.StringType,
+		"validate_database_settings":        types.BoolType,
+		"ingest_mode":                       types.StringType,
+		"oauth_endpoint":                    types.StringType,
+		"tenant_id":                         types.StringType,
+		"client_id":                         types.StringType,
+		"scope":                             types.StringType,
+		"oauth_type":                        types.StringType,
+		"description":                       types.StringType,
+		"client_secret":                     types.StringType,
+		"text_secret":                       types.StringType,
+		"certificate":                       types.ObjectType{AttrTypes: OutputAzureDataExplorerCertificateAttrTypes()},
+		"format":                            types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureDataExplorerKeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_enabled":                types.BoolType,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+		"is_mapping_obj":                    types.BoolType,
+		"mapping_obj":                       types.StringType,
+		"mapping_ref":                       types.StringType,
+		"ingest_url":                        types.StringType,
+		"on_backpressure":                   types.StringType,
+		"stage_path":                        types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"on_disk_full_backpressure":         types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputAzureDataExplorerRetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputAzureDataExplorerOrphansAttrTypes()},
+		"timeout_sec":                       types.Float64Type,
+		"flush_immediately":                 types.BoolType,
+		"retain_blob_on_success":            types.BoolType,
+		"extent_tags":                       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureDataExplorerExtentTagsAttrTypes()}},
+		"ingest_if_not_exists":              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureDataExplorerIngestIfNotExistsAttrTypes()}},
+		"report_level":                      types.StringType,
+		"report_method":                     types.StringType,
+		"additional_properties":             types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureDataExplorerAdditionalPropertiesAttrTypes()}},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureDataExplorerResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputAzureDataExplorerTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"reject_unauthorized":               types.BoolType,
+		"use_round_robin_dns":               types.BoolType,
+		"keep_alive":                        types.BoolType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputAzureDataExplorerModel) terraformPayload() (map[string]any, error) {
@@ -19451,6 +20445,52 @@ type OutputAzureLogsModel struct {
 	KeypairSecret                 types.String  `tfsdk:"keypair_secret" json:"keypairSecret,omitempty"`
 }
 
+func OutputAzureLogsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"log_type":                          types.StringType,
+		"resource_id":                       types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureLogsExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"api_url":                           types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureLogsResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputAzureLogsTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"workspace_id":                      types.StringType,
+		"workspace_key":                     types.StringType,
+		"keypair_secret":                    types.StringType,
+	}
+}
+
 func (m OutputAzureLogsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -20159,6 +21199,51 @@ type OutputKinesisModel struct {
 	PqControls              types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputKinesisModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"stream_name":               types.StringType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"concurrency":               types.Float64Type,
+		"max_record_size_kb":        types.Float64Type,
+		"flush_period_sec":          types.Float64Type,
+		"compression":               types.StringType,
+		"use_list_shards":           types.BoolType,
+		"as_ndjson":                 types.BoolType,
+		"on_backpressure":           types.StringType,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"max_events_per_flush":      types.Float64Type,
+		"pq_strict_ordering":        types.BoolType,
+		"pq_rate_per_sec":           types.Float64Type,
+		"pq_mode":                   types.StringType,
+		"pq_max_buffer_size":        types.Float64Type,
+		"pq_max_backpressure_sec":   types.Float64Type,
+		"pq_max_file_size":          types.StringType,
+		"pq_max_size":               types.StringType,
+		"pq_path":                   types.StringType,
+		"pq_compress":               types.StringType,
+		"pq_on_backpressure":        types.StringType,
+		"pq_max_buffer_size_bytes":  types.StringType,
+		"pq_controls":               types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputKinesisModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -20849,6 +21934,49 @@ type OutputHoneycombModel struct {
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputHoneycombModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"dataset":                           types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHoneycombExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHoneycombResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputHoneycombTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"team":                              types.StringType,
+		"text_secret":                       types.StringType,
+	}
+}
+
 func (m OutputHoneycombModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -21506,6 +22634,48 @@ type OutputAzureEventhubModel struct {
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputAzureEventhubModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"pipeline":                   types.StringType,
+		"system_fields":              types.ListType{ElemType: types.StringType},
+		"environment":                types.StringType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topic":                      types.StringType,
+		"ack":                        types.Int64Type,
+		"format":                     types.StringType,
+		"max_record_size_kb":         types.Float64Type,
+		"flush_event_count":          types.Float64Type,
+		"flush_period_sec":           types.Float64Type,
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: OutputAzureEventhubSaslAttrTypes()},
+		"tls":                        types.ObjectType{AttrTypes: OutputAzureEventhubTLSAttrTypes()},
+		"on_backpressure":            types.StringType,
+		"description":                types.StringType,
+		"pq_strict_ordering":         types.BoolType,
+		"pq_rate_per_sec":            types.Float64Type,
+		"pq_mode":                    types.StringType,
+		"pq_max_buffer_size":         types.Float64Type,
+		"pq_max_backpressure_sec":    types.Float64Type,
+		"pq_max_file_size":           types.StringType,
+		"pq_max_size":                types.StringType,
+		"pq_path":                    types.StringType,
+		"pq_compress":                types.StringType,
+		"pq_on_backpressure":         types.StringType,
+		"pq_max_buffer_size_bytes":   types.StringType,
+		"pq_controls":                types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputAzureEventhubModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -22158,6 +23328,61 @@ type OutputGoogleChronicleModel struct {
 	PqOnBackpressure                types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes            types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                      types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputGoogleChronicleModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"pipeline":                           types.StringType,
+		"system_fields":                      types.ListType{ElemType: types.StringType},
+		"environment":                        types.StringType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"api_version":                        types.StringType,
+		"authentication_method":              types.StringType,
+		"response_retry_settings":            types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleChronicleResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":             types.ObjectType{AttrTypes: OutputGoogleChronicleTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header":  types.BoolType,
+		"log_format_type":                    types.StringType,
+		"region":                             types.StringType,
+		"concurrency":                        types.Float64Type,
+		"max_payload_size_kb":                types.Float64Type,
+		"max_payload_events":                 types.Float64Type,
+		"compress":                           types.BoolType,
+		"reject_unauthorized":                types.BoolType,
+		"timeout_sec":                        types.Float64Type,
+		"flush_period_sec":                   types.Float64Type,
+		"extra_http_headers":                 types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleChronicleExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":        types.StringType,
+		"safe_headers":                       types.ListType{ElemType: types.StringType},
+		"use_round_robin_dns":                types.BoolType,
+		"on_backpressure":                    types.StringType,
+		"total_memory_limit_kb":              types.Float64Type,
+		"description":                        types.StringType,
+		"extra_log_types":                    types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleChronicleExtraLogTypesAttrTypes()}},
+		"log_type":                           types.StringType,
+		"log_text_field":                     types.StringType,
+		"customer_id":                        types.StringType,
+		"namespace":                          types.StringType,
+		"custom_labels":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleChronicleCustomLabelsAttrTypes()}},
+		"udm_type":                           types.StringType,
+		"api_key":                            types.StringType,
+		"api_key_secret":                     types.StringType,
+		"service_account_credentials":        types.StringType,
+		"service_account_credentials_secret": types.StringType,
+		"pq_strict_ordering":                 types.BoolType,
+		"pq_rate_per_sec":                    types.Float64Type,
+		"pq_mode":                            types.StringType,
+		"pq_max_buffer_size":                 types.Float64Type,
+		"pq_max_backpressure_sec":            types.Float64Type,
+		"pq_max_file_size":                   types.StringType,
+		"pq_max_size":                        types.StringType,
+		"pq_path":                            types.StringType,
+		"pq_compress":                        types.StringType,
+		"pq_on_backpressure":                 types.StringType,
+		"pq_max_buffer_size_bytes":           types.StringType,
+		"pq_controls":                        types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputGoogleChronicleModel) terraformPayload() (map[string]any, error) {
@@ -23026,6 +24251,67 @@ type OutputGoogleCloudStorageModel struct {
 	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
 	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+}
+
+func OutputGoogleCloudStorageModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"bucket":                    types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"aws_authentication_method": types.StringType,
+		"stage_path":                types.StringType,
+		"dest_path":                 types.StringType,
+		"verify_permissions":        types.BoolType,
+		"object_acl":                types.StringType,
+		"storage_class":             types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"add_id_to_stage_path":      types.BoolType,
+		"remove_empty_dirs":         types.BoolType,
+		"partition_expr":            types.StringType,
+		"format":                    types.StringType,
+		"base_file_name":            types.StringType,
+		"file_name_suffix":          types.StringType,
+		"max_file_size_mb":          types.Float64Type,
+		"max_file_open_time_sec":    types.Float64Type,
+		"max_file_idle_time_sec":    types.Float64Type,
+		"max_open_files":            types.Float64Type,
+		"header_line":               types.StringType,
+		"write_high_water_mark":     types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"deadletter_enabled":        types.BoolType,
+		"on_disk_full_backpressure": types.StringType,
+		"force_close_on_shutdown":   types.BoolType,
+		"retry_settings":            types.ObjectType{AttrTypes: OutputGoogleCloudStorageRetrySettingsAttrTypes()},
+		"orphans":                   types.ObjectType{AttrTypes: OutputGoogleCloudStorageOrphansAttrTypes()},
+		"description":               types.StringType,
+		"compress":                  types.StringType,
+		"compression_level":         types.StringType,
+		"automatic_schema":          types.BoolType,
+		"parquet_schema":            types.StringType,
+		"parquet_version":           types.StringType,
+		"parquet_data_page_version": types.StringType,
+		"parquet_row_group_length":  types.Float64Type,
+		"parquet_page_size":         types.StringType,
+		"should_log_invalid_rows":   types.BoolType,
+		"key_value_metadata":        types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudStorageKeyValueMetadataAttrTypes()}},
+		"enable_statistics":         types.BoolType,
+		"enable_write_page_index":   types.BoolType,
+		"enable_page_checksum":      types.BoolType,
+		"empty_dir_cleanup_sec":     types.Float64Type,
+		"directory_batch_size":      types.Float64Type,
+		"deadletter_path":           types.StringType,
+		"max_retry_num":             types.Float64Type,
+		"aws_api_key":               types.StringType,
+		"aws_secret_key":            types.StringType,
+		"aws_secret":                types.StringType,
+	}
 }
 
 func (m OutputGoogleCloudStorageModel) terraformPayload() (map[string]any, error) {
@@ -24004,6 +25290,81 @@ type OutputGoogleCloudLoggingModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputGoogleCloudLoggingModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"pipeline":                    types.StringType,
+		"system_fields":               types.ListType{ElemType: types.StringType},
+		"environment":                 types.StringType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"log_location_type":           types.StringType,
+		"log_name_expression":         types.StringType,
+		"sanitize_log_names":          types.BoolType,
+		"payload_format":              types.StringType,
+		"log_labels":                  types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudLoggingLogLabelsAttrTypes()}},
+		"resource_type_expression":    types.StringType,
+		"resource_type_labels":        types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes()}},
+		"severity_expression":         types.StringType,
+		"insert_id_expression":        types.StringType,
+		"google_auth_method":          types.StringType,
+		"service_account_credentials": types.StringType,
+		"secret":                      types.StringType,
+		"max_payload_size_kb":         types.Float64Type,
+		"max_payload_events":          types.Float64Type,
+		"flush_period_sec":            types.Float64Type,
+		"concurrency":                 types.Float64Type,
+		"connection_timeout":          types.Float64Type,
+		"timeout_sec":                 types.Float64Type,
+		"throttle_rate_req_per_sec":   types.Int64Type,
+		"request_method_expression":   types.StringType,
+		"request_url_expression":      types.StringType,
+		"request_size_expression":     types.StringType,
+		"status_expression":           types.StringType,
+		"response_size_expression":    types.StringType,
+		"user_agent_expression":       types.StringType,
+		"remote_ip_expression":        types.StringType,
+		"server_ip_expression":        types.StringType,
+		"referer_expression":          types.StringType,
+		"latency_expression":          types.StringType,
+		"cache_lookup_expression":     types.StringType,
+		"cache_hit_expression":        types.StringType,
+		"cache_validated_expression":  types.StringType,
+		"cache_fill_bytes_expression": types.StringType,
+		"protocol_expression":         types.StringType,
+		"id_expression":               types.StringType,
+		"producer_expression":         types.StringType,
+		"first_expression":            types.StringType,
+		"last_expression":             types.StringType,
+		"file_expression":             types.StringType,
+		"line_expression":             types.StringType,
+		"function_expression":         types.StringType,
+		"uid_expression":              types.StringType,
+		"index_expression":            types.StringType,
+		"total_splits_expression":     types.StringType,
+		"trace_expression":            types.StringType,
+		"span_id_expression":          types.StringType,
+		"trace_sampled_expression":    types.StringType,
+		"on_backpressure":             types.StringType,
+		"total_memory_limit_kb":       types.Float64Type,
+		"description":                 types.StringType,
+		"log_location_expression":     types.StringType,
+		"payload_expression":          types.StringType,
+		"pq_strict_ordering":          types.BoolType,
+		"pq_rate_per_sec":             types.Float64Type,
+		"pq_mode":                     types.StringType,
+		"pq_max_buffer_size":          types.Float64Type,
+		"pq_max_backpressure_sec":     types.Float64Type,
+		"pq_max_file_size":            types.StringType,
+		"pq_max_size":                 types.StringType,
+		"pq_path":                     types.StringType,
+		"pq_compress":                 types.StringType,
+		"pq_on_backpressure":          types.StringType,
+		"pq_max_buffer_size_bytes":    types.StringType,
+		"pq_controls":                 types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputGoogleCloudLoggingModel) terraformPayload() (map[string]any, error) {
@@ -25135,6 +26496,689 @@ func (m *OutputGoogleCloudLoggingModel) unmarshalPayload(input map[string]any) e
 	return nil
 }
 
+type OutputGoogleCloudObservabilityModel struct {
+	ID                       types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                     types.String  `tfsdk:"type" json:"type,omitempty"`
+	Pipeline                 types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SystemFields             types.List    `tfsdk:"system_fields" json:"systemFields,omitempty"`
+	Environment              types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Streamtags               types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Protocol                 types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
+	OtlpVersion              types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
+	Endpoint                 types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	GoogleAuthMethod         types.String  `tfsdk:"google_auth_method" json:"googleAuthMethod,omitempty"`
+	Metadata                 types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	DynamicHeadersEnabled    types.Bool    `tfsdk:"dynamic_headers_enabled" json:"dynamicHeadersEnabled,omitempty"`
+	DynamicHeadersField      types.String  `tfsdk:"dynamic_headers_field" json:"dynamicHeadersField,omitempty"`
+	Concurrency              types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
+	MaxPayloadSizeKB         types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
+	TimeoutSec               types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	FlushPeriodSec           types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
+	FailedRequestLoggingMode types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
+	ConnectionTimeout        types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	KeepAliveTime            types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
+	TLS                      types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxPayloadEvents         types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
+	OnBackpressure           types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	Description              types.String  `tfsdk:"description" json:"description,omitempty"`
+	Secret                   types.String  `tfsdk:"secret" json:"secret,omitempty"`
+	PqStrictOrdering         types.Bool    `tfsdk:"pq_strict_ordering" json:"pqStrictOrdering,omitempty"`
+	PqRatePerSec             types.Float64 `tfsdk:"pq_rate_per_sec" json:"pqRatePerSec,omitempty"`
+	PqMode                   types.String  `tfsdk:"pq_mode" json:"pqMode,omitempty"`
+	PqMaxBufferSize          types.Float64 `tfsdk:"pq_max_buffer_size" json:"pqMaxBufferSize,omitempty"`
+	PqMaxBackpressureSec     types.Float64 `tfsdk:"pq_max_backpressure_sec" json:"pqMaxBackpressureSec,omitempty"`
+	PqMaxFileSize            types.String  `tfsdk:"pq_max_file_size" json:"pqMaxFileSize,omitempty"`
+	PqMaxSize                types.String  `tfsdk:"pq_max_size" json:"pqMaxSize,omitempty"`
+	PqPath                   types.String  `tfsdk:"pq_path" json:"pqPath,omitempty"`
+	PqCompress               types.String  `tfsdk:"pq_compress" json:"pqCompress,omitempty"`
+	PqOnBackpressure         types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
+	PqMaxBufferSizeBytes     types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls               types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputGoogleCloudObservabilityModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"pipeline":                    types.StringType,
+		"system_fields":               types.ListType{ElemType: types.StringType},
+		"environment":                 types.StringType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"protocol":                    types.StringType,
+		"otlp_version":                types.StringType,
+		"endpoint":                    types.StringType,
+		"google_auth_method":          types.StringType,
+		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}},
+		"dynamic_headers_enabled":     types.BoolType,
+		"dynamic_headers_field":       types.StringType,
+		"concurrency":                 types.Float64Type,
+		"max_payload_size_kb":         types.Float64Type,
+		"timeout_sec":                 types.Float64Type,
+		"flush_period_sec":            types.Float64Type,
+		"failed_request_logging_mode": types.StringType,
+		"connection_timeout":          types.Float64Type,
+		"keep_alive_time":             types.Float64Type,
+		"tls":                         types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityTLSAttrTypes()},
+		"max_payload_events":          types.Float64Type,
+		"on_backpressure":             types.StringType,
+		"description":                 types.StringType,
+		"secret":                      types.StringType,
+		"pq_strict_ordering":          types.BoolType,
+		"pq_rate_per_sec":             types.Float64Type,
+		"pq_mode":                     types.StringType,
+		"pq_max_buffer_size":          types.Float64Type,
+		"pq_max_backpressure_sec":     types.Float64Type,
+		"pq_max_file_size":            types.StringType,
+		"pq_max_size":                 types.StringType,
+		"pq_path":                     types.StringType,
+		"pq_compress":                 types.StringType,
+		"pq_on_backpressure":          types.StringType,
+		"pq_max_buffer_size_bytes":    types.StringType,
+		"pq_controls":                 types.MapType{ElemType: types.StringType},
+	}
+}
+
+func (m OutputGoogleCloudObservabilityModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SystemFields.IsNull() && !m.SystemFields.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.SystemFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert system_fields to API value: %v", err)
+		}
+		output["systemFields"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.Protocol.IsNull() && !m.Protocol.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Protocol)
+		if err != nil {
+			return nil, fmt.Errorf("convert protocol to API value: %v", err)
+		}
+		output["protocol"] = value
+	}
+	if !m.OtlpVersion.IsNull() && !m.OtlpVersion.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OtlpVersion)
+		if err != nil {
+			return nil, fmt.Errorf("convert otlp_version to API value: %v", err)
+		}
+		output["otlpVersion"] = value
+	}
+	if !m.Endpoint.IsNull() && !m.Endpoint.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Endpoint)
+		if err != nil {
+			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
+		}
+		output["endpoint"] = value
+	}
+	if !m.GoogleAuthMethod.IsNull() && !m.GoogleAuthMethod.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.GoogleAuthMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert google_auth_method to API value: %v", err)
+		}
+		output["googleAuthMethod"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.DynamicHeadersEnabled.IsNull() && !m.DynamicHeadersEnabled.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_enabled to API value: %v", err)
+		}
+		output["dynamicHeadersEnabled"] = value
+	}
+	if !m.DynamicHeadersField.IsNull() && !m.DynamicHeadersField.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.DynamicHeadersField)
+		if err != nil {
+			return nil, fmt.Errorf("convert dynamic_headers_field to API value: %v", err)
+		}
+		output["dynamicHeadersField"] = value
+	}
+	if !m.Concurrency.IsNull() && !m.Concurrency.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Concurrency)
+		if err != nil {
+			return nil, fmt.Errorf("convert concurrency to API value: %v", err)
+		}
+		output["concurrency"] = value
+	}
+	if !m.MaxPayloadSizeKB.IsNull() && !m.MaxPayloadSizeKB.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxPayloadSizeKB)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_payload_size_kb to API value: %v", err)
+		}
+		output["maxPayloadSizeKB"] = value
+	}
+	if !m.TimeoutSec.IsNull() && !m.TimeoutSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TimeoutSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
+		}
+		output["timeoutSec"] = value
+	}
+	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert flush_period_sec to API value: %v", err)
+		}
+		output["flushPeriodSec"] = value
+	}
+	if !m.FailedRequestLoggingMode.IsNull() && !m.FailedRequestLoggingMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.FailedRequestLoggingMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert failed_request_logging_mode to API value: %v", err)
+		}
+		output["failedRequestLoggingMode"] = value
+	}
+	if !m.ConnectionTimeout.IsNull() && !m.ConnectionTimeout.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ConnectionTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert connection_timeout to API value: %v", err)
+		}
+		output["connectionTimeout"] = value
+	}
+	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.KeepAliveTime)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_time to API value: %v", err)
+		}
+		output["keepAliveTime"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxPayloadEvents.IsNull() && !m.MaxPayloadEvents.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxPayloadEvents)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_payload_events to API value: %v", err)
+		}
+		output["maxPayloadEvents"] = value
+	}
+	if !m.OnBackpressure.IsNull() && !m.OnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.OnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert on_backpressure to API value: %v", err)
+		}
+		output["onBackpressure"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.Secret.IsNull() && !m.Secret.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Secret)
+		if err != nil {
+			return nil, fmt.Errorf("convert secret to API value: %v", err)
+		}
+		output["secret"] = value
+	}
+	if !m.PqStrictOrdering.IsNull() && !m.PqStrictOrdering.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqStrictOrdering)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_strict_ordering to API value: %v", err)
+		}
+		output["pqStrictOrdering"] = value
+	}
+	if !m.PqRatePerSec.IsNull() && !m.PqRatePerSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqRatePerSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_rate_per_sec to API value: %v", err)
+		}
+		output["pqRatePerSec"] = value
+	}
+	if !m.PqMode.IsNull() && !m.PqMode.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMode)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_mode to API value: %v", err)
+		}
+		output["pqMode"] = value
+	}
+	if !m.PqMaxBufferSize.IsNull() && !m.PqMaxBufferSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size to API value: %v", err)
+		}
+		output["pqMaxBufferSize"] = value
+	}
+	if !m.PqMaxBackpressureSec.IsNull() && !m.PqMaxBackpressureSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBackpressureSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_backpressure_sec to API value: %v", err)
+		}
+		output["pqMaxBackpressureSec"] = value
+	}
+	if !m.PqMaxFileSize.IsNull() && !m.PqMaxFileSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxFileSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_file_size to API value: %v", err)
+		}
+		output["pqMaxFileSize"] = value
+	}
+	if !m.PqMaxSize.IsNull() && !m.PqMaxSize.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxSize)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_size to API value: %v", err)
+		}
+		output["pqMaxSize"] = value
+	}
+	if !m.PqPath.IsNull() && !m.PqPath.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_path to API value: %v", err)
+		}
+		output["pqPath"] = value
+	}
+	if !m.PqCompress.IsNull() && !m.PqCompress.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqCompress)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_compress to API value: %v", err)
+		}
+		output["pqCompress"] = value
+	}
+	if !m.PqOnBackpressure.IsNull() && !m.PqOnBackpressure.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqOnBackpressure)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_on_backpressure to API value: %v", err)
+		}
+		output["pqOnBackpressure"] = value
+	}
+	if !m.PqMaxBufferSizeBytes.IsNull() && !m.PqMaxBufferSizeBytes.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqMaxBufferSizeBytes)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_max_buffer_size_bytes to API value: %v", err)
+		}
+		output["pqMaxBufferSizeBytes"] = value
+	}
+	if !m.PqControls.IsNull() && !m.PqControls.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PqControls)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
+		}
+		output["pqControls"] = value
+	}
+	return output, nil
+}
+
+func (m *OutputGoogleCloudObservabilityModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["systemFields"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert systemFields from API value: %v", err)
+		}
+		m.SystemFields = value.(types.List)
+	} else {
+		m.SystemFields = types.ListNull(types.StringType)
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["protocol"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert protocol from API value: %v", err)
+		}
+		m.Protocol = value.(types.String)
+	} else {
+		m.Protocol = types.StringNull()
+	}
+	if item, ok := input["otlpVersion"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert otlpVersion from API value: %v", err)
+		}
+		m.OtlpVersion = value.(types.String)
+	} else {
+		m.OtlpVersion = types.StringNull()
+	}
+	if item, ok := input["endpoint"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert endpoint from API value: %v", err)
+		}
+		m.Endpoint = value.(types.String)
+	} else {
+		m.Endpoint = types.StringNull()
+	}
+	if item, ok := input["googleAuthMethod"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert googleAuthMethod from API value: %v", err)
+		}
+		m.GoogleAuthMethod = value.(types.String)
+	} else {
+		m.GoogleAuthMethod = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()})
+	}
+	if item, ok := input["dynamicHeadersEnabled"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersEnabled from API value: %v", err)
+		}
+		m.DynamicHeadersEnabled = value.(types.Bool)
+	} else {
+		m.DynamicHeadersEnabled = types.BoolNull()
+	}
+	if item, ok := input["dynamicHeadersField"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert dynamicHeadersField from API value: %v", err)
+		}
+		m.DynamicHeadersField = value.(types.String)
+	} else {
+		m.DynamicHeadersField = types.StringNull()
+	}
+	if item, ok := input["concurrency"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert concurrency from API value: %v", err)
+		}
+		m.Concurrency = value.(types.Float64)
+	} else {
+		m.Concurrency = types.Float64Null()
+	}
+	if item, ok := input["maxPayloadSizeKB"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxPayloadSizeKB from API value: %v", err)
+		}
+		m.MaxPayloadSizeKB = value.(types.Float64)
+	} else {
+		m.MaxPayloadSizeKB = types.Float64Null()
+	}
+	if item, ok := input["timeoutSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert timeoutSec from API value: %v", err)
+		}
+		m.TimeoutSec = value.(types.Float64)
+	} else {
+		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["flushPeriodSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert flushPeriodSec from API value: %v", err)
+		}
+		m.FlushPeriodSec = value.(types.Float64)
+	} else {
+		m.FlushPeriodSec = types.Float64Null()
+	}
+	if item, ok := input["failedRequestLoggingMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert failedRequestLoggingMode from API value: %v", err)
+		}
+		m.FailedRequestLoggingMode = value.(types.String)
+	} else {
+		m.FailedRequestLoggingMode = types.StringNull()
+	}
+	if item, ok := input["connectionTimeout"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert connectionTimeout from API value: %v", err)
+		}
+		m.ConnectionTimeout = value.(types.Float64)
+	} else {
+		m.ConnectionTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTime"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTime from API value: %v", err)
+		}
+		m.KeepAliveTime = value.(types.Float64)
+	} else {
+		m.KeepAliveTime = types.Float64Null()
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(OutputGoogleCloudObservabilityTLSAttrTypes())
+	}
+	if item, ok := input["maxPayloadEvents"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxPayloadEvents from API value: %v", err)
+		}
+		m.MaxPayloadEvents = value.(types.Float64)
+	} else {
+		m.MaxPayloadEvents = types.Float64Null()
+	}
+	if item, ok := input["onBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert onBackpressure from API value: %v", err)
+		}
+		m.OnBackpressure = value.(types.String)
+	} else {
+		m.OnBackpressure = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["secret"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert secret from API value: %v", err)
+		}
+		m.Secret = value.(types.String)
+	} else {
+		m.Secret = types.StringNull()
+	}
+	if item, ok := input["pqStrictOrdering"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqStrictOrdering from API value: %v", err)
+		}
+		m.PqStrictOrdering = value.(types.Bool)
+	} else {
+		m.PqStrictOrdering = types.BoolNull()
+	}
+	if item, ok := input["pqRatePerSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqRatePerSec from API value: %v", err)
+		}
+		m.PqRatePerSec = value.(types.Float64)
+	} else {
+		m.PqRatePerSec = types.Float64Null()
+	}
+	if item, ok := input["pqMode"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMode from API value: %v", err)
+		}
+		m.PqMode = value.(types.String)
+	} else {
+		m.PqMode = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSize from API value: %v", err)
+		}
+		m.PqMaxBufferSize = value.(types.Float64)
+	} else {
+		m.PqMaxBufferSize = types.Float64Null()
+	}
+	if item, ok := input["pqMaxBackpressureSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBackpressureSec from API value: %v", err)
+		}
+		m.PqMaxBackpressureSec = value.(types.Float64)
+	} else {
+		m.PqMaxBackpressureSec = types.Float64Null()
+	}
+	if item, ok := input["pqMaxFileSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxFileSize from API value: %v", err)
+		}
+		m.PqMaxFileSize = value.(types.String)
+	} else {
+		m.PqMaxFileSize = types.StringNull()
+	}
+	if item, ok := input["pqMaxSize"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxSize from API value: %v", err)
+		}
+		m.PqMaxSize = value.(types.String)
+	} else {
+		m.PqMaxSize = types.StringNull()
+	}
+	if item, ok := input["pqPath"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqPath from API value: %v", err)
+		}
+		m.PqPath = value.(types.String)
+	} else {
+		m.PqPath = types.StringNull()
+	}
+	if item, ok := input["pqCompress"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqCompress from API value: %v", err)
+		}
+		m.PqCompress = value.(types.String)
+	} else {
+		m.PqCompress = types.StringNull()
+	}
+	if item, ok := input["pqOnBackpressure"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqOnBackpressure from API value: %v", err)
+		}
+		m.PqOnBackpressure = value.(types.String)
+	} else {
+		m.PqOnBackpressure = types.StringNull()
+	}
+	if item, ok := input["pqMaxBufferSizeBytes"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pqMaxBufferSizeBytes from API value: %v", err)
+		}
+		m.PqMaxBufferSizeBytes = value.(types.String)
+	} else {
+		m.PqMaxBufferSizeBytes = types.StringNull()
+	}
+	if item, ok := input["pqControls"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert pqControls from API value: %v", err)
+		}
+		m.PqControls = value.(types.Map)
+	} else {
+		m.PqControls = types.MapNull(types.StringType)
+	}
+	return nil
+}
+
 type OutputGooglePubsubModel struct {
 	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
 	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
@@ -25169,6 +27213,44 @@ type OutputGooglePubsubModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputGooglePubsubModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"pipeline":                    types.StringType,
+		"system_fields":               types.ListType{ElemType: types.StringType},
+		"environment":                 types.StringType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"topic_name":                  types.StringType,
+		"create_topic":                types.BoolType,
+		"ordered_delivery":            types.BoolType,
+		"region":                      types.StringType,
+		"google_auth_method":          types.StringType,
+		"service_account_credentials": types.StringType,
+		"secret":                      types.StringType,
+		"batch_size":                  types.Float64Type,
+		"batch_timeout":               types.Float64Type,
+		"max_queue_size":              types.Float64Type,
+		"max_record_size_kb":          types.Float64Type,
+		"flush_period":                types.Float64Type,
+		"max_in_progress":             types.Float64Type,
+		"on_backpressure":             types.StringType,
+		"description":                 types.StringType,
+		"pq_strict_ordering":          types.BoolType,
+		"pq_rate_per_sec":             types.Float64Type,
+		"pq_mode":                     types.StringType,
+		"pq_max_buffer_size":          types.Float64Type,
+		"pq_max_backpressure_sec":     types.Float64Type,
+		"pq_max_file_size":            types.StringType,
+		"pq_max_size":                 types.StringType,
+		"pq_path":                     types.StringType,
+		"pq_compress":                 types.StringType,
+		"pq_on_backpressure":          types.StringType,
+		"pq_max_buffer_size_bytes":    types.StringType,
+		"pq_controls":                 types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputGooglePubsubModel) terraformPayload() (map[string]any, error) {
@@ -25746,6 +27828,48 @@ type OutputExabeamModel struct {
 	DirectoryBatchSize     types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath         types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum            types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputExabeamModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"bucket":                    types.StringType,
+		"region":                    types.StringType,
+		"stage_path":                types.StringType,
+		"endpoint":                  types.StringType,
+		"object_acl":                types.StringType,
+		"storage_class":             types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"add_id_to_stage_path":      types.BoolType,
+		"remove_empty_dirs":         types.BoolType,
+		"max_file_open_time_sec":    types.Float64Type,
+		"max_file_idle_time_sec":    types.Float64Type,
+		"max_open_files":            types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"deadletter_enabled":        types.BoolType,
+		"on_disk_full_backpressure": types.StringType,
+		"retry_settings":            types.ObjectType{AttrTypes: OutputExabeamRetrySettingsAttrTypes()},
+		"orphans":                   types.ObjectType{AttrTypes: OutputExabeamOrphansAttrTypes()},
+		"max_file_size_mb":          types.Float64Type,
+		"encoded_configuration":     types.StringType,
+		"collector_instance_id":     types.StringType,
+		"site_name":                 types.StringType,
+		"site_id":                   types.StringType,
+		"timezone_offset":           types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret_key":            types.StringType,
+		"description":               types.StringType,
+		"empty_dir_cleanup_sec":     types.Float64Type,
+		"directory_batch_size":      types.Float64Type,
+		"deadletter_path":           types.StringType,
+		"max_retry_num":             types.Float64Type,
+	}
 }
 
 func (m OutputExabeamModel) terraformPayload() (map[string]any, error) {
@@ -26391,6 +28515,52 @@ type OutputKafkaModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputKafkaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"pipeline":                   types.StringType,
+		"system_fields":              types.ListType{ElemType: types.StringType},
+		"environment":                types.StringType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topic":                      types.StringType,
+		"ack":                        types.Int64Type,
+		"format":                     types.StringType,
+		"compression":                types.StringType,
+		"max_record_size_kb":         types.Float64Type,
+		"flush_event_count":          types.Float64Type,
+		"flush_period_sec":           types.Float64Type,
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: OutputKafkaKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: OutputKafkaSaslAttrTypes()},
+		"tls":                        types.ObjectType{AttrTypes: OutputKafkaTLSAttrTypes()},
+		"on_backpressure":            types.StringType,
+		"description":                types.StringType,
+		"protobuf_library_id":        types.StringType,
+		"protobuf_encoding_id":       types.StringType,
+		"pq_strict_ordering":         types.BoolType,
+		"pq_rate_per_sec":            types.Float64Type,
+		"pq_mode":                    types.StringType,
+		"pq_max_buffer_size":         types.Float64Type,
+		"pq_max_backpressure_sec":    types.Float64Type,
+		"pq_max_file_size":           types.StringType,
+		"pq_max_size":                types.StringType,
+		"pq_path":                    types.StringType,
+		"pq_compress":                types.StringType,
+		"pq_on_backpressure":         types.StringType,
+		"pq_max_buffer_size_bytes":   types.StringType,
+		"pq_controls":                types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputKafkaModel) terraformPayload() (map[string]any, error) {
@@ -27100,6 +29270,52 @@ type OutputConfluentCloudModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputConfluentCloudModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"pipeline":                   types.StringType,
+		"system_fields":              types.ListType{ElemType: types.StringType},
+		"environment":                types.StringType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"tls":                        types.ObjectType{AttrTypes: OutputConfluentCloudTLSAttrTypes()},
+		"topic":                      types.StringType,
+		"ack":                        types.Int64Type,
+		"format":                     types.StringType,
+		"compression":                types.StringType,
+		"max_record_size_kb":         types.Float64Type,
+		"flush_event_count":          types.Float64Type,
+		"flush_period_sec":           types.Float64Type,
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: OutputConfluentCloudKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: OutputConfluentCloudSaslAttrTypes()},
+		"on_backpressure":            types.StringType,
+		"description":                types.StringType,
+		"protobuf_library_id":        types.StringType,
+		"protobuf_encoding_id":       types.StringType,
+		"pq_strict_ordering":         types.BoolType,
+		"pq_rate_per_sec":            types.Float64Type,
+		"pq_mode":                    types.StringType,
+		"pq_max_buffer_size":         types.Float64Type,
+		"pq_max_backpressure_sec":    types.Float64Type,
+		"pq_max_file_size":           types.StringType,
+		"pq_max_size":                types.StringType,
+		"pq_path":                    types.StringType,
+		"pq_compress":                types.StringType,
+		"pq_on_backpressure":         types.StringType,
+		"pq_max_buffer_size_bytes":   types.StringType,
+		"pq_controls":                types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputConfluentCloudModel) terraformPayload() (map[string]any, error) {
@@ -27820,6 +30036,63 @@ type OutputMskModel struct {
 	PqOnBackpressure          types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes      types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputMskModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"pipeline":                   types.StringType,
+		"system_fields":              types.ListType{ElemType: types.StringType},
+		"environment":                types.StringType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"brokers":                    types.ListType{ElemType: types.StringType},
+		"topic":                      types.StringType,
+		"ack":                        types.Int64Type,
+		"format":                     types.StringType,
+		"compression":                types.StringType,
+		"max_record_size_kb":         types.Float64Type,
+		"flush_event_count":          types.Float64Type,
+		"flush_period_sec":           types.Float64Type,
+		"kafka_schema_registry":      types.ObjectType{AttrTypes: OutputMskKafkaSchemaRegistryAttrTypes()},
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"aws_authentication_method":  types.StringType,
+		"aws_secret_key":             types.StringType,
+		"region":                     types.StringType,
+		"endpoint":                   types.StringType,
+		"reuse_connections":          types.BoolType,
+		"reject_unauthorized":        types.BoolType,
+		"enable_assume_role":         types.BoolType,
+		"assume_role_arn":            types.StringType,
+		"assume_role_external_id":    types.StringType,
+		"duration_seconds":           types.Float64Type,
+		"tls":                        types.ObjectType{AttrTypes: OutputMskTLSAttrTypes()},
+		"on_backpressure":            types.StringType,
+		"description":                types.StringType,
+		"aws_api_key":                types.StringType,
+		"aws_secret":                 types.StringType,
+		"protobuf_library_id":        types.StringType,
+		"protobuf_encoding_id":       types.StringType,
+		"pq_strict_ordering":         types.BoolType,
+		"pq_rate_per_sec":            types.Float64Type,
+		"pq_mode":                    types.StringType,
+		"pq_max_buffer_size":         types.Float64Type,
+		"pq_max_backpressure_sec":    types.Float64Type,
+		"pq_max_file_size":           types.StringType,
+		"pq_max_size":                types.StringType,
+		"pq_path":                    types.StringType,
+		"pq_compress":                types.StringType,
+		"pq_on_backpressure":         types.StringType,
+		"pq_max_buffer_size_bytes":   types.StringType,
+		"pq_controls":                types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputMskModel) terraformPayload() (map[string]any, error) {
@@ -28715,6 +30988,60 @@ type OutputElasticModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputElasticModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"load_balanced":                     types.BoolType,
+		"index":                             types.StringType,
+		"doc_type":                          types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputElasticTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"extra_params":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticExtraParamsAttrTypes()}},
+		"auth":                              types.ObjectType{AttrTypes: OutputElasticAuthAttrTypes()},
+		"elastic_version":                   types.StringType,
+		"elastic_pipeline":                  types.StringType,
+		"include_doc_id":                    types.BoolType,
+		"write_action":                      types.StringType,
+		"retry_partial_errors":              types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"url":                               types.StringType,
+		"use_round_robin_dns":               types.BoolType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputElasticModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -29550,6 +31877,50 @@ type OutputElasticCloudModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputElasticCloudModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"index":                             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticCloudExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"extra_params":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticCloudExtraParamsAttrTypes()}},
+		"auth":                              types.ObjectType{AttrTypes: OutputElasticCloudAuthAttrTypes()},
+		"elastic_pipeline":                  types.StringType,
+		"include_doc_id":                    types.BoolType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticCloudResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputElasticCloudTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputElasticCloudModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -30227,6 +32598,54 @@ type OutputNewrelicModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 	APIKey                        types.String  `tfsdk:"api_key" json:"apiKey,omitempty"`
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func OutputNewrelicModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"region":                            types.StringType,
+		"log_type":                          types.StringType,
+		"message_field":                     types.StringType,
+		"metadata":                          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicMetadataAttrTypes()}},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputNewrelicTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"custom_url":                        types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"api_key":                           types.StringType,
+		"text_secret":                       types.StringType,
+	}
 }
 
 func (m OutputNewrelicModel) terraformPayload() (map[string]any, error) {
@@ -30970,6 +33389,52 @@ type OutputNewrelicEventsModel struct {
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputNewrelicEventsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"region":                            types.StringType,
+		"account_id":                        types.StringType,
+		"event_type":                        types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicEventsExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicEventsResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputNewrelicEventsTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"description":                       types.StringType,
+		"custom_url":                        types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"api_key":                           types.StringType,
+		"text_secret":                       types.StringType,
+	}
+}
+
 func (m OutputNewrelicEventsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -31684,6 +34149,59 @@ type OutputInfluxdbModel struct {
 	Token                         types.String  `tfsdk:"token" json:"token,omitempty"`
 	CredentialsSecret             types.String  `tfsdk:"credentials_secret" json:"credentialsSecret,omitempty"`
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func OutputInfluxdbModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"use_v2_api":                        types.BoolType,
+		"timestamp_precision":               types.StringType,
+		"dynamic_value_field_name":          types.BoolType,
+		"value_field_name":                  types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputInfluxdbExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputInfluxdbResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputInfluxdbTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"description":                       types.StringType,
+		"database":                          types.StringType,
+		"bucket":                            types.StringType,
+		"org":                               types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"token":                             types.StringType,
+		"credentials_secret":                types.StringType,
+		"text_secret":                       types.StringType,
+	}
 }
 
 func (m OutputInfluxdbModel) terraformPayload() (map[string]any, error) {
@@ -32503,6 +35021,48 @@ type OutputCloudwatchModel struct {
 	PqControls              types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputCloudwatchModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"log_group_name":            types.StringType,
+		"log_stream_name":           types.StringType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"max_queue_size":            types.Float64Type,
+		"max_record_size_kb":        types.Float64Type,
+		"flush_period_sec":          types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"pq_strict_ordering":        types.BoolType,
+		"pq_rate_per_sec":           types.Float64Type,
+		"pq_mode":                   types.StringType,
+		"pq_max_buffer_size":        types.Float64Type,
+		"pq_max_backpressure_sec":   types.Float64Type,
+		"pq_max_file_size":          types.StringType,
+		"pq_max_size":               types.StringType,
+		"pq_path":                   types.StringType,
+		"pq_compress":               types.StringType,
+		"pq_on_backpressure":        types.StringType,
+		"pq_max_buffer_size_bytes":  types.StringType,
+		"pq_controls":               types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputCloudwatchModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -33164,6 +35724,70 @@ type OutputMinioModel struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputMinioModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputMinioRetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputMinioOrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"endpoint":                          types.StringType,
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"description":                       types.StringType,
+		"aws_api_key":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputMinioKeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputMinioModel) terraformPayload() (map[string]any, error) {
@@ -34151,6 +36775,40 @@ type OutputStatsdModel struct {
 	PqControls           types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputStatsdModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"pipeline":                 types.StringType,
+		"system_fields":            types.ListType{ElemType: types.StringType},
+		"environment":              types.StringType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"protocol":                 types.StringType,
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"mtu":                      types.Float64Type,
+		"flush_period_sec":         types.Float64Type,
+		"dns_resolve_period_sec":   types.Float64Type,
+		"description":              types.StringType,
+		"throttle_rate_per_sec":    types.StringType,
+		"connection_timeout":       types.Float64Type,
+		"write_timeout":            types.Float64Type,
+		"on_backpressure":          types.StringType,
+		"pq_strict_ordering":       types.BoolType,
+		"pq_rate_per_sec":          types.Float64Type,
+		"pq_mode":                  types.StringType,
+		"pq_max_buffer_size":       types.Float64Type,
+		"pq_max_backpressure_sec":  types.Float64Type,
+		"pq_max_file_size":         types.StringType,
+		"pq_max_size":              types.StringType,
+		"pq_path":                  types.StringType,
+		"pq_compress":              types.StringType,
+		"pq_on_backpressure":       types.StringType,
+		"pq_max_buffer_size_bytes": types.StringType,
+		"pq_controls":              types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputStatsdModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -34654,6 +37312,40 @@ type OutputStatsdExtModel struct {
 	PqOnBackpressure     types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputStatsdExtModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"pipeline":                 types.StringType,
+		"system_fields":            types.ListType{ElemType: types.StringType},
+		"environment":              types.StringType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"protocol":                 types.StringType,
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"mtu":                      types.Float64Type,
+		"flush_period_sec":         types.Float64Type,
+		"dns_resolve_period_sec":   types.Float64Type,
+		"description":              types.StringType,
+		"throttle_rate_per_sec":    types.StringType,
+		"connection_timeout":       types.Float64Type,
+		"write_timeout":            types.Float64Type,
+		"on_backpressure":          types.StringType,
+		"pq_strict_ordering":       types.BoolType,
+		"pq_rate_per_sec":          types.Float64Type,
+		"pq_mode":                  types.StringType,
+		"pq_max_buffer_size":       types.Float64Type,
+		"pq_max_backpressure_sec":  types.Float64Type,
+		"pq_max_file_size":         types.StringType,
+		"pq_max_size":              types.StringType,
+		"pq_path":                  types.StringType,
+		"pq_compress":              types.StringType,
+		"pq_on_backpressure":       types.StringType,
+		"pq_max_buffer_size_bytes": types.StringType,
+		"pq_controls":              types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputStatsdExtModel) terraformPayload() (map[string]any, error) {
@@ -35161,6 +37853,40 @@ type OutputGraphiteModel struct {
 	PqControls           types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputGraphiteModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                       types.StringType,
+		"type":                     types.StringType,
+		"pipeline":                 types.StringType,
+		"system_fields":            types.ListType{ElemType: types.StringType},
+		"environment":              types.StringType,
+		"streamtags":               types.ListType{ElemType: types.StringType},
+		"protocol":                 types.StringType,
+		"host":                     types.StringType,
+		"port":                     types.Float64Type,
+		"mtu":                      types.Float64Type,
+		"flush_period_sec":         types.Float64Type,
+		"dns_resolve_period_sec":   types.Float64Type,
+		"description":              types.StringType,
+		"throttle_rate_per_sec":    types.StringType,
+		"connection_timeout":       types.Float64Type,
+		"write_timeout":            types.Float64Type,
+		"on_backpressure":          types.StringType,
+		"pq_strict_ordering":       types.BoolType,
+		"pq_rate_per_sec":          types.Float64Type,
+		"pq_mode":                  types.StringType,
+		"pq_max_buffer_size":       types.Float64Type,
+		"pq_max_backpressure_sec":  types.Float64Type,
+		"pq_max_file_size":         types.StringType,
+		"pq_max_size":              types.StringType,
+		"pq_path":                  types.StringType,
+		"pq_compress":              types.StringType,
+		"pq_on_backpressure":       types.StringType,
+		"pq_max_buffer_size_bytes": types.StringType,
+		"pq_controls":              types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputGraphiteModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -35645,6 +38371,19 @@ type OutputRouterModel struct {
 	Description  types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func OutputRouterModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"pipeline":      types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"environment":   types.StringType,
+		"streamtags":    types.ListType{ElemType: types.StringType},
+		"rules":         types.ListType{ElemType: types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}},
+		"description":   types.StringType,
+	}
+}
+
 func (m OutputRouterModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -35818,6 +38557,46 @@ type OutputSnsModel struct {
 	PqOnBackpressure        types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes    types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls              types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSnsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"topic_arn":                 types.StringType,
+		"message_group_id":          types.StringType,
+		"max_retries":               types.Float64Type,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"pq_strict_ordering":        types.BoolType,
+		"pq_rate_per_sec":           types.Float64Type,
+		"pq_mode":                   types.StringType,
+		"pq_max_buffer_size":        types.Float64Type,
+		"pq_max_backpressure_sec":   types.Float64Type,
+		"pq_max_file_size":          types.StringType,
+		"pq_max_size":               types.StringType,
+		"pq_path":                   types.StringType,
+		"pq_compress":               types.StringType,
+		"pq_on_backpressure":        types.StringType,
+		"pq_max_buffer_size_bytes":  types.StringType,
+		"pq_controls":               types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSnsModel) terraformPayload() (map[string]any, error) {
@@ -36431,6 +39210,52 @@ type OutputSqsModel struct {
 	PqOnBackpressure        types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes    types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls              types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSqsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"queue_name":                types.StringType,
+		"queue_type":                types.StringType,
+		"aws_account_id":            types.StringType,
+		"message_group_id":          types.StringType,
+		"create_queue":              types.BoolType,
+		"aws_authentication_method": types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"reuse_connections":         types.BoolType,
+		"reject_unauthorized":       types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"duration_seconds":          types.Float64Type,
+		"max_queue_size":            types.Float64Type,
+		"max_record_size_kb":        types.Float64Type,
+		"flush_period_sec":          types.Float64Type,
+		"max_in_progress":           types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"description":               types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret":                types.StringType,
+		"pq_strict_ordering":        types.BoolType,
+		"pq_rate_per_sec":           types.Float64Type,
+		"pq_mode":                   types.StringType,
+		"pq_max_buffer_size":        types.Float64Type,
+		"pq_max_backpressure_sec":   types.Float64Type,
+		"pq_max_file_size":          types.StringType,
+		"pq_max_size":               types.StringType,
+		"pq_path":                   types.StringType,
+		"pq_compress":               types.StringType,
+		"pq_on_backpressure":        types.StringType,
+		"pq_max_buffer_size_bytes":  types.StringType,
+		"pq_controls":               types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSqsModel) terraformPayload() (map[string]any, error) {
@@ -37110,6 +39935,20 @@ type OutputSnmpModel struct {
 	Description         types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
+func OutputSnmpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                     types.StringType,
+		"type":                   types.StringType,
+		"pipeline":               types.StringType,
+		"system_fields":          types.ListType{ElemType: types.StringType},
+		"environment":            types.StringType,
+		"streamtags":             types.ListType{ElemType: types.StringType},
+		"hosts":                  types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSnmpHostsAttrTypes()}},
+		"dns_resolve_period_sec": types.Float64Type,
+		"description":            types.StringType,
+	}
+}
+
 func (m OutputSnmpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -37303,6 +40142,50 @@ type OutputSumoLogicModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSumoLogicModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"custom_source":                     types.StringType,
+		"custom_category":                   types.StringType,
+		"format":                            types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSumoLogicExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSumoLogicResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputSumoLogicTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSumoLogicModel) terraformPayload() (map[string]any, error) {
@@ -37989,6 +40872,61 @@ type OutputDatadogModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 	APIKey                        types.String  `tfsdk:"api_key" json:"apiKey,omitempty"`
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
+}
+
+func OutputDatadogModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"content_type":                      types.StringType,
+		"message":                           types.StringType,
+		"source":                            types.StringType,
+		"host":                              types.StringType,
+		"service":                           types.StringType,
+		"tags":                              types.ListType{ElemType: types.StringType},
+		"batch_by_tags":                     types.BoolType,
+		"allow_api_key_from_events":         types.BoolType,
+		"severity":                          types.StringType,
+		"site":                              types.StringType,
+		"send_counters_as_count":            types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatadogExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatadogResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputDatadogTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"custom_url":                        types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"api_key":                           types.StringType,
+		"text_secret":                       types.StringType,
+	}
 }
 
 func (m OutputDatadogModel) terraformPayload() (map[string]any, error) {
@@ -38845,6 +41783,53 @@ type OutputGrafanaCloudModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputGrafanaCloudModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"loki_url":                          types.StringType,
+		"prometheus_url":                    types.StringType,
+		"message":                           types.StringType,
+		"message_format":                    types.StringType,
+		"labels":                            types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGrafanaCloudLabelsAttrTypes()}},
+		"metric_rename_expr":                types.StringType,
+		"prometheus_auth":                   types.ObjectType{AttrTypes: OutputGrafanaCloudPrometheusAuthAttrTypes()},
+		"loki_auth":                         types.ObjectType{AttrTypes: OutputGrafanaCloudLokiAuthAttrTypes()},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGrafanaCloudExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGrafanaCloudResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputGrafanaCloudTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"compress":                          types.BoolType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputGrafanaCloudModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -39573,6 +42558,57 @@ type OutputLokiModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputLokiModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"message":                           types.StringType,
+		"message_format":                    types.StringType,
+		"labels":                            types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLokiLabelsAttrTypes()}},
+		"auth_type":                         types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLokiExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLokiResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputLokiTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"enable_dynamic_headers":            types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"compress":                          types.BoolType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"credentials_secret":                types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputLokiModel) terraformPayload() (map[string]any, error) {
@@ -40367,6 +43403,55 @@ type OutputPrometheusModel struct {
 	TextSecret                         types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputPrometheusModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                     types.StringType,
+		"type":                                   types.StringType,
+		"pipeline":                               types.StringType,
+		"system_fields":                          types.ListType{ElemType: types.StringType},
+		"environment":                            types.StringType,
+		"streamtags":                             types.ListType{ElemType: types.StringType},
+		"url":                                    types.StringType,
+		"metric_rename_expr":                     types.StringType,
+		"send_metadata":                          types.BoolType,
+		"use_prometheus_histogram_bucket_suffix": types.BoolType,
+		"concurrency":                            types.Float64Type,
+		"max_payload_size_kb":                    types.Float64Type,
+		"max_payload_events":                     types.Float64Type,
+		"reject_unauthorized":                    types.BoolType,
+		"timeout_sec":                            types.Float64Type,
+		"flush_period_sec":                       types.Float64Type,
+		"extra_http_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputPrometheusExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":                    types.BoolType,
+		"failed_request_logging_mode":            types.StringType,
+		"safe_headers":                           types.ListType{ElemType: types.StringType},
+		"response_retry_settings":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputPrometheusResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":                 types.ObjectType{AttrTypes: OutputPrometheusTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header":      types.BoolType,
+		"on_backpressure":                        types.StringType,
+		"auth_type":                              types.StringType,
+		"description":                            types.StringType,
+		"metrics_flush_period_sec":               types.Float64Type,
+		"pq_strict_ordering":                     types.BoolType,
+		"pq_rate_per_sec":                        types.Float64Type,
+		"pq_mode":                                types.StringType,
+		"pq_max_buffer_size":                     types.Float64Type,
+		"pq_max_backpressure_sec":                types.Float64Type,
+		"pq_max_file_size":                       types.StringType,
+		"pq_max_size":                            types.StringType,
+		"pq_path":                                types.StringType,
+		"pq_compress":                            types.StringType,
+		"pq_on_backpressure":                     types.StringType,
+		"pq_max_buffer_size_bytes":               types.StringType,
+		"pq_controls":                            types.MapType{ElemType: types.StringType},
+		"username":                               types.StringType,
+		"password":                               types.StringType,
+		"token":                                  types.StringType,
+		"credentials_secret":                     types.StringType,
+		"text_secret":                            types.StringType,
+	}
+}
+
 func (m OutputPrometheusModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -41097,6 +44182,25 @@ type OutputRingModel struct {
 	Description    types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func OutputRingModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"pipeline":        types.StringType,
+		"system_fields":   types.ListType{ElemType: types.StringType},
+		"environment":     types.StringType,
+		"streamtags":      types.ListType{ElemType: types.StringType},
+		"format":          types.StringType,
+		"partition_expr":  types.StringType,
+		"max_data_size":   types.StringType,
+		"max_data_time":   types.StringType,
+		"compress":        types.StringType,
+		"dest_path":       types.StringType,
+		"on_backpressure": types.StringType,
+		"description":     types.StringType,
+	}
+}
+
 func (m OutputRingModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -41392,6 +44496,72 @@ type OutputOpenTelemetryModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputOpenTelemetryModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"protocol":                          types.StringType,
+		"endpoint":                          types.StringType,
+		"otlp_version":                      types.StringType,
+		"compress":                          types.StringType,
+		"http_compress":                     types.StringType,
+		"auth_type":                         types.StringType,
+		"http_traces_endpoint_override":     types.StringType,
+		"http_metrics_endpoint_override":    types.StringType,
+		"http_logs_endpoint_override":       types.StringType,
+		"metadata":                          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputOpenTelemetryMetadataAttrTypes()}},
+		"dynamic_headers_enabled":           types.BoolType,
+		"dynamic_headers_field":             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"failed_request_logging_mode":       types.StringType,
+		"connection_timeout":                types.Float64Type,
+		"keep_alive_time":                   types.Float64Type,
+		"keep_alive":                        types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"token":                             types.StringType,
+		"credentials_secret":                types.StringType,
+		"text_secret":                       types.StringType,
+		"login_url":                         types.StringType,
+		"secret_param_name":                 types.StringType,
+		"oauth_text_secret":                 types.StringType,
+		"token_attribute_name":              types.StringType,
+		"auth_header_expr":                  types.StringType,
+		"token_timeout_secs":                types.Float64Type,
+		"oauth_params":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputOpenTelemetryOauthParamsAttrTypes()}},
+		"oauth_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputOpenTelemetryOauthHeadersAttrTypes()}},
+		"reject_unauthorized":               types.BoolType,
+		"use_round_robin_dns":               types.BoolType,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputOpenTelemetryExtraHttpHeadersAttrTypes()}},
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputOpenTelemetryResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputOpenTelemetryTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputOpenTelemetryTLSAttrTypes()},
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
@@ -42431,6 +45601,60 @@ type OutputServiceNowModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputServiceNowModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"token_secret":                      types.StringType,
+		"auth_token_name":                   types.StringType,
+		"otlp_version":                      types.StringType,
+		"max_payload_size_kb":               types.Float64Type,
+		"protocol":                          types.StringType,
+		"compress":                          types.StringType,
+		"http_compress":                     types.StringType,
+		"http_traces_endpoint_override":     types.StringType,
+		"http_metrics_endpoint_override":    types.StringType,
+		"http_logs_endpoint_override":       types.StringType,
+		"metadata":                          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputServiceNowMetadataAttrTypes()}},
+		"dynamic_headers_enabled":           types.BoolType,
+		"dynamic_headers_field":             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"failed_request_logging_mode":       types.StringType,
+		"connection_timeout":                types.Float64Type,
+		"keep_alive_time":                   types.Float64Type,
+		"keep_alive":                        types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"reject_unauthorized":               types.BoolType,
+		"use_round_robin_dns":               types.BoolType,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputServiceNowExtraHttpHeadersAttrTypes()}},
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputServiceNowResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputServiceNowTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputServiceNowTLSAttrTypes()},
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputServiceNowModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -43272,6 +46496,56 @@ type OutputDatasetModel struct {
 	TextSecret                    types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
 }
 
+func OutputDatasetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"message_field":                     types.StringType,
+		"exclude_fields":                    types.ListType{ElemType: types.StringType},
+		"server_host_field":                 types.StringType,
+		"timestamp_field":                   types.StringType,
+		"default_severity":                  types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatasetResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputDatasetTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"site":                              types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatasetExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"custom_url":                        types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"api_key":                           types.StringType,
+		"text_secret":                       types.StringType,
+	}
+}
+
 func (m OutputDatasetModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -44041,6 +47315,48 @@ type OutputCriblTcpModel struct {
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputCriblTcpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                            types.StringType,
+		"type":                          types.StringType,
+		"pipeline":                      types.StringType,
+		"system_fields":                 types.ListType{ElemType: types.StringType},
+		"environment":                   types.StringType,
+		"streamtags":                    types.ListType{ElemType: types.StringType},
+		"load_balanced":                 types.BoolType,
+		"compression":                   types.StringType,
+		"log_failed_requests":           types.BoolType,
+		"throttle_rate_per_sec":         types.StringType,
+		"tls":                           types.ObjectType{AttrTypes: OutputCriblTcpTLSAttrTypes()},
+		"connection_timeout":            types.Float64Type,
+		"write_timeout":                 types.Float64Type,
+		"token_ttlminutes":              types.Float64Type,
+		"auth_tokens":                   types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblTcpAuthTokensAttrTypes()}},
+		"exclude_fields":                types.ListType{ElemType: types.StringType},
+		"on_backpressure":               types.StringType,
+		"description":                   types.StringType,
+		"host":                          types.StringType,
+		"port":                          types.Float64Type,
+		"exclude_self":                  types.BoolType,
+		"hosts":                         types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblTcpHostsAttrTypes()}},
+		"dns_resolve_period_sec":        types.Float64Type,
+		"load_balance_stats_period_sec": types.Float64Type,
+		"max_concurrent_senders":        types.Float64Type,
+		"pq_strict_ordering":            types.BoolType,
+		"pq_rate_per_sec":               types.Float64Type,
+		"pq_mode":                       types.StringType,
+		"pq_max_buffer_size":            types.Float64Type,
+		"pq_max_backpressure_sec":       types.Float64Type,
+		"pq_max_file_size":              types.StringType,
+		"pq_max_size":                   types.StringType,
+		"pq_path":                       types.StringType,
+		"pq_compress":                   types.StringType,
+		"pq_on_backpressure":            types.StringType,
+		"pq_max_buffer_size_bytes":      types.StringType,
+		"pq_controls":                   types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputCriblTcpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -44688,6 +48004,56 @@ type OutputCriblHttpModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputCriblHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"load_balanced":                     types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputCriblHttpTLSAttrTypes()},
+		"token_ttlminutes":                  types.Float64Type,
+		"exclude_fields":                    types.ListType{ElemType: types.StringType},
+		"compression":                       types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblHttpExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"throttle_rate_per_sec":             types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblHttpResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputCriblHttpTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"auth_tokens":                       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblHttpAuthTokensAttrTypes()}},
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"url":                               types.StringType,
+		"use_round_robin_dns":               types.BoolType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblHttpURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputCriblHttpModel) terraformPayload() (map[string]any, error) {
@@ -45467,6 +48833,56 @@ type OutputCriblSearchEngineModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputCriblSearchEngineModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"load_balanced":                     types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputCriblSearchEngineTLSAttrTypes()},
+		"token_ttlminutes":                  types.Float64Type,
+		"exclude_fields":                    types.ListType{ElemType: types.StringType},
+		"compression":                       types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"throttle_rate_per_sec":             types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputCriblSearchEngineTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"auth_tokens":                       types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineAuthTokensAttrTypes()}},
+		"on_backpressure":                   types.StringType,
+		"use_round_robin_dns":               types.BoolType,
+		"description":                       types.StringType,
+		"url":                               types.StringType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputCriblSearchEngineModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -46238,6 +49654,50 @@ type OutputHumioHecModel struct {
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputHumioHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHumioHecExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"format":                            types.StringType,
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHumioHecResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputHumioHecTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputHumioHecModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -46911,6 +50371,50 @@ type OutputCrowdstrikeNextGenSiemModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputCrowdstrikeNextGenSiemModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"format":                            types.StringType,
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputCrowdstrikeNextGenSiemModel) terraformPayload() (map[string]any, error) {
@@ -47611,6 +51115,75 @@ type OutputDlS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputDlS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"enable_assume_role":                types.BoolType,
+		"assume_role_arn":                   types.StringType,
+		"assume_role_external_id":           types.StringType,
+		"duration_seconds":                  types.Float64Type,
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputDlS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputDlS3OrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"kms_key_id":                        types.StringType,
+		"partitioning_fields":               types.ListType{ElemType: types.StringType},
+		"description":                       types.StringType,
+		"aws_api_key":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDlS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputDlS3Model) terraformPayload() (map[string]any, error) {
@@ -48709,6 +52282,71 @@ type OutputSecurityLakeModel struct {
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
 }
 
+func OutputSecurityLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"enable_assume_role":                types.BoolType,
+		"assume_role_arn":                   types.StringType,
+		"assume_role_external_id":           types.StringType,
+		"duration_seconds":                  types.Float64Type,
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"base_file_name":                    types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputSecurityLakeRetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputSecurityLakeOrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"kms_key_id":                        types.StringType,
+		"account_id":                        types.StringType,
+		"custom_source":                     types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSecurityLakeKeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"description":                       types.StringType,
+		"aws_api_key":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"parquet_schema":                    types.StringType,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
+}
+
 func (m OutputSecurityLakeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -49729,6 +53367,59 @@ type OutputCriblLakeModel struct {
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
 }
 
+func OutputCriblLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"enable_assume_role":                types.BoolType,
+		"assume_role_arn":                   types.StringType,
+		"assume_role_external_id":           types.StringType,
+		"duration_seconds":                  types.Float64Type,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputCriblLakeRetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputCriblLakeOrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"kms_key_id":                        types.StringType,
+		"aws_authentication_method":         types.StringType,
+		"format":                            types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"description":                       types.StringType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
+}
+
 func (m OutputCriblLakeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -50521,6 +54212,23 @@ type OutputDiskSpoolModel struct {
 	Description   types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func OutputDiskSpoolModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":             types.StringType,
+		"type":           types.StringType,
+		"pipeline":       types.StringType,
+		"system_fields":  types.ListType{ElemType: types.StringType},
+		"environment":    types.StringType,
+		"streamtags":     types.ListType{ElemType: types.StringType},
+		"time_window":    types.StringType,
+		"max_data_size":  types.StringType,
+		"max_data_time":  types.StringType,
+		"compress":       types.StringType,
+		"partition_expr": types.StringType,
+		"description":    types.StringType,
+	}
+}
+
 func (m OutputDiskSpoolModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -50751,6 +54459,7 @@ type OutputClickHouseModel struct {
 	ResponseRetrySettings         types.List    `tfsdk:"response_retry_settings" json:"responseRetrySettings,omitempty"`
 	TimeoutRetrySettings          types.Object  `tfsdk:"timeout_retry_settings" json:"timeoutRetrySettings,omitempty"`
 	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
+	Workload                      types.String  `tfsdk:"workload" json:"workload,omitempty"`
 	DumpFormatErrorsToDisk        types.Bool    `tfsdk:"dump_format_errors_to_disk" json:"dumpFormatErrorsToDisk,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
@@ -50774,6 +54483,63 @@ type OutputClickHouseModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputClickHouseModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"auth_type":                         types.StringType,
+		"database":                          types.StringType,
+		"table_name":                        types.StringType,
+		"format":                            types.StringType,
+		"mapping_type":                      types.StringType,
+		"async_inserts":                     types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputClickHouseTLSAttrTypes()},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputClickHouseExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputClickHouseResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputClickHouseTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"workload":                          types.StringType,
+		"dump_format_errors_to_disk":        types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"credentials_secret":                types.StringType,
+		"sql_username":                      types.StringType,
+		"wait_for_async_inserts":            types.BoolType,
+		"exclude_mapping_fields":            types.ListType{ElemType: types.StringType},
+		"describe_table":                    types.StringType,
+		"column_mappings":                   types.ListType{ElemType: types.ObjectType{AttrTypes: OutputClickHouseColumnMappingsAttrTypes()}},
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputClickHouseModel) terraformPayload() (map[string]any, error) {
@@ -50973,6 +54739,13 @@ func (m OutputClickHouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert response_honor_retry_after_header to API value: %v", err)
 		}
 		output["responseHonorRetryAfterHeader"] = value
+	}
+	if !m.Workload.IsNull() && !m.Workload.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Workload)
+		if err != nil {
+			return nil, fmt.Errorf("convert workload to API value: %v", err)
+		}
+		output["workload"] = value
 	}
 	if !m.DumpFormatErrorsToDisk.IsNull() && !m.DumpFormatErrorsToDisk.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.DumpFormatErrorsToDisk)
@@ -51391,6 +55164,15 @@ func (m *OutputClickHouseModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ResponseHonorRetryAfterHeader = types.BoolNull()
 	}
+	if item, ok := input["workload"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workload from API value: %v", err)
+		}
+		m.Workload = value.(types.String)
+	} else {
+		m.Workload = types.StringNull()
+	}
 	if item, ok := input["dumpFormatErrorsToDisk"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
 		if err != nil {
@@ -51630,6 +55412,7 @@ type OutputLocalSearchStorageModel struct {
 	ResponseRetrySettings         types.List    `tfsdk:"response_retry_settings" json:"responseRetrySettings,omitempty"`
 	TimeoutRetrySettings          types.Object  `tfsdk:"timeout_retry_settings" json:"timeoutRetrySettings,omitempty"`
 	ResponseHonorRetryAfterHeader types.Bool    `tfsdk:"response_honor_retry_after_header" json:"responseHonorRetryAfterHeader,omitempty"`
+	Workload                      types.String  `tfsdk:"workload" json:"workload,omitempty"`
 	DumpFormatErrorsToDisk        types.Bool    `tfsdk:"dump_format_errors_to_disk" json:"dumpFormatErrorsToDisk,omitempty"`
 	OnBackpressure                types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	StatsDestination              types.Object  `tfsdk:"stats_destination" json:"statsDestination,omitempty"`
@@ -51654,6 +55437,64 @@ type OutputLocalSearchStorageModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputLocalSearchStorageModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"url":                               types.StringType,
+		"auth_type":                         types.StringType,
+		"database":                          types.StringType,
+		"table_name":                        types.StringType,
+		"format":                            types.StringType,
+		"mapping_type":                      types.StringType,
+		"async_inserts":                     types.BoolType,
+		"tls":                               types.ObjectType{AttrTypes: OutputLocalSearchStorageTLSAttrTypes()},
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"workload":                          types.StringType,
+		"dump_format_errors_to_disk":        types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"stats_destination":                 types.ObjectType{AttrTypes: OutputLocalSearchStorageStatsDestinationAttrTypes()},
+		"description":                       types.StringType,
+		"username":                          types.StringType,
+		"password":                          types.StringType,
+		"credentials_secret":                types.StringType,
+		"sql_username":                      types.StringType,
+		"wait_for_async_inserts":            types.BoolType,
+		"exclude_mapping_fields":            types.ListType{ElemType: types.StringType},
+		"describe_table":                    types.StringType,
+		"column_mappings":                   types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageColumnMappingsAttrTypes()}},
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error) {
@@ -51853,6 +55694,13 @@ func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert response_honor_retry_after_header to API value: %v", err)
 		}
 		output["responseHonorRetryAfterHeader"] = value
+	}
+	if !m.Workload.IsNull() && !m.Workload.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.Workload)
+		if err != nil {
+			return nil, fmt.Errorf("convert workload to API value: %v", err)
+		}
+		output["workload"] = value
 	}
 	if !m.DumpFormatErrorsToDisk.IsNull() && !m.DumpFormatErrorsToDisk.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.DumpFormatErrorsToDisk)
@@ -52278,6 +56126,15 @@ func (m *OutputLocalSearchStorageModel) unmarshalPayload(input map[string]any) e
 	} else {
 		m.ResponseHonorRetryAfterHeader = types.BoolNull()
 	}
+	if item, ok := input["workload"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert workload from API value: %v", err)
+		}
+		m.Workload = value.(types.String)
+	} else {
+		m.Workload = types.StringNull()
+	}
 	if item, ok := input["dumpFormatErrorsToDisk"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
 		if err != nil {
@@ -52543,6 +56400,56 @@ type OutputXsiamModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputXsiamModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"load_balanced":                     types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputXsiamExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputXsiamResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputXsiamTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"throttle_rate_req_per_sec":         types.Int64Type,
+		"on_backpressure":                   types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"url":                               types.StringType,
+		"use_round_robin_dns":               types.BoolType,
+		"exclude_self":                      types.BoolType,
+		"urls":                              types.ListType{ElemType: types.ObjectType{AttrTypes: OutputXsiamURLsAttrTypes()}},
+		"dns_resolve_period_sec":            types.Float64Type,
+		"load_balance_stats_period_sec":     types.Float64Type,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputXsiamModel) terraformPayload() (map[string]any, error) {
@@ -53288,6 +57195,22 @@ type OutputNetflowModel struct {
 	MaxRecordSize       types.Float64 `tfsdk:"max_record_size" json:"maxRecordSize,omitempty"`
 }
 
+func OutputNetflowModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                     types.StringType,
+		"type":                   types.StringType,
+		"pipeline":               types.StringType,
+		"system_fields":          types.ListType{ElemType: types.StringType},
+		"environment":            types.StringType,
+		"streamtags":             types.ListType{ElemType: types.StringType},
+		"hosts":                  types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNetflowHostsAttrTypes()}},
+		"dns_resolve_period_sec": types.Float64Type,
+		"enable_ip_spoofing":     types.BoolType,
+		"description":            types.StringType,
+		"max_record_size":        types.Float64Type,
+	}
+}
+
 func (m OutputNetflowModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -53520,6 +57443,57 @@ type OutputDynatraceHttpModel struct {
 	EnvironmentID                 types.String  `tfsdk:"environment_id" json:"environmentId,omitempty"`
 	ActiveGateDomain              types.String  `tfsdk:"active_gate_domain" json:"activeGateDomain,omitempty"`
 	URL                           types.String  `tfsdk:"url" json:"url,omitempty"`
+}
+
+func OutputDynatraceHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"method":                            types.StringType,
+		"keep_alive":                        types.BoolType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceHttpExtraHttpHeadersAttrTypes()}},
+		"use_round_robin_dns":               types.BoolType,
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceHttpResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputDynatraceHttpTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"auth_type":                         types.StringType,
+		"format":                            types.StringType,
+		"endpoint":                          types.StringType,
+		"telemetry_type":                    types.StringType,
+		"total_memory_limit_kb":             types.Float64Type,
+		"description":                       types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"environment_id":                    types.StringType,
+		"active_gate_domain":                types.StringType,
+		"url":                               types.StringType,
+	}
 }
 
 func (m OutputDynatraceHttpModel) terraformPayload() (map[string]any, error) {
@@ -54317,6 +58291,60 @@ type OutputDynatraceOtlpModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputDynatraceOtlpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"protocol":                          types.StringType,
+		"endpoint":                          types.StringType,
+		"otlp_version":                      types.StringType,
+		"compress":                          types.StringType,
+		"http_compress":                     types.StringType,
+		"http_traces_endpoint_override":     types.StringType,
+		"http_metrics_endpoint_override":    types.StringType,
+		"http_logs_endpoint_override":       types.StringType,
+		"metadata":                          types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceOtlpMetadataAttrTypes()}},
+		"dynamic_headers_enabled":           types.BoolType,
+		"dynamic_headers_field":             types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"failed_request_logging_mode":       types.StringType,
+		"connection_timeout":                types.Float64Type,
+		"keep_alive_time":                   types.Float64Type,
+		"keep_alive":                        types.BoolType,
+		"endpoint_type":                     types.StringType,
+		"token_secret":                      types.StringType,
+		"auth_token_name":                   types.StringType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"reject_unauthorized":               types.BoolType,
+		"use_round_robin_dns":               types.BoolType,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceOtlpExtraHttpHeadersAttrTypes()}},
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceOtlpResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputDynatraceOtlpTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputDynatraceOtlpModel) terraformPayload() (map[string]any, error) {
@@ -55166,6 +59194,64 @@ type OutputSentinelOneAiSiemModel struct {
 	PqOnBackpressure              types.String  `tfsdk:"pq_on_backpressure" json:"pqOnBackpressure,omitempty"`
 	PqMaxBufferSizeBytes          types.String  `tfsdk:"pq_max_buffer_size_bytes" json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls                    types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+func OutputSentinelOneAiSiemModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"region":                            types.StringType,
+		"endpoint":                          types.StringType,
+		"concurrency":                       types.Float64Type,
+		"max_payload_size_kb":               types.Float64Type,
+		"max_payload_events":                types.Float64Type,
+		"compress":                          types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"timeout_sec":                       types.Float64Type,
+		"flush_period_sec":                  types.Float64Type,
+		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelOneAiSiemExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":       types.StringType,
+		"safe_headers":                      types.ListType{ElemType: types.StringType},
+		"auth_type":                         types.StringType,
+		"response_retry_settings":           types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelOneAiSiemResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":            types.ObjectType{AttrTypes: OutputSentinelOneAiSiemTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header": types.BoolType,
+		"on_backpressure":                   types.StringType,
+		"description":                       types.StringType,
+		"token":                             types.StringType,
+		"text_secret":                       types.StringType,
+		"base_url":                          types.StringType,
+		"host_expression":                   types.StringType,
+		"source_expression":                 types.StringType,
+		"source_type_expression":            types.StringType,
+		"data_source_category_expression":   types.StringType,
+		"data_source_name_expression":       types.StringType,
+		"data_source_vendor_expression":     types.StringType,
+		"event_type_expression":             types.StringType,
+		"host":                              types.StringType,
+		"source":                            types.StringType,
+		"source_type":                       types.StringType,
+		"data_source_category":              types.StringType,
+		"data_source_name":                  types.StringType,
+		"data_source_vendor":                types.StringType,
+		"event_type":                        types.StringType,
+		"pq_strict_ordering":                types.BoolType,
+		"pq_rate_per_sec":                   types.Float64Type,
+		"pq_mode":                           types.StringType,
+		"pq_max_buffer_size":                types.Float64Type,
+		"pq_max_backpressure_sec":           types.Float64Type,
+		"pq_max_file_size":                  types.StringType,
+		"pq_max_size":                       types.StringType,
+		"pq_path":                           types.StringType,
+		"pq_compress":                       types.StringType,
+		"pq_on_backpressure":                types.StringType,
+		"pq_max_buffer_size_bytes":          types.StringType,
+		"pq_controls":                       types.MapType{ElemType: types.StringType},
+	}
 }
 
 func (m OutputSentinelOneAiSiemModel) terraformPayload() (map[string]any, error) {
@@ -56076,6 +60162,59 @@ type OutputChronicleModel struct {
 	PqControls                      types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputChronicleModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                 types.StringType,
+		"type":                               types.StringType,
+		"pipeline":                           types.StringType,
+		"system_fields":                      types.ListType{ElemType: types.StringType},
+		"environment":                        types.StringType,
+		"streamtags":                         types.ListType{ElemType: types.StringType},
+		"api_version":                        types.StringType,
+		"authentication_method":              types.StringType,
+		"response_retry_settings":            types.ListType{ElemType: types.ObjectType{AttrTypes: OutputChronicleResponseRetrySettingsAttrTypes()}},
+		"timeout_retry_settings":             types.ObjectType{AttrTypes: OutputChronicleTimeoutRetrySettingsAttrTypes()},
+		"response_honor_retry_after_header":  types.BoolType,
+		"region":                             types.StringType,
+		"concurrency":                        types.Float64Type,
+		"max_payload_size_kb":                types.Float64Type,
+		"max_payload_events":                 types.Float64Type,
+		"compress":                           types.BoolType,
+		"reject_unauthorized":                types.BoolType,
+		"timeout_sec":                        types.Float64Type,
+		"flush_period_sec":                   types.Float64Type,
+		"extra_http_headers":                 types.ListType{ElemType: types.ObjectType{AttrTypes: OutputChronicleExtraHttpHeadersAttrTypes()}},
+		"failed_request_logging_mode":        types.StringType,
+		"safe_headers":                       types.ListType{ElemType: types.StringType},
+		"use_round_robin_dns":                types.BoolType,
+		"on_backpressure":                    types.StringType,
+		"total_memory_limit_kb":              types.Float64Type,
+		"ingestion_method":                   types.StringType,
+		"namespace":                          types.StringType,
+		"log_type":                           types.StringType,
+		"log_text_field":                     types.StringType,
+		"gcp_project_id":                     types.StringType,
+		"gcp_instance":                       types.StringType,
+		"custom_labels":                      types.ListType{ElemType: types.ObjectType{AttrTypes: OutputChronicleCustomLabelsAttrTypes()}},
+		"endpoint":                           types.StringType,
+		"description":                        types.StringType,
+		"service_account_credentials":        types.StringType,
+		"service_account_credentials_secret": types.StringType,
+		"pq_strict_ordering":                 types.BoolType,
+		"pq_rate_per_sec":                    types.Float64Type,
+		"pq_mode":                            types.StringType,
+		"pq_max_buffer_size":                 types.Float64Type,
+		"pq_max_backpressure_sec":            types.Float64Type,
+		"pq_max_file_size":                   types.StringType,
+		"pq_max_size":                        types.StringType,
+		"pq_path":                            types.StringType,
+		"pq_compress":                        types.StringType,
+		"pq_on_backpressure":                 types.StringType,
+		"pq_max_buffer_size_bytes":           types.StringType,
+		"pq_controls":                        types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputChronicleModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -56907,6 +61046,64 @@ type OutputDatabricksModel struct {
 	DirectoryBatchSize     types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath         types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum            types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputDatabricksModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"pipeline":                  types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"environment":               types.StringType,
+		"streamtags":                types.ListType{ElemType: types.StringType},
+		"dest_path":                 types.StringType,
+		"stage_path":                types.StringType,
+		"add_id_to_stage_path":      types.BoolType,
+		"remove_empty_dirs":         types.BoolType,
+		"partition_expr":            types.StringType,
+		"format":                    types.StringType,
+		"base_file_name":            types.StringType,
+		"file_name_suffix":          types.StringType,
+		"max_file_size_mb":          types.Float64Type,
+		"max_file_open_time_sec":    types.Float64Type,
+		"max_file_idle_time_sec":    types.Float64Type,
+		"max_open_files":            types.Float64Type,
+		"header_line":               types.StringType,
+		"write_high_water_mark":     types.Float64Type,
+		"on_backpressure":           types.StringType,
+		"deadletter_enabled":        types.BoolType,
+		"on_disk_full_backpressure": types.StringType,
+		"force_close_on_shutdown":   types.BoolType,
+		"retry_settings":            types.ObjectType{AttrTypes: OutputDatabricksRetrySettingsAttrTypes()},
+		"orphans":                   types.ObjectType{AttrTypes: OutputDatabricksOrphansAttrTypes()},
+		"workspace_id":              types.StringType,
+		"workspace_host":            types.StringType,
+		"scope":                     types.StringType,
+		"client_id":                 types.StringType,
+		"catalog":                   types.StringType,
+		"schema":                    types.StringType,
+		"events_volume_name":        types.StringType,
+		"client_text_secret":        types.StringType,
+		"timeout_sec":               types.Int64Type,
+		"description":               types.StringType,
+		"compress":                  types.StringType,
+		"compression_level":         types.StringType,
+		"automatic_schema":          types.BoolType,
+		"parquet_schema":            types.StringType,
+		"parquet_version":           types.StringType,
+		"parquet_data_page_version": types.StringType,
+		"parquet_row_group_length":  types.Float64Type,
+		"parquet_page_size":         types.StringType,
+		"should_log_invalid_rows":   types.BoolType,
+		"key_value_metadata":        types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatabricksKeyValueMetadataAttrTypes()}},
+		"enable_statistics":         types.BoolType,
+		"enable_write_page_index":   types.BoolType,
+		"enable_page_checksum":      types.BoolType,
+		"empty_dir_cleanup_sec":     types.Float64Type,
+		"directory_batch_size":      types.Float64Type,
+		"deadletter_path":           types.StringType,
+		"max_retry_num":             types.Float64Type,
+	}
 }
 
 func (m OutputDatabricksModel) terraformPayload() (map[string]any, error) {
@@ -57806,6 +62003,48 @@ type OutputMicrosoftFabricModel struct {
 	PqControls                types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
+func OutputMicrosoftFabricModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                         types.StringType,
+		"type":                       types.StringType,
+		"pipeline":                   types.StringType,
+		"system_fields":              types.ListType{ElemType: types.StringType},
+		"environment":                types.StringType,
+		"streamtags":                 types.ListType{ElemType: types.StringType},
+		"topic":                      types.StringType,
+		"ack":                        types.Int64Type,
+		"format":                     types.StringType,
+		"max_record_size_kb":         types.Float64Type,
+		"flush_event_count":          types.Float64Type,
+		"flush_period_sec":           types.Float64Type,
+		"connection_timeout":         types.Float64Type,
+		"request_timeout":            types.Float64Type,
+		"max_retries":                types.Float64Type,
+		"max_back_off":               types.Float64Type,
+		"initial_backoff":            types.Float64Type,
+		"backoff_rate":               types.Float64Type,
+		"authentication_timeout":     types.Float64Type,
+		"reauthentication_threshold": types.Float64Type,
+		"sasl":                       types.ObjectType{AttrTypes: OutputMicrosoftFabricSaslAttrTypes()},
+		"tls":                        types.ObjectType{AttrTypes: OutputMicrosoftFabricTLSAttrTypes()},
+		"on_backpressure":            types.StringType,
+		"bootstrap_server":           types.StringType,
+		"description":                types.StringType,
+		"pq_strict_ordering":         types.BoolType,
+		"pq_rate_per_sec":            types.Float64Type,
+		"pq_mode":                    types.StringType,
+		"pq_max_buffer_size":         types.Float64Type,
+		"pq_max_backpressure_sec":    types.Float64Type,
+		"pq_max_file_size":           types.StringType,
+		"pq_max_size":                types.StringType,
+		"pq_path":                    types.StringType,
+		"pq_compress":                types.StringType,
+		"pq_on_backpressure":         types.StringType,
+		"pq_max_buffer_size_bytes":   types.StringType,
+		"pq_controls":                types.MapType{ElemType: types.StringType},
+	}
+}
+
 func (m OutputMicrosoftFabricModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -58464,6 +62703,67 @@ type OutputCloudflareR2Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputCloudflareR2ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputCloudflareR2RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputCloudflareR2OrphansAttrTypes()},
+		"aws_secret_key":                    types.StringType,
+		"endpoint":                          types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCloudflareR2KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputCloudflareR2Model) terraformPayload() (map[string]any, error) {
@@ -59428,6 +63728,65 @@ type OutputNutanixObjectsModel struct {
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
 }
 
+func OutputNutanixObjectsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputNutanixObjectsRetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputNutanixObjectsOrphansAttrTypes()},
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNutanixObjectsKeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
+}
+
 func (m OutputNutanixObjectsModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -60357,6 +64716,64 @@ type OutputStorjS3Model struct {
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
 }
 
+func OutputStorjS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputStorjS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputStorjS3OrphansAttrTypes()},
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputStorjS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
+}
+
 func (m OutputStorjS3Model) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -61268,6 +65685,64 @@ type OutputAlphasocS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputAlphasocS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputAlphasocS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputAlphasocS3OrphansAttrTypes()},
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAlphasocS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputAlphasocS3Model) terraformPayload() (map[string]any, error) {
@@ -62183,6 +66658,66 @@ type OutputDellS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputDellS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputDellS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputDellS3OrphansAttrTypes()},
+		"object_acl":                        types.StringType,
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDellS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputDellS3Model) terraformPayload() (map[string]any, error) {
@@ -63133,6 +67668,69 @@ type OutputCloudianS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputCloudianS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"endpoint":                          types.StringType,
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputCloudianS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputCloudianS3OrphansAttrTypes()},
+		"object_acl":                        types.StringType,
+		"storage_class":                     types.StringType,
+		"server_side_encryption":            types.StringType,
+		"kms_key_id":                        types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCloudianS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputCloudianS3Model) terraformPayload() (map[string]any, error) {
@@ -64129,6 +68727,65 @@ type OutputScalityS3Model struct {
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
 }
 
+func OutputScalityS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"region":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputScalityS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputScalityS3OrphansAttrTypes()},
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputScalityS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
+}
+
 func (m OutputScalityS3Model) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -65057,6 +69714,65 @@ type OutputAlibabaCloudS3Model struct {
 	DirectoryBatchSize            types.Float64 `tfsdk:"directory_batch_size" json:"directoryBatchSize,omitempty"`
 	DeadletterPath                types.String  `tfsdk:"deadletter_path" json:"deadletterPath,omitempty"`
 	MaxRetryNum                   types.Float64 `tfsdk:"max_retry_num" json:"maxRetryNum,omitempty"`
+}
+
+func OutputAlibabaCloudS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                                types.StringType,
+		"type":                              types.StringType,
+		"pipeline":                          types.StringType,
+		"system_fields":                     types.ListType{ElemType: types.StringType},
+		"environment":                       types.StringType,
+		"streamtags":                        types.ListType{ElemType: types.StringType},
+		"aws_authentication_method":         types.StringType,
+		"reuse_connections":                 types.BoolType,
+		"reject_unauthorized":               types.BoolType,
+		"bucket":                            types.StringType,
+		"dest_path":                         types.StringType,
+		"max_concurrent_file_parts":         types.Float64Type,
+		"verify_permissions":                types.BoolType,
+		"max_closing_files_to_backpressure": types.Float64Type,
+		"stage_path":                        types.StringType,
+		"add_id_to_stage_path":              types.BoolType,
+		"remove_empty_dirs":                 types.BoolType,
+		"partition_expr":                    types.StringType,
+		"format":                            types.StringType,
+		"base_file_name":                    types.StringType,
+		"file_name_suffix":                  types.StringType,
+		"max_file_size_mb":                  types.Float64Type,
+		"max_file_open_time_sec":            types.Float64Type,
+		"max_file_idle_time_sec":            types.Float64Type,
+		"max_open_files":                    types.Float64Type,
+		"header_line":                       types.StringType,
+		"write_high_water_mark":             types.Float64Type,
+		"on_backpressure":                   types.StringType,
+		"deadletter_enabled":                types.BoolType,
+		"on_disk_full_backpressure":         types.StringType,
+		"force_close_on_shutdown":           types.BoolType,
+		"retry_settings":                    types.ObjectType{AttrTypes: OutputAlibabaCloudS3RetrySettingsAttrTypes()},
+		"orphans":                           types.ObjectType{AttrTypes: OutputAlibabaCloudS3OrphansAttrTypes()},
+		"object_acl":                        types.StringType,
+		"endpoint":                          types.StringType,
+		"description":                       types.StringType,
+		"aws_secret":                        types.StringType,
+		"compress":                          types.StringType,
+		"compression_level":                 types.StringType,
+		"automatic_schema":                  types.BoolType,
+		"parquet_schema":                    types.StringType,
+		"parquet_version":                   types.StringType,
+		"parquet_data_page_version":         types.StringType,
+		"parquet_row_group_length":          types.Float64Type,
+		"parquet_page_size":                 types.StringType,
+		"should_log_invalid_rows":           types.BoolType,
+		"key_value_metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAlibabaCloudS3KeyValueMetadataAttrTypes()}},
+		"enable_statistics":                 types.BoolType,
+		"enable_write_page_index":           types.BoolType,
+		"enable_page_checksum":              types.BoolType,
+		"empty_dir_cleanup_sec":             types.Float64Type,
+		"directory_batch_size":              types.Float64Type,
+		"deadletter_path":                   types.StringType,
+		"max_retry_num":                     types.Float64Type,
+	}
 }
 
 func (m OutputAlibabaCloudS3Model) terraformPayload() (map[string]any, error) {

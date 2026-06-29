@@ -83,6 +83,8 @@ func writeTerraformTfvarsWithPlaceholders(t *testing.T, outputDir string) {
 			fmt.Fprintf(&buf, "%s = <<-EOT\n%s\nEOT\n", n, keyStr)
 		} else if strings.Contains(lower, "cert") {
 			fmt.Fprintf(&buf, "%s = <<-EOT\n%s\nEOT\n", n, certStr)
+		} else if strings.Contains(lower, "url") {
+			fmt.Fprintf(&buf, "%s = %q\n", n, "https://example.com")
 		} else {
 			fmt.Fprintf(&buf, "%s = %q\n", n, "placeholder")
 		}

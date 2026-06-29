@@ -83,10 +83,6 @@ func (d *NotificationDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						Computed:    true,
 						Description: `Persistent queue usage threshold.`,
 					},
-					"__worker_group": schema.StringAttribute{
-						Computed:    true,
-						Description: `Optional scope to a specific worker group.`,
-					},
 				},
 			},
 			"disabled": schema.BoolAttribute{

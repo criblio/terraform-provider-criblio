@@ -7,8 +7,6 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
@@ -44,6 +42,12 @@ type CriblioProviderModel struct {
 	ServerURL      types.String `tfsdk:"server_url"`
 	TokenURL       types.String `tfsdk:"token_url"`
 	WorkspaceID    types.String `tfsdk:"workspace_id"`
+}
+
+type providerOAuthConfig struct {
+	ClientID     string
+	ClientSecret string
+	TokenURL     string
 }
 
 func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -159,22 +163,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		serverUrlParams["cloudDomain"] = "cribl.cloud"
 	}
 
-	security := shared.Security{}
-
-	if !data.BearerAuth.IsUnknown() {
-		security.BearerAuth = data.BearerAuth.ValueStringPointer()
-	}
-	if explicitServerUrlParams["organizationId"] {
-		security.OrganizationID = stringPointer(serverUrlParams["organizationId"])
-	}
-	if explicitServerUrlParams["workspaceId"] {
-		security.WorkspaceID = stringPointer(serverUrlParams["workspaceId"])
-	}
-	if explicitServerUrlParams["cloudDomain"] {
-		security.CloudDomain = stringPointer(serverUrlParams["cloudDomain"])
-	}
-
-	clientOauth := &shared.SchemeClientOauth{}
+	clientOauth := &providerOAuthConfig{}
 
 	if !data.ClientID.IsUnknown() {
 		clientOauth.ClientID = data.ClientID.ValueString()
@@ -196,10 +185,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		clientOauth.TokenURL = data.TokenURL.ValueString()
 	}
 
-	if clientOauth.ClientID != "" && clientOauth.ClientSecret != "" {
-		security.ClientOauth = clientOauth
-	}
-
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
 		Transport:  http.DefaultTransport,
@@ -208,16 +193,9 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	httpClient := http.DefaultClient
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
-	opts := []sdk.SDKOption{
-		sdk.WithTemplatedServerURL(serverUrl, serverUrlParams),
-		sdk.WithSecurity(security),
-		sdk.WithClient(httpClient),
-	}
-
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 
 	clients := &ProviderClients{
-		Legacy: sdk.New(opts...),
 		RC: restclient.New(restclient.Config{
 			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
 			ProviderOrgID:       restCredentials.OrganizationID,
@@ -239,7 +217,7 @@ func providerRestBaseURL(serverURL string, credentials *auth.CriblConfig) string
 	return auth.ConstructBaseURL(auth.ConstructBaseURLInput{BaseURL: serverURL}, credentials)
 }
 
-func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[string]string, explicitParams map[string]bool) *auth.CriblConfig {
+func providerRestCredentials(clientOauth *providerOAuthConfig, params map[string]string, explicitParams map[string]bool) *auth.CriblConfig {
 	credentials := &auth.CriblConfig{}
 	if loaded, err := auth.GetCredentials(); err == nil && loaded != nil {
 		credentials = loaded
@@ -280,10 +258,6 @@ func providerRestParam(providerValue string, providerSet bool, credentialValue, 
 	default:
 		return defaultValue
 	}
-}
-
-func stringPointer(value string) *string {
-	return &value
 }
 
 func (p *CriblioProvider) Functions(_ context.Context) []func() function.Function {
@@ -400,6 +374,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchDashboardCategoryDataSource,
 		NewSearchDatasetDataSource,
 		NewSearchDatasetProviderDataSource,
+		NewSearchDatasetProvidersDataSource,
 		NewSearchDatasetRulesetDataSource,
 		NewSearchDatatypeRulesetDataSource,
 		NewSearchDatatypeRulesetsDataSource,

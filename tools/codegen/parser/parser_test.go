@@ -106,6 +106,9 @@ func TestParseOneOfVariants(t *testing.T) {
 	if hasField(azure.Fields, "__template_account_key") {
 		t.Fatalf("__template_* fields should not be generated")
 	}
+	if hasField(azure.Fields, "__internal_flag") {
+		t.Fatalf("__* internal fields should not be generated")
+	}
 }
 
 func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
@@ -188,6 +191,41 @@ func TestNotificationHidesGroupIDForBackwardCompatibility(t *testing.T) {
 
 	if hasField(resource.Fields, "group_id") {
 		t.Fatalf("notification group_id should be hidden from Terraform schema")
+	}
+}
+
+func TestNotificationTargetHidesGroupIDForBackwardCompatibility(t *testing.T) {
+	resource := &ResourceDef{
+		StructName: "NotificationTarget",
+		TypeName:   "criblio_notification_target",
+		Fields: []FieldDef{
+			{
+				APIName:       "groupId",
+				TerraformName: "group_id",
+				GoName:        "GroupID",
+				Type:          "string",
+				Required:      true,
+				ForceNew:      true,
+				PathParam:     true,
+			},
+			{
+				APIName:       "type",
+				TerraformName: "type",
+				GoName:        "Type",
+				Type:          "string",
+				Required:      true,
+			},
+		},
+	}
+
+	applyResourceCompatibility(resource)
+
+	if hasField(resource.Fields, "group_id") {
+		t.Fatalf("notification target group_id should be hidden from Terraform schema")
+	}
+	targetType := fieldByTFName(t, resource.Fields, "type")
+	if targetType.Required || !targetType.Optional || !targetType.Computed {
+		t.Fatalf("notification target type flags = required:%v optional:%v computed:%v", targetType.Required, targetType.Optional, targetType.Computed)
 	}
 }
 

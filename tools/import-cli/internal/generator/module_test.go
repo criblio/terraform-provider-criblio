@@ -336,7 +336,7 @@ func TestWriteRootFiles_creates_import_with_module_prefix_by_group(t *testing.T)
 func TestWriteRootFiles_creates_tfvars_example_when_variables_present(t *testing.T) {
 	tmp := t.TempDir()
 	infos := []RootModuleInfo{
-		{Name: "source", Path: "./source", Variables: []string{"secret_xxx_value", "source_default_in_splunk_hec_token"}},
+		{Name: "source", Path: "./source", Variables: []string{"notification_target_slack_1_slack_target_url", "secret_xxx_value", "source_default_in_splunk_hec_token"}},
 	}
 	items := []ResourceItem{
 		{TypeName: "criblio_source", Name: "s1", ImportID: `{"group_id":"default","id":"s1"}`, GroupID: "default"},
@@ -349,6 +349,7 @@ func TestWriteRootFiles_creates_tfvars_example_when_variables_present(t *testing
 	require.FileExists(t, tfvarsExamplePath)
 	tfvarsBytes, _ := os.ReadFile(tfvarsExamplePath)
 	tfvarsStr := string(tfvarsBytes)
+	assert.Contains(t, tfvarsStr, `notification_target_slack_1_slack_target_url = "https://hooks.slack.com/"`)
 	assert.Contains(t, tfvarsStr, `secret_xxx_value = ""`)
 	assert.Contains(t, tfvarsStr, `source_default_in_splunk_hec_token = ""`)
 	assert.Contains(t, tfvarsStr, "Copy to terraform.tfvars")

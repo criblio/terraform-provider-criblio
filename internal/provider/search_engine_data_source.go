@@ -65,7 +65,8 @@ func (d *SearchEngineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Description: `If <code>true</code>, the lakehouse engine currently owns the main Dataset.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier.`,
 			},
 			"is_compute_deprovisioned": schema.BoolAttribute{
 				Computed:    true,

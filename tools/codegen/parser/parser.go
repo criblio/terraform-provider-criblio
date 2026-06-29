@@ -176,9 +176,14 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 }
 
 func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
-	schema, ok := mappingValue(schemas, resource.SchemaName)
+	schemaName := resource.SchemaName
+	if schemaName == "" && resource.List.ResponseSchema != "" {
+		schemaName = listItemSchemaName(schemas, resource.List.ResponseSchema)
+		resource.SchemaName = schemaName
+	}
+	schema, ok := mappingValue(schemas, schemaName)
 	if !ok {
-		return fmt.Errorf("resource %q schema %q not found", resource.Name, resource.SchemaName)
+		return fmt.Errorf("resource %q schema %q not found", resource.Name, schemaName)
 	}
 
 	postFields := schemaPropertySet(schema)
@@ -235,6 +240,35 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	return nil
 }
 
+func listItemSchemaName(schemas *yaml.Node, responseSchemaName string) string {
+	schema, ok := mappingValue(schemas, responseSchemaName)
+	if !ok {
+		return ""
+	}
+	if name := listItemSchemaRefName(schema); name != "" {
+		return name
+	}
+	return responseSchemaName
+}
+
+func listItemSchemaRefName(schema *yaml.Node) string {
+	if schema == nil {
+		return ""
+	}
+	if properties, ok := mappingValue(schema, "properties"); ok && properties.Kind == yaml.MappingNode {
+		if itemsProperty, ok := mappingValue(properties, "items"); ok {
+			if itemsSchema, ok := mappingValue(itemsProperty, "items"); ok {
+				return schemaRefName(itemsSchema)
+			}
+			return schemaRefName(itemsProperty)
+		}
+	}
+	if itemsSchema, ok := mappingValue(schema, "items"); ok {
+		return schemaRefName(itemsSchema)
+	}
+	return ""
+}
+
 func applyResourceCompatibility(resource *ResourceDef) {
 	if resource == nil {
 		return
@@ -266,6 +300,22 @@ func applyResourceCompatibility(resource *ResourceDef) {
 			fields = append(fields, field)
 		}
 		resource.Fields = fields
+	}
+	if resource.StructName == "NotificationTarget" {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			if field.TerraformName == "type" {
+				field.Required = false
+				field.Optional = true
+				field.Computed = true
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
 	}
 	if resource.StructName == "Destination" || resource.StructName == "PackDestination" {
 		keepRoot := map[string]bool{
@@ -315,6 +365,13 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		makeSearchDatasetHoistedFieldsComputed(resource.Fields)
 		renameSearchDatasetProviderFields(resource.OneOfVariants)
 		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+	}
+	if resource.StructName == "SearchDatasetProvider" {
+		makeSearchDatasetProviderHoistedFieldsComputed(resource.Fields)
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+		for index := range resource.OneOfVariants {
+			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+		}
 	}
 	if resource.StructName != "MappingRuleset" {
 		return
@@ -370,6 +427,18 @@ func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
 		field := &fields[index]
 		switch field.TerraformName {
 		case "id", "description", "provider_id", "type":
+			field.Required = false
+			field.Optional = false
+			field.Computed = true
+		}
+	}
+}
+
+func makeSearchDatasetProviderHoistedFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		switch field.TerraformName {
+		case "id", "description", "type":
 			field.Required = false
 			field.Optional = false
 			field.Computed = true
@@ -495,7 +564,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			}
 
 			if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-				parsed, err := parseOneOfVariants(oneOf, schemas)
+				parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
 				if err != nil {
 					return nil, nil, err
 				}
@@ -512,7 +581,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 		}
 	}
 	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-		parsed, err := parseOneOfVariants(oneOf, schemas)
+		parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -521,7 +590,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 	return fields, variants, nil
 }
 
-func parseOneOfVariants(oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
 	var variants []OneOfVariantDef
 	for _, variantRef := range oneOf.Content {
 		schemaName := schemaRefName(variantRef)
@@ -540,11 +609,15 @@ func parseOneOfVariants(oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
 		if renamed, ok := stringAnnotation(variantSchema, "x-terraform-name"); ok && renamed != "" {
 			tfName = renamed
 		}
+		modelName := exportName(schemaName) + "Model"
+		if exportName(schemaName) == exportName(parentModelName) {
+			modelName = exportName(schemaName) + "VariantModel"
+		}
 		variants = append(variants, OneOfVariantDef{
 			APIName:            schemaName,
 			TerraformName:      snake(tfName),
 			GoName:             exportName(schemaName),
-			ModelName:          exportName(schemaName) + "Model",
+			ModelName:          modelName,
 			SchemaName:         schemaName,
 			DiscriminatorValue: discriminatorValue(variantFields),
 			Fields:             variantFields,
@@ -729,7 +802,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 }
 
 func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
-	return strings.HasPrefix(apiName, "__template_") || ignoredAnnotation(property)
+	return strings.HasPrefix(apiName, "__") || ignoredAnnotation(property)
 }
 
 func ignoredAnnotation(property *yaml.Node) bool {

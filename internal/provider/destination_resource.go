@@ -76,6 +76,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: false,
 				Computed: true,
 			},
+
 			"output_default": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -529,7 +530,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1059,7 +1060,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1477,7 +1478,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1738,7 +1739,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -2153,7 +2154,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -2585,7 +2586,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -2951,7 +2952,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3278,7 +3279,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3588,7 +3589,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3885,7 +3886,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -5717,7 +5718,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6013,7 +6014,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6270,7 +6271,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6554,7 +6555,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6898,7 +6899,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -7293,7 +7294,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -8134,7 +8135,296 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_google_cloud_observability": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Tags for filtering and grouping in @{product}`,
+						ElementType: types.StringType,
+					},
+					"protocol": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"otlp_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.`,
+					},
+					"google_auth_method": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required: false,
+									Optional: true,
+									Computed: true,
+								},
+								"value": schema.StringAttribute{
+									Required: false,
+									Optional: true,
+									Computed: true,
+								},
+							},
+						},
+					},
+					"dynamic_headers_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Batch event data upon dynamic metadata (whether presented or not)`,
+					},
+					"dynamic_headers_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `When presented, this field which contains metadata, will be injected into the Destination metadata and used to batch events.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body sent to Google Cloud Observability`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"connection_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+					},
+					"keep_alive_time": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How often the sender should ping the peer to keep the connection open`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+								Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+							"max_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+						},
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Select or create a stored text secret`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -8333,7 +8623,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -8741,6 +9031,67 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Optional: true,
 										Computed: true,
 									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
@@ -9152,7 +9503,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -9358,6 +9709,67 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Optional: true,
 										Computed: true,
 									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
+									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
@@ -9703,7 +10115,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -9842,6 +10254,67 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										Required: false,
 										Optional: true,
 										Computed: true,
+									},
+									"oauth_enabled": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Authenticate with the schema registry using OAuth instead of basic HTTP authentication`,
+									},
+									"token_url": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `URL of the token endpoint to use for OAuth authentication`,
+									},
+									"client_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Client ID to use for OAuth authentication`,
+									},
+									"oauth_secret_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: true,
+									},
+									"client_text_secret": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Select or create a stored text secret`,
+									},
+									"oauth_params": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"name": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+											},
+										},
+									},
+									"identity_pool_id": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud identity pool ID. Sent as the `Confluent-Identity-Pool-Id` header on requests to the schema registry.",
+									},
+									"logical_cluster": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: "Confluent Cloud Schema Registry logical cluster ID. Sent as the `target-sr-cluster` header on requests to the schema registry.",
 									},
 									"credentials_secret": schema.StringAttribute{
 										Required:    false,
@@ -10198,7 +10671,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -10629,7 +11102,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -10986,7 +11459,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11313,7 +11786,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11626,7 +12099,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11966,7 +12439,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -12217,7 +12690,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -12798,7 +13271,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -12972,7 +13445,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13146,7 +13619,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13436,7 +13909,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13681,7 +14154,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14059,7 +14532,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14415,7 +14888,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14838,7 +15311,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -15197,7 +15670,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -15499,7 +15972,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16147,7 +16620,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16573,7 +17046,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16899,7 +17372,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -17249,7 +17722,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -17683,7 +18156,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18117,7 +18590,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18419,7 +18892,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18721,7 +19194,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -20282,6 +20755,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"workload": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
 					"dump_format_errors_to_disk": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
@@ -20428,7 +20907,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -20729,6 +21208,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"workload": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
 					"dump_format_errors_to_disk": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
@@ -20780,6 +21265,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:  true,
 								Computed:  true,
 								Sensitive: true,
+							},
+							"wait_for_async_inserts": schema.BoolAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+							"concurrency": schema.Float64Attribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
 							},
 						},
 					},
@@ -20918,7 +21413,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -21267,7 +21762,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -21665,7 +22160,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -22069,7 +22564,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -22456,7 +22951,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -22830,7 +23325,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -23517,7 +24012,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -32076,6 +32571,196 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputGoogleCloudLogging.PqControls = types.MapNull(types.StringType)
 		}
 	}
+	if api.OutputGoogleCloudObservability != nil {
+		if state.OutputGoogleCloudObservability == nil {
+			state.OutputGoogleCloudObservability = &OutputGoogleCloudObservabilityModel{}
+		}
+		if !api.OutputGoogleCloudObservability.ID.IsNull() && !api.OutputGoogleCloudObservability.ID.IsUnknown() {
+			state.OutputGoogleCloudObservability.ID = api.OutputGoogleCloudObservability.ID
+		} else if state.OutputGoogleCloudObservability.ID.IsNull() || state.OutputGoogleCloudObservability.ID.IsUnknown() {
+			state.OutputGoogleCloudObservability.ID = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Type.IsNull() && !api.OutputGoogleCloudObservability.Type.IsUnknown() {
+			state.OutputGoogleCloudObservability.Type = api.OutputGoogleCloudObservability.Type
+		} else if state.OutputGoogleCloudObservability.Type.IsNull() || state.OutputGoogleCloudObservability.Type.IsUnknown() {
+			state.OutputGoogleCloudObservability.Type = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Pipeline.IsNull() && !api.OutputGoogleCloudObservability.Pipeline.IsUnknown() {
+			state.OutputGoogleCloudObservability.Pipeline = api.OutputGoogleCloudObservability.Pipeline
+		} else if state.OutputGoogleCloudObservability.Pipeline.IsNull() || state.OutputGoogleCloudObservability.Pipeline.IsUnknown() {
+			state.OutputGoogleCloudObservability.Pipeline = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.SystemFields.IsNull() && !api.OutputGoogleCloudObservability.SystemFields.IsUnknown() {
+			state.OutputGoogleCloudObservability.SystemFields = api.OutputGoogleCloudObservability.SystemFields
+		} else if state.OutputGoogleCloudObservability.SystemFields.IsNull() || state.OutputGoogleCloudObservability.SystemFields.IsUnknown() {
+			state.OutputGoogleCloudObservability.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleCloudObservability.Environment.IsNull() && !api.OutputGoogleCloudObservability.Environment.IsUnknown() {
+			state.OutputGoogleCloudObservability.Environment = api.OutputGoogleCloudObservability.Environment
+		} else if state.OutputGoogleCloudObservability.Environment.IsNull() || state.OutputGoogleCloudObservability.Environment.IsUnknown() {
+			state.OutputGoogleCloudObservability.Environment = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Streamtags.IsNull() && !api.OutputGoogleCloudObservability.Streamtags.IsUnknown() {
+			state.OutputGoogleCloudObservability.Streamtags = api.OutputGoogleCloudObservability.Streamtags
+		} else if state.OutputGoogleCloudObservability.Streamtags.IsNull() || state.OutputGoogleCloudObservability.Streamtags.IsUnknown() {
+			state.OutputGoogleCloudObservability.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleCloudObservability.Protocol.IsNull() && !api.OutputGoogleCloudObservability.Protocol.IsUnknown() {
+			state.OutputGoogleCloudObservability.Protocol = api.OutputGoogleCloudObservability.Protocol
+		} else if state.OutputGoogleCloudObservability.Protocol.IsNull() || state.OutputGoogleCloudObservability.Protocol.IsUnknown() {
+			state.OutputGoogleCloudObservability.Protocol = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.OtlpVersion.IsNull() && !api.OutputGoogleCloudObservability.OtlpVersion.IsUnknown() {
+			state.OutputGoogleCloudObservability.OtlpVersion = api.OutputGoogleCloudObservability.OtlpVersion
+		} else if state.OutputGoogleCloudObservability.OtlpVersion.IsNull() || state.OutputGoogleCloudObservability.OtlpVersion.IsUnknown() {
+			state.OutputGoogleCloudObservability.OtlpVersion = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Endpoint.IsNull() && !api.OutputGoogleCloudObservability.Endpoint.IsUnknown() {
+			state.OutputGoogleCloudObservability.Endpoint = api.OutputGoogleCloudObservability.Endpoint
+		} else if state.OutputGoogleCloudObservability.Endpoint.IsNull() || state.OutputGoogleCloudObservability.Endpoint.IsUnknown() {
+			state.OutputGoogleCloudObservability.Endpoint = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.GoogleAuthMethod.IsNull() && !api.OutputGoogleCloudObservability.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleCloudObservability.GoogleAuthMethod = api.OutputGoogleCloudObservability.GoogleAuthMethod
+		} else if state.OutputGoogleCloudObservability.GoogleAuthMethod.IsNull() || state.OutputGoogleCloudObservability.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleCloudObservability.GoogleAuthMethod = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Metadata.IsNull() && !api.OutputGoogleCloudObservability.Metadata.IsUnknown() {
+			state.OutputGoogleCloudObservability.Metadata = api.OutputGoogleCloudObservability.Metadata
+		} else if state.OutputGoogleCloudObservability.Metadata.IsNull() || state.OutputGoogleCloudObservability.Metadata.IsUnknown() {
+			state.OutputGoogleCloudObservability.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()})
+		}
+		if !api.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsNull() && !api.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsUnknown() {
+			state.OutputGoogleCloudObservability.DynamicHeadersEnabled = api.OutputGoogleCloudObservability.DynamicHeadersEnabled
+		} else if state.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsNull() || state.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsUnknown() {
+			state.OutputGoogleCloudObservability.DynamicHeadersEnabled = types.BoolNull()
+		}
+		if !api.OutputGoogleCloudObservability.DynamicHeadersField.IsNull() && !api.OutputGoogleCloudObservability.DynamicHeadersField.IsUnknown() {
+			state.OutputGoogleCloudObservability.DynamicHeadersField = api.OutputGoogleCloudObservability.DynamicHeadersField
+		} else if state.OutputGoogleCloudObservability.DynamicHeadersField.IsNull() || state.OutputGoogleCloudObservability.DynamicHeadersField.IsUnknown() {
+			state.OutputGoogleCloudObservability.DynamicHeadersField = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Concurrency.IsNull() && !api.OutputGoogleCloudObservability.Concurrency.IsUnknown() {
+			state.OutputGoogleCloudObservability.Concurrency = api.OutputGoogleCloudObservability.Concurrency
+		} else if state.OutputGoogleCloudObservability.Concurrency.IsNull() || state.OutputGoogleCloudObservability.Concurrency.IsUnknown() {
+			state.OutputGoogleCloudObservability.Concurrency = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.MaxPayloadSizeKB.IsNull() && !api.OutputGoogleCloudObservability.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputGoogleCloudObservability.MaxPayloadSizeKB = api.OutputGoogleCloudObservability.MaxPayloadSizeKB
+		} else if state.OutputGoogleCloudObservability.MaxPayloadSizeKB.IsNull() || state.OutputGoogleCloudObservability.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputGoogleCloudObservability.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.TimeoutSec.IsNull() && !api.OutputGoogleCloudObservability.TimeoutSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.TimeoutSec = api.OutputGoogleCloudObservability.TimeoutSec
+		} else if state.OutputGoogleCloudObservability.TimeoutSec.IsNull() || state.OutputGoogleCloudObservability.TimeoutSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.FlushPeriodSec.IsNull() && !api.OutputGoogleCloudObservability.FlushPeriodSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.FlushPeriodSec = api.OutputGoogleCloudObservability.FlushPeriodSec
+		} else if state.OutputGoogleCloudObservability.FlushPeriodSec.IsNull() || state.OutputGoogleCloudObservability.FlushPeriodSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.FailedRequestLoggingMode.IsNull() && !api.OutputGoogleCloudObservability.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputGoogleCloudObservability.FailedRequestLoggingMode = api.OutputGoogleCloudObservability.FailedRequestLoggingMode
+		} else if state.OutputGoogleCloudObservability.FailedRequestLoggingMode.IsNull() || state.OutputGoogleCloudObservability.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputGoogleCloudObservability.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.ConnectionTimeout.IsNull() && !api.OutputGoogleCloudObservability.ConnectionTimeout.IsUnknown() {
+			state.OutputGoogleCloudObservability.ConnectionTimeout = api.OutputGoogleCloudObservability.ConnectionTimeout
+		} else if state.OutputGoogleCloudObservability.ConnectionTimeout.IsNull() || state.OutputGoogleCloudObservability.ConnectionTimeout.IsUnknown() {
+			state.OutputGoogleCloudObservability.ConnectionTimeout = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.KeepAliveTime.IsNull() && !api.OutputGoogleCloudObservability.KeepAliveTime.IsUnknown() {
+			state.OutputGoogleCloudObservability.KeepAliveTime = api.OutputGoogleCloudObservability.KeepAliveTime
+		} else if state.OutputGoogleCloudObservability.KeepAliveTime.IsNull() || state.OutputGoogleCloudObservability.KeepAliveTime.IsUnknown() {
+			state.OutputGoogleCloudObservability.KeepAliveTime = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.TLS.IsNull() && !api.OutputGoogleCloudObservability.TLS.IsUnknown() {
+			state.OutputGoogleCloudObservability.TLS = api.OutputGoogleCloudObservability.TLS
+		} else if state.OutputGoogleCloudObservability.TLS.IsNull() || state.OutputGoogleCloudObservability.TLS.IsUnknown() {
+			state.OutputGoogleCloudObservability.TLS = types.ObjectNull(OutputGoogleCloudObservabilityTLSAttrTypes())
+		}
+		if !api.OutputGoogleCloudObservability.MaxPayloadEvents.IsNull() && !api.OutputGoogleCloudObservability.MaxPayloadEvents.IsUnknown() {
+			state.OutputGoogleCloudObservability.MaxPayloadEvents = api.OutputGoogleCloudObservability.MaxPayloadEvents
+		} else if state.OutputGoogleCloudObservability.MaxPayloadEvents.IsNull() || state.OutputGoogleCloudObservability.MaxPayloadEvents.IsUnknown() {
+			state.OutputGoogleCloudObservability.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.OnBackpressure.IsNull() && !api.OutputGoogleCloudObservability.OnBackpressure.IsUnknown() {
+			state.OutputGoogleCloudObservability.OnBackpressure = api.OutputGoogleCloudObservability.OnBackpressure
+		} else if state.OutputGoogleCloudObservability.OnBackpressure.IsNull() || state.OutputGoogleCloudObservability.OnBackpressure.IsUnknown() {
+			state.OutputGoogleCloudObservability.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Description.IsNull() && !api.OutputGoogleCloudObservability.Description.IsUnknown() {
+			state.OutputGoogleCloudObservability.Description = api.OutputGoogleCloudObservability.Description
+		} else if state.OutputGoogleCloudObservability.Description.IsNull() || state.OutputGoogleCloudObservability.Description.IsUnknown() {
+			state.OutputGoogleCloudObservability.Description = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.Secret.IsNull() && !api.OutputGoogleCloudObservability.Secret.IsUnknown() {
+			state.OutputGoogleCloudObservability.Secret = stringFromAPIOrPrior(api.OutputGoogleCloudObservability.Secret.ValueString(), state.OutputGoogleCloudObservability.Secret)
+		} else if state.OutputGoogleCloudObservability.Secret.IsNull() || state.OutputGoogleCloudObservability.Secret.IsUnknown() {
+			state.OutputGoogleCloudObservability.Secret = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqStrictOrdering.IsNull() && !api.OutputGoogleCloudObservability.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqStrictOrdering = api.OutputGoogleCloudObservability.PqStrictOrdering
+		} else if state.OutputGoogleCloudObservability.PqStrictOrdering.IsNull() || state.OutputGoogleCloudObservability.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqRatePerSec.IsNull() && !api.OutputGoogleCloudObservability.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqRatePerSec = api.OutputGoogleCloudObservability.PqRatePerSec
+		} else if state.OutputGoogleCloudObservability.PqRatePerSec.IsNull() || state.OutputGoogleCloudObservability.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.PqMode.IsNull() && !api.OutputGoogleCloudObservability.PqMode.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMode = api.OutputGoogleCloudObservability.PqMode
+		} else if state.OutputGoogleCloudObservability.PqMode.IsNull() || state.OutputGoogleCloudObservability.PqMode.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMode = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqMaxBufferSize.IsNull() && !api.OutputGoogleCloudObservability.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBufferSize = api.OutputGoogleCloudObservability.PqMaxBufferSize
+		} else if state.OutputGoogleCloudObservability.PqMaxBufferSize.IsNull() || state.OutputGoogleCloudObservability.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.PqMaxBackpressureSec.IsNull() && !api.OutputGoogleCloudObservability.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBackpressureSec = api.OutputGoogleCloudObservability.PqMaxBackpressureSec
+		} else if state.OutputGoogleCloudObservability.PqMaxBackpressureSec.IsNull() || state.OutputGoogleCloudObservability.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputGoogleCloudObservability.PqMaxFileSize.IsNull() && !api.OutputGoogleCloudObservability.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxFileSize = api.OutputGoogleCloudObservability.PqMaxFileSize
+		} else if state.OutputGoogleCloudObservability.PqMaxFileSize.IsNull() || state.OutputGoogleCloudObservability.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqMaxSize.IsNull() && !api.OutputGoogleCloudObservability.PqMaxSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxSize = api.OutputGoogleCloudObservability.PqMaxSize
+		} else if state.OutputGoogleCloudObservability.PqMaxSize.IsNull() || state.OutputGoogleCloudObservability.PqMaxSize.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqPath.IsNull() && !api.OutputGoogleCloudObservability.PqPath.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqPath = api.OutputGoogleCloudObservability.PqPath
+		} else if state.OutputGoogleCloudObservability.PqPath.IsNull() || state.OutputGoogleCloudObservability.PqPath.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqPath = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqCompress.IsNull() && !api.OutputGoogleCloudObservability.PqCompress.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqCompress = api.OutputGoogleCloudObservability.PqCompress
+		} else if state.OutputGoogleCloudObservability.PqCompress.IsNull() || state.OutputGoogleCloudObservability.PqCompress.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqCompress = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqOnBackpressure.IsNull() && !api.OutputGoogleCloudObservability.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqOnBackpressure = api.OutputGoogleCloudObservability.PqOnBackpressure
+		} else if state.OutputGoogleCloudObservability.PqOnBackpressure.IsNull() || state.OutputGoogleCloudObservability.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqMaxBufferSizeBytes.IsNull() && !api.OutputGoogleCloudObservability.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBufferSizeBytes = api.OutputGoogleCloudObservability.PqMaxBufferSizeBytes
+		} else if state.OutputGoogleCloudObservability.PqMaxBufferSizeBytes.IsNull() || state.OutputGoogleCloudObservability.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputGoogleCloudObservability.PqControls.IsNull() && !api.OutputGoogleCloudObservability.PqControls.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqControls = api.OutputGoogleCloudObservability.PqControls
+		} else if state.OutputGoogleCloudObservability.PqControls.IsNull() || state.OutputGoogleCloudObservability.PqControls.IsUnknown() {
+			state.OutputGoogleCloudObservability.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputGooglePubsub != nil {
 		if state.OutputGooglePubsub == nil {
 			state.OutputGooglePubsub = &OutputGooglePubsubModel{}
@@ -39800,6 +40485,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.ResponseHonorRetryAfterHeader.IsNull() || state.OutputClickHouse.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputClickHouse.ResponseHonorRetryAfterHeader = types.BoolNull()
 		}
+		if !api.OutputClickHouse.Workload.IsNull() && !api.OutputClickHouse.Workload.IsUnknown() {
+			state.OutputClickHouse.Workload = api.OutputClickHouse.Workload
+		} else if state.OutputClickHouse.Workload.IsNull() || state.OutputClickHouse.Workload.IsUnknown() {
+			state.OutputClickHouse.Workload = types.StringNull()
+		}
 		if !api.OutputClickHouse.DumpFormatErrorsToDisk.IsNull() && !api.OutputClickHouse.DumpFormatErrorsToDisk.IsUnknown() {
 			state.OutputClickHouse.DumpFormatErrorsToDisk = api.OutputClickHouse.DumpFormatErrorsToDisk
 		} else if state.OutputClickHouse.DumpFormatErrorsToDisk.IsNull() || state.OutputClickHouse.DumpFormatErrorsToDisk.IsUnknown() {
@@ -40059,6 +40749,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader = api.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader
 		} else if state.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsNull() || state.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputLocalSearchStorage.Workload.IsNull() && !api.OutputLocalSearchStorage.Workload.IsUnknown() {
+			state.OutputLocalSearchStorage.Workload = api.OutputLocalSearchStorage.Workload
+		} else if state.OutputLocalSearchStorage.Workload.IsNull() || state.OutputLocalSearchStorage.Workload.IsUnknown() {
+			state.OutputLocalSearchStorage.Workload = types.StringNull()
 		}
 		if !api.OutputLocalSearchStorage.DumpFormatErrorsToDisk.IsNull() && !api.OutputLocalSearchStorage.DumpFormatErrorsToDisk.IsUnknown() {
 			state.OutputLocalSearchStorage.DumpFormatErrorsToDisk = api.OutputLocalSearchStorage.DumpFormatErrorsToDisk

@@ -40,6 +40,12 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_collector.splunk", "group_id", "criblio_collector.splunk_access_log_collector", "group_id"),
+						resource.TestCheckResourceAttrPair("data.criblio_collector.splunk", "id", "criblio_collector.splunk_access_log_collector", "id"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_collector.rest", "group_id", "criblio_collector.rest_api_collector", "group_id"),
+						resource.TestCheckResourceAttrPair("data.criblio_collector.rest", "id", "criblio_collector.rest_api_collector", "id"),
 					),
 				},
 				{
@@ -61,5 +67,19 @@ func collectorConfig(t *testing.T, suffix string) string {
 	config := string(content)
 	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
 	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
+	config += `
+
+data "criblio_collector" "splunk" {
+  group_id = criblio_collector.splunk_access_log_collector.group_id
+  id = criblio_collector.splunk_access_log_collector.id
+  depends_on = [criblio_collector.splunk_access_log_collector]
+}
+
+
+data "criblio_collector" "rest" {
+  group_id = criblio_collector.rest_api_collector.group_id
+  id = criblio_collector.rest_api_collector.id
+  depends_on = [criblio_collector.rest_api_collector]
+}`
 	return config
 }

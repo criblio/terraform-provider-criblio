@@ -31,6 +31,12 @@ type Entry struct {
 	// GetMethod is the SDK method name to get a single resource by ID (e.g. "GetInputByID").
 	// Empty if not known or not applicable.
 	GetMethod string
+	// RESTListPath is the REST list endpoint template. When set, discovery uses
+	// the provider REST client instead of SDK reflection.
+	RESTListPath string
+	// RESTGetPath is the REST get endpoint template. When set, conversion can
+	// use the provider REST client instead of SDK reflection.
+	RESTGetPath string
 	// ImportIDFormat describes the Terraform import ID format, matching provider ImportState.
 	// Examples: "json:group_id,id", "id", "json:group_id,id,pack". Empty if not known.
 	ImportIDFormat string
@@ -50,6 +56,8 @@ type EntryOverride struct {
 	SDKService     string
 	ListMethod     string
 	GetMethod      string
+	RESTListPath   string
+	RESTGetPath    string
 	ImportIDFormat string
 }
 
@@ -91,6 +99,8 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 			e.SDKService = meta.SDKService
 			e.ListMethod = meta.ListMethod
 			e.GetMethod = meta.GetMethod
+			e.RESTListPath = meta.RESTListPath
+			e.RESTGetPath = meta.RESTGetPath
 			e.ImportIDFormat = meta.ImportIDFormat
 			e.OneOf = meta.OneOf
 			e.RefreshFromMethod = meta.RefreshFromMethod
@@ -114,6 +124,12 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 			}
 			if o.GetMethod != "" {
 				e.GetMethod = o.GetMethod
+			}
+			if o.RESTListPath != "" {
+				e.RESTListPath = o.RESTListPath
+			}
+			if o.RESTGetPath != "" {
+				e.RESTGetPath = o.RESTGetPath
 			}
 			if o.ImportIDFormat != "" {
 				e.ImportIDFormat = o.ImportIDFormat

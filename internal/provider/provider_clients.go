@@ -2,11 +2,9 @@ package provider
 
 import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 )
 
-// ProviderClients carries both API clients during the Speakeasy migration.
+// ProviderClients carries API clients for provider resources and data sources.
 type ProviderClients struct {
-	Legacy *sdk.CriblIo
-	RC     *restclient.Client
+	RC *restclient.Client
 }

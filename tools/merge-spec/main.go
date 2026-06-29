@@ -136,7 +136,7 @@ func applySchemaImportsFromOverlay(spec *yaml.Node, overlayPath string) error {
 		return fmt.Errorf("target components schemas mapping not found")
 	}
 	for index, item := range imports.Content {
-		sourcePath, schemaNames, err := parseSchemaImport(item)
+		sourcePath, schemaNames, onConflict, err := parseSchemaImport(item)
 		if err != nil {
 			return fmt.Errorf("schema_imports %d: %v", index, err)
 		}
@@ -150,7 +150,7 @@ func applySchemaImportsFromOverlay(spec *yaml.Node, overlayPath string) error {
 		}
 		seen := map[string]bool{}
 		for _, schemaName := range schemaNames {
-			if err := importSchemaRecursive(targetSchemas, sourceSchemas, schemaName, seen); err != nil {
+			if err := importSchemaRecursive(targetSchemas, sourceSchemas, schemaName, seen, onConflict); err != nil {
 				return fmt.Errorf("schema_imports %d: %v", index, err)
 			}
 		}
@@ -158,29 +158,39 @@ func applySchemaImportsFromOverlay(spec *yaml.Node, overlayPath string) error {
 	return nil
 }
 
-func parseSchemaImport(item *yaml.Node) (string, []string, error) {
+func parseSchemaImport(item *yaml.Node) (string, []string, string, error) {
 	if item.Kind != yaml.MappingNode {
-		return "", nil, fmt.Errorf("entry must be a mapping")
+		return "", nil, "", fmt.Errorf("entry must be a mapping")
 	}
 	source, ok := mappingValue(item, "source")
 	if !ok || source.Kind != yaml.ScalarNode || source.Value == "" {
-		return "", nil, fmt.Errorf("source scalar is required")
+		return "", nil, "", fmt.Errorf("source scalar is required")
 	}
 	schemas, ok := mappingValue(item, "schemas")
 	if !ok || schemas.Kind != yaml.SequenceNode {
-		return "", nil, fmt.Errorf("schemas sequence is required")
+		return "", nil, "", fmt.Errorf("schemas sequence is required")
+	}
+	onConflict := ""
+	if value, ok := mappingValue(item, "on_conflict"); ok {
+		if value.Kind != yaml.ScalarNode {
+			return "", nil, "", fmt.Errorf("on_conflict must be a scalar")
+		}
+		onConflict = value.Value
+		if onConflict != "" && onConflict != "keep" && onConflict != "error" {
+			return "", nil, "", fmt.Errorf("on_conflict must be empty, keep, or error")
+		}
 	}
 	names := make([]string, 0, len(schemas.Content))
 	for _, schema := range schemas.Content {
 		if schema.Kind != yaml.ScalarNode || schema.Value == "" {
-			return "", nil, fmt.Errorf("schema names must be non-empty scalars")
+			return "", nil, "", fmt.Errorf("schema names must be non-empty scalars")
 		}
 		names = append(names, schema.Value)
 	}
-	return source.Value, names, nil
+	return source.Value, names, onConflict, nil
 }
 
-func importSchemaRecursive(targetSchemas, sourceSchemas *yaml.Node, schemaName string, seen map[string]bool) error {
+func importSchemaRecursive(targetSchemas, sourceSchemas *yaml.Node, schemaName string, seen map[string]bool, onConflict string) error {
 	if seen[schemaName] {
 		return nil
 	}
@@ -192,6 +202,9 @@ func importSchemaRecursive(targetSchemas, sourceSchemas *yaml.Node, schemaName s
 	}
 	if existing, ok := mappingValue(targetSchemas, schemaName); ok {
 		if !nodesEqual(existing, sourceSchema) {
+			if onConflict == "keep" {
+				return nil
+			}
 			return fmt.Errorf("target schema %q already exists with different content", schemaName)
 		}
 	} else {
@@ -202,7 +215,7 @@ func importSchemaRecursive(targetSchemas, sourceSchemas *yaml.Node, schemaName s
 		if _, ok := mappingValue(sourceSchemas, refName); !ok {
 			continue
 		}
-		if err := importSchemaRecursive(targetSchemas, sourceSchemas, refName, seen); err != nil {
+		if err := importSchemaRecursive(targetSchemas, sourceSchemas, refName, seen, onConflict); err != nil {
 			return err
 		}
 	}
@@ -559,7 +572,7 @@ func shouldPrefixPath(apiPath string) bool {
 		strings.HasPrefix(apiPath, "/routes") ||
 		strings.HasPrefix(apiPath, "/search/") ||
 		strings.HasPrefix(apiPath, "/settings/") ||
-		strings.HasPrefix(apiPath, "/notification") ||
+		strings.HasPrefix(apiPath, "/notifications") ||
 		strings.HasPrefix(apiPath, "/collectors") ||
 		strings.HasPrefix(apiPath, "/executors") ||
 		strings.HasPrefix(apiPath, "/functions") ||
