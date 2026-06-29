@@ -24,15 +24,12 @@ paths:
       summary: Get the health status of the application
       tags:
         - health
-      x-speakeasy-group: health
-      x-speakeasy-name-override: get
   /v1/organizations/{organizationId}/workspaces:
     servers:
       - url: https://gateway.cribl.cloud
     post:
       description: Create a new Workspace in the specified Organization.
       operationId: v1.workspaces.createWorkspace
-      x-speakeasy-entity-operation: Workspace#create
       parameters:
         - name: organizationId
           required: true
@@ -67,7 +64,6 @@ paths:
     get:
       description: Get a list of all Workspaces for the specified Organization.
       operationId: v1.workspaces.listWorkspaces
-      x-speakeasy-entity-operation: Workspaces#read
       parameters:
         - name: organizationId
           required: true
@@ -99,7 +95,6 @@ paths:
     patch:
       description: Update the specified Workspace.
       operationId: v1.workspaces.updateWorkspace
-      x-speakeasy-entity-operation: Workspace#update
       parameters:
         - name: organizationId
           required: true
@@ -134,7 +129,6 @@ paths:
     delete:
       description: Delete the specified Workspace in the specified Organization.
       operationId: v1.workspaces.deleteWorkspace
-      x-speakeasy-entity-operation: Workspace#delete
       parameters:
         - name: organizationId
           required: true
@@ -163,7 +157,6 @@ paths:
     get:
       description: Get the specified Workspace.
       operationId: v1.workspaces.getWorkspace
-      x-speakeasy-entity-operation: Workspace#get
       parameters:
         - name: organizationId
           required: true
@@ -208,7 +201,6 @@ components:
         - ap-southeast-2
         - ca-central-1
       description: AWS region where the workspace is deployed
-      x-speakeasy-unknown-values: allow
     WorkspaceState:
       type: string
       enum:
@@ -218,7 +210,6 @@ components:
         - Failed
         - Deprovisioning
       description: Current state of the workspace
-      x-speakeasy-unknown-values: allow
     WorkspaceSchema:
       type: object
       properties:
@@ -323,7 +314,6 @@ components:
           type: number
           description: Total number of workspaces
           example: 5
-          x-speakeasy-ignore: true
       required:
         - items
         - count
@@ -337,15 +327,3 @@ components:
       required:
         - statusCode
         - message
-x-speakeasy-retries:
-  strategy: backoff
-  backoff:
-    initialInterval: 500
-    maxInterval: 60000
-    maxElapsedTime: 3600000
-    exponent: 1.5
-  statusCodes:
-    - '502'
-    - '503'
-    - '504'
-  retryConnectionErrors: true

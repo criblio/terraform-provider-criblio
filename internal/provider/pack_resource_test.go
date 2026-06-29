@@ -1,13 +1,16 @@
 package provider
 
 import (
+	"context"
 	"encoding/json"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"testing"
 )
 
 func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
-	tags := tagsAPIMap(&packRequestBodyTags{})
+	tags, err := tagsAPIMap(context.Background(), packRequestBodyTagsObjectFromAPI(&packTagsAPI{}))
+	if err != nil {
+		t.Fatalf("build tags API map: %v", err)
+	}
 
 	body, err := json.Marshal(map[string]any{
 		"package": map[string]any{
@@ -25,12 +28,15 @@ func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
 }
 
 func TestTagsAPIMapPreservesConfiguredTags(t *testing.T) {
-	tags := tagsAPIMap(&packRequestBodyTags{
-		DataType:   []types.String{types.StringValue("logs")},
-		Domain:     []types.String{types.StringValue("security")},
-		Streamtags: []types.String{types.StringValue("prod")},
-		Technology: []types.String{types.StringValue("cribl")},
-	})
+	tags, err := tagsAPIMap(context.Background(), packRequestBodyTagsObjectFromAPI(&packTagsAPI{
+		DataType:   []string{"logs"},
+		Domain:     []string{"security"},
+		Streamtags: []string{"prod"},
+		Technology: []string{"cribl"},
+	}))
+	if err != nil {
+		t.Fatalf("build tags API map: %v", err)
+	}
 
 	body, err := json.Marshal(map[string]any{
 		"package": map[string]any{

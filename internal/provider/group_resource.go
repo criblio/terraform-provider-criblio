@@ -13,6 +13,7 @@ import (
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -49,7 +50,7 @@ type GroupResourceModel struct {
 	OnPrem              types.Bool        `tfsdk:"on_prem" json:"onPrem,omitempty"`
 	Product             types.String      `tfsdk:"product" json:"product,omitempty"`
 	Provisioned         types.Bool        `tfsdk:"provisioned" json:"provisioned,omitempty"`
-	Streamtags          []types.String    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Streamtags          types.List        `tfsdk:"streamtags" json:"streamtags,omitempty"`
 	Tags                types.String      `tfsdk:"tags" json:"tags,omitempty"`
 	Type                types.String      `tfsdk:"type" json:"type,omitempty"`
 	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access" json:"workerRemoteAccess,omitempty"`
@@ -382,7 +383,7 @@ func groupAPIFromModel(data *GroupResourceModel) groupAPIModel {
 		Name:                groupStringPointerFromValue(data.Name),
 		OnPrem:              groupBoolPointerFromValue(data.OnPrem),
 		Provisioned:         groupBoolPointerFromValue(data.Provisioned),
-		Streamtags:          groupStringSliceFromValues(data.Streamtags),
+		Streamtags:          groupStringSliceFromList(data.Streamtags),
 		Tags:                groupStringPointerFromValue(data.Tags),
 		Type:                groupStringPointerFromValue(data.Type),
 		WorkerRemoteAccess:  groupBoolPointerFromValue(data.WorkerRemoteAccess),
@@ -427,7 +428,7 @@ func (data *GroupResourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	data.Name = types.StringPointerValue(api.Name)
 	data.OnPrem = types.BoolPointerValue(api.OnPrem)
 	data.Provisioned = types.BoolPointerValue(api.Provisioned)
-	data.Streamtags = groupStringValuesFromSlice(api.Streamtags)
+	data.Streamtags = groupStringListFromSlice(api.Streamtags)
 	data.Tags = types.StringPointerValue(api.Tags)
 	data.Type = types.StringPointerValue(api.Type)
 	data.WorkerRemoteAccess = types.BoolPointerValue(api.WorkerRemoteAccess)
@@ -517,7 +518,7 @@ func preserveGroupPlan(ctx context.Context, data *GroupResourceModel, plan types
 	if !planData.Provisioned.IsNull() && !planData.Provisioned.IsUnknown() {
 		data.Provisioned = planData.Provisioned
 	}
-	if planData.Streamtags != nil {
+	if !planData.Streamtags.IsNull() && !planData.Streamtags.IsUnknown() {
 		data.Streamtags = planData.Streamtags
 	}
 	if !planData.Tags.IsNull() && !planData.Tags.IsUnknown() {
@@ -531,21 +532,30 @@ func preserveGroupPlan(ctx context.Context, data *GroupResourceModel, plan types
 	}
 }
 
-func groupStringValuesFromSlice(values []string) []types.String {
-	out := make([]types.String, 0, len(values))
+func groupStringListFromSlice(values []string) types.List {
+	return types.ListValueMust(types.StringType, groupStringAttrValues(values))
+}
+
+func groupStringAttrValues(values []string) []attr.Value {
+	out := make([]attr.Value, 0, len(values))
 	for _, value := range values {
 		out = append(out, types.StringValue(value))
 	}
 	return out
 }
 
-func groupStringSliceFromValues(values []types.String) []string {
-	if len(values) == 0 {
+func groupStringSliceFromList(value types.List) []string {
+	if value.IsNull() || value.IsUnknown() {
 		return nil
 	}
-	out := make([]string, 0, len(values))
-	for _, value := range values {
-		if !value.IsNull() && !value.IsUnknown() {
+	elements := value.Elements()
+	if len(elements) == 0 {
+		return nil
+	}
+	out := make([]string, 0, len(elements))
+	for _, element := range elements {
+		value, ok := element.(types.String)
+		if ok && !value.IsNull() && !value.IsUnknown() {
 			out = append(out, value.ValueString())
 		}
 	}

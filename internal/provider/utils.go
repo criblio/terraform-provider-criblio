@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httputil"
@@ -15,27 +14,6 @@ import (
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
-
-func debugResponse(response *http.Response) string {
-	if v := response.Request.Header.Get("Authorization"); v != "" {
-		response.Request.Header.Set("Authorization", "(sensitive)")
-	}
-	dumpReq, err := httputil.DumpRequest(response.Request, true)
-	if err != nil {
-		dumpReq, err = httputil.DumpRequest(response.Request, false)
-		if err != nil {
-			return err.Error()
-		}
-	}
-	dumpRes, err := httputil.DumpResponse(response, true)
-	if err != nil {
-		dumpRes, err = httputil.DumpResponse(response, false)
-		if err != nil {
-			return err.Error()
-		}
-	}
-	return fmt.Sprintf("**Request**:\n%s\n**Response**:\n%s", string(dumpReq), string(dumpRes))
-}
 
 // Configurable options for the provider HTTP transport.
 type ProviderHTTPTransportOpts struct {

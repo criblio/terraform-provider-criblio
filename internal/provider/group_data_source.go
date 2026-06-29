@@ -36,7 +36,7 @@ type GroupDataSourceModel struct {
 	Name                types.String      `tfsdk:"name"`
 	OnPrem              types.Bool        `tfsdk:"on_prem"`
 	Provisioned         types.Bool        `tfsdk:"provisioned"`
-	Streamtags          []types.String    `tfsdk:"streamtags"`
+	Streamtags          types.List        `tfsdk:"streamtags"`
 	Tags                types.String      `tfsdk:"tags"`
 	Type                types.String      `tfsdk:"type"`
 	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access"`
@@ -193,7 +193,7 @@ func (data *GroupDataSourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	data.Name = types.StringPointerValue(api.Name)
 	data.OnPrem = types.BoolPointerValue(api.OnPrem)
 	data.Provisioned = types.BoolPointerValue(api.Provisioned)
-	data.Streamtags = groupStringValuesFromSlice(api.Streamtags)
+	data.Streamtags = groupStringListFromSlice(api.Streamtags)
 	data.Tags = types.StringPointerValue(api.Tags)
 	data.Type = types.StringPointerValue(api.Type)
 	data.WorkerRemoteAccess = types.BoolPointerValue(api.WorkerRemoteAccess)
