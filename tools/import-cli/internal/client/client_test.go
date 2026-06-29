@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
 	"github.com/spf13/viper"
 )
@@ -91,16 +92,15 @@ func TestNewFromConfig_onPremEnvSet(t *testing.T) {
 	}
 }
 
-func TestBulkExporterUserAgent_format(t *testing.T) {
+func TestBulkExporterUserAgentMatchesProvider(t *testing.T) {
 	ua := BulkExporterUserAgent()
-	if !strings.HasPrefix(ua, "speakeasy-sdk/bulk-exporter ") {
-		t.Errorf("User-Agent prefix: got %q", ua)
+	if ua != useragent.TerraformProvider {
+		t.Errorf("User-Agent = %q, want %q", ua, useragent.TerraformProvider)
 	}
-	if !strings.Contains(ua, speakeasyGeneratorVersion) {
-		t.Errorf("User-Agent should contain generator version %q: %q", speakeasyGeneratorVersion, ua)
+	if !strings.Contains(ua, "speakeasy-sdk/terraform") {
+		t.Errorf("User-Agent should retain Speakeasy tracking token, got %q", ua)
 	}
-	const wantSuffix = "github.com/criblio/terraform-provider-criblio/tools/import-cli"
-	if !strings.HasSuffix(ua, wantSuffix) {
-		t.Errorf("User-Agent suffix: got %q want suffix %q", ua, wantSuffix)
+	if strings.Contains(ua, "/internal/sdk") {
+		t.Errorf("User-Agent should not reference removed internal SDK package, got %q", ua)
 	}
 }

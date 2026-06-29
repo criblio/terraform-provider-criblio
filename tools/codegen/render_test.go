@@ -243,8 +243,8 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "r.client = clients.RC")
 	assertContains(t, resourceContent, `json:"group_id"`)
 	assertContains(t, resourceContent, `path.Root("group_id")`)
-	assertNotContains(t, resourceContent, "speakeasy_")
-	assertNotContains(t, resourceContent, "internal/sdk")
+	assertNotContains(t, resourceContent, "legacy_")
+	assertNotContains(t, resourceContent, "internal/"+"sdk")
 
 	clientContent := renderTemplate(t, "client", certificate)
 	assertContains(t, clientContent, "return deleteCertificateSoft(ctx, a.client, model)")

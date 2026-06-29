@@ -22,7 +22,7 @@ type Entry struct {
 	// ModelTypeName is the Go type name of the resource's state model (e.g. SourceResourceModel).
 	// Used for reflection-based conversion and HCL generation.
 	ModelTypeName string
-	// SDKService is the name of the service field on sdk.CriblIo (e.g. "Inputs", "Pipelines").
+	// SDKService is the name of the service field on REST discovery (e.g. "Inputs", "Pipelines").
 	// Empty if not known; used by discovery to call List*.
 	SDKService string
 	// ListMethod is the SDK method name to list resources (e.g. "ListInput", "ListPipeline").

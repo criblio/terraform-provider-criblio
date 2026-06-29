@@ -73,14 +73,6 @@ jobs:
           fi
           cd ../..
 
-          echo "Checking path internal/sdk/internal/hooks"
-          cd internal/sdk/internal/hooks
-          if [[ `gofmt -l .` ]]; then 
-            gofmt -l . && exit 1
-          else
-            echo "fmt check passed"
-          fi
-
 
   acceptance_test_cloud:
     runs-on: ubuntu-latest

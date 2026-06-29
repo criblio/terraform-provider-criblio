@@ -12,6 +12,8 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
 
 type testItem struct {
@@ -25,6 +27,9 @@ func TestMethods(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("Authorization") != "Bearer test-token" {
 			t.Errorf("Authorization = %q, expected Bearer test-token", r.Header.Get("Authorization"))
+		}
+		if r.Header.Get("User-Agent") != useragent.TerraformProvider {
+			t.Errorf("User-Agent = %q, expected %q", r.Header.Get("User-Agent"), useragent.TerraformProvider)
 		}
 
 		switch r.Method {
@@ -435,6 +440,28 @@ func TestAuthenticationRequired(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "authentication requires bearer token or credentials") {
 		t.Fatalf("error = %q, expected authentication message", err.Error())
+	}
+}
+
+func TestUserAgentOverride(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("User-Agent") != "custom-agent" {
+			t.Errorf("User-Agent = %q, expected custom-agent", r.Header.Get("User-Agent"))
+		}
+		writeJSON(t, w, testItem{ID: "agent", Name: "custom"})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:     server.URL,
+		BearerToken: "test-token",
+		UserAgent:   "custom-agent",
+	})
+
+	if _, err := Get[testItem](context.Background(), client, "/system/certificates"); err != nil {
+		t.Fatalf("Get returned error: %v", err)
 	}
 }
 

@@ -9,6 +9,8 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
 
 func TestGetTokenCloud(t *testing.T) {
@@ -16,6 +18,7 @@ func TestGetTokenCloud(t *testing.T) {
 	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
 
 	var receivedContentType string
+	var receivedUserAgent string
 	var receivedBody struct {
 		GrantType    string `json:"grant_type"`
 		ClientID     string `json:"client_id"`
@@ -28,6 +31,7 @@ func TestGetTokenCloud(t *testing.T) {
 			t.Errorf("unexpected path %q", r.URL.Path)
 		}
 		receivedContentType = r.Header.Get("Content-Type")
+		receivedUserAgent = r.Header.Get("User-Agent")
 		if err := json.NewDecoder(r.Body).Decode(&receivedBody); err != nil {
 			t.Errorf("failed to decode request body: %v", err)
 		}
@@ -49,6 +53,9 @@ func TestGetTokenCloud(t *testing.T) {
 	}
 	if receivedContentType != "application/json" {
 		t.Errorf("content type = %q, expected application/json", receivedContentType)
+	}
+	if receivedUserAgent != useragent.TerraformProvider {
+		t.Errorf("User-Agent = %q, expected %q", receivedUserAgent, useragent.TerraformProvider)
 	}
 	if receivedBody.GrantType != "client_credentials" {
 		t.Errorf("grant_type = %q, expected client_credentials", receivedBody.GrantType)

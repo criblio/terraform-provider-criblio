@@ -2879,7 +2879,6 @@ actions:
               - Raw
               - RenderedText
             description: Content format for delivered events.
-            x-speakeasy-unknown-values: allow
           heartbeatInterval:
             type: number
             minimum: 1
@@ -2920,7 +2919,6 @@ actions:
             enum:
               - simple
               - xml
-            x-speakeasy-unknown-values: allow
           queries:
             type: array
             description: Path and XPath selector entries when using simple mode.

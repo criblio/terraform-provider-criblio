@@ -3,15 +3,13 @@ package provider
 import (
 	"context"
 	"fmt"
-	"net/url"
-	"strings"
-
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"net/url"
+	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -29,11 +27,11 @@ type PackDataSource struct {
 
 // PackDataSourceModel describes the data model.
 type PackDataSourceModel struct {
-	Disabled types.Bool                `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	GroupID  types.String              `tfsdk:"group_id"`
-	ID       types.String              `tfsdk:"id"`
-	Items    []tfTypes.PackInstallInfo `tfsdk:"items"`
-	With     types.String              `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
+	Disabled types.Bool        `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	GroupID  types.String      `tfsdk:"group_id"`
+	ID       types.String      `tfsdk:"id"`
+	Items    []packInstallInfo `tfsdk:"items"`
+	With     types.String      `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
 // Metadata returns the data source type name.
@@ -185,7 +183,7 @@ func (r *PackDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("unexpected response from API", "empty response body")
 		return
 	}
-	data.Items = []tfTypes.PackInstallInfo{packInstallInfoFromAPI(apiModel)}
+	data.Items = []packInstallInfo{packInstallInfoFromAPI(apiModel)}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

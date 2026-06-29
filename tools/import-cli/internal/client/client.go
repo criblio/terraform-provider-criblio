@@ -7,16 +7,13 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 )
 
-// Client carries the REST client used by migrated import-cli paths and the
-// legacy SDK client used by paths that have not been ported yet.
+// Client carries the REST client used by import-cli discovery and export paths.
 type Client struct {
 	REST *restclient.Client
-	SDK  *sdk.CriblIo
 }
 
 // NewFromConfig builds Cribl API clients from the resolved config.
@@ -26,18 +23,16 @@ func NewFromConfig(cfg *config.Config) (*Client, error) {
 	applyConfigToEnv(cfg)
 	transport := &custom.SearchListTransport{Base: http.DefaultTransport}
 	httpClient := &http.Client{Transport: transport}
+	userAgent := BulkExporterUserAgent()
 
 	restClient := restclient.New(restclient.Config{
 		Credentials: credentialsFromConfig(cfg),
 		BearerToken: cfg.Get(config.KeyBearerToken),
 		HTTPClient:  httpClient,
+		UserAgent:   userAgent,
 	})
 
-	sdkClient := sdk.New(
-		sdk.WithClient(&http.Client{Transport: transport}),
-		sdk.WithUserAgent(BulkExporterUserAgent()),
-	)
-	return &Client{REST: restClient, SDK: sdkClient}, nil
+	return &Client{REST: restClient}, nil
 }
 
 func credentialsFromConfig(cfg *config.Config) *auth.CriblConfig {

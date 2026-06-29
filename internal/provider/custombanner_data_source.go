@@ -3,8 +3,6 @@ package provider
 import (
 	"context"
 	"fmt"
-
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -23,7 +21,7 @@ type CustomBannerDataSource struct {
 }
 
 type CustomBannerDataSourceModel struct {
-	Items []tfTypes.BannerMessage `tfsdk:"items"`
+	Items []bannerMessage `tfsdk:"items"`
 }
 
 func (r *CustomBannerDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -104,7 +102,7 @@ func (r *CustomBannerDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 	if items != nil {
-		data.Items = make([]tfTypes.BannerMessage, 0, len(*items))
+		data.Items = make([]bannerMessage, 0, len(*items))
 		for index := range *items {
 			data.Items = append(data.Items, bannerMessageFromAPI(&(*items)[index]))
 		}

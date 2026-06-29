@@ -10,11 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	cribl_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
-	cribl_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	cribl_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
+	cribl_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -43,24 +43,24 @@ type PackResource struct {
 
 // PackResourceModel describes the resource data model.
 type PackResourceModel struct {
-	AllowCustomFunctions types.Bool                   `tfsdk:"allow_custom_functions"`
-	Author               types.String                 `tfsdk:"author"`
-	Description          types.String                 `tfsdk:"description"`
-	Disabled             types.Bool                   `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
-	DisplayName          types.String                 `tfsdk:"display_name"`
-	Exports              []types.String               `tfsdk:"exports"`
-	Filename             types.String                 `queryParam:"style=form,explode=true,name=filename" tfsdk:"filename"`
-	Force                types.Bool                   `tfsdk:"force"`
-	GroupID              types.String                 `tfsdk:"group_id"`
-	ID                   types.String                 `tfsdk:"id"`
-	Inputs               types.Float64                `tfsdk:"inputs"`
-	Items                []tfTypes.PackInstallInfo    `tfsdk:"items"`
-	MinLogStreamVersion  types.String                 `tfsdk:"min_log_stream_version"`
-	Outputs              types.Float64                `tfsdk:"outputs"`
-	Source               types.String                 `tfsdk:"source"`
-	Spec                 types.String                 `tfsdk:"spec"`
-	Tags                 *tfTypes.PackRequestBodyTags `tfsdk:"tags"`
-	Version              types.String                 `tfsdk:"version"`
+	AllowCustomFunctions types.Bool        `tfsdk:"allow_custom_functions"`
+	Author               types.String      `tfsdk:"author"`
+	Description          types.String      `tfsdk:"description"`
+	Disabled             types.Bool        `queryParam:"style=form,explode=true,name=disabled" tfsdk:"disabled"`
+	DisplayName          types.String      `tfsdk:"display_name"`
+	Exports              []types.String    `tfsdk:"exports"`
+	Filename             types.String      `queryParam:"style=form,explode=true,name=filename" tfsdk:"filename"`
+	Force                types.Bool        `tfsdk:"force"`
+	GroupID              types.String      `tfsdk:"group_id"`
+	ID                   types.String      `tfsdk:"id"`
+	Inputs               types.Float64     `tfsdk:"inputs"`
+	Items                []packInstallInfo `tfsdk:"items"`
+	MinLogStreamVersion  types.String      `tfsdk:"min_log_stream_version"`
+	Outputs              types.Float64     `tfsdk:"outputs"`
+	Source               types.String      `tfsdk:"source"`
+	Spec                 types.String      `tfsdk:"spec"`
+	Tags                 types.Object      `tfsdk:"tags"`
+	Version              types.String      `tfsdk:"version"`
 }
 
 func (r *PackResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -417,11 +417,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	preservePackMetadataFromConfig(ctx, data, plan)
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preservePackPlan(ctx, data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -471,7 +467,10 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	merge(ctx, req, resp, &data)
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -515,11 +514,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	preservePackMetadataFromConfig(ctx, data, plan)
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preservePackPlan(ctx, data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -562,7 +557,11 @@ func (r *PackResource) createPack(ctx context.Context, data *PackResourceModel) 
 	if encoded := query.Encode(); encoded != "" {
 		path += "?" + encoded
 	}
-	return restclient.Post[packRequestBody, packAPIModel](ctx, r.client, path, packRequestFromModel(data))
+	body, err := packRequestFromModel(ctx, data)
+	if err != nil {
+		return nil, err
+	}
+	return restclient.Post[packRequestBody, packAPIModel](ctx, r.client, path, body)
 }
 
 func (r *PackResource) refreshPackState(ctx context.Context, data *PackResourceModel) error {
@@ -745,9 +744,13 @@ func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID st
 	} else if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
 		version = data.Items[0].Version.ValueString()
 	}
+	tags, err := tagsAPIMap(ctx, data.Tags)
+	if err != nil {
+		return err
+	}
 	packageObj := map[string]any{
 		"displayName": displayName,
-		"tags":        tagsAPIMap(data.Tags),
+		"tags":        tags,
 		"version":     version,
 	}
 	if !data.Author.IsNull() && !data.Author.IsUnknown() {
@@ -762,7 +765,11 @@ func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID st
 	return restclient.PatchNoResponse(ctx, r.client, fmt.Sprintf("/m/%s/p/%s/pack/settings", url.PathEscape(groupID), url.PathEscape(packID)), map[string]any{"package": packageObj})
 }
 
-func packRequestFromModel(data *PackResourceModel) packRequestBody {
+func packRequestFromModel(ctx context.Context, data *PackResourceModel) (packRequestBody, error) {
+	tags, err := packTagsAPIFromTF(ctx, data.Tags)
+	if err != nil {
+		return packRequestBody{}, err
+	}
 	return packRequestBody{
 		AllowCustomFunctions: boolPointerFromValue(data.AllowCustomFunctions),
 		Author:               stringPointerFromValue(data.Author),
@@ -776,9 +783,9 @@ func packRequestFromModel(data *PackResourceModel) packRequestBody {
 		Outputs:              float64PointerFromValue(data.Outputs),
 		Source:               stringPointerFromValue(data.Source),
 		Spec:                 stringPointerFromValue(data.Spec),
-		Tags:                 packTagsAPIFromTF(data.Tags),
+		Tags:                 tags,
 		Version:              stringPointerFromValue(data.Version),
-	}
+	}, nil
 }
 
 func (data *PackResourceModel) applyPackAPIModel(api *packAPIModel) {
@@ -786,27 +793,18 @@ func (data *PackResourceModel) applyPackAPIModel(api *packAPIModel) {
 		return
 	}
 	item := packInstallInfoFromAPI(api)
-	data.Items = []tfTypes.PackInstallInfo{item}
+	data.Items = []packInstallInfo{item}
 	data.Author = item.Author
 	data.Description = item.Description
 	data.DisplayName = item.DisplayName
 	data.MinLogStreamVersion = item.MinLogStreamVersion
 	data.Source = item.Source
 	data.Version = item.Version
-	if item.Tags != nil {
-		data.Tags = &tfTypes.PackRequestBodyTags{
-			DataType:   item.Tags.DataType,
-			Domain:     item.Tags.Domain,
-			Streamtags: item.Tags.Streamtags,
-			Technology: item.Tags.Technology,
-		}
-	} else {
-		data.Tags = nil
-	}
+	data.Tags = packRequestBodyTagsObjectFromAPI(api.Tags)
 }
 
-func packInstallInfoFromAPI(api *packAPIModel) tfTypes.PackInstallInfo {
-	item := tfTypes.PackInstallInfo{
+func packInstallInfoFromAPI(api *packAPIModel) packInstallInfo {
+	item := packInstallInfo{
 		Author:              types.StringPointerValue(api.Author),
 		Description:         types.StringPointerValue(api.Description),
 		DisplayName:         types.StringPointerValue(api.DisplayName),
@@ -840,11 +838,11 @@ func normalizedSettings(settings map[string]any) map[string]jsontypes.Normalized
 	return result
 }
 
-func packInstallTagsFromAPI(tags *packTagsAPI) *tfTypes.PackInstallInfoTags {
+func packInstallTagsFromAPI(tags *packTagsAPI) *packInstallInfoTags {
 	if tags == nil {
 		return nil
 	}
-	return &tfTypes.PackInstallInfoTags{
+	return &packInstallInfoTags{
 		DataType:   stringValuesFromSlice(tags.DataType),
 		Domain:     stringValuesFromSlice(tags.Domain),
 		Streamtags: stringValuesFromSlice(tags.Streamtags),
@@ -852,37 +850,75 @@ func packInstallTagsFromAPI(tags *packTagsAPI) *tfTypes.PackInstallInfoTags {
 	}
 }
 
-func packTagsAPIFromTF(tags *tfTypes.PackRequestBodyTags) *packTagsAPI {
-	if tags == nil {
-		return nil
-	}
-	return &packTagsAPI{
-		DataType:   stringSliceFromValues(tags.DataType),
-		Domain:     stringSliceFromValues(tags.Domain),
-		Streamtags: stringSliceFromValues(tags.Streamtags),
-		Technology: stringSliceFromValues(tags.Technology),
+func packRequestBodyTagsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"data_type":  types.ListType{ElemType: types.StringType},
+		"domain":     types.ListType{ElemType: types.StringType},
+		"streamtags": types.ListType{ElemType: types.StringType},
+		"technology": types.ListType{ElemType: types.StringType},
 	}
 }
 
-func tagsAPIMap(tags *tfTypes.PackRequestBodyTags) map[string]any {
+func packRequestBodyTagsObjectFromAPI(tags *packTagsAPI) types.Object {
+	if tags == nil {
+		return types.ObjectNull(packRequestBodyTagsAttrTypes())
+	}
+	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
+		"data_type":  types.ListValueMust(types.StringType, stringAttrValues(tags.DataType)),
+		"domain":     types.ListValueMust(types.StringType, stringAttrValues(tags.Domain)),
+		"streamtags": types.ListValueMust(types.StringType, stringAttrValues(tags.Streamtags)),
+		"technology": types.ListValueMust(types.StringType, stringAttrValues(tags.Technology)),
+	})
+}
+
+func packTagsAPIFromTF(ctx context.Context, tags types.Object) (*packTagsAPI, error) {
+	if tags.IsNull() || tags.IsUnknown() {
+		return nil, nil
+	}
+	var model packRequestBodyTags
+	diags := tags.As(ctx, &model, basetypes.ObjectAsOptions{})
+	if diags.HasError() {
+		return nil, fmt.Errorf("convert pack tags: %s", diags.Errors()[0].Summary())
+	}
+	return &packTagsAPI{
+		DataType:   stringSliceFromList(model.DataType),
+		Domain:     stringSliceFromList(model.Domain),
+		Streamtags: stringSliceFromList(model.Streamtags),
+		Technology: stringSliceFromList(model.Technology),
+	}, nil
+}
+
+func tagsAPIMap(ctx context.Context, tags types.Object) (map[string]any, error) {
 	out := map[string]any{
 		"dataType":   []string{},
 		"domain":     []string{},
 		"streamtags": []string{},
 		"technology": []string{},
 	}
-	if tags == nil {
-		return out
+	model, err := packTagsAPIFromTF(ctx, tags)
+	if err != nil {
+		return nil, err
 	}
-	out["dataType"] = nonNilStringSliceFromValues(tags.DataType)
-	out["domain"] = nonNilStringSliceFromValues(tags.Domain)
-	out["streamtags"] = nonNilStringSliceFromValues(tags.Streamtags)
-	out["technology"] = nonNilStringSliceFromValues(tags.Technology)
-	return out
+	if model == nil {
+		return out, nil
+	}
+	out["dataType"] = nonNilStringSlice(model.DataType)
+	out["domain"] = nonNilStringSlice(model.Domain)
+	out["streamtags"] = nonNilStringSlice(model.Streamtags)
+	out["technology"] = nonNilStringSlice(model.Technology)
+	return out, nil
 }
 
 func stringValuesFromSlice(values []string) []types.String {
 	out := make([]types.String, 0, len(values))
+	for _, value := range values {
+		out = append(out, types.StringValue(value))
+	}
+	return out
+}
+
+func stringAttrValues(values []string) []attr.Value {
+	out := make([]attr.Value, 0, len(values))
 	for _, value := range values {
 		out = append(out, types.StringValue(value))
 	}
@@ -902,12 +938,30 @@ func stringSliceFromValues(values []types.String) []string {
 	return out
 }
 
-func nonNilStringSliceFromValues(values []types.String) []string {
-	out := stringSliceFromValues(values)
-	if out == nil {
-		return []string{}
+func stringSliceFromList(value types.List) []string {
+	if value.IsNull() || value.IsUnknown() {
+		return nil
+	}
+	elements := value.Elements()
+	if len(elements) == 0 {
+		return nil
+	}
+	out := make([]string, 0, len(elements))
+	for _, element := range elements {
+		value, ok := element.(types.String)
+		if !ok || value.IsNull() || value.IsUnknown() {
+			continue
+		}
+		out = append(out, value.ValueString())
 	}
 	return out
+}
+
+func nonNilStringSlice(values []string) []string {
+	if values == nil {
+		return []string{}
+	}
+	return values
 }
 
 func stringPointerFromValue(value types.String) *string {
@@ -1000,19 +1054,64 @@ func shortNameForPatch(source string) string {
 	return filepath.Base(source)
 }
 
-func preservePackMetadataFromConfig(ctx context.Context, data *PackResourceModel, plan types.Object) {
+func preservePackPlan(ctx context.Context, data *PackResourceModel, plan types.Object) {
 	var planData PackResourceModel
-	if diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true, UnhandledUnknownAsEmpty: true}); diags.HasError() {
+	if diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	}); diags.HasError() {
 		return
+	}
+	if !planData.AllowCustomFunctions.IsNull() && !planData.AllowCustomFunctions.IsUnknown() {
+		data.AllowCustomFunctions = planData.AllowCustomFunctions
 	}
 	if !planData.Description.IsNull() && !planData.Description.IsUnknown() {
 		data.Description = planData.Description
+	}
+	if !planData.Disabled.IsNull() && !planData.Disabled.IsUnknown() {
+		data.Disabled = planData.Disabled
 	}
 	if !planData.Author.IsNull() && !planData.Author.IsUnknown() {
 		data.Author = planData.Author
 	}
 	if !planData.DisplayName.IsNull() && !planData.DisplayName.IsUnknown() {
 		data.DisplayName = planData.DisplayName
+	}
+	if planData.Exports != nil {
+		data.Exports = planData.Exports
+	}
+	if !planData.Filename.IsNull() && !planData.Filename.IsUnknown() {
+		data.Filename = planData.Filename
+	}
+	if !planData.Force.IsNull() && !planData.Force.IsUnknown() {
+		data.Force = planData.Force
+	}
+	if !planData.GroupID.IsNull() && !planData.GroupID.IsUnknown() {
+		data.GroupID = planData.GroupID
+	}
+	if !planData.ID.IsNull() && !planData.ID.IsUnknown() {
+		data.ID = planData.ID
+	}
+	if !planData.Inputs.IsNull() && !planData.Inputs.IsUnknown() {
+		data.Inputs = planData.Inputs
+	}
+	if planData.Items != nil {
+		data.Items = planData.Items
+	}
+	if !planData.MinLogStreamVersion.IsNull() && !planData.MinLogStreamVersion.IsUnknown() {
+		data.MinLogStreamVersion = planData.MinLogStreamVersion
+	}
+	if !planData.Outputs.IsNull() && !planData.Outputs.IsUnknown() {
+		data.Outputs = planData.Outputs
+	}
+	if !planData.Source.IsNull() && !planData.Source.IsUnknown() {
+		data.Source = planData.Source
+	}
+	if !planData.Spec.IsNull() && !planData.Spec.IsUnknown() {
+		data.Spec = planData.Spec
+	}
+	if !planData.Tags.IsNull() && !planData.Tags.IsUnknown() {
+		data.Tags = planData.Tags
 	}
 	if !planData.Version.IsNull() && !planData.Version.IsUnknown() {
 		data.Version = planData.Version

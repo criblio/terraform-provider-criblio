@@ -247,6 +247,7 @@ func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {
 	opts := hclOptionsForType("criblio_certificate", registry.Entry{})
 	require.NotNil(t, opts)
 
+	assert.True(t, opts.SkipAttributes["cert_expiry_date"])
 	assert.True(t, opts.SkipAttributes["in_use"])
 	assert.True(t, opts.SkipAttributes["passphrase"])
 	assert.False(t, opts.SkipAttributes["ca"])
@@ -304,9 +305,13 @@ func TestSkipResourceByID(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"id": "in_syslog"}))
 		assert.True(t, skipResourceByID("criblio_group", map[string]string{"group_id": "search", "product": "stream"}))
 	})
-	t.Run("skip when id equals group_id", func(t *testing.T) {
+	t.Run("skip non singleton resource when id equals group_id", func(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default"}
-		assert.True(t, skipResourceByID("criblio_group", idMap))
+		assert.True(t, skipResourceByID("criblio_source", idMap))
+	})
+	t.Run("not skip criblio_group when id equals group_id", func(t *testing.T) {
+		idMap := map[string]string{"group_id": "default", "id": "default", "product": "stream"}
+		assert.False(t, skipResourceByID("criblio_group", idMap))
 	})
 	t.Run("skip criblio_pack_lookups when id starts with cribl.", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_pack_lookups", map[string]string{"id": "cribl.something"}))

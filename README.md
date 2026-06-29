@@ -448,7 +448,6 @@ provider_installation {
 ```
 <!-- End Testing the provider locally [usage] -->
 
-<!-- Placeholder for Future Speakeasy SDK Sections -->
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
