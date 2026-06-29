@@ -990,11 +990,22 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 				},
 				NestedAttrTypes: "PipelineGroupsAttrTypes",
 			},
+			{
+				APIName:       "params",
+				TerraformName: "params",
+				GoName:        "Params",
+				Type:          "object",
+				CustomType:    "jsontypes.NormalizedType{}",
+				ObjectAsJSON:  true,
+				ValidJSON:     true,
+				Description:   "Parameters as JSON.",
+			},
 		},
 	}
 
 	resourceContent := renderTemplate(t, "resource", resource)
 	assertContains(t, resourceContent, `"conf": schema.StringAttribute{`)
+	assertContains(t, resourceContent, `"params": schema.StringAttribute{`)
 	assertContains(t, resourceContent, `CustomType: jsontypes.NormalizedType{},`)
 	assertContains(t, resourceContent, `PlanModifiers: pipelineConfPlanModifiers(),`)
 	assertContains(t, resourceContent, `Validators: []validator.String{`)
@@ -1004,6 +1015,8 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 	assertContains(t, resourceContent, `"groups": schema.MapNestedAttribute{`)
 	assertContains(t, resourceContent, `state.Groups = types.MapNull(types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()})`)
 	assertNotContains(t, resourceContent, `state.Groups = types.MapNull(types.StringType)`)
+	assertNotContains(t, resourceContent, `state.Params = types.MapNull(types.StringType)`)
+	assertNotContains(t, resourceContent, `state.Params.ElementType(context.Background())`)
 	assertContains(t, resourceContent, `PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()})`)
 	assertNotContains(t, resourceContent, `ElementType:   types.StringType,`)
 

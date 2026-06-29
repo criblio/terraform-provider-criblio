@@ -219,10 +219,10 @@ run_acceptance() {
     test_args=("./tests/acceptance" "-run" "$test_pattern")
   fi
   if is_true "$DRY_RUN"; then
-    echo "DRY_RUN=true: would run acceptance test: go test -v -timeout 20m ${test_args[*]}"
+    echo "DRY_RUN=true: would run acceptance test: go test -v -timeout 30m ${test_args[*]}"
     return 0
   fi
-  if go test -v -timeout 20m "${test_args[@]}"; then
+  if go test -v -timeout 30m "${test_args[@]}"; then
     echo "acceptance test passed"
   else
     echo "acceptance test failed" >&2

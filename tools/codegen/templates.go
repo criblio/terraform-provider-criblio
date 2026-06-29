@@ -1894,7 +1894,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
 		state.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
-{{- else if eq .Type "object" }}
+{{- else if and (eq .Type "object") (not (objectAsJSON .)) }}
 	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 		state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal({{ listElementAttrType . }}) {
