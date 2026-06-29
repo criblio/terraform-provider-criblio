@@ -2,17 +2,15 @@ package discovery
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
@@ -20,9 +18,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// criblMockServer starts an httptest.Server that returns minimal valid responses for discovery:
-// POST /oauth/token returns 200 with a token so SDK auth succeeds; groups API returns one group;
-// other GETs return {"items":[]}. Use with sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client())).
 func criblMockServer(t *testing.T) *httptest.Server {
 	t.Helper()
 	groupsJSON := []byte(`{"items":[{"id":"default","name":"default"}]}`)
@@ -55,14 +50,13 @@ func criblMockClient(server *httptest.Server) *importclient.Client {
 			BearerToken: "mock",
 			HTTPClient:  server.Client(),
 		}),
-		SDK: sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client())),
 	}
 }
 
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
-	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock")
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := criblMockClient(server)
@@ -70,17 +64,15 @@ func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	results, err := Discover(ctx, client, reg, nil, nil, nil, false)
 	require.NoError(t, err)
 
-	// Every registry entry gets a result (types without list method show count 0).
 	assert.Len(t, results, reg.Len(), "Discover should return one result per registry entry")
 	discoverable := 0
 	for _, e := range reg.Entries() {
-		if e.SDKService != "" && e.ListMethod != "" {
+		if e.RESTListPath != "" {
 			discoverable++
 		}
 	}
-	assert.GreaterOrEqual(t, discoverable, 5, "registry should have several types with list method")
+	assert.GreaterOrEqual(t, discoverable, 5, "registry should have several REST list paths")
 
-	// Each result has the type name set
 	typeNames := make(map[string]struct{})
 	for _, r := range results {
 		assert.NotEmpty(t, r.TypeName, "result should have TypeName")
@@ -92,12 +84,11 @@ func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
-	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock")
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := criblMockClient(server)
 
-	// Only criblio_source and criblio_pipeline
 	results, err := Discover(ctx, client, reg, []string{"criblio_source", "criblio_pipeline"}, nil, nil, false)
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
@@ -108,7 +99,6 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	assert.True(t, names["criblio_source"])
 	assert.True(t, names["criblio_pipeline"])
 
-	// Exclude criblio_source
 	results, err = Discover(ctx, client, reg, nil, []string{"criblio_source"}, nil, false)
 	require.NoError(t, err)
 	for _, r := range results {
@@ -116,10 +106,10 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	}
 }
 
-func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
+func TestDiscover_RESTErrorsSurfacedWithResourceContext(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
-	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock")
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := criblMockClient(server)
@@ -129,7 +119,6 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 	require.Len(t, results, 1)
 	r := results[0]
 	assert.Equal(t, "criblio_source", r.TypeName)
-	// SDK should fail (e.g. connection or auth), and error must include resource context
 	if r.Err != nil {
 		assert.Contains(t, r.Err.Error(), "criblio_source", "error should include resource type name for context")
 	}
@@ -138,12 +127,11 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
-	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock")
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := criblMockClient(server)
 
-	// Include only a type that doesn't exist
 	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil, false)
 	require.NoError(t, err)
 	assert.Empty(t, results)
@@ -165,130 +153,38 @@ func TestSkipGroupScopedSingleton(t *testing.T) {
 	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
 }
 
-// TestIdentifiersFromItems_skipsLibCribl verifies that list items with lib="cribl" (built-in)
-// are filtered out and not returned in the identifier maps.
-func TestIdentifiersFromItems_skipsLibCribl(t *testing.T) {
+func TestIdentifiersFromRawItems_skipsLibCribl(t *testing.T) {
 	reg := mustBuildRegistry(t, context.Background())
 	e, ok := reg.ByTypeName("criblio_parser_lib_entry")
 	require.True(t, ok, "criblio_parser_lib_entry must be in registry")
 
-	cribl := "cribl"
-	criblio := "criblio"
-	items := []shared.ParserLibEntry{
-		{ID: "builtin-one", Lib: &cribl},
-		{ID: "user-one", Lib: &criblio},
-		{ID: "builtin-two", Lib: &cribl},
+	items := []json.RawMessage{
+		[]byte(`{"id":"builtin-one","lib":"cribl"}`),
+		[]byte(`{"id":"user-one","lib":"criblio"}`),
+		[]byte(`{"id":"builtin-two","lib":"cribl"}`),
 	}
-	itemsVal := reflect.ValueOf(items)
-	ids, err := identifiersFromItems(itemsVal, "default", e)
+	ids, err := identifiersFromRawItems(items, map[string]string{"group_id": "default"}, e)
 	require.NoError(t, err)
-	// Only user-one should appear; builtin-one and builtin-two have lib=cribl.
 	assert.Len(t, ids, 1)
 	assert.Equal(t, "user-one", ids[0]["id"])
 	assert.Equal(t, "default", ids[0]["group_id"])
 }
 
-func TestGetIDFromItem_handlesWrappedMapAndStructFields(t *testing.T) {
-	items := []any{
-		map[string]any{"id": "from-map"},
-		idFieldOnly{ID: "from-field"},
-		keyIDFieldOnly{KeyID: "from-key-field"},
-		map[string]any{"name": "from-map-name"},
-		nameMethodOnly{Name: "from-method-name"},
-	}
-
-	assert.Equal(t, "from-map", getIDFromItem(reflect.ValueOf(items).Index(0), ""))
-	assert.Equal(t, "from-field", getIDFromItem(reflect.ValueOf(items).Index(1), ""))
-	assert.Equal(t, "from-key-field", getIDFromItem(reflect.ValueOf(items).Index(2), ""))
-	assert.Equal(t, "from-map-name", getIDFromItem(reflect.ValueOf(items).Index(3), ""))
-	assert.Equal(t, "from-method-name", getIDFromItem(reflect.ValueOf(items).Index(4), ""))
-}
-
-func TestGetIDFromItem_handlesUnionGetNameFallback(t *testing.T) {
-	name := "from-name"
-	item := nameOnlyUnion{NameOnly: &nameOnly{Name: &name}}
-
-	assert.Equal(t, "from-name", getIDFromItem(reflect.ValueOf(item), ""))
-}
-
-// TestRegistryListMethodsExistOnSDK ensures every registry entry that has SDKService and
-// ListMethod set refers to a real service field and method on sdk.CriblIo. This catches
-// typos or SDK renames at test time instead of at discovery runtime (reflection would
-// then fail or panic). Uses the field's type to look up the method so we validate even
-// when the client's service field is nil (e.g. zero-value &sdk.CriblIo{}).
-func TestRegistryListMethodsExistOnSDK(t *testing.T) {
-	client := &sdk.CriblIo{}
-	clientVal := reflect.ValueOf(client).Elem()
-
+func TestRegistryImportableEntriesHaveRESTGetPath(t *testing.T) {
 	for _, e := range mustBuildRegistry(t, context.Background()).Entries() {
-		if e.SDKService == "" || e.ListMethod == "" {
+		if e.ImportIDFormat == "" || e.TypeName == "criblio_lakehouse_dataset_connection" {
 			continue
 		}
-		svcField := clientVal.FieldByName(e.SDKService)
-		require.True(t, svcField.IsValid(), "registry entry %q: SDKService %q not found on sdk.CriblIo", e.TypeName, e.SDKService)
-
-		// Resolve the type on which the method is defined (pointer receiver *Service).
-		svcType := svcField.Type()
-		if svcType.Kind() == reflect.Ptr {
-			svcType = svcType.Elem()
-		}
-		// Method is on *Service; use a non-nil pointer so MethodByName can find it.
-		svcPtr := reflect.New(svcType)
-		method := svcPtr.MethodByName(e.ListMethod)
-		assert.True(t, method.IsValid(), "registry entry %q: ListMethod %q not found on service %s", e.TypeName, e.ListMethod, e.SDKService)
-	}
-}
-
-// TestIsSDKUnionUnmarshalError documents and tests the expected SDK error substring patterns.
-// Discovery depends on these when falling back to captured list parsing. If the SDK changes
-// its error format, these tests will fail and the patterns must be updated.
-func TestIsSDKUnionUnmarshalError(t *testing.T) {
-	tests := []struct {
-		err  string
-		want bool
-	}{
-		{"", false},
-		{"some other error", false},
-		{"could not unmarshal", false}, // needs type name
-		{"could not unmarshal json: GenericDataset", true},
-		{"could not unmarshal json into GenericProvider", true},
-		{"could not unmarshal json into InputCollector", true},
-		{"could not unmarshal json into NotificationTarget", true},
-		{"could not unmarshal: GenericDataset", true},
-		{`could not unmarshal '{"type":"list.events"}' into any supported union types for DashboardElementUnion`, true},
-	}
-	for _, tt := range tests {
-		got := isSDKUnionUnmarshalError(errFromString(tt.err))
-		assert.Equal(t, tt.want, got, "isSDKUnionUnmarshalError(%q) = %v, want %v", tt.err, got, tt.want)
+		assert.NotEmpty(t, e.RESTGetPath, "registry entry %q must have RESTGetPath", e.TypeName)
 	}
 }
 
 func TestIsRecoverableListDecodeError(t *testing.T) {
-	union := errFromString(`could not unmarshal '{}' into any supported union types for Foo`)
 	jsonErr := errFromString("error unmarshaling json response body: json: cannot unmarshal number into Go value of type string")
 	wrapped := fmt.Errorf("criblio_search_saved_query: %w", jsonErr)
-	assert.True(t, IsRecoverableListDecodeError(union))
 	assert.True(t, IsRecoverableListDecodeError(jsonErr))
 	assert.True(t, IsRecoverableListDecodeError(wrapped))
 	assert.False(t, IsRecoverableListDecodeError(errFromString("connection refused")))
-}
-
-// TestIsSDKLibraryUnmarshalError documents and tests the expected SDK error for lib="cribl" enum mismatch.
-// EventBreakerRuleset Library enum had only custom/cribl-custom; API returns cribl for built-ins.
-func TestIsSDKLibraryUnmarshalError(t *testing.T) {
-	tests := []struct {
-		err  string
-		want bool
-	}{
-		{"", false},
-		{"some other error", false},
-		{"invalid value for Library", true},
-		{"could not unmarshal: invalid value for Library", true},
-	}
-	for _, tt := range tests {
-		got := isSDKLibraryUnmarshalError(errFromString(tt.err))
-		assert.Equal(t, tt.want, got, "isSDKLibraryUnmarshalError(%q) = %v, want %v", tt.err, got, tt.want)
-	}
 }
 
 func errFromString(s string) error {
@@ -301,34 +197,3 @@ func errFromString(s string) error {
 type errString struct{ s string }
 
 func (e *errString) Error() string { return e.s }
-
-type idFieldOnly struct {
-	ID string
-}
-
-type keyIDFieldOnly struct {
-	KeyID string
-}
-
-type nameMethodOnly struct {
-	Name string
-}
-
-func (n nameMethodOnly) GetName() string {
-	return n.Name
-}
-
-type nameOnly struct {
-	Name *string
-}
-
-func (n *nameOnly) GetName() *string {
-	if n == nil {
-		return nil
-	}
-	return n.Name
-}
-
-type nameOnlyUnion struct {
-	NameOnly *nameOnly
-}

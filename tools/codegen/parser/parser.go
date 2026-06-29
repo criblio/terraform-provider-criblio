@@ -647,16 +647,16 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.PreferState = true
 		field.ApplyStrategy = "stringFromAPIOrPrior"
 	}
-	if boolAnnotation(property, "x-terraform-sensitive") || boolAnnotation(property, "x-speakeasy-param-sensitive") {
+	if boolAnnotation(property, "x-terraform-sensitive") {
 		field.Sensitive = true
 	}
-	if boolAnnotation(property, "x-terraform-prefer-state") || boolAnnotation(property, "x-speakeasy-param-suppress-computed-diff") || scalarValue(property, "x-speakeasy-plan-modifiers") == "PreferState" {
+	if boolAnnotation(property, "x-terraform-prefer-state") {
 		field.PreferState = true
 	}
 	if suppressDiffAnnotation(property) {
 		field.SuppressDiff = true
 	}
-	if boolAnnotation(property, "x-terraform-force-new") || boolAnnotation(property, "x-speakeasy-param-force-new") {
+	if boolAnnotation(property, "x-terraform-force-new") {
 		field.ForceNew = true
 	}
 	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
@@ -806,7 +806,7 @@ func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
 }
 
 func ignoredAnnotation(property *yaml.Node) bool {
-	return boolAnnotation(property, "x-terraform-ignore") || boolAnnotation(property, "x-speakeasy-terraform-ignore")
+	return boolAnnotation(property, "x-terraform-ignore")
 }
 
 func enumValues(property *yaml.Node) []string {
@@ -1329,9 +1329,6 @@ func boolAnnotation(node *yaml.Node, key string) bool {
 }
 
 func suppressDiffAnnotation(node *yaml.Node) bool {
-	if boolAnnotation(node, "x-speakeasy-param-suppress-computed-diff") {
-		return true
-	}
 	value, ok := mappingValue(node, "x-terraform-suppress-diff")
 	if !ok || value.Kind != yaml.ScalarNode {
 		return false

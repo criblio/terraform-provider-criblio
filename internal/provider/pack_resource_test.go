@@ -2,14 +2,12 @@ package provider
 
 import (
 	"encoding/json"
-	"testing"
-
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"testing"
 )
 
 func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
-	tags := tagsAPIMap(&tfTypes.PackRequestBodyTags{})
+	tags := tagsAPIMap(&packRequestBodyTags{})
 
 	body, err := json.Marshal(map[string]any{
 		"package": map[string]any{
@@ -27,7 +25,7 @@ func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
 }
 
 func TestTagsAPIMapPreservesConfiguredTags(t *testing.T) {
-	tags := tagsAPIMap(&tfTypes.PackRequestBodyTags{
+	tags := tagsAPIMap(&packRequestBodyTags{
 		DataType:   []types.String{types.StringValue("logs")},
 		Domain:     []types.String{types.StringValue("security")},
 		Streamtags: []types.String{types.StringValue("prod")},

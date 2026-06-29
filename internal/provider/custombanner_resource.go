@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"regexp"
 
-	custom_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
-	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
-	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
-	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
-	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	custom_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/boolplanmodifier"
+	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/float64planmodifier"
+	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -35,17 +34,17 @@ type CustomBannerResource struct {
 }
 
 type CustomBannerResourceModel struct {
-	Created         types.Float64           `tfsdk:"created"`
-	CustomThemes    []types.String          `tfsdk:"custom_themes"`
-	Enabled         types.Bool              `tfsdk:"enabled"`
-	ID              types.String            `tfsdk:"id"`
-	InvertFontColor types.Bool              `tfsdk:"invert_font_color"`
-	Items           []tfTypes.BannerMessage `tfsdk:"items"`
-	Link            types.String            `tfsdk:"link"`
-	LinkDisplay     types.String            `tfsdk:"link_display"`
-	Message         types.String            `tfsdk:"message"`
-	Theme           types.String            `tfsdk:"theme"`
-	Type            types.String            `tfsdk:"type"`
+	Created         types.Float64   `tfsdk:"created"`
+	CustomThemes    []types.String  `tfsdk:"custom_themes"`
+	Enabled         types.Bool      `tfsdk:"enabled"`
+	ID              types.String    `tfsdk:"id"`
+	InvertFontColor types.Bool      `tfsdk:"invert_font_color"`
+	Items           []bannerMessage `tfsdk:"items"`
+	Link            types.String    `tfsdk:"link"`
+	LinkDisplay     types.String    `tfsdk:"link_display"`
+	Message         types.String    `tfsdk:"message"`
+	Theme           types.String    `tfsdk:"theme"`
+	Type            types.String    `tfsdk:"type"`
 }
 
 type customBannerAPI struct {
@@ -229,28 +228,22 @@ func (r *CustomBannerResource) Configure(_ context.Context, req resource.Configu
 }
 
 func (r *CustomBannerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *CustomBannerResourceModel
+	var data CustomBannerResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	if err := r.createCustomBanner(ctx, data); err != nil {
+	if err := r.createCustomBanner(ctx, &data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preserveCustomBannerPlan(ctx, &data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -281,29 +274,26 @@ func (r *CustomBannerResource) Read(ctx context.Context, req resource.ReadReques
 }
 
 func (r *CustomBannerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *CustomBannerResourceModel
+	var data CustomBannerResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	merge(ctx, req, resp, &data)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	if _, err := restclient.Patch[customBannerAPI, customBannerAPI](ctx, r.client, customBannerPath, data.toCustomBannerAPI()); err != nil {
+	if _, err := restclient.Patch[customBannerAPI, customBannerAPI](ctx, r.client, customBannerPath, (&data).toCustomBannerAPI()); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	if err := r.refreshCustomBannerState(ctx, data); err != nil {
+	if err := r.refreshCustomBannerState(ctx, &data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preserveCustomBannerPlan(ctx, &data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -371,7 +361,7 @@ func (data *CustomBannerResourceModel) applyCustomBannerAPI(apiModel *customBann
 		return
 	}
 	item := bannerMessageFromAPI(apiModel)
-	data.Items = []tfTypes.BannerMessage{item}
+	data.Items = []bannerMessage{item}
 	data.Created = item.Created
 	data.CustomThemes = item.CustomThemes
 	data.Enabled = item.Enabled
@@ -384,8 +374,8 @@ func (data *CustomBannerResourceModel) applyCustomBannerAPI(apiModel *customBann
 	data.Type = item.Type
 }
 
-func bannerMessageFromAPI(apiModel *customBannerAPI) tfTypes.BannerMessage {
-	return tfTypes.BannerMessage{
+func bannerMessageFromAPI(apiModel *customBannerAPI) bannerMessage {
+	return bannerMessage{
 		Created:         types.Float64PointerValue(apiModel.Created),
 		CustomThemes:    stringValuesFromSlice(apiModel.CustomThemes),
 		Enabled:         types.BoolValue(apiModel.Enabled),
@@ -396,5 +386,43 @@ func bannerMessageFromAPI(apiModel *customBannerAPI) tfTypes.BannerMessage {
 		Message:         types.StringValue(apiModel.Message),
 		Theme:           types.StringValue(apiModel.Theme),
 		Type:            types.StringValue(apiModel.Type),
+	}
+}
+
+func preserveCustomBannerPlan(ctx context.Context, data *CustomBannerResourceModel, plan types.Object) {
+	var planData CustomBannerResourceModel
+	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true})
+	if diags.HasError() {
+		return
+	}
+	if !planData.Created.IsNull() && !planData.Created.IsUnknown() {
+		data.Created = planData.Created
+	}
+	if planData.CustomThemes != nil {
+		data.CustomThemes = planData.CustomThemes
+	}
+	if !planData.Enabled.IsNull() && !planData.Enabled.IsUnknown() {
+		data.Enabled = planData.Enabled
+	}
+	if !planData.ID.IsNull() && !planData.ID.IsUnknown() {
+		data.ID = planData.ID
+	}
+	if !planData.InvertFontColor.IsNull() && !planData.InvertFontColor.IsUnknown() {
+		data.InvertFontColor = planData.InvertFontColor
+	}
+	if !planData.Link.IsNull() && !planData.Link.IsUnknown() {
+		data.Link = planData.Link
+	}
+	if !planData.LinkDisplay.IsNull() && !planData.LinkDisplay.IsUnknown() {
+		data.LinkDisplay = planData.LinkDisplay
+	}
+	if !planData.Message.IsNull() && !planData.Message.IsUnknown() {
+		data.Message = planData.Message
+	}
+	if !planData.Theme.IsNull() && !planData.Theme.IsUnknown() {
+		data.Theme = planData.Theme
+	}
+	if !planData.Type.IsNull() && !planData.Type.IsUnknown() {
+		data.Type = planData.Type
 	}
 }

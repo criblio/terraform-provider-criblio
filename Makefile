@@ -16,7 +16,10 @@ test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 unit-test: 
-	go test -v ./internal/auth/... ./internal/restclient/... ./internal/sdk/credentials ./internal/sdk/internal/hooks ./tools/sync-openapi ./tools/merge-spec/...
+	go test -v ./internal/auth/... ./internal/restclient/... ./tools/sync-openapi ./tools/merge-spec/...
+
+verify-no-speakeasy:
+	./scripts/verify_no_speakeasy.sh
 
 sync-openapi:
 	go run ./tools/sync-openapi
@@ -43,17 +46,6 @@ integration-test-import-cli: build-import-cli
 
 build-import-cli:
 	go build -o goatify ./tools/import-cli
-
-test-speakeasy: 
-	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
-
-# Fast/minimal Speakeasy run (CI-friendly).
-build-speakeasy:
-	speakeasy run --skip-versioning --output console --minimal
-
-# Full Speakeasy run
-build-speakeasy-full:
-	GOTOOLCHAIN=go1.25.0 speakeasy run
 
 install-sbom-tools:
 	go install github.com/anchore/syft/cmd/syft@latest

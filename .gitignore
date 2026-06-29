@@ -4,8 +4,6 @@
 .terraform*
 *.tfstate*
 .DS_Store
-**/.speakeasy/temp/
-**/.speakeasy/logs/
 terraform-provider-criblio
 goatify
 /behavioral-extractor
@@ -13,8 +11,6 @@ goatify
 tools/behavioral-extractor/
 tools/agentic-codegen/
 tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/darwin_arm64/terraform-provider-criblio_v999.99.9
-**/.speakeasy/temp/
-**/.speakeasy/logs/
 **.zip
 tests/e2e/import.tf
 *.idea
@@ -36,8 +32,9 @@ sbom-*.json
 .claude/skills/*
 !.claude/skills/criblio-terraform-resource-development.md
 tf*
+!internal/tfplanmodifiers/
+!internal/tfplanmodifiers/**
 go.work*
 dist/*
-.speakeasy-*
 merged-spec.yml
 internal/auth/cloud_only_paths.go

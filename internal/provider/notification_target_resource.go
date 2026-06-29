@@ -5,8 +5,8 @@ import (
 	"context"
 	"fmt"
 
-	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"

@@ -3,13 +3,11 @@ package provider
 import (
 	"context"
 	"fmt"
-	"net/url"
-
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"net/url"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -27,21 +25,21 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	Cloud               *tfTypes.ConfigGroupCloud `tfsdk:"cloud"`
-	Description         types.String              `tfsdk:"description"`
-	EstimatedIngestRate types.Float64             `tfsdk:"estimated_ingest_rate"`
-	Fields              types.String              `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
-	ID                  types.String              `tfsdk:"id"`
-	Inherits            types.String              `tfsdk:"inherits"`
-	IsFleet             types.Bool                `tfsdk:"is_fleet"`
-	MaxWorkerAge        types.String              `tfsdk:"max_worker_age"`
-	Name                types.String              `tfsdk:"name"`
-	OnPrem              types.Bool                `tfsdk:"on_prem"`
-	Provisioned         types.Bool                `tfsdk:"provisioned"`
-	Streamtags          []types.String            `tfsdk:"streamtags"`
-	Tags                types.String              `tfsdk:"tags"`
-	Type                types.String              `tfsdk:"type"`
-	WorkerRemoteAccess  types.Bool                `tfsdk:"worker_remote_access"`
+	Cloud               *configGroupCloud `tfsdk:"cloud"`
+	Description         types.String      `tfsdk:"description"`
+	EstimatedIngestRate types.Float64     `tfsdk:"estimated_ingest_rate"`
+	Fields              types.String      `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
+	ID                  types.String      `tfsdk:"id"`
+	Inherits            types.String      `tfsdk:"inherits"`
+	IsFleet             types.Bool        `tfsdk:"is_fleet"`
+	MaxWorkerAge        types.String      `tfsdk:"max_worker_age"`
+	Name                types.String      `tfsdk:"name"`
+	OnPrem              types.Bool        `tfsdk:"on_prem"`
+	Provisioned         types.Bool        `tfsdk:"provisioned"`
+	Streamtags          []types.String    `tfsdk:"streamtags"`
+	Tags                types.String      `tfsdk:"tags"`
+	Type                types.String      `tfsdk:"type"`
+	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access"`
 }
 
 // Metadata returns the data source type name.
@@ -179,7 +177,7 @@ func (data *GroupDataSourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	if api.Cloud == nil {
 		data.Cloud = nil
 	} else {
-		data.Cloud = &tfTypes.ConfigGroupCloud{
+		data.Cloud = &configGroupCloud{
 			Provider: types.StringPointerValue(api.Cloud.Provider),
 			Region:   types.StringValue(api.Cloud.Region),
 		}

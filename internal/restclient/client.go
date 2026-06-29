@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
+	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
 
 // Config holds REST client settings.
@@ -26,6 +27,7 @@ type Config struct {
 	Credentials         *auth.CriblConfig
 	BearerToken         string
 	HTTPClient          *http.Client
+	UserAgent           string
 }
 
 // Client sends authenticated requests to Cribl APIs.
@@ -35,6 +37,7 @@ type Client struct {
 	credentials         *auth.CriblConfig
 	bearerToken         string
 	httpClient          *http.Client
+	userAgent           string
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
@@ -66,6 +69,10 @@ func New(config Config) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
+	agent := config.UserAgent
+	if agent == "" {
+		agent = useragent.TerraformProvider
+	}
 
 	baseURL := config.BaseURL
 	if baseURL == "" {
@@ -82,6 +89,7 @@ func New(config Config) *Client {
 		credentials:         config.Credentials,
 		bearerToken:         config.BearerToken,
 		httpClient:          httpClient,
+		userAgent:           agent,
 	}
 }
 
@@ -234,6 +242,7 @@ func (c *Client) send(ctx context.Context, method, path, contentType string, bod
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
 	}
+	req.Header.Set("User-Agent", c.userAgent)
 	if body != nil {
 		req.Header.Set("Accept", "application/json")
 	}

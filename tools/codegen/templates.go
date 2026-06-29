@@ -1373,25 +1373,25 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 {{- if needsCustomPlanModifier . "bool" }}
-	custom_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	custom_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/boolplanmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "float64" }}
-	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
+	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/float64planmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "int64" }}
-	custom_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/int64planmodifier"
+	custom_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/int64planmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "list" }}
-	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "map" }}
-	custom_mapplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
+	custom_mapplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/mapplanmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "object" }}
-	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/objectplanmodifier"
 {{- end }}
 {{- if needsCustomPlanModifier . "string" }}
-	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 {{- end }}
 {{- if needsCustomJSONValidator . }}
 	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"

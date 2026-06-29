@@ -1,8 +1,0 @@
-internal/provider/types/pipeline_function_conf.go
-internal/sdk/models/shared/pipelinefunctionconf.go
-internal/sdk/models/shared/genericdataset.go
-internal/sdk/models/shared/security.go
-internal/provider/reflect/options.go
-internal/provider/reflect/struct.go
-internal/provider/reflect/into.go
-internal/provider/utils.go

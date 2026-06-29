@@ -9,9 +9,8 @@ import (
 	"regexp"
 	"strings"
 
-	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -39,21 +38,21 @@ type GroupResource struct {
 
 // GroupResourceModel describes the resource data model.
 type GroupResourceModel struct {
-	Cloud               *tfTypes.ConfigGroupCloud `tfsdk:"cloud" json:"cloud,omitempty"`
-	Description         types.String              `tfsdk:"description" json:"description,omitempty"`
-	EstimatedIngestRate types.Float64             `tfsdk:"estimated_ingest_rate" json:"estimatedIngestRate,omitempty"`
-	ID                  types.String              `tfsdk:"id" json:"id,omitempty"`
-	Inherits            types.String              `tfsdk:"inherits" json:"inherits,omitempty"`
-	IsFleet             types.Bool                `tfsdk:"is_fleet" json:"isFleet,omitempty"`
-	MaxWorkerAge        types.String              `tfsdk:"max_worker_age" json:"maxWorkerAge,omitempty"`
-	Name                types.String              `tfsdk:"name" json:"name,omitempty"`
-	OnPrem              types.Bool                `tfsdk:"on_prem" json:"onPrem,omitempty"`
-	Product             types.String              `tfsdk:"product" json:"product,omitempty"`
-	Provisioned         types.Bool                `tfsdk:"provisioned" json:"provisioned,omitempty"`
-	Streamtags          []types.String            `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	Tags                types.String              `tfsdk:"tags" json:"tags,omitempty"`
-	Type                types.String              `tfsdk:"type" json:"type,omitempty"`
-	WorkerRemoteAccess  types.Bool                `tfsdk:"worker_remote_access" json:"workerRemoteAccess,omitempty"`
+	Cloud               *configGroupCloud `tfsdk:"cloud" json:"cloud,omitempty"`
+	Description         types.String      `tfsdk:"description" json:"description,omitempty"`
+	EstimatedIngestRate types.Float64     `tfsdk:"estimated_ingest_rate" json:"estimatedIngestRate,omitempty"`
+	ID                  types.String      `tfsdk:"id" json:"id,omitempty"`
+	Inherits            types.String      `tfsdk:"inherits" json:"inherits,omitempty"`
+	IsFleet             types.Bool        `tfsdk:"is_fleet" json:"isFleet,omitempty"`
+	MaxWorkerAge        types.String      `tfsdk:"max_worker_age" json:"maxWorkerAge,omitempty"`
+	Name                types.String      `tfsdk:"name" json:"name,omitempty"`
+	OnPrem              types.Bool        `tfsdk:"on_prem" json:"onPrem,omitempty"`
+	Product             types.String      `tfsdk:"product" json:"product,omitempty"`
+	Provisioned         types.Bool        `tfsdk:"provisioned" json:"provisioned,omitempty"`
+	Streamtags          []types.String    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Tags                types.String      `tfsdk:"tags" json:"tags,omitempty"`
+	Type                types.String      `tfsdk:"type" json:"type,omitempty"`
+	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access" json:"workerRemoteAccess,omitempty"`
 }
 
 func (r *GroupResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -211,40 +210,31 @@ type groupAPIModel struct {
 }
 
 func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GroupResourceModel
+	var data GroupResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
-		UnhandledNullAsEmpty:    true,
-		UnhandledUnknownAsEmpty: true,
-	})...)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if !validateGroupConfiguration(data, &resp.Diagnostics) {
+	if !validateGroupConfiguration(&data, &resp.Diagnostics) {
 		return
 	}
-	apiModel, err := restclient.Post[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/products/%s/groups", url.PathEscape(data.Product.ValueString())), groupAPIFromModel(data))
+	apiModel, err := restclient.Post[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/products/%s/groups", url.PathEscape(data.Product.ValueString())), groupAPIFromModel(&data))
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	data.applyGroupAPIModel(apiModel)
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	if err := r.refreshGroupState(ctx, data); err != nil {
+	(&data).applyGroupAPIModel(apiModel)
+	preserveGroupPlan(ctx, &data, plan)
+	if err := r.refreshGroupState(ctx, &data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preserveGroupPlan(ctx, &data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -274,17 +264,17 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 }
 
 func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GroupResourceModel
+	var data GroupResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	merge(ctx, req, resp, &data)
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if !validateGroupConfiguration(data, &resp.Diagnostics) {
+	if !validateGroupConfiguration(&data, &resp.Diagnostics) {
 		return
 	}
 
@@ -292,25 +282,19 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	// ^[a-z] pattern on PATCH. Skip the update and refresh from GET to avoid a
 	// permanent error for legacy mixed-case groups.
 	if regexp.MustCompile(`^[a-z]`).MatchString(data.ID.ValueString()) {
-		apiModel, err := restclient.Patch[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/master/groups/%s", url.PathEscape(data.ID.ValueString())), groupAPIFromModel(data))
+		apiModel, err := restclient.Patch[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/master/groups/%s", url.PathEscape(data.ID.ValueString())), groupAPIFromModel(&data))
 		if err != nil {
 			resp.Diagnostics.AddError("failure to invoke API", err.Error())
 			return
 		}
-		data.applyGroupAPIModel(apiModel)
-		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
+		(&data).applyGroupAPIModel(apiModel)
+		preserveGroupPlan(ctx, &data, plan)
 	}
-	if err := r.refreshGroupState(ctx, data); err != nil {
+	if err := r.refreshGroupState(ctx, &data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	preserveGroupPlan(ctx, &data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -427,7 +411,7 @@ func (data *GroupResourceModel) applyGroupAPIModel(api *groupAPIModel) {
 	if api.Cloud == nil {
 		data.Cloud = nil
 	} else {
-		data.Cloud = &tfTypes.ConfigGroupCloud{
+		data.Cloud = &configGroupCloud{
 			Provider: types.StringPointerValue(api.Cloud.Provider),
 			Region:   types.StringValue(api.Cloud.Region),
 		}
@@ -491,6 +475,59 @@ func preserveLegacyEdgeIsFleet(prior types.Bool, data *GroupResourceModel) {
 	}
 	if data.Product.ValueString() == "edge" || (!data.Type.IsNull() && !data.Type.IsUnknown() && data.Type.ValueString() == "edge") {
 		data.IsFleet = prior
+	}
+}
+
+func preserveGroupPlan(ctx context.Context, data *GroupResourceModel, plan types.Object) {
+	var planData GroupResourceModel
+	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true})
+	if diags.HasError() {
+		return
+	}
+	if planData.Cloud != nil {
+		data.Cloud = planData.Cloud
+	}
+	if !planData.Description.IsNull() && !planData.Description.IsUnknown() {
+		data.Description = planData.Description
+	}
+	if !planData.EstimatedIngestRate.IsNull() && !planData.EstimatedIngestRate.IsUnknown() {
+		data.EstimatedIngestRate = planData.EstimatedIngestRate
+	}
+	if !planData.ID.IsNull() && !planData.ID.IsUnknown() {
+		data.ID = planData.ID
+	}
+	if !planData.Inherits.IsNull() && !planData.Inherits.IsUnknown() {
+		data.Inherits = planData.Inherits
+	}
+	if !planData.IsFleet.IsNull() && !planData.IsFleet.IsUnknown() {
+		data.IsFleet = planData.IsFleet
+	}
+	if !planData.MaxWorkerAge.IsNull() && !planData.MaxWorkerAge.IsUnknown() {
+		data.MaxWorkerAge = planData.MaxWorkerAge
+	}
+	if !planData.Name.IsNull() && !planData.Name.IsUnknown() {
+		data.Name = planData.Name
+	}
+	if !planData.OnPrem.IsNull() && !planData.OnPrem.IsUnknown() {
+		data.OnPrem = planData.OnPrem
+	}
+	if !planData.Product.IsNull() && !planData.Product.IsUnknown() {
+		data.Product = planData.Product
+	}
+	if !planData.Provisioned.IsNull() && !planData.Provisioned.IsUnknown() {
+		data.Provisioned = planData.Provisioned
+	}
+	if planData.Streamtags != nil {
+		data.Streamtags = planData.Streamtags
+	}
+	if !planData.Tags.IsNull() && !planData.Tags.IsUnknown() {
+		data.Tags = planData.Tags
+	}
+	if !planData.Type.IsNull() && !planData.Type.IsUnknown() {
+		data.Type = planData.Type
+	}
+	if !planData.WorkerRemoteAccess.IsNull() && !planData.WorkerRemoteAccess.IsUnknown() {
+		data.WorkerRemoteAccess = planData.WorkerRemoteAccess
 	}
 }
 

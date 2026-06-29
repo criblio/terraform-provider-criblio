@@ -1,5 +1,4 @@
-// Package discovery implements the discovery engine that iterates through the
-// registry and calls SDK List* endpoints to enumerate existing resources.
+// Package discovery implements REST-backed discovery for existing resources.
 package discovery
 
 import (
@@ -9,220 +8,68 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"reflect"
 	"slices"
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
 
-// eventBreakerRulesetIdentifiersFromCapture returns identifiers from the captured
-// event breaker list response when the SDK failed to unmarshal (lib="cribl" not in enum).
-func eventBreakerRulesetIdentifiersFromCapture(gid string) ([]map[string]string, error) {
-	body := custom.GetAndClearEventBreakerRulesetListBody(gid)
-	if len(body) == 0 {
-		return nil, nil
-	}
-	return custom.ParseEventBreakerRulesetListBody(body, gid)
+// Result holds the discovery result for one resource type.
+type Result struct {
+	TypeName       string
+	Count          int
+	Err            error
+	Details        []string
+	PerGroupCounts map[string]int
 }
 
-// filterSearchDashboardIDs removes pack-scoped dashboard IDs (containing ".") from the list.
-// Pack-scoped dashboards (e.g. "cribl-criblvision-for-stream.sh1eceuw4") belong to their parent pack
-// and cannot be managed as standalone criblio_search_dashboard resources.
-func filterSearchDashboardIDs(typeName string, ids []map[string]string) []map[string]string {
-	if typeName != "criblio_search_dashboard" {
-		return ids
-	}
-	filtered := ids[:0]
-	for _, m := range ids {
-		if !strings.Contains(m["id"], ".") {
-			filtered = append(filtered, m)
-		}
-	}
-	return filtered
-}
-
-func skipGroupScopedSingleton(typeName, groupID string) bool {
-	return typeName == "criblio_routes" && (groupID == "default_search" || groupID == "search")
-}
-
-// searchListIdentifiersFromCapture returns identifiers (and count) from the captured
-// list response body when the SDK failed to unmarshal (e.g. cribl_lake, union drift, strict JSON).
-func searchListIdentifiersFromCapture(e registry.Entry) ([]map[string]string, int, error) {
-	switch e.TypeName {
-	case "criblio_search_saved_query":
-		body := custom.GetAndClearSearchListBody(custom.PathSearchSaved)
-		return custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchSaved)
-	case "criblio_search_dashboard":
-		body := custom.GetAndClearSearchListBody(custom.PathSearchDashboards)
-		ids, _, err := custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchDashboards)
-		if err != nil {
-			return nil, 0, err
-		}
-		filtered := filterSearchDashboardIDs(e.TypeName, ids)
-		return filtered, len(filtered), nil
-	case "criblio_search_dataset":
-		body := custom.GetAndClearSearchListBody(custom.PathSearchDatasets)
-		return custom.IdentifiersFromSearchListBody(body, custom.PathSearchDatasets)
-	case "criblio_search_dataset_provider":
-		body := custom.GetAndClearSearchListBody(custom.PathSearchDatasetProviders)
-		return custom.IdentifiersFromSearchListBody(body, custom.PathSearchDatasetProviders)
-	default:
-		return nil, 0, nil
-	}
-}
-
-// unionUnmarshalIdentifiersFromCapture returns identifiers from the captured raw list response
-// for resource types where the SDK union unmarshal fails for some items (e.g. scheduledSearch in
-// InputCollector, bulletin_message in NotificationTarget). Unsupported item types are filtered out.
-func unionUnmarshalIdentifiersFromCapture(e registry.Entry, groupID string) ([]map[string]string, int, error) {
-	switch e.TypeName {
-	case "criblio_collector":
-		body := custom.GetAndClearSavedJobsListBody(groupID)
-		if len(body) == 0 {
-			return nil, 0, nil
-		}
-		ids, err := custom.ParseSavedJobsListBody(body, groupID)
-		return ids, len(ids), err
-	case "criblio_notification_target":
-		body := custom.GetAndClearNotificationTargetListBody()
-		if len(body) == 0 {
-			return nil, 0, nil
-		}
-		ids, err := custom.ParseNotificationTargetListBody(body)
-		return ids, len(ids), err
-	default:
-		return nil, 0, nil
-	}
-}
-
-func criblLakeDatasetIdentifiersFromCapture(lakeID string) ([]map[string]string, int, bool, error) {
-	body := custom.GetAndClearCriblLakeDatasetListBody(lakeID)
-	if len(body) == 0 {
-		return nil, 0, false, nil
-	}
-	ids, err := custom.ParseCriblLakeDatasetListBody(body, lakeID)
-	return ids, len(ids), true, err
-}
-
-// isSDKUnionUnmarshalError reports whether err is the SDK failing to unmarshal a response
-// into a oneOf union type. When true, discovery may fall back to parsing captured raw bodies.
-func isSDKUnionUnmarshalError(err error) bool {
-	if err == nil {
-		return false
-	}
-	s := err.Error()
-	if !strings.Contains(s, "could not unmarshal") {
-		return false
-	}
-	return strings.Contains(s, "union types for") ||
-		strings.Contains(s, "GenericDataset") ||
-		strings.Contains(s, "GenericProvider") ||
-		strings.Contains(s, "InputCollector") ||
-		strings.Contains(s, "NotificationTarget")
-}
-
-// isRecoverableListDecodeError is true for SDK union failures or JSON decode errors on list responses
-// where we can retry from HTTP-captured bodies.
-func isRecoverableListDecodeError(err error) bool {
-	if err == nil {
-		return false
-	}
-	if isSDKUnionUnmarshalError(err) {
-		return true
-	}
-	return strings.Contains(err.Error(), "error unmarshaling json response body")
-}
-
-// IsRecoverableListDecodeError reports whether err (including wrapped errors from discovery results)
-// is a list decode failure that should not abort export/dry-run. Unwraps fmt.Errorf chains.
+// IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
 	for e := err; e != nil; e = errors.Unwrap(e) {
-		if isRecoverableListDecodeError(e) {
+		if strings.Contains(e.Error(), "decode response") ||
+			strings.Contains(e.Error(), "unmarshal") {
 			return true
 		}
 	}
 	return false
 }
 
-// isSDKLibraryUnmarshalError reports whether err is the SDK failing to unmarshal lib="cribl"
-// (EventBreakerRuleset Library enum only has custom/cribl-custom; API returns cribl for built-ins).
-// When true, discovery falls back to parsing the captured raw response body instead of failing.
-func isSDKLibraryUnmarshalError(err error) bool {
-	if err == nil {
-		return false
-	}
-	return strings.Contains(err.Error(), "invalid value for Library")
-}
-
-// Result holds the discovery result for one resource type: count and any error
-// with resource context. Items are left for future HCL generation.
-// Details is optional (e.g. group names for criblio_group) for dry-run display.
-// PerGroupCounts is set for group-scoped resources (key = group label e.g. "default (stream)").
-type Result struct {
-	TypeName       string
-	Count          int
-	Err            error
-	Details        []string       // optional; e.g. group names for criblio_group
-	PerGroupCounts map[string]int // optional; per-group count for preview/export
-}
-
-func legacySDK(client *importclient.Client) (*sdk.CriblIo, error) {
-	if client == nil || client.SDK == nil {
-		return nil, fmt.Errorf("client or legacy SDK client is nil")
-	}
-	return client.SDK, nil
-}
-
-// Discover runs the discovery engine: for each registry entry that has
-// SDKService and ListMethod (and passes include/exclude), calls the SDK List*
-// endpoint and records count and errors. Uses group IDs from the API when
-// available so list requests (e.g. /m/{groupId}/...) succeed; falls back to
-// ["default"] if the groups API is unavailable.
-// groupFilter restricts to specific groups (by ID or label e.g. "default (stream)"); empty = all groups.
-// onPrem: when true, exclude default_search from groupIDs (all m/default_search/* endpoints are restricted on on-prem).
+// Discover enumerates resources through REST list endpoints.
 func Discover(ctx context.Context, client *importclient.Client, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool) ([]Result, error) {
-	sdkClient, err := legacySDK(client)
-	if err != nil {
-		return nil, err
+	if client == nil || client.REST == nil {
+		return nil, fmt.Errorf("REST client is nil")
 	}
+
 	includeSet := sliceToSet(include)
 	excludeSet := sliceToSet(exclude)
 
-	streamIDs, streamNames, streamErr := fetchGroupsByProduct(ctx, sdkClient, operations.GetProductsGroupsByProductProductStream)
+	streamIDs, streamNames, streamErr := fetchGroupsByProduct(ctx, client, "stream")
 	if streamErr != nil {
 		return nil, fmt.Errorf("fetch stream groups: %w", streamErr)
 	}
-	edgeIDs, edgeNames, edgeErr := fetchGroupsByProduct(ctx, sdkClient, operations.GetProductsGroupsByProductProductEdge)
+	edgeIDs, edgeNames, edgeErr := fetchGroupsByProduct(ctx, client, "edge")
 	if edgeErr != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", edgeErr)
 	}
 
-	// Apply group filter: keep only groups whose ID or label matches.
 	streamIDs, streamNames = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, edgeNames = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
 
-	// Use both stream and edge group IDs for list API (edge fleets have their own sources, pipelines, etc.).
 	groupIDs := make([]string, 0, len(streamIDs)+len(edgeIDs)+1)
 	groupIDs = append(groupIDs, streamIDs...)
 	groupIDs = append(groupIDs, edgeIDs...)
 	if len(groupIDs) == 0 && len(groupFilter) == 0 {
 		groupIDs = fallbackGroupIDs(onPrem)
 	} else if len(groupFilter) == 0 {
-		// Unfiltered export: include default + default_search so resources under those groups are discovered.
 		groupIDs = ensureDefaultGroups(groupIDs)
 	}
-	// When groupFilter is non-empty, use only matched worker group IDs (no injection of default/default_search).
 	if onPrem {
 		groupIDs = filterOutDefaultSearch(groupIDs)
 	}
-	// Map group ID -> label for PerGroupCounts (stream and edge).
+
 	idToLabel := make(map[string]string)
 	for i := range streamIDs {
 		idToLabel[streamIDs[i]] = streamNames[i] + " (stream)"
@@ -230,16 +77,13 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 	for i := range edgeIDs {
 		idToLabel[edgeIDs[i]] = edgeNames[i] + " (edge)"
 	}
-	// All group names for criblio_group display (stream and edge, labeled).
-	var groupNames []string
-	for _, n := range streamNames {
-		groupNames = append(groupNames, n+" (stream)")
+
+	groupNames := make([]string, 0, len(streamNames)+len(edgeNames))
+	for _, name := range streamNames {
+		groupNames = append(groupNames, name+" (stream)")
 	}
-	for _, n := range edgeNames {
-		groupNames = append(groupNames, n+" (edge)")
-	}
-	if len(streamNames) == 0 && len(edgeNames) == 0 {
-		groupNames = nil
+	for _, name := range edgeNames {
+		groupNames = append(groupNames, name+" (edge)")
 	}
 
 	var results []Result
@@ -247,256 +91,73 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 		if !matchesFilter(e.TypeName, includeSet, excludeSet) {
 			continue
 		}
-		// No list method: show in preview. criblio_group uses group count and names from API.
-		// criblio_lakehouse_dataset_connection has no list API; discover via lakehouses × lake datasets.
-		if e.SDKService == "" || e.ListMethod == "" {
-			count := 0
-			var details []string
-			if e.TypeName == "criblio_group" {
-				count = len(streamNames) + len(edgeNames)
-				details = groupNames
-			} else if e.TypeName == "criblio_lakehouse_dataset_connection" {
-				if len(groupFilter) > 0 && skipDiscoveryForGroupFilter(e.TypeName, groupIDs) {
-					count = 0
-				} else {
-					ids, lhErr := listLakehouseDatasetConnectionIdentifiers(ctx, sdkClient)
-					if lhErr == nil {
-						count = len(ids)
+		if len(groupFilter) > 0 && skipDiscoveryForGroupFilter(e.TypeName, groupIDs) {
+			results = append(results, Result{TypeName: e.TypeName})
+			continue
+		}
+
+		res := Result{TypeName: e.TypeName}
+		switch {
+		case e.TypeName == "criblio_group":
+			res.Count = len(streamNames) + len(edgeNames)
+			res.Details = groupNames
+		case e.TypeName == "criblio_custom_banner":
+			_, err := restclient.Get[map[string]json.RawMessage](ctx, client.REST, "/system/banners/custom-banner")
+			if restclient.IsNotFound(err) {
+				res.Count = 0
+			} else if err != nil {
+				res.Err = err
+			} else {
+				res.Count = 1
+			}
+		case e.TypeName == "criblio_lakehouse_dataset_connection":
+			ids, err := listLakehouseDatasetConnectionIdentifiers(ctx, client)
+			res.Count = len(ids)
+			res.Err = err
+		case e.TypeName == "criblio_pack_routes":
+			ids, err := listPackRoutesIdentifiers(ctx, client, groupIDs)
+			res.Count = len(ids)
+			res.Err = err
+		case e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset":
+			if slices.Contains(groupIDs, "default_search") {
+				res.Count = 1
+			}
+		case e.RESTListPath != "":
+			count, perGroup, err := listOneREST(ctx, client, e, groupIDs)
+			res.Count = count
+			res.Err = err
+			if len(perGroup) > 0 {
+				res.PerGroupCounts = make(map[string]int)
+				for gid, count := range perGroup {
+					if label, ok := idToLabel[gid]; ok {
+						res.PerGroupCounts[label] = count
+					} else {
+						res.PerGroupCounts[gid] = count
 					}
 				}
-			} else if e.TypeName == "criblio_pack_routes" {
-				ids, prErr := listPackRoutesIdentifiers(ctx, sdkClient, groupIDs)
-				if prErr == nil {
-					count = len(ids)
-				}
-			} else if e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset" {
-				if slices.Contains(groupIDs, "default_search") {
-					count = 1
-				}
 			}
-			results = append(results, Result{TypeName: e.TypeName, Count: count, Details: details})
-			continue
 		}
-		if len(groupFilter) > 0 && skipDiscoveryForGroupFilter(e.TypeName, groupIDs) {
-			results = append(results, Result{TypeName: e.TypeName, Count: 0})
-			continue
-		}
-		count, perGroup, err := listOne(ctx, client, e, groupIDs)
-		res := Result{TypeName: e.TypeName, Count: count}
-		if err != nil {
-			res.Err = fmt.Errorf("%s: %w", e.TypeName, err)
-		}
-		if len(perGroup) > 0 {
-			res.PerGroupCounts = make(map[string]int)
-			for gid, n := range perGroup {
-				if label, ok := idToLabel[gid]; ok {
-					res.PerGroupCounts[label] = n
-				} else {
-					res.PerGroupCounts[gid] = n
-				}
-			}
+		if res.Err != nil {
+			res.Err = fmt.Errorf("%s: %w", e.TypeName, res.Err)
 		}
 		results = append(results, res)
 	}
 	return results, nil
 }
 
-// filterGroups keeps only (ids[i], names[i]) where ids[i] or (names[i]+suffix) is in filter. If filter is empty, returns all.
-func filterGroups(ids, names []string, suffix string, filter []string) (filteredIDs, filteredNames []string) {
-	if len(filter) == 0 {
-		return ids, names
-	}
-	filterSet := sliceToSet(filter)
-	for i := range ids {
-		id := ids[i]
-		label := names[i] + suffix
-		if inSet(id, filterSet) || inSet(label, filterSet) {
-			filteredIDs = append(filteredIDs, id)
-			filteredNames = append(filteredNames, names[i])
-		}
-	}
-	return filteredIDs, filteredNames
-}
-
-// fetchGroupsByProduct returns group IDs and display names for a given product (stream or edge).
-// Names use GetName() with ID as fallback. Used for both stream (listOne) and stream+edge (criblio_group display).
-func fetchGroupsByProduct(ctx context.Context, client *sdk.CriblIo, product operations.GetProductsGroupsByProductProduct) (ids []string, names []string, err error) {
-	if client == nil || client.Groups == nil {
-		return nil, nil, fmt.Errorf("client or Groups service nil")
-	}
-	req := operations.GetProductsGroupsByProductRequest{Product: product}
-	resp, err := client.Groups.GetProductsGroupsByProduct(ctx, req)
-	if err != nil {
-		return nil, nil, err
-	}
-	if resp == nil || resp.Object == nil {
-		return nil, nil, nil
-	}
-	items := resp.Object.GetItems()
-	if len(items) == 0 {
-		return nil, nil, nil
-	}
-	ids = make([]string, 0, len(items))
-	names = make([]string, 0, len(items))
-	for _, g := range items {
-		id := g.GetID()
-		if id == "" {
-			continue
-		}
-		ids = append(ids, id)
-		if n := g.GetName(); n != nil && *n != "" {
-			names = append(names, *n)
-		} else {
-			names = append(names, id)
-		}
-	}
-	return ids, names, nil
-}
-
-// listGroupIdentifiers returns one identifier map per group by calling GetProductsGroupsByProduct for stream and edge.
-// If groupIDs is non-empty, only groups whose id is in groupIDs are returned.
-func listGroupIdentifiers(ctx context.Context, client *sdk.CriblIo, groupIDs []string) ([]map[string]string, error) {
-	idMaps, _, err := ListGroupIdentifiersAndItems(ctx, &importclient.Client{SDK: client}, groupIDs)
-	return idMaps, err
-}
-
-// listLakehouseDatasetConnectionIdentifiers returns (lakehouse_id, lake_dataset_id) pairs by listing
-// lakehouses and lake datasets (default lake). The API has no list endpoint for connections, so we
-// derive potential connection resources from the cartesian product.
-func listLakehouseDatasetConnectionIdentifiers(ctx context.Context, client *sdk.CriblIo) ([]map[string]string, error) {
-	lakehousesResp, err := client.LakeHouse.ListDefaultLakeLakehouses(ctx)
-	if err != nil || lakehousesResp == nil || lakehousesResp.Object == nil {
-		return nil, err
-	}
-	datasetsResp, err := client.Lake.GetCriblLakeDatasetByLakeID(ctx, operations.GetCriblLakeDatasetByLakeIDRequest{
-		LakeID: operations.GetCriblLakeDatasetByLakeIDLakeIDDefault,
-	})
-	if err != nil || datasetsResp == nil || datasetsResp.Object == nil {
-		return nil, err
-	}
-	lakehouses := lakehousesResp.Object.GetItems()
-	datasets := datasetsResp.Object.GetItems()
-	out := make([]map[string]string, 0, len(lakehouses)*len(datasets))
-	for _, lh := range lakehouses {
-		lakehouseID := lh.GetID()
-		if lakehouseID == "" {
-			continue
-		}
-		for _, ds := range datasets {
-			datasetID := ds.GetID()
-			if datasetID == "" {
-				continue
-			}
-			out = append(out, map[string]string{"lakehouse_id": lakehouseID, "lake_dataset_id": datasetID})
-		}
-	}
-	return out, nil
-}
-
-// ListGroupIdentifiersAndItems returns identifier maps and full ConfigGroup items for each group (same order).
-// Used by export for criblio_group so we can refresh from list response instead of GetGroupsByID (whose response body is empty in SDK).
-func ListGroupIdentifiersAndItems(ctx context.Context, client *importclient.Client, groupIDs []string) (idMaps []map[string]string, items []shared.ConfigGroup, err error) {
-	sdkClient, err := legacySDK(client)
-	if err != nil {
-		return nil, nil, err
-	}
-	streamIDs, streamItems, err := fetchGroupsByProductWithItems(ctx, sdkClient, operations.GetProductsGroupsByProductProductStream)
-	if err != nil {
-		return nil, nil, err
-	}
-	edgeIDs, edgeItems, err := fetchGroupsByProductWithItems(ctx, sdkClient, operations.GetProductsGroupsByProductProductEdge)
-	if err != nil {
-		return nil, nil, err
-	}
-	groupIDSet := sliceToSet(groupIDs)
-	for i, id := range streamIDs {
-		if len(groupIDSet) > 0 && !inSet(id, groupIDSet) {
-			continue
-		}
-		idMaps = append(idMaps, map[string]string{"group_id": id, "product": "stream"})
-		items = append(items, streamItems[i])
-	}
-	for i, id := range edgeIDs {
-		if len(groupIDSet) > 0 && !inSet(id, groupIDSet) {
-			continue
-		}
-		idMaps = append(idMaps, map[string]string{"group_id": id, "product": "edge"})
-		items = append(items, edgeItems[i])
-	}
-	return idMaps, items, nil
-}
-
-// fetchGroupsByProductWithItems returns group IDs and full ConfigGroup items for a product (stream or edge).
-func fetchGroupsByProductWithItems(ctx context.Context, client *sdk.CriblIo, product operations.GetProductsGroupsByProductProduct) (ids []string, items []shared.ConfigGroup, err error) {
-	if client == nil || client.Groups == nil {
-		return nil, nil, fmt.Errorf("client or Groups service nil")
-	}
-	req := operations.GetProductsGroupsByProductRequest{Product: product}
-	resp, err := client.Groups.GetProductsGroupsByProduct(ctx, req)
-	if err != nil {
-		return nil, nil, err
-	}
-	if resp == nil || resp.Object == nil {
-		return nil, nil, nil
-	}
-	groupItems := resp.Object.GetItems()
-	if len(groupItems) == 0 {
-		return nil, nil, nil
-	}
-	ids = make([]string, 0, len(groupItems))
-	items = make([]shared.ConfigGroup, 0, len(groupItems))
-	for _, g := range groupItems {
-		id := g.GetID()
-		if id == "" {
-			continue
-		}
-		ids = append(ids, id)
-		items = append(items, g)
-	}
-	return ids, items, nil
-}
-
-func sliceToSet(s []string) map[string]struct{} {
-	m := make(map[string]struct{}, len(s))
-	for _, v := range s {
-		m[v] = struct{}{}
-	}
-	return m
-}
-
-func matchesFilter(typeName string, include, exclude map[string]struct{}) bool {
-	if len(exclude) > 0 && inSet(typeName, exclude) {
-		return false
-	}
-	if len(include) > 0 && !inSet(typeName, include) {
-		return false
-	}
-	return true
-}
-
-func inSet(s string, m map[string]struct{}) bool {
-	_, ok := m[s]
-	return ok
-}
-
-// GetGroupIDs returns group IDs used for list/export (stream + edge, filtered by groupFilter).
-// Same logic as inside Discover. Use when exporting so list and get calls use the same groups.
-// onPrem: when true, exclude default_search (m/default_search/* restricted on on-prem).
+// GetGroupIDs returns group IDs used for list/export.
 func GetGroupIDs(ctx context.Context, client *importclient.Client, groupFilter []string, onPrem bool) ([]string, error) {
-	sdkClient, err := legacySDK(client)
-	if err != nil {
-		return nil, err
-	}
-	streamIDs, streamNames, err := fetchGroupsByProduct(ctx, sdkClient, operations.GetProductsGroupsByProductProductStream)
+	streamIDs, streamNames, err := fetchGroupsByProduct(ctx, client, "stream")
 	if err != nil {
 		return nil, fmt.Errorf("fetch stream groups: %w", err)
 	}
-	edgeIDs, edgeNames, err := fetchGroupsByProduct(ctx, sdkClient, operations.GetProductsGroupsByProductProductEdge)
+	edgeIDs, edgeNames, err := fetchGroupsByProduct(ctx, client, "edge")
 	if err != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", err)
 	}
 	streamIDs, _ = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, _ = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
+
 	groupIDs := make([]string, 0, len(streamIDs)+len(edgeIDs)+1)
 	groupIDs = append(groupIDs, streamIDs...)
 	groupIDs = append(groupIDs, edgeIDs...)
@@ -511,383 +172,83 @@ func GetGroupIDs(ctx context.Context, client *importclient.Client, groupFilter [
 	return groupIDs, nil
 }
 
-// skipDiscoveryForGroupFilter when --group is set, omit types that only land under global/ or search/
-// in module layout (lake, notification, search UI) unless default_search is among the resolved group IDs.
-func skipDiscoveryForGroupFilter(typeName string, groupIDs []string) bool {
-	hasDefaultSearch := false
-	for _, g := range groupIDs {
-		if g == "default_search" {
-			hasDefaultSearch = true
-			break
-		}
-	}
-	if strings.HasPrefix(typeName, "criblio_search_") {
-		return !hasDefaultSearch
-	}
-	switch typeName {
-	case "criblio_cribl_lake_dataset", "criblio_cribl_lake_house", "criblio_lakehouse_dataset_connection", "criblio_notification_target":
-		return true
-	}
-	return false
-}
-
-// filterOutDefaultSearch removes default_search from groupIDs. Used when on-prem since m/default_search/* is restricted.
-func filterOutDefaultSearch(groupIDs []string) []string {
-	out := make([]string, 0, len(groupIDs))
-	for _, gid := range groupIDs {
-		if gid != "default_search" {
-			out = append(out, gid)
-		}
-	}
-	return out
-}
-
-// ensureDefaultGroups prepends "default" and "default_search" to groupIDs if not already present,
-// so resources under those groups (e.g. certificates, parser_lib_entry under default_search) are discovered.
-func ensureDefaultGroups(groupIDs []string) []string {
-	needDefault := true
-	needDefaultSearch := true
-	for _, gid := range groupIDs {
-		if gid == "default" {
-			needDefault = false
-		}
-		if gid == "default_search" {
-			needDefaultSearch = false
-		}
-		if !needDefault && !needDefaultSearch {
-			break
-		}
-	}
-	if !needDefault && !needDefaultSearch {
-		return groupIDs
-	}
-	prepend := make([]string, 0, 2)
-	if needDefault {
-		prepend = append(prepend, "default")
-	}
-	if needDefaultSearch {
-		prepend = append(prepend, "default_search")
-	}
-	return append(prepend, groupIDs...)
-}
-
-// fallbackGroupIDs returns group IDs to try when the groups API returned none.
-// Uses "default", "default_search" (search/parser resources), and, if set, CRIBL_WORKSPACE_ID
-// (e.g. cloud workspace "main") so list calls like /m/{groupId}/lib/grok succeed.
-// onPrem: when true, omit default_search (restricted on on-prem).
-func fallbackGroupIDs(onPrem bool) []string {
-	ids := []string{"default"}
-	if !onPrem {
-		ids = append(ids, "default_search")
-	}
-	if w := os.Getenv("CRIBL_WORKSPACE_ID"); w != "" && w != "default" && w != "default_search" {
-		ids = append(ids, w)
-	}
-	return ids
-}
-
-// ListItemIdentifiers calls the SDK List* method for the entry and returns one identifier map per item.
-// Each map has lowercase keys expected by BuildImportID: "id", "group_id", "pack" (as applicable).
-// Used by export to fetch each resource and generate import blocks.
+// ListItemIdentifiers returns one identifier map per item.
 func ListItemIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) ([]map[string]string, error) {
 	if len(groupIDs) == 0 {
 		return nil, nil
 	}
-	if e.RESTListPath != "" {
-		ids, _, err := listRESTIdentifiers(ctx, client, e, groupIDs)
-		return ids, err
-	}
-	sdkClient, err := legacySDK(client)
-	if err != nil {
-		return nil, err
-	}
-	// criblio_group has no ListMethod; list via GetProductsGroupsByProduct (stream + edge) and filter by groupIDs.
-	if e.TypeName == "criblio_group" && e.ListMethod == "" {
-		return listGroupIdentifiers(ctx, sdkClient, groupIDs)
-	}
-	if e.TypeName == "criblio_lakehouse_dataset_connection" {
-		return listLakehouseDatasetConnectionIdentifiers(ctx, sdkClient)
-	}
-	if e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset" {
+	switch e.TypeName {
+	case "criblio_custom_banner":
+		return []map[string]string{{"id": "custom-banner"}}, nil
+	case "criblio_group":
+		idMaps, _, err := ListGroupIdentifiersAndItems(ctx, client, groupIDs)
+		return idMaps, err
+	case "criblio_lakehouse_dataset_connection":
+		return listLakehouseDatasetConnectionIdentifiers(ctx, client)
+	case "criblio_search_dataset_ruleset", "criblio_search_datatype_ruleset":
 		if slices.Contains(groupIDs, "default_search") {
 			return []map[string]string{{"id": "default", "group_id": "default_search"}}, nil
 		}
 		return nil, nil
+	case "criblio_pack_routes":
+		return listPackRoutesIdentifiers(ctx, client, groupIDs)
 	}
-	if e.TypeName == "criblio_pack_routes" {
-		return listPackRoutesIdentifiers(ctx, sdkClient, groupIDs)
-	}
-	clientVal := reflect.ValueOf(sdkClient)
-	if clientVal.Kind() == reflect.Ptr {
-		clientVal = clientVal.Elem()
-	}
-	svcField := clientVal.FieldByName(e.SDKService)
-	if !svcField.IsValid() {
-		return nil, fmt.Errorf("SDK service %q not found on client", e.SDKService)
-	}
-	if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
-		return nil, fmt.Errorf("SDK service %q is nil", e.SDKService)
-	}
-	svc := svcField
-	if svc.Kind() == reflect.Ptr {
-		svc = svc.Elem()
-	}
-	method := svc.Addr().MethodByName(e.ListMethod)
-	if !method.IsValid() {
-		return nil, fmt.Errorf("method %q not found on service %s", e.ListMethod, e.SDKService)
-	}
-	args := buildListArgs(ctx, method, e, groupIDs[0])
-	if len(args) >= 2 && requestRequiresPack(args[1]) {
-		return listPackScopedIdentifiers(ctx, sdkClient, e, groupIDs, method)
-	}
-	if len(args) < 2 || !requestHasGroupID(args[1]) {
-		items, err := callListAndGetItems(ctx, method, args)
-		if err != nil {
-			if isRecoverableListDecodeError(err) {
-				if ids, _, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && len(ids) > 0 {
-					return ids, nil
-				}
-				if ids, _, parseErr := unionUnmarshalIdentifiersFromCapture(e, groupIDs[0]); parseErr == nil && len(ids) > 0 {
-					return ids, nil
-				}
-				return nil, nil
-			}
-			return nil, err
-		}
-		// Pass list scope: groupIDs[0] for group-scoped; "default" for criblio_cribl_lake_dataset (Lake API only has lake "default").
-		scope := groupIDs[0]
-		if e.TypeName == "criblio_cribl_lake_dataset" {
-			scope = "default"
-			if ids, _, found, parseErr := criblLakeDatasetIdentifiersFromCapture(scope); found && parseErr == nil {
-				return ids, nil
-			}
-		}
-		ids, idErr := identifiersFromItems(items, scope, e)
-		if idErr != nil {
-			return nil, idErr
-		}
-		return filterSearchDashboardIDs(e.TypeName, ids), nil
-	}
-	var out []map[string]string
-	for _, gid := range groupIDs {
-		if skipGroupScopedSingleton(e.TypeName, gid) {
-			continue
-		}
-		args := buildListArgs(ctx, method, e, gid)
-		if len(args) >= 2 && requestRequiresPack(args[1]) {
-			// Pack-scoped: list via listPackScopedIdentifiers (called once above with first group).
-			// Here we're in the per-group loop but pack-scoped already returned; skip.
-			continue
-		}
-		// One resource per group (e.g. criblio_routes: route table per group); do not iterate items.
-		if e.ListUseGroupIDAsItemID {
-			out = append(out, map[string]string{"group_id": gid, "id": gid})
-			continue
-		}
-		var ids []map[string]string
-		var err error
-		switch e.TypeName {
-		case "criblio_event_breaker_ruleset":
-			ids, err = listIdentifiersForEventBreakerRuleset(ctx, method, e, gid, args)
-		case "criblio_search_dataset", "criblio_search_dataset_provider":
-			ids, err = listIdentifiersForSearchTypes(ctx, method, e, gid, args)
-		default:
-			items, listErr := callListAndGetItems(ctx, method, args)
-			if listErr != nil {
-				if isRecoverableListDecodeError(listErr) {
-					if parsed, _, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && len(parsed) > 0 {
-						out = append(out, parsed...)
-					} else if parsed, _, parseErr := unionUnmarshalIdentifiersFromCapture(e, gid); parseErr == nil && len(parsed) > 0 {
-						out = append(out, parsed...)
-					}
-					continue
-				}
-				return nil, listErr
-			}
-			ids, err = identifiersFromItems(items, gid, e)
-		}
-		if err != nil {
-			return nil, err
-		}
-		if e.TypeName == "criblio_pack" {
-			ids = filterPackIdentifiers(ids)
-		}
-		out = append(out, ids...)
-	}
-	return out, nil
-}
-
-// listIdentifiersForEventBreakerRuleset lists event breaker ruleset identifiers for one group.
-// SDK ListEventBreakerRulesetResponseBody has no Items; falls back to captured list response when SDK fails.
-func listIdentifiersForEventBreakerRuleset(ctx context.Context, method reflect.Value, e registry.Entry, gid string, args []reflect.Value) ([]map[string]string, error) {
-	items, err := callListAndGetItems(ctx, method, args)
-	if err != nil {
-		if isSDKLibraryUnmarshalError(err) {
-			return eventBreakerRulesetIdentifiersFromCapture(gid)
-		}
-		return nil, err
-	}
-	ids, err := identifiersFromItems(items, gid, e)
-	if err != nil {
-		return nil, err
-	}
-	if len(ids) == 0 {
-		if body := custom.GetAndClearEventBreakerRulesetListBody(gid); len(body) > 0 {
-			if parsed, parseErr := custom.ParseEventBreakerRulesetListBody(body, gid); parseErr == nil {
-				return parsed, nil
-			}
-		}
-	}
-	return ids, nil
-}
-
-// listIdentifiersForSearchTypes lists search dataset or provider identifiers for one group.
-// Falls back to captured list when SDK union unmarshal fails (e.g. cribl_lake).
-// When SDK fails and capture parse fails, returns (nil, nil) so caller can continue (no ids for this group).
-func listIdentifiersForSearchTypes(ctx context.Context, method reflect.Value, e registry.Entry, gid string, args []reflect.Value) ([]map[string]string, error) {
-	items, err := callListAndGetItems(ctx, method, args)
-	if err != nil {
-		if isRecoverableListDecodeError(err) {
-			ids, _, parseErr := searchListIdentifiersFromCapture(e)
-			if parseErr != nil {
-				return nil, nil // continue without ids
-			}
-			return ids, nil
-		}
-		return nil, err
-	}
-	return identifiersFromItems(items, gid, e)
-}
-
-// filterPackIdentifiers removes pack IDs in SkipPacks (e.g. HelloPacks).
-func filterPackIdentifiers(ids []map[string]string) []map[string]string {
-	filtered := ids[:0]
-	for _, m := range ids {
-		if !custom.SkipPacks[m["id"]] {
-			filtered = append(filtered, m)
-		}
-	}
-	return filtered
-}
-
-// callListAndGetItems invokes the list method and returns the slice of items (reflect.Value of slice).
-func callListAndGetItems(ctx context.Context, method reflect.Value, args []reflect.Value) (reflect.Value, error) {
-	var items reflect.Value
-	err := func() (err error) {
-		defer func() {
-			if r := recover(); r != nil {
-				err = fmt.Errorf("list method call failed: %v", r)
-			}
-		}()
-		outs := method.Call(args)
-		if len(outs) != 2 {
-			return fmt.Errorf("unexpected method signature")
-		}
-		// Safe error extraction: second return may be nil (success); type-asserting nil interface to error panics.
-		if v := outs[1].Interface(); v != nil {
-			if e, ok := v.(error); ok {
-				return e
-			}
-		}
-		respVal := outs[0]
-		if respVal.IsNil() {
-			return nil
-		}
-		if respVal.Kind() == reflect.Ptr {
-			respVal = respVal.Elem()
-		}
-		objectField := respVal.FieldByName("Object")
-		if !objectField.IsValid() || (objectField.Kind() == reflect.Ptr && objectField.IsNil()) {
-			return nil
-		}
-		// Object is already *ResponseBody; call GetItems on it (not Addr() which would be **ResponseBody).
-		getItems := objectField.MethodByName("GetItems")
-		if !getItems.IsValid() {
-			return nil
-		}
-		itemOuts := getItems.Call(nil)
-		if len(itemOuts) == 0 {
-			return nil
-		}
-		items = itemOuts[0]
-		return nil
-	}()
-	if err != nil {
-		return reflect.Value{}, err
-	}
-	return items, nil
-}
-
-// identifiersFromItems builds one identifier map per item. groupID is set for group-scoped resources.
-// e is used for ListItemIDMethod (e.g. GetKeyID) and ListUseGroupIDAsItemID (use groupID as id when item has none).
-// Items with lib="cribl" (built-in) are skipped so they are not exported.
-func identifiersFromItems(items reflect.Value, groupID string, e registry.Entry) ([]map[string]string, error) {
-	if items.Kind() != reflect.Slice {
+	if e.RESTListPath == "" {
 		return nil, nil
 	}
-	n := items.Len()
-	out := make([]map[string]string, 0, n)
-	for i := 0; i < n; i++ {
-		item := items.Index(i)
-		if getLibFromItem(item) == custom.EventBreakerLibCribl {
-			continue
+	ids, _, err := listRESTIdentifiers(ctx, client, e, groupIDs)
+	return ids, err
+}
+
+// ListGroupIdentifiersAndItems returns identifier maps and raw group API items.
+func ListGroupIdentifiersAndItems(ctx context.Context, client *importclient.Client, groupIDs []string) (idMaps []map[string]string, items []json.RawMessage, err error) {
+	groupIDSet := sliceToSet(groupIDs)
+	for _, product := range []string{"stream", "edge"} {
+		rawItems, err := getRESTItems(ctx, client, fmt.Sprintf("/products/%s/groups", product))
+		if err != nil {
+			return nil, nil, err
 		}
-		id := getIDFromItem(item, e.ListItemIDMethod)
-		if id == "" && e.ListUseGroupIDAsItemID && groupID != "" {
-			id = groupID
+		for _, raw := range rawItems {
+			item, err := rawMap(raw)
+			if err != nil {
+				return nil, nil, err
+			}
+			id := rawString(item, "id", "ID", "name")
+			if id == "" {
+				continue
+			}
+			if len(groupIDSet) > 0 && !inSet(id, groupIDSet) {
+				continue
+			}
+			idMaps = append(idMaps, map[string]string{"group_id": id, "id": id, "product": product})
+			items = append(items, raw)
 		}
+	}
+	return idMaps, items, nil
+}
+
+func fetchGroupsByProduct(ctx context.Context, client *importclient.Client, product string) (ids []string, names []string, err error) {
+	items, err := getRESTItems(ctx, client, fmt.Sprintf("/products/%s/groups", product))
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, raw := range items {
+		item, err := rawMap(raw)
+		if err != nil {
+			return nil, nil, err
+		}
+		id := rawString(item, "id", "ID", "name")
 		if id == "" {
 			continue
 		}
-		// Skip search datasets tagged cribl:default (built-in); only user-created are imported.
-		if e.TypeName == "criblio_search_dataset" && itemHasCriblDefaultTagFromItem(item) {
-			continue
+		ids = append(ids, id)
+		if name := rawString(item, "name"); name != "" {
+			names = append(names, name)
+		} else {
+			names = append(names, id)
 		}
-		// Skip default search dataset providers (cribl_leader, S3, cribl_lake, etc.) so only user-created are imported.
-		if e.TypeName == "criblio_search_dataset_provider" && custom.DefaultSearchDatasetProviderIDs[id] {
-			continue
-		}
-		// Skip cribl_lake datasets: they are managed via Lake API and exported as criblio_cribl_lake_dataset only.
-		if e.TypeName == "criblio_search_dataset" && getTypeFromItem(item) == custom.SearchDatasetTypeCriblLake {
-			continue
-		}
-		// Skip default Cribl Lake datasets (cribl_logs, default_*, etc.) so only user-created are imported.
-		if e.TypeName == "criblio_cribl_lake_dataset" && custom.DefaultCriblLakeDatasetIDs[id] {
-			continue
-		}
-		// Skip pack-scoped resources (id contains ".") — pack-owned items bleed into top-level list APIs
-		// but belong to their pack, not standalone resources (e.g. criblio_pack_breakers, pack macros).
-		if (e.TypeName == "criblio_event_breaker_ruleset" || e.TypeName == "criblio_search_macro") && strings.Contains(id, ".") {
-			continue
-		}
-		// Skip pack pipelines (id starts with "pack:") — they belong to criblio_pack_pipeline, not criblio_pipeline.
-		if e.TypeName == "criblio_pipeline" && strings.HasPrefix(id, "pack:") {
-			continue
-		}
-		// Strip "pack:" prefix from pack pipeline IDs if present (API may return full ID format).
-		if e.TypeName == "criblio_pack_pipeline" && strings.HasPrefix(id, "pack:") {
-			id = strings.TrimPrefix(id, "pack:")
-		}
-		// Skip built-in destinations (default, devnull) so only user-created are imported.
-		if (e.TypeName == "criblio_destination" || e.TypeName == "criblio_pack_destination") && custom.DefaultDestinationIDs[id] {
-			continue
-		}
-		m := map[string]string{"id": id}
-		if e.TypeName == "criblio_cribl_lake_dataset" {
-			// Lake API uses lake_id (default "default"); always set so HCL has required lake_id.
-			if groupID != "" {
-				m["lake_id"] = groupID
-			} else {
-				m["lake_id"] = "default"
-			}
-		} else if e.TypeName == "criblio_cribl_lake_house" {
-			// Lakehouse API is not group-scoped; omit group_id so export puts under global.
-		} else if groupID != "" {
-			m["group_id"] = groupID
-		}
-		out = append(out, m)
 	}
-	return out, nil
+	return ids, names, nil
 }
 
 func listOneREST(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) (int, map[string]int, error) {
@@ -903,26 +264,37 @@ func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e reg
 		return nil, nil, fmt.Errorf("REST client is nil")
 	}
 
-	scopes := []string{""}
-	if pathUsesRESTParam(e.RESTListPath, "group_id") {
-		scopes = groupIDs
-	}
-
 	var out []map[string]string
-	perGroup := make(map[string]int)
-	for _, gid := range scopes {
+	perGroup := map[string]int{}
+	for _, scope := range restScopes(e.RESTListPath, groupIDs) {
+		gid := scope["group_id"]
 		if gid != "" && skipGroupScopedSingleton(e.TypeName, gid) {
 			continue
 		}
-		path := renderRESTPath(e.RESTListPath, map[string]string{"group_id": gid})
-		items, err := restclient.Get[[]json.RawMessage](ctx, client.REST, path)
-		if err != nil {
-			return nil, nil, err
-		}
-		if items == nil {
+		if pathUsesRESTParam(e.RESTListPath, "pack") {
+			packIDs, err := getPackIDsByGroup(ctx, client, gid)
+			if err != nil {
+				return nil, nil, err
+			}
+			groupCount := 0
+			for _, packID := range packIDs {
+				scope["pack"] = packID
+				ids, err := listRESTPathIdentifiers(ctx, client, e, scope)
+				if err != nil {
+					return nil, nil, err
+				}
+				for _, id := range ids {
+					id["pack"] = packID
+				}
+				groupCount += len(ids)
+				out = append(out, ids...)
+			}
+			if gid != "" {
+				perGroup[gid] = groupCount
+			}
 			continue
 		}
-		ids, err := identifiersFromRawItems(*items, gid, e)
+		ids, err := listRESTPathIdentifiers(ctx, client, e, scope)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -937,61 +309,194 @@ func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e reg
 	return out, perGroup, nil
 }
 
-func identifiersFromRawItems(items []json.RawMessage, groupID string, e registry.Entry) ([]map[string]string, error) {
+func listRESTPathIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, scope map[string]string) ([]map[string]string, error) {
+	path := renderRESTPath(e.RESTListPath, scope)
+	items, err := getRESTItems(ctx, client, path)
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return identifiersFromRawItems(items, scope, e)
+}
+
+func restScopes(path string, groupIDs []string) []map[string]string {
+	if pathUsesRESTParam(path, "group_id") {
+		scopes := make([]map[string]string, 0, len(groupIDs))
+		for _, gid := range groupIDs {
+			scopes = append(scopes, map[string]string{"group_id": gid})
+		}
+		return scopes
+	}
+	if pathUsesRESTParam(path, "lake_id") {
+		return []map[string]string{{"lake_id": "default"}}
+	}
+	if pathUsesRESTParam(path, "product") {
+		return []map[string]string{{"product": "stream"}, {"product": "edge"}}
+	}
+	return []map[string]string{{}}
+}
+
+func identifiersFromRawItems(items []json.RawMessage, scope map[string]string, e registry.Entry) ([]map[string]string, error) {
 	out := make([]map[string]string, 0, len(items))
 	for _, raw := range items {
-		var item map[string]any
-		if err := json.Unmarshal(raw, &item); err != nil {
+		item, err := rawMap(raw)
+		if err != nil {
 			return nil, err
 		}
 		if rawString(item, "lib", "library") == custom.EventBreakerLibCribl {
 			continue
 		}
-		id := rawString(item, "id", "ID", "keyID", "keyId", "name")
-		if id == "" && e.ListUseGroupIDAsItemID && groupID != "" {
-			id = groupID
+		id := rawString(item, "id", "ID", "Id", "keyID", "keyId", "key_id", "name", "Name")
+		if id == "" && e.ListUseGroupIDAsItemID && scope["group_id"] != "" {
+			id = scope["group_id"]
 		}
 		if id == "" {
 			continue
 		}
-		if e.TypeName == "criblio_search_dataset" && rawHasCriblDefaultTag(item) {
-			continue
-		}
-		if e.TypeName == "criblio_search_dataset_provider" && custom.DefaultSearchDatasetProviderIDs[id] {
-			continue
-		}
-		if e.TypeName == "criblio_search_dataset" && rawString(item, "type") == custom.SearchDatasetTypeCriblLake {
-			continue
-		}
-		if e.TypeName == "criblio_cribl_lake_dataset" && custom.DefaultCriblLakeDatasetIDs[id] {
-			continue
-		}
-		if (e.TypeName == "criblio_event_breaker_ruleset" || e.TypeName == "criblio_search_macro") && strings.Contains(id, ".") {
-			continue
-		}
-		if e.TypeName == "criblio_pipeline" && strings.HasPrefix(id, "pack:") {
+		if shouldSkipRawID(e.TypeName, id, item) {
 			continue
 		}
 		if e.TypeName == "criblio_pack_pipeline" && strings.HasPrefix(id, "pack:") {
 			id = strings.TrimPrefix(id, "pack:")
 		}
-		if (e.TypeName == "criblio_destination" || e.TypeName == "criblio_pack_destination") && custom.DefaultDestinationIDs[id] {
-			continue
-		}
-
 		m := map[string]string{"id": id}
-		if e.TypeName == "criblio_cribl_lake_dataset" {
-			if groupID != "" {
-				m["lake_id"] = groupID
-			} else {
-				m["lake_id"] = "default"
+		for _, key := range []string{"group_id", "lake_id", "pack", "product"} {
+			if scope[key] != "" {
+				m[key] = scope[key]
 			}
-		} else if e.TypeName != "criblio_cribl_lake_house" && groupID != "" {
-			m["group_id"] = groupID
 		}
 		out = append(out, m)
 	}
 	return out, nil
+}
+
+func shouldSkipRawID(typeName, id string, item map[string]any) bool {
+	switch {
+	case typeName == "criblio_search_dataset" && rawHasCriblDefaultTag(item):
+		return true
+	case typeName == "criblio_search_dataset_provider" && custom.DefaultSearchDatasetProviderIDs[id]:
+		return true
+	case typeName == "criblio_search_dataset" && rawString(item, "type") == custom.SearchDatasetTypeCriblLake:
+		return true
+	case typeName == "criblio_cribl_lake_dataset" && custom.DefaultCriblLakeDatasetIDs[id]:
+		return true
+	case (typeName == "criblio_event_breaker_ruleset" || typeName == "criblio_search_macro") && strings.Contains(id, "."):
+		return true
+	case typeName == "criblio_pipeline" && strings.HasPrefix(id, "pack:"):
+		return true
+	case (typeName == "criblio_destination" || typeName == "criblio_pack_destination") && custom.DefaultDestinationIDs[id]:
+		return true
+	}
+	return false
+}
+
+func listLakehouseDatasetConnectionIdentifiers(ctx context.Context, client *importclient.Client) ([]map[string]string, error) {
+	lakehouses, err := getRESTItems(ctx, client, "/products/lake/lakes/default/lakehouses")
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	datasets, err := getRESTItems(ctx, client, "/products/lake/lakes/default/datasets")
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	out := make([]map[string]string, 0, len(lakehouses)*len(datasets))
+	for _, lhRaw := range lakehouses {
+		lh, err := rawMap(lhRaw)
+		if err != nil {
+			return nil, err
+		}
+		lakehouseID := rawString(lh, "id", "ID", "name")
+		if lakehouseID == "" {
+			continue
+		}
+		for _, dsRaw := range datasets {
+			ds, err := rawMap(dsRaw)
+			if err != nil {
+				return nil, err
+			}
+			datasetID := rawString(ds, "id", "ID", "name")
+			if datasetID == "" {
+				continue
+			}
+			out = append(out, map[string]string{"lakehouse_id": lakehouseID, "lake_dataset_id": datasetID})
+		}
+	}
+	return out, nil
+}
+
+func listPackRoutesIdentifiers(ctx context.Context, client *importclient.Client, groupIDs []string) ([]map[string]string, error) {
+	var out []map[string]string
+	for _, gid := range groupIDs {
+		packIDs, err := getPackIDsByGroup(ctx, client, gid)
+		if err != nil {
+			return nil, fmt.Errorf("criblio_pack_routes: get packs for group %s: %w", gid, err)
+		}
+		for _, packID := range packIDs {
+			out = append(out, map[string]string{"group_id": gid, "pack": packID})
+		}
+	}
+	return out, nil
+}
+
+func getPackIDsByGroup(ctx context.Context, client *importclient.Client, groupID string) ([]string, error) {
+	items, err := getRESTItems(ctx, client, fmt.Sprintf("/m/%s/packs", url.PathEscape(groupID)))
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	ids := make([]string, 0, len(items))
+	for _, raw := range items {
+		item, err := rawMap(raw)
+		if err != nil {
+			return nil, err
+		}
+		id := rawString(item, "id", "ID", "name")
+		if id != "" && !custom.SkipPacks[id] {
+			ids = append(ids, id)
+		}
+	}
+	return ids, nil
+}
+
+func getRESTItems(ctx context.Context, client *importclient.Client, path string) ([]json.RawMessage, error) {
+	items, err := restclient.Get[[]json.RawMessage](ctx, client.REST, path)
+	if err == nil {
+		if items == nil {
+			return nil, nil
+		}
+		return *items, nil
+	}
+	var notFound *restclient.NotFoundError
+	if errors.As(err, &notFound) {
+		return nil, err
+	}
+	item, itemErr := restclient.Get[map[string]json.RawMessage](ctx, client.REST, path)
+	if itemErr != nil {
+		return nil, err
+	}
+	raw, err := json.Marshal(item)
+	if err != nil {
+		return nil, err
+	}
+	return []json.RawMessage{raw}, nil
+}
+
+func rawMap(raw json.RawMessage) (map[string]any, error) {
+	var item map[string]any
+	if err := json.Unmarshal(raw, &item); err != nil {
+		return nil, err
+	}
+	return item, nil
 }
 
 func rawString(item map[string]any, keys ...string) string {
@@ -1020,7 +525,7 @@ func rawHasCriblDefaultTag(item map[string]any) bool {
 		return false
 	}
 	for _, tag := range tags {
-		if s, ok := tag.(string); ok && strings.EqualFold(s, "cribl:default") {
+		if s, ok := tag.(string); ok && strings.EqualFold(s, custom.CriblDefaultTag) {
 			return true
 		}
 	}
@@ -1039,814 +544,99 @@ func renderRESTPath(path string, values map[string]string) string {
 	return rendered
 }
 
-// getLibFromItem returns the lib value from a list item (struct or map). Used to skip built-in items (lib="cribl").
-func getLibFromItem(item reflect.Value) string {
-	if item.Kind() == reflect.Ptr && !item.IsNil() {
-		item = item.Elem()
+func filterGroups(ids, names []string, suffix string, filter []string) (filteredIDs, filteredNames []string) {
+	if len(filter) == 0 {
+		return ids, names
 	}
-	if item.Kind() == reflect.Map {
-		for _, key := range []string{"lib", "Lib"} {
-			k := item.MapIndex(reflect.ValueOf(key))
-			if !k.IsValid() {
-				continue
-			}
-			if k.Kind() == reflect.Interface {
-				k = reflect.ValueOf(k.Interface())
-			}
-			for k.Kind() == reflect.Ptr && k.IsValid() && !k.IsNil() {
-				k = k.Elem()
-			}
-			if k.Kind() == reflect.String {
-				return k.String()
-			}
+	filterSet := sliceToSet(filter)
+	for i := range ids {
+		id := ids[i]
+		label := names[i] + suffix
+		if inSet(id, filterSet) || inSet(label, filterSet) {
+			filteredIDs = append(filteredIDs, id)
+			filteredNames = append(filteredNames, names[i])
 		}
-		return ""
 	}
-	getLib := item.Addr().MethodByName("GetLib")
-	if !getLib.IsValid() {
-		return ""
-	}
-	outs := getLib.Call(nil)
-	if len(outs) == 0 {
-		return ""
-	}
-	v := outs[0]
-	if v.Kind() == reflect.Ptr && v.IsNil() {
-		return ""
-	}
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-	if v.Kind() == reflect.String {
-		return v.String()
-	}
-	// Named types with underlying string (e.g. shared.CriblLib "custom"/"cribl") for Knowledge resources.
-	if v.IsValid() && v.CanConvert(reflect.TypeOf("")) {
-		return v.Convert(reflect.TypeOf("")).String()
-	}
-	return ""
+	return filteredIDs, filteredNames
 }
 
-// itemHasCriblDefaultTagFromItem returns true if the item has tags containing "cribl:default" (string or slice).
-// Used to skip built-in search datasets when the SDK list unmarshals successfully.
-func itemHasCriblDefaultTagFromItem(item reflect.Value) bool {
-	if item.Kind() == reflect.Ptr && !item.IsNil() {
-		item = item.Elem()
+func sliceToSet(values []string) map[string]struct{} {
+	set := make(map[string]struct{}, len(values))
+	for _, value := range values {
+		set[value] = struct{}{}
 	}
-	tag := custom.CriblDefaultTag
-	if item.Kind() == reflect.Map {
-		k := item.MapIndex(reflect.ValueOf("tags"))
-		if !k.IsValid() {
-			return false
-		}
-		if k.Kind() == reflect.Interface {
-			k = reflect.ValueOf(k.Interface())
-		}
-		for k.Kind() == reflect.Ptr && k.IsValid() && !k.IsNil() {
-			k = k.Elem()
-		}
-		if k.Kind() == reflect.String {
-			return k.String() == tag
-		}
-		if k.Kind() == reflect.Slice {
-			for j := 0; j < k.Len(); j++ {
-				el := k.Index(j)
-				if el.Kind() == reflect.Interface {
-					el = reflect.ValueOf(el.Interface())
-				}
-				if el.Kind() == reflect.String && el.String() == tag {
-					return true
-				}
-			}
-		}
+	return set
+}
+
+func matchesFilter(typeName string, include, exclude map[string]struct{}) bool {
+	if len(exclude) > 0 && inSet(typeName, exclude) {
 		return false
 	}
-	// Struct: field Tags or method GetTags
-	f := item.FieldByName("Tags")
-	if f.IsValid() {
-		for f.Kind() == reflect.Ptr && f.IsValid() && !f.IsNil() {
-			f = f.Elem()
-		}
-		if f.Kind() == reflect.String {
-			return f.String() == tag
-		}
-		if f.Kind() == reflect.Slice {
-			for j := 0; j < f.Len(); j++ {
-				el := f.Index(j)
-				if el.Kind() == reflect.Interface {
-					el = reflect.ValueOf(el.Interface())
-				}
-				if el.Kind() == reflect.String && el.String() == tag {
-					return true
-				}
-			}
-		}
+	if len(include) > 0 && !inSet(typeName, include) {
+		return false
 	}
-	getTags := item.Addr().MethodByName("GetTags")
-	if getTags.IsValid() && getTags.Type().NumOut() >= 1 {
-		outs := getTags.Call(nil)
-		v := outs[0]
-		for v.Kind() == reflect.Ptr && v.IsValid() && !v.IsNil() {
-			v = v.Elem()
-		}
-		if v.Kind() == reflect.String {
-			return v.String() == tag
-		}
-		if v.Kind() == reflect.Slice {
-			for j := 0; j < v.Len(); j++ {
-				el := v.Index(j)
-				if el.Kind() == reflect.Interface {
-					el = reflect.ValueOf(el.Interface())
-				}
-				if el.Kind() == reflect.String && el.String() == tag {
-					return true
-				}
-			}
-		}
+	return true
+}
+
+func inSet(value string, set map[string]struct{}) bool {
+	_, ok := set[value]
+	return ok
+}
+
+func skipDiscoveryForGroupFilter(typeName string, groupIDs []string) bool {
+	hasDefaultSearch := slices.Contains(groupIDs, "default_search")
+	if strings.HasPrefix(typeName, "criblio_search_") {
+		return !hasDefaultSearch
+	}
+	switch typeName {
+	case "criblio_cribl_lake_dataset", "criblio_cribl_lake_house", "criblio_lakehouse_dataset_connection", "criblio_notification_target":
+		return true
 	}
 	return false
 }
 
-// getTypeFromItem returns the type string from a list item (e.g. "cribl_lake" for search datasets).
-// Used to skip cribl_lake items so they are only exported as criblio_cribl_lake_dataset.
-func getTypeFromItem(item reflect.Value) string {
-	if item.Kind() == reflect.Ptr && !item.IsNil() {
-		item = item.Elem()
-	}
-	if item.Kind() == reflect.Map {
-		for _, key := range []string{"type", "Type"} {
-			k := item.MapIndex(reflect.ValueOf(key))
-			if !k.IsValid() {
-				continue
-			}
-			if k.Kind() == reflect.Interface {
-				k = reflect.ValueOf(k.Interface())
-			}
-			for k.Kind() == reflect.Ptr && k.IsValid() && !k.IsNil() {
-				k = k.Elem()
-			}
-			if k.Kind() == reflect.String {
-				return k.String()
-			}
-		}
-		return ""
-	}
-	getType := item.Addr().MethodByName("GetType")
-	if !getType.IsValid() {
-		return ""
-	}
-	outs := getType.Call(nil)
-	if len(outs) == 0 {
-		return ""
-	}
-	v := outs[0]
-	if v.Kind() == reflect.Ptr && v.IsNil() {
-		return ""
-	}
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-	if v.Kind() == reflect.String {
-		return v.String()
-	}
-	if v.IsValid() && v.CanConvert(reflect.TypeOf("")) {
-		return v.Convert(reflect.TypeOf("")).String()
-	}
-	return ""
+func skipGroupScopedSingleton(typeName, groupID string) bool {
+	return typeName == "criblio_routes" && (groupID == "default_search" || groupID == "search")
 }
 
-// getIDFromItem returns the ID from a list item (struct or map). itemIDMethod if non-empty is tried first (e.g. "GetKeyID").
-func getIDFromItem(item reflect.Value, itemIDMethod string) string {
-	for item.IsValid() && (item.Kind() == reflect.Interface || item.Kind() == reflect.Ptr) && !item.IsNil() {
-		item = item.Elem()
-	}
-	if !item.IsValid() {
-		return ""
-	}
-	if item.Kind() == reflect.Map {
-		for _, key := range []string{"id", "ID", "Id", "keyId", "keyID", "key_id", "name", "Name"} {
-			k := item.MapIndex(reflect.ValueOf(key))
-			if !k.IsValid() {
-				continue
-			}
-			if s := stringFromReflectValue(k); s != "" {
-				return s
-			}
-		}
-		return ""
-	}
-	// Struct: try custom method first, then GetID
-	if itemIDMethod != "" {
-		m := methodByName(item, itemIDMethod)
-		if m.IsValid() {
-			outs := m.Call(nil)
-			if len(outs) > 0 {
-				if s := stringFromReflectValue(outs[0]); s != "" {
-					return s
-				}
-			}
-		}
-	}
-	getID := methodByName(item, "GetID")
-	if getID.IsValid() {
-		outs := getID.Call(nil)
-		if len(outs) > 0 {
-			if s := stringFromReflectValue(outs[0]); s != "" {
-				return s
-			}
-		}
-	}
-	getName := methodByName(item, "GetName")
-	if getName.IsValid() {
-		outs := getName.Call(nil)
-		if len(outs) > 0 {
-			if s := stringFromReflectValue(outs[0]); s != "" {
-				return s
-			}
-		}
-	}
-	for _, name := range []string{"ID", "Id", "KeyID", "KeyId", "Name"} {
-		if s := stringFromStructField(item, name); s != "" {
-			return s
-		}
-	}
-	// Union-type structs (e.g. GenericDataset, GenericProvider) have no GetID on the wrapper; get ID from the non-nil inner field.
-	return getIDFromUnionStruct(item)
-}
-
-// getIDFromUnionStruct returns the ID from a union-style struct whose fields are pointers to concrete types.
-// Used for ListDataset/ListDatasetProvider items (GenericDataset, GenericProvider).
-func getIDFromUnionStruct(item reflect.Value) string {
-	for item.IsValid() && (item.Kind() == reflect.Interface || item.Kind() == reflect.Ptr) && !item.IsNil() {
-		item = item.Elem()
-	}
-	if item.Kind() != reflect.Struct {
-		return ""
-	}
-	for i := 0; i < item.NumField(); i++ {
-		f := item.Field(i)
-		if f.Kind() != reflect.Ptr || f.IsNil() {
-			continue
-		}
-		inner := f.Elem()
-		if inner.Kind() != reflect.Struct {
-			continue
-		}
-		for _, methodName := range []string{"GetID", "GetName"} {
-			m := methodByName(inner, methodName)
-			if !m.IsValid() {
-				continue
-			}
-			outs := m.Call(nil)
-			if len(outs) == 0 {
-				continue
-			}
-			if s := stringFromReflectValue(outs[0]); s != "" {
-				return s
-			}
-		}
-		for _, name := range []string{"ID", "Id", "KeyID", "KeyId", "Name"} {
-			if s := stringFromStructField(inner, name); s != "" {
-				return s
-			}
-		}
-	}
-	return ""
-}
-
-func stringFromStructField(item reflect.Value, name string) string {
-	if !item.IsValid() || item.Kind() != reflect.Struct {
-		return ""
-	}
-	f := item.FieldByName(name)
-	if !f.IsValid() {
-		return ""
-	}
-	return stringFromReflectValue(f)
-}
-
-func methodByName(v reflect.Value, name string) reflect.Value {
-	if !v.IsValid() {
-		return reflect.Value{}
-	}
-	if m := v.MethodByName(name); m.IsValid() {
-		return m
-	}
-	if v.CanAddr() {
-		return v.Addr().MethodByName(name)
-	}
-	if v.Kind() == reflect.Struct {
-		copy := reflect.New(v.Type())
-		copy.Elem().Set(v)
-		return copy.MethodByName(name)
-	}
-	return reflect.Value{}
-}
-
-func stringFromReflectValue(v reflect.Value) string {
-	for v.IsValid() && (v.Kind() == reflect.Interface || v.Kind() == reflect.Ptr) {
-		if v.IsNil() {
-			return ""
-		}
-		v = v.Elem()
-	}
-	if !v.IsValid() {
-		return ""
-	}
-	if v.Kind() == reflect.String {
-		return v.String()
-	}
-	if v.CanConvert(reflect.TypeOf("")) {
-		return v.Convert(reflect.TypeOf("")).String()
-	}
-	return ""
-}
-
-// listOne calls the SDK list method for the given entry and returns total count and per-group counts.
-// When the list method takes a request with GroupID, it is called once per groupID; perGroup maps groupID -> count.
-// When the method has no GroupID, perGroup is nil.
-func listOne(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) (total int, perGroup map[string]int, err error) {
-	// No groups (e.g. user filtered to edge-only): return zero, no API calls.
-	if len(groupIDs) == 0 {
-		return 0, nil, nil
-	}
-	if e.RESTListPath != "" {
-		return listOneREST(ctx, client, e, groupIDs)
-	}
-	sdkClient, err := legacySDK(client)
-	if err != nil {
-		return 0, nil, err
-	}
-	clientVal := reflect.ValueOf(sdkClient)
-	if clientVal.Kind() == reflect.Ptr {
-		clientVal = clientVal.Elem()
-	}
-	svcField := clientVal.FieldByName(e.SDKService)
-	if !svcField.IsValid() {
-		return 0, nil, fmt.Errorf("SDK service %q not found on client", e.SDKService)
-	}
-	if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
-		return 0, nil, fmt.Errorf("SDK service %q is nil", e.SDKService)
-	}
-	svc := svcField
-	if svc.Kind() == reflect.Ptr {
-		svc = svc.Elem()
-	}
-	method := svc.Addr().MethodByName(e.ListMethod)
-	if !method.IsValid() {
-		return 0, nil, fmt.Errorf("method %q not found on service %s", e.ListMethod, e.SDKService)
-	}
-
-	args := buildListArgs(ctx, method, e, groupIDs[0])
-	if len(args) >= 2 && requestRequiresPack(args[1]) {
-		return countPackScoped(ctx, sdkClient, e, groupIDs, method)
-	}
-	// If the method has no request or request has no GroupID, call once.
-	if len(args) < 2 || !requestHasGroupID(args[1]) {
-		// For search dataset/provider types, count after filtering out defaults so preview matches export.
-		if e.TypeName == "criblio_search_dataset_provider" || e.TypeName == "criblio_search_dataset" {
-			items, listErr := callListAndGetItems(ctx, method, args)
-			if listErr != nil && isRecoverableListDecodeError(listErr) {
-				if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
-					return count, nil, nil
-				}
-				return 0, nil, nil
-			}
-			if listErr != nil {
-				return 0, nil, listErr
-			}
-			ids, idErr := identifiersFromItems(items, groupIDs[0], e)
-			if idErr != nil {
-				return 0, nil, idErr
-			}
-			return len(ids), nil, nil
-		}
-		if e.TypeName == "criblio_search_saved_query" || e.TypeName == "criblio_search_dashboard" {
-			items, listErr := callListAndGetItems(ctx, method, args)
-			if listErr != nil && isRecoverableListDecodeError(listErr) {
-				if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
-					return count, nil, nil
-				}
-				return 0, nil, nil
-			}
-			if listErr != nil {
-				return 0, nil, listErr
-			}
-			ids, idErr := identifiersFromItems(items, groupIDs[0], e)
-			if idErr != nil {
-				return 0, nil, idErr
-			}
-			return len(ids), nil, nil
-		}
-		// criblio_cribl_lake_dataset: count after filtering DefaultCriblLakeDatasetIDs so discovery count matches export.
-		if e.TypeName == "criblio_cribl_lake_dataset" {
-			items, listErr := callListAndGetItems(ctx, method, args)
-			if listErr != nil && isRecoverableListDecodeError(listErr) {
-				return 0, nil, nil
-			}
-			if listErr != nil {
-				return 0, nil, listErr
-			}
-			if _, count, found, parseErr := criblLakeDatasetIdentifiersFromCapture("default"); found && parseErr == nil {
-				return count, nil, nil
-			}
-			ids, idErr := identifiersFromItems(items, groupIDs[0], e)
-			if idErr != nil {
-				return 0, nil, idErr
-			}
-			return len(ids), nil, nil
-		}
-		n, err := callListAndCount(ctx, method, args)
-		if err != nil && isRecoverableListDecodeError(err) {
-			if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
-				return count, nil, nil
-			}
-			if _, count, parseErr := unionUnmarshalIdentifiersFromCapture(e, groupIDs[0]); parseErr == nil && count > 0 {
-				return count, nil, nil
-			}
-			return 0, nil, nil
-		}
-		return n, nil, err
-	}
-	// Request has GroupID: call once per group and sum counts; record per-group.
-	perGroup = make(map[string]int)
+func filterOutDefaultSearch(groupIDs []string) []string {
+	out := make([]string, 0, len(groupIDs))
 	for _, gid := range groupIDs {
-		if skipGroupScopedSingleton(e.TypeName, gid) {
-			continue
-		}
-		args := buildListArgs(ctx, method, e, gid)
-		if len(args) >= 2 && requestRequiresPack(args[1]) {
-			return total, perGroup, nil
-		}
-		var n int
-		switch e.TypeName {
-		case "criblio_search_dataset", "criblio_search_dataset_provider":
-			ids, listErr := listIdentifiersForSearchTypes(ctx, method, e, gid, args)
-			if listErr != nil {
-				return total, perGroup, listErr
-			}
-			n = len(ids)
-		case "criblio_event_breaker_ruleset":
-			ids, listErr := listIdentifiersForEventBreakerRuleset(ctx, method, e, gid, args)
-			if listErr != nil {
-				return total, perGroup, listErr
-			}
-			n = len(ids)
-		default:
-			var err error
-			n, err = callListAndCount(ctx, method, args)
-			if err != nil {
-				if isRecoverableListDecodeError(err) {
-					if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
-						total += count
-						perGroup[gid] = count
-					} else if _, count, parseErr := unionUnmarshalIdentifiersFromCapture(e, gid); parseErr == nil && count > 0 {
-						total += count
-						perGroup[gid] = count
-					}
-					continue
-				}
-				return total, perGroup, err
-			}
-			// criblio_routes: API may return 0 items; count as 1 resource per group when ListUseGroupIDAsItemID.
-			if n == 0 && e.ListUseGroupIDAsItemID {
-				n = 1
-			}
-		}
-		total += n
-		perGroup[gid] = n
-	}
-	return total, perGroup, nil
-}
-
-// callListAndCount invokes the list method with the given args and returns the item count.
-// args are built from method.Type() in buildListArgs so they match the method signature.
-// We use reflection because the registry drives which SDK List* method to call by name;
-// a panic from type mismatch is recovered and returned as an error.
-func callListAndCount(ctx context.Context, method reflect.Value, args []reflect.Value) (n int, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("list method call failed: %v", r)
-		}
-	}()
-	outs := method.Call(args)
-	if len(outs) != 2 {
-		return 0, fmt.Errorf("unexpected method signature")
-	}
-	respVal := outs[0]
-	errVal := outs[1]
-	if !errVal.IsNil() {
-		return 0, errVal.Interface().(error)
-	}
-	if respVal.IsNil() {
-		return 0, nil
-	}
-	return countItemsFromResponse(respVal)
-}
-
-func buildListArgs(ctx context.Context, method reflect.Value, e registry.Entry, groupID string) []reflect.Value {
-	if groupID == "" {
-		groupID = "default"
-	}
-	// Lake API list (criblio_cribl_lake_dataset) only accepts lakeId "default"; do not use groupIDs[0] (e.g. "default_search").
-	if e.TypeName == "criblio_cribl_lake_dataset" {
-		groupID = "default"
-	}
-	mt := method.Type()
-	args := []reflect.Value{reflect.ValueOf(ctx)}
-	if mt.NumIn() >= 2 {
-		param1 := mt.In(1)
-		if param1.Kind() != reflect.Slice {
-			reqVal := reflect.New(param1)
-			setGroupIDDefault(reqVal, groupID)
-			args = append(args, reqVal.Elem())
+		if gid != "default_search" {
+			out = append(out, gid)
 		}
 	}
-	return args
+	return out
 }
 
-// requestHasGroupID reports whether the request struct has a GroupID field (used for path /m/{groupId}/...).
-func requestHasGroupID(reqVal reflect.Value) bool {
-	if reqVal.Kind() == reflect.Ptr {
-		reqVal = reqVal.Elem()
-	}
-	if !reqVal.IsValid() || reqVal.Kind() != reflect.Struct {
-		return false
-	}
-	f := reqVal.FieldByName("GroupID")
-	return f.IsValid() && f.Kind() == reflect.String
-}
-
-func setGroupIDDefault(req reflect.Value, defaultGroupID string) {
-	if req.Kind() == reflect.Ptr {
-		req = req.Elem()
-	}
-	if !req.IsValid() || req.Kind() != reflect.Struct {
-		return
-	}
-	// Set GroupID (path /m/{groupId}/...) or LakeID (path /lakes/{lakeId}/...) so list request is valid.
-	for _, name := range []string{"GroupID", "LakeID"} {
-		f := req.FieldByName(name)
-		if f.IsValid() && f.CanSet() && f.Kind() == reflect.String {
-			f.SetString(defaultGroupID)
-		}
-	}
-}
-
-func setPackDefault(req reflect.Value, packID string) {
-	if req.Kind() == reflect.Ptr {
-		req = req.Elem()
-	}
-	if !req.IsValid() || req.Kind() != reflect.Struct {
-		return
-	}
-	f := req.FieldByName("Pack")
-	if f.IsValid() && f.CanSet() && f.Kind() == reflect.String {
-		f.SetString(packID)
-	}
-}
-
-// getPackIDsByGroup returns pack IDs for the given group via Packs.GetPacksByGroup.
-// Used to discover pack-scoped resources (pack_destination, pack_pipeline, pack_source).
-func getPackIDsByGroup(ctx context.Context, client *sdk.CriblIo, groupID string) ([]string, error) {
-	if client == nil || client.Packs == nil {
-		return nil, fmt.Errorf("packs service nil")
-	}
-	resp, err := client.Packs.GetPacksByGroup(ctx, operations.GetPacksByGroupRequest{GroupID: groupID})
-	if err != nil {
-		return nil, err
-	}
-	if resp == nil || resp.Object == nil {
-		return nil, nil
-	}
-	items := resp.Object.GetItems()
-	ids := make([]string, 0, len(items))
-	for _, item := range items {
-		if id := item.GetID(); id != "" && !custom.SkipPacks[id] {
-			ids = append(ids, id)
-		}
-	}
-	return ids, nil
-}
-
-// buildListArgsWithPack builds [ctx, request] with GroupID and Pack set for pack-scoped list methods.
-func buildListArgsWithPack(ctx context.Context, method reflect.Value, e registry.Entry, groupID, packID string) []reflect.Value {
-	if groupID == "" {
-		groupID = "default"
-	}
-	mt := method.Type()
-	args := []reflect.Value{reflect.ValueOf(ctx)}
-	if mt.NumIn() >= 2 {
-		param1 := mt.In(1)
-		if param1.Kind() != reflect.Slice {
-			reqVal := reflect.New(param1)
-			setGroupIDDefault(reqVal, groupID)
-			setPackDefault(reqVal, packID)
-			args = append(args, reqVal.Elem())
-		}
-	}
-	return args
-}
-
-// listPackRoutesIdentifiers discovers criblio_pack_routes: one resource per (group_id, pack).
-// There is no list API that returns items; we enumerate groups × packs and return one identifier map per pair.
-func listPackRoutesIdentifiers(ctx context.Context, client *sdk.CriblIo, groupIDs []string) ([]map[string]string, error) {
-	var out []map[string]string
+func ensureDefaultGroups(groupIDs []string) []string {
+	needDefault := true
+	needDefaultSearch := true
 	for _, gid := range groupIDs {
-		packIDs, err := getPackIDsByGroup(ctx, client, gid)
-		if err != nil {
-			return nil, fmt.Errorf("criblio_pack_routes: get packs for group %s: %w", gid, err)
+		if gid == "default" {
+			needDefault = false
 		}
-		for _, packID := range packIDs {
-			out = append(out, map[string]string{"group_id": gid, "pack": packID})
+		if gid == "default_search" {
+			needDefaultSearch = false
 		}
 	}
-	return out, nil
+	prepend := make([]string, 0, 2)
+	if needDefault {
+		prepend = append(prepend, "default")
+	}
+	if needDefaultSearch {
+		prepend = append(prepend, "default_search")
+	}
+	return append(prepend, groupIDs...)
 }
 
-// listPackScopedIdentifiers discovers identifiers for pack-scoped resources (pack_destination, pack_pipeline, pack_source)
-// by listing packs per group then calling the list method for each (groupID, packID).
-func listPackScopedIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupIDs []string, method reflect.Value) ([]map[string]string, error) {
-	var out []map[string]string
-	for _, gid := range groupIDs {
-		packIDs, err := getPackIDsByGroup(ctx, client, gid)
-		if err != nil {
-			return nil, fmt.Errorf("%s: get packs for group %s: %w", e.TypeName, gid, err)
-		}
-		for _, packID := range packIDs {
-			args := buildListArgsWithPack(ctx, method, e, gid, packID)
-			items, err := callListAndGetItems(ctx, method, args)
-			var ids []map[string]string
-			if err != nil {
-				// criblio_pack_source: SDK may fail to unmarshal Input union; use captured list response.
-				if e.TypeName == "criblio_pack_source" {
-					body := custom.GetAndClearPackInputsListBody(gid, packID)
-					if len(body) > 0 {
-						capturedIDs, parseErr := custom.ParsePackInputsListBody(body)
-						if parseErr == nil {
-							for _, m := range capturedIDs {
-								m["group_id"] = gid
-								m["pack"] = packID
-								out = append(out, m)
-							}
-						}
-					}
-					continue
-				}
-				// criblio_pack_breakers: SDK may fail when lib="cribl" (not in EventBreakerRuleset enum); use captured list response.
-				if e.TypeName == "criblio_pack_breakers" && isSDKLibraryUnmarshalError(err) {
-					body := custom.GetAndClearPackBreakersListBody(gid, packID)
-					if len(body) > 0 {
-						if capturedIDs, parseErr := custom.ParsePackBreakersListBody(body, gid, packID); parseErr == nil {
-							out = append(out, capturedIDs...)
-						}
-					}
-					continue
-				}
-				return nil, fmt.Errorf("%s: list pack %s/%s: %w", e.TypeName, gid, packID, err)
-			}
-			ids, err = identifiersFromItems(items, gid, e)
-			if err != nil {
-				return nil, err
-			}
-			// criblio_pack_destination: SDK ListPackOutputResponseBody has no Items; use captured list response.
-			if e.TypeName == "criblio_pack_destination" && len(ids) == 0 {
-				body := custom.GetAndClearPackOutputsListBody(gid, packID)
-				if len(body) > 0 {
-					capturedIDs, parseErr := custom.ParsePackOutputsListBody(body)
-					if parseErr == nil {
-						for _, m := range capturedIDs {
-							m["group_id"] = gid
-						}
-						ids = capturedIDs
-					}
-				}
-			}
-			// criblio_pack_source: SDK may return empty items when Input union unmarshals with all fields null; use captured list response.
-			if e.TypeName == "criblio_pack_source" && len(ids) == 0 {
-				body := custom.GetAndClearPackInputsListBody(gid, packID)
-				if len(body) > 0 {
-					capturedIDs, parseErr := custom.ParsePackInputsListBody(body)
-					if parseErr == nil {
-						for _, m := range capturedIDs {
-							m["group_id"] = gid
-						}
-						ids = capturedIDs
-					}
-				}
-			}
-			for _, m := range ids {
-				if e.TypeName == "criblio_pack_destination" && custom.DefaultDestinationIDs[m["id"]] {
-					continue
-				}
-				m["pack"] = packID
-				out = append(out, m)
-			}
-		}
+func fallbackGroupIDs(onPrem bool) []string {
+	ids := []string{"default"}
+	if !onPrem {
+		ids = append(ids, "default_search")
 	}
-	return out, nil
-}
-
-// countPackScoped returns total count and per-group counts for pack-scoped list methods.
-func countPackScoped(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupIDs []string, method reflect.Value) (total int, perGroup map[string]int, err error) {
-	perGroup = make(map[string]int)
-	for _, gid := range groupIDs {
-		packIDs, err := getPackIDsByGroup(ctx, client, gid)
-		if err != nil {
-			return 0, nil, fmt.Errorf("%s: get packs for group %s: %w", e.TypeName, gid, err)
-		}
-		var groupCount int
-		for _, packID := range packIDs {
-			args := buildListArgsWithPack(ctx, method, e, gid, packID)
-			n, err := callListAndCount(ctx, method, args)
-			if err != nil {
-				// criblio_pack_source: SDK may fail to unmarshal Input union; use captured list body for count.
-				if e.TypeName == "criblio_pack_source" {
-					body := custom.GetAndClearPackInputsListBody(gid, packID)
-					if len(body) > 0 {
-						if ids, parseErr := custom.ParsePackInputsListBody(body); parseErr == nil {
-							n = len(ids)
-						}
-					} else {
-						n = 0
-					}
-				} else if e.TypeName == "criblio_pack_breakers" && isSDKLibraryUnmarshalError(err) {
-					body := custom.GetAndClearPackBreakersListBody(gid, packID)
-					if len(body) > 0 {
-						if ids, parseErr := custom.ParsePackBreakersListBody(body, gid, packID); parseErr == nil {
-							n = len(ids)
-						}
-					} else {
-						n = 0
-					}
-				} else {
-					return 0, nil, fmt.Errorf("%s: list pack %s/%s: %w", e.TypeName, gid, packID, err)
-				}
-			}
-			// criblio_pack_destination: SDK response has no Items; use captured list body for count.
-			if e.TypeName == "criblio_pack_destination" && n == 0 {
-				body := custom.GetAndClearPackOutputsListBody(gid, packID)
-				if len(body) > 0 {
-					if ids, parseErr := custom.ParsePackOutputsListBody(body); parseErr == nil {
-						n = len(ids)
-					}
-				}
-			}
-			// criblio_pack_source: SDK may return 0 when Input union unmarshals with all fields null; use captured list body.
-			if e.TypeName == "criblio_pack_source" && n == 0 {
-				body := custom.GetAndClearPackInputsListBody(gid, packID)
-				if len(body) > 0 {
-					if ids, parseErr := custom.ParsePackInputsListBody(body); parseErr == nil {
-						n = len(ids)
-					}
-				}
-			}
-			groupCount += n
-		}
-		total += groupCount
-		if groupCount > 0 {
-			perGroup[gid] = groupCount
-		}
+	if workspace := os.Getenv("CRIBL_WORKSPACE_ID"); workspace != "" && workspace != "default" && workspace != "default_search" {
+		ids = append(ids, workspace)
 	}
-	return total, perGroup, nil
-}
-
-// requestRequiresPack reports whether the request struct has a Pack field that is
-// required for the API path (e.g. /m/{groupId}/p/{pack}/...) and is currently empty.
-func requestRequiresPack(reqVal reflect.Value) bool {
-	if reqVal.Kind() == reflect.Ptr {
-		reqVal = reqVal.Elem()
-	}
-	if !reqVal.IsValid() || reqVal.Kind() != reflect.Struct {
-		return false
-	}
-	f := reqVal.FieldByName("Pack")
-	if !f.IsValid() || f.Kind() != reflect.String {
-		return false
-	}
-	return f.String() == ""
-}
-
-func countItemsFromResponse(respVal reflect.Value) (int, error) {
-	if respVal.Kind() == reflect.Ptr {
-		respVal = respVal.Elem()
-	}
-	objectField := respVal.FieldByName("Object")
-	if !objectField.IsValid() || (objectField.Kind() == reflect.Ptr && objectField.IsNil()) {
-		return 0, nil
-	}
-	// Call GetItems on the Object (pointer receiver)
-	getItems := objectField.MethodByName("GetItems")
-	if !getItems.IsValid() {
-		return 0, nil
-	}
-	outs := getItems.Call(nil)
-	if len(outs) == 0 {
-		return 0, nil
-	}
-	items := outs[0]
-	if items.Kind() == reflect.Slice {
-		return items.Len(), nil
-	}
-	return 0, nil
+	return ids
 }

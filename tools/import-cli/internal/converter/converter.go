@@ -1,5 +1,5 @@
-// Package converter converts SDK API responses into provider ResourceModel instances
-// using reflection, provider RefreshFrom* methods, and generated model metadata.
+// Package converter converts REST API responses into provider ResourceModel
+// instances using reflection and generated model metadata.
 package converter
 
 import (
@@ -12,11 +12,7 @@ import (
 	"unicode"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
-	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -25,7 +21,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
-// RefreshFromMethodName returns the RefreshFrom* method name for the given SDK Get method.
+// RefreshFromMethodName returns the RefreshFrom* method name for a legacy Get method name.
 // Convention: RefreshFromOperations + GetMethod + "ResponseBody" (e.g. GetInputByID -> RefreshFromOperationsGetInputByIDResponseBody).
 func RefreshFromMethodName(getMethod string) string {
 	if getMethod == "" {
@@ -34,16 +30,11 @@ func RefreshFromMethodName(getMethod string) string {
 	return "RefreshFromOperations" + getMethod + "ResponseBody"
 }
 
-// Convert fetches a single resource via the SDK Get* method and converts the response
-// into a provider ResourceModel by instantiating the model and calling its RefreshFrom* method.
-// requestParams is used to build the Get request (e.g. GroupID, ID, Pack). Keys must match
-// the request struct field names (e.g. "GroupID", "ID").
-// For criblio_search_dataset and criblio_search_dataset_provider, if the list response was
-// cached (SDK union unmarshal failed for cribl_lake), we build the model from the cached
-// list item instead of calling Get—same pattern as reusing list response for usage group.
+// Convert fetches a single resource via REST and converts the response into a
+// provider ResourceModel.
 func Convert(ctx context.Context, client *importclient.Client, e registry.Entry, requestParams map[string]string) (model interface{}, err error) {
-	if e.GetMethod == "" {
-		return nil, fmt.Errorf("%s: no GetMethod in registry", e.TypeName)
+	if e.RESTGetPath == "" {
+		return nil, fmt.Errorf("%s: no RESTGetPath in registry", e.TypeName)
 	}
 	if client == nil {
 		return nil, fmt.Errorf("client is nil")
@@ -54,126 +45,11 @@ func Convert(ctx context.Context, client *importclient.Client, e registry.Entry,
 		return nil, fmt.Errorf("%s: unknown model type %q", e.TypeName, e.ModelTypeName)
 	}
 
-	if e.RESTGetPath != "" {
-		raw, restErr := callRESTGetByID(ctx, client, e, requestParams)
-		if restErr == nil {
-			converted, convErr := convertGeneratedModelFromRawItem(e, modelType, raw)
-			if convErr == nil {
-				if injErr := InjectRequiredIdentifiers(converted, requestParams); injErr != nil {
-					return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-				}
-				return converted, nil
-			}
-		}
-	}
-
-	// Call SDK Get* first so we get full response (type-specific blocks like s3_provider, apihttp_provider).
-	// For search_dataset/search_dataset_provider, only fall back to cached list item when Get fails
-	// (e.g. SDK unmarshal error for cribl_lake); list item has only id/description/type so HCL would be empty.
-	if client.SDK == nil {
-		return nil, fmt.Errorf("legacy SDK client is nil")
-	}
-	respBody, err := callGetByID(ctx, client.SDK, e, requestParams)
-	// criblio_pack_destination: SDK GetPackOutputByIDResponseBody is empty; use captured raw response (same shape as GetOutputByID).
-	// Store raw items[0] so export can emit the oneOf block (e.g. output_cribl_lake) when the model has no Items field.
-	if err == nil && e.TypeName == "criblio_pack_destination" {
-		if captured := custom.GetAndClearPackOutputGetBody(requestParams["GroupID"], requestParams["Pack"], requestParams["ID"]); len(captured) > 0 {
-			var rawResp struct {
-				Items []json.RawMessage `json:"items"`
-			}
-			if jsonErr := json.Unmarshal(captured, &rawResp); jsonErr == nil && len(rawResp.Items) > 0 {
-				custom.StorePackOutputFirstItem(requestParams["GroupID"], requestParams["Pack"], requestParams["ID"], rawResp.Items[0])
-			}
-			var getOut operations.GetOutputByIDResponseBody
-			if jsonErr := json.Unmarshal(captured, &getOut); jsonErr == nil {
-				respBody = &getOut
-			}
-		}
-	}
-	if err == nil && respBody != nil {
-		converted, convErr := convertFromResponseBody(ctx, e, modelType, respBody)
-		if convErr == nil {
-			if injErr := InjectRequiredIdentifiers(converted, requestParams); injErr != nil {
-				return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-			}
-			return converted, nil
-		}
-	}
-
-	// Fallback for search_dataset/search_dataset_provider: build from cached list item when Get failed
-	// or conversion failed (e.g. SDK union unmarshal for cribl_lake).
-	id := requestParams["ID"]
-	if id != "" && (e.TypeName == "criblio_search_dataset" || e.TypeName == "criblio_search_dataset_provider") {
-		var pathKey string
-		if e.TypeName == "criblio_search_dataset" {
-			pathKey = custom.PathSearchDatasets
-		} else {
-			pathKey = custom.PathSearchDatasetProviders
-		}
-		if itemJSON := custom.GetCachedSearchListItem(pathKey, id); len(itemJSON) > 0 {
-			// For search_dataset, try to get full model from captured Get body or list item (SDK GenericDataset).
-			// Get body is captured when Get returned 200 but SDK unmarshal failed (e.g. cribl_lake); list item
-			// may have full or summary payload. Try Get body first (full), then list item.
-			if e.TypeName == "criblio_search_dataset" {
-				tryGenericDataset := func(data []byte) (interface{}, bool) {
-					var g shared.GenericDataset
-					if err := json.Unmarshal(data, &g); err != nil {
-						return nil, false
-					}
-					modelVal := reflect.New(modelType)
-					method := modelVal.MethodByName("RefreshFromSharedGenericDataset")
-					if !method.IsValid() {
-						return nil, false
-					}
-					ctx := context.Background()
-					outs := method.Call([]reflect.Value{reflect.ValueOf(ctx), reflect.ValueOf(&g)})
-					if len(outs) == 1 && !outs[0].IsNil() {
-						if DiagnosticsToError(outs[0].Interface().(diag.Diagnostics), e.TypeName, "") != nil {
-							return nil, false
-						}
-					}
-					return modelVal.Interface(), true
-				}
-				// 1) Try captured Get response body (full single-dataset response from API).
-				if getBody := custom.GetAndClearSearchDatasetGetBody(id); len(getBody) > 0 {
-					var getResp struct {
-						Items []json.RawMessage `json:"items"`
-					}
-					if err := json.Unmarshal(getBody, &getResp); err == nil && len(getResp.Items) > 0 {
-						if model, ok := tryGenericDataset(getResp.Items[0]); ok {
-							if injErr := InjectRequiredIdentifiers(model, requestParams); injErr != nil {
-								return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-							}
-							return model, nil
-						}
-					}
-				}
-				// 2) Try list item JSON (may be full or summary).
-				if model, ok := tryGenericDataset(itemJSON); ok {
-					if injErr := InjectRequiredIdentifiers(model, requestParams); injErr != nil {
-						return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-					}
-					return model, nil
-				}
-			}
-			model, buildErr := modelFromSearchItemJSON(modelType, itemJSON)
-			if buildErr == nil {
-				if injErr := InjectRequiredIdentifiers(model, requestParams); injErr != nil {
-					return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-				}
-				return model, nil
-			}
-		}
-	}
-
+	raw, err := callRESTGetByID(ctx, client, e, requestParams)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", e.TypeName, err)
 	}
-	if respBody == nil {
-		return nil, fmt.Errorf("%s: Get response body is nil", e.TypeName)
-	}
-	// Get succeeded but convertFromResponseBody failed and we had no cache fallback
-	converted, convErr := convertFromResponseBody(ctx, e, modelType, respBody)
+	converted, convErr := convertGeneratedModelFromRawItem(e, modelType, raw)
 	if convErr != nil {
 		return nil, convErr
 	}
@@ -181,6 +57,24 @@ func Convert(ctx context.Context, client *importclient.Client, e registry.Entry,
 		return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, err)
 	}
 	return converted, nil
+}
+
+// ConvertRawItemWithIdentifiers converts a raw API item into a provider resource
+// model and injects Terraform identifier fields.
+func ConvertRawItemWithIdentifiers(e registry.Entry, itemJSON json.RawMessage, identifiers map[string]string) (interface{}, error) {
+	modelTypes := ResourceModelTypes()
+	modelType, ok := modelTypes[e.ModelTypeName]
+	if !ok {
+		return nil, fmt.Errorf("%s: unknown model type %q", e.TypeName, e.ModelTypeName)
+	}
+	model, err := convertGeneratedModelFromRawItem(e, modelType, itemJSON)
+	if err != nil {
+		return nil, err
+	}
+	if err := InjectRequiredIdentifiers(model, identifiers); err != nil {
+		return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, err)
+	}
+	return model, nil
 }
 
 // fillPackLookupsContent fetches the pack lookup file (GET /m/{groupID}/p/{pack}/system/lookups/{id},
@@ -289,15 +183,28 @@ func callRESTGetByID(ctx context.Context, client *importclient.Client, e registr
 	if client == nil || client.REST == nil {
 		return nil, fmt.Errorf("REST client is nil")
 	}
-	path := renderRESTPath(e.RESTGetPath, restPathValues(requestParams))
+	values := restPathValues(requestParams)
+	path := renderRESTPath(e.RESTGetPath, values)
 	items, err := restclient.Get[[]json.RawMessage](ctx, client.REST, path)
-	if err != nil {
+	if err == nil {
+		if items == nil || len(*items) == 0 {
+			return nil, fmt.Errorf("%s: empty REST response", e.TypeName)
+		}
+		if id := requestParams["ID"]; id != "" {
+			for _, item := range *items {
+				var object map[string]any
+				if json.Unmarshal(item, &object) == nil && rawString(object, "id", "ID", "Id", "keyID", "keyId", "name") == id {
+					return item, nil
+				}
+			}
+		}
+		return (*items)[0], nil
+	}
+	item, itemErr := restclient.Get[map[string]json.RawMessage](ctx, client.REST, path)
+	if itemErr != nil {
 		return nil, err
 	}
-	if items == nil || len(*items) == 0 {
-		return nil, fmt.Errorf("%s: empty REST response", e.TypeName)
-	}
-	return (*items)[0], nil
+	return json.Marshal(item)
 }
 
 func restPathValues(requestParams map[string]string) map[string]string {
@@ -315,6 +222,26 @@ func renderRESTPath(path string, values map[string]string) string {
 		rendered = strings.ReplaceAll(rendered, "{"+key+"}", url.PathEscape(value))
 	}
 	return rendered
+}
+
+func rawString(item map[string]any, keys ...string) string {
+	for _, key := range keys {
+		value, ok := item[key]
+		if !ok || value == nil {
+			continue
+		}
+		switch typed := value.(type) {
+		case string:
+			return strings.TrimSpace(typed)
+		case fmt.Stringer:
+			return strings.TrimSpace(typed.String())
+		default:
+			if s := fmt.Sprint(typed); s != "" && s != "<nil>" {
+				return strings.TrimSpace(s)
+			}
+		}
+	}
+	return ""
 }
 
 func copyMatchingFields(dst, src reflect.Value) {
@@ -668,8 +595,8 @@ func stringValues(values []string) []attr.Value {
 }
 
 // modelFromSearchItemJSON builds a SearchDataset or SearchDatasetProvider model from a list-item
-// JSON (e.g. when SDK cannot unmarshal cribl_lake). Sets ID, Description, Type, ProviderID from
-// the item so HCL generation and import work without calling Get.
+// JSON. Sets ID, Description, Type, ProviderID from the item so HCL generation
+// and import work without calling Get.
 func modelFromSearchItemJSON(modelType reflect.Type, itemJSON []byte) (interface{}, error) {
 	var parsed map[string]interface{}
 	if err := json.Unmarshal(itemJSON, &parsed); err != nil {
@@ -704,145 +631,4 @@ func modelFromSearchItemJSON(modelType reflect.Type, itemJSON []byte) (interface
 		f.Set(reflect.ValueOf(types.StringValue(s)))
 	}
 	return modelVal.Interface(), nil
-}
-
-// bodyFromSearchRulesetGetResponse returns the Counted* payload for Local Search ruleset GET responses.
-func bodyFromSearchRulesetGetResponse(resp interface{}) (interface{}, error) {
-	switch r := resp.(type) {
-	case *operations.GetDatasetRuleByIDResponse:
-		if r == nil {
-			return nil, nil
-		}
-		if r.CountedDatasetRuleset != nil {
-			return r.CountedDatasetRuleset, nil
-		}
-	case *operations.GetDatatypeRuleByIDResponse:
-		if r == nil {
-			return nil, nil
-		}
-		if r.CountedDatatypeRuleset != nil {
-			return r.CountedDatatypeRuleset, nil
-		}
-	}
-	return nil, fmt.Errorf("search ruleset response has no Counted* body")
-}
-
-// callGetByID invokes the SDK Get* method for the entry and returns the response Object (ResponseBody).
-func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, requestParams map[string]string) (interface{}, error) {
-	clientVal := reflect.ValueOf(client)
-	if clientVal.Kind() == reflect.Ptr {
-		clientVal = clientVal.Elem()
-	}
-	svcField := clientVal.FieldByName(e.SDKService)
-	if !svcField.IsValid() {
-		return nil, fmt.Errorf("SDK service %q not found", e.SDKService)
-	}
-	if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
-		return nil, fmt.Errorf("SDK service %q is nil", e.SDKService)
-	}
-	// Search ruleset GETs are (ctx, opts ...operations.Option). MethodByName+reflect.Call/CallSlice is unreliable
-	// across how the method value is obtained; call the SDK directly.
-	if e.SDKService == "Search" {
-		switch e.GetMethod {
-		case "GetDatasetRuleByID":
-			resp, err := client.Search.GetDatasetRuleByID(ctx)
-			if err != nil {
-				return nil, err
-			}
-			return bodyFromSearchRulesetGetResponse(resp)
-		case "GetDatatypeRuleByID":
-			resp, err := client.Search.GetDatatypeRuleByID(ctx)
-			if err != nil {
-				return nil, err
-			}
-			return bodyFromSearchRulesetGetResponse(resp)
-		}
-	}
-	svc := svcField
-	if svc.Kind() == reflect.Ptr {
-		svc = svc.Elem()
-	}
-	method := svc.Addr().MethodByName(e.GetMethod)
-	if !method.IsValid() {
-		return nil, fmt.Errorf("method %q not found on service %s", e.GetMethod, e.SDKService)
-	}
-	mt := method.Type()
-	if mt.NumIn() < 2 || mt.NumOut() != 2 {
-		return nil, fmt.Errorf("get method %s has unexpected signature", e.GetMethod)
-	}
-	// Variadic (ctx, opts ...operations.Option): must use CallSlice with a []T final arg, never Call with a slice.
-	if mt.IsVariadic() && mt.NumIn() == 2 && mt.In(1).Kind() == reflect.Slice {
-		optSlice := reflect.MakeSlice(mt.In(1), 0, 0)
-		args := []reflect.Value{reflect.ValueOf(ctx), optSlice}
-		outs := method.CallSlice(args)
-		return unwrapGetResponse(outs)
-	}
-	paramType := mt.In(1)
-	reqType := paramType
-	if reqType.Kind() == reflect.Ptr {
-		reqType = reqType.Elem()
-	}
-	reqVal := reflect.New(reqType)
-	setRequestFields(reqVal, requestParams)
-	// Method may take request by value (GetOutputByIDRequest) or by pointer (*GetXRequest).
-	reqArg := reqVal
-	if paramType.Kind() == reflect.Struct {
-		reqArg = reqVal.Elem()
-	}
-	// Pass only fixed args (ctx, request). Variadic opts ...Option after the request are left empty.
-	args := []reflect.Value{reflect.ValueOf(ctx), reqArg}
-	outs := method.Call(args)
-	return unwrapGetResponse(outs)
-}
-
-func unwrapGetResponse(outs []reflect.Value) (interface{}, error) {
-	if len(outs) != 2 {
-		return nil, fmt.Errorf("unexpected get method return count")
-	}
-	respVal := outs[0]
-	errVal := outs[1]
-	if !errVal.IsNil() {
-		return nil, errVal.Interface().(error)
-	}
-	if respVal.IsNil() {
-		return nil, nil
-	}
-	// response.Object; respVal may be *GetXResponse.
-	if respVal.Kind() == reflect.Ptr {
-		respVal = respVal.Elem()
-	}
-	objectField := respVal.FieldByName("Object")
-	if objectField.IsValid() && !(objectField.Kind() == reflect.Ptr && objectField.IsNil()) {
-		return objectField.Interface(), nil
-	}
-	// Search (and similar) SDK responses use Counted* payloads instead of Object.
-	for _, name := range []string{"CountedLocalSearchEngine", "CountedLocalSearchSource", "CountedDatasetRuleset", "CountedDatatypeRuleset"} {
-		f := respVal.FieldByName(name)
-		if f.IsValid() && f.Kind() == reflect.Ptr && !f.IsNil() {
-			return f.Interface(), nil
-		}
-	}
-	return nil, fmt.Errorf("response has no Object or supported Counted* body field")
-}
-
-func setRequestFields(reqVal reflect.Value, params map[string]string) {
-	if reqVal.Kind() == reflect.Ptr {
-		reqVal = reqVal.Elem()
-	}
-	if !reqVal.IsValid() || reqVal.Kind() != reflect.Struct {
-		return
-	}
-	for i := 0; i < reqVal.NumField(); i++ {
-		f := reqVal.Field(i)
-		if !f.CanSet() {
-			continue
-		}
-		name := reqVal.Type().Field(i).Name
-		if v, ok := params[name]; ok && v != "" {
-			switch f.Kind() {
-			case reflect.String:
-				f.SetString(v)
-			}
-		}
-	}
 }

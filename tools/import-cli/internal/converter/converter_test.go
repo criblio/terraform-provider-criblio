@@ -10,8 +10,6 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -74,15 +72,16 @@ func TestConvertFromResponseBody_source(t *testing.T) {
 	e, ok := reg.ByTypeName("criblio_source")
 	require.True(t, ok, "registry must contain criblio_source")
 
-	// RefreshFrom* requires at least one item; use minimal InputUnion1 (Cribl HTTP).
-	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.InputUnion1{
-			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
-				ID:   stringPtr("test"),
-				Type: shared.InputCriblHTTPTypeCriblHTTP,
-				Host: "0.0.0.0",
-				Port: 10200,
-			}),
+	body := &struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "test",
+				"type": "cribl_http",
+				"host": "0.0.0.0",
+				"port": 10200,
+			},
 		},
 	}
 	model, err := ConvertFromResponseBody(ctx, e, body)
@@ -99,8 +98,9 @@ func TestConvertFromResponseBody_pipeline(t *testing.T) {
 	e, ok := reg.ByTypeName("criblio_pipeline")
 	require.True(t, ok, "registry must contain criblio_pipeline")
 
-	// Pipeline RefreshFrom* expects at least one item; empty items produce a diagnostic error.
-	body := &operations.GetPipelineByIDResponseBody{Items: nil}
+	body := &struct {
+		Items []map[string]any
+	}{}
 	_, err := ConvertFromResponseBody(ctx, e, body)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "response body has no items")
@@ -115,7 +115,9 @@ func TestConvertFromResponseBody_unknownModelType(t *testing.T) {
 		GetMethod:      "GetInputByID",
 		ImportIDFormat: "id",
 	}
-	body := &operations.GetInputByIDResponseBody{}
+	body := &struct {
+		Items []map[string]any
+	}{}
 	_, err := ConvertFromResponseBody(ctx, e, body)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "unknown model type")
@@ -128,7 +130,9 @@ func TestConvertFromResponseBody_noGetMethod(t *testing.T) {
 	e, _ := reg.ByTypeName("criblio_source")
 	e.GetMethod = ""
 
-	_, err := ConvertFromResponseBody(ctx, e, &operations.GetInputByIDResponseBody{})
+	_, err := ConvertFromResponseBody(ctx, e, &struct {
+		Items []map[string]any
+	}{})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "no GetMethod")
 }
@@ -260,13 +264,14 @@ func TestConvertFromResponseBody_destination(t *testing.T) {
 	e, ok := reg.ByTypeName("criblio_destination")
 	require.True(t, ok, "registry must contain criblio_destination")
 
-	// RefreshFrom* requires at least one item; use minimal Output.
-	body := &operations.GetOutputByIDResponseBody{
-		Items: []shared.Output{
-			shared.CreateOutputOutputDevnull(shared.OutputDevnull{
-				ID:   stringPtr("test"),
-				Type: shared.OutputDevnullTypeDevnull,
-			}),
+	body := &struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "test",
+				"type": "devnull",
+			},
 		},
 	}
 	model, err := ConvertFromResponseBody(ctx, e, body)
@@ -282,12 +287,24 @@ func TestConvertFromResponseBody_certificateGeneratedModel(t *testing.T) {
 	e, ok := reg.ByTypeName("criblio_certificate")
 	require.True(t, ok, "registry must contain criblio_certificate")
 
-	body := &operations.GetCertificateByIDResponseBody{
-		Items: []shared.Certificate{
+	body := &struct {
+		Items []struct {
+			ID          string   `json:"id,omitempty"`
+			Cert        string   `json:"cert,omitempty"`
+			Description string   `json:"description,omitempty"`
+			InUse       []string `json:"inUse,omitempty"`
+		} `json:"items"`
+	}{
+		Items: []struct {
+			ID          string   `json:"id,omitempty"`
+			Cert        string   `json:"cert,omitempty"`
+			Description string   `json:"description,omitempty"`
+			InUse       []string `json:"inUse,omitempty"`
+		}{
 			{
 				ID:          "my-cert",
 				Cert:        "cert-body",
-				Description: stringPtr("generated certificate"),
+				Description: "generated certificate",
 				InUse:       []string{},
 			},
 		},
@@ -358,14 +375,16 @@ func TestConvertFromResponseBodyWithIdentifiers_injects_required_fields(t *testi
 	e, ok := reg.ByTypeName("criblio_source")
 	require.True(t, ok)
 
-	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.InputUnion1{
-			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
-				ID:   stringPtr("test"),
-				Type: shared.InputCriblHTTPTypeCriblHTTP,
-				Host: "0.0.0.0",
-				Port: 10200,
-			}),
+	body := &struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "test",
+				"type": "cribl_http",
+				"host": "0.0.0.0",
+				"port": 10200,
+			},
 		},
 	}
 	identifiers := map[string]string{"GroupID": "default", "ID": "input-hec-1"}
@@ -382,14 +401,16 @@ func TestConvertFromResponseBodyWithIdentifiers_nil_identifiers_ok(t *testing.T)
 	ctx := context.Background()
 	reg := buildTestRegistry(t)
 	e, _ := reg.ByTypeName("criblio_source")
-	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.InputUnion1{
-			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
-				ID:   stringPtr("test"),
-				Type: shared.InputCriblHTTPTypeCriblHTTP,
-				Host: "0.0.0.0",
-				Port: 10200,
-			}),
+	body := &struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "test",
+				"type": "cribl_http",
+				"host": "0.0.0.0",
+				"port": 10200,
+			},
 		},
 	}
 	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, nil)
@@ -397,8 +418,6 @@ func TestConvertFromResponseBodyWithIdentifiers_nil_identifiers_ok(t *testing.T)
 	require.NotNil(t, model)
 	// No panic; identifiers simply not set
 }
-
-func stringPtr(s string) *string { return &s }
 
 func buildTestRegistry(t *testing.T) *registry.Registry {
 	t.Helper()

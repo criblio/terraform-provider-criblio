@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -285,6 +286,7 @@ func doTokenRequest(ctx context.Context, method, requestURL, contentType string,
 	}
 	req = req.WithContext(ctx)
 	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("User-Agent", useragent.TerraformProvider)
 
 	resp, err := retryClient.Do(req)
 	if err != nil {

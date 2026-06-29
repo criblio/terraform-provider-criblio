@@ -9,8 +9,6 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
@@ -74,11 +72,11 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "no GetMethod or ImportIDFormat", Count: r.Count})
 			continue
 		}
-		if e.GetMethod == "" && r.TypeName != "criblio_lakehouse_dataset_connection" {
+		if e.RESTGetPath == "" && r.TypeName != "criblio_lakehouse_dataset_connection" {
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "no GetMethod or ImportIDFormat", Count: r.Count})
 			continue
 		}
-		// criblio_group: SDK GetGroupsByID response body is empty; use list response (GetProductsGroupsByProduct) and refresh from CreateProductsGroupsByProductResponseBody.
+		// criblio_group: use the list response because the legacy master GET omits fields on some deployments.
 		if r.TypeName == "criblio_group" {
 			if progress != nil {
 				progress("criblio_group: %d items", r.Count)
@@ -93,9 +91,8 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 				continue
 			}
 			for i, idMap := range idMaps {
-				body := &operations.CreateProductsGroupsByProductResponseBody{Items: []shared.ConfigGroup{groupItems[i]}}
 				requestParams := toRequestParams(idMap)
-				model, convErr := converter.ConvertFromResponseBodyWithIdentifiers(ctx, e, body, requestParams)
+				model, convErr := converter.ConvertRawItemWithIdentifiers(e, groupItems[i], requestParams)
 				if convErr != nil {
 					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr)))
 					continue
