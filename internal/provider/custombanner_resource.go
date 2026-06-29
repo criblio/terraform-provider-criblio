@@ -419,6 +419,9 @@ func preserveCustomBannerPlan(ctx context.Context, data *CustomBannerResourceMod
 	if !planData.InvertFontColor.IsNull() && !planData.InvertFontColor.IsUnknown() {
 		data.InvertFontColor = planData.InvertFontColor
 	}
+	if planData.Items != nil {
+		data.Items = planData.Items
+	}
 	if !planData.Link.IsNull() && !planData.Link.IsUnknown() {
 		data.Link = planData.Link
 	}

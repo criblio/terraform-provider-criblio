@@ -119,6 +119,102 @@ func TestCustomBannerPlanDecodeAllowsUnknownComputedLists(t *testing.T) {
 	}
 }
 
+func TestPreserveCustomBannerPlanKeepsPlannedItems(t *testing.T) {
+	plan := customBannerPlanObjectWithItems(t, bannerMessage{
+		Created: types.Float64Null(),
+		Enabled: types.BoolValue(true),
+		ID:      types.StringValue(customBannerID),
+		Message: types.StringValue("Scheduled maintenance window: Saturday 2am-4am UTC"),
+		Theme:   types.StringValue("purple"),
+		Type:    types.StringValue("custom"),
+	})
+	data := &CustomBannerResourceModel{
+		Enabled: types.BoolValue(true),
+		Items: []bannerMessage{{
+			Enabled: types.BoolValue(true),
+			ID:      types.StringValue(customBannerID),
+			Message: types.StringValue("Maintenance complete. Systems are operating normally."),
+			Theme:   types.StringValue("green"),
+			Type:    types.StringValue("custom"),
+		}},
+		Message: types.StringValue("Maintenance complete. Systems are operating normally."),
+		Theme:   types.StringValue("green"),
+		Type:    types.StringValue("custom"),
+	}
+
+	preserveCustomBannerPlan(context.Background(), data, plan)
+
+	if len(data.Items) != 1 {
+		t.Fatalf("expected one planned item, got %d", len(data.Items))
+	}
+	if got := data.Items[0].Theme.ValueString(); got != "purple" {
+		t.Fatalf("expected planned item theme to be preserved, got %q", got)
+	}
+	if got := data.Items[0].Message.ValueString(); got != "Scheduled maintenance window: Saturday 2am-4am UTC" {
+		t.Fatalf("expected planned item message to be preserved, got %q", got)
+	}
+	if got := data.Theme.ValueString(); got != "purple" {
+		t.Fatalf("expected planned top-level theme to be preserved, got %q", got)
+	}
+}
+
+func customBannerPlanObjectWithItems(t *testing.T, item bannerMessage) types.Object {
+	t.Helper()
+
+	stringListType := types.ListType{ElemType: types.StringType}
+	itemType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"created":           types.Float64Type,
+		"custom_themes":     stringListType,
+		"enabled":           types.BoolType,
+		"id":                types.StringType,
+		"invert_font_color": types.BoolType,
+		"link":              types.StringType,
+		"link_display":      types.StringType,
+		"message":           types.StringType,
+		"theme":             types.StringType,
+		"type":              types.StringType,
+	}}
+	bannerType := map[string]attr.Type{
+		"created":           types.Float64Type,
+		"custom_themes":     stringListType,
+		"enabled":           types.BoolType,
+		"id":                types.StringType,
+		"invert_font_color": types.BoolType,
+		"items":             types.ListType{ElemType: itemType},
+		"link":              types.StringType,
+		"link_display":      types.StringType,
+		"message":           types.StringType,
+		"theme":             types.StringType,
+		"type":              types.StringType,
+	}
+	itemValue := types.ObjectValueMust(itemType.AttrTypes, map[string]attr.Value{
+		"created":           item.Created,
+		"custom_themes":     types.ListNull(types.StringType),
+		"enabled":           item.Enabled,
+		"id":                item.ID,
+		"invert_font_color": types.BoolNull(),
+		"link":              types.StringNull(),
+		"link_display":      types.StringNull(),
+		"message":           item.Message,
+		"theme":             item.Theme,
+		"type":              item.Type,
+	})
+
+	return types.ObjectValueMust(bannerType, map[string]attr.Value{
+		"created":           types.Float64Null(),
+		"custom_themes":     types.ListNull(types.StringType),
+		"enabled":           types.BoolValue(true),
+		"id":                types.StringValue(customBannerID),
+		"invert_font_color": types.BoolNull(),
+		"items":             types.ListValueMust(itemType, []attr.Value{itemValue}),
+		"link":              types.StringValue("https://status.example.com"),
+		"link_display":      types.StringValue("View status page"),
+		"message":           item.Message,
+		"theme":             item.Theme,
+		"type":              item.Type,
+	})
+}
+
 func newCustomBannerTestServer(t *testing.T, postStatus int, postCount, patchCount, getCount *int) *httptest.Server {
 	t.Helper()
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
