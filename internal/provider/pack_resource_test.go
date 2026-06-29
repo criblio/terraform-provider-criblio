@@ -4,6 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
@@ -50,5 +55,90 @@ func TestTagsAPIMapPreservesConfiguredTags(t *testing.T) {
 	want := `{"package":{"tags":{"dataType":["logs"],"domain":["security"],"streamtags":["prod"],"technology":["cribl"]}}}`
 	if string(body) != want {
 		t.Fatalf("unexpected tags body\nwant: %s\n got: %s", want, string(body))
+	}
+}
+
+func TestPackPlanDecodeAllowsUnknownItems(t *testing.T) {
+	stringListType := types.ListType{ElemType: types.StringType}
+	tagsType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"data_type":  stringListType,
+		"domain":     stringListType,
+		"streamtags": stringListType,
+		"technology": stringListType,
+	}}
+	itemType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"author":                 types.StringType,
+		"description":            types.StringType,
+		"display_name":           types.StringType,
+		"exports":                stringListType,
+		"id":                     types.StringType,
+		"inputs":                 types.Float64Type,
+		"min_log_stream_version": types.StringType,
+		"outputs":                types.Float64Type,
+		"settings":               types.MapType{ElemType: jsontypes.NormalizedType{}},
+		"source":                 types.StringType,
+		"spec":                   types.StringType,
+		"tags":                   tagsType,
+		"version":                types.StringType,
+		"warnings":               jsontypes.NormalizedType{},
+	}}
+	packTypes := map[string]attr.Type{
+		"allow_custom_functions": types.BoolType,
+		"author":                 types.StringType,
+		"description":            types.StringType,
+		"disabled":               types.BoolType,
+		"display_name":           types.StringType,
+		"exports":                stringListType,
+		"filename":               types.StringType,
+		"force":                  types.BoolType,
+		"group_id":               types.StringType,
+		"id":                     types.StringType,
+		"inputs":                 types.Float64Type,
+		"items":                  types.ListType{ElemType: itemType},
+		"min_log_stream_version": types.StringType,
+		"outputs":                types.Float64Type,
+		"source":                 types.StringType,
+		"spec":                   types.StringType,
+		"tags":                   tagsType,
+		"version":                types.StringType,
+	}
+	plan := types.ObjectValueMust(packTypes, map[string]attr.Value{
+		"allow_custom_functions": types.BoolNull(),
+		"author":                 types.StringNull(),
+		"description":            types.StringValue("Pack from source"),
+		"disabled":               types.BoolNull(),
+		"display_name":           types.StringValue("Search Pack"),
+		"exports":                types.ListNull(types.StringType),
+		"filename":               types.StringNull(),
+		"force":                  types.BoolNull(),
+		"group_id":               types.StringValue("default_search"),
+		"id":                     types.StringValue("my_search_pack"),
+		"inputs":                 types.Float64Null(),
+		"items":                  types.ListUnknown(itemType),
+		"min_log_stream_version": types.StringNull(),
+		"outputs":                types.Float64Null(),
+		"source":                 types.StringValue("https://example.com/my-pack.crbl"),
+		"spec":                   types.StringNull(),
+		"tags":                   types.ObjectNull(tagsType.AttrTypes),
+		"version":                types.StringNull(),
+	})
+
+	var model *PackResourceModel
+	diags := plan.As(context.Background(), &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})
+
+	if diags.HasError() {
+		t.Fatalf("expected unknown items to decode without diagnostics, got: %v", diags)
+	}
+	if model == nil {
+		t.Fatal("expected decoded pack model")
+	}
+	if model.Items != nil {
+		t.Fatalf("expected unknown items to decode as nil, got %#v", model.Items)
+	}
+	if got := model.ID.ValueString(); got != "my_search_pack" {
+		t.Fatalf("expected id to decode, got %q", got)
 	}
 }

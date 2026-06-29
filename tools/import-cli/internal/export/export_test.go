@@ -247,6 +247,7 @@ func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {
 	opts := hclOptionsForType("criblio_certificate", registry.Entry{})
 	require.NotNil(t, opts)
 
+	assert.True(t, opts.SkipAttributes["cert_expiry_date"])
 	assert.True(t, opts.SkipAttributes["in_use"])
 	assert.True(t, opts.SkipAttributes["passphrase"])
 	assert.False(t, opts.SkipAttributes["ca"])

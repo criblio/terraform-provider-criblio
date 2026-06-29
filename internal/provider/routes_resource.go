@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 var _ = jsontypes.NormalizedType{}
@@ -250,7 +251,15 @@ func (r *RoutesResource) Configure(_ context.Context, req resource.ConfigureRequ
 
 func (r *RoutesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var model RoutesModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
+	var plan types.Object
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(plan.As(ctx, &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -289,7 +298,15 @@ func (r *RoutesResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *RoutesResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var model RoutesModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
+	var plan types.Object
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(plan.As(ctx, &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}

@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 var _ = jsontypes.NormalizedType{}
@@ -97,7 +98,15 @@ func (r *GrokResource) Configure(_ context.Context, req resource.ConfigureReques
 
 func (r *GrokResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var model GrokModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
+	var plan types.Object
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(plan.As(ctx, &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -131,7 +140,15 @@ func (r *GrokResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 func (r *GrokResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var model GrokModel
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
+	var plan types.Object
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(plan.As(ctx, &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}

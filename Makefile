@@ -18,9 +18,6 @@ test-cleanup:
 unit-test: 
 	go test -v ./internal/auth/... ./internal/restclient/... ./tools/sync-openapi ./tools/merge-spec/...
 
-verify-no-speakeasy:
-	./scripts/verify_no_speakeasy.sh
-
 sync-openapi:
 	go run ./tools/sync-openapi
 

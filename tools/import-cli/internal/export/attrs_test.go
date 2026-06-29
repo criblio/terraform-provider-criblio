@@ -113,3 +113,26 @@ func TestHclOptionsForType_criblLakeHouseSkipsStatus(t *testing.T) {
 	assert.Equal(t, "Lakehouse", attrs["description"].String)
 	assert.Equal(t, "medium", attrs["tier_size"].String)
 }
+
+func TestHclOptionsForType_certificateSkipsComputedExpiryDate(t *testing.T) {
+	opts := hclOptionsForType("criblio_certificate", registry.Entry{})
+	require.NotNil(t, opts)
+
+	model := &provider.CertificateResourceModel{
+		Cert:           types.StringValue("-----BEGIN CERTIFICATE-----\nMIIB\n-----END CERTIFICATE-----"),
+		CertExpiryDate: types.StringValue("2026-10-09T04:21:14.000Z"),
+		Description:    types.StringValue("Imported certificate"),
+		GroupID:        types.StringValue("default"),
+		ID:             types.StringValue("poc-test-cert"),
+		InUse:          []types.String{types.StringValue("output:test")},
+		PrivKey:        types.StringValue("-----BEGIN PRIVATE KEY-----\nMIIB\n-----END PRIVATE KEY-----"),
+	}
+
+	attrs, err := hcl.ModelToValue(model, opts)
+	require.NoError(t, err)
+
+	assert.NotContains(t, attrs, "cert_expiry_date")
+	assert.NotContains(t, attrs, "in_use")
+	assert.Equal(t, "poc-test-cert", attrs["id"].String)
+	assert.Equal(t, "Imported certificate", attrs["description"].String)
+}

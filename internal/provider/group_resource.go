@@ -211,31 +211,34 @@ type groupAPIModel struct {
 }
 
 func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data GroupResourceModel
+	var data *GroupResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if !validateGroupConfiguration(&data, &resp.Diagnostics) {
+	if !validateGroupConfiguration(data, &resp.Diagnostics) {
 		return
 	}
-	apiModel, err := restclient.Post[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/products/%s/groups", url.PathEscape(data.Product.ValueString())), groupAPIFromModel(&data))
+	apiModel, err := restclient.Post[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/products/%s/groups", url.PathEscape(data.Product.ValueString())), groupAPIFromModel(data))
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	(&data).applyGroupAPIModel(apiModel)
-	preserveGroupPlan(ctx, &data, plan)
-	if err := r.refreshGroupState(ctx, &data); err != nil {
+	data.applyGroupAPIModel(apiModel)
+	preserveGroupPlan(ctx, data, plan)
+	if err := r.refreshGroupState(ctx, data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	preserveGroupPlan(ctx, &data, plan)
+	preserveGroupPlan(ctx, data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -265,17 +268,20 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 }
 
 func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data GroupResourceModel
+	var data *GroupResourceModel
 	var plan types.Object
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if !validateGroupConfiguration(&data, &resp.Diagnostics) {
+	if !validateGroupConfiguration(data, &resp.Diagnostics) {
 		return
 	}
 
@@ -283,19 +289,19 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	// ^[a-z] pattern on PATCH. Skip the update and refresh from GET to avoid a
 	// permanent error for legacy mixed-case groups.
 	if regexp.MustCompile(`^[a-z]`).MatchString(data.ID.ValueString()) {
-		apiModel, err := restclient.Patch[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/master/groups/%s", url.PathEscape(data.ID.ValueString())), groupAPIFromModel(&data))
+		apiModel, err := restclient.Patch[groupAPIModel, groupAPIModel](ctx, r.client, fmt.Sprintf("/master/groups/%s", url.PathEscape(data.ID.ValueString())), groupAPIFromModel(data))
 		if err != nil {
 			resp.Diagnostics.AddError("failure to invoke API", err.Error())
 			return
 		}
-		(&data).applyGroupAPIModel(apiModel)
-		preserveGroupPlan(ctx, &data, plan)
+		data.applyGroupAPIModel(apiModel)
+		preserveGroupPlan(ctx, data, plan)
 	}
-	if err := r.refreshGroupState(ctx, &data); err != nil {
+	if err := r.refreshGroupState(ctx, data); err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	preserveGroupPlan(ctx, &data, plan)
+	preserveGroupPlan(ctx, data, plan)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -481,7 +487,10 @@ func preserveLegacyEdgeIsFleet(prior types.Bool, data *GroupResourceModel) {
 
 func preserveGroupPlan(ctx context.Context, data *GroupResourceModel, plan types.Object) {
 	var planData GroupResourceModel
-	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true})
+	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})
 	if diags.HasError() {
 		return
 	}
