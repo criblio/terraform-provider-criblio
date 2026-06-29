@@ -36,11 +36,15 @@ func newRenderer(outputDir string, ignored ignoreSet) renderer {
 
 func (r renderer) render(resources []parser.ResourceDef) ([]renderedFile, error) {
 	var files []renderedFile
+	expectedDataSourceTests := map[string]struct{}{}
 	for _, resource := range resources {
 		for _, output := range outputFiles(resource) {
 			path := output.Path
 			if r.outputDir != "" {
 				path = filepath.Join(r.outputDir, path)
+			}
+			if output.Kind == "data_source_test" {
+				expectedDataSourceTests[path] = struct{}{}
 			}
 			if r.ignored.ignored(output.Path) || r.ignored.ignored(path) {
 				files = append(files, renderedFile{Path: path, Skipped: true})
@@ -67,7 +71,37 @@ func (r renderer) render(resources []parser.ResourceDef) ([]renderedFile, error)
 			files = append(files, renderedFile{Path: path})
 		}
 	}
+	if err := r.cleanupStaleDataSourceTests(expectedDataSourceTests); err != nil {
+		return nil, err
+	}
 	return files, nil
+}
+
+func (r renderer) cleanupStaleDataSourceTests(expected map[string]struct{}) error {
+	dir := "tests/acceptance"
+	if r.outputDir != "" {
+		dir = filepath.Join(r.outputDir, dir)
+	}
+	paths, err := filepath.Glob(filepath.Join(dir, "*_data_source_test.go"))
+	if err != nil {
+		return fmt.Errorf("glob data source acceptance tests: %v", err)
+	}
+	for _, path := range paths {
+		if _, ok := expected[path]; ok {
+			continue
+		}
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read stale data source acceptance test %s: %v", path, err)
+		}
+		if !bytes.Contains(content, []byte(generatedHeader)) {
+			continue
+		}
+		if err := os.Remove(path); err != nil {
+			return fmt.Errorf("remove stale data source acceptance test %s: %v", path, err)
+		}
+	}
+	return nil
 }
 
 func shouldSkipExistingOutput(path string, output parser.OutputFile) (bool, error) {
@@ -124,6 +158,9 @@ func shouldGenerateDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
 
 func canGenerateStandaloneListDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
 	if !hasGeneratedListDataSource(resource) {
+		return false
+	}
+	if resource.Create.Path != "" {
 		return false
 	}
 	for _, field := range listConfigFields(resource) {

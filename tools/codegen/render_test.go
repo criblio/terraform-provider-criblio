@@ -106,6 +106,48 @@ func TestRendererOverwritesGeneratedAcceptanceTests(t *testing.T) {
 	}
 }
 
+func TestRendererRemovesStaleGeneratedDataSourceAcceptanceTests(t *testing.T) {
+	dir := t.TempDir()
+	stalePath := filepath.Join(dir, "tests/acceptance/certificate_data_source_test.go")
+	customPath := filepath.Join(dir, "tests/acceptance/custom_data_source_test.go")
+	if err := os.MkdirAll(filepath.Dir(stalePath), 0755); err != nil {
+		t.Fatalf("create acceptance test directory: %v", err)
+	}
+	staleContent := []byte("// " + generatedHeader + "\n\npackage tests\n")
+	if err := os.WriteFile(stalePath, staleContent, 0644); err != nil {
+		t.Fatalf("write stale data source test: %v", err)
+	}
+	customContent := []byte("package tests\n\nfunc TestCustomDataSource(t *testing.T) {}\n")
+	if err := os.WriteFile(customPath, customContent, 0644); err != nil {
+		t.Fatalf("write custom data source test: %v", err)
+	}
+
+	resource := parser.ResourceDef{
+		Name:           "SystemInfo",
+		FileStem:       "system_info",
+		StructName:     "SystemInfo",
+		ListFileStem:   "system_info",
+		ListStructName: "SystemInfo",
+		ListTypeName:   "criblio_system_info",
+		List: parser.OperationDef{
+			Path:       "/m/{groupId}/system/info",
+			PathParams: []parser.FieldDef{{TerraformName: "group_id", GoName: "GroupID", PathParam: true}},
+		},
+	}
+	if _, err := newRenderer(dir, ignoreSet{}).render([]parser.ResourceDef{resource}); err != nil {
+		t.Fatalf("render returned error: %v", err)
+	}
+	if _, err := os.Stat(stalePath); !os.IsNotExist(err) {
+		t.Fatalf("stale generated data source test exists or stat returned unexpected error: %v", err)
+	}
+	if _, err := os.Stat(customPath); err != nil {
+		t.Fatalf("custom data source test should remain: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/system_info_data_source_test.go")); err != nil {
+		t.Fatalf("expected data source acceptance test missing: %v", err)
+	}
+}
+
 func TestRendererGeneratesStandaloneListDataSourceAcceptanceTests(t *testing.T) {
 	dir := t.TempDir()
 	resource := parser.ResourceDef{
@@ -149,13 +191,9 @@ func TestRendererGeneratesListOnlyDataSourceAcceptanceTests(t *testing.T) {
 		Name:           "Thing",
 		FileStem:       "thing",
 		StructName:     "Thing",
-		TypeName:       "criblio_thing",
 		ListFileStem:   "things",
 		ListStructName: "Things",
 		ListTypeName:   "criblio_things",
-		Create: parser.OperationDef{
-			Path: "/m/{groupId}/things",
-		},
 		List: parser.OperationDef{
 			Path:       "/m/{groupId}/things",
 			PathParams: []parser.FieldDef{{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", PathParam: true}},
@@ -176,8 +214,8 @@ func TestRendererGeneratesListOnlyDataSourceAcceptanceTests(t *testing.T) {
 	}
 	assertContains(t, string(content), `data "criblio_things" "all"`)
 	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_things.all")`)
-	assertNotContains(t, string(content), `resource "criblio_thing"`)
-	assertNotContains(t, string(content), `data "criblio_thing" "by_id"`)
+	assertNotContains(t, string(content), `resource "`)
+	assertNotContains(t, string(content), `"by_id"`)
 }
 
 func TestRenderedSnippets(t *testing.T) {

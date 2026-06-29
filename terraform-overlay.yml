@@ -1411,6 +1411,30 @@ actions:
     update:
       x-terraform-list: SystemInfo
       x-terraform-list-name: SystemInfo
+  - target: "$.components.schemas.SystemInfo.properties"
+    update:
+      cpus:
+        x-terraform-ignore: true
+      diskUsage:
+        x-terraform-ignore: true
+      hasCloudWorkspace:
+        x-terraform-ignore: true
+      isCriblSandbox:
+        x-terraform-ignore: true
+      isFedRampEnabled:
+        x-terraform-ignore: true
+      isFipsEnabled:
+        x-terraform-ignore: true
+      loadavg:
+        x-terraform-ignore: true
+      memory:
+        x-terraform-ignore: true
+      messages:
+        x-terraform-ignore: true
+      net:
+        x-terraform-ignore: true
+      uptime:
+        x-terraform-ignore: true
 
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:

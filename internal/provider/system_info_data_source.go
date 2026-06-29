@@ -95,49 +95,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `Filesystem path to the Cribl configuration directory.`,
 						},
-						"cpus": schema.ListNestedAttribute{
-							Computed:    true,
-							Description: `Array of CPU information for each processor, including model, speed, and usage times.`,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"model": schema.StringAttribute{
-										Computed:    true,
-										Description: `CPU model identifier.`,
-									},
-									"speed": schema.Float64Attribute{
-										Computed:    true,
-										Description: `CPU speed (in MHz).`,
-									},
-									"times": schema.MapAttribute{
-										Computed:    true,
-										Description: `CPU time breakdown (user, nice, sys, idle, irq).`,
-										ElementType: types.StringType,
-									},
-								},
-							},
-						},
-						"disk_usage": schema.SingleNestedAttribute{
-							Computed:    true,
-							Description: `Disk usage information for the Cribl instance.`,
-							Attributes: map[string]schema.Attribute{
-								"bytes_available": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Total available bytes.`,
-								},
-								"bytes_used": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Total bytes used.`,
-								},
-								"disk_path": schema.StringAttribute{
-									Computed:    true,
-									Description: `Mount point or device path checked.`,
-								},
-								"total_disk_size": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Total disk size (in bytes).`,
-								},
-							},
-						},
 						"dist_mode": schema.StringAttribute{
 							Computed:    true,
 							Description: `Distribution mode of the Cribl instance.`,
@@ -151,10 +108,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `Globally unique identifier for the Cribl instance.`,
 						},
-						"has_cloud_workspace": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If <code>true</code>, the Cribl instance has a Cribl.Cloud Workspace.`,
-						},
 						"hostname": schema.StringAttribute{
 							Computed:    true,
 							Description: `Hostname of the machine running the Cribl instance.`,
@@ -166,18 +119,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 						"install_path": schema.StringAttribute{
 							Computed:    true,
 							Description: `Filesystem path where Cribl is installed.`,
-						},
-						"is_cribl_sandbox": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If <code>true</code>, the Cribl instance is running in a Cribl Sandbox environment.`,
-						},
-						"is_fed_ramp_enabled": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If <code>true</code>, FedRAMP mode is enabled.`,
-						},
-						"is_fips_enabled": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If <code>true</code>, FIPS compliance mode is enabled.`,
 						},
 						"license": schema.SingleNestedAttribute{
 							Computed:    true,
@@ -347,60 +288,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 								},
 							},
 						},
-						"loadavg": schema.ListAttribute{
-							Computed:    true,
-							Description: `System load averages for the past 1, 5, and 15 minutes, in the order <code>[1min, 5min, 15min]</code>.`,
-							ElementType: types.Float64Type,
-						},
-						"memory": schema.SingleNestedAttribute{
-							Computed:    true,
-							Description: `System memory information.`,
-							Attributes: map[string]schema.Attribute{
-								"free": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Number of bytes of RAM currently available for use.`,
-								},
-								"total": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Total number of bytes of RAM installed on the system.`,
-								},
-							},
-						},
-						"messages": schema.ListNestedAttribute{
-							Computed:    true,
-							Description: `System bulletin messages, such as warnings, errors, and informational notices.`,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"severity": schema.StringAttribute{
-										Computed: true,
-									},
-									"title": schema.StringAttribute{
-										Computed: true,
-									},
-									"text": schema.StringAttribute{
-										Computed: true,
-									},
-									"time": schema.Float64Attribute{
-										Computed: true,
-									},
-									"group": schema.StringAttribute{
-										Computed: true,
-									},
-									"metadata": schema.ListAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-									},
-								},
-							},
-						},
-						"net": schema.MapAttribute{
-							Computed:    true,
-							Description: `Network interface information. Structure is implementation-dependent.`,
-							ElementType: types.StringType,
-						},
 						"openssl": schema.SingleNestedAttribute{
 							Computed:    true,
 							Description: `OpenSSL version and FIPS provider information.`,
@@ -459,10 +346,6 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 								},
 							},
 						},
-						"uptime": schema.Float64Attribute{
-							Computed:    true,
-							Description: `System uptime (in seconds).`,
-						},
 						"version": schema.StringAttribute{
 							Computed:    true,
 							Description: `Version of Cribl software currently running on the host. In some responses this may be omitted; use <code>BUILD.VERSION</code> for the build version.`,
@@ -508,7 +391,7 @@ func (d *SystemInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "cpus": item.Cpus, "disk_usage": item.DiskUsage, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "has_cloud_workspace": item.HasCloudWorkspace, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "is_cribl_sandbox": item.IsCriblSandbox, "is_fed_ramp_enabled": item.IsFedRampEnabled, "is_fips_enabled": item.IsFipsEnabled, "license": item.License, "limits": item.Limits, "loadavg": item.Loadavg, "memory": item.Memory, "messages": item.Messages, "net": item.Net, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "uptime": item.Uptime, "version": item.Version, "worker_processes": item.WorkerProcesses}))
+			values = append(values, types.ObjectValueMust(SystemInfoItemAttrTypes(), map[string]attr.Value{"api_port": item.APIPort, "app_platform_enabled": item.AppPlatformEnabled, "build": item.BUILD, "conf": item.Conf, "config_path": item.ConfigPath, "dist_mode": item.DistMode, "env": item.Env, "guid": item.Guid, "hostname": item.Hostname, "insights_enabled": item.InsightsEnabled, "install_path": item.InstallPath, "license": item.License, "limits": item.Limits, "openssl": item.Openssl, "os": item.Os, "system_conf": item.SystemConf, "version": item.Version, "worker_processes": item.WorkerProcesses}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: SystemInfoItemAttrTypes()}, values)
@@ -522,28 +405,17 @@ func SystemInfoItemAttrTypes() map[string]attr.Type {
 		"build":                types.MapType{ElemType: types.StringType},
 		"conf":                 types.ObjectType{AttrTypes: SystemInfoConfAttrTypes()},
 		"config_path":          types.StringType,
-		"cpus":                 types.ListType{ElemType: types.ObjectType{AttrTypes: SystemInfoCpusAttrTypes()}},
-		"disk_usage":           types.ObjectType{AttrTypes: SystemInfoDiskUsageAttrTypes()},
 		"dist_mode":            types.StringType,
 		"env":                  types.MapType{ElemType: types.StringType},
 		"guid":                 types.StringType,
-		"has_cloud_workspace":  types.BoolType,
 		"hostname":             types.StringType,
 		"insights_enabled":     types.BoolType,
 		"install_path":         types.StringType,
-		"is_cribl_sandbox":     types.BoolType,
-		"is_fed_ramp_enabled":  types.BoolType,
-		"is_fips_enabled":      types.BoolType,
 		"license":              types.ObjectType{AttrTypes: SystemInfoLicenseAttrTypes()},
 		"limits":               types.ObjectType{AttrTypes: SystemInfoLimitsAttrTypes()},
-		"loadavg":              types.ListType{ElemType: types.Float64Type},
-		"memory":               types.ObjectType{AttrTypes: SystemInfoMemoryAttrTypes()},
-		"messages":             types.ListType{ElemType: types.ObjectType{AttrTypes: SystemInfoMessagesAttrTypes()}},
-		"net":                  types.MapType{ElemType: types.StringType},
 		"openssl":              types.ObjectType{AttrTypes: SystemInfoOpensslAttrTypes()},
 		"os":                   types.ObjectType{AttrTypes: SystemInfoOsAttrTypes()},
 		"system_conf":          types.ObjectType{AttrTypes: SystemInfoSystemConfAttrTypes()},
-		"uptime":               types.Float64Type,
 		"version":              types.StringType,
 		"worker_processes":     types.Float64Type,
 	}

@@ -22,94 +22,61 @@ type SystemInfoModel struct {
 	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
 	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
 	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
-	Cpus               types.List    `tfsdk:"cpus" json:"cpus,omitempty"`
-	DiskUsage          types.Object  `tfsdk:"disk_usage" json:"diskUsage,omitempty"`
 	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
 	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
 	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
-	HasCloudWorkspace  types.Bool    `tfsdk:"has_cloud_workspace" json:"hasCloudWorkspace,omitempty"`
 	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
 	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
 	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
-	IsCriblSandbox     types.Bool    `tfsdk:"is_cribl_sandbox" json:"isCriblSandbox,omitempty"`
-	IsFedRampEnabled   types.Bool    `tfsdk:"is_fed_ramp_enabled" json:"isFedRampEnabled,omitempty"`
-	IsFipsEnabled      types.Bool    `tfsdk:"is_fips_enabled" json:"isFipsEnabled,omitempty"`
 	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
 	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
-	Loadavg            types.List    `tfsdk:"loadavg" json:"loadavg,omitempty"`
-	Memory             types.Object  `tfsdk:"memory" json:"memory,omitempty"`
-	Messages           types.List    `tfsdk:"messages" json:"messages,omitempty"`
-	Net                types.Map     `tfsdk:"net" json:"net,omitempty"`
 	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
 	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
 	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Uptime             types.Float64 `tfsdk:"uptime" json:"uptime,omitempty"`
 	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
 	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoResourceModel struct {
-	APIPort            types.Float64   `tfsdk:"api_port" json:"apiPort,omitempty"`
-	AppPlatformEnabled types.Bool      `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
-	BUILD              types.Map       `tfsdk:"build" json:"BUILD,omitempty"`
-	Conf               types.Object    `tfsdk:"conf" json:"conf,omitempty"`
-	ConfigPath         types.String    `tfsdk:"config_path" json:"configPath,omitempty"`
-	Cpus               types.List      `tfsdk:"cpus" json:"cpus,omitempty"`
-	DiskUsage          types.Object    `tfsdk:"disk_usage" json:"diskUsage,omitempty"`
-	DistMode           types.String    `tfsdk:"dist_mode" json:"distMode,omitempty"`
-	Env                types.Map       `tfsdk:"env" json:"env,omitempty"`
-	Guid               types.String    `tfsdk:"guid" json:"guid,omitempty"`
-	HasCloudWorkspace  types.Bool      `tfsdk:"has_cloud_workspace" json:"hasCloudWorkspace,omitempty"`
-	Hostname           types.String    `tfsdk:"hostname" json:"hostname,omitempty"`
-	InsightsEnabled    types.Bool      `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
-	InstallPath        types.String    `tfsdk:"install_path" json:"installPath,omitempty"`
-	IsCriblSandbox     types.Bool      `tfsdk:"is_cribl_sandbox" json:"isCriblSandbox,omitempty"`
-	IsFedRampEnabled   types.Bool      `tfsdk:"is_fed_ramp_enabled" json:"isFedRampEnabled,omitempty"`
-	IsFipsEnabled      types.Bool      `tfsdk:"is_fips_enabled" json:"isFipsEnabled,omitempty"`
-	License            types.Object    `tfsdk:"license" json:"license,omitempty"`
-	Limits             types.Object    `tfsdk:"limits" json:"limits,omitempty"`
-	Loadavg            []types.Float64 `tfsdk:"loadavg" json:"loadavg,omitempty"`
-	Memory             types.Object    `tfsdk:"memory" json:"memory,omitempty"`
-	Messages           types.List      `tfsdk:"messages" json:"messages,omitempty"`
-	Net                types.Map       `tfsdk:"net" json:"net,omitempty"`
-	Openssl            types.Object    `tfsdk:"openssl" json:"openssl,omitempty"`
-	Os                 types.Object    `tfsdk:"os" json:"os,omitempty"`
-	SystemConf         types.Object    `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Uptime             types.Float64   `tfsdk:"uptime" json:"uptime,omitempty"`
-	Version            types.String    `tfsdk:"version" json:"version,omitempty"`
-	WorkerProcesses    types.Float64   `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
+	APIPort            types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
+	AppPlatformEnabled types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
+	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
+	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
+	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
+	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
+	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
+	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
+	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
+	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
+	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
+	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
+	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
+	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
+	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
+	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
+	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoDataSourceModel struct {
-	APIPort            types.Float64   `tfsdk:"api_port" json:"apiPort,omitempty"`
-	AppPlatformEnabled types.Bool      `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
-	BUILD              types.Map       `tfsdk:"build" json:"BUILD,omitempty"`
-	Conf               types.Object    `tfsdk:"conf" json:"conf,omitempty"`
-	ConfigPath         types.String    `tfsdk:"config_path" json:"configPath,omitempty"`
-	Cpus               types.List      `tfsdk:"cpus" json:"cpus,omitempty"`
-	DiskUsage          types.Object    `tfsdk:"disk_usage" json:"diskUsage,omitempty"`
-	DistMode           types.String    `tfsdk:"dist_mode" json:"distMode,omitempty"`
-	Env                types.Map       `tfsdk:"env" json:"env,omitempty"`
-	Guid               types.String    `tfsdk:"guid" json:"guid,omitempty"`
-	HasCloudWorkspace  types.Bool      `tfsdk:"has_cloud_workspace" json:"hasCloudWorkspace,omitempty"`
-	Hostname           types.String    `tfsdk:"hostname" json:"hostname,omitempty"`
-	InsightsEnabled    types.Bool      `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
-	InstallPath        types.String    `tfsdk:"install_path" json:"installPath,omitempty"`
-	IsCriblSandbox     types.Bool      `tfsdk:"is_cribl_sandbox" json:"isCriblSandbox,omitempty"`
-	IsFedRampEnabled   types.Bool      `tfsdk:"is_fed_ramp_enabled" json:"isFedRampEnabled,omitempty"`
-	IsFipsEnabled      types.Bool      `tfsdk:"is_fips_enabled" json:"isFipsEnabled,omitempty"`
-	License            types.Object    `tfsdk:"license" json:"license,omitempty"`
-	Limits             types.Object    `tfsdk:"limits" json:"limits,omitempty"`
-	Loadavg            []types.Float64 `tfsdk:"loadavg" json:"loadavg,omitempty"`
-	Memory             types.Object    `tfsdk:"memory" json:"memory,omitempty"`
-	Messages           types.List      `tfsdk:"messages" json:"messages,omitempty"`
-	Net                types.Map       `tfsdk:"net" json:"net,omitempty"`
-	Openssl            types.Object    `tfsdk:"openssl" json:"openssl,omitempty"`
-	Os                 types.Object    `tfsdk:"os" json:"os,omitempty"`
-	SystemConf         types.Object    `tfsdk:"system_conf" json:"systemConf,omitempty"`
-	Uptime             types.Float64   `tfsdk:"uptime" json:"uptime,omitempty"`
-	Version            types.String    `tfsdk:"version" json:"version,omitempty"`
-	WorkerProcesses    types.Float64   `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
+	APIPort            types.Float64 `tfsdk:"api_port" json:"apiPort,omitempty"`
+	AppPlatformEnabled types.Bool    `tfsdk:"app_platform_enabled" json:"appPlatformEnabled,omitempty"`
+	BUILD              types.Map     `tfsdk:"build" json:"BUILD,omitempty"`
+	Conf               types.Object  `tfsdk:"conf" json:"conf,omitempty"`
+	ConfigPath         types.String  `tfsdk:"config_path" json:"configPath,omitempty"`
+	DistMode           types.String  `tfsdk:"dist_mode" json:"distMode,omitempty"`
+	Env                types.Map     `tfsdk:"env" json:"env,omitempty"`
+	Guid               types.String  `tfsdk:"guid" json:"guid,omitempty"`
+	Hostname           types.String  `tfsdk:"hostname" json:"hostname,omitempty"`
+	InsightsEnabled    types.Bool    `tfsdk:"insights_enabled" json:"insightsEnabled,omitempty"`
+	InstallPath        types.String  `tfsdk:"install_path" json:"installPath,omitempty"`
+	License            types.Object  `tfsdk:"license" json:"license,omitempty"`
+	Limits             types.Object  `tfsdk:"limits" json:"limits,omitempty"`
+	Openssl            types.Object  `tfsdk:"openssl" json:"openssl,omitempty"`
+	Os                 types.Object  `tfsdk:"os" json:"os,omitempty"`
+	SystemConf         types.Object  `tfsdk:"system_conf" json:"systemConf,omitempty"`
+	Version            types.String  `tfsdk:"version" json:"version,omitempty"`
+	WorkerProcesses    types.Float64 `tfsdk:"worker_processes" json:"workerProcesses,omitempty"`
 }
 
 type SystemInfoAPIModel struct {
@@ -118,28 +85,17 @@ type SystemInfoAPIModel struct {
 	BUILD              map[string]string `json:"BUILD,omitempty"`
 	Conf               any               `json:"conf,omitempty"`
 	ConfigPath         *string           `json:"configPath,omitempty"`
-	Cpus               any               `json:"cpus,omitempty"`
-	DiskUsage          any               `json:"diskUsage,omitempty"`
 	DistMode           *string           `json:"distMode,omitempty"`
 	Env                map[string]string `json:"env,omitempty"`
 	Guid               *string           `json:"guid,omitempty"`
-	HasCloudWorkspace  *bool             `json:"hasCloudWorkspace,omitempty"`
 	Hostname           *string           `json:"hostname,omitempty"`
 	InsightsEnabled    *bool             `json:"insightsEnabled,omitempty"`
 	InstallPath        *string           `json:"installPath,omitempty"`
-	IsCriblSandbox     *bool             `json:"isCriblSandbox,omitempty"`
-	IsFedRampEnabled   *bool             `json:"isFedRampEnabled,omitempty"`
-	IsFipsEnabled      *bool             `json:"isFipsEnabled,omitempty"`
 	License            any               `json:"license,omitempty"`
 	Limits             any               `json:"limits,omitempty"`
-	Loadavg            []float64         `json:"loadavg,omitempty"`
-	Memory             any               `json:"memory,omitempty"`
-	Messages           any               `json:"messages,omitempty"`
-	Net                map[string]string `json:"net,omitempty"`
 	Openssl            any               `json:"openssl,omitempty"`
 	Os                 any               `json:"os,omitempty"`
 	SystemConf         any               `json:"systemConf,omitempty"`
-	Uptime             *float64          `json:"uptime,omitempty"`
 	Version            *string           `json:"version,omitempty"`
 	WorkerProcesses    *float64          `json:"workerProcesses,omitempty"`
 }
@@ -173,49 +129,6 @@ func SystemInfoConfAttrTypes() map[string]attr.Type {
 		"pipelines":    types.Float64Type,
 		"routes":       types.Float64Type,
 		"rules":        types.Float64Type,
-	}
-}
-
-type SystemInfoCpusModel struct {
-	Model types.String  `tfsdk:"model" json:"model,omitempty"`
-	Speed types.Float64 `tfsdk:"speed" json:"speed,omitempty"`
-	Times types.Map     `tfsdk:"times" json:"times,omitempty"`
-}
-
-type SystemInfoCpusAPIModel struct {
-	Model *string           `json:"model,omitempty"`
-	Speed *float64          `json:"speed,omitempty"`
-	Times map[string]string `json:"times,omitempty"`
-}
-
-func SystemInfoCpusAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"model": types.StringType,
-		"speed": types.Float64Type,
-		"times": types.MapType{ElemType: types.StringType},
-	}
-}
-
-type SystemInfoDiskUsageModel struct {
-	BytesAvailable types.Float64 `tfsdk:"bytes_available" json:"bytesAvailable,omitempty"`
-	BytesUsed      types.Float64 `tfsdk:"bytes_used" json:"bytesUsed,omitempty"`
-	DiskPath       types.String  `tfsdk:"disk_path" json:"diskPath,omitempty"`
-	TotalDiskSize  types.Float64 `tfsdk:"total_disk_size" json:"totalDiskSize,omitempty"`
-}
-
-type SystemInfoDiskUsageAPIModel struct {
-	BytesAvailable *float64 `json:"bytesAvailable,omitempty"`
-	BytesUsed      *float64 `json:"bytesUsed,omitempty"`
-	DiskPath       *string  `json:"diskPath,omitempty"`
-	TotalDiskSize  *float64 `json:"totalDiskSize,omitempty"`
-}
-
-func SystemInfoDiskUsageAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"bytes_available": types.Float64Type,
-		"bytes_used":      types.Float64Type,
-		"disk_path":       types.StringType,
-		"total_disk_size": types.Float64Type,
 	}
 }
 
@@ -383,55 +296,6 @@ type SystemInfoLimitsSamplesAPIModel struct {
 func SystemInfoLimitsSamplesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"max_size": types.StringType,
-	}
-}
-
-type SystemInfoMemoryModel struct {
-	Free  types.Float64 `tfsdk:"free" json:"free,omitempty"`
-	Total types.Float64 `tfsdk:"total" json:"total,omitempty"`
-}
-
-type SystemInfoMemoryAPIModel struct {
-	Free  *float64 `json:"free,omitempty"`
-	Total *float64 `json:"total,omitempty"`
-}
-
-func SystemInfoMemoryAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"free":  types.Float64Type,
-		"total": types.Float64Type,
-	}
-}
-
-type SystemInfoMessagesModel struct {
-	ID       types.String  `tfsdk:"id" json:"id,omitempty"`
-	Severity types.String  `tfsdk:"severity" json:"severity,omitempty"`
-	Title    types.String  `tfsdk:"title" json:"title,omitempty"`
-	Text     types.String  `tfsdk:"text" json:"text,omitempty"`
-	Time     types.Float64 `tfsdk:"time" json:"time,omitempty"`
-	Group    types.String  `tfsdk:"group" json:"group,omitempty"`
-	Metadata types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-}
-
-type SystemInfoMessagesAPIModel struct {
-	ID       *string  `json:"id,omitempty"`
-	Severity *string  `json:"severity,omitempty"`
-	Title    *string  `json:"title,omitempty"`
-	Text     *string  `json:"text,omitempty"`
-	Time     *float64 `json:"time,omitempty"`
-	Group    *string  `json:"group,omitempty"`
-	Metadata []string `json:"metadata,omitempty"`
-}
-
-func SystemInfoMessagesAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"id":       types.StringType,
-		"severity": types.StringType,
-		"title":    types.StringType,
-		"text":     types.StringType,
-		"time":     types.Float64Type,
-		"group":    types.StringType,
-		"metadata": types.ListType{ElemType: types.StringType},
 	}
 }
 
@@ -744,20 +608,6 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 		}
 		output["configPath"] = value
 	}
-	if !m.Cpus.IsNull() && !m.Cpus.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Cpus)
-		if err != nil {
-			return nil, fmt.Errorf("convert cpus to API value: %v", err)
-		}
-		output["cpus"] = value
-	}
-	if !m.DiskUsage.IsNull() && !m.DiskUsage.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.DiskUsage)
-		if err != nil {
-			return nil, fmt.Errorf("convert disk_usage to API value: %v", err)
-		}
-		output["diskUsage"] = value
-	}
 	if !m.DistMode.IsNull() && !m.DistMode.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.DistMode)
 		if err != nil {
@@ -778,13 +628,6 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert guid to API value: %v", err)
 		}
 		output["guid"] = value
-	}
-	if !m.HasCloudWorkspace.IsNull() && !m.HasCloudWorkspace.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.HasCloudWorkspace)
-		if err != nil {
-			return nil, fmt.Errorf("convert has_cloud_workspace to API value: %v", err)
-		}
-		output["hasCloudWorkspace"] = value
 	}
 	if !m.Hostname.IsNull() && !m.Hostname.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.Hostname)
@@ -807,27 +650,6 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 		}
 		output["installPath"] = value
 	}
-	if !m.IsCriblSandbox.IsNull() && !m.IsCriblSandbox.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.IsCriblSandbox)
-		if err != nil {
-			return nil, fmt.Errorf("convert is_cribl_sandbox to API value: %v", err)
-		}
-		output["isCriblSandbox"] = value
-	}
-	if !m.IsFedRampEnabled.IsNull() && !m.IsFedRampEnabled.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.IsFedRampEnabled)
-		if err != nil {
-			return nil, fmt.Errorf("convert is_fed_ramp_enabled to API value: %v", err)
-		}
-		output["isFedRampEnabled"] = value
-	}
-	if !m.IsFipsEnabled.IsNull() && !m.IsFipsEnabled.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.IsFipsEnabled)
-		if err != nil {
-			return nil, fmt.Errorf("convert is_fips_enabled to API value: %v", err)
-		}
-		output["isFipsEnabled"] = value
-	}
 	if !m.License.IsNull() && !m.License.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.License)
 		if err != nil {
@@ -841,34 +663,6 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert limits to API value: %v", err)
 		}
 		output["limits"] = value
-	}
-	if !m.Loadavg.IsNull() && !m.Loadavg.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Loadavg)
-		if err != nil {
-			return nil, fmt.Errorf("convert loadavg to API value: %v", err)
-		}
-		output["loadavg"] = value
-	}
-	if !m.Memory.IsNull() && !m.Memory.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Memory)
-		if err != nil {
-			return nil, fmt.Errorf("convert memory to API value: %v", err)
-		}
-		output["memory"] = value
-	}
-	if !m.Messages.IsNull() && !m.Messages.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Messages)
-		if err != nil {
-			return nil, fmt.Errorf("convert messages to API value: %v", err)
-		}
-		output["messages"] = value
-	}
-	if !m.Net.IsNull() && !m.Net.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Net)
-		if err != nil {
-			return nil, fmt.Errorf("convert net to API value: %v", err)
-		}
-		output["net"] = value
 	}
 	if !m.Openssl.IsNull() && !m.Openssl.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.Openssl)
@@ -890,13 +684,6 @@ func (m SystemInfoModel) MarshalJSON() ([]byte, error) {
 			return nil, fmt.Errorf("convert system_conf to API value: %v", err)
 		}
 		output["systemConf"] = value
-	}
-	if !m.Uptime.IsNull() && !m.Uptime.IsUnknown() {
-		value, err := SystemInfoTerraformValueToJSON(m.Uptime)
-		if err != nil {
-			return nil, fmt.Errorf("convert uptime to API value: %v", err)
-		}
-		output["uptime"] = value
 	}
 	if !m.Version.IsNull() && !m.Version.IsUnknown() {
 		value, err := SystemInfoTerraformValueToJSON(m.Version)
@@ -953,24 +740,6 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.ConfigPath = types.StringNull()
 	}
-	if input.Cpus != nil {
-		value, err := SystemInfoAPIValueToTerraformValue(input.Cpus, types.ListType{ElemType: types.ObjectType{AttrTypes: SystemInfoCpusAttrTypes()}})
-		if err != nil {
-			return fmt.Errorf("convert cpus from API value: %v", err)
-		}
-		m.Cpus = value.(types.List)
-	} else {
-		m.Cpus = types.ListNull(types.ObjectType{AttrTypes: SystemInfoCpusAttrTypes()})
-	}
-	if input.DiskUsage != nil {
-		value, err := SystemInfoAPIValueToTerraformValue(input.DiskUsage, types.ObjectType{AttrTypes: SystemInfoDiskUsageAttrTypes()})
-		if err != nil {
-			return fmt.Errorf("convert diskUsage from API value: %v", err)
-		}
-		m.DiskUsage = value.(types.Object)
-	} else {
-		m.DiskUsage = types.ObjectNull(SystemInfoDiskUsageAttrTypes())
-	}
 	if input.DistMode != nil {
 		m.DistMode = types.StringValue(*input.DistMode)
 	} else {
@@ -990,11 +759,6 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Guid = types.StringNull()
 	}
-	if input.HasCloudWorkspace != nil {
-		m.HasCloudWorkspace = types.BoolValue(*input.HasCloudWorkspace)
-	} else {
-		m.HasCloudWorkspace = types.BoolNull()
-	}
 	if input.Hostname != nil {
 		m.Hostname = types.StringValue(*input.Hostname)
 	} else {
@@ -1009,21 +773,6 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 		m.InstallPath = types.StringValue(*input.InstallPath)
 	} else {
 		m.InstallPath = types.StringNull()
-	}
-	if input.IsCriblSandbox != nil {
-		m.IsCriblSandbox = types.BoolValue(*input.IsCriblSandbox)
-	} else {
-		m.IsCriblSandbox = types.BoolNull()
-	}
-	if input.IsFedRampEnabled != nil {
-		m.IsFedRampEnabled = types.BoolValue(*input.IsFedRampEnabled)
-	} else {
-		m.IsFedRampEnabled = types.BoolNull()
-	}
-	if input.IsFipsEnabled != nil {
-		m.IsFipsEnabled = types.BoolValue(*input.IsFipsEnabled)
-	} else {
-		m.IsFipsEnabled = types.BoolNull()
 	}
 	if input.License != nil {
 		value, err := SystemInfoAPIValueToTerraformValue(input.License, types.ObjectType{AttrTypes: SystemInfoLicenseAttrTypes()})
@@ -1042,42 +791,6 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 		m.Limits = value.(types.Object)
 	} else {
 		m.Limits = types.ObjectNull(SystemInfoLimitsAttrTypes())
-	}
-	if input.Loadavg != nil {
-		value, diags := types.ListValueFrom(context.Background(), types.Float64Type, input.Loadavg)
-		if diags.HasError() {
-			return fmt.Errorf("convert loadavg from API value: %v", diags)
-		}
-		m.Loadavg = value
-	} else {
-		m.Loadavg = types.ListNull(types.Float64Type)
-	}
-	if input.Memory != nil {
-		value, err := SystemInfoAPIValueToTerraformValue(input.Memory, types.ObjectType{AttrTypes: SystemInfoMemoryAttrTypes()})
-		if err != nil {
-			return fmt.Errorf("convert memory from API value: %v", err)
-		}
-		m.Memory = value.(types.Object)
-	} else {
-		m.Memory = types.ObjectNull(SystemInfoMemoryAttrTypes())
-	}
-	if input.Messages != nil {
-		value, err := SystemInfoAPIValueToTerraformValue(input.Messages, types.ListType{ElemType: types.ObjectType{AttrTypes: SystemInfoMessagesAttrTypes()}})
-		if err != nil {
-			return fmt.Errorf("convert messages from API value: %v", err)
-		}
-		m.Messages = value.(types.List)
-	} else {
-		m.Messages = types.ListNull(types.ObjectType{AttrTypes: SystemInfoMessagesAttrTypes()})
-	}
-	if input.Net != nil {
-		value, diags := types.MapValueFrom(context.Background(), types.StringType, input.Net)
-		if diags.HasError() {
-			return fmt.Errorf("convert net from API value: %v", diags)
-		}
-		m.Net = value
-	} else {
-		m.Net = types.MapNull(types.StringType)
 	}
 	if input.Openssl != nil {
 		value, err := SystemInfoAPIValueToTerraformValue(input.Openssl, types.ObjectType{AttrTypes: SystemInfoOpensslAttrTypes()})
@@ -1105,11 +818,6 @@ func (m *SystemInfoModel) UnmarshalJSON(data []byte) error {
 		m.SystemConf = value.(types.Object)
 	} else {
 		m.SystemConf = types.ObjectNull(SystemInfoSystemConfAttrTypes())
-	}
-	if input.Uptime != nil {
-		m.Uptime = types.Float64Value(*input.Uptime)
-	} else {
-		m.Uptime = types.Float64Null()
 	}
 	if input.Version != nil {
 		m.Version = types.StringValue(*input.Version)
