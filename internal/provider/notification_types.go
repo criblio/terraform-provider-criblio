@@ -83,7 +83,6 @@ type NotificationConfModel struct {
 	DataVolume         types.String  `tfsdk:"data_volume" json:"dataVolume,omitempty"`
 	NotifyOnResolution types.Bool    `tfsdk:"notify_on_resolution" json:"notifyOnResolution,omitempty"`
 	UsageThreshold     types.Float64 `tfsdk:"usage_threshold" json:"usageThreshold,omitempty"`
-	WorkerGroup        types.String  `tfsdk:"__worker_group" json:"__workerGroup,omitempty"`
 }
 
 type NotificationConfAPIModel struct {
@@ -97,7 +96,6 @@ type NotificationConfAPIModel struct {
 	DataVolume         *string  `json:"dataVolume,omitempty"`
 	NotifyOnResolution *bool    `json:"notifyOnResolution,omitempty"`
 	UsageThreshold     *float64 `json:"usageThreshold,omitempty"`
-	WorkerGroup        *string  `json:"__workerGroup,omitempty"`
 }
 
 func NotificationConfAttrTypes() map[string]attr.Type {
@@ -112,7 +110,6 @@ func NotificationConfAttrTypes() map[string]attr.Type {
 		"data_volume":          types.StringType,
 		"notify_on_resolution": types.BoolType,
 		"usage_threshold":      types.Float64Type,
-		"__worker_group":       types.StringType,
 	}
 }
 

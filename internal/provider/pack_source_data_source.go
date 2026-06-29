@@ -8823,10 +8823,6 @@ func (d *PackSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Computed:    true,
 									Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
 								},
-								"__lbdisable_assembly": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Internal flag to disable LB worker payload reassembly.`,
-								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
 									Description: `Fields to add to events from this input`,
@@ -25844,10 +25840,6 @@ func (d *PackSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 					"line_buffer_limit": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
-					},
-					"__lbdisable_assembly": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Internal flag to disable LB worker payload reassembly.`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Computed:    true,

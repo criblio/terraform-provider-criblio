@@ -31092,7 +31092,6 @@ type InputKubeLogsModel struct {
 	Rules                 types.List    `tfsdk:"rules" json:"rules,omitempty"`
 	Timestamps            types.Bool    `tfsdk:"timestamps" json:"timestamps,omitempty"`
 	LineBufferLimit       types.Float64 `tfsdk:"line_buffer_limit" json:"lineBufferLimit,omitempty"`
-	LBDisableAssembly     types.Bool    `tfsdk:"__lbdisable_assembly" json:"__LBDisableAssembly,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	Persistence           types.Object  `tfsdk:"persistence" json:"persistence,omitempty"`
 	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
@@ -31118,7 +31117,6 @@ func InputKubeLogsModelAttrTypes() map[string]attr.Type {
 		"rules":                   types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()}},
 		"timestamps":              types.BoolType,
 		"line_buffer_limit":       types.Float64Type,
-		"__lbdisable_assembly":    types.BoolType,
 		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}},
 		"persistence":             types.ObjectType{AttrTypes: InputKubeLogsPersistenceAttrTypes()},
 		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
@@ -31234,13 +31232,6 @@ func (m InputKubeLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert line_buffer_limit to API value: %v", err)
 		}
 		output["lineBufferLimit"] = value
-	}
-	if !m.LBDisableAssembly.IsNull() && !m.LBDisableAssembly.IsUnknown() {
-		value, err := SourceTerraformValueToJSON(m.LBDisableAssembly)
-		if err != nil {
-			return nil, fmt.Errorf("convert __lbdisable_assembly to API value: %v", err)
-		}
-		output["__LBDisableAssembly"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
@@ -31422,15 +31413,6 @@ func (m *InputKubeLogsModel) unmarshalPayload(input map[string]any) error {
 		m.LineBufferLimit = value.(types.Float64)
 	} else {
 		m.LineBufferLimit = types.Float64Null()
-	}
-	if item, ok := input["__LBDisableAssembly"]; ok {
-		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
-		if err != nil {
-			return fmt.Errorf("convert __LBDisableAssembly from API value: %v", err)
-		}
-		m.LBDisableAssembly = value.(types.Bool)
-	} else {
-		m.LBDisableAssembly = types.BoolNull()
 	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}})

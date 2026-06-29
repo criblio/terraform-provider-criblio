@@ -8844,10 +8844,6 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Computed:    true,
 									Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
 								},
-								"__lbdisable_assembly": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Internal flag to disable LB worker payload reassembly.`,
-								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
 									Description: `Fields to add to events from this input`,
@@ -30074,12 +30070,6 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Computed:    false,
 						Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
 					},
-					"__lbdisable_assembly": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `Internal flag to disable LB worker payload reassembly.`,
-					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -49709,13 +49699,6 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKubeLogs.LineBufferLimit = api.InputKubeLogs.LineBufferLimit
 			} else if state.InputKubeLogs.LineBufferLimit.IsNull() || state.InputKubeLogs.LineBufferLimit.IsUnknown() {
 				state.InputKubeLogs.LineBufferLimit = types.Float64Null()
-			}
-		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.LBDisableAssembly.IsNull() || state.InputKubeLogs.LBDisableAssembly.IsUnknown())) {
-			if !api.InputKubeLogs.LBDisableAssembly.IsNull() && !api.InputKubeLogs.LBDisableAssembly.IsUnknown() {
-				state.InputKubeLogs.LBDisableAssembly = api.InputKubeLogs.LBDisableAssembly
-			} else if state.InputKubeLogs.LBDisableAssembly.IsNull() || state.InputKubeLogs.LBDisableAssembly.IsUnknown() {
-				state.InputKubeLogs.LBDisableAssembly = types.BoolNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Metadata.IsNull() || state.InputKubeLogs.Metadata.IsUnknown())) {

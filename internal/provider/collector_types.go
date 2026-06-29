@@ -561,7 +561,6 @@ type InputCollectorRestCollectorConfModel struct {
 	Discovery                       types.Object `tfsdk:"discovery" json:"discovery,omitempty"`
 	Pagination                      types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
 	RetryRules                      types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
-	Scheduling                      types.Object `tfsdk:"__scheduling" json:"__scheduling,omitempty"`
 }
 
 type InputCollectorRestCollectorConfAPIModel struct {
@@ -598,7 +597,6 @@ type InputCollectorRestCollectorConfAPIModel struct {
 	Discovery                       any      `json:"discovery,omitempty"`
 	Pagination                      any      `json:"pagination,omitempty"`
 	RetryRules                      any      `json:"retryRules,omitempty"`
-	Scheduling                      any      `json:"__scheduling,omitempty"`
 }
 
 func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
@@ -636,7 +634,6 @@ func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
 		"discovery":                          types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryAttrTypes()},
 		"pagination":                         types.ObjectType{AttrTypes: InputCollectorRestCollectorConfPaginationAttrTypes()},
 		"retry_rules":                        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRetryRulesAttrTypes()},
-		"__scheduling":                       types.ObjectType{AttrTypes: InputCollectorRestCollectorConfSchedulingAttrTypes()},
 	}
 }
 
@@ -939,20 +936,6 @@ func InputCollectorRestCollectorConfRetryRulesAttrTypes() map[string]attr.Type {
 		"retry_connect_timeout": types.BoolType,
 		"retry_connect_reset":   types.BoolType,
 		"retry_header_name":     types.StringType,
-	}
-}
-
-type InputCollectorRestCollectorConfSchedulingModel struct {
-	StateTracking types.Map `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
-}
-
-type InputCollectorRestCollectorConfSchedulingAPIModel struct {
-	StateTracking map[string]string `json:"stateTracking,omitempty"`
-}
-
-func InputCollectorRestCollectorConfSchedulingAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"state_tracking": types.MapType{ElemType: types.StringType},
 	}
 }
 

@@ -1609,7 +1609,6 @@ Optional:
 - `rules` (Attributes List) Add rules to decide which Pods to collect logs from. Logs are collected if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_logs--rules))
 - `timestamps` (Boolean) For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted.
 - `line_buffer_limit` (Number) Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).
-- `__lbdisable_assembly` (Boolean) Internal flag to disable LB worker payload reassembly.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_logs--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs--persistence))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream

@@ -8825,10 +8825,6 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 									Computed:    true,
 									Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
 								},
-								"__lbdisable_assembly": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Internal flag to disable LB worker payload reassembly.`,
-								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
 									Description: `Fields to add to events from this input`,
@@ -18468,7 +18464,6 @@ func SourcesInputKubeLogsObjectValue(item *InputKubeLogsModel) attr.Value {
 		"rules":                   item.Rules,
 		"timestamps":              item.Timestamps,
 		"line_buffer_limit":       item.LineBufferLimit,
-		"__lbdisable_assembly":    item.LBDisableAssembly,
 		"metadata":                item.Metadata,
 		"persistence":             item.Persistence,
 		"breaker_rulesets":        item.BreakerRulesets,

@@ -802,7 +802,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 }
 
 func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
-	return strings.HasPrefix(apiName, "__template_") || ignoredAnnotation(property)
+	return strings.HasPrefix(apiName, "__") || ignoredAnnotation(property)
 }
 
 func ignoredAnnotation(property *yaml.Node) bool {

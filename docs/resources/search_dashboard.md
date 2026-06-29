@@ -428,7 +428,6 @@ Optional:
 - `data_volume` (String) Data volume threshold.
 - `notify_on_resolution` (Boolean) Notify when the condition returns to the resolved state.
 - `usage_threshold` (Number) Persistent queue usage threshold.
-- `__worker_group` (String) Optional scope to a specific worker group.
 
 <a id="nestedatt--schedule--notifications--items--metadata"></a>
 ### Nested Schema for `schedule.notifications.items.metadata`

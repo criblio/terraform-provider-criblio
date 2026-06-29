@@ -342,6 +342,8 @@ components:
           x-terraform-prefer-state: true
         __template_accountKey:
           type: string
+        __internalFlag:
+          type: boolean
         container:
           type: string
     OutputElastic:

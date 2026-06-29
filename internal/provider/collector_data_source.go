@@ -877,15 +877,6 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 											},
 										},
 									},
-									"__scheduling": schema.SingleNestedAttribute{
-										Computed: true,
-										Attributes: map[string]schema.Attribute{
-											"state_tracking": schema.MapAttribute{
-												Computed:    true,
-												ElementType: types.StringType,
-											},
-										},
-									},
 								},
 							},
 						},

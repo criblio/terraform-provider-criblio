@@ -105,6 +105,7 @@ After gathering facts, restate the development plan in a short checklist before 
 - Search resources normally use `group_id = "default_search"`; stream resources normally use `group_id = "default"`.
 - Cloud-only, on-prem-only, and license-gated endpoints need acceptance skips or separate test helpers, not broken default tests.
 - Sensitive values must not appear in plan diffs, generated docs as real secrets, or import-cli HCL output.
+- Upstream properties whose API names start with `__` are Cribl-internal helper fields. They must not be generated as Terraform attributes because framework `tfsdk` tags cannot start with underscores and these fields are not user-facing configuration.
 
 ## Import CLI And Export
 
