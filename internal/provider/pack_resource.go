@@ -1095,6 +1095,9 @@ func preservePackPlan(ctx context.Context, data *PackResourceModel, plan types.O
 	if !planData.Inputs.IsNull() && !planData.Inputs.IsUnknown() {
 		data.Inputs = planData.Inputs
 	}
+	if planData.Items != nil {
+		data.Items = planData.Items
+	}
 	if !planData.MinLogStreamVersion.IsNull() && !planData.MinLogStreamVersion.IsUnknown() {
 		data.MinLogStreamVersion = planData.MinLogStreamVersion
 	}

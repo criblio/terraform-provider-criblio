@@ -112,7 +112,7 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if gid := idMap["group_id"]; gid != "" {
 		if id := idMap["id"]; id != "" && id == gid {
 			switch typeName {
-			case "criblio_group_system_settings", "criblio_routes":
+			case "criblio_group", "criblio_group_system_settings", "criblio_routes":
 				// Intentional: one resource per group, id=group_id
 			default:
 				return true

@@ -2,6 +2,7 @@ package client
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/useragent"
@@ -95,5 +96,11 @@ func TestBulkExporterUserAgentMatchesProvider(t *testing.T) {
 	ua := BulkExporterUserAgent()
 	if ua != useragent.TerraformProvider {
 		t.Errorf("User-Agent = %q, want %q", ua, useragent.TerraformProvider)
+	}
+	if !strings.Contains(ua, "speakeasy-sdk/terraform") {
+		t.Errorf("User-Agent should retain Speakeasy tracking token, got %q", ua)
+	}
+	if strings.Contains(ua, "/internal/sdk") {
+		t.Errorf("User-Agent should not reference removed internal SDK package, got %q", ua)
 	}
 }
