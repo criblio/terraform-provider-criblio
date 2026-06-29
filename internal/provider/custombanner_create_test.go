@@ -8,7 +8,9 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 func TestCustomBannerCreateUsesPostThenGet(t *testing.T) {
@@ -53,6 +55,67 @@ func TestCustomBannerCreateFallsBackToPatch(t *testing.T) {
 				t.Fatalf("POST/PATCH/GET counts = %d/%d/%d, want 1/1/1", postCount, patchCount, getCount)
 			}
 		})
+	}
+}
+
+func TestCustomBannerPlanDecodeAllowsUnknownComputedLists(t *testing.T) {
+	stringListType := types.ListType{ElemType: types.StringType}
+	itemType := types.ObjectType{AttrTypes: map[string]attr.Type{
+		"created":           types.Float64Type,
+		"custom_themes":     stringListType,
+		"enabled":           types.BoolType,
+		"id":                types.StringType,
+		"invert_font_color": types.BoolType,
+		"link":              types.StringType,
+		"link_display":      types.StringType,
+		"message":           types.StringType,
+		"theme":             types.StringType,
+		"type":              types.StringType,
+	}}
+	bannerType := map[string]attr.Type{
+		"created":           types.Float64Type,
+		"custom_themes":     stringListType,
+		"enabled":           types.BoolType,
+		"id":                types.StringType,
+		"invert_font_color": types.BoolType,
+		"items":             types.ListType{ElemType: itemType},
+		"link":              types.StringType,
+		"link_display":      types.StringType,
+		"message":           types.StringType,
+		"theme":             types.StringType,
+		"type":              types.StringType,
+	}
+	plan := types.ObjectValueMust(bannerType, map[string]attr.Value{
+		"created":           types.Float64Unknown(),
+		"custom_themes":     types.ListUnknown(types.StringType),
+		"enabled":           types.BoolValue(true),
+		"id":                types.StringUnknown(),
+		"invert_font_color": types.BoolUnknown(),
+		"items":             types.ListUnknown(itemType),
+		"link":              types.StringValue("https://status.example.com"),
+		"link_display":      types.StringValue("View status page"),
+		"message":           types.StringValue("Scheduled maintenance"),
+		"theme":             types.StringValue("purple"),
+		"type":              types.StringValue("custom"),
+	})
+
+	var model CustomBannerResourceModel
+	diags := plan.As(context.Background(), &model, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})
+
+	if diags.HasError() {
+		t.Fatalf("expected unknown computed lists to decode without diagnostics, got: %v", diags)
+	}
+	if model.CustomThemes != nil {
+		t.Fatalf("expected unknown custom_themes to decode as nil, got %#v", model.CustomThemes)
+	}
+	if model.Items != nil {
+		t.Fatalf("expected unknown items to decode as nil, got %#v", model.Items)
+	}
+	if got := model.Message.ValueString(); got != "Scheduled maintenance" {
+		t.Fatalf("expected message to decode, got %q", got)
 	}
 }
 

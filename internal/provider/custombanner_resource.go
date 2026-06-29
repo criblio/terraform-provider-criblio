@@ -234,7 +234,10 @@ func (r *CustomBannerResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -280,7 +283,10 @@ func (r *CustomBannerResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	resp.Diagnostics.Append(plan.As(ctx, &data, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -391,7 +397,10 @@ func bannerMessageFromAPI(apiModel *customBannerAPI) bannerMessage {
 
 func preserveCustomBannerPlan(ctx context.Context, data *CustomBannerResourceModel, plan types.Object) {
 	var planData CustomBannerResourceModel
-	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true})
+	diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{
+		UnhandledNullAsEmpty:    true,
+		UnhandledUnknownAsEmpty: true,
+	})
 	if diags.HasError() {
 		return
 	}
