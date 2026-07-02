@@ -3111,3 +3111,83 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Deploy
       x-terraform-action: true
+
+  # MON-762: criblio_monitor resource — /products/aetos/monitors
+  - target: "$.paths./products/aetos/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+  - target: "$.paths./products/aetos/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/aetos/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
+
+  # MonitorConf schema annotations
+  - target: "$.components.schemas.MonitorConf.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  # replace: strips oneOf(string, MonitorQuery) — codegen treats property-level oneOf as
+  # a resource variant, not a field. Replace with a plain JSON string.
+  - target: "$.components.schemas.MonitorConf.properties.query"
+    replace:
+      type: string
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-valid-json: true
+      description: "PromQL string or MonitorQuery object as JSON. Use a plain string or jsonencode({...}) in HCL."
+  # replace: strips type:array+items to avoid codegen emitting ListNestedAttribute
+  - target: "$.components.schemas.MonitorConf.properties.params"
+    replace:
+      type: object
+      additionalProperties: true
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-valid-json: true
+      description: "Monitor parameters as JSON string (use jsonencode({...}) in HCL)."
+  - target: "$.components.schemas.MonitorConf.properties.rules"
+    replace:
+      type: string
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-valid-json: true
+      description: "Array of monitor rules as JSON string (use jsonencode([...]) in HCL)."
+  - target: "$.components.schemas.MonitorConf.properties.sqlOverride"
+    replace:
+      type: object
+      additionalProperties: true
+      x-terraform-object-as-json: true
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+      x-terraform-valid-json: true
+      x-terraform-optional-computed: true
+      description: "SQL override as JSON string, e.g. jsonencode({instant: '...', range: '...'})."
+  - target: "$.components.schemas.MonitorConf.properties.isDefault"
+    update:
+      x-terraform-computed: true
+
+  - target: "$.paths./products/aetos/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+  - target: "$.paths./products/aetos/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/aetos/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
