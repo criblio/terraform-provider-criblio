@@ -18,3 +18,10 @@ internal/provider/custombanner_data_source.go
 internal/provider/custombanner_resource.go
 internal/provider/pack_id_resolve.go
 internal/provider/pack_resource.go
+# MON-762: hand-written, schema based on IAetosMonitorConf not upstream MonitorConf
+internal/provider/monitor_client.go
+internal/provider/monitor_resource.go
+internal/provider/monitor_types.go
+internal/provider/monitor_data_source.go
+internal/provider/monitors_data_source.go
+tests/acceptance/monitor_test.go
