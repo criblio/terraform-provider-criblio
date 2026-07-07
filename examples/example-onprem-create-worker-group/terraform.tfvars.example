@@ -1,0 +1,4 @@
+# Copy this file to terraform.tfvars and replace each placeholder with the value
+# for your on-prem deployment. Do not commit terraform.tfvars to version control.
+
+worker_group_id = "id-for-new-worker-group-must-not-already-exist"

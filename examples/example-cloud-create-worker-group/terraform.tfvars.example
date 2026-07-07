@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars and replace each placeholder with the value
+# for your Cribl.Cloud deployment. Do not commit terraform.tfvars to version control.
+
+organization_id = "your-organization-id"
+workspace_id    = "your-workspace-name"
+client_id       = "client-id-from-your-api-credential"
+client_secret   = "client-secret-from-your-api-credential"
+worker_group_id = "id-for-new-worker-group-must-not-already-exist"

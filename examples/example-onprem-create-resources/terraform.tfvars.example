@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars and replace each placeholder with the value
+# for your on-prem deployment. Do not commit terraform.tfvars to version control.
+
+worker_group_id = "id-for-new-worker-group-must-not-already-exist"
+aws_api_key     = "your-aws-access-key-id"
+aws_secret_key  = "your-aws-secret-access-key"
+aws_bucket_name = "your-s3-bucket-name"
+aws_region      = "your-s3-bucket-region-such-as-us-east-2"
