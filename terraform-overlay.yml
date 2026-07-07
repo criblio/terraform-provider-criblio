@@ -3174,20 +3174,4 @@ actions:
     update:
       x-terraform-computed: true
 
-  - target: "$.paths./products/aetos/monitors.post"
-    update:
-      x-terraform-resource: true
-      x-terraform-resource-name: Monitor
-  - target: "$.paths./products/aetos/monitors.get"
-    update:
-      x-terraform-list: Monitor
-      x-terraform-list-name: Monitors
-  - target: "$.paths./products/aetos/monitors/{id}.get"
-    update:
-      x-terraform-read: Monitor
-  - target: "$.paths./products/aetos/monitors/{id}.patch"
-    update:
-      x-terraform-update: Monitor
-  - target: "$.paths./products/aetos/monitors/{id}.delete"
-    update:
-      x-terraform-delete: Monitor
+  
