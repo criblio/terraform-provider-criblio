@@ -1,0 +1,33 @@
+// Hand-written: do not regenerate (listed in .codegen-ignore).
+package provider
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+)
+
+type MonitorAPI struct {
+	client *restclient.Client
+}
+
+func newMonitorAPI(client *restclient.Client) MonitorAPI {
+	return MonitorAPI{client: client}
+}
+
+func (a MonitorAPI) Create(ctx context.Context, model MonitorModel) (*MonitorModel, error) {
+	return restclient.Post[MonitorModel, MonitorModel](ctx, a.client, "/products/aetos/monitors", model)
+}
+
+func (a MonitorAPI) Read(ctx context.Context, model MonitorModel) (*MonitorModel, error) {
+	return restclient.Get[MonitorModel](ctx, a.client, fmt.Sprintf("/products/aetos/monitors/%s", model.ID.ValueString()))
+}
+
+func (a MonitorAPI) Update(ctx context.Context, model MonitorModel) (*MonitorModel, error) {
+	return restclient.Patch[MonitorModel, MonitorModel](ctx, a.client, fmt.Sprintf("/products/aetos/monitors/%s", model.ID.ValueString()), model)
+}
+
+func (a MonitorAPI) Delete(ctx context.Context, model MonitorModel) error {
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/products/aetos/monitors/%s", model.ID.ValueString()))
+}

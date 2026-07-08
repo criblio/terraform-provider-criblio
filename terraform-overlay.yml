@@ -3111,3 +3111,9 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Deploy
       x-terraform-action: true
+
+  # NOTE: criblio_monitor (/products/aetos/monitors) is hand-written and listed
+  # in .codegen-ignore. All path and schema annotations for MonitorConf have been
+  # removed to prevent codegen from overwriting the hand-written files.
+
+  
