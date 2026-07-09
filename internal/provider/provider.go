@@ -188,8 +188,9 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		Transport:  http.DefaultTransport,
 	}
 
-	httpClient := http.DefaultClient
-	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
+	httpClient := &http.Client{
+		Transport: NewProviderHTTPTransport(providerHTTPTransportOpts),
+	}
 
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 

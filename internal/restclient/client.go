@@ -208,7 +208,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
-	responseBody, statusCode, err := c.send(ctx, method, path, contentType, body)
+	responseBody, statusCode, token, err := c.send(ctx, method, path, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -216,18 +216,18 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return responseBody, responseError(path, statusCode, responseBody)
 	}
 
-	auth.InvalidateToken(c.credentials)
-	responseBody, statusCode, err = c.send(ctx, method, path, contentType, body)
+	auth.InvalidateTokenValue(c.credentials, token)
+	responseBody, statusCode, _, err = c.send(ctx, method, path, contentType, body)
 	if err != nil {
 		return nil, err
 	}
 	return responseBody, responseError(path, statusCode, responseBody)
 }
 
-func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, error) {
+func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, string, error) {
 	requestURL, err := c.requestURL(path)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, "", err
 	}
 
 	var reader io.Reader
@@ -237,7 +237,7 @@ func (c *Client) send(ctx context.Context, method, path, contentType string, bod
 
 	req, err := http.NewRequestWithContext(ctx, method, requestURL, reader)
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to create request: %v", err)
+		return nil, 0, "", fmt.Errorf("failed to create request: %v", err)
 	}
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
@@ -249,22 +249,22 @@ func (c *Client) send(ctx context.Context, method, path, contentType string, bod
 
 	token, err := c.token(ctx)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, "", fmt.Errorf("failed to authenticate for %s %s: %v", method, path, err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to send request: %v", err)
+		return nil, 0, "", fmt.Errorf("failed to send request: %v", err)
 	}
 	defer resp.Body.Close()
 
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to read response body: %v", err)
+		return nil, 0, "", fmt.Errorf("failed to read response body: %v", err)
 	}
 
-	return responseBody, resp.StatusCode, nil
+	return responseBody, resp.StatusCode, token, nil
 }
 
 func (c *Client) requestURL(path string) (string, error) {

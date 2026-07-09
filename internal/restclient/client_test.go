@@ -11,8 +11,11 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strings"
+	"sync"
 	"testing"
+	"time"
 
+	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
 
@@ -440,6 +443,139 @@ func TestAuthenticationRequired(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "authentication requires bearer token or credentials") {
 		t.Fatalf("error = %q, expected authentication message", err.Error())
+	}
+}
+
+func TestUnauthorizedInvalidatesTokenAndRetriesRequest(t *testing.T) {
+	auth.ClearTokenCache()
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	loginCount := 0
+	apiCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/v1/auth/login":
+			loginCount++
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"token":"token-%d","forcePasswordChange":false}`, loginCount)))
+		case "/api/v1/system/certificates/cert-1":
+			apiCount++
+			switch r.Header.Get("Authorization") {
+			case "Bearer token-1":
+				http.Error(w, "stale token", http.StatusUnauthorized)
+			case "Bearer token-2":
+				writeJSON(t, w, testItem{ID: "cert-1", Name: "fresh-token"})
+			default:
+				t.Errorf("unexpected Authorization = %q", r.Header.Get("Authorization"))
+			}
+		default:
+			t.Errorf("unexpected path %q", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		Credentials: &auth.CriblConfig{
+			OnpremServerURL: server.URL,
+			OnpremUsername:  "admin",
+			OnpremPassword:  "secret",
+		},
+	})
+
+	got, err := Get[testItem](context.Background(), client, "/system/certificates/cert-1")
+	if err != nil {
+		t.Fatalf("Get returned error: %v", err)
+	}
+	if got.Name != "fresh-token" {
+		t.Fatalf("name = %q, expected fresh-token", got.Name)
+	}
+	if loginCount != 2 {
+		t.Fatalf("login count = %d, expected 2", loginCount)
+	}
+	if apiCount != 2 {
+		t.Fatalf("api count = %d, expected 2", apiCount)
+	}
+}
+
+func TestConcurrentUnauthorizedRefreshesTokenOnce(t *testing.T) {
+	auth.ClearTokenCache()
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	var mu sync.Mutex
+	loginCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/v1/auth/login":
+			mu.Lock()
+			loginCount++
+			token := "stale-token"
+			if loginCount > 1 {
+				token = "fresh-token"
+			}
+			mu.Unlock()
+			if token == "fresh-token" {
+				time.Sleep(50 * time.Millisecond)
+			}
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"token":"%s","forcePasswordChange":false}`, token)))
+		case "/api/v1/system/certificates/cert-1":
+			switch r.Header.Get("Authorization") {
+			case "Bearer stale-token":
+				http.Error(w, "stale token", http.StatusUnauthorized)
+			case "Bearer fresh-token":
+				writeJSON(t, w, testItem{ID: "cert-1", Name: "fresh-token"})
+			default:
+				t.Errorf("unexpected Authorization = %q", r.Header.Get("Authorization"))
+			}
+		default:
+			t.Errorf("unexpected path %q", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+
+	credentials := &auth.CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+	if token, err := auth.GetToken(context.Background(), credentials); err != nil {
+		t.Fatalf("preload GetToken returned error: %v", err)
+	} else if token != "stale-token" {
+		t.Fatalf("preload token = %q, expected stale-token", token)
+	}
+
+	client := New(Config{Credentials: credentials})
+
+	var wg sync.WaitGroup
+	errs := make(chan error, 20)
+	for range 20 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			got, err := Get[testItem](context.Background(), client, "/system/certificates/cert-1")
+			if err != nil {
+				errs <- err
+				return
+			}
+			if got.Name != "fresh-token" {
+				errs <- fmt.Errorf("name = %q, expected fresh-token", got.Name)
+			}
+		}()
+	}
+	wg.Wait()
+	close(errs)
+
+	for err := range errs {
+		if err != nil {
+			t.Fatalf("concurrent Get returned error: %v", err)
+		}
+	}
+
+	mu.Lock()
+	gotLoginCount := loginCount
+	mu.Unlock()
+	if gotLoginCount != 2 {
+		t.Fatalf("login count = %d, expected 2", gotLoginCount)
 	}
 }
 
