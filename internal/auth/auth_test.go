@@ -802,10 +802,6 @@ func TestInvalidTokenResponsesAreNotCached(t *testing.T) {
 			name:      "empty on-prem token",
 			firstBody: `{"token":"","forcePasswordChange":false}`,
 		},
-		{
-			name:      "password change required",
-			firstBody: `{"token":"token","forcePasswordChange":true}`,
-		},
 	}
 
 	for _, test := range testCases {
@@ -843,6 +839,37 @@ func TestInvalidTokenResponsesAreNotCached(t *testing.T) {
 				t.Fatalf("request count = %d, expected 2", requestCount)
 			}
 		})
+	}
+}
+
+func TestOnPremTokenAllowsForcePasswordChangeWhenTokenPresent(t *testing.T) {
+	ClearTokenCache()
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"password-change-token","forcePasswordChange":true}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+
+	for range 2 {
+		token, err := GetToken(context.Background(), config)
+		if err != nil {
+			t.Fatalf("GetToken returned error: %v", err)
+		}
+		if token != "password-change-token" {
+			t.Fatalf("token = %q, expected password-change-token", token)
+		}
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected cached token after first login", requestCount)
 	}
 }
 

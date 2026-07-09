@@ -242,14 +242,10 @@ func getOnPremBearerToken(ctx context.Context, config *CriblConfig) (*TokenInfo,
 	}
 
 	var result struct {
-		Token               string `json:"token"`
-		ForcePasswordChange bool   `json:"forcePasswordChange"`
+		Token string `json:"token"`
 	}
 	if err := json.Unmarshal(responseBody, &result); err != nil {
 		return nil, fmt.Errorf("failed to parse response: %v", err)
-	}
-	if result.ForcePasswordChange {
-		return nil, fmt.Errorf("on-prem authentication requires password change")
 	}
 
 	token := strings.TrimPrefix(result.Token, "Bearer ")
