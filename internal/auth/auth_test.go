@@ -3,12 +3,16 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
@@ -334,6 +338,179 @@ func TestTokenCacheHit(t *testing.T) {
 	}
 }
 
+func TestGetTokenOnPremConcurrentSingleflight(t *testing.T) {
+	ClearTokenCache()
+
+	var requestCount int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&requestCount, 1)
+		time.Sleep(50 * time.Millisecond)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"concurrent-token","forcePasswordChange":false}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+
+	var wg sync.WaitGroup
+	errs := make(chan error, 25)
+	for range 25 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			token, err := GetToken(context.Background(), config)
+			if err != nil {
+				errs <- err
+				return
+			}
+			if token != "concurrent-token" {
+				errs <- fmt.Errorf("token = %q, expected concurrent-token", token)
+			}
+		}()
+	}
+	wg.Wait()
+	close(errs)
+
+	for err := range errs {
+		if err != nil {
+			t.Fatalf("concurrent GetToken returned error: %v", err)
+		}
+	}
+	if got := atomic.LoadInt32(&requestCount); got != 1 {
+		t.Fatalf("login request count = %d, expected 1", got)
+	}
+}
+
+func TestOnPremCacheKeyNormalizesTrailingSlash(t *testing.T) {
+	ClearTokenCache()
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"normalized-token","forcePasswordChange":false}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+	slashedConfig := &CriblConfig{
+		OnpremServerURL: server.URL + "/",
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+
+	if _, err := GetToken(context.Background(), config); err != nil {
+		t.Fatalf("GetToken returned error: %v", err)
+	}
+	if _, err := GetToken(context.Background(), slashedConfig); err != nil {
+		t.Fatalf("GetToken with trailing slash returned error: %v", err)
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
+func TestOnPremCacheKeySeparatesCredentials(t *testing.T) {
+	ClearTokenCache()
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		var requestBody struct {
+			Username string `json:"username"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
+			t.Errorf("failed to decode request body: %v", err)
+		}
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"` + requestBody.Username + `-token","forcePasswordChange":false}`))
+	}))
+	defer server.Close()
+
+	first, err := GetToken(context.Background(), &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "first",
+		OnpremPassword:  "secret",
+	})
+	if err != nil {
+		t.Fatalf("first GetToken returned error: %v", err)
+	}
+	second, err := GetToken(context.Background(), &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "second",
+		OnpremPassword:  "secret",
+	})
+	if err != nil {
+		t.Fatalf("second GetToken returned error: %v", err)
+	}
+
+	if first != "first-token" {
+		t.Fatalf("first token = %q, expected first-token", first)
+	}
+	if second != "second-token" {
+		t.Fatalf("second token = %q, expected second-token", second)
+	}
+	if requestCount != 2 {
+		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestCloudCacheKeySeparatesDomains(t *testing.T) {
+	ClearTokenCache()
+	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	firstCount := 0
+	firstServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		firstCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"access_token":"first-domain-token","expires_in":3600}`))
+	}))
+	defer firstServer.Close()
+
+	secondCount := 0
+	secondServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		secondCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"access_token":"second-domain-token","expires_in":3600}`))
+	}))
+	defer secondServer.Close()
+
+	first, err := GetToken(context.Background(), &CriblConfig{
+		ClientID:     "client-id",
+		ClientSecret: "client-secret",
+		CloudDomain:  firstServer.URL,
+	})
+	if err != nil {
+		t.Fatalf("first GetToken returned error: %v", err)
+	}
+	second, err := GetToken(context.Background(), &CriblConfig{
+		ClientID:     "client-id",
+		ClientSecret: "client-secret",
+		CloudDomain:  secondServer.URL,
+	})
+	if err != nil {
+		t.Fatalf("second GetToken returned error: %v", err)
+	}
+
+	if first != "first-domain-token" {
+		t.Fatalf("first token = %q, expected first-domain-token", first)
+	}
+	if second != "second-domain-token" {
+		t.Fatalf("second token = %q, expected second-domain-token", second)
+	}
+	if firstCount != 1 || secondCount != 1 {
+		t.Fatalf("request counts = %d, %d; expected 1, 1", firstCount, secondCount)
+	}
+}
+
 func TestTokenCacheExpiry(t *testing.T) {
 	ClearTokenCache()
 	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
@@ -419,8 +596,28 @@ func TestTokenCacheCloudKeyMatchesHook(t *testing.T) {
 	if err != nil {
 		t.Fatalf("tokenCacheKey returned error: %v", err)
 	}
-	if key != "client-id:client-secret" {
-		t.Fatalf("cloud cache key = %q, expected current hook format", key)
+	if strings.Contains(key, "client-id") || strings.Contains(key, "client-secret") {
+		t.Fatalf("cloud cache key = %q, expected no raw credential material", key)
+	}
+	if !strings.HasPrefix(key, "cloud:") {
+		t.Fatalf("cloud cache key = %q, expected cloud prefix", key)
+	}
+}
+
+func TestTokenCacheOnPremKeyDoesNotExposeCredentials(t *testing.T) {
+	key, err := tokenCacheKey(&CriblConfig{
+		OnpremServerURL: "https://example.local",
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err != nil {
+		t.Fatalf("tokenCacheKey returned error: %v", err)
+	}
+	if strings.Contains(key, "admin") || strings.Contains(key, "secret") || strings.Contains(key, "example.local") {
+		t.Fatalf("on-prem cache key = %q, expected no raw credential material", key)
+	}
+	if !strings.HasPrefix(key, "onprem:") {
+		t.Fatalf("on-prem cache key = %q, expected onprem prefix", key)
 	}
 }
 
@@ -452,6 +649,35 @@ func TestInvalidateToken(t *testing.T) {
 
 	if requestCount != 2 {
 		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestInvalidateTokenValueOnlyRemovesMatchingToken(t *testing.T) {
+	ClearTokenCache()
+
+	key, err := tokenCacheKey(&CriblConfig{
+		OnpremServerURL: "https://example.local",
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err != nil {
+		t.Fatalf("tokenCacheKey returned error: %v", err)
+	}
+	config := &CriblConfig{
+		OnpremServerURL: "https://example.local",
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+
+	tokenCache.Store(key, &TokenInfo{Token: "fresh-token", ExpiresAt: timeNow().Add(time.Hour)})
+	InvalidateTokenValue(config, "stale-token")
+	if _, ok := loadCachedToken(key); !ok {
+		t.Fatal("InvalidateTokenValue removed non-matching token")
+	}
+
+	InvalidateTokenValue(config, "fresh-token")
+	if _, ok := loadCachedToken(key); ok {
+		t.Fatal("InvalidateTokenValue kept matching token")
 	}
 }
 
@@ -508,6 +734,304 @@ func TestTokenNon200Error(t *testing.T) {
 	}
 }
 
+func TestTokenRequestRetriesTransientFailures(t *testing.T) {
+	ClearTokenCache()
+	fastTokenRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		if requestCount < 3 {
+			http.Error(w, "temporary", http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"retry-token","forcePasswordChange":false}`))
+	}))
+	defer server.Close()
+
+	token, err := GetToken(context.Background(), &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err != nil {
+		t.Fatalf("GetToken returned error: %v", err)
+	}
+	if token != "retry-token" {
+		t.Fatalf("token = %q, expected retry-token", token)
+	}
+	if requestCount != 3 {
+		t.Fatalf("request count = %d, expected 3", requestCount)
+	}
+}
+
+func TestTokenRequestDoesNotRetryUnauthorized(t *testing.T) {
+	ClearTokenCache()
+	fastTokenRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		http.Error(w, "invalid credentials", http.StatusUnauthorized)
+	}))
+	defer server.Close()
+
+	_, err := GetToken(context.Background(), &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err == nil {
+		t.Fatal("GetToken returned nil error, expected unauthorized error")
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+	if !strings.Contains(err.Error(), "after 1 attempt") {
+		t.Fatalf("error = %q, expected actual attempt count", err.Error())
+	}
+}
+
+func TestInvalidTokenResponsesAreNotCached(t *testing.T) {
+	testCases := []struct {
+		name      string
+		firstBody string
+	}{
+		{
+			name:      "empty on-prem token",
+			firstBody: `{"token":"","forcePasswordChange":false}`,
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			ClearTokenCache()
+
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requestCount++
+				w.WriteHeader(http.StatusOK)
+				if requestCount == 1 {
+					_, _ = w.Write([]byte(test.firstBody))
+					return
+				}
+				_, _ = w.Write([]byte(`{"token":"valid-token","forcePasswordChange":false}`))
+			}))
+			defer server.Close()
+
+			config := &CriblConfig{
+				OnpremServerURL: server.URL,
+				OnpremUsername:  "admin",
+				OnpremPassword:  "secret",
+			}
+			if _, err := GetToken(context.Background(), config); err == nil {
+				t.Fatal("first GetToken returned nil error, expected invalid response error")
+			}
+			token, err := GetToken(context.Background(), config)
+			if err != nil {
+				t.Fatalf("second GetToken returned error: %v", err)
+			}
+			if token != "valid-token" {
+				t.Fatalf("token = %q, expected valid-token", token)
+			}
+			if requestCount != 2 {
+				t.Fatalf("request count = %d, expected 2", requestCount)
+			}
+		})
+	}
+}
+
+func TestOnPremTokenAllowsForcePasswordChangeWhenTokenPresent(t *testing.T) {
+	ClearTokenCache()
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"password-change-token","forcePasswordChange":true}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+
+	for range 2 {
+		token, err := GetToken(context.Background(), config)
+		if err != nil {
+			t.Fatalf("GetToken returned error: %v", err)
+		}
+		if token != "password-change-token" {
+			t.Fatalf("token = %q, expected password-change-token", token)
+		}
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected cached token after first login", requestCount)
+	}
+}
+
+func TestInvalidCloudTokenResponsesAreNotCached(t *testing.T) {
+	testCases := []struct {
+		name      string
+		firstBody string
+	}{
+		{
+			name:      "empty access token",
+			firstBody: `{"access_token":"","expires_in":3600}`,
+		},
+		{
+			name:      "invalid expiry",
+			firstBody: `{"access_token":"token","expires_in":0}`,
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			ClearTokenCache()
+			t.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requestCount++
+				w.WriteHeader(http.StatusOK)
+				if requestCount == 1 {
+					_, _ = w.Write([]byte(test.firstBody))
+					return
+				}
+				_, _ = w.Write([]byte(`{"access_token":"valid-token","expires_in":3600}`))
+			}))
+			defer server.Close()
+
+			config := &CriblConfig{
+				ClientID:     "client-id",
+				ClientSecret: "client-secret",
+				CloudDomain:  server.URL,
+			}
+			if _, err := GetToken(context.Background(), config); err == nil {
+				t.Fatal("first GetToken returned nil error, expected invalid response error")
+			}
+			token, err := GetToken(context.Background(), config)
+			if err != nil {
+				t.Fatalf("second GetToken returned error: %v", err)
+			}
+			if token != "valid-token" {
+				t.Fatalf("token = %q, expected valid-token", token)
+			}
+			if requestCount != 2 {
+				t.Fatalf("request count = %d, expected 2", requestCount)
+			}
+		})
+	}
+}
+
+func TestTokenRequestRespectsContextCancellation(t *testing.T) {
+	ClearTokenCache()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "temporary", http.StatusInternalServerError)
+	}))
+	defer server.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	_, err := GetToken(ctx, &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err == nil {
+		t.Fatal("GetToken returned nil error, expected context cancellation")
+	}
+	if !strings.Contains(err.Error(), context.Canceled.Error()) {
+		t.Fatalf("error = %q, expected context cancellation", err.Error())
+	}
+}
+
+func TestSharedTokenFetchSurvivesLeadingCallerCancellation(t *testing.T) {
+	ClearTokenCache()
+
+	var requestCount int32
+	started := make(chan struct{}, 1)
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&requestCount, 1)
+		started <- struct{}{}
+		<-release
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"token":"shared-token","forcePasswordChange":false}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	}
+	leaderCtx, cancelLeader := context.WithCancel(context.Background())
+	leaderErr := make(chan error, 1)
+	go func() {
+		_, err := GetToken(leaderCtx, config)
+		leaderErr <- err
+	}()
+
+	select {
+	case <-started:
+	case <-time.After(time.Second):
+		t.Fatal("timed out waiting for token request to start")
+	}
+
+	cancelLeader()
+	select {
+	case err := <-leaderErr:
+		if err == nil || !strings.Contains(err.Error(), context.Canceled.Error()) {
+			t.Fatalf("leader error = %v, expected context cancellation", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("timed out waiting for leader cancellation")
+	}
+
+	followerDone := make(chan struct{})
+	var followerToken string
+	var followerErr error
+	go func() {
+		defer close(followerDone)
+		followerToken, followerErr = GetToken(context.Background(), config)
+	}()
+
+	close(release)
+	select {
+	case <-followerDone:
+	case <-time.After(time.Second):
+		t.Fatal("timed out waiting for follower token")
+	}
+	if followerErr != nil {
+		t.Fatalf("follower GetToken returned error: %v", followerErr)
+	}
+	if followerToken != "shared-token" {
+		t.Fatalf("follower token = %q, expected shared-token", followerToken)
+	}
+	if got := atomic.LoadInt32(&requestCount); got != 1 {
+		t.Fatalf("request count = %d, expected 1 shared request", got)
+	}
+}
+
+func TestConciseBodyRedactsNonJSONSecrets(t *testing.T) {
+	body := []byte("client_secret=super-secret&password=hunter2 token:abc123 access_token=xyz")
+	got := conciseBody(body)
+
+	for _, leaked := range []string{"super-secret", "hunter2", "abc123", "xyz"} {
+		if strings.Contains(got, leaked) {
+			t.Fatalf("conciseBody leaked %q in %q", leaked, got)
+		}
+	}
+	if !strings.Contains(got, "(sensitive)") {
+		t.Fatalf("conciseBody = %q, expected redacted markers", got)
+	}
+}
+
 func TestIsOnPremAndIsGov(t *testing.T) {
 	if !IsOnPrem(&CriblConfig{OnpremServerURL: "http://localhost:9000"}) {
 		t.Fatal("IsOnPrem returned false, expected true")
@@ -521,4 +1045,20 @@ func TestIsOnPremAndIsGov(t *testing.T) {
 	if IsGov("cribl.cloud") {
 		t.Fatal("IsGov returned true, expected false")
 	}
+}
+
+func fastTokenRetry(t *testing.T) {
+	t.Helper()
+
+	oldMin := tokenRetryWaitMin
+	oldMax := tokenRetryWaitMax
+	oldCap := tokenBackoffCap
+	tokenRetryWaitMin = time.Millisecond
+	tokenRetryWaitMax = time.Millisecond
+	tokenBackoffCap = time.Millisecond
+	t.Cleanup(func() {
+		tokenRetryWaitMin = oldMin
+		tokenRetryWaitMax = oldMax
+		tokenBackoffCap = oldCap
+	})
 }
