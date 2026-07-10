@@ -1,6 +1,7 @@
 package hcl
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -117,6 +118,32 @@ func TestModelToValue_pipelineNestedNormalizedFunctionConf(t *testing.T) {
 	conf := functionValues[0].Map["conf"]
 	assert.Equal(t, KindString, conf.Kind)
 	assert.JSONEq(t, `{"add":[{"name":"foo","value":"bar"}]}`, conf.String)
+}
+
+func TestModelToValue_nestedNormalizedScalarStringIsJSONEncoded(t *testing.T) {
+	type modelWithConfig struct {
+		Config types.Map `tfsdk:"config"`
+	}
+	model := &modelWithConfig{
+		Config: types.MapValueMust(jsontypes.NormalizedType{}, map[string]attr.Value{
+			"color":   jsontypes.NewNormalizedValue("#336666"),
+			"field":   jsontypes.NewNormalizedValue("organizationId"),
+			"pattern": jsontypes.NewNormalizedValue("*"),
+			"object":  jsontypes.NewNormalizedValue(`{"query":"status"}`),
+		}),
+	}
+
+	out, err := ModelToValue(model, nil)
+	require.NoError(t, err)
+
+	config := out["config"].Map
+	for _, key := range []string{"color", "field", "pattern", "object"} {
+		assert.True(t, json.Valid([]byte(config[key].String)), "%s should be a valid JSON string", key)
+	}
+	assert.Equal(t, `"#336666"`, config["color"].String)
+	assert.Equal(t, `"organizationId"`, config["field"].String)
+	assert.Equal(t, `"*"`, config["pattern"].String)
+	assert.JSONEq(t, `{"query":"status"}`, config["object"].String)
 }
 
 func TestToHCLExpr_null_empty_sensitive(t *testing.T) {
