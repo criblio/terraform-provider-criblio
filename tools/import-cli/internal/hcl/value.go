@@ -467,6 +467,11 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 			return Value{Kind: KindNull}, nil
 		}
 		return attrToValue(v.UnderlyingValue(), path, sensitive, opts)
+	case jsontypes.Normalized:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return Value{Kind: KindString, String: v.ValueString()}, nil
 	default:
 		return Value{}, fmt.Errorf("unsupported attr type %T", av)
 	}
