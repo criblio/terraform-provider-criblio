@@ -1,9 +1,11 @@
 package hcl
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
@@ -79,6 +81,69 @@ func TestModelToValue_pipeline_nested(t *testing.T) {
 	require.NotNil(t, out)
 	assert.Equal(t, KindMap, out["conf"].Kind)
 	assert.NotNil(t, out["conf"].Map)
+}
+
+func TestModelToValue_pipelineNestedNormalizedFunctionConf(t *testing.T) {
+	function := types.ObjectValueMust(provider.PipelineConfFunctionsAttrTypes(), map[string]attr.Value{
+		"filter":      types.StringValue("true"),
+		"id":          types.StringValue("eval"),
+		"description": types.StringNull(),
+		"disabled":    types.BoolValue(false),
+		"final":       types.BoolValue(false),
+		"conf":        jsontypes.NewNormalizedValue(`{"add":[{"name":"foo","value":"bar"}]}`),
+		"group_id":    types.StringNull(),
+	})
+	functions := types.ListValueMust(
+		types.ObjectType{AttrTypes: provider.PipelineConfFunctionsAttrTypes()},
+		[]attr.Value{function},
+	)
+	model := &provider.PipelineResourceModel{
+		GroupID: types.StringValue("default"),
+		ID:      types.StringValue("pipe-1"),
+		Conf: types.ObjectValueMust(provider.PipelineConfAttrTypes(), map[string]attr.Value{
+			"async_func_timeout": types.Int64Null(),
+			"output":             types.StringNull(),
+			"description":        types.StringNull(),
+			"streamtags":         types.ListNull(types.StringType),
+			"functions":          functions,
+			"groups":             types.MapNull(types.ObjectType{AttrTypes: provider.PipelineConfGroupsAttrTypes()}),
+		}),
+	}
+
+	out, err := ModelToValue(model, nil)
+	require.NoError(t, err)
+
+	functionValues := out["conf"].Map["functions"].List
+	require.Len(t, functionValues, 1)
+	conf := functionValues[0].Map["conf"]
+	assert.Equal(t, KindString, conf.Kind)
+	assert.JSONEq(t, `{"add":[{"name":"foo","value":"bar"}]}`, conf.String)
+}
+
+func TestModelToValue_nestedNormalizedScalarStringIsJSONEncoded(t *testing.T) {
+	type modelWithConfig struct {
+		Config types.Map `tfsdk:"config"`
+	}
+	model := &modelWithConfig{
+		Config: types.MapValueMust(jsontypes.NormalizedType{}, map[string]attr.Value{
+			"color":   jsontypes.NewNormalizedValue("#336666"),
+			"field":   jsontypes.NewNormalizedValue("organizationId"),
+			"pattern": jsontypes.NewNormalizedValue("*"),
+			"object":  jsontypes.NewNormalizedValue(`{"query":"status"}`),
+		}),
+	}
+
+	out, err := ModelToValue(model, nil)
+	require.NoError(t, err)
+
+	config := out["config"].Map
+	for _, key := range []string{"color", "field", "pattern", "object"} {
+		assert.True(t, json.Valid([]byte(config[key].String)), "%s should be a valid JSON string", key)
+	}
+	assert.Equal(t, `"#336666"`, config["color"].String)
+	assert.Equal(t, `"organizationId"`, config["field"].String)
+	assert.Equal(t, `"*"`, config["pattern"].String)
+	assert.JSONEq(t, `{"query":"status"}`, config["object"].String)
 }
 
 func TestToHCLExpr_null_empty_sensitive(t *testing.T) {

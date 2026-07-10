@@ -318,7 +318,7 @@ func fieldToValue(field reflect.Value, path string, sensitive bool, opts *Option
 		if v.IsNull() || v.IsUnknown() {
 			return Value{Kind: KindNull}, nil
 		}
-		return Value{Kind: KindString, String: v.ValueString()}, nil
+		return normalizedJSONToValue(v)
 	}
 
 	// Nested struct
@@ -347,7 +347,11 @@ func fieldToValue(field reflect.Value, path string, sensitive bool, opts *Option
 						if nv.IsNull() || nv.IsUnknown() {
 							m[key.String()] = Value{Kind: KindNull}
 						} else {
-							m[key.String()] = Value{Kind: KindString, String: nv.ValueString()}
+							value, err := normalizedJSONToValue(nv)
+							if err != nil {
+								return Value{}, err
+							}
+							m[key.String()] = value
 						}
 					}
 				}
@@ -467,9 +471,26 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 			return Value{Kind: KindNull}, nil
 		}
 		return attrToValue(v.UnderlyingValue(), path, sensitive, opts)
+	case jsontypes.Normalized:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return normalizedJSONToValue(v)
 	default:
 		return Value{}, fmt.Errorf("unsupported attr type %T", av)
 	}
+}
+
+func normalizedJSONToValue(v jsontypes.Normalized) (Value, error) {
+	raw := v.ValueString()
+	if isValidJSON(raw) {
+		return Value{Kind: KindString, String: raw}, nil
+	}
+	encoded, err := json.Marshal(raw)
+	if err != nil {
+		return Value{}, err
+	}
+	return Value{Kind: KindString, String: string(encoded)}, nil
 }
 
 // IsSecretValue returns true if the string looks like a secret (e.g. Cribl stored secret ref #42:...).
