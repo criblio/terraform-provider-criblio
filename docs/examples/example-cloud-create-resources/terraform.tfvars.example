@@ -1,0 +1,12 @@
+# Copy this file to terraform.tfvars and replace each placeholder with the value
+# for your Cribl.Cloud deployment. Do not commit terraform.tfvars to version control.
+
+organization_id = "your-organization-id"
+workspace_id    = "your-workspace-name"
+client_id       = "client-id-from-your-api-credential"
+client_secret   = "client-secret-from-your-api-credential"
+worker_group_id = "id-for-new-worker-group-must-not-already-exist"
+aws_api_key     = "your-aws-access-key-id"
+aws_secret_key  = "your-aws-secret-access-key"
+aws_bucket_name = "your-s3-bucket-name"
+aws_region      = "your-s3-bucket-region-such-as-us-east-2"
