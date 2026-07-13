@@ -3112,8 +3112,32 @@ actions:
       x-terraform-resource-name: Deploy
       x-terraform-action: true
 
-  # NOTE: criblio_monitor (/products/aetos/monitors) is hand-written and listed
-  # in .codegen-ignore. All path and schema annotations for MonitorConf have been
-  # removed to prevent codegen from overwriting the hand-written files.
+  # MON-762: criblio_monitor — Aetos alert monitors (/products/aetos/monitors).
+  # Path annotations restore Terraform codegen support (removed in a prior commit).
+  # managedBy is not yet in the upstream spec (blocked on cribl/cribl#43133);
+  # add it as computed via the schema properties overlay until sync-openapi picks it up.
+  - target: "$.paths./products/aetos/monitors.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Monitor
+  - target: "$.paths./products/aetos/monitors.get"
+    update:
+      x-terraform-list: Monitor
+      x-terraform-list-name: Monitors
+  - target: "$.paths./products/aetos/monitors/{id}.get"
+    update:
+      x-terraform-read: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.patch"
+    update:
+      x-terraform-update: Monitor
+  - target: "$.paths./products/aetos/monitors/{id}.delete"
+    update:
+      x-terraform-delete: Monitor
+  - target: "$.components.schemas.MonitorConf.properties"
+    update:
+      managedBy:
+        type: string
+        x-terraform-computed: true
+        description: "Identifies the external provisioner (e.g. 'terraform') that owns this monitor. Stamped by the backend when the Terraform provider User-Agent is detected. Read-only from the UI."
 
   

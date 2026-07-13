@@ -9,6 +9,7 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_destination":             {"environment", "pipeline", "type"},          // root attrs are Computed-only (hoisted from active output_*); configure inside output_* only
 	"criblio_global_var":              {"items"},                                    // provider marks items as Computed only; config comes from GetByID and we flatten Items[0]
 	"criblio_grok":                    {"size", "tags"},                             // size/tags are API-owned and Computed-only
+	"criblio_monitor":                 {"managed_by"},                               // managed_by is Computed-only; stamped by backend when TF UA detected
 	"criblio_group_system_settings":   {"items"},                                    // provider marks items as read-only; configurable attrs are top-level (api, backups, etc.)
 	"criblio_lookup_file":             {"pending_task", "version"},                  // pending_task/version are Computed only
 	"criblio_pack_vars":               {"items"},                                    // items is Computed; config comes from flattenFirstItemToAttrs (description, lib, tags, type, value)

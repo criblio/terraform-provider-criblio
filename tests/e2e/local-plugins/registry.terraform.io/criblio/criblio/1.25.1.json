@@ -1,0 +1,10 @@
+{
+  "archives": {
+    "darwin_arm64": {
+      "hashes": [
+        "h1:PFBuXFzizSkPjszdcqvtGCbfeWvVfYrf9mh3WMVeJJw="
+      ],
+      "url": "terraform-provider-criblio_1.25.1_darwin_arm64.zip"
+    }
+  }
+}
