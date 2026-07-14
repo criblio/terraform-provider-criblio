@@ -3,8 +3,12 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"io"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -180,6 +184,73 @@ func TestPreservePackPlanKeepsPlannedItems(t *testing.T) {
 	}
 	if got := data.Version.ValueString(); got != "1.0.1" {
 		t.Fatalf("expected configured top-level version to be preserved, got %q", got)
+	}
+}
+
+func TestInstallUploadedPackUsesJSONPatchWithShortSource(t *testing.T) {
+	var calls []string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls = append(calls, r.Method+" "+r.URL.RequestURI())
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.Method != http.MethodPatch || r.URL.Path != "/api/v1/m/default/packs/pack-from-file" {
+			http.NotFound(w, r)
+			return
+		}
+		if got := r.Header.Get("Content-Type"); got != "application/json" {
+			t.Fatalf("Content-Type = %q, want application/json", got)
+		}
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Fatalf("read body: %v", err)
+		}
+		var request map[string]any
+		if err := json.Unmarshal(body, &request); err != nil {
+			t.Fatalf("unmarshal request body %q: %v", string(body), err)
+		}
+		if _, ok := request["items"]; ok {
+			t.Fatalf("request body must not use legacy items envelope: %s", string(body))
+		}
+		if got := request["source"]; got != "pack-from-file.random.crbl" {
+			t.Fatalf("source = %#v, want uploaded short filename", got)
+		}
+
+		if err := json.NewEncoder(w).Encode(map[string]any{
+			"items": []map[string]any{{
+				"id":     "pack-from-file",
+				"source": "file:/opt/cribl_config/state/packs/pack-from-file.random.crbl",
+			}},
+		}); err != nil {
+			t.Fatalf("write response: %v", err)
+		}
+	}))
+	defer server.Close()
+
+	resource := &PackResource{client: restclient.New(restclient.Config{
+		BaseURL:     server.URL,
+		BearerToken: "test",
+	})}
+	data := &PackResourceModel{
+		GroupID: types.StringValue("default"),
+		ID:      types.StringValue("pack-from-file"),
+		Items: []packInstallInfo{{
+			ID: types.StringValue("pack-from-file"),
+		}},
+	}
+
+	err := resource.installUploadedPack(context.Background(), data, "file:/opt/cribl_config/state/packs/pack-from-file.random.crbl")
+	if err != nil {
+		t.Fatalf("installUploadedPack returned error: %v", err)
+	}
+
+	wantCalls := []string{"PATCH /api/v1/m/default/packs/pack-from-file"}
+	if len(calls) != len(wantCalls) {
+		t.Fatalf("calls = %#v, want %#v", calls, wantCalls)
+	}
+	for i := range wantCalls {
+		if calls[i] != wantCalls[i] {
+			t.Fatalf("calls = %#v, want %#v", calls, wantCalls)
+		}
 	}
 }
 
