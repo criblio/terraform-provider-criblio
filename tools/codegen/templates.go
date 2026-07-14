@@ -1026,6 +1026,25 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
+{{- else if eq .StructName "MappingRuleset" }}
+	apiModel, err := restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)), model)
+	if err != nil {
+		return nil, err
+	}
+	if model.Active.IsNull() || model.Active.IsUnknown() {
+		return apiModel, nil
+	}
+	if err := a.patchActive(ctx, model); err != nil {
+		return nil, err
+	}
+	apiModel, err = a.Read(ctx, model)
+	if err != nil {
+		return nil, err
+	}
+	if apiModel.Active.IsNull() || apiModel.Active.IsUnknown() || apiModel.Active.ValueBool() != model.Active.ValueBool() {
+		return nil, fmt.Errorf("mapping ruleset %q in product %q did not reach active=%t", mappingRulesetID(model), model.Product.ValueString(), model.Active.ValueBool())
+	}
+	return apiModel, nil
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
@@ -1164,6 +1183,25 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 		lastErr = err
 	}
 	return nil, lastErr
+{{- else if eq .StructName "MappingRuleset" }}
+	apiModel, err := restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)), model)
+	if err != nil {
+		return nil, err
+	}
+	if model.Active.IsNull() || model.Active.IsUnknown() {
+		return apiModel, nil
+	}
+	if err := a.patchActive(ctx, model); err != nil {
+		return nil, err
+	}
+	apiModel, err = a.Read(ctx, model)
+	if err != nil {
+		return nil, err
+	}
+	if apiModel.Active.IsNull() || apiModel.Active.IsUnknown() || apiModel.Active.ValueBool() != model.Active.ValueBool() {
+		return nil, fmt.Errorf("mapping ruleset %q in product %q did not reach active=%t", mappingRulesetID(model), model.Product.ValueString(), model.Active.ValueBool())
+	}
+	return apiModel, nil
 {{- else }}
 {{- if .Update.ReadAfterWrite }}
 	body, err := model.updateBody()
@@ -1257,6 +1295,22 @@ func notificationGroupID(model NotificationModel) string {
 		return model.Group.ValueString()
 	}
 	return "default"
+}
+{{- end }}
+{{- if eq .StructName "MappingRuleset" }}
+
+type mappingRulesetActivePatch struct {
+	ID     string ` + "`json:\"id\"`" + `
+	Active bool   ` + "`json:\"active\"`" + `
+}
+
+func (a MappingRulesetAPI) patchActive(ctx context.Context, model MappingRulesetModel) error {
+	body := mappingRulesetActivePatch{
+		ID:     mappingRulesetID(model),
+		Active: model.Active.ValueBool(),
+	}
+	_, err := restclient.Patch[mappingRulesetActivePatch, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)), body)
+	return err
 }
 {{- end }}
 {{- if eq .StructName "Key" }}

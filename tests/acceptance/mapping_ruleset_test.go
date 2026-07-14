@@ -12,9 +12,22 @@ func TestMappingRuleset(t *testing.T) {
 		t.Skip("Skipping mapping ruleset test for on-prem: mappings API returns 403")
 	}
 
+	testMappingRulesetForProduct(t, "edge")
+}
+
+func TestMappingRulesetStream(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping mapping ruleset test for on-prem: mappings API returns 403")
+	}
+
+	testMappingRulesetForProduct(t, "stream")
+}
+
+func testMappingRulesetForProduct(t *testing.T, product string) {
+	t.Helper()
+
 	resourceName := "criblio_mapping_ruleset.my_mapping_ruleset"
 	id := "default"
-	product := "edge"
 	final := "true"
 
 	resource.Test(t, resource.TestCase{
@@ -26,6 +39,7 @@ func TestMappingRuleset(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "product", product),
 					resource.TestCheckResourceAttr(resourceName, "id", id),
+					resource.TestCheckResourceAttr(resourceName, "active", "true"),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.description", "test mapping"),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.final", final),
@@ -44,6 +58,9 @@ func TestMappingRuleset(t *testing.T) {
 				ImportState:       true,
 				ImportStateId:     `{"product":"` + product + `","id":"` + id + `"}`,
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"conf",
+				},
 			},
 		},
 	})
