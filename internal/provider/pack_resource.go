@@ -364,6 +364,12 @@ type packInstallItemRequest struct {
 	DisplayName string   `json:"displayName,omitempty"`
 }
 
+type packUpgradeRequest struct {
+	AllowCustomFunctions *bool   `json:"allowCustomFunctions,omitempty"`
+	Source               string  `json:"source"`
+	Spec                 *string `json:"spec,omitempty"`
+}
+
 func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *PackResourceModel
 	var plan types.Object
@@ -666,15 +672,16 @@ func (r *PackResource) uploadPackFile(ctx context.Context, groupID string, fileC
 }
 
 func (r *PackResource) installUploadedPack(ctx context.Context, data *PackResourceModel, uploadedSource string) error {
+	if _, err := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), shortNameForPatch(uploadedSource), boolPointerFromValue(data.Disabled)); err == nil {
+		return nil
+	}
+
 	fullPath := fullSourcePath(uploadedSource)
 	version := ""
 	if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
 		version = data.Items[0].Version.ValueString()
 	}
-	if _, err := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), fullPath, version, packInstallDisplayName(data)); err == nil {
-		return nil
-	}
-	_, err := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), shortNameForPatch(uploadedSource), boolPointerFromValue(data.Disabled))
+	_, err := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), r.effectivePackID(ctx, data), fullPath, version, packInstallDisplayName(data))
 	return err
 }
 
@@ -703,6 +710,22 @@ func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, p
 }
 
 func (r *PackResource) patchPackByIDWithSource(ctx context.Context, groupID, packID, source string, disabled *bool) (*packAPIModel, error) {
+	body := packUpgradeRequest{
+		AllowCustomFunctions: nil,
+		Source:               source,
+	}
+	apiModel, err := restclient.Patch[packUpgradeRequest, packAPIModel](ctx, r.client, fmt.Sprintf("/m/%s/packs/%s", url.PathEscape(groupID), url.PathEscape(packID)), body)
+	if err == nil {
+		return apiModel, nil
+	}
+	var httpErr *restclient.HTTPError
+	if errors.As(err, &httpErr) && httpErr.StatusCode == 500 && strings.Contains(httpErr.Body, "up to date") {
+		return nil, nil
+	}
+	return r.patchPackByIDWithSourceForm(ctx, groupID, packID, source, disabled)
+}
+
+func (r *PackResource) patchPackByIDWithSourceForm(ctx context.Context, groupID, packID, source string, disabled *bool) (*packAPIModel, error) {
 	form := url.Values{}
 	form.Set("source", source)
 	if disabled != nil {
