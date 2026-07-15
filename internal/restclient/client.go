@@ -13,9 +13,17 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/useragent"
+)
+
+const apiRetryMax = 3
+
+var (
+	apiRetryWaitMin = 500 * time.Millisecond
+	apiRetryWaitMax = 2 * time.Second
 )
 
 // Config holds REST client settings.
@@ -208,20 +216,44 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
-	responseBody, statusCode, token, err := c.send(ctx, method, path, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	if statusCode != http.StatusUnauthorized || c.bearerToken != "" || os.Getenv("CRIBL_BEARER_TOKEN") != "" || c.credentials == nil {
-		return responseBody, responseError(path, statusCode, responseBody)
-	}
+	for attempt := 0; ; attempt++ {
+		responseBody, statusCode, token, err := c.send(ctx, method, path, contentType, body)
+		if err != nil {
+			if shouldRetryAPIRequest(method, 0, nil, err, attempt) {
+				if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
+					return nil, err
+				}
+				continue
+			}
+			return nil, err
+		}
 
-	auth.InvalidateTokenValue(c.credentials, token)
-	responseBody, statusCode, _, err = c.send(ctx, method, path, contentType, body)
-	if err != nil {
-		return nil, err
+		if statusCode == http.StatusUnauthorized && c.bearerToken == "" && os.Getenv("CRIBL_BEARER_TOKEN") == "" && c.credentials != nil {
+			auth.InvalidateTokenValue(c.credentials, token)
+			responseBody, statusCode, _, err = c.send(ctx, method, path, contentType, body)
+			if err != nil {
+				if shouldRetryAPIRequest(method, 0, nil, err, attempt) {
+					if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
+						return nil, err
+					}
+					continue
+				}
+				return nil, err
+			}
+		}
+
+		err = responseError(path, statusCode, responseBody)
+		if err == nil {
+			return responseBody, nil
+		}
+		if shouldRetryAPIRequest(method, statusCode, responseBody, nil, attempt) {
+			if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
+				return nil, err
+			}
+			continue
+		}
+		return responseBody, err
 	}
-	return responseBody, responseError(path, statusCode, responseBody)
 }
 
 func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, string, error) {
@@ -314,6 +346,52 @@ func responseError(path string, statusCode int, body []byte) error {
 			StatusCode: statusCode,
 			Body:       string(body),
 		}
+	}
+}
+
+func shouldRetryAPIRequest(method string, statusCode int, body []byte, err error, attempt int) bool {
+	if attempt >= apiRetryMax || !isRetryableAPIMethod(method) {
+		return false
+	}
+	if err != nil {
+		message := strings.ToLower(err.Error())
+		return strings.Contains(message, "failed to send request") ||
+			strings.Contains(message, "failed to read response body")
+	}
+	switch statusCode {
+	case http.StatusRequestTimeout, http.StatusTooManyRequests, http.StatusBadGateway, http.StatusServiceUnavailable, http.StatusGatewayTimeout:
+		return true
+	case http.StatusInternalServerError:
+		return responseBodyHasTransientError(body)
+	default:
+		return false
+	}
+}
+
+func isRetryableAPIMethod(method string) bool {
+	return method == http.MethodGet || method == http.MethodHead
+}
+
+func responseBodyHasTransientError(body []byte) bool {
+	message := strings.ToLower(string(body))
+	return strings.Contains(message, "econnreset") ||
+		strings.Contains(message, "connection reset") ||
+		strings.Contains(message, "socket hang up")
+}
+
+func waitBeforeAPIRetry(ctx context.Context, attempt int) error {
+	wait := apiRetryWaitMin << attempt
+	if wait > apiRetryWaitMax {
+		wait = apiRetryWaitMax
+	}
+	timer := time.NewTimer(wait)
+	defer timer.Stop()
+
+	select {
+	case <-timer.C:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 }
 
