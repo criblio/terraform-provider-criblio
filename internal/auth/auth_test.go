@@ -766,6 +766,39 @@ func TestTokenRequestRetriesTransientFailures(t *testing.T) {
 	}
 }
 
+func TestTokenRequestReportsFinalRetriedHTTPResponse(t *testing.T) {
+	ClearTokenCache()
+	fastTokenRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"error":"leader is still starting"}`))
+	}))
+	defer server.Close()
+
+	_, err := GetToken(context.Background(), &CriblConfig{
+		OnpremServerURL: server.URL,
+		OnpremUsername:  "admin",
+		OnpremPassword:  "secret",
+	})
+	if err == nil {
+		t.Fatal("GetToken returned nil error, expected retry exhaustion")
+	}
+	if requestCount != tokenRetryMax+1 {
+		t.Fatalf("request count = %d, expected %d", requestCount, tokenRetryMax+1)
+	}
+	for _, want := range []string{"status=500", `body={"error":"leader is still starting"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("error = %q, expected %q", err.Error(), want)
+		}
+	}
+	if strings.Contains(err.Error(), "giving up after") {
+		t.Fatalf("error = %q, expected auth-layer response details instead of retryablehttp exhaustion", err.Error())
+	}
+}
+
 func TestTokenRequestDoesNotRetryUnauthorized(t *testing.T) {
 	ClearTokenCache()
 	fastTokenRetry(t)

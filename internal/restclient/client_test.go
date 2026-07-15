@@ -338,6 +338,65 @@ func TestErrors(t *testing.T) {
 	}
 }
 
+func TestGetRetriesTransientECONNRESETResponse(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		if requestCount == 1 {
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Read ECONNRESET","error":{"errno":-104,"code":"ECONNRESET","syscall":"read"}}`))
+			return
+		}
+		writeJSON(t, w, testItem{ID: "pipeline-1", Name: "pipeline"})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:     server.URL,
+		BearerToken: "test-token",
+	})
+
+	got, err := Get[testItem](context.Background(), client, "/pipelines/pipeline-1")
+	if err != nil {
+		t.Fatalf("Get returned error: %v", err)
+	}
+	if got.Name != "pipeline" {
+		t.Fatalf("name = %q, expected pipeline", got.Name)
+	}
+	if requestCount != 2 {
+		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestPostDoesNotRetryTransientECONNRESETResponse(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Read ECONNRESET","error":{"errno":-104,"code":"ECONNRESET","syscall":"read"}}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:     server.URL,
+		BearerToken: "test-token",
+	})
+
+	_, err := Post[testItem, testItem](context.Background(), client, "/pipelines", testItem{Name: "pipeline"})
+	if err == nil {
+		t.Fatal("Post returned nil error, expected HTTP 500")
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
 func TestGatewayRouting(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 
@@ -636,4 +695,17 @@ func writeJSON(t *testing.T, w http.ResponseWriter, value any) {
 	if err := json.NewEncoder(w).Encode(value); err != nil {
 		t.Fatalf("failed to write JSON response: %v", err)
 	}
+}
+
+func fastAPIRetry(t *testing.T) {
+	t.Helper()
+
+	oldMin := apiRetryWaitMin
+	oldMax := apiRetryWaitMax
+	apiRetryWaitMin = time.Millisecond
+	apiRetryWaitMax = time.Millisecond
+	t.Cleanup(func() {
+		apiRetryWaitMin = oldMin
+		apiRetryWaitMax = oldMax
+	})
 }
