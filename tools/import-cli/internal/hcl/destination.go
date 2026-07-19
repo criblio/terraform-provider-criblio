@@ -35,7 +35,7 @@ func TFBlockModelToAPIItemMap(block map[string]Value, keysToSkip []string) (map[
 			continue
 		}
 		camel := snakeToCamel(k)
-		raw, err := json.Marshal(valueToJSONableForAPI(v))
+		raw, err := MarshalJSONNoEscape(valueToJSONableForAPI(v))
 		if err != nil {
 			return nil, fmt.Errorf("%s: %w", k, err)
 		}

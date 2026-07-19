@@ -146,6 +146,30 @@ func TestModelToValue_nestedNormalizedScalarStringIsJSONEncoded(t *testing.T) {
 	assert.JSONEq(t, `{"query":"status"}`, config["object"].String)
 }
 
+func TestModelToValue_normalizedJSONDoesNotEscapeHTMLCharacters(t *testing.T) {
+	type modelWithConfig struct {
+		Config types.Map `tfsdk:"config"`
+	}
+	model := &modelWithConfig{
+		Config: types.MapValueMust(jsontypes.NormalizedType{}, map[string]attr.Value{
+			"regex":  jsontypes.NewNormalizedValue(`{"regex":"(?<vendor>[^|]+)"}`),
+			"scalar": jsontypes.NewNormalizedValue(`"a\u003cb\u003ec"`),
+			"raw":    jsontypes.NewNormalizedValue(`(?<product>[^|]+)`),
+		}),
+	}
+
+	out, err := ModelToValue(model, nil)
+	require.NoError(t, err)
+
+	config := out["config"].Map
+	assert.Equal(t, `{"regex":"(?<vendor>[^|]+)"}`, config["regex"].String)
+	assert.Equal(t, `"a<b>c"`, config["scalar"].String)
+	assert.Equal(t, `"(?<product>[^|]+)"`, config["raw"].String)
+	assert.NotContains(t, config["regex"].String, `\u003c`)
+	assert.NotContains(t, config["scalar"].String, `\u003e`)
+	assert.NotContains(t, config["raw"].String, `\u003c`)
+}
+
 func TestToHCLExpr_null_empty_sensitive(t *testing.T) {
 	assert.Equal(t, "null", Value{Kind: KindNull}.ToHCLExpr())
 	assert.Equal(t, `""`, Value{Kind: KindString, String: ""}.ToHCLExpr())

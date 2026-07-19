@@ -484,9 +484,13 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 func normalizedJSONToValue(v jsontypes.Normalized) (Value, error) {
 	raw := v.ValueString()
 	if isValidJSON(raw) {
+		normalized, err := normalizeJSONNoEscape(raw)
+		if err == nil {
+			return Value{Kind: KindString, String: normalized}, nil
+		}
 		return Value{Kind: KindString, String: raw}, nil
 	}
-	encoded, err := json.Marshal(raw)
+	encoded, err := MarshalJSONNoEscape(raw)
 	if err != nil {
 		return Value{}, err
 	}
@@ -624,7 +628,7 @@ func MaskSensitiveValuesInJSON(jsonStr, resourceName, attrPath string) (string, 
 	if len(varNames) == 0 {
 		return jsonStr, nil
 	}
-	masked, err := json.Marshal(data)
+	masked, err := MarshalJSONNoEscape(data)
 	if err != nil {
 		return jsonStr, nil
 	}
