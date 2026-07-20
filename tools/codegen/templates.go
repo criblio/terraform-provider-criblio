@@ -668,6 +668,8 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	normalizeRoutesPayload(output)
+{{- if eq .StructName "Collector" }}
+	output["type"] = "collection"
 {{- end }}
 	return json.Marshal(output)
 }

@@ -331,6 +331,9 @@ func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip criblio_source in default_search group", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default_search", "id": "in_open_telemetry"}))
 	})
+	t.Run("skip criblio_collector in default_search group", func(t *testing.T) {
+		assert.True(t, skipResourceByID("criblio_collector", map[string]string{"group_id": "default_search", "id": "scheduledSearch_test_saved_query"}))
+	})
 	t.Run("skip criblio_routes in default_search group", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_routes", map[string]string{"group_id": "default_search", "id": "default_search"}))
 	})
@@ -339,6 +342,9 @@ func TestSkipResourceByID(t *testing.T) {
 	})
 	t.Run("not skip criblio_source in other groups when same id", func(t *testing.T) {
 		assert.False(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default", "id": "in_open_telemetry"}))
+	})
+	t.Run("not skip criblio_collector in other groups", func(t *testing.T) {
+		assert.False(t, skipResourceByID("criblio_collector", map[string]string{"group_id": "default", "id": "collector_rest"}))
 	})
 	t.Run("not skip criblio_routes in worker group", func(t *testing.T) {
 		assert.False(t, skipResourceByID("criblio_routes", map[string]string{"group_id": "default", "id": "default"}))
@@ -423,6 +429,18 @@ func TestDefaultResource(t *testing.T) {
 		override := ParseIncludeDefaultIDs([]string{"devnull"})
 		assert.False(t, DefaultResource("criblio_pipeline", map[string]string{"id": "devnull"}, attrs, override))
 		assert.False(t, DefaultResource("criblio_destination", map[string]string{"id": "devnull"}, attrs, override))
+	})
+	t.Run("include override matches criblio_routes group id", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		idMap := map[string]string{"group_id": "stream-leaders", "id": "default"}
+		override := ParseIncludeDefaultIDs([]string{"criblio_routes:stream-leaders"})
+		assert.False(t, DefaultResource("criblio_routes", idMap, attrs, override))
+	})
+	t.Run("include override does not match criblio_routes group id for other types", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		idMap := map[string]string{"group_id": "stream-leaders", "id": "default"}
+		override := ParseIncludeDefaultIDs([]string{"criblio_source:stream-leaders"})
+		assert.True(t, DefaultResource("criblio_routes", idMap, attrs, override))
 	})
 }
 
@@ -557,6 +575,47 @@ func TestFlattenItemsListToTopLevel(t *testing.T) {
 	})
 }
 
+func TestNormalizeRoutesForExport(t *testing.T) {
+	t.Run("removes null clone entries and omits empty clones", func(t *testing.T) {
+		routes := hcl.Value{Kind: hcl.KindList, List: []hcl.Value{
+			{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+				"name":        {Kind: hcl.KindString, String: "raw"},
+				"description": {Kind: hcl.KindString, String: ""},
+				"clones": {Kind: hcl.KindList, List: []hcl.Value{
+					{Kind: hcl.KindNull},
+				}},
+			}},
+		}}
+
+		got := normalizeRoutesForExport(routes)
+
+		route := got.List[0].Map
+		assert.NotContains(t, route, "clones")
+		assert.Equal(t, hcl.KindNull, route["description"].Kind)
+	})
+	t.Run("keeps valid clone maps and drops null clone entries", func(t *testing.T) {
+		clone := hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"__cloneId": {Kind: hcl.KindString, String: "audit"},
+		}}
+		routes := hcl.Value{Kind: hcl.KindList, List: []hcl.Value{
+			{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+				"name": {Kind: hcl.KindString, String: "with clones"},
+				"clones": {Kind: hcl.KindList, List: []hcl.Value{
+					{Kind: hcl.KindNull},
+					clone,
+				}},
+			}},
+		}}
+
+		got := normalizeRoutesForExport(routes)
+
+		clones := got.List[0].Map["clones"]
+		require.Equal(t, hcl.KindList, clones.Kind)
+		require.Len(t, clones.List, 1)
+		assert.Equal(t, clone, clones.List[0])
+	})
+}
+
 func TestFilterAttrsBySchema(t *testing.T) {
 	t.Run("allowed attrs kept", func(t *testing.T) {
 		allowed := converter.AllAttributeNamesFromModel("SourceResourceModel")
@@ -598,6 +657,15 @@ func TestRawJSONToItemMap(t *testing.T) {
 		require.NotNil(t, got)
 		assert.Equal(t, `"x"`, got["id"]) // values are JSON-encoded
 		assert.Equal(t, `"y"`, got["name"])
+	})
+	t.Run("does not escape HTML characters", func(t *testing.T) {
+		raw := []byte(`{"regex":"(?<vendor>[^|]+)","conf":{"query":"a\u003cb\u003ec"}}`)
+		got := rawJSONToItemMap(raw)
+		require.NotNil(t, got)
+		assert.Equal(t, `"(?<vendor>[^|]+)"`, got["regex"])
+		assert.Contains(t, got["conf"], `"a<b>c"`)
+		assert.NotContains(t, got["regex"], `\u003c`)
+		assert.NotContains(t, got["conf"], `\u003e`)
 	})
 	t.Run("invalid JSON returns nil", func(t *testing.T) {
 		got := rawJSONToItemMap([]byte(`{invalid`))

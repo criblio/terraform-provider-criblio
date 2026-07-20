@@ -384,6 +384,15 @@ func doTokenRequest(ctx context.Context, method, requestURL, contentType string,
 	retryClient.Backoff = tokenBackoff
 	retryClient.Logger = &retryableLogger{}
 	retryClient.CheckRetry = tokenRetryPolicy
+	retryClient.ErrorHandler = func(resp *http.Response, err error, numTries int) (*http.Response, error) {
+		if numTries > attempts {
+			attempts = numTries
+		}
+		if resp != nil {
+			return resp, nil
+		}
+		return nil, err
+	}
 	retryClient.RequestLogHook = func(_ retryablehttp.Logger, _ *http.Request, attempt int) {
 		attempts = attempt + 1
 	}

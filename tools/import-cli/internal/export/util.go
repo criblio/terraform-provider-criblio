@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 )
 
@@ -92,7 +93,7 @@ func rawJSONToItemMap(itemJSON []byte) map[string]string {
 	}
 	out := make(map[string]string, len(m))
 	for k, v := range m {
-		b, err := json.Marshal(v)
+		b, err := hcl.MarshalJSONNoEscape(v)
 		if err != nil {
 			continue
 		}

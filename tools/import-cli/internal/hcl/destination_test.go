@@ -77,6 +77,26 @@ func TestItemMapToBlock_generic(t *testing.T) {
 	assert.Equal(t, "rest", value.Map["type"].String)
 }
 
+func TestTFBlockModelToAPIItemMapDoesNotEscapeHTMLCharacters(t *testing.T) {
+	block := map[string]Value{
+		"type": {Kind: KindString, String: "regex"},
+		"conf": {Kind: KindMap, Map: map[string]Value{
+			"regex_list": {Kind: KindList, List: []Value{
+				{Kind: KindMap, Map: map[string]Value{
+					"regex": {Kind: KindString, String: `(?<vendor>[^|]+)`},
+				}},
+			}},
+		}},
+	}
+
+	got, err := TFBlockModelToAPIItemMap(block, nil)
+	require.NoError(t, err)
+
+	assert.Contains(t, got["conf"], `(?<vendor>[^|]+)`)
+	assert.NotContains(t, got["conf"], `\u003c`)
+	assert.NotContains(t, got["conf"], `\u003e`)
+}
+
 func TestItemMapToBlock_collector_collection_alias(t *testing.T) {
 	// API returns type "collection" for REST-style collectors; provider expects input_collector_rest.
 	item := map[string]string{
