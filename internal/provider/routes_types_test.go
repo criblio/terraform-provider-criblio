@@ -594,3 +594,53 @@ func TestPackRoutesModelUpdateBodyUsesRoutesNormalization(t *testing.T) {
 		t.Fatalf("route groupId = %#v, want default", route["groupId"])
 	}
 }
+
+func TestRoutesListWithDefaultGroupIDSetsDefaultForNullAndUnknown(t *testing.T) {
+	routeTypes := RoutesRoutesAttrTypes()
+	routes := types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{
+		types.ObjectValueMust(routeTypes, map[string]attr.Value{
+			"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
+			"context":                  types.StringNull(),
+			"description":              types.StringNull(),
+			"disabled":                 types.BoolNull(),
+			"enable_output_expression": types.BoolNull(),
+			"filter":                   types.StringNull(),
+			"group_id":                 types.StringNull(),
+			"name":                     types.StringValue("r1"),
+			"output":                   types.StringNull(),
+			"output_expression":        types.StringNull(),
+			"pipeline":                 types.StringValue("main"),
+			"target_context":           types.StringNull(),
+			"final":                    types.BoolNull(),
+			"id":                       types.StringNull(),
+		}),
+		types.ObjectValueMust(routeTypes, map[string]attr.Value{
+			"clones":                   types.ListNull(types.MapType{ElemType: types.StringType}),
+			"context":                  types.StringNull(),
+			"description":              types.StringNull(),
+			"disabled":                 types.BoolNull(),
+			"enable_output_expression": types.BoolNull(),
+			"filter":                   types.StringNull(),
+			"group_id":                 types.StringUnknown(),
+			"name":                     types.StringValue("r2"),
+			"output":                   types.StringNull(),
+			"output_expression":        types.StringNull(),
+			"pipeline":                 types.StringValue("main"),
+			"target_context":           types.StringNull(),
+			"final":                    types.BoolNull(),
+			"id":                       types.StringNull(),
+		}),
+	})
+
+	normalized := routesListWithDefaultGroupID(routes)
+	for idx, element := range normalized.Elements() {
+		route := element.(types.Object)
+		groupID := route.Attributes()["group_id"]
+		if groupID.IsNull() || groupID.IsUnknown() {
+			t.Fatalf("route %d group_id not normalized: %#v", idx, groupID)
+		}
+		if groupID.(types.String).ValueString() != "default" {
+			t.Fatalf("route %d group_id = %q, want default", idx, groupID.(types.String).ValueString())
+		}
+	}
+}

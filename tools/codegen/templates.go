@@ -668,6 +668,7 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	normalizeRoutesPayload(output)
+{{- end }}
 {{- if eq .StructName "Collector" }}
 	output["type"] = "collection"
 {{- end }}
@@ -2091,6 +2092,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
 	}
+	if !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithDefaultGroupID(state.Routes)
+	}
 {{- else if eq .StructName "PackRoutes" }}
 	if !api.Comments.IsNull() && !api.Comments.IsUnknown() && !state.Comments.IsNull() && !state.Comments.IsUnknown() {
 		state.Comments = routesListWithKnownAPIValues(api.Comments, state.Comments)
@@ -2103,6 +2107,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
+	if !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithDefaultGroupID(state.Routes)
 	}
 {{- end }}
 {{- range .OneOfVariants }}
@@ -2196,6 +2203,32 @@ func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) 
 	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
 	if diags.HasError() {
 		return stateRoutes
+	}
+	return value
+}
+
+func routesListWithDefaultGroupID(routes types.List) types.List {
+	elements := routes.Elements()
+	for index, element := range elements {
+		routeObject, ok := element.(types.Object)
+		if !ok || routeObject.IsNull() || routeObject.IsUnknown() {
+			continue
+		}
+		attributes := routeObject.Attributes()
+		groupID, hasGroupID := attributes["group_id"]
+		if !hasGroupID || (!groupID.IsNull() && !groupID.IsUnknown()) {
+			continue
+		}
+		attributes["group_id"] = types.StringValue("default")
+		updated, diags := types.ObjectValue(routeObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = updated
+	}
+	value, diags := types.ListValue(routes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return routes
 	}
 	return value
 }

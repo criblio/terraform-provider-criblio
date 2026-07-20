@@ -445,6 +445,9 @@ func applyPackRoutesAPIToState(api *PackRoutesModel, state *PackRoutesModel, pre
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
 	}
+	if !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithDefaultGroupID(state.Routes)
+	}
 }
 
 func PackRoutesDebug(value any) string {

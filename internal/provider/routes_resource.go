@@ -455,6 +455,9 @@ func applyRoutesAPIToState(api *RoutesModel, state *RoutesModel, preserveInputs 
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
 	}
+	if !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithDefaultGroupID(state.Routes)
+	}
 }
 
 func RoutesDebug(value any) string {
@@ -501,6 +504,32 @@ func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) 
 	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
 	if diags.HasError() {
 		return stateRoutes
+	}
+	return value
+}
+
+func routesListWithDefaultGroupID(routes types.List) types.List {
+	elements := routes.Elements()
+	for index, element := range elements {
+		routeObject, ok := element.(types.Object)
+		if !ok || routeObject.IsNull() || routeObject.IsUnknown() {
+			continue
+		}
+		attributes := routeObject.Attributes()
+		groupID, hasGroupID := attributes["group_id"]
+		if !hasGroupID || (!groupID.IsNull() && !groupID.IsUnknown()) {
+			continue
+		}
+		attributes["group_id"] = types.StringValue("default")
+		updated, diags := types.ObjectValue(routeObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = updated
+	}
+	value, diags := types.ListValue(routes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return routes
 	}
 	return value
 }
