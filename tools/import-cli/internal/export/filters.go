@@ -81,6 +81,11 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if typeName == "criblio_source" && idMap["group_id"] == "default_search" {
 		return true
 	}
+	// Search collectors are saved searches/jobs exposed from default_search, not
+	// importable collector inputs.
+	if typeName == "criblio_collector" && idMap["group_id"] == "default_search" {
+		return true
+	}
 	// Stream routes are one singleton per worker group. default_search has Search UI
 	// resources, but exporting criblio_routes there produces an invalid PATCH payload
 	// for the stream routes endpoint.
@@ -206,7 +211,13 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		return custom.DefaultPackIDs[pack]
 	case "criblio_pack_vars":
 		return custom.DefaultPackIDs[pack]
-	case "criblio_routes", "criblio_pack_routes":
+	case "criblio_routes":
+		// Routes are a singleton per group/pack; users modify but don't create them from scratch.
+		if includeOverride.Includes(typeName, idMap["group_id"]) {
+			return false
+		}
+		return true
+	case "criblio_pack_routes":
 		// Routes are a singleton per group/pack; users modify but don't create them from scratch.
 		return true
 	case "criblio_search_dataset_ruleset":

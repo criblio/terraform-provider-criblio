@@ -43,22 +43,8 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if r.TypeName == "criblio_pack" {
 		delete(attrs, "exports")
 	}
-	// normalizeRouteDescriptions sets description to null when empty string so config matches provider state (null vs "" drift).
-	normalizeRouteDescriptions := func(routesVal hcl.Value) hcl.Value {
-		if routesVal.Kind != hcl.KindList {
-			return routesVal
-		}
-		for i := range routesVal.List {
-			if routesVal.List[i].Kind == hcl.KindMap && routesVal.List[i].Map != nil {
-				if v, ok := routesVal.List[i].Map["description"]; ok && v.Kind == hcl.KindString && v.String == "" {
-					routesVal.List[i].Map["description"] = hcl.Value{Kind: hcl.KindNull}
-				}
-			}
-		}
-		return routesVal
-	}
 	if (r.TypeName == "criblio_routes" || r.TypeName == "criblio_pack_routes") && attrs["routes"].Kind != hcl.KindNull {
-		attrs["routes"] = normalizeRouteDescriptions(attrs["routes"])
+		attrs["routes"] = normalizeRoutesForExport(attrs["routes"])
 	}
 	if r.TypeName == "criblio_appscope_config" {
 		custom.ApplyAppscopeConfigDefaults(attrs)
@@ -133,6 +119,44 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	it.LifecycleIgnoreChanges = lifecycleIgnoreChangesForConvertedResource(r.TypeName, attrs)
 	return &it, ""
+}
+
+// normalizeRoutesForExport removes route values that are valid in state but invalid in config.
+func normalizeRoutesForExport(routesVal hcl.Value) hcl.Value {
+	if routesVal.Kind != hcl.KindList {
+		return routesVal
+	}
+	for i := range routesVal.List {
+		if routesVal.List[i].Kind != hcl.KindMap || routesVal.List[i].Map == nil {
+			continue
+		}
+		route := routesVal.List[i].Map
+		if v, ok := route["description"]; ok && v.Kind == hcl.KindString && v.String == "" {
+			route["description"] = hcl.Value{Kind: hcl.KindNull}
+		}
+		if v, ok := route["clones"]; ok && v.Kind == hcl.KindList {
+			route["clones"] = removeNullListItems(v)
+			if len(route["clones"].List) == 0 {
+				delete(route, "clones")
+			}
+		}
+	}
+	return routesVal
+}
+
+func removeNullListItems(v hcl.Value) hcl.Value {
+	if v.Kind != hcl.KindList {
+		return v
+	}
+	list := make([]hcl.Value, 0, len(v.List))
+	for _, item := range v.List {
+		if item.Kind == hcl.KindNull {
+			continue
+		}
+		list = append(list, item)
+	}
+	v.List = list
+	return v
 }
 
 func lifecycleIgnoreChangesForConvertedResource(typeName string, attrs map[string]hcl.Value) []string {

@@ -910,6 +910,33 @@ func TestResourceSchemaUsesPlanModifierHook(t *testing.T) {
 	assertNotContains(t, got, `PlanModifiers: []planmodifier.String{`)
 }
 
+func TestCollectorMarshalIncludesSavedJobType(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "collector",
+		FileStem:   "collector",
+		TypeName:   "criblio_collector",
+		StructName: "Collector",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "id",
+				TerraformName: "id",
+				GoName:        "ID",
+				Type:          "string",
+				Required:      true,
+				RequestField:  true,
+			},
+		},
+	}
+
+	content, err := executeTemplate("types", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got := string(content)
+
+	assertContains(t, got, `output["type"] = "collection"`)
+}
+
 func TestPrimitiveArrayFieldsPreserveElementTypes(t *testing.T) {
 	resource := parser.ResourceDef{
 		Name:       "array_resource",

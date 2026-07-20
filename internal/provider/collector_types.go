@@ -2860,6 +2860,7 @@ func (m CollectorModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	output["type"] = "collection"
 	return json.Marshal(output)
 }
 

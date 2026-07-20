@@ -663,6 +663,9 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- if eq .StructName "MappingRuleset" }}
 	output["id"] = mappingRulesetID(m)
 {{- end }}
+{{- if eq .StructName "Collector" }}
+	output["type"] = "collection"
+{{- end }}
 	return json.Marshal(output)
 }
 
