@@ -386,6 +386,7 @@ func (m PackRoutesModel) MarshalJSON() ([]byte, error) {
 		}
 		output["routes"] = value
 	}
+	normalizeRoutesPayload(output)
 	return json.Marshal(output)
 }
 func (m PackRoutesModel) updateBody() (map[string]any, error) {
@@ -417,6 +418,7 @@ func (m PackRoutesModel) updateBody() (map[string]any, error) {
 		}
 		output["routes"] = value
 	}
+	normalizeRoutesPayload(output)
 	return output, nil
 }
 

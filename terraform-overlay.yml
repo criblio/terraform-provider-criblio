@@ -226,16 +226,16 @@ actions:
       x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
   - target: "$.components.schemas.RouteComment.properties.groupId"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.RouteComment.properties.id"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.RouteComment.properties.index"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.AdditionalPropertiesTypeRoutesGroups.properties.index"
     update:
-      x-terraform-computed: true
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.PipelineFunctionConf"
     replace:
       type: object

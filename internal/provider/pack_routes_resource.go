@@ -61,19 +61,19 @@ func (r *PackRoutesResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 						"group_id": schema.StringAttribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Unique identifier for the Route Group that the Route is associated with.`,
 						},
 						"id": schema.StringAttribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Unique identifier for the comment.`,
 						},
 						"index": schema.Int64Attribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Relative position of the comment among all comments for the Route.`,
 						},
@@ -103,7 +103,7 @@ func (r *PackRoutesResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						},
 						"index": schema.Int64Attribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Relative position of the Route Group among all Route Groups. Routes are evaluated in ascending order according to the index value of their Route Group.`,
 						},
@@ -432,6 +432,15 @@ func applyPackRoutesAPIToState(api *PackRoutesModel, state *PackRoutesModel, pre
 		state.Routes = types.ListNull(types.ObjectType{AttrTypes: PackRoutesRoutesAttrTypes()})
 	} else if len(state.Routes.Elements()) == 0 {
 		state.Routes = types.ListValueMust(types.ObjectType{AttrTypes: PackRoutesRoutesAttrTypes()}, nil)
+	}
+	if !api.Comments.IsNull() && !api.Comments.IsUnknown() && !state.Comments.IsNull() && !state.Comments.IsUnknown() {
+		state.Comments = routesListWithKnownAPIValues(api.Comments, state.Comments)
+	}
+	if !api.Groups.IsNull() && !api.Groups.IsUnknown() && !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithKnownAPIValues(api.Groups, state.Groups)
+	}
+	if !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithDeterministicIndexes(state.Groups)
 	}
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)

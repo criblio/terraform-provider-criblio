@@ -9,6 +9,9 @@ import (
 {{- if needsFmt . }}
 	"fmt"
 {{- end }}
+{{- if eq .StructName "Routes" }}
+	"sort"
+{{- end }}
 	"strings"
 	"unicode"
 
@@ -663,6 +666,9 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- if eq .StructName "MappingRuleset" }}
 	output["id"] = mappingRulesetID(m)
 {{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	normalizeRoutesPayload(output)
+{{- end }}
 	return json.Marshal(output)
 }
 
@@ -695,7 +701,131 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
 {{- end }}
 {{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	normalizeRoutesPayload(output)
+{{- end }}
 	return output, nil
+}
+{{- end }}
+
+{{- if eq .StructName "Routes" }}
+func normalizeRoutesPayload(output map[string]any) {
+	normalizeRouteComments(output)
+	normalizeRouteGroups(output)
+	normalizeRouteEntries(output)
+}
+
+func normalizeRouteComments(output map[string]any) {
+	rawComments, ok := output["comments"].([]any)
+	if !ok {
+		return
+	}
+
+	claimed := make(map[int]bool)
+	for _, raw := range rawComments {
+		comment, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := comment["index"]; hasIndex {
+			switch v := idx.(type) {
+			case int:
+				claimed[v] = true
+			case int64:
+				claimed[int(v)] = true
+			case float64:
+				claimed[int(v)] = true
+			}
+		}
+	}
+
+	next := 0
+	for idx, raw := range rawComments {
+		comment, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if id, hasID := comment["id"]; !hasID || id == nil || id == "" {
+			comment["id"] = fmt.Sprintf("tf-comment-%d", idx)
+		}
+		if idx, hasIndex := comment["index"]; !hasIndex || idx == nil {
+			for claimed[next] {
+				next++
+			}
+			comment["index"] = next
+			claimed[next] = true
+			next++
+		}
+		rawComments[idx] = comment
+	}
+	output["comments"] = rawComments
+}
+
+func normalizeRouteGroups(output map[string]any) {
+	rawGroups, ok := output["groups"].(map[string]any)
+	if !ok {
+		return
+	}
+
+	keys := make([]string, 0, len(rawGroups))
+	for key := range rawGroups {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	claimed := make(map[int]bool)
+	for _, key := range keys {
+		group, ok := rawGroups[key].(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := group["index"]; hasIndex {
+			switch v := idx.(type) {
+			case int:
+				claimed[v] = true
+			case int64:
+				claimed[int(v)] = true
+			case float64:
+				claimed[int(v)] = true
+			}
+		}
+	}
+
+	next := 0
+	for _, key := range keys {
+		group, ok := rawGroups[key].(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := group["index"]; !hasIndex || idx == nil {
+			for claimed[next] {
+				next++
+			}
+			group["index"] = next
+			claimed[next] = true
+			next++
+		}
+		rawGroups[key] = group
+	}
+	output["groups"] = rawGroups
+}
+
+func normalizeRouteEntries(output map[string]any) {
+	rawRoutes, ok := output["routes"].([]any)
+	if !ok {
+		return
+	}
+	for idx, raw := range rawRoutes {
+		route, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if groupID, hasGroupID := route["groupId"]; !hasGroupID || groupID == nil || groupID == "" {
+			route["groupId"] = "default"
+		}
+		rawRoutes[idx] = route
+	}
+	output["routes"] = rawRoutes
 }
 {{- end }}
 
@@ -1370,6 +1500,9 @@ import (
 	"encoding/json"
 {{- end }}
 	"fmt"
+{{- if eq .StructName "Routes" }}
+	"sort"
+{{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 {{- if needsCustomPlanModifier . "bool" }}
@@ -1943,7 +2076,29 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.Schedule = normalized.(types.Object)
 		}
 	}
-{{- else if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+{{- else if eq .StructName "Routes" }}
+	if !api.Comments.IsNull() && !api.Comments.IsUnknown() && !state.Comments.IsNull() && !state.Comments.IsUnknown() {
+		state.Comments = routesListWithKnownAPIValues(api.Comments, state.Comments)
+	}
+	if !api.Groups.IsNull() && !api.Groups.IsUnknown() && !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithKnownAPIValues(api.Groups, state.Groups)
+	}
+	if !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithDeterministicIndexes(state.Groups)
+	}
+	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
+{{- else if eq .StructName "PackRoutes" }}
+	if !api.Comments.IsNull() && !api.Comments.IsUnknown() && !state.Comments.IsNull() && !state.Comments.IsUnknown() {
+		state.Comments = routesListWithKnownAPIValues(api.Comments, state.Comments)
+	}
+	if !api.Groups.IsNull() && !api.Groups.IsUnknown() && !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithKnownAPIValues(api.Groups, state.Groups)
+	}
+	if !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithDeterministicIndexes(state.Groups)
+	}
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
 	}
@@ -2039,6 +2194,117 @@ func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) 
 	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
 	if diags.HasError() {
 		return stateRoutes
+	}
+	return value
+}
+
+func routesGroupsMapWithKnownAPIValues(apiGroups types.Map, stateGroups types.Map) types.Map {
+	elements := stateGroups.Elements()
+	apiElements := apiGroups.Elements()
+	for key, stateElement := range elements {
+		apiElement, ok := apiElements[key]
+		if !ok {
+			continue
+		}
+		stateObject, ok := stateElement.(types.Object)
+		if !ok || stateObject.IsNull() || stateObject.IsUnknown() {
+			continue
+		}
+		apiObject, ok := apiElement.(types.Object)
+		if !ok || apiObject.IsNull() || apiObject.IsUnknown() {
+			continue
+		}
+		attributes := stateObject.Attributes()
+		apiAttributes := apiObject.Attributes()
+		changed := false
+		for name, stateAttribute := range attributes {
+			if !stateAttribute.IsUnknown() {
+				continue
+			}
+			apiAttribute, ok := apiAttributes[name]
+			if !ok || apiAttribute.IsUnknown() {
+				continue
+			}
+			attributes[name] = apiAttribute
+			changed = true
+		}
+		if !changed {
+			continue
+		}
+		merged, diags := types.ObjectValue(stateObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[key] = merged
+	}
+	value, diags := types.MapValue(stateGroups.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateGroups
+	}
+	return value
+}
+
+func routesGroupsMapWithDeterministicIndexes(stateGroups types.Map) types.Map {
+	elements := stateGroups.Elements()
+	keys := make([]string, 0, len(elements))
+	for key := range elements {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	claimed := make(map[int64]bool)
+	for _, key := range keys {
+		groupValue, ok := elements[key]
+		if !ok {
+			continue
+		}
+		groupObject, ok := groupValue.(types.Object)
+		if !ok || groupObject.IsNull() || groupObject.IsUnknown() {
+			continue
+		}
+		attributes := groupObject.Attributes()
+		groupIndex, ok := attributes["index"]
+		if !ok || groupIndex.IsUnknown() || groupIndex.IsNull() {
+			continue
+		}
+		intVal, ok := groupIndex.(types.Int64)
+		if !ok {
+			continue
+		}
+		claimed[intVal.ValueInt64()] = true
+	}
+
+	var next int64
+	for _, key := range keys {
+		groupValue, ok := elements[key]
+		if !ok {
+			continue
+		}
+		groupObject, ok := groupValue.(types.Object)
+		if !ok || groupObject.IsNull() || groupObject.IsUnknown() {
+			continue
+		}
+		attributes := groupObject.Attributes()
+		groupIndex, ok := attributes["index"]
+		if !ok || (!groupIndex.IsUnknown() && !groupIndex.IsNull()) {
+			continue
+		}
+		for claimed[next] {
+			next++
+		}
+		attributes["index"] = types.Int64Value(next)
+		claimed[next] = true
+		next++
+		merged, diags := types.ObjectValue(groupObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[key] = merged
+	}
+
+	value, diags := types.MapValue(stateGroups.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateGroups
 	}
 	return value
 }
