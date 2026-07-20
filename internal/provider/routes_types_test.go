@@ -100,6 +100,26 @@ func TestApplyRoutesAPIToStatePreservesNullInputsAfterWrite(t *testing.T) {
 	}
 }
 
+func TestIsRoutesImportStateTreatsEmptyRoutesAsImport(t *testing.T) {
+	routeType := types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}
+	state := RoutesModel{
+		Routes: types.ListValueMust(routeType, nil),
+	}
+	if !isRoutesImportState(&state) {
+		t.Fatalf("expected empty routes list to be treated as import state")
+	}
+}
+
+func TestIsPackRoutesImportStateTreatsEmptyRoutesAsImport(t *testing.T) {
+	routeType := types.ObjectType{AttrTypes: PackRoutesRoutesAttrTypes()}
+	state := PackRoutesModel{
+		Routes: types.ListValueMust(routeType, nil),
+	}
+	if !isPackRoutesImportState(&state) {
+		t.Fatalf("expected empty pack routes list to be treated as import state")
+	}
+}
+
 func TestApplyRoutesAPIToStateFillsUnknownRouteAttributesAfterWrite(t *testing.T) {
 	routeTypes := RoutesRoutesAttrTypes()
 	stateRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
@@ -254,6 +274,45 @@ func TestRoutesModelUpdateBodyNormalizesCommentsGroupsAndRouteGroupID(t *testing
 	}
 	if got := route["groupId"]; got != "default" {
 		t.Fatalf("route groupId = %#v", got)
+	}
+}
+
+func TestApplyRoutesAPIToStateImportDefaultsMissingRouteGroupID(t *testing.T) {
+	routeTypes := RoutesRoutesAttrTypes()
+	apiRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"clones":                   types.ListValueMust(types.MapType{ElemType: types.StringType}, nil),
+		"context":                  types.StringNull(),
+		"description":              types.StringNull(),
+		"disabled":                 types.BoolValue(false),
+		"enable_output_expression": types.BoolValue(false),
+		"filter":                   types.StringValue("true"),
+		"group_id":                 types.StringNull(),
+		"name":                     types.StringValue("route-1"),
+		"output":                   types.StringNull(),
+		"output_expression":        types.StringNull(),
+		"pipeline":                 types.StringValue("main"),
+		"target_context":           types.StringNull(),
+		"final":                    types.BoolValue(false),
+		"id":                       types.StringValue("route-1"),
+	})
+	api := RoutesModel{
+		ID:     types.StringValue("default"),
+		Routes: types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{apiRoute}),
+	}
+	state := RoutesModel{
+		ID:     types.StringValue("default"),
+		Routes: types.ListNull(types.ObjectType{AttrTypes: routeTypes}),
+	}
+
+	applyRoutesAPIToState(&api, &state, false, false)
+
+	route := state.Routes.Elements()[0].(types.Object)
+	groupID := route.Attributes()["group_id"]
+	if groupID.IsNull() || groupID.IsUnknown() {
+		t.Fatalf("group_id not defaulted during import: %#v", groupID)
+	}
+	if got := groupID.(types.String).ValueString(); got != "default" {
+		t.Fatalf("group_id = %q, want default", got)
 	}
 }
 

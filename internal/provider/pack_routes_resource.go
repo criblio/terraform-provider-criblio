@@ -379,6 +379,9 @@ func isPackRoutesImportState(state *PackRoutesModel) bool {
 	if state.Routes.IsNull() || state.Routes.IsUnknown() {
 		return true
 	}
+	if len(state.Routes.Elements()) == 0 {
+		return true
+	}
 	return false
 }
 

@@ -1957,6 +1957,11 @@ func is{{ .StructName }}ImportState(state *{{ .StructName }}Model) bool {
 	}
 {{- end }}
 {{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	if len(state.Routes.Elements()) == 0 {
+		return true
+	}
+{{- end }}
 	return false
 }
 
@@ -2216,7 +2221,7 @@ func routesListWithDefaultGroupID(routes types.List) types.List {
 		}
 		attributes := routeObject.Attributes()
 		groupID, hasGroupID := attributes["group_id"]
-		if !hasGroupID || (!groupID.IsNull() && !groupID.IsUnknown()) {
+		if hasGroupID && !groupID.IsNull() && !groupID.IsUnknown() {
 			continue
 		}
 		attributes["group_id"] = types.StringValue("default")

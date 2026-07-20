@@ -394,6 +394,9 @@ func isRoutesImportState(state *RoutesModel) bool {
 	if state.Routes.IsNull() || state.Routes.IsUnknown() {
 		return true
 	}
+	if len(state.Routes.Elements()) == 0 {
+		return true
+	}
 	return false
 }
 
@@ -517,7 +520,7 @@ func routesListWithDefaultGroupID(routes types.List) types.List {
 		}
 		attributes := routeObject.Attributes()
 		groupID, hasGroupID := attributes["group_id"]
-		if !hasGroupID || (!groupID.IsNull() && !groupID.IsUnknown()) {
+		if hasGroupID && !groupID.IsNull() && !groupID.IsUnknown() {
 			continue
 		}
 		attributes["group_id"] = types.StringValue("default")
