@@ -30,9 +30,15 @@ func (a PackLookupsAPI) Create(ctx context.Context, model PackLookupsModel) (*Pa
 func (a PackLookupsAPI) Read(ctx context.Context, model PackLookupsModel) (*PackLookupsModel, error) {
 	configuredID := model.ID.ValueString()
 	var lastErr error
+	packID := resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())
 	for _, id := range lookupFileAPIIDs(configuredID) {
-		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), packID, id))
 		if err == nil {
+			if content, contentErr := downloadPackLookupFileContent(ctx, a.client, model.GroupID.ValueString(), packID, id); contentErr != nil {
+				return nil, contentErr
+			} else if content != nil {
+				apiModel.Content = types.StringValue(*content)
+			}
 			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
@@ -88,6 +94,19 @@ func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client,
 	filename := lookupFileUploadFilename(id)
 	path := fmt.Sprintf("/m/%s/p/%s/system/lookups?filename=%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, client, model.GroupID.ValueString(), model.Pack.ValueString()), url.QueryEscape(filename))
 	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func downloadPackLookupFileContent(ctx context.Context, client *restclient.Client, groupID, packID, id string) (*string, error) {
+	filename := lookupFileUploadFilename(id)
+	body, err := restclient.GetRaw(ctx, client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s/content?raw=true", url.PathEscape(groupID), url.PathEscape(packID), url.PathEscape(filename)))
+	if err != nil {
+		if restclient.IsNotFound(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	content := string(body)
+	return &content, nil
 }
 
 func normalizePackLookupsAPIModel(model *PackLookupsModel, terraformID string) *PackLookupsModel {

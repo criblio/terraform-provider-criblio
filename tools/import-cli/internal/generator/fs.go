@@ -14,6 +14,8 @@ type FileSystem interface {
 	// WriteFileAtomic writes data to name in dir by writing to a temp file then renaming.
 	// Callers get either the full content on disk or no file (atomic).
 	WriteFileAtomic(dir, name string, data []byte, perm os.FileMode) error
+	// RemoveAll removes path and any children. Used for generated asset directories.
+	RemoveAll(path string) error
 }
 
 // DefaultFS is the filesystem used by WriteModuleDirectory when no FS is provided.
@@ -25,6 +27,10 @@ type osFS struct{}
 
 func (*osFS) MkdirAll(path string, perm os.FileMode) error {
 	return os.MkdirAll(path, perm)
+}
+
+func (*osFS) RemoveAll(path string) error {
+	return os.RemoveAll(path)
 }
 
 func (*osFS) WriteFileAtomic(dir, name string, data []byte, perm os.FileMode) error {

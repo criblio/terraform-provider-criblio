@@ -24,6 +24,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if skipResourceByID(r.TypeName, idMap) {
 		return nil, fmt.Sprintf("%s %v: skipped by config", r.TypeName, idMap)
 	}
+	if defaultLookupFileByID(r.TypeName, idMap, includeOverride) {
+		return nil, fmt.Sprintf("%s %v: built-in default lookup (skip export)", r.TypeName, idMap)
+	}
 	requestParams := toRequestParams(idMap)
 	model, convErr := converter.Convert(ctx, client, e, requestParams)
 	if convErr != nil {
@@ -82,6 +85,12 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if skipResourceWhenLibCribl(attrs) {
 		return nil, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap)
 	}
+	if isLookupFileType(r.TypeName) && criblDefaultTag(attrs) {
+		return nil, fmt.Sprintf("%s %v: cribl:default tag (built-in, skip export)", r.TypeName, idMap)
+	}
+	if isLookupFileType(r.TypeName) && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
+		return nil, fmt.Sprintf("%s %v: built-in default lookup (skip export)", r.TypeName, idMap)
+	}
 	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil, fmt.Sprintf("%s %v: built-in default (--exclude-defaults)", r.TypeName, idMap)
@@ -110,12 +119,20 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		attrs["cert"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.CertificateCertVariableName(name)}
 		attrs["priv_key"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.CertificatePrivKeyVariableName(name)}
 	}
+	files, hasLookupContent, contentErr := lookupContentAsset(ctx, client, r.TypeName, attrs, name, idMap)
+	if contentErr != nil {
+		return nil, fmt.Sprintf("%s %v: lookup content: %s", r.TypeName, idMap, sanitizeConvertError(contentErr))
+	}
+	if !hasLookupContent {
+		return nil, fmt.Sprintf("%s %v: lookup content missing from API response", r.TypeName, idMap)
+	}
 	it := generator.ResourceItem{
 		TypeName: e.TypeName,
 		Name:     name,
 		Attrs:    attrs,
 		ImportID: importID,
 		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
+		Files:    files,
 	}
 	it.LifecycleIgnoreChanges = lifecycleIgnoreChangesForConvertedResource(r.TypeName, attrs)
 	return &it, ""

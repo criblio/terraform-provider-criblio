@@ -13,9 +13,7 @@ func TestNoExportTypes_ContainsExpectedTypes(t *testing.T) {
 		"criblio_group_system_settings":        true,
 		"criblio_key":                          true,
 		"criblio_lakehouse_dataset_connection": true,
-		"criblio_lookup_file":                  true,
 		"criblio_mapping_ruleset":              true,
-		"criblio_pack_lookups":                 true,
 		"criblio_search_usage_group":           true,
 		"criblio_workspace":                    true,
 	}
@@ -23,6 +21,13 @@ func TestNoExportTypes_ContainsExpectedTypes(t *testing.T) {
 		assert.True(t, expected[typ], "NoExportTypes should contain %q", typ)
 	}
 	assert.Len(t, NoExportTypes, len(expected), "NoExportTypes count should match expected")
+}
+
+func TestNoExportTypes_AllowsLookupFileTypes(t *testing.T) {
+	for _, typ := range NoExportTypes {
+		assert.NotEqual(t, "criblio_lookup_file", typ)
+		assert.NotEqual(t, "criblio_pack_lookups", typ)
+	}
 }
 
 func TestSkipExportIDs_ContainsExpectedTypesAndIDs(t *testing.T) {

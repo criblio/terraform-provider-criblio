@@ -66,6 +66,42 @@ func TestConvertUsesRESTGetPath(t *testing.T) {
 	assert.Equal(t, "default", pipeline.GroupID.ValueString())
 }
 
+func TestConvertLookupFileUsesWrappedGetItemContent(t *testing.T) {
+	const lookupID = "lookup dir/file.csv"
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "/api/v1/m/default/system/lookups/lookup%20dir%2Ffile.csv", r.URL.EscapedPath())
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"items":[{"id":"lookup dir/file.csv","content":"key,value\none,two","description":"from get","mode":"memory","version":"v1"}]}`))
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	e, ok := reg.ByTypeName("criblio_lookup_file")
+	require.True(t, ok)
+	require.NotEmpty(t, e.RESTGetPath)
+
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	model, err := Convert(context.Background(), client, e, map[string]string{
+		"GroupID": "default",
+		"ID":      lookupID,
+	})
+	require.NoError(t, err)
+	lookup, ok := model.(*provider.LookupFileResourceModel)
+	require.True(t, ok)
+	assert.Equal(t, lookupID, lookup.ID.ValueString())
+	assert.Equal(t, "default", lookup.GroupID.ValueString())
+	assert.Equal(t, "key,value\none,two", lookup.Content.ValueString())
+	assert.Equal(t, "from get", lookup.Description.ValueString())
+	assert.Equal(t, "memory", lookup.Mode.ValueString())
+	assert.Equal(t, "v1", lookup.Version.ValueString())
+}
+
 func TestConvertFromResponseBody_source(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)

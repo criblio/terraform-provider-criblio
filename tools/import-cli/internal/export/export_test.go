@@ -3,9 +3,13 @@ package export
 import (
 	"context"
 	"errors"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
@@ -43,6 +47,377 @@ func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	// List fails (e.g. nil client) → recorded as list skip, not as returned error.
 	assert.Len(t, result.ListSkipped, 1, "list failure should be recorded in ListSkipped")
 	assert.Equal(t, "criblio_source", result.ListSkipped[0].TypeName)
+}
+
+func TestToResourceItemsLookupFileFetchesContentFromGet(t *testing.T) {
+	getCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"lookup.csv","description":"metadata only","version":"list-version"}]}`))
+		case "/api/v1/m/default/system/lookups/lookup.csv":
+			getCalled = true
+			_, _ = w.Write([]byte(`{"items":[{"id":"lookup.csv","content":"key,value\none,two","description":"from get","mode":"memory","version":"get-version","pendingTask":{"id":"task-1","type":"upload"}}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_lookup_file", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.True(t, getCalled, "lookup file export should fetch the item by ID after list discovery")
+	require.Empty(t, result.ListSkipped)
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+
+	item := result.Items[0]
+	assert.Equal(t, "criblio_lookup_file", item.TypeName)
+	assert.Equal(t, "default", item.GroupID)
+	assert.Equal(t, `{"group_id":"default","id":"lookup.csv"}`, item.ImportID)
+	require.Len(t, item.Files, 1)
+	assert.Equal(t, "files/lookup_file_default_lookup_csv/lookup.csv", item.Files[0].Path)
+	assert.Equal(t, []byte("key,value\none,two"), item.Files[0].Content)
+	require.Equal(t, hcl.KindExpression, item.Attrs["content"].Kind)
+	assert.Equal(t, `file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`, item.Attrs["content"].Expr)
+	assert.Equal(t, "from get", item.Attrs["description"].String)
+	assert.Equal(t, "memory", item.Attrs["mode"].String)
+	assert.NotContains(t, item.Attrs, "pending_task")
+	assert.NotContains(t, item.Attrs, "version")
+}
+
+func TestToResourceItemsLookupFileDownloadsRawContentWhenGetOmitsContent(t *testing.T) {
+	rawCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"lookup.csv","description":"metadata only","version":"list-version"}]}`))
+		case "/api/v1/m/default/system/lookups/lookup.csv":
+			_, _ = w.Write([]byte(`{"items":[{"id":"lookup.csv","description":"from get","mode":"memory","version":"get-version"}]}`))
+		case "/api/v1/m/default/system/lookups/lookup.csv/content":
+			if r.URL.Query().Get("raw") == "true" {
+				rawCalled = true
+				w.Header().Set("Content-Type", "text/csv")
+				_, _ = w.Write([]byte("key,value\nraw,content"))
+				return
+			}
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_lookup_file", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.True(t, rawCalled, "lookup export should fall back to raw content download")
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+
+	item := result.Items[0]
+	require.Len(t, item.Files, 1)
+	assert.Equal(t, []byte("key,value\nraw,content"), item.Files[0].Content)
+	require.Equal(t, hcl.KindExpression, item.Attrs["content"].Kind)
+	assert.Equal(t, `file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`, item.Attrs["content"].Expr)
+}
+
+func TestToResourceItemsLookupFileSkipsBuiltIns(t *testing.T) {
+	defaultGetCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"builtin_lib.csv","lib":"cribl"},{"id":"builtin_tag.csv","tags":"cribl:default"},{"id":"cribl.prefixed.csv"},{"id":"service_names_port_numbers.csv"},{"id":"my_id.csv"}]}`))
+		case "/api/v1/m/default/system/lookups/my_id.csv":
+			_, _ = w.Write([]byte(`{"items":[{"id":"my_id.csv","content":"key,value\none,two","description":"user lookup","mode":"memory"}]}`))
+		case "/api/v1/m/default/system/lookups/service_names_port_numbers.csv":
+			defaultGetCalled = true
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_lookup_file", Count: 3}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.Empty(t, result.ListSkipped)
+	require.Len(t, result.Items, 1)
+	require.False(t, defaultGetCalled, "known default lookups should skip before per-item conversion")
+
+	item := result.Items[0]
+	assert.Equal(t, "my_id.csv", item.Attrs["id"].String)
+	assert.Equal(t, `{"group_id":"default","id":"my_id.csv"}`, item.ImportID)
+	require.Len(t, result.ConvertSkipped, 1)
+	assert.Contains(t, result.ConvertSkipped[0], "service_names_port_numbers.csv")
+	assert.Contains(t, result.ConvertSkipped[0], "built-in default lookup")
+}
+
+func TestToResourceItemsLookupFileIncludeDefaultIDOverride(t *testing.T) {
+	contentCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"service_names_port_numbers.csv","size":23156}]}`))
+		case "/api/v1/m/default/system/lookups/service_names_port_numbers.csv":
+			_, _ = w.Write([]byte(`{"items":[{"id":"service_names_port_numbers.csv","size":23156}]}`))
+		case "/api/v1/m/default/system/lookups/service_names_port_numbers.csv/content":
+			contentCalled = true
+			w.Header().Set("Content-Type", "text/csv")
+			_, _ = w.Write([]byte("name,port\nhttp,80"))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_lookup_file", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		ParseIncludeDefaultIDs([]string{"criblio_lookup_file:service_names_port_numbers.csv"}),
+		nil,
+	)
+	require.NoError(t, err)
+	require.True(t, contentCalled)
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+
+	item := result.Items[0]
+	assert.Equal(t, "service_names_port_numbers.csv", item.Attrs["id"].String)
+	require.Len(t, item.Files, 1)
+	assert.Equal(t, []byte("name,port\nhttp,80"), item.Files[0].Content)
+}
+
+func TestToResourceItemsLookupFileSkipsCriblDefaultTag(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"new_builtin.csv"}]}`))
+		case "/api/v1/m/default/system/lookups/new_builtin.csv":
+			_, _ = w.Write([]byte(`{"items":[{"id":"new_builtin.csv","tags":"cribl:default","mode":"memory"}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_lookup_file", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.Empty(t, result.Items)
+	require.Len(t, result.ConvertSkipped, 1)
+	assert.Contains(t, result.ConvertSkipped[0], "cribl:default tag")
+}
+
+func TestToResourceItemsPackLookupsFetchesContentFromGet(t *testing.T) {
+	getCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/packs":
+			_, _ = w.Write([]byte(`{"items":[{"id":"knowledge"}]}`))
+		case "/api/v1/m/default/p/knowledge/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"pack_lookup.csv","description":"metadata only","version":"list-version"}]}`))
+		case "/api/v1/m/default/p/knowledge/system/lookups/pack_lookup.csv":
+			getCalled = true
+			_, _ = w.Write([]byte(`{"items":[{"id":"pack_lookup.csv","content":"key,value\nalpha,beta","description":"from get","mode":"memory","version":"get-version","pendingTask":{"id":"task-1","type":"upload"}}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_pack_lookups", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.True(t, getCalled, "pack lookup export should fetch the item by ID after list discovery")
+	require.Empty(t, result.ListSkipped)
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+
+	item := result.Items[0]
+	assert.Equal(t, "criblio_pack_lookups", item.TypeName)
+	assert.Equal(t, "default", item.GroupID)
+	assert.Equal(t, `{"group_id":"default","id":"pack_lookup.csv","pack":"knowledge"}`, item.ImportID)
+	assert.Equal(t, "default", item.Attrs["group_id"].String)
+	assert.Equal(t, "knowledge", item.Attrs["pack"].String)
+	require.Len(t, item.Files, 1)
+	assert.Equal(t, "files/pack_lookups_default_pack_lookup_csv_knowledge/pack_lookup.csv", item.Files[0].Path)
+	assert.Equal(t, []byte("key,value\nalpha,beta"), item.Files[0].Content)
+	require.Equal(t, hcl.KindExpression, item.Attrs["content"].Kind)
+	assert.Equal(t, `file("${path.module}/files/pack_lookups_default_pack_lookup_csv_knowledge/pack_lookup.csv")`, item.Attrs["content"].Expr)
+	assert.Equal(t, "from get", item.Attrs["description"].String)
+	assert.Equal(t, "memory", item.Attrs["mode"].String)
+	assert.NotContains(t, item.Attrs, "pending_task")
+	assert.NotContains(t, item.Attrs, "version")
+}
+
+func TestToResourceItemsPackLookupsDownloadsRawContentWhenGetOmitsContent(t *testing.T) {
+	rawCalled := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/packs":
+			_, _ = w.Write([]byte(`{"items":[{"id":"knowledge"}]}`))
+		case "/api/v1/m/default/p/knowledge/system/lookups":
+			_, _ = w.Write([]byte(`{"items":[{"id":"pack_lookup.csv","description":"metadata only","version":"list-version"}]}`))
+		case "/api/v1/m/default/p/knowledge/system/lookups/pack_lookup.csv":
+			_, _ = w.Write([]byte(`{"items":[{"id":"pack_lookup.csv","description":"from get","mode":"memory","version":"get-version"}]}`))
+		case "/api/v1/m/default/p/knowledge/system/lookups/pack_lookup.csv/content":
+			if r.URL.Query().Get("raw") == "true" {
+				rawCalled = true
+				w.Header().Set("Content-Type", "text/csv")
+				_, _ = w.Write([]byte("key,value\nraw,pack"))
+				return
+			}
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	result, err := ToResourceItems(
+		context.Background(),
+		client,
+		reg,
+		[]discovery.Result{{TypeName: "criblio_pack_lookups", Count: 1}},
+		[]string{"default"},
+		nil,
+		1,
+		false,
+		IncludeOverride{},
+		nil,
+	)
+	require.NoError(t, err)
+	require.True(t, rawCalled, "pack lookup export should fall back to raw content download")
+	require.Empty(t, result.ConvertSkipped)
+	require.Len(t, result.Items, 1)
+
+	item := result.Items[0]
+	require.Len(t, item.Files, 1)
+	assert.Equal(t, []byte("key,value\nraw,pack"), item.Files[0].Content)
+	require.Equal(t, hcl.KindExpression, item.Attrs["content"].Kind)
+	assert.Equal(t, `file("${path.module}/files/pack_lookups_default_pack_lookup_csv_knowledge/pack_lookup.csv")`, item.Attrs["content"].Expr)
 }
 
 func buildTestRegistry(t *testing.T) *registry.Registry {
@@ -313,8 +688,9 @@ func TestSkipResourceByID(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default", "product": "stream"}
 		assert.False(t, skipResourceByID("criblio_group", idMap))
 	})
-	t.Run("skip criblio_pack_lookups when id starts with cribl.", func(t *testing.T) {
-		assert.True(t, skipResourceByID("criblio_pack_lookups", map[string]string{"id": "cribl.something"}))
+	t.Run("not skip user-created lookup files", func(t *testing.T) {
+		assert.False(t, skipResourceByID("criblio_lookup_file", map[string]string{"id": "my_id.csv"}))
+		assert.False(t, skipResourceByID("criblio_pack_lookups", map[string]string{"id": "test.csv"}))
 	})
 	t.Run("skip criblio_pack_vars when id contains dots", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_pack_vars", map[string]string{"id": "foo.bar.baz"}))
@@ -403,11 +779,17 @@ func TestDefaultResource(t *testing.T) {
 		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblLogs"}, attrs, noOverride))
 		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblMetrics"}, attrs, noOverride))
 	})
+	t.Run("skip default lookup file IDs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		assert.True(t, DefaultResource("criblio_lookup_file", map[string]string{"id": "service_names_port_numbers.csv"}, attrs, noOverride))
+		assert.True(t, DefaultResource("criblio_pack_lookups", map[string]string{"id": "xsiam_name_vendor_products.csv"}, attrs, noOverride))
+	})
 	t.Run("not skip user-created resources", func(t *testing.T) {
 		attrs := map[string]hcl.Value{}
 		assert.False(t, DefaultResource("criblio_pipeline", map[string]string{"id": "my_custom_pipeline"}, attrs, noOverride))
 		assert.False(t, DefaultResource("criblio_grok", map[string]string{"id": "my_grok"}, attrs, noOverride))
 		assert.False(t, DefaultResource("criblio_source", map[string]string{"id": "my_source"}, attrs, noOverride))
+		assert.False(t, DefaultResource("criblio_lookup_file", map[string]string{"id": "my_id.csv"}, attrs, noOverride))
 	})
 	t.Run("not skip when tags is empty list", func(t *testing.T) {
 		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindList, List: []hcl.Value{}}}
@@ -429,6 +811,12 @@ func TestDefaultResource(t *testing.T) {
 		override := ParseIncludeDefaultIDs([]string{"devnull"})
 		assert.False(t, DefaultResource("criblio_pipeline", map[string]string{"id": "devnull"}, attrs, override))
 		assert.False(t, DefaultResource("criblio_destination", map[string]string{"id": "devnull"}, attrs, override))
+	})
+	t.Run("include override bypasses default lookup IDs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		override := ParseIncludeDefaultIDs([]string{"criblio_lookup_file:service_names_port_numbers.csv"})
+		assert.False(t, DefaultResource("criblio_lookup_file", map[string]string{"id": "service_names_port_numbers.csv"}, attrs, override))
+		assert.True(t, DefaultResource("criblio_pack_lookups", map[string]string{"id": "service_names_port_numbers.csv"}, attrs, override))
 	})
 	t.Run("include override matches criblio_routes group id", func(t *testing.T) {
 		attrs := map[string]hcl.Value{}

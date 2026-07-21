@@ -96,6 +96,14 @@ var DefaultSearchSavedQueryIDs = map[string]bool{
 	"cribl_search_started_1h":  true,
 }
 
+// DefaultLookupFileIDs are built-in lookup files that ship with Cribl but are not
+// marked with lib/tags in the lookup API responses.
+var DefaultLookupFileIDs = map[string]bool{
+	"model_relative_entropy_top_domains.csv": true,
+	"service_names_port_numbers.csv":         true,
+	"xsiam_name_vendor_products.csv":         true,
+}
+
 // DefaultDestinationIDs are built-in destination IDs that are never imported.
 // We skip these when listing destinations so only user-created destinations are exported.
 var DefaultDestinationIDs = map[string]bool{

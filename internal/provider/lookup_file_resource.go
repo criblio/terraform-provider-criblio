@@ -256,10 +256,8 @@ func applyLookupFileAPIToState(api *LookupFileModel, state *LookupFileModel, pre
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Content.IsNull() || state.Content.IsUnknown())) {
-		if !api.Content.IsNull() && !api.Content.IsUnknown() {
-			state.Content = api.Content
-		}
+	if !api.Content.IsNull() && !api.Content.IsUnknown() {
+		state.Content = api.Content
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
