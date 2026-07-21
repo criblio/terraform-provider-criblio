@@ -204,6 +204,24 @@ func callRESTGetByID(ctx context.Context, client *importclient.Client, e registr
 	if itemErr != nil {
 		return nil, err
 	}
+	if rawItems, ok := (*item)["items"]; ok {
+		var items []json.RawMessage
+		if unmarshalErr := json.Unmarshal(rawItems, &items); unmarshalErr != nil {
+			return nil, fmt.Errorf("%s: decode REST response items: %w", e.TypeName, unmarshalErr)
+		}
+		if len(items) == 0 {
+			return nil, fmt.Errorf("%s: empty REST response", e.TypeName)
+		}
+		if id := requestParams["ID"]; id != "" {
+			for _, raw := range items {
+				var object map[string]any
+				if json.Unmarshal(raw, &object) == nil && rawString(object, "id", "ID", "Id", "keyID", "keyId", "name") == id {
+					return raw, nil
+				}
+			}
+		}
+		return items[0], nil
+	}
 	return json.Marshal(item)
 }
 

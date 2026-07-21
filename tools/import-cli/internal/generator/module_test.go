@@ -113,6 +113,85 @@ func TestWriteModuleDirectory_parseable_hcl(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestWriteModuleDirectory_writesResourceFiles(t *testing.T) {
+	tmp := t.TempDir()
+	items := []ResourceItem{
+		{
+			TypeName: "criblio_lookup_file",
+			Name:     "lookup_file_default_lookup_csv",
+			Attrs: map[string]hcl.Value{
+				"id":       {Kind: hcl.KindString, String: "lookup.csv"},
+				"group_id": {Kind: hcl.KindString, String: "default"},
+				"content":  {Kind: hcl.KindExpression, Expr: `file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`},
+			},
+			Files: []ResourceFile{{
+				Path:    "files/lookup_file_default_lookup_csv/lookup.csv",
+				Content: []byte("key,value\none,two"),
+			}},
+			ImportID: `{"group_id":"default","id":"lookup.csv"}`,
+		},
+	}
+
+	err := WriteModuleDirectory(tmp, items, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+
+	moduleDir := filepath.Join(tmp, "lookup_file")
+	content, err := os.ReadFile(filepath.Join(moduleDir, "files", "lookup_file_default_lookup_csv", "lookup.csv"))
+	require.NoError(t, err)
+	assert.Equal(t, "key,value\none,two", string(content))
+
+	mainBytes, err := os.ReadFile(filepath.Join(moduleDir, "main.tf"))
+	require.NoError(t, err)
+	assert.Contains(t, string(mainBytes), `content  = file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`)
+	assert.NoError(t, hcl.ParseHCL(mainBytes, "main.tf"))
+}
+
+func TestWriteModuleDirectory_rebasesResourceFilesAfterNameDedup(t *testing.T) {
+	tmp := t.TempDir()
+	items := []ResourceItem{
+		{
+			TypeName: "criblio_lookup_file",
+			Name:     "lookup_file_default_lookup_csv",
+			Attrs: map[string]hcl.Value{
+				"id":       {Kind: hcl.KindString, String: "lookup.csv"},
+				"group_id": {Kind: hcl.KindString, String: "default"},
+				"content":  {Kind: hcl.KindExpression, Expr: `file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`},
+			},
+			Files: []ResourceFile{{
+				Path:    "files/lookup_file_default_lookup_csv/lookup.csv",
+				Content: []byte("key,value\none,two"),
+			}},
+		},
+		{
+			TypeName: "criblio_lookup_file",
+			Name:     "lookup_file_default_lookup_csv",
+			Attrs: map[string]hcl.Value{
+				"id":       {Kind: hcl.KindString, String: "lookup.csv"},
+				"group_id": {Kind: hcl.KindString, String: "default"},
+				"content":  {Kind: hcl.KindExpression, Expr: `file("${path.module}/files/lookup_file_default_lookup_csv/lookup.csv")`},
+			},
+			Files: []ResourceFile{{
+				Path:    "files/lookup_file_default_lookup_csv/lookup.csv",
+				Content: []byte("key,value\nthree,four"),
+			}},
+		},
+	}
+
+	err := WriteModuleDirectory(tmp, items, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+
+	moduleDir := filepath.Join(tmp, "lookup_file")
+	content, err := os.ReadFile(filepath.Join(moduleDir, "files", "lookup_file_default_lookup_csv_2", "lookup.csv"))
+	require.NoError(t, err)
+	assert.Equal(t, "key,value\nthree,four", string(content))
+
+	mainBytes, err := os.ReadFile(filepath.Join(moduleDir, "main.tf"))
+	require.NoError(t, err)
+	assert.Contains(t, string(mainBytes), `resource "criblio_lookup_file" "lookup_file_default_lookup_csv_2"`)
+	assert.Contains(t, string(mainBytes), `content  = file("${path.module}/files/lookup_file_default_lookup_csv_2/lookup.csv")`)
+	assert.NoError(t, hcl.ParseHCL(mainBytes, "main.tf"))
+}
+
 func TestWriteModuleDirectory_rewrites_pipeline_processor_refs(t *testing.T) {
 	tmp := t.TempDir()
 	items := []ResourceItem{

@@ -26,9 +26,11 @@ func BuildImportID(format string, identifiers map[string]string) (string, error)
 			if k == "" {
 				continue
 			}
-			if v, ok := identifiers[k]; ok {
-				obj[k] = v
+			v, ok := identifiers[k]
+			if !ok || v == "" {
+				return "", fmt.Errorf("identifier %q not found", k)
 			}
+			obj[k] = v
 		}
 		// Sort keys for deterministic JSON
 		names := make([]string, 0, len(obj))

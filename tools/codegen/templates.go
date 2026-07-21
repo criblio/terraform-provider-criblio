@@ -1213,6 +1213,11 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 	for _, id := range lookupFileAPIIDs(configuredID) {
 		apiModel, err := restclient.Get[LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
 		if err == nil {
+			if content, contentErr := downloadLookupFileContent(ctx, a.client, model.GroupID.ValueString(), id); contentErr != nil {
+				return nil, contentErr
+			} else if content != nil {
+				apiModel.Content = types.StringValue(*content)
+			}
 			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
@@ -1224,9 +1229,15 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 {{- else if eq .StructName "PackLookups" }}
 	configuredID := model.ID.ValueString()
 	var lastErr error
+	packID := resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())
 	for _, id := range lookupFileAPIIDs(configuredID) {
-		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), packID, id))
 		if err == nil {
+			if content, contentErr := downloadPackLookupFileContent(ctx, a.client, model.GroupID.ValueString(), packID, id); contentErr != nil {
+				return nil, contentErr
+			} else if content != nil {
+				apiModel.Content = types.StringValue(*content)
+			}
 			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
@@ -1447,6 +1458,19 @@ func uploadLookupFileContent(ctx context.Context, client *restclient.Client, mod
 	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
 }
 
+func downloadLookupFileContent(ctx context.Context, client *restclient.Client, groupID, id string) (*string, error) {
+	filename := lookupFileUploadFilename(id)
+	body, err := restclient.GetRaw(ctx, client, fmt.Sprintf("/m/%s/system/lookups/%s/content?raw=true", url.PathEscape(groupID), url.PathEscape(filename)))
+	if err != nil {
+		if restclient.IsNotFound(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	content := string(body)
+	return &content, nil
+}
+
 func normalizeLookupFileAPIModel(model *LookupFileModel, terraformID string) *LookupFileModel {
 	if model == nil {
 		return nil
@@ -1466,6 +1490,19 @@ func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client,
 	filename := lookupFileUploadFilename(id)
 	path := fmt.Sprintf("/m/%s/p/%s/system/lookups?filename=%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, client, model.GroupID.ValueString(), model.Pack.ValueString()), url.QueryEscape(filename))
 	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func downloadPackLookupFileContent(ctx context.Context, client *restclient.Client, groupID, packID, id string) (*string, error) {
+	filename := lookupFileUploadFilename(id)
+	body, err := restclient.GetRaw(ctx, client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s/content?raw=true", url.PathEscape(groupID), url.PathEscape(packID), url.PathEscape(filename)))
+	if err != nil {
+		if restclient.IsNotFound(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	content := string(body)
+	return &content, nil
 }
 
 func normalizePackLookupsAPIModel(model *PackLookupsModel, terraformID string) *PackLookupsModel {
@@ -1973,6 +2010,11 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	sync{{ .StructName }}LegacyItems(api, state)
 {{- end }}
 {{- range .Fields }}
+{{- if and (or (eq $.StructName "LookupFile") (eq $.StructName "PackLookups")) (eq .TerraformName "content") }}
+	if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = api.{{ .GoName }}
+	}
+{{- else }}
 {{- if not .Computed }}
 	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())){{- if nestedObjectList . }} || (!api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() && !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0){{- end }} {
 {{- end }}
@@ -2031,6 +2073,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- if not .Computed }}
 	}
+{{- end }}
 {{- end }}
 {{- if nestedObjectList . }}
 	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {

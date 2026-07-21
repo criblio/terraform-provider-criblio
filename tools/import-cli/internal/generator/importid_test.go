@@ -33,4 +33,9 @@ func TestBuildImportID(t *testing.T) {
 		_, err := BuildImportID("", map[string]string{"id": "x"})
 		require.Error(t, err)
 	})
+	t.Run("json_missing_identifier_error", func(t *testing.T) {
+		_, err := BuildImportID("json:group_id,id", map[string]string{"id": "lookup.csv"})
+		require.Error(t, err)
+		assert.Contains(t, err.Error(), `identifier "group_id" not found`)
+	})
 }

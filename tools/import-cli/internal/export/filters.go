@@ -100,12 +100,6 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if pack := idMap["pack"]; pack != "" && custom.SkipPacks[pack] {
 		return true
 	}
-	// criblio_pack_lookups: skip built-in lookups (id starts with "cribl."); provider id pattern rejects them.
-	if typeName == "criblio_pack_lookups" {
-		if id := idMap["id"]; id != "" && strings.HasPrefix(id, "cribl.") {
-			return true
-		}
-	}
 	// criblio_pack_vars: skip vars whose id contains dots (e.g. cribl.my_globalvar); provider id pattern is ^[a-zA-Z0-9_-]+$
 	if typeName == "criblio_pack_vars" {
 		if id := idMap["id"]; id != "" && strings.Contains(id, ".") {
@@ -138,6 +132,21 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	return false
 }
 
+func isLookupFileType(typeName string) bool {
+	return typeName == "criblio_lookup_file" || typeName == "criblio_pack_lookups"
+}
+
+func defaultLookupFileByID(typeName string, idMap map[string]string, includeOverride IncludeOverride) bool {
+	if !isLookupFileType(typeName) {
+		return false
+	}
+	id := idMap["id"]
+	if id == "" || includeOverride.Includes(typeName, id) {
+		return false
+	}
+	return custom.DefaultLookupFileIDs[id]
+}
+
 func skipResourceWhenLibCribl(attrs map[string]hcl.Value) bool {
 	v, ok := attrs["lib"]
 	if !ok || v.Kind != hcl.KindString {
@@ -160,6 +169,8 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 	}
 	pack := idMap["pack"]
 	switch typeName {
+	case "criblio_lookup_file", "criblio_pack_lookups":
+		return custom.DefaultLookupFileIDs[id]
 	case "criblio_destination":
 		return custom.DefaultDestinationIDs[id]
 	case "criblio_pack_destination":

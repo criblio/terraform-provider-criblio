@@ -170,6 +170,26 @@ func TestIdentifiersFromRawItems_skipsLibCribl(t *testing.T) {
 	assert.Equal(t, "default", ids[0]["group_id"])
 }
 
+func TestIdentifiersFromRawItems_skipsBuiltInLookupFiles(t *testing.T) {
+	reg := mustBuildRegistry(t, context.Background())
+	e, ok := reg.ByTypeName("criblio_lookup_file")
+	require.True(t, ok, "criblio_lookup_file must be in registry")
+
+	items := []json.RawMessage{
+		[]byte(`{"id":"lib_builtin.csv","lib":"cribl"}`),
+		[]byte(`{"id":"library_builtin.csv","library":"cribl"}`),
+		[]byte(`{"id":"tag_builtin.csv","tags":"cribl:default"}`),
+		[]byte(`{"id":"list_tag_builtin.csv","tags":["other","cribl:default"]}`),
+		[]byte(`{"id":"cribl.prefixed.csv"}`),
+		[]byte(`{"id":"user_lookup.csv"}`),
+	}
+	ids, err := identifiersFromRawItems(items, map[string]string{"group_id": "default"}, e)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+	assert.Equal(t, "user_lookup.csv", ids[0]["id"])
+	assert.Equal(t, "default", ids[0]["group_id"])
+}
+
 func TestRegistryImportableEntriesHaveRESTGetPath(t *testing.T) {
 	for _, e := range mustBuildRegistry(t, context.Background()).Entries() {
 		if e.ImportIDFormat == "" || e.TypeName == "criblio_lakehouse_dataset_connection" {

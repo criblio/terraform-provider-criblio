@@ -557,6 +557,9 @@ func TestRenderedSnippets(t *testing.T) {
 	packLookups := parser.ResourceDef{
 		StructName: "PackLookups",
 		TypeName:   "criblio_pack_lookups",
+		Fields: []parser.FieldDef{
+			{APIName: "content", TerraformName: "content", GoName: "Content", Type: "string", Optional: true},
+		},
 		Create: parser.OperationDef{
 			Method: "POST",
 			Path:   "/m/{groupId}/p/{pack}/system/lookups",
@@ -597,9 +600,15 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, packLookupsClient, `"net/url"`)
 	assertContains(t, packLookupsClient, `if err := uploadPackLookupFileContent(ctx, a.client, model, id); err != nil`)
 	assertContains(t, packLookupsClient, `for _, id := range lookupFileAPIIDs(configuredID)`)
+	assertContains(t, packLookupsClient, `downloadPackLookupFileContent(ctx, a.client, model.GroupID.ValueString(), packID, id)`)
 	assertContains(t, packLookupsClient, `return normalizePackLookupsAPIModel(apiModel, configuredID), nil`)
 	assertContains(t, packLookupsClient, `func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client, model PackLookupsModel, id string) error`)
+	assertContains(t, packLookupsClient, `func downloadPackLookupFileContent(ctx context.Context, client *restclient.Client, groupID, packID, id string) (*string, error)`)
 	assertContains(t, packLookupsClient, `url.QueryEscape(filename)`)
+	packLookupsResource := renderTemplate(t, "resource", packLookups)
+	assertContains(t, packLookupsResource, `if !api.Content.IsNull() && !api.Content.IsUnknown() {`)
+	assertContains(t, packLookupsResource, `state.Content = api.Content`)
+	assertNotContains(t, packLookupsResource, `state.Content.IsNull() || state.Content.IsUnknown()`)
 
 	fixedAPIField := parser.ResourceDef{
 		Name:     "searchengine",

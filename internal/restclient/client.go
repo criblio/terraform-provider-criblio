@@ -110,6 +110,11 @@ func Get[T any](ctx context.Context, c *Client, path string) (*T, error) {
 	return decodeResponse[T](path, body)
 }
 
+// GetRaw sends a GET request and returns the raw response body.
+func GetRaw(ctx context.Context, c *Client, path string) ([]byte, error) {
+	return do(ctx, c, http.MethodGet, path, "", nil)
+}
+
 // Post sends a POST request with a JSON body and decodes the response.
 func Post[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
 	responseBody, err := doJSON(ctx, c, http.MethodPost, path, body)
