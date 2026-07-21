@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 	"unicode"
 
@@ -382,6 +383,7 @@ func (m RoutesModel) MarshalJSON() ([]byte, error) {
 		}
 		output["routes"] = value
 	}
+	normalizeRoutesPayload(output)
 	return json.Marshal(output)
 }
 func (m RoutesModel) updateBody() (map[string]any, error) {
@@ -413,7 +415,126 @@ func (m RoutesModel) updateBody() (map[string]any, error) {
 		}
 		output["routes"] = value
 	}
+	normalizeRoutesPayload(output)
 	return output, nil
+}
+func normalizeRoutesPayload(output map[string]any) {
+	normalizeRouteComments(output)
+	normalizeRouteGroups(output)
+	normalizeRouteEntries(output)
+}
+
+func normalizeRouteComments(output map[string]any) {
+	rawComments, ok := output["comments"].([]any)
+	if !ok {
+		return
+	}
+
+	claimed := make(map[int]bool)
+	for _, raw := range rawComments {
+		comment, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := comment["index"]; hasIndex {
+			switch v := idx.(type) {
+			case int:
+				claimed[v] = true
+			case int64:
+				claimed[int(v)] = true
+			case float64:
+				claimed[int(v)] = true
+			}
+		}
+	}
+
+	next := 0
+	for idx, raw := range rawComments {
+		comment, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if id, hasID := comment["id"]; !hasID || id == nil || id == "" {
+			comment["id"] = fmt.Sprintf("tf-comment-%d", idx)
+		}
+		if idx, hasIndex := comment["index"]; !hasIndex || idx == nil {
+			for claimed[next] {
+				next++
+			}
+			comment["index"] = next
+			claimed[next] = true
+			next++
+		}
+		rawComments[idx] = comment
+	}
+	output["comments"] = rawComments
+}
+
+func normalizeRouteGroups(output map[string]any) {
+	rawGroups, ok := output["groups"].(map[string]any)
+	if !ok {
+		return
+	}
+
+	keys := make([]string, 0, len(rawGroups))
+	for key := range rawGroups {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	claimed := make(map[int]bool)
+	for _, key := range keys {
+		group, ok := rawGroups[key].(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := group["index"]; hasIndex {
+			switch v := idx.(type) {
+			case int:
+				claimed[v] = true
+			case int64:
+				claimed[int(v)] = true
+			case float64:
+				claimed[int(v)] = true
+			}
+		}
+	}
+
+	next := 0
+	for _, key := range keys {
+		group, ok := rawGroups[key].(map[string]any)
+		if !ok {
+			continue
+		}
+		if idx, hasIndex := group["index"]; !hasIndex || idx == nil {
+			for claimed[next] {
+				next++
+			}
+			group["index"] = next
+			claimed[next] = true
+			next++
+		}
+		rawGroups[key] = group
+	}
+	output["groups"] = rawGroups
+}
+
+func normalizeRouteEntries(output map[string]any) {
+	rawRoutes, ok := output["routes"].([]any)
+	if !ok {
+		return
+	}
+	for idx, raw := range rawRoutes {
+		route, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if groupID, hasGroupID := route["groupId"]; !hasGroupID || groupID == nil || groupID == "" {
+			route["groupId"] = "default"
+		}
+		rawRoutes[idx] = route
+	}
+	output["routes"] = rawRoutes
 }
 
 func (m *RoutesModel) UnmarshalJSON(data []byte) error {

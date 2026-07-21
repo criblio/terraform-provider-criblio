@@ -52,6 +52,7 @@ Read-Only:
 Read-Only:
 
 - `description` (String) Brief description of the Route Group.
+- `disabled` (Boolean) If <code>true</code>, disable the Route Group. Otherwise, <code>false</code>.
 - `index` (Integer) Relative position of the Route Group among all Route Groups. Routes are evaluated in ascending order according to the index value of their Route Group.
 - `name` (String) Name of the Route Group.
 

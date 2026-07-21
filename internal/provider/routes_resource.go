@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sort"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
@@ -61,19 +62,19 @@ func (r *RoutesResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 						"group_id": schema.StringAttribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Unique identifier for the Route Group that the Route is associated with.`,
 						},
 						"id": schema.StringAttribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Unique identifier for the comment.`,
 						},
 						"index": schema.Int64Attribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Relative position of the comment among all comments for the Route.`,
 						},
@@ -104,7 +105,7 @@ func (r *RoutesResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 						"index": schema.Int64Attribute{
 							Required:    false,
-							Optional:    false,
+							Optional:    true,
 							Computed:    true,
 							Description: `Relative position of the Route Group among all Route Groups. Routes are evaluated in ascending order according to the index value of their Route Group.`,
 						},
@@ -393,6 +394,9 @@ func isRoutesImportState(state *RoutesModel) bool {
 	if state.Routes.IsNull() || state.Routes.IsUnknown() {
 		return true
 	}
+	if len(state.Routes.Elements()) == 0 {
+		return true
+	}
 	return false
 }
 
@@ -442,8 +446,20 @@ func applyRoutesAPIToState(api *RoutesModel, state *RoutesModel, preserveInputs 
 	} else if len(state.Routes.Elements()) == 0 {
 		state.Routes = types.ListValueMust(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}, nil)
 	}
+	if !api.Comments.IsNull() && !api.Comments.IsUnknown() && !state.Comments.IsNull() && !state.Comments.IsUnknown() {
+		state.Comments = routesListWithKnownAPIValues(api.Comments, state.Comments)
+	}
+	if !api.Groups.IsNull() && !api.Groups.IsUnknown() && !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithKnownAPIValues(api.Groups, state.Groups)
+	}
+	if !state.Groups.IsNull() && !state.Groups.IsUnknown() {
+		state.Groups = routesGroupsMapWithDeterministicIndexes(state.Groups)
+	}
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
+	if (!preserveInputs || fillMissingInputs) && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithDefaultGroupID(state.Routes)
 	}
 }
 
@@ -491,6 +507,143 @@ func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) 
 	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
 	if diags.HasError() {
 		return stateRoutes
+	}
+	return value
+}
+
+func routesListWithDefaultGroupID(routes types.List) types.List {
+	elements := routes.Elements()
+	for index, element := range elements {
+		routeObject, ok := element.(types.Object)
+		if !ok || routeObject.IsNull() || routeObject.IsUnknown() {
+			continue
+		}
+		attributes := routeObject.Attributes()
+		groupID, hasGroupID := attributes["group_id"]
+		if hasGroupID && !groupID.IsNull() && !groupID.IsUnknown() {
+			continue
+		}
+		attributes["group_id"] = types.StringValue("default")
+		updated, diags := types.ObjectValue(routeObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = updated
+	}
+	value, diags := types.ListValue(routes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return routes
+	}
+	return value
+}
+
+func routesGroupsMapWithKnownAPIValues(apiGroups types.Map, stateGroups types.Map) types.Map {
+	elements := stateGroups.Elements()
+	apiElements := apiGroups.Elements()
+	for key, stateElement := range elements {
+		apiElement, ok := apiElements[key]
+		if !ok {
+			continue
+		}
+		stateObject, ok := stateElement.(types.Object)
+		if !ok || stateObject.IsNull() || stateObject.IsUnknown() {
+			continue
+		}
+		apiObject, ok := apiElement.(types.Object)
+		if !ok || apiObject.IsNull() || apiObject.IsUnknown() {
+			continue
+		}
+		attributes := stateObject.Attributes()
+		apiAttributes := apiObject.Attributes()
+		changed := false
+		for name, stateAttribute := range attributes {
+			if !stateAttribute.IsUnknown() {
+				continue
+			}
+			apiAttribute, ok := apiAttributes[name]
+			if !ok || apiAttribute.IsUnknown() {
+				continue
+			}
+			attributes[name] = apiAttribute
+			changed = true
+		}
+		if !changed {
+			continue
+		}
+		merged, diags := types.ObjectValue(stateObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[key] = merged
+	}
+	value, diags := types.MapValue(stateGroups.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateGroups
+	}
+	return value
+}
+
+func routesGroupsMapWithDeterministicIndexes(stateGroups types.Map) types.Map {
+	elements := stateGroups.Elements()
+	keys := make([]string, 0, len(elements))
+	for key := range elements {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	claimed := make(map[int64]bool)
+	for _, key := range keys {
+		groupValue, ok := elements[key]
+		if !ok {
+			continue
+		}
+		groupObject, ok := groupValue.(types.Object)
+		if !ok || groupObject.IsNull() || groupObject.IsUnknown() {
+			continue
+		}
+		attributes := groupObject.Attributes()
+		groupIndex, ok := attributes["index"]
+		if !ok || groupIndex.IsUnknown() || groupIndex.IsNull() {
+			continue
+		}
+		intVal, ok := groupIndex.(types.Int64)
+		if !ok {
+			continue
+		}
+		claimed[intVal.ValueInt64()] = true
+	}
+
+	var next int64
+	for _, key := range keys {
+		groupValue, ok := elements[key]
+		if !ok {
+			continue
+		}
+		groupObject, ok := groupValue.(types.Object)
+		if !ok || groupObject.IsNull() || groupObject.IsUnknown() {
+			continue
+		}
+		attributes := groupObject.Attributes()
+		groupIndex, ok := attributes["index"]
+		if !ok || (!groupIndex.IsUnknown() && !groupIndex.IsNull()) {
+			continue
+		}
+		for claimed[next] {
+			next++
+		}
+		attributes["index"] = types.Int64Value(next)
+		claimed[next] = true
+		next++
+		merged, diags := types.ObjectValue(groupObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[key] = merged
+	}
+
+	value, diags := types.MapValue(stateGroups.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateGroups
 	}
 	return value
 }

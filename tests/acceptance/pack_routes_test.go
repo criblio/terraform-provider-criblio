@@ -44,6 +44,7 @@ func TestPackRoutesGenerated(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"items",
+					"routes.0.group_id",
 				},
 			},
 		},
