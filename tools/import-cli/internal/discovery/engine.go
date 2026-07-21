@@ -374,6 +374,8 @@ func identifiersFromRawItems(items []json.RawMessage, scope map[string]string, e
 
 func shouldSkipRawID(typeName, id string, item map[string]any) bool {
 	switch {
+	case isLookupFileType(typeName) && (strings.HasPrefix(id, "cribl.") || rawHasCriblDefaultTag(item)):
+		return true
 	case typeName == "criblio_search_dataset" && rawHasCriblDefaultTag(item):
 		return true
 	case typeName == "criblio_search_dataset_provider" && custom.DefaultSearchDatasetProviderIDs[id]:
@@ -390,6 +392,10 @@ func shouldSkipRawID(typeName, id string, item map[string]any) bool {
 		return true
 	}
 	return false
+}
+
+func isLookupFileType(typeName string) bool {
+	return typeName == "criblio_lookup_file" || typeName == "criblio_pack_lookups"
 }
 
 func listLakehouseDatasetConnectionIdentifiers(ctx context.Context, client *importclient.Client) ([]map[string]string, error) {
@@ -520,13 +526,18 @@ func rawString(item map[string]any, keys ...string) string {
 }
 
 func rawHasCriblDefaultTag(item map[string]any) bool {
-	tags, ok := item["tags"].([]any)
+	tags, ok := item["tags"]
 	if !ok {
 		return false
 	}
-	for _, tag := range tags {
-		if s, ok := tag.(string); ok && strings.EqualFold(s, custom.CriblDefaultTag) {
-			return true
+	switch typed := tags.(type) {
+	case string:
+		return strings.EqualFold(strings.TrimSpace(typed), custom.CriblDefaultTag)
+	case []any:
+		for _, tag := range typed {
+			if s, ok := tag.(string); ok && strings.EqualFold(strings.TrimSpace(s), custom.CriblDefaultTag) {
+				return true
+			}
 		}
 	}
 	return false

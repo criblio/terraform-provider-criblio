@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -17,12 +18,20 @@ type ResourceItem struct {
 	Name     string
 	Attrs    map[string]hcl.Value
 	ImportID string
+	// Files are auxiliary files to write under this resource module directory.
+	Files []ResourceFile
 	// GroupID is the worker group/fleet/default_search id; used to organize output under <output_dir>/<id>/resources/.
 	// Empty or "global" for resources without group scope.
 	GroupID string
 	// LifecycleIgnoreChanges, when non-nil, adds lifecycle { ignore_changes = [...] } to the resource.
 	// Used for criblio_group_system_settings group_id=default (cloud disables API host/port updates).
 	LifecycleIgnoreChanges []string
+}
+
+// ResourceFile is an auxiliary file emitted next to generated Terraform.
+type ResourceFile struct {
+	Path    string
+	Content []byte
 }
 
 // SortResourceItems sorts items by TypeName then Name for deterministic output.
@@ -179,6 +188,7 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 		return nil
 	}
 	EnsureUniqueNames(items)
+	syncResourceFilePaths(items)
 	ApplyPipelineFunctionProcessorReferences(items)
 	SortResourceItems(items)
 	var dir string
@@ -189,6 +199,9 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 	}
 	if err := fs.MkdirAll(dir, 0755); err != nil {
 		return fmt.Errorf("create module dir: %w", err)
+	}
+	if err := writeResourceFiles(fs, dir, items); err != nil {
+		return err
 	}
 
 	// main.tf: resource blocks (order by name)
@@ -253,6 +266,101 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 		return err
 	}
 	return nil
+}
+
+func writeResourceFiles(fs FileSystem, moduleDir string, items []ResourceItem) error {
+	if !resourceItemsHaveFiles(items) {
+		return nil
+	}
+	if err := fs.RemoveAll(filepath.Join(moduleDir, "files")); err != nil {
+		return fmt.Errorf("remove stale resource files: %w", err)
+	}
+	written := make(map[string]bool)
+	for _, it := range items {
+		for _, file := range it.Files {
+			clean, err := cleanResourceFilePath(file.Path)
+			if err != nil {
+				return fmt.Errorf("%s.%s file %q: %w", it.TypeName, it.Name, file.Path, err)
+			}
+			if written[clean] {
+				return fmt.Errorf("%s.%s file %q: duplicate generated file path", it.TypeName, it.Name, file.Path)
+			}
+			written[clean] = true
+			fileDir := filepath.Join(moduleDir, filepath.Dir(clean))
+			if err := fs.MkdirAll(fileDir, 0755); err != nil {
+				return fmt.Errorf("create resource file dir: %w", err)
+			}
+			if err := fs.WriteFileAtomic(fileDir, filepath.Base(clean), file.Content, 0644); err != nil {
+				return fmt.Errorf("write resource file %s: %w", clean, err)
+			}
+		}
+	}
+	return nil
+}
+
+func syncResourceFilePaths(items []ResourceItem) {
+	for i := range items {
+		for j := range items[i].Files {
+			clean, err := cleanResourceFilePath(items[i].Files[j].Path)
+			if err != nil {
+				continue
+			}
+			slashPath := filepath.ToSlash(clean)
+			parts := strings.Split(slashPath, "/")
+			if len(parts) < 3 || parts[0] != "files" {
+				continue
+			}
+			nextPath := path.Join("files", items[i].Name, path.Join(parts[2:]...))
+			if nextPath == slashPath {
+				continue
+			}
+			items[i].Files[j].Path = nextPath
+			replaceResourceFilePathInAttrs(items[i].Attrs, slashPath, nextPath)
+		}
+	}
+}
+
+func replaceResourceFilePathInAttrs(attrs map[string]hcl.Value, oldPath, newPath string) {
+	for key, value := range attrs {
+		attrs[key] = replaceResourceFilePathInValue(value, oldPath, newPath)
+	}
+}
+
+func replaceResourceFilePathInValue(value hcl.Value, oldPath, newPath string) hcl.Value {
+	switch value.Kind {
+	case hcl.KindExpression:
+		value.Expr = strings.ReplaceAll(value.Expr, "${path.module}/"+oldPath, "${path.module}/"+newPath)
+		value.Expr = strings.ReplaceAll(value.Expr, oldPath, newPath)
+	case hcl.KindList:
+		for i := range value.List {
+			value.List[i] = replaceResourceFilePathInValue(value.List[i], oldPath, newPath)
+		}
+	case hcl.KindMap:
+		for key, nested := range value.Map {
+			value.Map[key] = replaceResourceFilePathInValue(nested, oldPath, newPath)
+		}
+	}
+	return value
+}
+
+func resourceItemsHaveFiles(items []ResourceItem) bool {
+	for _, it := range items {
+		if len(it.Files) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func cleanResourceFilePath(path string) (string, error) {
+	if path == "" {
+		return "", fmt.Errorf("path is required")
+	}
+	clean := filepath.Clean(filepath.FromSlash(path))
+	if clean == "." || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+		return "", fmt.Errorf("path must be relative and stay within the module")
+	}
+	return clean, nil
 }
 
 // ProgressFunc reports progress to the user; nil means no progress output.

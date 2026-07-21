@@ -98,6 +98,12 @@ func TestLookupFileReadFallsBackToCSVExtension(t *testing.T) {
 					},
 				},
 			})
+		case "/api/v1/m/default/system/lookups/my_id.csv/content":
+			if got := r.URL.Query().Get("raw"); got != "true" {
+				t.Fatalf("raw = %q, want true", got)
+			}
+			w.Header().Set("Content-Type", "text/csv")
+			_, _ = w.Write([]byte("column1,column2\nvalue1,value2\n"))
 		default:
 			http.NotFound(w, r)
 		}
@@ -119,8 +125,21 @@ func TestLookupFileReadFallsBackToCSVExtension(t *testing.T) {
 	if got := model.ID.ValueString(); got != "my_id" {
 		t.Fatalf("ID = %q, want configured ID", got)
 	}
-	if len(requestedPaths) != 2 {
-		t.Fatalf("requested paths = %#v, want raw ID then .csv fallback", requestedPaths)
+	if got := model.Content.ValueString(); got != "column1,column2\nvalue1,value2\n" {
+		t.Fatalf("Content = %q, want downloaded content", got)
+	}
+	wantPaths := []string{
+		"/api/v1/m/default/system/lookups/my_id",
+		"/api/v1/m/default/system/lookups/my_id.csv",
+		"/api/v1/m/default/system/lookups/my_id.csv/content",
+	}
+	if len(requestedPaths) != len(wantPaths) {
+		t.Fatalf("requested paths = %#v, want %#v", requestedPaths, wantPaths)
+	}
+	for i := range wantPaths {
+		if requestedPaths[i] != wantPaths[i] {
+			t.Fatalf("requested paths = %#v, want %#v", requestedPaths, wantPaths)
+		}
 	}
 }
 

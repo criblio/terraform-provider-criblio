@@ -174,6 +174,7 @@ func NewExportCommand() *cobra.Command {
 				if exportErr != nil {
 					return fmt.Errorf("export: %w", exportErr)
 				}
+				printExportSummary(c, exportResult, verbose, onPrem)
 				fmt.Fprintln(c.OutOrStdout(), "No resources to export. Run with --dry-run to see resource counts by type.")
 				return nil
 			}

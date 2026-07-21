@@ -34,6 +34,11 @@ func (a LookupFileAPI) Read(ctx context.Context, model LookupFileModel) (*Lookup
 	for _, id := range lookupFileAPIIDs(configuredID) {
 		apiModel, err := restclient.Get[LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
 		if err == nil {
+			if content, contentErr := downloadLookupFileContent(ctx, a.client, model.GroupID.ValueString(), id); contentErr != nil {
+				return nil, contentErr
+			} else if content != nil {
+				apiModel.Content = types.StringValue(*content)
+			}
 			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
@@ -111,6 +116,19 @@ func uploadLookupFileContent(ctx context.Context, client *restclient.Client, mod
 	filename := lookupFileUploadFilename(id)
 	path := fmt.Sprintf("/m/%s/system/lookups?filename=%s", model.GroupID.ValueString(), url.QueryEscape(filename))
 	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func downloadLookupFileContent(ctx context.Context, client *restclient.Client, groupID, id string) (*string, error) {
+	filename := lookupFileUploadFilename(id)
+	body, err := restclient.GetRaw(ctx, client, fmt.Sprintf("/m/%s/system/lookups/%s/content?raw=true", url.PathEscape(groupID), url.PathEscape(filename)))
+	if err != nil {
+		if restclient.IsNotFound(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	content := string(body)
+	return &content, nil
 }
 
 func normalizeLookupFileAPIModel(model *LookupFileModel, terraformID string) *LookupFileModel {
