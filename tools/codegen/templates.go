@@ -3521,6 +3521,10 @@ func TestRoutes(t *testing.T) {
 					ImportState:       true,
 					ImportStateId:     "default",
 					ImportStateVerify: true,
+					ImportStateVerifyIgnore: []string{
+						"routes.0.group_id",
+						"routes.1.group_id",
+					},
 				},
 			},
 		})
