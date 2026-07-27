@@ -33,3 +33,67 @@ func TestCollectorMarshalJSONIncludesSavedJobType(t *testing.T) {
 		t.Fatalf("expected collector id in body, got %#v in %s", got["id"], data)
 	}
 }
+
+func TestCollectorModelUnmarshalGoogleCloudStorageAlias(t *testing.T) {
+	var model CollectorModel
+	err := json.Unmarshal([]byte(`{
+		"id": "my-gcs-collector",
+		"type": "collection",
+		"collector": {
+			"type": "google_cloud_storage",
+			"conf": {
+				"bucket": "my-bucket",
+				"path": "logs/"
+			}
+		}
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	if model.InputCollectorGCS == nil {
+		t.Fatalf("InputCollectorGCS was not selected")
+	}
+	if model.InputCollectorGCS.Collector.IsNull() || model.InputCollectorGCS.Collector.IsUnknown() {
+		t.Fatalf("collector = %#v", model.InputCollectorGCS.Collector)
+	}
+}
+
+func TestCollectorModelUnmarshalAzureBlobAlias(t *testing.T) {
+	var model CollectorModel
+	err := json.Unmarshal([]byte(`{
+		"id": "my-azure-collector",
+		"type": "collection",
+		"collector": {
+			"type": "azure_blob",
+			"conf": {
+				"containerName": "logs"
+			}
+		}
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	if model.InputCollectorAzureBlob == nil {
+		t.Fatalf("InputCollectorAzureBlob was not selected")
+	}
+}
+
+func TestCollectorModelUnmarshalHealthCheckAlias(t *testing.T) {
+	var model CollectorModel
+	err := json.Unmarshal([]byte(`{
+		"id": "my-health-collector",
+		"type": "collection",
+		"collector": {
+			"type": "health_check",
+			"conf": {
+				"collectUrl": "https://api.example.com/health"
+			}
+		}
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	if model.InputCollectorHealthCheck == nil {
+		t.Fatalf("InputCollectorHealthCheck was not selected")
+	}
+}

@@ -467,5 +467,6 @@ func (m *PackRoutesModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Routes = types.ListNull(types.ObjectType{AttrTypes: PackRoutesRoutesAttrTypes()})
 	}
+	m.Routes = normalizeRouteClonePlaceholders(m.Routes)
 	return nil
 }

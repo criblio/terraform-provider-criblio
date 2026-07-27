@@ -96,6 +96,83 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas"
+    update:
+      InputCollectorFilesystem:
+        allOf:
+          - $ref: "#/components/schemas/InputCollectorBase"
+          - type: object
+            properties:
+              collector:
+                type: object
+                required:
+                  - type
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - filesystem
+                    example: filesystem
+                  destructive:
+                    type: boolean
+                    title: Destructive
+                    description: Delete any files collected.
+                    default: false
+                    example: false
+                  encoding:
+                    type: string
+                    title: Encoding
+                    description: Character encoding to use when parsing ingested data.
+                    default: utf8
+                    example: utf8
+                  conf:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        title: Directory
+                        description: The directory from which to collect data.
+                        example: /var/log/application/*.log
+                      extractors:
+                        type: array
+                        title: Path extractors
+                        items:
+                          type: object
+                          required:
+                            - key
+                            - expression
+                          properties:
+                            key:
+                              type: string
+                              title: Token
+                            expression:
+                              type: string
+                              title: Extractor expression
+                        description: Enrich discovery results from template path tokens.
+                      recurse:
+                        type: boolean
+                        title: Recursive
+                        description: Recurse through subdirectories.
+                        example: true
+                      maxBatchSize:
+                        type: integer
+                        title: Batch size limit (files)
+                        description: Maximum number of metadata files to batch before recording as results.
+                        minimum: 1
+                        example: 10
+  - target: "$.components.schemas.InputCollector"
+    update:
+      oneOf:
+        - $ref: "#/components/schemas/InputCollectorSplunk"
+        - $ref: "#/components/schemas/InputCollectorRest"
+        - $ref: "#/components/schemas/InputCollectorS3"
+        - $ref: "#/components/schemas/InputCollectorAzureBlob"
+        - $ref: "#/components/schemas/InputCollectorCriblLake"
+        - $ref: "#/components/schemas/InputCollectorDatabase"
+        - $ref: "#/components/schemas/InputCollectorGCS"
+        - $ref: "#/components/schemas/InputCollectorHealthCheck"
+        - $ref: "#/components/schemas/InputCollectorScript"
+        - $ref: "#/components/schemas/InputCollectorFilesystem"
 
   - target: "$.paths./m/{groupId}/pipelines.post"
     update:

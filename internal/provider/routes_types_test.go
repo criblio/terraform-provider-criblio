@@ -45,6 +45,51 @@ func TestRoutesModelUnmarshalClonesObject(t *testing.T) {
 	}
 }
 
+func TestRoutesModelUnmarshalDropsEmptyClonePlaceholder(t *testing.T) {
+	var model RoutesModel
+	err := json.Unmarshal([]byte(`{
+		"id": "default",
+		"groups": {},
+		"comments": [],
+		"routes": [
+			{
+				"id": "route-2",
+				"name": "Route-2",
+				"final": false,
+				"disabled": false,
+				"pipeline": "Pipeline-2",
+				"description": "",
+				"enableOutputExpression": false,
+				"filter": "__inputId.startsWith('splunk:')",
+				"clones": [
+					{}
+				],
+				"output": "Output-2"
+			}
+		]
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	if model.Routes.IsNull() || model.Routes.IsUnknown() || len(model.Routes.Elements()) != 1 {
+		t.Fatalf("routes = %#v", model.Routes)
+	}
+	route, ok := model.Routes.Elements()[0].(types.Object)
+	if !ok {
+		t.Fatalf("route element type = %T", model.Routes.Elements()[0])
+	}
+	clones, ok := route.Attributes()["clones"].(types.List)
+	if !ok {
+		t.Fatalf("clones attribute type = %T", route.Attributes()["clones"])
+	}
+	if clones.IsNull() || clones.IsUnknown() {
+		t.Fatalf("clones = %#v", clones)
+	}
+	if len(clones.Elements()) != 0 {
+		t.Fatalf("clones elements = %#v, want empty", clones.Elements())
+	}
+}
+
 func TestRoutesModelUpdateBodyEmitsEmptyGroupsAndComments(t *testing.T) {
 	model := RoutesModel{
 		Comments: types.ListNull(types.ObjectType{AttrTypes: RoutesCommentsAttrTypes()}),

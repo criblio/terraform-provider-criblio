@@ -170,6 +170,9 @@ func removeNullListItems(v hcl.Value) hcl.Value {
 		if item.Kind == hcl.KindNull {
 			continue
 		}
+		if item.Kind == hcl.KindMap && len(item.Map) == 0 {
+			continue
+		}
 		list = append(list, item)
 	}
 	v.List = list

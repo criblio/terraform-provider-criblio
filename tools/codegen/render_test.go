@@ -300,6 +300,43 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, sourceResource, `"items": schema.ListNestedAttribute{`)
 	assertContains(t, sourceResource, `"input_collection": schema.SingleNestedAttribute{`)
 
+	collector := parser.ResourceDef{
+		StructName: "Collector",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{
+				GoName:             "InputCollectorAzureBlob",
+				TerraformName:      "input_collector_azure_blob",
+				ModelName:          "InputCollectorAzureBlobModel",
+				DiscriminatorValue: "azureblob",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+			{
+				GoName:             "InputCollectorGCS",
+				TerraformName:      "input_collector_gcs",
+				ModelName:          "InputCollectorGCSModel",
+				DiscriminatorValue: "gcs",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+			{
+				GoName:             "InputCollectorHealthCheck",
+				TerraformName:      "input_collector_health_check",
+				ModelName:          "InputCollectorHealthCheckModel",
+				DiscriminatorValue: "healthcheck",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+		},
+	}
+	collectorTypes := renderTemplate(t, "types", collector)
+	assertContains(t, collectorTypes, `case "azureblob", "azure_blob":`)
+	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
+	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
+
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
 		Read: parser.OperationDef{
