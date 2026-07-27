@@ -41,16 +41,23 @@ func addOneOfBlockFromFirstItem(model interface{}, attrs map[string]hcl.Value, o
 	var alias map[string]string
 	if len(oneOf.SupportedBlockNames) > 0 {
 		suffix, ok := hcl.ResolveOneOfBlockNameRaw(raw, oneOf.SupportedBlockNames, oneOf.BlockNamePrefix)
+		aliasDiscStr := discStr
 		if !ok && oneOf.NestedDiscriminatorField != "" {
 			nestedRaw := resolveNestedDiscriminator(itemMap, oneOf.NestedDiscriminatorField)
 			if nestedRaw != "" {
 				suffix, ok = hcl.ResolveOneOfBlockNameRaw(nestedRaw, oneOf.SupportedBlockNames, oneOf.BlockNamePrefix)
+				aliasDiscStr = discriminatorString(nestedRaw)
+			}
+		}
+		if !ok {
+			if mapped := oneOf.DiscriminatorAlias[aliasDiscStr]; mapped != "" {
+				suffix, ok = hcl.ResolveOneOfBlockNameRaw(fmt.Sprintf("%q", mapped), oneOf.SupportedBlockNames, oneOf.BlockNamePrefix)
 			}
 		}
 		if !ok {
 			return ErrUnsupportedOneOfType
 		}
-		alias = map[string]string{discStr: suffix}
+		alias = map[string]string{discStr: suffix, aliasDiscStr: suffix}
 	} else {
 		alias = oneOf.DiscriminatorAlias
 	}
@@ -62,6 +69,14 @@ func addOneOfBlockFromFirstItem(model interface{}, attrs map[string]hcl.Value, o
 		attrs[blockName] = blockValue
 	}
 	return nil
+}
+
+func discriminatorString(raw string) string {
+	var discStr string
+	if err := json.Unmarshal([]byte(raw), &discStr); err != nil {
+		return strings.Trim(raw, `"`)
+	}
+	return discStr
 }
 
 func attrsHasOutputBlock(attrs map[string]hcl.Value) bool {

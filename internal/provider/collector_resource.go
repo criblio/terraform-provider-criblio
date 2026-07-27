@@ -3818,6 +3818,369 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 					},
 				},
 			},
+			"input_collector_filesystem": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"ttl": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"remove_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"environment": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"saved_state": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Saved state for the collector`,
+						ElementType: types.StringType,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Required:      false,
+						Optional:      true,
+						Computed:      true,
+						Description:   `Configuration for a scheduled job`,
+						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `A cron schedule on which to run this job`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+							},
+							"skippable": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits`,
+							},
+							"resume_missed": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Resume missed scheduled runs`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Reschedule tasks that failed with non-fatal errors`,
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum number of times a task can be rescheduled`,
+									},
+									"log_level": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Level at which to set task logging`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+									},
+									"mode": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: true,
+									},
+									"earliest": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Earliest time to collect data for the selected timezone`,
+									},
+									"latest": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Latest time to collect data for the selected timezone`,
+									},
+									"expression": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `A filter for tokens in the provided collect path and/or the events being collected`,
+									},
+									"min_task_size": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+									},
+									"max_task_size": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+									},
+									"time_warning": schema.MapAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Time warning configuration`,
+										ElementType: types.StringType,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `State tracking configuration`,
+										Attributes: map[string]schema.Attribute{
+											"state_update_expression": schema.StringAttribute{
+												Required: false,
+												Optional: true,
+												Computed: true,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Required: false,
+												Optional: true,
+												Computed: true,
+											},
+											"enabled": schema.BoolAttribute{
+												Required: false,
+												Optional: true,
+												Computed: true,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Tags for filtering and grouping`,
+						ElementType: types.StringType,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `If enabled, tasks are created and run by the same Worker Node`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Required:      false,
+						Optional:      true,
+						Computed:      true,
+						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
+						Attributes: map[string]schema.Attribute{
+							"type": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+							"breaker_rulesets": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+								ElementType: types.StringType,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"disabled": schema.BoolAttribute{
+										Required: false,
+										Optional: true,
+										Computed: true,
+									},
+									"command": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"args": schema.ListAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Arguments to be added to the custom command`,
+										ElementType: types.StringType,
+									},
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Fields to add to events from this input`,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: false,
+											Optional: true,
+											Computed: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+							},
+							"pipeline": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Pipeline to process results`,
+							},
+							"output": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Destination to send results to`,
+							},
+						},
+					},
+					"collector": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"type": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete any files collected.`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding to use when parsing ingested data.`,
+							},
+							"conf": schema.SingleNestedAttribute{
+								Required:      false,
+								Optional:      true,
+								Computed:      true,
+								PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
+								Attributes: map[string]schema.Attribute{
+									"path": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `The directory from which to collect data.`,
+									},
+									"extractors": schema.ListNestedAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Enrich discovery results from template path tokens.`,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"key": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+												"expression": schema.StringAttribute{
+													Required: false,
+													Optional: true,
+													Computed: true,
+												},
+											},
+										},
+									},
+									"recurse": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Recurse through subdirectories.`,
+									},
+									"max_batch_size": schema.Int64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum number of metadata files to batch before recording as results.`,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -4584,6 +4947,71 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 			state.InputCollectorScript.Collector = api.InputCollectorScript.Collector
 		} else if state.InputCollectorScript.Collector.IsNull() || state.InputCollectorScript.Collector.IsUnknown() {
 			state.InputCollectorScript.Collector = types.ObjectNull(InputCollectorScriptCollectorAttrTypes())
+		}
+	}
+	if api.InputCollectorFilesystem != nil {
+		if state.InputCollectorFilesystem == nil {
+			state.InputCollectorFilesystem = &InputCollectorFilesystemModel{}
+		}
+		if !api.InputCollectorFilesystem.ID.IsNull() && !api.InputCollectorFilesystem.ID.IsUnknown() {
+			state.InputCollectorFilesystem.ID = api.InputCollectorFilesystem.ID
+		} else if state.InputCollectorFilesystem.ID.IsNull() || state.InputCollectorFilesystem.ID.IsUnknown() {
+			state.InputCollectorFilesystem.ID = types.StringNull()
+		}
+		if !api.InputCollectorFilesystem.Ttl.IsNull() && !api.InputCollectorFilesystem.Ttl.IsUnknown() {
+			state.InputCollectorFilesystem.Ttl = api.InputCollectorFilesystem.Ttl
+		} else if state.InputCollectorFilesystem.Ttl.IsNull() || state.InputCollectorFilesystem.Ttl.IsUnknown() {
+			state.InputCollectorFilesystem.Ttl = types.StringNull()
+		}
+		if !api.InputCollectorFilesystem.IgnoreGroupJobsLimit.IsNull() && !api.InputCollectorFilesystem.IgnoreGroupJobsLimit.IsUnknown() {
+			state.InputCollectorFilesystem.IgnoreGroupJobsLimit = api.InputCollectorFilesystem.IgnoreGroupJobsLimit
+		} else if state.InputCollectorFilesystem.IgnoreGroupJobsLimit.IsNull() || state.InputCollectorFilesystem.IgnoreGroupJobsLimit.IsUnknown() {
+			state.InputCollectorFilesystem.IgnoreGroupJobsLimit = types.BoolNull()
+		}
+		if !api.InputCollectorFilesystem.RemoveFields.IsNull() && !api.InputCollectorFilesystem.RemoveFields.IsUnknown() {
+			state.InputCollectorFilesystem.RemoveFields = api.InputCollectorFilesystem.RemoveFields
+		} else if state.InputCollectorFilesystem.RemoveFields.IsNull() || state.InputCollectorFilesystem.RemoveFields.IsUnknown() {
+			state.InputCollectorFilesystem.RemoveFields = types.ListNull(types.StringType)
+		}
+		if !api.InputCollectorFilesystem.ResumeOnBoot.IsNull() && !api.InputCollectorFilesystem.ResumeOnBoot.IsUnknown() {
+			state.InputCollectorFilesystem.ResumeOnBoot = api.InputCollectorFilesystem.ResumeOnBoot
+		} else if state.InputCollectorFilesystem.ResumeOnBoot.IsNull() || state.InputCollectorFilesystem.ResumeOnBoot.IsUnknown() {
+			state.InputCollectorFilesystem.ResumeOnBoot = types.BoolNull()
+		}
+		if !api.InputCollectorFilesystem.Environment.IsNull() && !api.InputCollectorFilesystem.Environment.IsUnknown() {
+			state.InputCollectorFilesystem.Environment = api.InputCollectorFilesystem.Environment
+		} else if state.InputCollectorFilesystem.Environment.IsNull() || state.InputCollectorFilesystem.Environment.IsUnknown() {
+			state.InputCollectorFilesystem.Environment = types.StringNull()
+		}
+		if !api.InputCollectorFilesystem.SavedState.IsNull() && !api.InputCollectorFilesystem.SavedState.IsUnknown() {
+			state.InputCollectorFilesystem.SavedState = api.InputCollectorFilesystem.SavedState
+		} else if state.InputCollectorFilesystem.SavedState.IsNull() || state.InputCollectorFilesystem.SavedState.IsUnknown() {
+			state.InputCollectorFilesystem.SavedState = types.MapNull(types.StringType)
+		}
+		if !api.InputCollectorFilesystem.Schedule.IsNull() && !api.InputCollectorFilesystem.Schedule.IsUnknown() {
+			state.InputCollectorFilesystem.Schedule = api.InputCollectorFilesystem.Schedule
+		} else if state.InputCollectorFilesystem.Schedule.IsNull() || state.InputCollectorFilesystem.Schedule.IsUnknown() {
+			state.InputCollectorFilesystem.Schedule = types.ObjectNull(InputCollectorFilesystemScheduleAttrTypes())
+		}
+		if !api.InputCollectorFilesystem.Streamtags.IsNull() && !api.InputCollectorFilesystem.Streamtags.IsUnknown() {
+			state.InputCollectorFilesystem.Streamtags = api.InputCollectorFilesystem.Streamtags
+		} else if state.InputCollectorFilesystem.Streamtags.IsNull() || state.InputCollectorFilesystem.Streamtags.IsUnknown() {
+			state.InputCollectorFilesystem.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.InputCollectorFilesystem.WorkerAffinity.IsNull() && !api.InputCollectorFilesystem.WorkerAffinity.IsUnknown() {
+			state.InputCollectorFilesystem.WorkerAffinity = api.InputCollectorFilesystem.WorkerAffinity
+		} else if state.InputCollectorFilesystem.WorkerAffinity.IsNull() || state.InputCollectorFilesystem.WorkerAffinity.IsUnknown() {
+			state.InputCollectorFilesystem.WorkerAffinity = types.BoolNull()
+		}
+		if !api.InputCollectorFilesystem.Input.IsNull() && !api.InputCollectorFilesystem.Input.IsUnknown() {
+			state.InputCollectorFilesystem.Input = api.InputCollectorFilesystem.Input
+		} else if state.InputCollectorFilesystem.Input.IsNull() || state.InputCollectorFilesystem.Input.IsUnknown() {
+			state.InputCollectorFilesystem.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
+		}
+		if !api.InputCollectorFilesystem.Collector.IsNull() && !api.InputCollectorFilesystem.Collector.IsUnknown() {
+			state.InputCollectorFilesystem.Collector = api.InputCollectorFilesystem.Collector
+		} else if state.InputCollectorFilesystem.Collector.IsNull() || state.InputCollectorFilesystem.Collector.IsUnknown() {
+			state.InputCollectorFilesystem.Collector = types.ObjectNull(InputCollectorFilesystemCollectorAttrTypes())
 		}
 	}
 }

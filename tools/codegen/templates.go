@@ -826,7 +826,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	switch {{ .StructName }}OneOfDiscriminator(raw) {
 {{- range .OneOfVariants }}
 {{- if .DiscriminatorValue }}
-	case "{{ .DiscriminatorValue }}":
+	case {{ range $i, $value := discriminatorCaseValues $ . }}{{ if $i }}, {{ end }}"{{ $value }}"{{ end }}:
 		m.{{ .GoName }} = &{{ .ModelName }}{}
 		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
 			return err
@@ -839,6 +839,9 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		return err
 	}
 {{- end }}
+{{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	m.Routes = normalizeRouteClonePlaceholders(m.Routes)
 {{- end }}
 	return nil
 }
@@ -2044,7 +2047,59 @@ func {{ .Name }}Debug(value any) string {
 }
 
 {{- if eq .StructName "Routes" }}
+func normalizeRouteClonePlaceholders(routes types.List) types.List {
+	if routes.IsNull() || routes.IsUnknown() {
+		return routes
+	}
+	elements := routes.Elements()
+	changed := false
+	for index, element := range elements {
+		route, ok := element.(types.Object)
+		if !ok || route.IsNull() || route.IsUnknown() {
+			continue
+		}
+		attributes := route.Attributes()
+		clones, ok := attributes["clones"].(types.List)
+		if !ok || clones.IsNull() || clones.IsUnknown() {
+			continue
+		}
+		cloneElements := clones.Elements()
+		filtered := make([]attr.Value, 0, len(cloneElements))
+		for _, cloneElement := range cloneElements {
+			cloneMap, ok := cloneElement.(types.Map)
+			if ok && !cloneMap.IsNull() && !cloneMap.IsUnknown() && len(cloneMap.Elements()) == 0 {
+				changed = true
+				continue
+			}
+			filtered = append(filtered, cloneElement)
+		}
+		if len(filtered) == len(cloneElements) {
+			continue
+		}
+		value, diags := types.ListValue(clones.ElementType(context.Background()), filtered)
+		if diags.HasError() {
+			continue
+		}
+		attributes["clones"] = value
+		normalized, diags := types.ObjectValue(route.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = normalized
+	}
+	if !changed {
+		return routes
+	}
+	value, diags := types.ListValue(routes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return routes
+	}
+	return value
+}
+
 func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) types.List {
+	apiRoutes = normalizeRouteClonePlaceholders(apiRoutes)
+	stateRoutes = normalizeRouteClonePlaceholders(stateRoutes)
 	elements := stateRoutes.Elements()
 	apiElements := apiRoutes.Elements()
 	for index := range elements {

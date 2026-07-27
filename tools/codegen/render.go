@@ -246,6 +246,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
 		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
 		"noDiscriminatorVariants":          noDiscriminatorVariants,
+		"discriminatorCaseValues":          discriminatorCaseValues,
 		"variantAPINames":                  variantAPINames,
 		"variantRequiredAPINames":          variantRequiredAPINames,
 		"goStringSliceLiteral":             goStringSliceLiteral,
@@ -921,8 +922,8 @@ func needsNestedObject(resource parser.ResourceDef) bool {
 	return false
 }
 
-func needsResourceAttr(_ parser.ResourceDef) bool {
-	return false
+func needsResourceAttr(resource parser.ResourceDef) bool {
+	return resource.StructName == "Routes"
 }
 
 func needsValidator(resource parser.ResourceDef) bool {
@@ -1238,6 +1239,24 @@ func noDiscriminatorVariants(resource parser.ResourceDef) []parser.OneOfVariantD
 		}
 	}
 	return variants
+}
+
+func discriminatorCaseValues(resource parser.ResourceDef, variant parser.OneOfVariantDef) []string {
+	if variant.DiscriminatorValue == "" {
+		return nil
+	}
+	values := []string{variant.DiscriminatorValue}
+	if resource.StructName == "Collector" {
+		switch variant.TerraformName {
+		case "input_collector_azure_blob":
+			values = append(values, "azure_blob")
+		case "input_collector_gcs":
+			values = append(values, "google_cloud_storage")
+		case "input_collector_health_check":
+			values = append(values, "health_check")
+		}
+	}
+	return values
 }
 
 func variantRequiredAPINames(variant parser.OneOfVariantDef) []string {
