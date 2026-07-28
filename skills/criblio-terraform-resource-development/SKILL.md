@@ -5,7 +5,7 @@ description: Use when adding or changing a Cribl API endpoint and defining the m
 
 # Cribl Terraform Resource Development
 
-Use this skill when an engineer asks to add a new endpoint to the provider, generate a Terraform resource or data source, migrate a resource into the custom codegen path, or prepare the branch and PR for endpoint support.
+Support endpoint/resource work by starting from the API source of truth, preserving generated-code boundaries, and validating the generated provider surface before PR handoff.
 
 ## Core Rules
 
@@ -23,7 +23,7 @@ Gather the missing facts before editing. Ask only for what cannot be inferred fr
 - Terraform name: resource/data source name, expected `criblio_<name>` shape, and legacy names if any.
 - API shape: CRUD object, singleton settings object, read-only data source, list-only data source, or action endpoint.
 - Scope: stream workspace `/m/{groupId}`, search workspace `/m/{groupId}/search`, system/global, pack-scoped, or management API.
-- Spec source: whether the upstream spec is already updated, or whether the agent should run the local sync script.
+- Spec source: whether the upstream spec is already updated, or whether to run the local sync script.
 - Identity: import ID format, path params, fixed IDs, case-insensitive IDs, and update/delete support.
 - Fields: sensitive/write-only fields, API-owned computed fields, fields omitted or reformatted by GET, defaults, and null-vs-empty behavior.
 - Tests: live acceptance environment constraints, cloud-only or on-prem-only behavior, license restrictions, and required example coverage.
@@ -51,7 +51,7 @@ After gathering facts, restate the development plan in a short checklist before 
 
 1. Prefer updated upstream spec:
    - If the user has a new upstream spec, copy or merge it using the repo's existing process.
-   - If the user wants the agent to fetch it, run `make sync-openapi` after approval when network access may be required.
+   - If the user wants the spec fetched, run `make sync-openapi` after approval when network access may be required.
 2. If the upstream spec is missing or incomplete, patch the narrowest overlay:
    - Use `terraform-overlay.yml` for provider API resources.
    - Use `terraform-mgmt-overlay.yml` for management API resources.
