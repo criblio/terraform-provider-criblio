@@ -20,17 +20,6 @@ sbom-*.json
 .gocache/
 .cursor/
 .claude/
-!.cursor/
-.cursor/*
-!.cursor/skills/
-.cursor/skills/*
-!.cursor/skills/criblio-terraform-resource-development/
-!.cursor/skills/criblio-terraform-resource-development/SKILL.md
-!.claude/
-.claude/*
-!.claude/skills/
-.claude/skills/*
-!.claude/skills/criblio-terraform-resource-development.md
 tf*
 !internal/tfplanmodifiers/
 !internal/tfplanmodifiers/**
