@@ -621,7 +621,7 @@ func {{ .StructName }}ValueWithKnownNulls(value attr.Value, typ attr.Type) (attr
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
-{{- if and .RequestField (or (not .Computed) .OptionalComputed) }}
+{{- if and .RequestField (or (not .Computed) .OptionalComputed .RequestComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 {{- if objectAsJSON . }}
 		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
@@ -2224,9 +2224,9 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 		return
 	}
 {{- range .Fields }}
-{{- if and .FixedValue (eq .Type "string") }}
+{{- if and (or .FixedValue .DefaultValue) (eq .Type "string") }}
 	if model.{{ .GoName }}.IsNull() || model.{{ .GoName }}.IsUnknown() || model.{{ .GoName }}.ValueString() == "" {
-		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" (or .FixedValue .DefaultValue) }})
 	}
 {{- end }}
 {{- end }}

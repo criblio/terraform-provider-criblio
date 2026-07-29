@@ -531,6 +531,13 @@ func PackSourceTerraformNullValue(typ attr.Type) (attr.Value, error) {
 
 func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := PackSourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
 	if m.InputCollection != nil {
 		value, err := m.InputCollection.terraformPayload()
 		if err != nil {

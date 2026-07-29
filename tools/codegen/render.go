@@ -643,8 +643,8 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	fmt.Fprintf(output, "%s\tRequired: %t,\n", indent, field.Required)
 	fmt.Fprintf(output, "%s\tOptional: %t,\n", indent, field.Optional)
 	fmt.Fprintf(output, "%s\tComputed: %t,\n", indent, field.Computed)
-	if field.FixedValue != "" && field.Type == "string" {
-		fmt.Fprintf(output, "%s\tDefault: stringdefault.StaticString(%q),\n", indent, field.FixedValue)
+	if defaultValue := stringDefaultValue(field); defaultValue != "" {
+		fmt.Fprintf(output, "%s\tDefault: stringdefault.StaticString(%q),\n", indent, defaultValue)
 	}
 	if field.Sensitive {
 		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
@@ -731,8 +731,8 @@ func writeOneOfDataSourceAttribute(output *strings.Builder, variant parser.OneOf
 
 func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, indent string, required, computed bool) {
 	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
-	fixedString := field.FixedValue != "" && field.Type == "string"
-	if required && fixedString {
+	hasDefault := stringDefaultValue(field) != ""
+	if required && hasDefault {
 		fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
 		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
 	} else if required {
@@ -937,7 +937,7 @@ func needsValidator(resource parser.ResourceDef) bool {
 
 func needsStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if field.FixedValue != "" && field.Type == "string" {
+		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0) && field.Type == "string" {
 			return true
 		}
 	}
@@ -964,7 +964,7 @@ func needsCustomJSONValidator(resource parser.ResourceDef) bool {
 
 func needsStringDefault(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if field.FixedValue != "" && field.Type == "string" {
+		if stringDefaultValue(field) != "" {
 			return true
 		}
 	}
@@ -1382,6 +1382,12 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	var calls []string
 	if field.FixedValue != "" && field.Type == "string" {
 		calls = append(calls, fmt.Sprintf("stringvalidator.OneOf(%q)", field.FixedValue))
+	} else if field.ValidateEnum && len(field.Enum) > 0 && field.Type == "string" {
+		quoted := make([]string, 0, len(field.Enum))
+		for _, value := range field.Enum {
+			quoted = append(quoted, fmt.Sprintf("%q", value))
+		}
+		calls = append(calls, fmt.Sprintf("stringvalidator.OneOf(%s)", strings.Join(quoted, ", ")))
 	}
 	if field.NotNull {
 		calls = append(calls, "custom_stringvalidators.NotNull()")
@@ -1393,6 +1399,16 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 		calls = append(calls, "custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client)")
 	}
 	return calls
+}
+
+func stringDefaultValue(field parser.FieldDef) string {
+	if field.FixedValue != "" && field.Type == "string" {
+		return field.FixedValue
+	}
+	if field.DefaultValue != "" && field.Type == "string" {
+		return field.DefaultValue
+	}
+	return ""
 }
 
 func stringValidatorField(field parser.FieldDef) bool {
@@ -1466,6 +1482,13 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
+	if resource.TypeName == "criblio_search_dataset_ruleset" || resource.TypeName == "criblio_search_datatype" {
+		content, err := readRepoFile(filepath.Join("examples", "resources", resource.TypeName, "resource.tf"))
+		if err != nil {
+			return "", false
+		}
+		return strings.TrimSpace(string(content)), true
+	}
 	exampleDirs := map[string]string{
 		"criblio_pack_breakers":    "pack-with-breakers",
 		"criblio_pack_destination": "pack-with-destination",
@@ -1901,6 +1924,9 @@ func generatedImportBlock(resource parser.ResourceDef) string {
 func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	if field.FixedValue != "" {
 		return field.FixedValue
+	}
+	if field.DefaultValue != "" {
+		return field.DefaultValue
 	}
 	if field.PathParam && field.TerraformName == "product" {
 		return "stream"

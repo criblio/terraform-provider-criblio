@@ -118,7 +118,11 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			ids, err := listPackRoutesIdentifiers(ctx, client, groupIDs)
 			res.Count = len(ids)
 			res.Err = err
-		case e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset":
+		case e.TypeName == "criblio_search_dataset_ruleset":
+			if slices.Contains(groupIDs, "default_search") {
+				res.Count = 2
+			}
+		case e.TypeName == "criblio_search_datatype_ruleset":
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 1
 			}
@@ -185,7 +189,15 @@ func ListItemIdentifiers(ctx context.Context, client *importclient.Client, e reg
 		return idMaps, err
 	case "criblio_lakehouse_dataset_connection":
 		return listLakehouseDatasetConnectionIdentifiers(ctx, client)
-	case "criblio_search_dataset_ruleset", "criblio_search_datatype_ruleset":
+	case "criblio_search_dataset_ruleset":
+		if slices.Contains(groupIDs, "default_search") {
+			return []map[string]string{
+				{"id": "default", "group_id": "default_search"},
+				{"id": "metrics", "group_id": "default_search"},
+			}, nil
+		}
+		return nil, nil
+	case "criblio_search_datatype_ruleset":
 		if slices.Contains(groupIDs, "default_search") {
 			return []map[string]string{{"id": "default", "group_id": "default_search"}}, nil
 		}

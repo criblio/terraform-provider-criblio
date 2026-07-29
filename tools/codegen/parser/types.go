@@ -73,13 +73,16 @@ type FieldDef struct {
 	PathParam          bool
 	QueryParam         bool
 	RequestField       bool
+	RequestComputed    bool
 	UpdateField        bool
 	ApplyStrategy      string
 	PlanModifierHook   string
 	UseStateForUnknown bool
 	EmitEmpty          bool
 	FixedValue         string
+	DefaultValue       string
 	Enum               []string
+	ValidateEnum       bool
 	Fields             []FieldDef
 	ObjectAsJSON       bool
 	NotNull            bool

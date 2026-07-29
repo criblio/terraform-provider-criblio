@@ -23,9 +23,10 @@ resource "criblio_search_dataset" "my_searchdataset" {
     metadata = {
       enable_acceleration = false
     }
-    path        = "logs/*.log"
-    provider_id = "S3"
-    region      = "us-east-1"
+    path           = "logs/*.log"
+    provider_id    = "S3"
+    region         = "us-east-1"
+    search_version = "v1"
     storage_classes = [
       "STANDARD",
     ]
@@ -546,6 +547,7 @@ Optional:
 - `bucket` (String) S3 bucket name.
 - `extra_paths` (Attributes List) Additional bucket paths that are included in this Dataset. (see [below for nested schema](#nestedatt--s3_dataset--extra_paths))
 - `path` (String) Templated path under which to look for data.
+- `paths` (Attributes List) Bucket paths and datatype filters used by search execution v2. (see [below for nested schema](#nestedatt--s3_dataset--paths))
 - `region` (String) AWS region where the bucket is located.
 - `skip_event_time_filter` (Boolean) Whether to skip event time filtering.
 - `storage_classes` (List of String) Storage classes to include in the search.
@@ -1459,6 +1461,27 @@ Optional:
 - `filter` (String) Filter expression evaluated against each object path under the bucket.
 - `path` (String) Templated path under which to look for data.
 - `region` (String) AWS region where the bucket is located.
+
+<a id="nestedatt--s3_dataset--paths"></a>
+### Nested Schema for `s3_dataset.paths`
+
+Optional:
+
+- `auto_detect_region` (Boolean) Whether to automatically detect the bucket region.
+- `bucket` (String) S3 bucket name.
+- `filters` (Attributes List) Glob-to-Datatype mappings for this bucket path. (see [below for nested schema](#nestedatt--s3_dataset--paths--filters))
+- `partitioning_scheme` (String)
+- `region` (String) AWS region where the bucket is located.
+
+<a id="nestedatt--s3_dataset--paths--filters"></a>
+### Nested Schema for `s3_dataset.paths.filters`
+
+Optional:
+
+- `data_path_format` (String) Row format for Search v2 Lake path filters.
+- `data_type_id` (String) Datatype identifier that maps filtered objects to a data type definition.
+- `filter` (String) Glob pattern for selecting files within the storage path.
+- `preprocess_outer_json` (Boolean) When true, instructs the C++ reader to unwrap the outer JSON envelope before applying the user datatype to the nested _raw field. Set for Cribl Lake NDJSON filters only.
 
 <a id="nestedatt--snowflake_dataset--cache_connection_info"></a>
 ### Nested Schema for `snowflake_dataset.cache_connection_info`

@@ -51,13 +51,13 @@ func (r *SearchDatasetRulesetResource) Schema(_ context.Context, _ resource.Sche
 				Optional:    true,
 				Computed:    true,
 				Default:     stringdefault.StaticString("default"),
-				Description: `Unique identifier for the ruleset.`,
+				Description: "Ruleset identifier. Use `default` for log dataset rules or `metrics` for metric dataset rules.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 				Validators: []validator.String{
-					stringvalidator.OneOf("default"),
+					stringvalidator.OneOf("default", "metrics"),
 				},
 			},
 			"rules": schema.ListNestedAttribute{
@@ -250,7 +250,6 @@ func applySearchDatasetRulesetAPIToState(api *SearchDatasetRulesetModel, state *
 	if state.ID.IsUnknown() {
 		state.ID = types.StringNull()
 	}
-	state.ID = types.StringValue("default")
 	if !preserveInputs || (fillMissingInputs && (state.Rules.IsNull() || state.Rules.IsUnknown())) || (!api.Rules.IsNull() && !api.Rules.IsUnknown() && !state.Rules.IsNull() && !state.Rules.IsUnknown() && len(state.Rules.Elements()) == 0) {
 		if !api.Rules.IsNull() && !api.Rules.IsUnknown() {
 			state.Rules = api.Rules

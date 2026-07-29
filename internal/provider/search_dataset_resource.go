@@ -5063,6 +5063,73 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Templated path under which to look for data.`,
 					},
+					"paths": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Bucket paths and datatype filters used by search execution v2.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"auto_detect_region": schema.BoolAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Whether to automatically detect the bucket region.`,
+								},
+								"bucket": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `S3 bucket name.`,
+								},
+								"filters": schema.ListNestedAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Glob-to-Datatype mappings for this bucket path.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"data_path_format": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Row format for Search v2 Lake path filters.`,
+											},
+											"data_type_id": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Datatype identifier that maps filtered objects to a data type definition.`,
+											},
+											"filter": schema.StringAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `Glob pattern for selecting files within the storage path.`,
+											},
+											"preprocess_outer_json": schema.BoolAttribute{
+												Required:    false,
+												Optional:    true,
+												Computed:    true,
+												Description: `When true, instructs the C++ reader to unwrap the outer JSON envelope before applying the user datatype to the nested _raw field. Set for Cribl Lake NDJSON filters only.`,
+											},
+										},
+									},
+								},
+								"partitioning_scheme": schema.StringAttribute{
+									Required: false,
+									Optional: true,
+									Computed: true,
+								},
+								"region": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `AWS region where the bucket is located.`,
+								},
+							},
+						},
+					},
 					"region": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -7305,6 +7372,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetS3.Path = api.DatasetS3.Path
 		} else if state.DatasetS3.Path.IsNull() || state.DatasetS3.Path.IsUnknown() {
 			state.DatasetS3.Path = types.StringNull()
+		}
+		if !api.DatasetS3.Paths.IsNull() && !api.DatasetS3.Paths.IsUnknown() {
+			state.DatasetS3.Paths = api.DatasetS3.Paths
+		} else if state.DatasetS3.Paths.IsNull() || state.DatasetS3.Paths.IsUnknown() {
+			state.DatasetS3.Paths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()})
 		}
 		if !api.DatasetS3.Region.IsNull() && !api.DatasetS3.Region.IsUnknown() {
 			state.DatasetS3.Region = api.DatasetS3.Region
