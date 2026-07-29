@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -52,28 +53,28 @@ func TestSearchDatasetV2(t *testing.T) {
 	}
 
 	const (
-		id           = "tf_acc_s3_dataset_v2"
-		resourceName = "criblio_search_dataset.s3_v2"
+		id           = "search_dataset_v2"
+		resourceName = "criblio_search_dataset.v2"
 	)
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: searchDatasetV2Config(id, "test v2"),
+				ConfigDirectory: config.StaticDirectory("../../examples/search-dataset"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "id", id),
-					resource.TestCheckResourceAttr(resourceName, "description", "test v2"),
+					resource.TestCheckResourceAttr(resourceName, "description", "Search v2 dataset"),
 					resource.TestCheckResourceAttr(resourceName, "type", "s3"),
 					resource.TestCheckResourceAttr(resourceName, "s3_dataset.search_version", "v2"),
 					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.#", "1"),
-					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.0.bucket", "test_bucket"),
+					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.0.bucket", "lake-main-beautiful-nguyen-y8y4azd"),
 					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.0.filters.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.0.filters.0.data_type_id", "generic_ndjson"),
 					resource.TestCheckResourceAttr(resourceName, "s3_dataset.paths.0.filters.0.filter", "**"),
 				),
 			},
-			{Config: searchDatasetV2Config(id, "test v2"), PlanOnly: true},
+			{ConfigDirectory: config.StaticDirectory("../../examples/search-dataset"), PlanOnly: true},
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
@@ -113,41 +114,6 @@ resource "criblio_search_dataset" "s3_v1" {
       "STANDARD"
     ]
     type = "s3"
-  }
-}
-`
-}
-
-func searchDatasetV2Config(id, description string) string {
-	return `
-resource "criblio_search_dataset" "s3_v2" {
-  s3_dataset = {
-    breaker_rulesets = ["Cribl Search"]
-    description      = "` + description + `"
-    filter           = "true"
-    id               = "` + id + `"
-    metadata = {
-      enable_acceleration = false
-    }
-    paths = [
-      {
-        auto_detect_region  = true
-        bucket              = "test_bucket"
-        filters = [
-          {
-            data_type_id = "generic_ndjson"
-            filter       = "**"
-          }
-        ]
-        partitioning_scheme = "none"
-        region              = "us-east-1"
-      }
-    ]
-    provider_id            = "S3"
-    search_version         = "v2"
-    skip_event_time_filter = false
-    storage_classes        = ["STANDARD"]
-    type                   = "s3"
   }
 }
 `
