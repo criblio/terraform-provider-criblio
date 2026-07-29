@@ -8,6 +8,7 @@ import (
 	"os"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 
 	"go.yaml.in/yaml/v3"
@@ -503,6 +504,14 @@ func lookupTarget(root *yaml.Node, target string) (*yaml.Node, error) {
 	for _, segment := range strings.Split(strings.TrimPrefix(target, prefix), ".") {
 		if segment == "" {
 			return nil, fmt.Errorf("empty target segment")
+		}
+		if node.Kind == yaml.SequenceNode {
+			index, err := strconv.Atoi(segment)
+			if err != nil || index < 0 || index >= len(node.Content) {
+				return nil, fmt.Errorf("sequence index %q not found", segment)
+			}
+			node = node.Content[index]
+			continue
 		}
 		next, ok := mappingValue(node, segment)
 		if !ok {

@@ -8,9 +8,10 @@ resource "criblio_search_dataset" "my_searchdataset" {
     metadata = {
       enable_acceleration = false
     }
-    path        = "logs/*.log"
-    provider_id = "S3"
-    region      = "us-east-1"
+    path           = "logs/*.log"
+    provider_id    = "S3"
+    region         = "us-east-1"
+    search_version = "v1"
     storage_classes = [
       "STANDARD",
     ]

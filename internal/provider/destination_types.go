@@ -6147,6 +6147,13 @@ func DestinationTerraformNullValue(typ attr.Type) (attr.Value, error) {
 
 func (m DestinationModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
 	if m.OutputDefault != nil {
 		value, err := m.OutputDefault.terraformPayload()
 		if err != nil {

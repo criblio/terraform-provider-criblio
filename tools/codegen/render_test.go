@@ -554,6 +554,31 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, fixedDataSource, `model.ID = types.StringValue("default")`)
 	assertNotContains(t, fixedDataSource, `Required: true`)
 
+	defaultIdentity := fixedIdentity
+	defaultIdentity.StructName = "DatasetRuleset"
+	defaultIdentity.TypeName = "criblio_search_dataset_ruleset"
+	defaultIdentity.Fields = []parser.FieldDef{
+		{
+			APIName:       "id",
+			TerraformName: "id",
+			GoName:        "ID",
+			Type:          "string",
+			Optional:      true,
+			Computed:      true,
+			ForceNew:      true,
+			PathParam:     true,
+			DefaultValue:  "default",
+			Enum:          []string{"default", "metrics"},
+			ValidateEnum:  true,
+		},
+	}
+	defaultResource := renderTemplate(t, "resource", defaultIdentity)
+	assertContains(t, defaultResource, `Default: stringdefault.StaticString("default")`)
+	assertContains(t, defaultResource, `stringvalidator.OneOf("default", "metrics")`)
+	assertNotContains(t, defaultResource, `state.ID = types.StringValue("default")`)
+	defaultDataSource := renderTemplate(t, "data_source", defaultIdentity)
+	assertContains(t, defaultDataSource, `model.ID = types.StringValue("default")`)
+
 	packPipeline := parser.ResourceDef{
 		StructName: "PackPipeline",
 		TypeName:   "criblio_pack_pipeline",

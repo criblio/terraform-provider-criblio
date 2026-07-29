@@ -2230,6 +2230,55 @@ func DatasetS3ExtraPathsAttrTypes() map[string]attr.Type {
 	}
 }
 
+type DatasetS3PathsModel struct {
+	AutoDetectRegion   types.Bool   `tfsdk:"auto_detect_region" json:"autoDetectRegion,omitempty"`
+	Bucket             types.String `tfsdk:"bucket" json:"bucket,omitempty"`
+	Filters            types.List   `tfsdk:"filters" json:"filters,omitempty"`
+	PartitioningScheme types.String `tfsdk:"partitioning_scheme" json:"partitioningScheme,omitempty"`
+	Region             types.String `tfsdk:"region" json:"region,omitempty"`
+}
+
+type DatasetS3PathsAPIModel struct {
+	AutoDetectRegion   *bool   `json:"autoDetectRegion,omitempty"`
+	Bucket             *string `json:"bucket,omitempty"`
+	Filters            any     `json:"filters,omitempty"`
+	PartitioningScheme *string `json:"partitioningScheme,omitempty"`
+	Region             *string `json:"region,omitempty"`
+}
+
+func DatasetS3PathsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auto_detect_region":  types.BoolType,
+		"bucket":              types.StringType,
+		"filters":             types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetS3PathsFiltersAttrTypes()}},
+		"partitioning_scheme": types.StringType,
+		"region":              types.StringType,
+	}
+}
+
+type DatasetS3PathsFiltersModel struct {
+	DataPathFormat      types.String `tfsdk:"data_path_format" json:"dataPathFormat,omitempty"`
+	DataTypeID          types.String `tfsdk:"data_type_id" json:"dataTypeId,omitempty"`
+	Filter              types.String `tfsdk:"filter" json:"filter,omitempty"`
+	PreprocessOuterJSON types.Bool   `tfsdk:"preprocess_outer_json" json:"preprocessOuterJson,omitempty"`
+}
+
+type DatasetS3PathsFiltersAPIModel struct {
+	DataPathFormat      *string `json:"dataPathFormat,omitempty"`
+	DataTypeID          *string `json:"dataTypeId,omitempty"`
+	Filter              *string `json:"filter,omitempty"`
+	PreprocessOuterJSON *bool   `json:"preprocessOuterJson,omitempty"`
+}
+
+func DatasetS3PathsFiltersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"data_path_format":      types.StringType,
+		"data_type_id":          types.StringType,
+		"filter":                types.StringType,
+		"preprocess_outer_json": types.BoolType,
+	}
+}
+
 type DatasetSnowflakeCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
 	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
@@ -9288,6 +9337,7 @@ type DatasetS3Model struct {
 	Bucket                types.String `tfsdk:"bucket" json:"bucket,omitempty"`
 	ExtraPaths            types.List   `tfsdk:"extra_paths" json:"extraPaths,omitempty"`
 	Path                  types.String `tfsdk:"path" json:"path,omitempty"`
+	Paths                 types.List   `tfsdk:"paths" json:"paths,omitempty"`
 	Region                types.String `tfsdk:"region" json:"region,omitempty"`
 	SkipEventTimeFilter   types.Bool   `tfsdk:"skip_event_time_filter" json:"skipEventTimeFilter,omitempty"`
 	StorageClasses        types.List   `tfsdk:"storage_classes" json:"storageClasses,omitempty"`
@@ -9311,6 +9361,7 @@ func DatasetS3ModelAttrTypes() map[string]attr.Type {
 		"bucket":                  types.StringType,
 		"extra_paths":             types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetS3ExtraPathsAttrTypes()}},
 		"path":                    types.StringType,
+		"paths":                   types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()}},
 		"region":                  types.StringType,
 		"skip_event_time_filter":  types.BoolType,
 		"storage_classes":         types.ListType{ElemType: types.StringType},
@@ -9430,6 +9481,13 @@ func (m DatasetS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert path to API value: %v", err)
 		}
 		output["path"] = value
+	}
+	if !m.Paths.IsNull() && !m.Paths.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Paths)
+		if err != nil {
+			return nil, fmt.Errorf("convert paths to API value: %v", err)
+		}
+		output["paths"] = value
 	}
 	if !m.Region.IsNull() && !m.Region.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Region)
@@ -9599,6 +9657,15 @@ func (m *DatasetS3Model) unmarshalPayload(input map[string]any) error {
 		m.Path = value.(types.String)
 	} else {
 		m.Path = types.StringNull()
+	}
+	if item, ok := input["paths"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert paths from API value: %v", err)
+		}
+		m.Paths = value.(types.List)
+	} else {
+		m.Paths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()})
 	}
 	if item, ok := input["region"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)

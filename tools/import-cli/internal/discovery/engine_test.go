@@ -53,6 +53,17 @@ func criblMockClient(server *httptest.Server) *importclient.Client {
 	}
 }
 
+func TestListItemIdentifiersIncludesBothDatasetRulesets(t *testing.T) {
+	identifiers, err := ListItemIdentifiers(context.Background(), nil, registry.Entry{
+		TypeName: "criblio_search_dataset_ruleset",
+	}, []string{"default_search"})
+	require.NoError(t, err)
+	require.Equal(t, []map[string]string{
+		{"id": "default", "group_id": "default_search"},
+		{"id": "metrics", "group_id": "default_search"},
+	}, identifiers)
+}
+
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()

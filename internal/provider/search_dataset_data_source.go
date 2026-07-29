@@ -3426,6 +3426,53 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Templated path under which to look for data.`,
 					},
+					"paths": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Bucket paths and datatype filters used by search execution v2.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"auto_detect_region": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to automatically detect the bucket region.`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 bucket name.`,
+								},
+								"filters": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Glob-to-Datatype mappings for this bucket path.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"data_path_format": schema.StringAttribute{
+												Computed:    true,
+												Description: `Row format for Search v2 Lake path filters.`,
+											},
+											"data_type_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Datatype identifier that maps filtered objects to a data type definition.`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Description: `Glob pattern for selecting files within the storage path.`,
+											},
+											"preprocess_outer_json": schema.BoolAttribute{
+												Computed:    true,
+												Description: `When true, instructs the C++ reader to unwrap the outer JSON envelope before applying the user datatype to the nested _raw field. Set for Cribl Lake NDJSON filters only.`,
+											},
+										},
+									},
+								},
+								"partitioning_scheme": schema.StringAttribute{
+									Computed: true,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS region where the bucket is located.`,
+								},
+							},
+						},
+					},
 					"region": schema.StringAttribute{
 						Computed:    true,
 						Description: `AWS region where the bucket is located.`,

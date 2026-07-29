@@ -2546,6 +2546,35 @@ actions:
         type: string
         description: Templated path under which to look for data.
         x-terraform-optional-computed: true
+      paths:
+        type: array
+        description: Bucket paths and datatype filters used by search execution v2.
+        x-terraform-optional-computed: true
+        items:
+          type: object
+          required:
+            - bucket
+            - filters
+          properties:
+            autoDetectRegion:
+              type: boolean
+              description: Whether to automatically detect the bucket region.
+              x-terraform-optional-computed: true
+            bucket:
+              type: string
+              description: S3 bucket name.
+            filters:
+              type: array
+              description: Glob-to-Datatype mappings for this bucket path.
+              items:
+                $ref: "#/components/schemas/ObjectStorageFilter"
+            partitioningScheme:
+              $ref: "#/components/schemas/PartitioningScheme"
+              x-terraform-optional-computed: true
+            region:
+              type: string
+              description: AWS region where the bucket is located.
+              x-terraform-optional-computed: true
       region:
         type: string
         description: AWS region where the bucket is located.
@@ -2754,9 +2783,13 @@ actions:
       x-terraform-read: SearchDatasetRuleset
   - target: "$.components.schemas.DatasetRuleset.properties.id"
     update:
-      const: default
+      enum:
+        - default
+        - metrics
       default: default
-      x-terraform-fixed-value: default
+      description: Ruleset identifier. Use `default` for log dataset rules or `metrics` for metric dataset rules.
+      x-terraform-default-value: default
+      x-terraform-enum-validator: true
       x-terraform-suppress-diff: explicit
   - target: "$.components.schemas.DatasetRuleset.properties.rules"
     update:
@@ -2785,6 +2818,41 @@ actions:
   - target: "$.components.schemas.DatatypeRuleset.properties.rules"
     update:
       x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/search/datatypes.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.get"
+    update:
+      x-terraform-read: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.patch"
+    update:
+      x-terraform-update: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.delete"
+    update:
+      x-terraform-delete: SearchDatatype
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties"
+    update:
+      minRawLength:
+        type: integer
+        description: Minimum raw event length used when identifying the Datatype.
+        x-terraform-optional-computed: true
+      searchVersion:
+        type: string
+        enum:
+          - v1
+          - v2
+        description: Search execution version used by the Datatype.
+        x-terraform-optional-computed: true
+        x-terraform-enum-validator: true
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.1.oneOf.0.properties.dataFormat"
+    update:
+      x-terraform-request-computed: true
 
   - target: "$.paths./m/{groupId}/search/macros.post"
     update:
