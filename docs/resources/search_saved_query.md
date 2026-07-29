@@ -48,7 +48,7 @@ resource "criblio_search_saved_query" "my_search_saved_query" {
 ### Read-Only
 
 - `display_username` (String) Display name for the user who created the saved search.
-- `is_system` (Boolean)
+- `is_system` (Boolean) If <code>true</code>, the Saved Search is a system-created, system-managed query, such as a scheduled job that generates metadata.
 - `lib` (String) Library scope for the saved search. Indicates whether the definition is built-in or custom.
 - `resolved_dataset_ids` (List of String) Dataset identifiers that are resolved from the query for role-based access control (RBAC) and scheduling.
 - `search_job_source` (String) Source context that created the job.
@@ -255,6 +255,7 @@ Required:
 
 Optional:
 
+- `jitter_percent` (Integer) Percentage of the scheduling interval to use as a random jitter window. Spreads scheduled search execution times to reduce load spikes. Valid range is 0-50. Set to 0 to disable jitter. If not set, uses the global scheduled search jitter configuration.
 - `notifications` (Attributes) Notification settings for scheduled query executions. (see [below for nested schema](#nestedatt--schedule--notifications))
 
 <a id="nestedatt--schedule--notifications"></a>

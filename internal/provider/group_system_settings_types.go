@@ -97,21 +97,21 @@ type GroupSystemSettingsAPIModel struct {
 }
 
 type GroupSystemSettingsAPIFieldModel struct {
-	BaseURL            types.String  `tfsdk:"base_url" json:"baseUrl,omitempty"`
-	DisableAPICache    types.Bool    `tfsdk:"disable_api_cache" json:"disableApiCache,omitempty"`
-	Disabled           types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Headers            types.Map     `tfsdk:"headers" json:"headers,omitempty"`
-	Host               types.String  `tfsdk:"host" json:"host,omitempty"`
-	IDleSessionTTL     types.Float64 `tfsdk:"idle_session_ttl" json:"idleSessionTTL,omitempty"`
-	ListenOnPort       types.Bool    `tfsdk:"listen_on_port" json:"listenOnPort,omitempty"`
-	LoginRateLimit     types.String  `tfsdk:"login_rate_limit" json:"loginRateLimit,omitempty"`
-	Port               types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	Protocol           types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
-	Scripts            types.Bool    `tfsdk:"scripts" json:"scripts,omitempty"`
-	SensitiveFields    types.List    `tfsdk:"sensitive_fields" json:"sensitiveFields,omitempty"`
-	Ssl                types.Object  `tfsdk:"ssl" json:"ssl,omitempty"`
-	SsoRateLimit       types.String  `tfsdk:"sso_rate_limit" json:"ssoRateLimit,omitempty"`
-	WorkerRemoteAccess types.Bool    `tfsdk:"worker_remote_access" json:"workerRemoteAccess,omitempty"`
+	BaseURL            types.String `tfsdk:"base_url" json:"baseUrl,omitempty"`
+	DisableAPICache    types.Bool   `tfsdk:"disable_api_cache" json:"disableApiCache,omitempty"`
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Headers            types.Map    `tfsdk:"headers" json:"headers,omitempty"`
+	Host               types.String `tfsdk:"host" json:"host,omitempty"`
+	IDleSessionTTL     types.Int64  `tfsdk:"idle_session_ttl" json:"idleSessionTTL,omitempty"`
+	ListenOnPort       types.Bool   `tfsdk:"listen_on_port" json:"listenOnPort,omitempty"`
+	LoginRateLimit     types.String `tfsdk:"login_rate_limit" json:"loginRateLimit,omitempty"`
+	Port               types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	Protocol           types.String `tfsdk:"protocol" json:"protocol,omitempty"`
+	Scripts            types.Bool   `tfsdk:"scripts" json:"scripts,omitempty"`
+	SensitiveFields    types.List   `tfsdk:"sensitive_fields" json:"sensitiveFields,omitempty"`
+	Ssl                types.Object `tfsdk:"ssl" json:"ssl,omitempty"`
+	SsoRateLimit       types.String `tfsdk:"sso_rate_limit" json:"ssoRateLimit,omitempty"`
+	WorkerRemoteAccess types.Bool   `tfsdk:"worker_remote_access" json:"workerRemoteAccess,omitempty"`
 }
 
 type GroupSystemSettingsAPIFieldAPIModel struct {
@@ -120,10 +120,10 @@ type GroupSystemSettingsAPIFieldAPIModel struct {
 	Disabled           *bool             `json:"disabled,omitempty"`
 	Headers            map[string]string `json:"headers,omitempty"`
 	Host               *string           `json:"host,omitempty"`
-	IDleSessionTTL     *float64          `json:"idleSessionTTL,omitempty"`
+	IDleSessionTTL     *int64            `json:"idleSessionTTL,omitempty"`
 	ListenOnPort       *bool             `json:"listenOnPort,omitempty"`
 	LoginRateLimit     *string           `json:"loginRateLimit,omitempty"`
-	Port               *float64          `json:"port,omitempty"`
+	Port               *int64            `json:"port,omitempty"`
 	Protocol           *string           `json:"protocol,omitempty"`
 	Scripts            *bool             `json:"scripts,omitempty"`
 	SensitiveFields    []string          `json:"sensitiveFields,omitempty"`
@@ -139,10 +139,10 @@ func GroupSystemSettingsAPIFieldAttrTypes() map[string]attr.Type {
 		"disabled":             types.BoolType,
 		"headers":              types.MapType{ElemType: types.StringType},
 		"host":                 types.StringType,
-		"idle_session_ttl":     types.Float64Type,
+		"idle_session_ttl":     types.Int64Type,
 		"listen_on_port":       types.BoolType,
 		"login_rate_limit":     types.StringType,
-		"port":                 types.Float64Type,
+		"port":                 types.Int64Type,
 		"protocol":             types.StringType,
 		"scripts":              types.BoolType,
 		"sensitive_fields":     types.ListType{ElemType: types.StringType},
@@ -258,36 +258,36 @@ func GroupSystemSettingsProxyAttrTypes() map[string]attr.Type {
 }
 
 type GroupSystemSettingsRollbackModel struct {
-	RollbackEnabled types.Bool    `tfsdk:"rollback_enabled" json:"rollbackEnabled,omitempty"`
-	RollbackRetries types.Float64 `tfsdk:"rollback_retries" json:"rollbackRetries,omitempty"`
-	RollbackTimeout types.Float64 `tfsdk:"rollback_timeout" json:"rollbackTimeout,omitempty"`
+	RollbackEnabled types.Bool  `tfsdk:"rollback_enabled" json:"rollbackEnabled,omitempty"`
+	RollbackRetries types.Int64 `tfsdk:"rollback_retries" json:"rollbackRetries,omitempty"`
+	RollbackTimeout types.Int64 `tfsdk:"rollback_timeout" json:"rollbackTimeout,omitempty"`
 }
 
 type GroupSystemSettingsRollbackAPIModel struct {
-	RollbackEnabled *bool    `json:"rollbackEnabled,omitempty"`
-	RollbackRetries *float64 `json:"rollbackRetries,omitempty"`
-	RollbackTimeout *float64 `json:"rollbackTimeout,omitempty"`
+	RollbackEnabled *bool  `json:"rollbackEnabled,omitempty"`
+	RollbackRetries *int64 `json:"rollbackRetries,omitempty"`
+	RollbackTimeout *int64 `json:"rollbackTimeout,omitempty"`
 }
 
 func GroupSystemSettingsRollbackAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"rollback_enabled": types.BoolType,
-		"rollback_retries": types.Float64Type,
-		"rollback_timeout": types.Float64Type,
+		"rollback_retries": types.Int64Type,
+		"rollback_timeout": types.Int64Type,
 	}
 }
 
 type GroupSystemSettingsShutdownModel struct {
-	DrainTimeout types.Float64 `tfsdk:"drain_timeout" json:"drainTimeout,omitempty"`
+	DrainTimeout types.Int64 `tfsdk:"drain_timeout" json:"drainTimeout,omitempty"`
 }
 
 type GroupSystemSettingsShutdownAPIModel struct {
-	DrainTimeout *float64 `json:"drainTimeout,omitempty"`
+	DrainTimeout *int64 `json:"drainTimeout,omitempty"`
 }
 
 func GroupSystemSettingsShutdownAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"drain_timeout": types.Float64Type,
+		"drain_timeout": types.Int64Type,
 	}
 }
 
@@ -320,21 +320,21 @@ func GroupSystemSettingsSocketsAttrTypes() map[string]attr.Type {
 }
 
 type GroupSystemSettingsSupportModel struct {
-	FeatureFlagOverrides types.List    `tfsdk:"feature_flag_overrides" json:"featureFlagOverrides,omitempty"`
-	LogFileMaxFiles      types.Float64 `tfsdk:"log_file_max_files" json:"logFileMaxFiles,omitempty"`
-	LogFileMaxSize       types.String  `tfsdk:"log_file_max_size" json:"logFileMaxSize,omitempty"`
+	FeatureFlagOverrides types.List   `tfsdk:"feature_flag_overrides" json:"featureFlagOverrides,omitempty"`
+	LogFileMaxFiles      types.Int64  `tfsdk:"log_file_max_files" json:"logFileMaxFiles,omitempty"`
+	LogFileMaxSize       types.String `tfsdk:"log_file_max_size" json:"logFileMaxSize,omitempty"`
 }
 
 type GroupSystemSettingsSupportAPIModel struct {
-	FeatureFlagOverrides any      `json:"featureFlagOverrides,omitempty"`
-	LogFileMaxFiles      *float64 `json:"logFileMaxFiles,omitempty"`
-	LogFileMaxSize       *string  `json:"logFileMaxSize,omitempty"`
+	FeatureFlagOverrides any     `json:"featureFlagOverrides,omitempty"`
+	LogFileMaxFiles      *int64  `json:"logFileMaxFiles,omitempty"`
+	LogFileMaxSize       *string `json:"logFileMaxSize,omitempty"`
 }
 
 func GroupSystemSettingsSupportAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"feature_flag_overrides": types.ListType{ElemType: types.ObjectType{AttrTypes: GroupSystemSettingsSupportFeatureFlagOverridesAttrTypes()}},
-		"log_file_max_files":     types.Float64Type,
+		"log_file_max_files":     types.Int64Type,
 		"log_file_max_size":      types.StringType,
 	}
 }
@@ -400,25 +400,25 @@ func GroupSystemSettingsTLSAttrTypes() map[string]attr.Type {
 }
 
 type GroupSystemSettingsUpgradeGroupSettingsModel struct {
-	IsRolling  types.Bool    `tfsdk:"is_rolling" json:"isRolling,omitempty"`
-	Quantity   types.Float64 `tfsdk:"quantity" json:"quantity,omitempty"`
-	RetryCount types.Float64 `tfsdk:"retry_count" json:"retryCount,omitempty"`
-	RetryDelay types.Float64 `tfsdk:"retry_delay" json:"retryDelay,omitempty"`
+	IsRolling  types.Bool  `tfsdk:"is_rolling" json:"isRolling,omitempty"`
+	Quantity   types.Int64 `tfsdk:"quantity" json:"quantity,omitempty"`
+	RetryCount types.Int64 `tfsdk:"retry_count" json:"retryCount,omitempty"`
+	RetryDelay types.Int64 `tfsdk:"retry_delay" json:"retryDelay,omitempty"`
 }
 
 type GroupSystemSettingsUpgradeGroupSettingsAPIModel struct {
-	IsRolling  *bool    `json:"isRolling,omitempty"`
-	Quantity   *float64 `json:"quantity,omitempty"`
-	RetryCount *float64 `json:"retryCount,omitempty"`
-	RetryDelay *float64 `json:"retryDelay,omitempty"`
+	IsRolling  *bool  `json:"isRolling,omitempty"`
+	Quantity   *int64 `json:"quantity,omitempty"`
+	RetryCount *int64 `json:"retryCount,omitempty"`
+	RetryDelay *int64 `json:"retryDelay,omitempty"`
 }
 
 func GroupSystemSettingsUpgradeGroupSettingsAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"is_rolling":  types.BoolType,
-		"quantity":    types.Float64Type,
-		"retry_count": types.Float64Type,
-		"retry_delay": types.Float64Type,
+		"quantity":    types.Int64Type,
+		"retry_count": types.Int64Type,
+		"retry_delay": types.Int64Type,
 	}
 }
 
@@ -466,37 +466,49 @@ func GroupSystemSettingsUpgradeSettingsPackageURLsAttrTypes() map[string]attr.Ty
 }
 
 type GroupSystemSettingsWorkersModel struct {
-	Count                  types.Float64 `tfsdk:"count" json:"count,omitempty"`
-	EnableHeapSnapshots    types.Bool    `tfsdk:"enable_heap_snapshots" json:"enableHeapSnapshots,omitempty"`
-	LoadThrottlePerc       types.Float64 `tfsdk:"load_throttle_perc" json:"loadThrottlePerc,omitempty"`
-	Memory                 types.Float64 `tfsdk:"memory" json:"memory,omitempty"`
-	Minimum                types.Float64 `tfsdk:"minimum" json:"minimum,omitempty"`
-	StartupMaxConns        types.Float64 `tfsdk:"startup_max_conns" json:"startupMaxConns,omitempty"`
-	StartupThrottleTimeout types.Float64 `tfsdk:"startup_throttle_timeout" json:"startupThrottleTimeout,omitempty"`
-	V8SingleThread         types.Bool    `tfsdk:"v8_single_thread" json:"v8SingleThread,omitempty"`
+	Count                                types.Int64 `tfsdk:"count" json:"count,omitempty"`
+	EnableHeapSnapshots                  types.Bool  `tfsdk:"enable_heap_snapshots" json:"enableHeapSnapshots,omitempty"`
+	LoadThrottlePerc                     types.Int64 `tfsdk:"load_throttle_perc" json:"loadThrottlePerc,omitempty"`
+	Memory                               types.Int64 `tfsdk:"memory" json:"memory,omitempty"`
+	Minimum                              types.Int64 `tfsdk:"minimum" json:"minimum,omitempty"`
+	RestartUnresponsiveProcesses         types.Bool  `tfsdk:"restart_unresponsive_processes" json:"restartUnresponsiveProcesses,omitempty"`
+	StartupMaxConns                      types.Int64 `tfsdk:"startup_max_conns" json:"startupMaxConns,omitempty"`
+	StartupThrottleTimeout               types.Int64 `tfsdk:"startup_throttle_timeout" json:"startupThrottleTimeout,omitempty"`
+	V8SingleThread                       types.Bool  `tfsdk:"v8_single_thread" json:"v8SingleThread,omitempty"`
+	WorkerProcessConfigUpdateConcurrency types.Int64 `tfsdk:"worker_process_config_update_concurrency" json:"workerProcessConfigUpdateConcurrency,omitempty"`
+	WorkerProcessReloadTimeout           types.Int64 `tfsdk:"worker_process_reload_timeout" json:"workerProcessReloadTimeout,omitempty"`
+	WorkerThreadPoolSize                 types.Int64 `tfsdk:"worker_thread_pool_size" json:"workerThreadPoolSize,omitempty"`
 }
 
 type GroupSystemSettingsWorkersAPIModel struct {
-	Count                  *float64 `json:"count,omitempty"`
-	EnableHeapSnapshots    *bool    `json:"enableHeapSnapshots,omitempty"`
-	LoadThrottlePerc       *float64 `json:"loadThrottlePerc,omitempty"`
-	Memory                 *float64 `json:"memory,omitempty"`
-	Minimum                *float64 `json:"minimum,omitempty"`
-	StartupMaxConns        *float64 `json:"startupMaxConns,omitempty"`
-	StartupThrottleTimeout *float64 `json:"startupThrottleTimeout,omitempty"`
-	V8SingleThread         *bool    `json:"v8SingleThread,omitempty"`
+	Count                                *int64 `json:"count,omitempty"`
+	EnableHeapSnapshots                  *bool  `json:"enableHeapSnapshots,omitempty"`
+	LoadThrottlePerc                     *int64 `json:"loadThrottlePerc,omitempty"`
+	Memory                               *int64 `json:"memory,omitempty"`
+	Minimum                              *int64 `json:"minimum,omitempty"`
+	RestartUnresponsiveProcesses         *bool  `json:"restartUnresponsiveProcesses,omitempty"`
+	StartupMaxConns                      *int64 `json:"startupMaxConns,omitempty"`
+	StartupThrottleTimeout               *int64 `json:"startupThrottleTimeout,omitempty"`
+	V8SingleThread                       *bool  `json:"v8SingleThread,omitempty"`
+	WorkerProcessConfigUpdateConcurrency *int64 `json:"workerProcessConfigUpdateConcurrency,omitempty"`
+	WorkerProcessReloadTimeout           *int64 `json:"workerProcessReloadTimeout,omitempty"`
+	WorkerThreadPoolSize                 *int64 `json:"workerThreadPoolSize,omitempty"`
 }
 
 func GroupSystemSettingsWorkersAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"count":                    types.Float64Type,
-		"enable_heap_snapshots":    types.BoolType,
-		"load_throttle_perc":       types.Float64Type,
-		"memory":                   types.Float64Type,
-		"minimum":                  types.Float64Type,
-		"startup_max_conns":        types.Float64Type,
-		"startup_throttle_timeout": types.Float64Type,
-		"v8_single_thread":         types.BoolType,
+		"count":                          types.Int64Type,
+		"enable_heap_snapshots":          types.BoolType,
+		"load_throttle_perc":             types.Int64Type,
+		"memory":                         types.Int64Type,
+		"minimum":                        types.Int64Type,
+		"restart_unresponsive_processes": types.BoolType,
+		"startup_max_conns":              types.Int64Type,
+		"startup_throttle_timeout":       types.Int64Type,
+		"v8_single_thread":               types.BoolType,
+		"worker_process_config_update_concurrency": types.Int64Type,
+		"worker_process_reload_timeout":            types.Int64Type,
+		"worker_thread_pool_size":                  types.Int64Type,
 	}
 }
 
@@ -561,6 +573,12 @@ func GroupSystemSettingsTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "disable_sni_routing":
+		return prefix + "disableSNIRouting"
+	case "idle_session_ttl":
+		return prefix + "idleSessionTTL"
 	}
 	var output strings.Builder
 	upperNext := false

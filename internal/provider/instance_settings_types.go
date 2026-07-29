@@ -35,51 +35,51 @@ type InstanceSettingsAPIModel struct {
 }
 
 type InstanceSettingsCloudWorkspaceModel struct {
-	AuthToken             types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
-	AuthTokenRotated      types.Bool    `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
-	Compression           types.String  `tfsdk:"compression" json:"compression,omitempty"`
-	ConfigBundles         types.Object  `tfsdk:"config_bundles" json:"configBundles,omitempty"`
-	ConfigHelperSocketDir types.String  `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
-	ConnectionTimeout     types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
-	DisableSniRouting     types.Bool    `tfsdk:"disable_sni_routing" json:"disableSNIRouting,omitempty"`
-	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Failover              types.Object  `tfsdk:"failover" json:"failover,omitempty"`
-	ForwardToLeaderAPI    types.Bool    `tfsdk:"forward_to_leader_api" json:"forwardToLeaderApi,omitempty"`
-	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
-	IpWhitelistRegex      types.String  `tfsdk:"ip_whitelist_regex" json:"ipWhitelistRegex,omitempty"`
-	MaxActiveCxn          types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
-	MaxBufferBytes        types.Float64 `tfsdk:"max_buffer_bytes" json:"maxBufferBytes,omitempty"`
-	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	Protocol              types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
-	Proxy                 types.Object  `tfsdk:"proxy" json:"proxy,omitempty"`
-	Resiliency            types.String  `tfsdk:"resiliency" json:"resiliency,omitempty"`
-	SubscriptionAgreement types.Bool    `tfsdk:"subscription_agreement" json:"subscriptionAgreement,omitempty"`
-	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	WriteTimeout          types.Float64 `tfsdk:"write_timeout" json:"writeTimeout,omitempty"`
+	AuthToken             types.String `tfsdk:"auth_token" json:"authToken,omitempty"`
+	AuthTokenRotated      types.Bool   `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
+	Compression           types.String `tfsdk:"compression" json:"compression,omitempty"`
+	ConfigBundles         types.Object `tfsdk:"config_bundles" json:"configBundles,omitempty"`
+	ConfigHelperSocketDir types.String `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
+	ConnectionTimeout     types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	DisableSniRouting     types.Bool   `tfsdk:"disable_sni_routing" json:"disableSNIRouting,omitempty"`
+	Disabled              types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Failover              types.Object `tfsdk:"failover" json:"failover,omitempty"`
+	ForwardToLeaderAPI    types.Bool   `tfsdk:"forward_to_leader_api" json:"forwardToLeaderApi,omitempty"`
+	Host                  types.String `tfsdk:"host" json:"host,omitempty"`
+	IpWhitelistRegex      types.String `tfsdk:"ip_whitelist_regex" json:"ipWhitelistRegex,omitempty"`
+	MaxActiveCxn          types.Int64  `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
+	MaxBufferBytes        types.Int64  `tfsdk:"max_buffer_bytes" json:"maxBufferBytes,omitempty"`
+	Port                  types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	Protocol              types.String `tfsdk:"protocol" json:"protocol,omitempty"`
+	Proxy                 types.Object `tfsdk:"proxy" json:"proxy,omitempty"`
+	Resiliency            types.String `tfsdk:"resiliency" json:"resiliency,omitempty"`
+	SubscriptionAgreement types.Bool   `tfsdk:"subscription_agreement" json:"subscriptionAgreement,omitempty"`
+	TLS                   types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	WriteTimeout          types.Int64  `tfsdk:"write_timeout" json:"writeTimeout,omitempty"`
 }
 
 type InstanceSettingsCloudWorkspaceAPIModel struct {
-	AuthToken             *string  `json:"authToken,omitempty"`
-	AuthTokenRotated      *bool    `json:"authTokenRotated,omitempty"`
-	Compression           *string  `json:"compression,omitempty"`
-	ConfigBundles         any      `json:"configBundles,omitempty"`
-	ConfigHelperSocketDir *string  `json:"configHelperSocketDir,omitempty"`
-	ConnectionTimeout     *float64 `json:"connectionTimeout,omitempty"`
-	DisableSniRouting     *bool    `json:"disableSNIRouting,omitempty"`
-	Disabled              *bool    `json:"disabled,omitempty"`
-	Failover              any      `json:"failover,omitempty"`
-	ForwardToLeaderAPI    *bool    `json:"forwardToLeaderApi,omitempty"`
-	Host                  *string  `json:"host,omitempty"`
-	IpWhitelistRegex      *string  `json:"ipWhitelistRegex,omitempty"`
-	MaxActiveCxn          *float64 `json:"maxActiveCxn,omitempty"`
-	MaxBufferBytes        *float64 `json:"maxBufferBytes,omitempty"`
-	Port                  *float64 `json:"port,omitempty"`
-	Protocol              *string  `json:"protocol,omitempty"`
-	Proxy                 any      `json:"proxy,omitempty"`
-	Resiliency            *string  `json:"resiliency,omitempty"`
-	SubscriptionAgreement *bool    `json:"subscriptionAgreement,omitempty"`
-	TLS                   any      `json:"tls,omitempty"`
-	WriteTimeout          *float64 `json:"writeTimeout,omitempty"`
+	AuthToken             *string `json:"authToken,omitempty"`
+	AuthTokenRotated      *bool   `json:"authTokenRotated,omitempty"`
+	Compression           *string `json:"compression,omitempty"`
+	ConfigBundles         any     `json:"configBundles,omitempty"`
+	ConfigHelperSocketDir *string `json:"configHelperSocketDir,omitempty"`
+	ConnectionTimeout     *int64  `json:"connectionTimeout,omitempty"`
+	DisableSniRouting     *bool   `json:"disableSNIRouting,omitempty"`
+	Disabled              *bool   `json:"disabled,omitempty"`
+	Failover              any     `json:"failover,omitempty"`
+	ForwardToLeaderAPI    *bool   `json:"forwardToLeaderApi,omitempty"`
+	Host                  *string `json:"host,omitempty"`
+	IpWhitelistRegex      *string `json:"ipWhitelistRegex,omitempty"`
+	MaxActiveCxn          *int64  `json:"maxActiveCxn,omitempty"`
+	MaxBufferBytes        *int64  `json:"maxBufferBytes,omitempty"`
+	Port                  *int64  `json:"port,omitempty"`
+	Protocol              *string `json:"protocol,omitempty"`
+	Proxy                 any     `json:"proxy,omitempty"`
+	Resiliency            *string `json:"resiliency,omitempty"`
+	SubscriptionAgreement *bool   `json:"subscriptionAgreement,omitempty"`
+	TLS                   any     `json:"tls,omitempty"`
+	WriteTimeout          *int64  `json:"writeTimeout,omitempty"`
 }
 
 func InstanceSettingsCloudWorkspaceAttrTypes() map[string]attr.Type {
@@ -89,22 +89,22 @@ func InstanceSettingsCloudWorkspaceAttrTypes() map[string]attr.Type {
 		"compression":              types.StringType,
 		"config_bundles":           types.ObjectType{AttrTypes: InstanceSettingsCloudWorkspaceConfigBundlesAttrTypes()},
 		"config_helper_socket_dir": types.StringType,
-		"connection_timeout":       types.Float64Type,
+		"connection_timeout":       types.Int64Type,
 		"disable_sni_routing":      types.BoolType,
 		"disabled":                 types.BoolType,
 		"failover":                 types.ObjectType{AttrTypes: InstanceSettingsCloudWorkspaceFailoverAttrTypes()},
 		"forward_to_leader_api":    types.BoolType,
 		"host":                     types.StringType,
 		"ip_whitelist_regex":       types.StringType,
-		"max_active_cxn":           types.Float64Type,
-		"max_buffer_bytes":         types.Float64Type,
-		"port":                     types.Float64Type,
+		"max_active_cxn":           types.Int64Type,
+		"max_buffer_bytes":         types.Int64Type,
+		"port":                     types.Int64Type,
 		"protocol":                 types.StringType,
 		"proxy":                    types.ObjectType{AttrTypes: InstanceSettingsCloudWorkspaceProxyAttrTypes()},
 		"resiliency":               types.StringType,
 		"subscription_agreement":   types.BoolType,
 		"tls":                      types.ObjectType{AttrTypes: InstanceSettingsCloudWorkspaceTLSAttrTypes()},
-		"write_timeout":            types.Float64Type,
+		"write_timeout":            types.Int64Type,
 	}
 }
 
@@ -123,41 +123,41 @@ func InstanceSettingsCloudWorkspaceConfigBundlesAttrTypes() map[string]attr.Type
 }
 
 type InstanceSettingsCloudWorkspaceFailoverModel struct {
-	MissedHbLimit types.Float64 `tfsdk:"missed_hb_limit" json:"missedHBLimit,omitempty"`
-	Period        types.String  `tfsdk:"period" json:"period,omitempty"`
-	Volume        types.String  `tfsdk:"volume" json:"volume,omitempty"`
+	MissedHbLimit types.Int64  `tfsdk:"missed_hb_limit" json:"missedHBLimit,omitempty"`
+	Period        types.String `tfsdk:"period" json:"period,omitempty"`
+	Volume        types.String `tfsdk:"volume" json:"volume,omitempty"`
 }
 
 type InstanceSettingsCloudWorkspaceFailoverAPIModel struct {
-	MissedHbLimit *float64 `json:"missedHBLimit,omitempty"`
-	Period        *string  `json:"period,omitempty"`
-	Volume        *string  `json:"volume,omitempty"`
+	MissedHbLimit *int64  `json:"missedHBLimit,omitempty"`
+	Period        *string `json:"period,omitempty"`
+	Volume        *string `json:"volume,omitempty"`
 }
 
 func InstanceSettingsCloudWorkspaceFailoverAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"missed_hb_limit": types.Float64Type,
+		"missed_hb_limit": types.Int64Type,
 		"period":          types.StringType,
 		"volume":          types.StringType,
 	}
 }
 
 type InstanceSettingsCloudWorkspaceProxyModel struct {
-	Disabled types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Host     types.String  `tfsdk:"host" json:"host,omitempty"`
-	Password types.String  `tfsdk:"password" json:"password,omitempty"`
-	Port     types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	Type     types.Float64 `tfsdk:"type" json:"type,omitempty"`
-	UserID   types.String  `tfsdk:"user_id" json:"userId,omitempty"`
+	Disabled types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Host     types.String `tfsdk:"host" json:"host,omitempty"`
+	Password types.String `tfsdk:"password" json:"password,omitempty"`
+	Port     types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	Type     types.Int64  `tfsdk:"type" json:"type,omitempty"`
+	UserID   types.String `tfsdk:"user_id" json:"userId,omitempty"`
 }
 
 type InstanceSettingsCloudWorkspaceProxyAPIModel struct {
-	Disabled *bool    `json:"disabled,omitempty"`
-	Host     *string  `json:"host,omitempty"`
-	Password *string  `json:"password,omitempty"`
-	Port     *float64 `json:"port,omitempty"`
-	Type     *float64 `json:"type,omitempty"`
-	UserID   *string  `json:"userId,omitempty"`
+	Disabled *bool   `json:"disabled,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+	Type     *int64  `json:"type,omitempty"`
+	UserID   *string `json:"userId,omitempty"`
 }
 
 func InstanceSettingsCloudWorkspaceProxyAttrTypes() map[string]attr.Type {
@@ -165,8 +165,8 @@ func InstanceSettingsCloudWorkspaceProxyAttrTypes() map[string]attr.Type {
 		"disabled": types.BoolType,
 		"host":     types.StringType,
 		"password": types.StringType,
-		"port":     types.Float64Type,
-		"type":     types.Float64Type,
+		"port":     types.Int64Type,
+		"type":     types.Int64Type,
 		"user_id":  types.StringType,
 	}
 }
@@ -175,7 +175,7 @@ type InstanceSettingsCloudWorkspaceTLSModel struct {
 	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
-	CommonNameRegex    types.Map    `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
@@ -187,18 +187,18 @@ type InstanceSettingsCloudWorkspaceTLSModel struct {
 }
 
 type InstanceSettingsCloudWorkspaceTLSAPIModel struct {
-	CaPath             *string           `json:"caPath,omitempty"`
-	CertPath           *string           `json:"certPath,omitempty"`
-	CertificateName    *string           `json:"certificateName,omitempty"`
-	CommonNameRegex    map[string]string `json:"commonNameRegex,omitempty"`
-	Disabled           *bool             `json:"disabled,omitempty"`
-	MaxVersion         *string           `json:"maxVersion,omitempty"`
-	MinVersion         *string           `json:"minVersion,omitempty"`
-	Passphrase         *string           `json:"passphrase,omitempty"`
-	PrivKeyPath        *string           `json:"privKeyPath,omitempty"`
-	RejectUnauthorized *bool             `json:"rejectUnauthorized,omitempty"`
-	RequestCert        *bool             `json:"requestCert,omitempty"`
-	Servername         *string           `json:"servername,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	Disabled           *bool   `json:"disabled,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	Servername         *string `json:"servername,omitempty"`
 }
 
 func InstanceSettingsCloudWorkspaceTLSAttrTypes() map[string]attr.Type {
@@ -206,7 +206,7 @@ func InstanceSettingsCloudWorkspaceTLSAttrTypes() map[string]attr.Type {
 		"ca_path":             types.StringType,
 		"cert_path":           types.StringType,
 		"certificate_name":    types.StringType,
-		"common_name_regex":   types.MapType{ElemType: types.StringType},
+		"common_name_regex":   types.StringType,
 		"disabled":            types.BoolType,
 		"max_version":         types.StringType,
 		"min_version":         types.StringType,
@@ -219,47 +219,47 @@ func InstanceSettingsCloudWorkspaceTLSAttrTypes() map[string]attr.Type {
 }
 
 type InstanceSettingsMasterModel struct {
-	AuthToken             types.String  `tfsdk:"auth_token" json:"authToken,omitempty"`
-	AuthTokenRotated      types.Bool    `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
-	Compression           types.String  `tfsdk:"compression" json:"compression,omitempty"`
-	ConfigBundles         types.Object  `tfsdk:"config_bundles" json:"configBundles,omitempty"`
-	ConfigHelperSocketDir types.String  `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
-	ConnectionTimeout     types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
-	DisableSniRouting     types.Bool    `tfsdk:"disable_sni_routing" json:"disableSNIRouting,omitempty"`
-	Failover              types.Object  `tfsdk:"failover" json:"failover,omitempty"`
-	ForwardToLeaderAPI    types.Bool    `tfsdk:"forward_to_leader_api" json:"forwardToLeaderApi,omitempty"`
-	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
-	IpWhitelistRegex      types.String  `tfsdk:"ip_whitelist_regex" json:"ipWhitelistRegex,omitempty"`
-	MaxActiveCxn          types.Float64 `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
-	MaxBufferBytes        types.Float64 `tfsdk:"max_buffer_bytes" json:"maxBufferBytes,omitempty"`
-	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	Protocol              types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
-	Proxy                 types.Object  `tfsdk:"proxy" json:"proxy,omitempty"`
-	Resiliency            types.String  `tfsdk:"resiliency" json:"resiliency,omitempty"`
-	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	WriteTimeout          types.Float64 `tfsdk:"write_timeout" json:"writeTimeout,omitempty"`
+	AuthToken             types.String `tfsdk:"auth_token" json:"authToken,omitempty"`
+	AuthTokenRotated      types.Bool   `tfsdk:"auth_token_rotated" json:"authTokenRotated,omitempty"`
+	Compression           types.String `tfsdk:"compression" json:"compression,omitempty"`
+	ConfigBundles         types.Object `tfsdk:"config_bundles" json:"configBundles,omitempty"`
+	ConfigHelperSocketDir types.String `tfsdk:"config_helper_socket_dir" json:"configHelperSocketDir,omitempty"`
+	ConnectionTimeout     types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	DisableSniRouting     types.Bool   `tfsdk:"disable_sni_routing" json:"disableSNIRouting,omitempty"`
+	Failover              types.Object `tfsdk:"failover" json:"failover,omitempty"`
+	ForwardToLeaderAPI    types.Bool   `tfsdk:"forward_to_leader_api" json:"forwardToLeaderApi,omitempty"`
+	Host                  types.String `tfsdk:"host" json:"host,omitempty"`
+	IpWhitelistRegex      types.String `tfsdk:"ip_whitelist_regex" json:"ipWhitelistRegex,omitempty"`
+	MaxActiveCxn          types.Int64  `tfsdk:"max_active_cxn" json:"maxActiveCxn,omitempty"`
+	MaxBufferBytes        types.Int64  `tfsdk:"max_buffer_bytes" json:"maxBufferBytes,omitempty"`
+	Port                  types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	Protocol              types.String `tfsdk:"protocol" json:"protocol,omitempty"`
+	Proxy                 types.Object `tfsdk:"proxy" json:"proxy,omitempty"`
+	Resiliency            types.String `tfsdk:"resiliency" json:"resiliency,omitempty"`
+	TLS                   types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	WriteTimeout          types.Int64  `tfsdk:"write_timeout" json:"writeTimeout,omitempty"`
 }
 
 type InstanceSettingsMasterAPIModel struct {
-	AuthToken             *string  `json:"authToken,omitempty"`
-	AuthTokenRotated      *bool    `json:"authTokenRotated,omitempty"`
-	Compression           *string  `json:"compression,omitempty"`
-	ConfigBundles         any      `json:"configBundles,omitempty"`
-	ConfigHelperSocketDir *string  `json:"configHelperSocketDir,omitempty"`
-	ConnectionTimeout     *float64 `json:"connectionTimeout,omitempty"`
-	DisableSniRouting     *bool    `json:"disableSNIRouting,omitempty"`
-	Failover              any      `json:"failover,omitempty"`
-	ForwardToLeaderAPI    *bool    `json:"forwardToLeaderApi,omitempty"`
-	Host                  *string  `json:"host,omitempty"`
-	IpWhitelistRegex      *string  `json:"ipWhitelistRegex,omitempty"`
-	MaxActiveCxn          *float64 `json:"maxActiveCxn,omitempty"`
-	MaxBufferBytes        *float64 `json:"maxBufferBytes,omitempty"`
-	Port                  *float64 `json:"port,omitempty"`
-	Protocol              *string  `json:"protocol,omitempty"`
-	Proxy                 any      `json:"proxy,omitempty"`
-	Resiliency            *string  `json:"resiliency,omitempty"`
-	TLS                   any      `json:"tls,omitempty"`
-	WriteTimeout          *float64 `json:"writeTimeout,omitempty"`
+	AuthToken             *string `json:"authToken,omitempty"`
+	AuthTokenRotated      *bool   `json:"authTokenRotated,omitempty"`
+	Compression           *string `json:"compression,omitempty"`
+	ConfigBundles         any     `json:"configBundles,omitempty"`
+	ConfigHelperSocketDir *string `json:"configHelperSocketDir,omitempty"`
+	ConnectionTimeout     *int64  `json:"connectionTimeout,omitempty"`
+	DisableSniRouting     *bool   `json:"disableSNIRouting,omitempty"`
+	Failover              any     `json:"failover,omitempty"`
+	ForwardToLeaderAPI    *bool   `json:"forwardToLeaderApi,omitempty"`
+	Host                  *string `json:"host,omitempty"`
+	IpWhitelistRegex      *string `json:"ipWhitelistRegex,omitempty"`
+	MaxActiveCxn          *int64  `json:"maxActiveCxn,omitempty"`
+	MaxBufferBytes        *int64  `json:"maxBufferBytes,omitempty"`
+	Port                  *int64  `json:"port,omitempty"`
+	Protocol              *string `json:"protocol,omitempty"`
+	Proxy                 any     `json:"proxy,omitempty"`
+	Resiliency            *string `json:"resiliency,omitempty"`
+	TLS                   any     `json:"tls,omitempty"`
+	WriteTimeout          *int64  `json:"writeTimeout,omitempty"`
 }
 
 func InstanceSettingsMasterAttrTypes() map[string]attr.Type {
@@ -269,20 +269,20 @@ func InstanceSettingsMasterAttrTypes() map[string]attr.Type {
 		"compression":              types.StringType,
 		"config_bundles":           types.ObjectType{AttrTypes: InstanceSettingsMasterConfigBundlesAttrTypes()},
 		"config_helper_socket_dir": types.StringType,
-		"connection_timeout":       types.Float64Type,
+		"connection_timeout":       types.Int64Type,
 		"disable_sni_routing":      types.BoolType,
 		"failover":                 types.ObjectType{AttrTypes: InstanceSettingsMasterFailoverAttrTypes()},
 		"forward_to_leader_api":    types.BoolType,
 		"host":                     types.StringType,
 		"ip_whitelist_regex":       types.StringType,
-		"max_active_cxn":           types.Float64Type,
-		"max_buffer_bytes":         types.Float64Type,
-		"port":                     types.Float64Type,
+		"max_active_cxn":           types.Int64Type,
+		"max_buffer_bytes":         types.Int64Type,
+		"port":                     types.Int64Type,
 		"protocol":                 types.StringType,
 		"proxy":                    types.ObjectType{AttrTypes: InstanceSettingsMasterProxyAttrTypes()},
 		"resiliency":               types.StringType,
 		"tls":                      types.ObjectType{AttrTypes: InstanceSettingsMasterTLSAttrTypes()},
-		"write_timeout":            types.Float64Type,
+		"write_timeout":            types.Int64Type,
 	}
 }
 
@@ -301,41 +301,41 @@ func InstanceSettingsMasterConfigBundlesAttrTypes() map[string]attr.Type {
 }
 
 type InstanceSettingsMasterFailoverModel struct {
-	MissedHbLimit types.Float64 `tfsdk:"missed_hb_limit" json:"missedHBLimit,omitempty"`
-	Period        types.String  `tfsdk:"period" json:"period,omitempty"`
-	Volume        types.String  `tfsdk:"volume" json:"volume,omitempty"`
+	MissedHbLimit types.Int64  `tfsdk:"missed_hb_limit" json:"missedHBLimit,omitempty"`
+	Period        types.String `tfsdk:"period" json:"period,omitempty"`
+	Volume        types.String `tfsdk:"volume" json:"volume,omitempty"`
 }
 
 type InstanceSettingsMasterFailoverAPIModel struct {
-	MissedHbLimit *float64 `json:"missedHBLimit,omitempty"`
-	Period        *string  `json:"period,omitempty"`
-	Volume        *string  `json:"volume,omitempty"`
+	MissedHbLimit *int64  `json:"missedHBLimit,omitempty"`
+	Period        *string `json:"period,omitempty"`
+	Volume        *string `json:"volume,omitempty"`
 }
 
 func InstanceSettingsMasterFailoverAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"missed_hb_limit": types.Float64Type,
+		"missed_hb_limit": types.Int64Type,
 		"period":          types.StringType,
 		"volume":          types.StringType,
 	}
 }
 
 type InstanceSettingsMasterProxyModel struct {
-	Disabled types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Host     types.String  `tfsdk:"host" json:"host,omitempty"`
-	Password types.String  `tfsdk:"password" json:"password,omitempty"`
-	Port     types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	Type     types.Float64 `tfsdk:"type" json:"type,omitempty"`
-	UserID   types.String  `tfsdk:"user_id" json:"userId,omitempty"`
+	Disabled types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Host     types.String `tfsdk:"host" json:"host,omitempty"`
+	Password types.String `tfsdk:"password" json:"password,omitempty"`
+	Port     types.Int64  `tfsdk:"port" json:"port,omitempty"`
+	Type     types.Int64  `tfsdk:"type" json:"type,omitempty"`
+	UserID   types.String `tfsdk:"user_id" json:"userId,omitempty"`
 }
 
 type InstanceSettingsMasterProxyAPIModel struct {
-	Disabled *bool    `json:"disabled,omitempty"`
-	Host     *string  `json:"host,omitempty"`
-	Password *string  `json:"password,omitempty"`
-	Port     *float64 `json:"port,omitempty"`
-	Type     *float64 `json:"type,omitempty"`
-	UserID   *string  `json:"userId,omitempty"`
+	Disabled *bool   `json:"disabled,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+	Type     *int64  `json:"type,omitempty"`
+	UserID   *string `json:"userId,omitempty"`
 }
 
 func InstanceSettingsMasterProxyAttrTypes() map[string]attr.Type {
@@ -343,8 +343,8 @@ func InstanceSettingsMasterProxyAttrTypes() map[string]attr.Type {
 		"disabled": types.BoolType,
 		"host":     types.StringType,
 		"password": types.StringType,
-		"port":     types.Float64Type,
-		"type":     types.Float64Type,
+		"port":     types.Int64Type,
+		"type":     types.Int64Type,
 		"user_id":  types.StringType,
 	}
 }
@@ -353,7 +353,7 @@ type InstanceSettingsMasterTLSModel struct {
 	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
 	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
 	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
-	CommonNameRegex    types.Map    `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
 	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
 	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
@@ -365,18 +365,18 @@ type InstanceSettingsMasterTLSModel struct {
 }
 
 type InstanceSettingsMasterTLSAPIModel struct {
-	CaPath             *string           `json:"caPath,omitempty"`
-	CertPath           *string           `json:"certPath,omitempty"`
-	CertificateName    *string           `json:"certificateName,omitempty"`
-	CommonNameRegex    map[string]string `json:"commonNameRegex,omitempty"`
-	Disabled           *bool             `json:"disabled,omitempty"`
-	MaxVersion         *string           `json:"maxVersion,omitempty"`
-	MinVersion         *string           `json:"minVersion,omitempty"`
-	Passphrase         *string           `json:"passphrase,omitempty"`
-	PrivKeyPath        *string           `json:"privKeyPath,omitempty"`
-	RejectUnauthorized *bool             `json:"rejectUnauthorized,omitempty"`
-	RequestCert        *bool             `json:"requestCert,omitempty"`
-	Servername         *string           `json:"servername,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	Disabled           *bool   `json:"disabled,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	Servername         *string `json:"servername,omitempty"`
 }
 
 func InstanceSettingsMasterTLSAttrTypes() map[string]attr.Type {
@@ -384,7 +384,7 @@ func InstanceSettingsMasterTLSAttrTypes() map[string]attr.Type {
 		"ca_path":             types.StringType,
 		"cert_path":           types.StringType,
 		"certificate_name":    types.StringType,
-		"common_name_regex":   types.MapType{ElemType: types.StringType},
+		"common_name_regex":   types.StringType,
 		"disabled":            types.BoolType,
 		"max_version":         types.StringType,
 		"min_version":         types.StringType,
@@ -457,6 +457,12 @@ func InstanceSettingsTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "disable_sni_routing":
+		return prefix + "disableSNIRouting"
+	case "missed_hb_limit":
+		return prefix + "missedHBLimit"
 	}
 	var output strings.Builder
 	upperNext := false

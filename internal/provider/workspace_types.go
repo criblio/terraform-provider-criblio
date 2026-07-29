@@ -122,6 +122,10 @@ func WorkspaceTerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+	switch name {
+	case "leader_fqdn":
+		return prefix + "leaderFQDN"
+	}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {

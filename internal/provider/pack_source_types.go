@@ -83,9 +83,12 @@ type PackSourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -158,9 +161,12 @@ type PackSourceResourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -233,9 +239,12 @@ type PackSourceDataSourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -311,9 +320,12 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
 		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
 		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_bedrock_s3":             types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
 		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
 		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
 		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_sysdig_hec":             types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
+		"input_upwind_hec":             types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
 		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
 		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
 		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
@@ -381,6 +393,60 @@ func PackSourceTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "chat_messages":
+		return prefix + "chat_messages"
+	case "cribl_api":
+		return prefix + "criblAPI"
+	case "custom_apiversion":
+		return prefix + "customAPIVersion"
+	case "elastic_api":
+		return prefix + "elasticAPI"
+	case "enable_sqsassume_role":
+		return prefix + "enableSQSAssumeRole"
+	case "hec_api":
+		return prefix + "hecAPI"
+	case "loki_api":
+		return prefix + "lokiAPI"
+	case "max_manifest_size_kb":
+		return prefix + "maxManifestSizeKB"
+	case "name":
+		return prefix + "Name"
+	case "org_roles":
+		return prefix + "org_roles"
+	case "org_users":
+		return prefix + "org_users"
+	case "parquet_chunk_size_mb":
+		return prefix + "parquetChunkSizeMB"
+	case "project_details":
+		return prefix + "project_details"
+	case "prometheus_api":
+		return prefix + "prometheusAPI"
+	case "schema_registry_url":
+		return prefix + "schemaRegistryURL"
+	case "splunk_hec_api":
+		return prefix + "splunkHecAPI"
+	case "sqsassume_role_arn":
+		return prefix + "SQSAssumeRoleArn"
+	case "sqsassume_role_external_id":
+		return prefix + "SQSAssumeRoleExternalId"
+	case "sqsaws_authentication_method":
+		return prefix + "SQSAwsAuthenticationMethod"
+	case "sqsaws_secret":
+		return prefix + "SQSAwsSecret"
+	case "sqsaws_secret_key":
+		return prefix + "SQSAwsSecretKey"
+	case "sqsduration_seconds":
+		return prefix + "SQSDurationSeconds"
+	case "transport_url":
+		return prefix + "transportURL"
+	case "use_custom_oauth_params_or_headers":
+		return prefix + "useCustomOAuthParamsOrHeaders"
+	case "values":
+		return prefix + "Values"
+	case "verify_kplcheck_sums":
+		return prefix + "verifyKPLCheckSums"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -1096,6 +1162,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputBedrockS3 != nil {
+		value, err := m.InputBedrockS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputServicenowTable != nil {
 		value, err := m.InputServicenowTable.terraformPayload()
 		if err != nil {
@@ -1116,6 +1191,24 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputCloudflareHec != nil {
 		value, err := m.InputCloudflareHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSysdigHec != nil {
+		value, err := m.InputSysdigHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputUpwindHec != nil {
+		value, err := m.InputUpwindHec.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1184,24 +1277,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputCollection.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "kafka":
-		m.InputKafka = &InputKafkaModel{}
-		if err := m.InputKafka.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "msk":
-		m.InputMsk = &InputMskModel{}
-		if err := m.InputMsk.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "http":
 		m.InputHttp = &InputHttpModel{}
 		if err := m.InputHttp.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "splunk":
-		m.InputSplunk = &InputSplunkModel{}
-		if err := m.InputSplunk.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "splunk_search":
@@ -1214,19 +1292,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputSplunkHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "azure_blob":
-		m.InputAzureBlob = &InputAzureBlobModel{}
-		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "elastic":
 		m.InputElastic = &InputElasticModel{}
 		if err := m.InputElastic.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "confluent_cloud":
-		m.InputConfluentCloud = &InputConfluentCloudModel{}
-		if err := m.InputConfluentCloud.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "grafana":
@@ -1242,11 +1310,6 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "prometheus_rw":
 		m.InputPrometheusRw = &InputPrometheusRwModel{}
 		if err := m.InputPrometheusRw.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "prometheus":
-		m.InputPrometheus = &InputPrometheusModel{}
-		if err := m.InputPrometheus.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "edge_prometheus":
@@ -1294,19 +1357,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputFirehose.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "google_pubsub":
-		m.InputGooglePubsub = &InputGooglePubsubModel{}
-		if err := m.InputGooglePubsub.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "cribl":
 		m.InputCribl = &InputCriblModel{}
 		if err := m.InputCribl.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "cribl_tcp":
-		m.InputCriblTcp = &InputCriblTcpModel{}
-		if err := m.InputCriblTcp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "cribl_http":
@@ -1317,11 +1370,6 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "cribl_lake_http":
 		m.InputCriblLakeHttp = &InputCriblLakeHttpModel{}
 		if err := m.InputCriblLakeHttp.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "tcpjson":
-		m.InputTcpjson = &InputTcpjsonModel{}
-		if err := m.InputTcpjson.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "system_metrics":
@@ -1374,11 +1422,6 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputHttpRaw.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "kinesis":
-		m.InputKinesis = &InputKinesisModel{}
-		if err := m.InputKinesis.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "criblmetrics":
 		m.InputCriblmetrics = &InputCriblmetricsModel{}
 		if err := m.InputCriblmetrics.unmarshalPayload(raw); err != nil {
@@ -1389,19 +1432,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputMetrics.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "s3":
-		m.InputS3 = &InputS3Model{}
-		if err := m.InputS3.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "s3_inventory":
 		m.InputS3Inventory = &InputS3InventoryModel{}
 		if err := m.InputS3Inventory.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "snmp":
-		m.InputSnmp = &InputSnmpModel{}
-		if err := m.InputSnmp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "open_telemetry":
@@ -1412,16 +1445,6 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "model_driven_telemetry":
 		m.InputModelDrivenTelemetry = &InputModelDrivenTelemetryModel{}
 		if err := m.InputModelDrivenTelemetry.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "sqs":
-		m.InputSqs = &InputSqsModel{}
-		if err := m.InputSqs.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "syslog":
-		m.InputSyslog = &InputSyslogModel{}
-		if err := m.InputSyslog.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "file":
@@ -1479,14 +1502,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputWizWebhook.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "netflow":
-		m.InputNetflow = &InputNetflowModel{}
-		if err := m.InputNetflow.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "security_lake":
-		m.InputSecurityLake = &InputSecurityLakeModel{}
-		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
+	case "bedrock_s3":
+		m.InputBedrockS3 = &InputBedrockS3Model{}
+		if err := m.InputBedrockS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "servicenow_table":
@@ -1502,6 +1520,16 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "cloudflare_hec":
 		m.InputCloudflareHec = &InputCloudflareHecModel{}
 		if err := m.InputCloudflareHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sysdig_hec":
+		m.InputSysdigHec = &InputSysdigHecModel{}
+		if err := m.InputSysdigHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "upwind_hec":
+		m.InputUpwindHec = &InputUpwindHecModel{}
+		if err := m.InputUpwindHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "openai_compliance_logs":
@@ -1520,6 +1548,9 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	if matched, err := m.unmarshalPackSourceOneOfByShape(raw); matched || err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -1533,4 +1564,137 @@ func PackSourceOneOfDiscriminator(input map[string]any) string {
 		return value
 	}
 	return ""
+}
+
+func (m *PackSourceModel) unmarshalPackSourceOneOfByShape(raw map[string]any) (bool, error) {
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "topics", "groupId", "fromBeginning", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "tls", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "metadata", "description"}) {
+		m.InputKafka = &InputKafkaModel{}
+		if err := m.InputKafka.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics", "awsAuthenticationMethod", "region"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "topics", "groupId", "fromBeginning", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "metadata", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "tls", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "description", "awsApiKey", "awsSecret"}) {
+		m.InputMsk = &InputMskModel{}
+		if err := m.InputMsk.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "ipWhitelistRegex", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "breakerRulesets", "staleChannelFlushMs", "authTokens", "maxS2Sversion", "description", "useFwdTimezone", "dropControlFields", "extractMetrics", "compress"}) {
+		m.InputSplunk = &InputSplunkModel{}
+		if err := m.InputSplunk.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "visibilityTimeout", "numReceivers", "maxMessages", "servicePeriodSecs", "skipOnError", "metadata", "breakerRulesets", "staleChannelFlushMs", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "authType", "description", "connectionString", "textSecret", "storageAccountName", "tenantId", "clientId", "azureCloud", "endpointSuffix", "clientTextSecret", "certificate"}) {
+		m.InputAzureBlob = &InputAzureBlobModel{}
+		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "tls", "topics", "groupId", "fromBeginning", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "metadata", "description"}) {
+		m.InputConfluentCloud = &InputConfluentCloudModel{}
+		if err := m.InputConfluentCloud.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "interval", "logLevel"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "dimensionList", "fieldPerMetric", "discoveryType", "interval", "logLevel", "rejectUnauthorized", "timeout", "keepAliveTime", "jobTimeout", "maxMissedKeepAlives", "ttl", "ignoreGroupJobsLimit", "metadata", "authType", "description", "targetList", "recordType", "scrapePort", "nameList", "scrapeProtocol", "scrapePath", "awsAuthenticationMethod", "awsApiKey", "awsSecret", "usePublicIp", "searchFilter", "awsSecretKey", "region", "endpoint", "reuseConnections", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "httpDiscoveryUrl", "httpDiscoveryHeaders", "httpDiscoveryRejectUnauthorized", "maxResponseBodySize", "username", "password", "credentialsSecret"}) {
+		m.InputPrometheus = &InputPrometheusModel{}
+		if err := m.InputPrometheus.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "topicName", "subscriptionName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "topicName", "subscriptionName", "monitorSubscription", "createTopic", "createSubscription", "region", "googleAuthMethod", "serviceAccountCredentials", "secret", "maxBacklog", "concurrency", "requestTimeout", "metadata", "description", "orderedDelivery"}) {
+		m.InputGooglePubsub = &InputGooglePubsubModel{}
+		if err := m.InputGooglePubsub.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "enableLoadBalancing", "authTokens", "description"}) {
+		m.InputCriblTcp = &InputCriblTcpModel{}
+		if err := m.InputCriblTcp.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "ipWhitelistRegex", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "enableLoadBalancing", "authType", "description", "authToken", "textSecret"}) {
+		m.InputTcpjson = &InputTcpjsonModel{}
+		if err := m.InputTcpjson.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "streamName", "region"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "streamName", "serviceInterval", "shardExpr", "shardIteratorType", "payloadFormat", "getRecordsLimit", "getRecordsLimitTotal", "loadBalancingAlgorithm", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "verifyKPLCheckSums", "avoidDuplicates", "metadata", "description", "awsApiKey", "awsSecret"}) {
+		m.InputKinesis = &InputKinesisModel{}
+		if err := m.InputKinesis.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "awsAccountId", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "breakerRulesets", "staleChannelFlushMs", "maxMessages", "visibilityTimeout", "numReceivers", "socketTimeout", "skipOnError", "includeSqsMetadata", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "enableSQSAssumeRole", "sharedCredentials", "sharedAssumeRoleArn", "preprocess", "metadata", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "checkpointing", "pollTimeout", "encoding", "tagAfterProcessing", "description", "awsApiKey", "awsSecret", "SQSAssumeRoleArn", "SQSAssumeRoleExternalId", "SQSDurationSeconds", "SQSAwsAuthenticationMethod", "SQSAwsSecret", "SQSAwsSecretKey", "processedTagKey", "processedTagValue"}) {
+		m.InputS3 = &InputS3Model{}
+		if err := m.InputS3.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "snmpV3Auth", "maxBufferSize", "ipWhitelistRegex", "metadata", "udpSocketRxBufSize", "varbindsWithTypes", "bestEffortParsing", "description"}) {
+		m.InputSnmp = &InputSnmpModel{}
+		if err := m.InputSnmp.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "queueName", "queueType"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "queueType", "awsAccountId", "createQueue", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "maxMessages", "visibilityTimeout", "metadata", "pollTimeout", "description", "awsApiKey", "awsSecret", "numReceivers"}) {
+		m.InputSqs = &InputSqsModel{}
+		if err := m.InputSqs.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "udpPort", "tcpPort", "maxBufferSize", "ipWhitelistRegex", "timestampTimezone", "singleMsgUdpPackets", "enableProxyHeader", "keepFieldsList", "octetCounting", "inferFraming", "strictlyInferOctetCounting", "allowNonStandardAppName", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "tls", "metadata", "udpSocketRxBufSize", "enableLoadBalancing", "description", "enableEnhancedProxyHeaderParsing"}) {
+		m.InputSyslog = &InputSyslogModel{}
+		if err := m.InputSyslog.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "enablePassThrough", "ipAllowlistRegex", "ipDenylistRegex", "udpSocketRxBufSize", "templateCacheMinutes", "v5Enabled", "v9Enabled", "ipfixEnabled", "metadata", "description"}) {
+		m.InputNetflow = &InputNetflowModel{}
+		if err := m.InputNetflow.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackSourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "awsAccountId", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "breakerRulesets", "staleChannelFlushMs", "maxMessages", "visibilityTimeout", "numReceivers", "socketTimeout", "skipOnError", "includeSqsMetadata", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "enableSQSAssumeRole", "sharedCredentials", "sharedAssumeRoleArn", "preprocess", "metadata", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "checkpointing", "pollTimeout", "encoding", "description", "awsApiKey", "awsSecret", "SQSAssumeRoleArn", "SQSAssumeRoleExternalId", "SQSDurationSeconds", "SQSAwsAuthenticationMethod", "SQSAwsSecret", "SQSAwsSecretKey", "tagAfterProcessing", "processedTagKey", "processedTagValue"}) {
+		m.InputSecurityLake = &InputSecurityLakeModel{}
+		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+func PackSourceOneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
+	for _, name := range required {
+		if _, ok := raw[name]; !ok {
+			return false
+		}
+	}
+	if len(required) > 0 {
+		return true
+	}
+	for _, name := range known {
+		if _, ok := raw[name]; ok {
+			return true
+		}
+	}
+	return false
 }

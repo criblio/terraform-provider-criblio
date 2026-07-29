@@ -43,6 +43,7 @@ type PackDestinationModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -70,6 +71,7 @@ type PackDestinationModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -85,6 +87,7 @@ type PackDestinationModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -93,6 +96,7 @@ type PackDestinationModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -102,6 +106,7 @@ type PackDestinationModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationResourceModel struct {
@@ -131,6 +136,7 @@ type PackDestinationResourceModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -158,6 +164,7 @@ type PackDestinationResourceModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -173,6 +180,7 @@ type PackDestinationResourceModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -181,6 +189,7 @@ type PackDestinationResourceModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -190,6 +199,7 @@ type PackDestinationResourceModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationDataSourceModel struct {
@@ -219,6 +229,7 @@ type PackDestinationDataSourceModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -246,6 +257,7 @@ type PackDestinationDataSourceModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -261,6 +273,7 @@ type PackDestinationDataSourceModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -269,6 +282,7 @@ type PackDestinationDataSourceModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -278,6 +292,7 @@ type PackDestinationDataSourceModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationAPIModel struct {
@@ -350,6 +365,44 @@ func PackDestinationTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "bootstrap_server":
+		return prefix + "bootstrap_server"
+	case "client_id":
+		return prefix + "client_id"
+	case "data_center":
+		return prefix + "data_center"
+	case "dcr_id":
+		return prefix + "dcrID"
+	case "enable_ack":
+		return prefix + "enableACK"
+	case "endpoint_urlconfiguration":
+		return prefix + "endpointURLConfiguration"
+	case "manual_apikey":
+		return prefix + "manualAPIKey"
+	case "max_file_size_mb":
+		return prefix + "maxFileSizeMB"
+	case "max_payload_size_kb":
+		return prefix + "maxPayloadSizeKB"
+	case "max_record_size_kb":
+		return prefix + "maxRecordSizeKB"
+	case "object_acl":
+		return prefix + "objectACL"
+	case "schema_registry_url":
+		return prefix + "schemaRegistryURL"
+	case "token_ttlminutes":
+		return prefix + "tokenTTLMinutes"
+	case "total_memory_limit_kb":
+		return prefix + "totalMemoryLimitKB"
+	case "use_v2_api":
+		return prefix + "useV2API"
+	case "wiz_connector_id":
+		return prefix + "wiz_connector_id"
+	case "wiz_environment":
+		return prefix + "wiz_environment"
+	case "wiz_sourcetype":
+		return prefix + "wiz_sourcetype"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -687,6 +740,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputGoogleBigquery != nil {
+		value, err := m.OutputGoogleBigquery.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputGoogleChronicle != nil {
 		value, err := m.OutputGoogleChronicle.terraformPayload()
 		if err != nil {
@@ -930,6 +992,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputAmazonManagedPrometheus != nil {
+		value, err := m.OutputAmazonManagedPrometheus.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputPrometheus != nil {
 		value, err := m.OutputPrometheus.terraformPayload()
 		if err != nil {
@@ -1065,6 +1136,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputCustomerMetricsStorage != nil {
+		value, err := m.OutputCustomerMetricsStorage.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputLocalSearchStorage != nil {
 		value, err := m.OutputLocalSearchStorage.terraformPayload()
 		if err != nil {
@@ -1130,6 +1210,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputDatabricks != nil {
 		value, err := m.OutputDatabricks.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputSnowflakeStreaming != nil {
+		value, err := m.OutputSnowflakeStreaming.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1218,6 +1307,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputIbmCloudS3 != nil {
+		value, err := m.OutputIbmCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	return json.Marshal(output)
 }
 
@@ -1281,16 +1379,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDevnull.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "syslog":
-		m.OutputSyslog = &OutputSyslogModel{}
-		if err := m.OutputSyslog.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "splunk":
-		m.OutputSplunk = &OutputSplunkModel{}
-		if err := m.OutputSplunk.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "splunk_lb":
 		m.OutputSplunkLb = &OutputSplunkLbModel{}
 		if err := m.OutputSplunkLb.unmarshalPayload(raw); err != nil {
@@ -1304,11 +1392,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "wiz_hec":
 		m.OutputWizHec = &OutputWizHecModel{}
 		if err := m.OutputWizHec.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "tcpjson":
-		m.OutputTcpjson = &OutputTcpjsonModel{}
-		if err := m.OutputTcpjson.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "wavefront":
@@ -1326,16 +1409,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputFilesystem.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "s3":
-		m.OutputS3 = &OutputS3Model{}
-		if err := m.OutputS3.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "azure_blob":
-		m.OutputAzureBlob = &OutputAzureBlobModel{}
-		if err := m.OutputAzureBlob.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "azure_data_explorer":
 		m.OutputAzureDataExplorer = &OutputAzureDataExplorerModel{}
 		if err := m.OutputAzureDataExplorer.unmarshalPayload(raw); err != nil {
@@ -1346,11 +1419,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputAzureLogs.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "kinesis":
-		m.OutputKinesis = &OutputKinesisModel{}
-		if err := m.OutputKinesis.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "honeycomb":
 		m.OutputHoneycomb = &OutputHoneycombModel{}
 		if err := m.OutputHoneycomb.unmarshalPayload(raw); err != nil {
@@ -1359,6 +1427,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "azure_eventhub":
 		m.OutputAzureEventhub = &OutputAzureEventhubModel{}
 		if err := m.OutputAzureEventhub.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "google_bigquery":
+		m.OutputGoogleBigquery = &OutputGoogleBigqueryModel{}
+		if err := m.OutputGoogleBigquery.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "google_chronicle":
@@ -1381,29 +1454,9 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputGoogleCloudObservability.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "google_pubsub":
-		m.OutputGooglePubsub = &OutputGooglePubsubModel{}
-		if err := m.OutputGooglePubsub.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "exabeam":
 		m.OutputExabeam = &OutputExabeamModel{}
 		if err := m.OutputExabeam.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "kafka":
-		m.OutputKafka = &OutputKafkaModel{}
-		if err := m.OutputKafka.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "confluent_cloud":
-		m.OutputConfluentCloud = &OutputConfluentCloudModel{}
-		if err := m.OutputConfluentCloud.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "msk":
-		m.OutputMsk = &OutputMskModel{}
-		if err := m.OutputMsk.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "elastic":
@@ -1466,16 +1519,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputSns.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "sqs":
-		m.OutputSqs = &OutputSqsModel{}
-		if err := m.OutputSqs.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "snmp":
-		m.OutputSnmp = &OutputSnmpModel{}
-		if err := m.OutputSnmp.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "sumo_logic":
 		m.OutputSumoLogic = &OutputSumoLogicModel{}
 		if err := m.OutputSumoLogic.unmarshalPayload(raw); err != nil {
@@ -1496,9 +1539,9 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputLoki.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "prometheus":
-		m.OutputPrometheus = &OutputPrometheusModel{}
-		if err := m.OutputPrometheus.unmarshalPayload(raw); err != nil {
+	case "amazon_managed_prometheus":
+		m.OutputAmazonManagedPrometheus = &OutputAmazonManagedPrometheusModel{}
+		if err := m.OutputAmazonManagedPrometheus.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "ring":
@@ -1519,11 +1562,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "dataset":
 		m.OutputDataset = &OutputDatasetModel{}
 		if err := m.OutputDataset.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "cribl_tcp":
-		m.OutputCriblTcp = &OutputCriblTcpModel{}
-		if err := m.OutputCriblTcp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "cribl_http":
@@ -1551,11 +1589,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDlS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "security_lake":
-		m.OutputSecurityLake = &OutputSecurityLakeModel{}
-		if err := m.OutputSecurityLake.unmarshalPayload(raw); err != nil {
-			return err
-		}
 	case "cribl_lake":
 		m.OutputCriblLake = &OutputCriblLakeModel{}
 		if err := m.OutputCriblLake.unmarshalPayload(raw); err != nil {
@@ -1571,6 +1604,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputClickHouse.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "customer_metrics_storage":
+		m.OutputCustomerMetricsStorage = &OutputCustomerMetricsStorageModel{}
+		if err := m.OutputCustomerMetricsStorage.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "local_search_storage":
 		m.OutputLocalSearchStorage = &OutputLocalSearchStorageModel{}
 		if err := m.OutputLocalSearchStorage.unmarshalPayload(raw); err != nil {
@@ -1579,11 +1617,6 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "xsiam":
 		m.OutputXsiam = &OutputXsiamModel{}
 		if err := m.OutputXsiam.unmarshalPayload(raw); err != nil {
-			return err
-		}
-	case "netflow":
-		m.OutputNetflow = &OutputNetflowModel{}
-		if err := m.OutputNetflow.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "dynatrace_http":
@@ -1609,6 +1642,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "databricks":
 		m.OutputDatabricks = &OutputDatabricksModel{}
 		if err := m.OutputDatabricks.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "snowflake_streaming":
+		m.OutputSnowflakeStreaming = &OutputSnowflakeStreamingModel{}
+		if err := m.OutputSnowflakeStreaming.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "microsoft_fabric":
@@ -1656,6 +1694,14 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputAlibabaCloudS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "ibm_cloud_s3":
+		m.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
+		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	}
+	if matched, err := m.unmarshalPackDestinationOneOfByShape(raw); matched || err != nil {
+		return err
 	}
 	return nil
 }
@@ -1670,4 +1716,137 @@ func PackDestinationOneOfDiscriminator(input map[string]any) string {
 		return value
 	}
 	return ""
+}
+
+func (m *PackDestinationModel) unmarshalPackDestinationOneOfByShape(raw map[string]any) (bool, error) {
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "protocol", "facility", "severity", "appName", "messageFormat", "timestampFormat", "throttleRatePerSec", "octetCountFraming", "logFailedRequests", "description", "loadBalanced", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "connectionTimeout", "writeTimeout", "tls", "onBackpressure", "maxRecordSize", "udpDnsResolvePeriodSec", "enableIpSpoofing", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputSyslog = &OutputSyslogModel{}
+		if err := m.OutputSyslog.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "host", "port", "nestedFields", "throttleRatePerSec", "connectionTimeout", "writeTimeout", "tls", "enableMultiMetrics", "enableACK", "logFailedRequests", "maxS2Sversion", "onBackpressure", "authType", "description", "maxFailedHealthChecks", "compress", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "authToken", "textSecret"}) {
+		m.OutputSplunk = &OutputSplunkModel{}
+		if err := m.OutputSplunk.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "loadBalanced", "compression", "logFailedRequests", "throttleRatePerSec", "tls", "connectionTimeout", "writeTimeout", "tokenTTLMinutes", "sendHeader", "onBackpressure", "authType", "description", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "authToken", "textSecret"}) {
+		m.OutputTcpjson = &OutputTcpjsonModel{}
+		if err := m.OutputTcpjson.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "endpoint", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "awsAuthenticationMethod", "reuseConnections", "rejectUnauthorized", "bucket", "region", "destPath", "maxConcurrentFileParts", "verifyPermissions", "maxClosingFilesToBackpressure", "stagePath", "addIdToStagePath", "removeEmptyDirs", "partitionExpr", "format", "baseFileName", "fileNameSuffix", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "awsSecretKey", "objectACL", "storageClass", "serverSideEncryption", "kmsKeyId", "description", "awsApiKey", "awsSecret", "compress", "compressionLevel", "automaticSchema", "parquetSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "emptyDirCleanupSec", "directoryBatchSize", "deadletterPath", "maxRetryNum"}) {
+		m.OutputS3 = &OutputS3Model{}
+		if err := m.OutputS3.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "containerName", "createContainer", "destPath", "stagePath", "addIdToStagePath", "maxConcurrentFileParts", "removeEmptyDirs", "partitionExpr", "format", "baseFileName", "fileNameSuffix", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "authType", "storageClass", "description", "compress", "compressionLevel", "automaticSchema", "parquetSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "emptyDirCleanupSec", "directoryBatchSize", "deadletterPath", "maxRetryNum", "connectionString", "textSecret", "storageAccountName", "tenantId", "clientId", "azureCloud", "endpointSuffix", "clientTextSecret", "certificate"}) {
+		m.OutputAzureBlob = &OutputAzureBlobModel{}
+		if err := m.OutputAzureBlob.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "streamName", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "concurrency", "maxRecordSizeKB", "flushPeriodSec", "compression", "useListShards", "asNdjson", "onBackpressure", "description", "awsApiKey", "awsSecret", "maxEventsPerFlush", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputKinesis = &OutputKinesisModel{}
+		if err := m.OutputKinesis.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "topicName", "createTopic", "orderedDelivery", "region", "googleAuthMethod", "serviceAccountCredentials", "secret", "batchSize", "batchTimeout", "maxQueueSize", "maxRecordSizeKB", "flushPeriod", "maxInProgress", "onBackpressure", "description", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputGooglePubsub = &OutputGooglePubsubModel{}
+		if err := m.OutputGooglePubsub.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "tls", "onBackpressure", "description", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputKafka = &OutputKafkaModel{}
+		if err := m.OutputKafka.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "tls", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "onBackpressure", "description", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputConfluentCloud = &OutputConfluentCloudModel{}
+		if err := m.OutputConfluentCloud.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "tls", "onBackpressure", "description", "awsApiKey", "awsSecret", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputMsk = &OutputMskModel{}
+		if err := m.OutputMsk.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "queueName", "queueType", "awsAccountId", "messageGroupId", "createQueue", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "maxQueueSize", "maxRecordSizeKB", "flushPeriodSec", "maxInProgress", "onBackpressure", "description", "awsApiKey", "awsSecret", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputSqs = &OutputSqsModel{}
+		if err := m.OutputSqs.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "hosts", "dnsResolvePeriodSec", "enableIpSpoofing", "description", "maxRecordSize"}) {
+		m.OutputSnmp = &OutputSnmpModel{}
+		if err := m.OutputSnmp.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "url", "metricRenameExpr", "sendMetadata", "usePrometheusHistogramBucketSuffix", "concurrency", "maxPayloadSizeKB", "maxPayloadEvents", "rejectUnauthorized", "timeoutSec", "flushPeriodSec", "extraHttpHeaders", "useRoundRobinDns", "failedRequestLoggingMode", "safeHeaders", "responseRetrySettings", "timeoutRetrySettings", "responseHonorRetryAfterHeader", "onBackpressure", "authType", "description", "metricsFlushPeriodSec", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "username", "password", "token", "credentialsSecret", "textSecret", "awsAuthenticationMethod", "awsSecret", "region", "awsService", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds"}) {
+		m.OutputPrometheus = &OutputPrometheusModel{}
+		if err := m.OutputPrometheus.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "loadBalanced", "compression", "logFailedRequests", "throttleRatePerSec", "tls", "connectionTimeout", "writeTimeout", "tokenTTLMinutes", "authTokens", "excludeFields", "onBackpressure", "description", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
+		m.OutputCriblTcp = &OutputCriblTcpModel{}
+		if err := m.OutputCriblTcp.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "endpoint", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "awsAuthenticationMethod", "reuseConnections", "rejectUnauthorized", "bucket", "region", "maxConcurrentFileParts", "verifyPermissions", "maxClosingFilesToBackpressure", "stagePath", "addIdToStagePath", "removeEmptyDirs", "baseFileName", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "awsSecretKey", "objectACL", "storageClass", "serverSideEncryption", "kmsKeyId", "accountId", "customSource", "automaticSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "description", "awsApiKey", "awsSecret", "emptyDirCleanupSec", "directoryBatchSize", "parquetSchema", "deadletterPath", "maxRetryNum"}) {
+		m.OutputSecurityLake = &OutputSecurityLakeModel{}
+		if err := m.OutputSecurityLake.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	if PackDestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "hosts", "dnsResolvePeriodSec", "enableIpSpoofing", "description", "maxRecordSize"}) {
+		m.OutputNetflow = &OutputNetflowModel{}
+		if err := m.OutputNetflow.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+func PackDestinationOneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
+	for _, name := range required {
+		if _, ok := raw[name]; !ok {
+			return false
+		}
+	}
+	if len(required) > 0 {
+		return true
+	}
+	for _, name := range known {
+		if _, ok := raw[name]; ok {
+			return true
+		}
+	}
+	return false
 }

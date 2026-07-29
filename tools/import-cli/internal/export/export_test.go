@@ -1056,6 +1056,31 @@ func TestNormalizeRoutesForExport(t *testing.T) {
 	})
 }
 
+func TestTrimRouterFilterWhitespace(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"output_router": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"rules": {Kind: hcl.KindList, List: []hcl.Value{
+				{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+					"filter": {Kind: hcl.KindString, String: "  _logType == 'test_log' \t"},
+				}},
+			}},
+		}},
+	}
+
+	trimRouterFilterWhitespace(attrs)
+
+	filter := attrs["output_router"].Map["rules"].List[0].Map["filter"]
+	assert.Equal(t, "  _logType == 'test_log'", filter.String)
+}
+
+func TestEnsurePipelineConfForExport(t *testing.T) {
+	attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindNull}}
+
+	ensurePipelineConfForExport(attrs)
+
+	assert.Equal(t, "default", attrs["conf"].Map["output"].String)
+}
+
 func TestFilterAttrsBySchema(t *testing.T) {
 	t.Run("allowed attrs kept", func(t *testing.T) {
 		allowed := converter.AllAttributeNamesFromModel("SourceResourceModel")

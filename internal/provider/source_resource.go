@@ -73,10 +73,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -96,7 +98,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -122,10 +124,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -163,8 +167,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -182,7 +190,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -205,7 +214,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -231,7 +241,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -251,7 +262,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -277,10 +288,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -318,8 +331,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -346,7 +363,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"schema_registry_url": schema.StringAttribute{
 											Computed:    true,
@@ -368,7 +386,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"oauth_enabled": schema.BoolAttribute{
 													Computed:    true,
@@ -395,10 +414,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"name": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Name`,
 															},
 															"value": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Value`,
 															},
 														},
 													},
@@ -421,7 +442,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -498,13 +520,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"username": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Username`,
 										},
 										"password": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
 											Computed: true,
@@ -553,10 +578,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Parameter Name`,
 													},
 													"value": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Parameter Value`,
 													},
 												},
 											},
@@ -567,10 +594,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Field Name`,
 													},
 													"value": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Field Value`,
 													},
 												},
 											},
@@ -581,7 +610,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -669,7 +699,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -679,7 +710,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -694,7 +726,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -714,7 +747,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -740,10 +773,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -781,8 +816,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -834,7 +873,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -847,7 +887,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"schema_registry_url": schema.StringAttribute{
 											Computed:    true,
@@ -869,7 +910,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"oauth_enabled": schema.BoolAttribute{
 													Computed:    true,
@@ -896,10 +938,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"name": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Name`,
 															},
 															"value": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Value`,
 															},
 														},
 													},
@@ -922,7 +966,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -999,7 +1044,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -1037,7 +1083,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -1097,10 +1144,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Maximum number of network errors before the consumer re-creates a socket`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -1116,10 +1165,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -1139,7 +1190,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -1165,10 +1216,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -1206,8 +1259,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -1229,7 +1286,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1328,7 +1386,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
 								},
 								"splunk_hec_acks": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enable Splunk HEC acknowledgements`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -1336,7 +1395,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -1355,7 +1415,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"metadata": schema.ListNestedAttribute{
 												Computed:    true,
@@ -1363,7 +1424,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -1376,7 +1438,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -1391,7 +1454,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -1411,7 +1475,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -1437,10 +1501,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -1478,8 +1544,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -1496,7 +1566,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1568,7 +1639,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -1596,7 +1668,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 										},
 									},
@@ -1606,7 +1679,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The highest S2S protocol version to advertise during handshake`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"use_fwd_timezone": schema.BoolAttribute{
 									Computed:    true,
@@ -1634,10 +1708,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -1657,7 +1733,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -1683,10 +1759,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -1724,8 +1802,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -1763,7 +1845,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Parameter Name`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -1778,7 +1861,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Header Name`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -1833,7 +1917,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -1893,13 +1978,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Splunk Search authentication type`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
@@ -1923,10 +2011,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -1946,7 +2036,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -1972,10 +2062,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -2013,8 +2105,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -2044,7 +2140,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If true, the token is active and can be used for authentication.`,
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,
@@ -2061,7 +2158,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -2077,7 +2175,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -2169,7 +2268,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -2223,7 +2323,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -2238,7 +2339,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -2258,7 +2360,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -2284,10 +2386,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -2325,8 +2429,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -2365,7 +2473,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -2395,7 +2504,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"connection_string": schema.StringAttribute{
 									Computed:    true,
@@ -2448,10 +2558,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -2471,7 +2583,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -2497,10 +2609,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -2538,8 +2652,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -2556,7 +2674,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -2647,7 +2766,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication type`,
 								},
 								"api_version": schema.StringAttribute{
 									Computed:    true,
@@ -2659,10 +2779,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Field Name`,
 											},
 											"value": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Field Value`,
 											},
 										},
 									},
@@ -2673,7 +2795,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -2694,10 +2817,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Enter credentials directly, or select a stored secret`,
 										},
 										"username": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Username`,
 										},
 										"password": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Password`,
 										},
 										"credentials_secret": schema.StringAttribute{
 											Computed:    true,
@@ -2723,13 +2848,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Password`,
 								},
 								"credentials_secret": schema.StringAttribute{
 									Computed:    true,
@@ -2757,7 +2885,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -2777,7 +2906,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -2803,10 +2932,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -2844,8 +2975,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -2859,7 +2994,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
@@ -2915,7 +3051,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"schema_registry_url": schema.StringAttribute{
 											Computed:    true,
@@ -2937,7 +3074,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"oauth_enabled": schema.BoolAttribute{
 													Computed:    true,
@@ -2964,10 +3102,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"name": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Name`,
 															},
 															"value": schema.StringAttribute{
-																Computed: true,
+																Computed:    true,
+																Description: `Parameter Value`,
 															},
 														},
 													},
@@ -2990,7 +3130,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Disabled`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
 													Computed: true,
@@ -3067,13 +3208,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"username": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Username`,
 										},
 										"password": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
 											Computed: true,
@@ -3122,10 +3266,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Parameter Name`,
 													},
 													"value": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Parameter Value`,
 													},
 												},
 											},
@@ -3136,10 +3282,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Field Name`,
 													},
 													"value": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Field Value`,
 													},
 												},
 											},
@@ -3195,7 +3343,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -3205,7 +3354,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -3217,10 +3367,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -3240,7 +3392,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -3266,10 +3418,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -3307,8 +3461,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -3325,7 +3483,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3426,10 +3585,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 										},
 										"username": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Username`,
 										},
 										"password": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
@@ -3452,10 +3613,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 										},
 										"username": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Username`,
 										},
 										"password": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Password`,
 										},
 										"token": schema.StringAttribute{
 											Computed:    true,
@@ -3477,7 +3640,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -3487,7 +3651,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -3499,10 +3664,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -3522,7 +3689,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -3548,10 +3715,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -3589,8 +3758,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -3607,7 +3780,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3706,7 +3880,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -3716,13 +3891,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
@@ -3746,10 +3924,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -3769,7 +3949,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -3795,10 +3975,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -3836,8 +4018,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -3854,7 +4040,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3953,7 +4140,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -3963,13 +4151,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
@@ -3996,7 +4187,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -4016,7 +4208,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -4042,10 +4234,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -4083,8 +4277,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -4143,7 +4341,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -4156,7 +4355,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"target_list": schema.ListAttribute{
 									Computed:    true,
@@ -4187,7 +4387,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -4215,7 +4416,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -4255,10 +4457,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name`,
 											},
 											"value": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Value`,
 											},
 										},
 									},
@@ -4293,10 +4497,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -4316,7 +4522,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -4342,10 +4548,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -4383,8 +4591,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -4440,7 +4652,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -4454,10 +4667,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Enter credentials directly, or select a stored secret`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"targets": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Targets`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"protocol": schema.StringAttribute{
@@ -4501,7 +4716,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -4529,7 +4745,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -4609,10 +4826,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name`,
 											},
 											"value": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Value`,
 											},
 										},
 									},
@@ -4647,10 +4866,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -4670,7 +4891,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -4696,10 +4917,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -4737,8 +4960,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -4784,7 +5011,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -4811,13 +5039,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 											},
 											"interval": schema.Float64Attribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Interval`,
 											},
 											"log_level": schema.StringAttribute{
 												Computed: true,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enabled`,
 											},
 										},
 									},
@@ -4867,7 +5097,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
@@ -4887,10 +5118,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -4910,7 +5143,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -4936,10 +5169,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -4977,8 +5212,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -5024,7 +5263,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -5047,13 +5287,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 											},
 											"interval": schema.Float64Attribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Interval`,
 											},
 											"log_level": schema.StringAttribute{
 												Computed: true,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enabled`,
 											},
 										},
 									},
@@ -5099,7 +5341,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
@@ -5119,10 +5362,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -5142,7 +5387,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -5168,10 +5413,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -5209,8 +5456,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -5269,7 +5520,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -5327,7 +5579,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
 									Computed:    true,
@@ -5395,10 +5648,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -5418,7 +5673,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -5444,10 +5699,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -5485,8 +5742,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -5549,7 +5810,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -5606,8 +5868,18 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										},
 									},
 								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
@@ -5664,10 +5936,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -5687,7 +5961,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -5713,10 +5987,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -5754,8 +6030,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -5814,7 +6094,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"auth_type": schema.StringAttribute{
 											Computed: true,
@@ -5879,7 +6160,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
@@ -5939,7 +6221,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -5949,7 +6232,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -5961,10 +6245,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -5984,7 +6270,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6010,10 +6296,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -6051,8 +6339,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -6069,7 +6361,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mechanism": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Authentication mechanism`,
 										},
 										"text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -6124,14 +6417,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"blob_store": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Azure Blob Storage`,
 											Attributes: map[string]schema.Attribute{
 												"container_name": schema.StringAttribute{
 													Computed:    true,
 													Description: `Azure Blob Storage container used to store checkpoints. Must be 3–63 lowercase alphanumeric characters or hyphens.`,
 												},
 												"auth_type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Authentication method`,
 												},
 												"text_secret": schema.StringAttribute{
 													Computed:    true,
@@ -6224,7 +6519,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -6234,7 +6530,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -6246,10 +6543,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Disabled`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -6269,7 +6568,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6295,10 +6594,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -6336,8 +6637,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -6373,7 +6678,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -6383,7 +6689,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"interval": schema.Float64Attribute{
 									Computed:    true,
@@ -6403,10 +6710,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -6426,7 +6735,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6452,10 +6761,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -6493,8 +6804,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -6516,7 +6831,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -6608,7 +6924,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -6618,7 +6935,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -6633,7 +6951,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -6653,7 +6972,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6679,10 +6998,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -6720,8 +7041,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -6779,7 +7104,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -6789,7 +7115,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"ordered_delivery": schema.BoolAttribute{
 									Computed:    true,
@@ -6805,10 +7132,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -6828,7 +7157,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6854,10 +7183,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -6895,8 +7226,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -6910,7 +7245,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -6920,7 +7256,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -6935,7 +7272,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -6955,7 +7293,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -6981,10 +7319,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -7022,8 +7362,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -7040,7 +7384,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -7108,7 +7453,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -7131,7 +7477,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Select or create a stored text secret`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable token`,
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,
@@ -7141,7 +7488,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -7153,10 +7501,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -7176,7 +7526,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -7202,10 +7552,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -7243,8 +7595,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -7267,7 +7623,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Select or create a stored text secret`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable token`,
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,
@@ -7280,7 +7637,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -7372,7 +7730,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -7382,7 +7741,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -7394,10 +7754,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -7417,7 +7779,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -7443,10 +7805,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -7484,8 +7848,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -7507,7 +7875,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -7606,7 +7975,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
 								},
 								"splunk_hec_acks": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enable Splunk HEC acknowledgements`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -7614,7 +7984,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -7624,11 +7995,13 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_tokens_ext": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Auth tokens`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"token": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Token`,
 											},
 											"description": schema.StringAttribute{
 												Computed: true,
@@ -7639,7 +8012,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -7652,7 +8026,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Computed: true,
 												Attributes: map[string]schema.Attribute{
 													"enabled": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `When enabled, the token value is available on events as __hecToken`,
 													},
 													"default_dataset": schema.StringAttribute{
 														Computed: true,
@@ -7667,7 +8042,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Computed: true,
 												Attributes: map[string]schema.Attribute{
 													"enabled": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Elasticsearch`,
 													},
 													"default_dataset": schema.StringAttribute{
 														Computed: true,
@@ -7678,7 +8054,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -7693,7 +8070,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -7713,7 +8091,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -7739,10 +8117,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -7780,8 +8160,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -7798,7 +8182,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -7870,7 +8255,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -7887,7 +8273,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
@@ -7907,10 +8294,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -7930,7 +8319,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -7956,10 +8345,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -7997,8 +8388,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -8138,13 +8533,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Set Name`,
 													},
 													"filter": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Filter Expression`,
 													},
 													"include_children": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Include Child Processes`,
 													},
 												},
 											},
@@ -8173,7 +8571,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"expr": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Expression`,
 													},
 												},
 											},
@@ -8214,7 +8613,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -8224,7 +8624,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `persistence`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -8252,7 +8653,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -8264,10 +8666,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -8287,7 +8691,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -8313,10 +8717,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -8354,8 +8760,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -8370,7 +8780,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -8387,7 +8798,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events based on entries collected from the hosts file`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8396,7 +8808,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events for each of the host’s network interfaces`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8405,7 +8818,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events for physical disks, partitions, and file systems`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8414,7 +8828,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events based on the host system’s current state`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8423,7 +8838,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events based on entries collected from the host’s network routes`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8432,7 +8848,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events for DNS resolvers and search entries`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8441,7 +8858,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events for local users and groups`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8450,7 +8868,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events for Firewall rules entries`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8459,7 +8878,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events from the list of services`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8468,7 +8888,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events from list of listening ports`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8477,7 +8898,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Creates events from list of logged-in users`,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Enabled`,
 												},
 											},
 										},
@@ -8520,7 +8942,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Enable only to collect LastLog data via legacy implementation. This option will be removed in a future release. Please contact Support before enabling. [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -8532,10 +8955,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -8555,7 +8980,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -8581,10 +9006,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -8622,8 +9049,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -8662,7 +9093,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -8672,7 +9104,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `persistence`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -8700,7 +9133,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -8712,10 +9146,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -8735,7 +9171,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -8761,10 +9197,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -8802,8 +9240,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -8842,7 +9284,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -8889,7 +9332,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Load balance traffic across all Worker Processes`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -8901,10 +9345,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -8924,7 +9370,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -8950,10 +9396,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -8991,8 +9439,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -9019,7 +9471,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -9029,7 +9482,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -9041,10 +9495,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -9064,7 +9520,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -9090,10 +9546,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -9131,8 +9589,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -9258,13 +9720,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Set Name`,
 													},
 													"filter": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Filter Expression`,
 													},
 													"include_children": schema.BoolAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Include Child Processes`,
 													},
 												},
 											},
@@ -9293,7 +9758,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -9303,7 +9769,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `persistence`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -9335,7 +9802,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Enable to use built-in tools (PowerShell) to collect metrics instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-metrics/#advanced-tab)`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -9347,10 +9815,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -9370,7 +9840,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -9396,10 +9866,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -9437,8 +9909,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -9459,7 +9935,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -9530,11 +10007,20 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Use Assume Role credentials when accessing Amazon SQS`,
 								},
+								"shared_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same credential settings for S3 and SQS`,
+								},
+								"shared_assume_role_arn": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same settings for S3 and SQS`,
+								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -9553,7 +10039,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -9584,14 +10071,39 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsassume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"sqsassume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"sqsduration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"sqsaws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"sqsaws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsaws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
@@ -9614,10 +10126,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -9637,7 +10151,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -9663,10 +10177,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -9704,8 +10220,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -9722,7 +10242,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -9810,7 +10331,31 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"extract_metrics": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Toggle to Yes to extract each incoming metric to multiple events, one per data point. This works well when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave toggled to No (the default).`,
+									Description: `Extract each incoming metric to multiple events, one per data point. Recommended when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave disabled.`,
+								},
+								"sampling_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The rate_by_service hint sent to connected tracers as the catch-all sampling rate. Applies to any service/environment not explicitly listed in Per-Service Sampling Rules. 1.0 = keep all traces (default); 0.0 = suggest dropping all.`,
+								},
+								"sampling_rules": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Per-service sampling rate hints. Each row maps to a "service:<s>,env:<e>" key in the rate_by_service response sent to tracers.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"service": schema.StringAttribute{
+												Computed:    true,
+												Description: `Datadog service name`,
+											},
+											"environment": schema.StringAttribute{
+												Computed:    true,
+												Description: `Datadog environment name (example: prod, staging)`,
+											},
+											"rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Sampling rate for this service/environment combination (0.0–1.0)`,
+											},
+										},
+									},
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -9818,7 +10363,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -9832,16 +10378,17 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Toggle to Yes to send key validation requests from Datadog Agent to the Datadog API. If toggled to No (the default), Stream handles key validation requests by always responding that the key is valid.`,
+											Description: `Forward key validation requests from the Datadog Agent to the Datadog API. If disabled, Stream handles key validation requests locally by always responding that the key is valid.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).`,
+											Description: `Whether to reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 										},
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -9853,10 +10400,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -9876,7 +10425,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -9902,10 +10451,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -9943,18 +10494,24 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
 								},
 								"samples": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Datagens`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"sample": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Data Generator File Name`,
 											},
 											"events_per_sec": schema.Float64Attribute{
 												Computed:    true,
@@ -9969,7 +10526,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -9979,7 +10537,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -9991,10 +10550,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -10014,7 +10575,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -10040,10 +10601,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -10081,8 +10644,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -10104,7 +10671,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -10205,7 +10773,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -10234,7 +10803,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"metadata": schema.ListNestedAttribute{
 												Computed:    true,
@@ -10242,7 +10812,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -10255,7 +10826,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -10270,7 +10842,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -10290,7 +10863,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -10316,10 +10889,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -10357,8 +10932,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -10399,7 +10978,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -10447,7 +11027,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -10457,10 +11038,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -10476,10 +11059,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -10499,7 +11084,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -10525,10 +11110,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -10566,8 +11153,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -10586,7 +11177,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -10596,7 +11188,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -10608,10 +11201,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -10631,7 +11226,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -10657,10 +11252,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -10698,8 +11295,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -10732,7 +11333,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -10780,7 +11382,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -10794,7 +11397,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -10809,7 +11413,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -10829,7 +11434,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -10855,10 +11460,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -10896,8 +11503,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -10918,7 +11529,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -10989,11 +11601,20 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Use Assume Role credentials when accessing Amazon SQS`,
 								},
+								"shared_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same credential settings for S3 and SQS`,
+								},
+								"shared_assume_role_arn": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same settings for S3 and SQS`,
+								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -11012,7 +11633,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -11055,14 +11677,39 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsassume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"sqsassume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"sqsduration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"sqsaws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"sqsaws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsaws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS secret key`,
 								},
 								"processed_tag_key": schema.StringAttribute{
 									Computed:    true,
@@ -11082,10 +11729,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -11105,7 +11754,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -11131,10 +11780,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -11172,8 +11823,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -11194,7 +11849,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -11265,11 +11921,20 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Use Assume Role credentials when accessing Amazon SQS`,
 								},
+								"shared_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same credential settings for S3 and SQS`,
+								},
+								"shared_assume_role_arn": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same settings for S3 and SQS`,
+								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -11288,7 +11953,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -11335,14 +12001,39 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsassume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"sqsassume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"sqsduration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"sqsaws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"sqsaws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsaws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
@@ -11368,7 +12059,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -11388,7 +12080,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -11414,10 +12106,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -11455,8 +12149,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -11474,7 +12172,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues.`,
 									Attributes: map[string]schema.Attribute{
 										"v3_auth_enabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enabled`,
 										},
 										"allow_unmatched_trap": schema.BoolAttribute{
 											Computed:    true,
@@ -11486,19 +12185,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `V3 name`,
 													},
 													"auth_protocol": schema.StringAttribute{
 														Computed: true,
 													},
 													"auth_key": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `V3 authentication key`,
 													},
 													"priv_protocol": schema.StringAttribute{
 														Computed: true,
 													},
 													"priv_key": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `V3 privacy key`,
 													},
 												},
 											},
@@ -11519,7 +12221,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -11541,7 +12244,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -11553,10 +12257,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -11576,7 +12282,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -11602,10 +12308,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -11643,8 +12351,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -11661,7 +12373,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -11761,14 +12474,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Authentication type`,
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
 												Description: `Bearer token for Authorization header`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"metadata": schema.ListNestedAttribute{
 												Computed:    true,
@@ -11776,7 +12491,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -11786,17 +12502,20 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												},
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
 												Description: `Select or create a stored text secret`,
 											},
 											"username": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Username`,
 											},
 											"password": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Password`,
 											},
 											"credentials_secret": schema.StringAttribute{
 												Computed:    true,
@@ -11811,7 +12530,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -11825,13 +12545,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"username": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Password`,
 								},
 								"token": schema.StringAttribute{
 									Computed:    true,
@@ -11859,10 +12582,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -11882,7 +12607,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -11908,10 +12633,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -11949,8 +12676,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -11967,7 +12698,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12015,7 +12747,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -12033,7 +12766,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -12048,7 +12782,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -12068,7 +12803,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -12094,10 +12829,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -12135,8 +12872,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -12161,7 +12902,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -12209,7 +12951,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -12223,10 +12966,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -12249,7 +12994,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -12269,7 +13015,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -12295,10 +13041,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -12336,8 +13084,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -12415,7 +13167,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12463,7 +13216,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -12481,7 +13235,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Load balance traffic across all Worker Processes`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
 									Computed:    true,
@@ -12497,10 +13252,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -12520,7 +13277,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -12546,10 +13303,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -12587,8 +13346,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -12644,7 +13407,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -12667,7 +13431,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
@@ -12678,7 +13443,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.`,
 								},
 								"suppress_missing_path_errors": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Suppress errors when search path does not exist`,
 								},
 								"delete_files": schema.BoolAttribute{
 									Computed:    true,
@@ -12706,10 +13472,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -12729,7 +13497,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -12755,10 +13523,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -12796,8 +13566,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -12814,7 +13588,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12886,7 +13661,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -12912,7 +13688,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -12926,7 +13703,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"auth_token": schema.StringAttribute{
 									Computed:    true,
@@ -12949,10 +13727,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -12972,7 +13752,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -12998,10 +13778,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -13039,8 +13821,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -13075,7 +13861,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -13127,7 +13914,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Persistence`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -13158,7 +13946,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"host": schema.StringAttribute{
 									Computed:    true,
@@ -13172,7 +13961,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -13240,10 +14030,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -13263,7 +14055,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -13289,10 +14081,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -13330,8 +14124,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -13349,7 +14147,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `How to authenticate incoming client connections`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `mTLS settings`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13461,7 +14260,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"subscription_name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Subscription name`,
 											},
 											"version": schema.StringAttribute{
 												Computed:    true,
@@ -13501,7 +14301,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".`,
 											},
 											"query_selector": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Query builder mode`,
 											},
 											"metadata": schema.ListNestedAttribute{
 												Computed:    true,
@@ -13509,7 +14310,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -13519,7 +14321,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												},
 											},
 											"queries": schema.ListNestedAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Queries`,
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"path": schema.StringAttribute{
@@ -13546,7 +14349,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -13556,7 +14360,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"log_fingerprint_mismatch": schema.BoolAttribute{
 									Computed:    true,
@@ -13572,10 +14377,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -13595,7 +14402,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -13621,10 +14428,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -13662,8 +14471,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -13672,6 +14485,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
 									ElementType: types.StringType,
+								},
+								"suppress_missing_log_errors": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, missing event log channels will not cause the Source to report errors. Use in Fleets where some hosts may not have all configured event logs.`,
 								},
 								"read_mode": schema.StringAttribute{
 									Computed:    true,
@@ -13699,7 +14516,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -13708,12 +14526,13 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										},
 									},
 								},
-								"max_event_bytes": schema.Float64Attribute{
+								"max_event_bytes": schema.Int64Attribute{
 									Computed:    true,
 									Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"disable_json_rendering": schema.BoolAttribute{
 									Computed:    true,
@@ -13733,10 +14552,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -13756,7 +14577,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -13782,10 +14603,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -13823,8 +14646,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -13843,7 +14670,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -13853,7 +14681,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -13865,10 +14694,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -13888,7 +14719,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -13914,10 +14745,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -13955,8 +14788,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -13995,7 +14832,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -14005,7 +14843,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -14017,10 +14856,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -14040,7 +14881,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -14066,10 +14907,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -14107,8 +14950,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -14151,7 +14998,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.`,
 								},
 								"suppress_missing_path_errors": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Suppress errors when search path does not exist`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -14159,7 +15007,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -14169,7 +15018,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -14181,10 +15031,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -14204,7 +15056,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -14230,10 +15082,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -14271,8 +15125,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -14294,7 +15152,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The client ID of the Wiz application`,
 								},
 								"content_config": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Content types`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"content_type": schema.StringAttribute{
@@ -14302,10 +15161,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `The name of the Wiz query`,
 											},
 											"content_description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable content`,
 											},
 											"state_tracking": schema.BoolAttribute{
 												Computed:    true,
@@ -14379,7 +15240,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -14438,7 +15300,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
@@ -14458,10 +15321,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -14481,7 +15346,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -14507,10 +15372,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -14548,8 +15415,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -14563,24 +15434,29 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: "Optional `OpenAI-Project` request header value, typically `proj_xxxxxxxxxxxxxxxxxxxxxxxx`",
 								},
 								"content_config": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Content Types`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"content_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Content type`,
 											},
 											"content_description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"collect_path": schema.StringAttribute{
 												Computed:    true,
 												Description: `OpenAI Organization API path`,
 											},
 											"docs_url": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Docs URL`,
 											},
 											"disabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enabled`,
 											},
 											"state_tracking": schema.BoolAttribute{
 												Computed:    true,
@@ -14604,23 +15480,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name`,
 														},
 														"value": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Value`,
 														},
 													},
 												},
 											},
 											"pagination_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pagination type`,
 											},
 											"pagination_attribute": schema.ListAttribute{
 												Computed:    true,
+												Description: `Pagination attributes`,
 												ElementType: types.StringType,
 											},
 											"pagination_last_page_expr": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Last page expression`,
 											},
 											"max_pages": schema.Float64Attribute{
 												Computed:    true,
@@ -14660,7 +15541,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -14677,7 +15559,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 								},
 								"api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -14705,7 +15588,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -14752,7 +15636,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -14764,10 +15649,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -14787,7 +15674,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -14813,10 +15700,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -14854,8 +15743,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -14877,7 +15770,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -14978,7 +15872,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -15007,7 +15902,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"metadata": schema.ListNestedAttribute{
 												Computed:    true,
@@ -15015,7 +15911,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -15028,7 +15925,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -15043,7 +15941,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -15063,7 +15962,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -15089,10 +15988,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -15130,8 +16031,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -15182,7 +16087,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -15192,7 +16098,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -15207,7 +16114,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -15227,7 +16135,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -15253,10 +16161,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -15294,8 +16204,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -15316,7 +16230,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 								},
 								"aws_secret_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Secret key`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -15387,11 +16302,20 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Use Assume Role credentials when accessing Amazon SQS`,
 								},
+								"shared_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same credential settings for S3 and SQS`,
+								},
+								"shared_assume_role_arn": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same settings for S3 and SQS`,
+								},
 								"preprocess": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Disabled`,
 										},
 										"command": schema.StringAttribute{
 											Computed:    true,
@@ -15410,7 +16334,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -15449,14 +16374,39 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"aws_api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Access key`,
 								},
 								"aws_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsassume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"sqsassume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"sqsduration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"sqsaws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"sqsaws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsaws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS secret key`,
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
@@ -15471,7 +16421,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 						},
-						"input_servicenow_table": schema.SingleNestedAttribute{
+						"input_bedrock_s3": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
@@ -15479,10 +16429,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -15502,7 +16454,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -15528,10 +16480,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -15569,8 +16523,331 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: "The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.",
+								},
+								"file_filter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching file names to download and process. Defaults to: .*`,
+								},
+								"aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret key`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
+								"max_messages": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+								},
+								"visibility_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+								},
+								"num_receivers": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+								},
+								"socket_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+								},
+								"skip_on_error": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.`,
+								},
+								"include_sqs_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access Amazon S3`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_sqsassume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials when accessing Amazon SQS`,
+								},
+								"shared_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same credential settings for S3 and SQS`,
+								},
+								"shared_assume_role_arn": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use the same settings for S3 and SQS`,
+								},
+								"preprocess": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Disabled`,
+										},
+										"command": schema.StringAttribute{
+											Computed:    true,
+											Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+										},
+										"args": schema.ListAttribute{
+											Computed:    true,
+											Description: `Arguments to be added to the custom command`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to events from this input`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"parquet_chunk_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum file size for each Parquet chunk`,
+								},
+								"parquet_chunk_download_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+								},
+								"checkpointing": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Resume processing files after an interruption`,
+										},
+										"retries": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+										},
+									},
+								},
+								"poll_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+								},
+								"encoding": schema.StringAttribute{
+									Computed:    true,
+									Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Access key`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsassume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"sqsassume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"sqsduration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"sqsaws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"sqsaws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"sqsaws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS secret key`,
+								},
+								"tag_after_processing": schema.StringAttribute{
+									Computed: true,
+								},
+								"processed_tag_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+								},
+								"processed_tag_value": schema.StringAttribute{
+									Computed:    true,
+									Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+								},
+							},
+						},
+						"input_servicenow_table": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed: true,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -15669,7 +16946,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -15716,7 +16994,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"credentials_secret": schema.StringAttribute{
 									Computed:    true,
@@ -15771,7 +17050,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"client_id": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `ServiceNow OAuth client ID`,
 								},
 								"client_text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -15799,10 +17079,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -15822,7 +17104,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -15848,10 +17130,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -15889,8 +17173,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -15920,10 +17208,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable token`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"allowed_indexes_at_token": schema.ListAttribute{
 												Computed:    true,
@@ -15936,7 +17226,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -15952,7 +17243,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -16044,7 +17336,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -16058,26 +17351,27 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 									ElementType: types.StringType,
 								},
-								"hec_acks": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to enable Zscaler HEC acknowledgements`,
-								},
 								"access_control_allow_origin": schema.ListAttribute{
 									Computed:    true,
-									Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+									Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
 									ElementType: types.StringType,
 								},
 								"access_control_allow_headers": schema.ListAttribute{
 									Computed:    true,
-									Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+									Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
 									ElementType: types.StringType,
 								},
 								"emit_token_metrics": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+								},
+								"hec_acks": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether HEC acknowledgements are enabled. Always true for Zscaler sources.`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -16089,10 +17383,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -16112,7 +17408,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -16138,10 +17434,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -16179,8 +17477,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -16199,8 +17501,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed:    true,
-												Description: `Select Secret to use a text secret to authenticate`,
+												Computed: true,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -16211,10 +17512,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"enabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Enable token`,
 											},
 											"description": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Description`,
 											},
 											"allowed_indexes_at_token": schema.ListAttribute{
 												Computed:    true,
@@ -16227,7 +17530,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
-															Computed: true,
+															Computed:    true,
+															Description: `Name of the metadata field.`,
 														},
 														"value": schema.StringAttribute{
 															Computed:    true,
@@ -16240,7 +17544,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -16336,7 +17641,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -16349,15 +17655,6 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 									ElementType: types.StringType,
-								},
-								"breaker_rulesets": schema.ListAttribute{
-									Computed:    true,
-									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
-									ElementType: types.StringType,
-								},
-								"stale_channel_flush_ms": schema.Float64Attribute{
-									Computed:    true,
-									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"access_control_allow_origin": schema.ListAttribute{
 									Computed:    true,
@@ -16373,12 +17670,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
-						"input_openai_compliance_logs": schema.SingleNestedAttribute{
+						"input_sysdig_hec": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
@@ -16386,10 +17693,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Source type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -16409,7 +17718,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -16435,10 +17744,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -16476,24 +17787,631 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Port to listen on`,
+								},
+								"auth_tokens": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"auth_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+											},
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Enable token`,
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"allowed_indexes_at_token": schema.ListAttribute{
+												Computed:    true,
+												Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+												ElementType: types.StringType,
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Fields to add to events referencing this token`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name of the metadata field.`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"max_active_req": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+								},
+								"max_requests_per_socket": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								},
+								"enable_proxy_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
+								},
+								"capture_headers": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add request headers to events, in the __headers field`,
+								},
+								"activity_log_sample_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+								},
+								"socket_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+								},
+								"keep_alive_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+								},
+								"ip_allowlist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+								},
+								"ip_denylist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+								},
+								"hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which to listen for the Sysdig HTTP Event Collector API requests. This input supports the /event and /raw endpoints.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"allowed_indexes": schema.ListAttribute{
+									Computed:    true,
+									Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_origin": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+									ElementType: types.StringType,
+								},
+								"emit_token_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_upwind_hec": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Source type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed: true,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Port to listen on`,
+								},
+								"auth_tokens": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"auth_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+											"token": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+											},
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Enable token`,
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description`,
+											},
+											"allowed_indexes_at_token": schema.ListAttribute{
+												Computed:    true,
+												Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+												ElementType: types.StringType,
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed:    true,
+												Description: `Fields to add to events referencing this token`,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Name of the metadata field.`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `If true, TLS is disabled on this connection.`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"max_active_req": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+								},
+								"max_requests_per_socket": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								},
+								"enable_proxy_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
+								},
+								"capture_headers": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add request headers to events, in the __headers field`,
+								},
+								"activity_log_sample_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+								},
+								"socket_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+								},
+								"keep_alive_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+								},
+								"ip_allowlist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+								},
+								"ip_denylist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+								},
+								"hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which to listen for the Upwind HTTP Event Collector API requests. This input supports the /event endpoint.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+								"allowed_indexes": schema.ListAttribute{
+									Computed:    true,
+									Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_origin": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+									ElementType: types.StringType,
+								},
+								"emit_token_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
+								},
+							},
+						},
+						"input_openai_compliance_logs": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Connector type identifier.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Description: `Metadata tags used for categorization and filtering.`,
+									ElementType: types.StringType,
+								},
+								"cribl_source_provenance": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"origin": schema.StringAttribute{
+											Computed:    true,
+											Description: `Feature that created the Source.`,
+										},
+										"destination_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+										},
+										"source_arn": schema.StringAttribute{
+											Computed:    true,
+											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+									},
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"pipeline": schema.StringAttribute{
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
+											},
+										},
+									},
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"mode": schema.StringAttribute{
+											Computed: true,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"compress": schema.StringAttribute{
+											Computed: true,
+										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
+										"pq_controls": schema.MapAttribute{
+											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
 								},
 								"api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
 								},
 								"account_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Account type`,
 								},
 								"cron_schedule": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Cron schedule`,
 								},
 								"earliest": schema.StringAttribute{
 									Computed:    true,
@@ -16544,7 +18462,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -16600,7 +18519,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 								"workspace_id": schema.StringAttribute{
 									Computed:    true,
@@ -16642,10 +18562,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -16665,7 +18587,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -16691,10 +18613,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -16732,64 +18656,303 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
 								},
 								"api_key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `API key`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored Anthropic API key`,
 								},
-								"content_config": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"content_type": schema.StringAttribute{
-												Computed: true,
-											},
-											"content_description": schema.StringAttribute{
-												Computed: true,
-											},
-											"enabled": schema.BoolAttribute{
-												Computed: true,
-											},
-											"state_tracking": schema.BoolAttribute{
-												Computed:    true,
-												Description: `Track collection progress between consecutive scheduled executions`,
-											},
-											"state_update_expression": schema.StringAttribute{
-												Computed:    true,
-												Description: `JavaScript expression that defines how to update the state from an event`,
-											},
-											"state_merge_expression": schema.StringAttribute{
-												Computed:    true,
-												Description: `JavaScript expression that defines which state to keep when merging task state`,
-											},
-											"manage_state": schema.MapAttribute{
-												Computed:    true,
-												ElementType: types.StringType,
-											},
-											"cron_schedule": schema.StringAttribute{
-												Computed:    true,
-												Description: `Schedule on which to run this collection job`,
-											},
-											"earliest": schema.StringAttribute{
-												Computed:    true,
-												Description: `Earliest time for data collection, relative to now`,
-											},
-											"latest": schema.StringAttribute{
-												Computed:    true,
-												Description: `Latest time for data collection, relative to now`,
-											},
-											"job_timeout": schema.StringAttribute{
-												Computed:    true,
-												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
-											},
+								"activities": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Activities`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"earliest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Earliest time for data collection, relative to now`,
+										},
+										"latest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Latest time for data collection, relative to now`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+										"state_tracking": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Track collection progress between consecutive scheduled executions`,
+										},
+										"state_update_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines how to update the state from an event`,
+										},
+										"state_merge_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines which state to keep when merging task state`,
+										},
+										"manage_state": schema.MapAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"chats": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Chats`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"earliest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Earliest time for data collection, relative to now`,
+										},
+										"latest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Latest time for data collection, relative to now`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+										"state_tracking": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Track collection progress between consecutive scheduled executions`,
+										},
+										"state_update_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines how to update the state from an event`,
+										},
+										"state_merge_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines which state to keep when merging task state`,
+										},
+										"manage_state": schema.MapAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"projects": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Projects`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"earliest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Earliest time for data collection, relative to now`,
+										},
+										"latest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Latest time for data collection, relative to now`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+										"state_tracking": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Track collection progress between consecutive scheduled executions`,
+										},
+										"state_update_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines how to update the state from an event`,
+										},
+										"state_merge_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines which state to keep when merging task state`,
+										},
+										"manage_state": schema.MapAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"chat_messages": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Chat Messages`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"earliest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Earliest time for data collection, relative to now`,
+										},
+										"latest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Latest time for data collection, relative to now`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+										"state_tracking": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Track collection progress between consecutive scheduled executions`,
+										},
+										"state_update_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines how to update the state from an event`,
+										},
+										"state_merge_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines which state to keep when merging task state`,
+										},
+										"manage_state": schema.MapAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"project_details": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Project Details`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"earliest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Earliest time for data collection, relative to now`,
+										},
+										"latest": schema.StringAttribute{
+											Computed:    true,
+											Description: `Latest time for data collection, relative to now`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+										"state_tracking": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Track collection progress between consecutive scheduled executions`,
+										},
+										"state_update_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines how to update the state from an event`,
+										},
+										"state_merge_expression": schema.StringAttribute{
+											Computed:    true,
+											Description: `JavaScript expression that defines which state to keep when merging task state`,
+										},
+										"manage_state": schema.MapAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+									},
+								},
+								"groups": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Groups`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+									},
+								},
+								"organizations": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Organizations`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+									},
+								},
+								"org_users": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Organization Users`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										},
+									},
+								},
+								"org_roles": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Organization Roles`,
+									Attributes: map[string]schema.Attribute{
+										"enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enabled`,
+										},
+										"cron_schedule": schema.StringAttribute{
+											Computed:    true,
+											Description: `Schedule on which to run this collection job`,
+										},
+										"job_timeout": schema.StringAttribute{
+											Computed:    true,
+											Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 										},
 									},
 								},
@@ -16819,7 +18982,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -16866,7 +19030,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -16878,10 +19043,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If true, the Source is disabled and will not collect data.`,
 								},
 								"pipeline": schema.StringAttribute{
 									Computed:    true,
@@ -16901,7 +19068,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Metadata tags used for categorization and filtering.`,
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -16927,10 +19094,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"pipeline": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Pipeline or Pack to process data before sending to the Destination.`,
 											},
 											"output": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Destination to send data to when not using Routes.`,
 											},
 										},
 									},
@@ -16968,8 +19137,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"compress": schema.StringAttribute{
 											Computed: true,
 										},
+										"on_backpressure": schema.StringAttribute{
+											Computed: true,
+										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
+											Description: `Management controls for the persistent queue.`,
 											ElementType: types.StringType,
 										},
 									},
@@ -17028,7 +19201,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
@@ -17075,7 +19249,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional description for this configuration.`,
 								},
 							},
 						},
@@ -17093,14 +19268,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17130,7 +19307,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -17166,14 +19343,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -17229,10 +19408,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -17256,9 +19441,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -17289,9 +19475,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -17325,9 +19512,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17357,7 +19545,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -17393,14 +19581,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -17456,10 +19646,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -17496,9 +19692,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -17530,9 +19727,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -17571,14 +19769,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -17609,9 +19809,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -17724,19 +19925,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -17809,14 +20013,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -17829,14 +20035,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -17849,9 +20057,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17975,9 +20184,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -17989,9 +20199,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -18010,9 +20221,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18042,7 +20254,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -18078,14 +20290,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -18141,10 +20355,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -18212,9 +20432,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -18231,9 +20452,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -18265,9 +20487,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -18306,14 +20529,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -18344,9 +20569,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -18459,9 +20685,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    true,
@@ -18517,9 +20744,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -18607,14 +20835,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Maximum number of network errors before the consumer re-creates a socket`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -18634,14 +20864,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18671,7 +20903,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -18707,14 +20939,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -18770,10 +21004,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -18803,9 +21043,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -18952,9 +21193,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enable Splunk HEC acknowledgements`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -18964,9 +21206,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -18991,9 +21234,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Required:    false,
@@ -19003,9 +21247,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -19020,9 +21265,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -19041,9 +21287,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19073,7 +21320,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -19109,14 +21356,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -19172,10 +21421,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -19198,9 +21453,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -19306,9 +21562,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -19346,9 +21603,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 							},
 						},
@@ -19360,9 +21618,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `The highest S2S protocol version to advertise during handshake`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"use_fwd_timezone": schema.BoolAttribute{
 						Required:    false,
@@ -19400,14 +21659,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19437,7 +21698,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -19473,14 +21734,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -19536,10 +21799,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -19593,9 +21862,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Parameter Name`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -19614,9 +21884,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Header Name`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -19695,9 +21966,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -19783,19 +22055,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Splunk Search authentication type`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -19827,14 +22102,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19864,7 +22141,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -19900,14 +22177,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -19963,10 +22242,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -20008,9 +22293,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `If true, the token is active and can be used for authentication.`,
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -20033,9 +22319,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -20055,9 +22342,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -20193,9 +22481,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -20271,9 +22560,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -20292,9 +22582,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20324,7 +22615,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -20360,14 +22651,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -20423,10 +22716,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -20481,9 +22780,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -20525,9 +22825,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"connection_string": schema.StringAttribute{
 						Required:    false,
@@ -20602,14 +22903,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20639,7 +22942,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -20675,14 +22978,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -20738,10 +23043,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -20764,9 +23075,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -20901,9 +23213,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.`,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication type`,
 					},
 					"api_version": schema.StringAttribute{
 						Required:    false,
@@ -20919,14 +23232,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -20939,9 +23254,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -20970,14 +23286,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Password`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Required:    false,
@@ -21013,19 +23331,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -21063,9 +23384,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21095,7 +23417,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -21131,14 +23453,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -21194,10 +23518,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -21215,9 +23545,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -21299,9 +23630,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -21333,9 +23665,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -21374,14 +23707,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required:    true,
+													Optional:    false,
+													Computed:    false,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -21412,9 +23747,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -21527,19 +23863,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -21612,14 +23951,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -21632,14 +23973,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -21713,9 +24056,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -21727,9 +24071,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -21743,14 +24088,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21780,7 +24127,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -21816,14 +24163,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -21879,10 +24228,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -21905,9 +24260,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -22058,14 +24414,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Password`,
 							},
 							"token": schema.StringAttribute{
 								Required:    false,
@@ -22098,14 +24456,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Password`,
 							},
 							"token": schema.StringAttribute{
 								Required:    false,
@@ -22135,9 +24495,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -22149,9 +24510,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -22165,14 +24527,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22202,7 +24566,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -22238,14 +24602,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -22301,10 +24667,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -22327,9 +24699,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -22476,9 +24849,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -22490,19 +24864,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -22534,14 +24911,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22571,7 +24950,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -22607,14 +24986,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -22670,10 +25051,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -22696,9 +25083,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -22845,9 +25233,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -22859,19 +25248,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -22908,9 +25300,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22940,7 +25333,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -22976,14 +25369,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -23039,10 +25434,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -23127,9 +25528,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -23146,9 +25548,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"target_list": schema.ListAttribute{
 						Required:    false,
@@ -23193,9 +25596,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -23233,9 +25637,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -23293,14 +25698,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Value`,
 								},
 							},
 						},
@@ -23347,14 +25754,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23384,7 +25793,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -23420,14 +25829,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -23483,10 +25894,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -23566,9 +25983,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -23586,14 +26004,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Enter credentials directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"targets": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Targets`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"protocol": schema.StringAttribute{
@@ -23657,9 +26077,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -23697,9 +26118,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -23813,14 +26235,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Value`,
 								},
 							},
 						},
@@ -23867,14 +26291,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23904,7 +26330,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -23940,14 +26366,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -24003,10 +26431,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -24072,9 +26506,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -24111,9 +26546,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 								},
 								"interval": schema.Float64Attribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Interval`,
 								},
 								"log_level": schema.StringAttribute{
 									Required: false,
@@ -24121,9 +26557,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: false,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enabled`,
 								},
 							},
 						},
@@ -24195,9 +26632,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -24223,14 +26661,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24260,7 +26700,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -24296,14 +26736,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -24359,10 +26801,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -24428,9 +26876,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -24461,9 +26910,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 								},
 								"interval": schema.Float64Attribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Interval`,
 								},
 								"log_level": schema.StringAttribute{
 									Required: false,
@@ -24471,9 +26921,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: false,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enabled`,
 								},
 							},
 						},
@@ -24539,9 +26990,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -24567,14 +27019,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24604,7 +27058,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -24640,14 +27094,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -24703,10 +27159,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -24791,9 +27253,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -24877,9 +27340,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
 						Required:    false,
@@ -24977,14 +27441,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25014,7 +27480,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -25050,14 +27516,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -25113,10 +27581,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -25207,9 +27681,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -25292,10 +27767,24 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 							},
 						},
 					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						ElementType: types.StringType,
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -25376,14 +27865,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25413,7 +27904,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -25449,14 +27940,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -25512,10 +28005,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -25600,9 +28099,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -25701,9 +28201,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -25785,9 +28286,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -25799,9 +28301,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -25815,14 +28318,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25852,7 +28357,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -25888,14 +28393,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -25951,10 +28458,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -25977,9 +28490,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mechanism": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Authentication mechanism`,
 							},
 							"text_secret": schema.StringAttribute{
 								Required:    false,
@@ -26060,9 +28574,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"blob_store": schema.SingleNestedAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Azure Blob Storage`,
 								Attributes: map[string]schema.Attribute{
 									"container_name": schema.StringAttribute{
 										Required:    true,
@@ -26071,9 +28586,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										Description: `Azure Blob Storage container used to store checkpoints. Must be 3–63 lowercase alphanumeric characters or hyphens.`,
 									},
 									"auth_type": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Authentication method`,
 									},
 									"text_secret": schema.StringAttribute{
 										Required:    false,
@@ -26208,9 +28724,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -26222,9 +28739,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -26238,14 +28756,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Disabled`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26275,7 +28795,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -26311,14 +28831,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -26374,10 +28896,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -26427,9 +28955,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -26441,9 +28970,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"interval": schema.Float64Attribute{
 						Required:    false,
@@ -26469,14 +28999,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26506,7 +29038,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -26542,14 +29074,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -26605,10 +29139,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -26638,9 +29178,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -26776,9 +29317,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -26790,9 +29332,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -26811,9 +29354,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26843,7 +29387,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -26879,14 +29423,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -26942,10 +29488,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -27029,9 +29581,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -27043,9 +29596,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"ordered_delivery": schema.BoolAttribute{
 						Required:    false,
@@ -27065,14 +29619,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27102,7 +29658,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -27138,14 +29694,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -27201,10 +29759,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -27222,9 +29786,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -27236,9 +29801,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -27257,9 +29823,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27289,7 +29856,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -27325,14 +29892,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -27388,10 +29957,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -27414,9 +29989,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -27516,9 +30092,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -27549,9 +30126,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -27563,9 +30141,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -27579,14 +30158,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27616,7 +30197,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -27652,14 +30233,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -27715,10 +30298,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -27749,9 +30338,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -27768,9 +30358,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -27906,9 +30497,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -27920,9 +30512,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -27936,14 +30529,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27973,7 +30568,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -28009,14 +30604,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -28072,10 +30669,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -28105,9 +30708,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -28254,9 +30858,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enable Splunk HEC acknowledgements`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -28266,9 +30871,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -28280,15 +30886,17 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Auth tokens`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"token": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Token`,
 								},
 								"description": schema.StringAttribute{
 									Required: false,
@@ -28303,9 +30911,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -28322,9 +30931,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: false,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `When enabled, the token value is available on events as __hecToken`,
 										},
 										"default_dataset": schema.StringAttribute{
 											Required: false,
@@ -28345,9 +30955,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: false,
 									Attributes: map[string]schema.Attribute{
 										"enabled": schema.BoolAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Elasticsearch`,
 										},
 										"default_dataset": schema.StringAttribute{
 											Required: false,
@@ -28360,9 +30971,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -28381,9 +30993,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -28413,7 +31026,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -28449,14 +31062,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -28512,10 +31127,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -28538,9 +31159,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -28646,9 +31268,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -28671,9 +31294,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"auth_token": schema.StringAttribute{
 						Required:    false,
@@ -28699,14 +31323,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -28736,7 +31362,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -28772,14 +31398,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -28835,10 +31463,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -29040,19 +31674,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Set Name`,
 										},
 										"filter": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Filter Expression`,
 										},
 										"include_children": schema.BoolAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Include Child Processes`,
 										},
 									},
 								},
@@ -29091,9 +31728,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"expr": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Expression`,
 										},
 									},
 								},
@@ -29150,9 +31788,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -29164,9 +31803,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `persistence`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -29206,9 +31846,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -29222,14 +31863,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -29259,7 +31902,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -29295,14 +31938,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -29358,10 +32003,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -29380,9 +32031,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -29405,9 +32057,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events based on entries collected from the hosts file`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29418,9 +32071,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events for each of the host’s network interfaces`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29431,9 +32085,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events for physical disks, partitions, and file systems`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29444,9 +32099,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events based on the host system’s current state`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29457,9 +32113,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events based on entries collected from the host’s network routes`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29470,9 +32127,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events for DNS resolvers and search entries`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29483,9 +32141,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events for local users and groups`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29496,9 +32155,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events for Firewall rules entries`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29509,9 +32169,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events from the list of services`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29522,9 +32183,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events from list of listening ports`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29535,9 +32197,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Creates events from list of logged-in users`,
 								Attributes: map[string]schema.Attribute{
 									"enable": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Enabled`,
 									},
 								},
 							},
@@ -29598,9 +32261,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Enable only to collect LastLog data via legacy implementation. This option will be removed in a future release. Please contact Support before enabling. [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -29614,14 +32278,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -29651,7 +32317,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -29687,14 +32353,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -29750,10 +32418,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -29806,9 +32480,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -29820,9 +32495,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `persistence`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -29862,9 +32538,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -29878,14 +32555,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -29915,7 +32594,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -29951,14 +32630,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -30014,10 +32695,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -30070,9 +32757,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -30139,9 +32827,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Load balance traffic across all Worker Processes`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -30155,14 +32844,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30192,7 +32883,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -30228,14 +32919,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -30291,10 +32984,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -30329,9 +33028,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -30343,9 +33043,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -30359,14 +33060,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30396,7 +33099,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -30432,14 +33135,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -30495,10 +33200,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -30680,19 +33391,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Set Name`,
 										},
 										"filter": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `Filter Expression`,
 										},
 										"include_children": schema.BoolAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Include Child Processes`,
 										},
 									},
 								},
@@ -30731,9 +33445,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -30745,9 +33460,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `persistence`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -30793,9 +33509,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Enable to use built-in tools (PowerShell) to collect metrics instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-metrics/#advanced-tab)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -30809,14 +33526,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30846,7 +33565,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -30882,14 +33601,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -30945,10 +33666,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -30977,9 +33704,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -31084,15 +33812,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Use Assume Role credentials when accessing Amazon SQS`,
 					},
+					"shared_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same credential settings for S3 and SQS`,
+					},
+					"shared_assume_role_arn": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same settings for S3 and SQS`,
+					},
 					"preprocess": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -31117,9 +33858,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -31162,20 +33904,57 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsassume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"sqsassume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"sqsduration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"sqsaws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"sqsaws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsaws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Required: false,
@@ -31206,14 +33985,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -31243,7 +34024,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -31279,14 +34060,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -31342,10 +34125,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -31368,9 +34157,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -31502,7 +34292,41 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Toggle to Yes to extract each incoming metric to multiple events, one per data point. This works well when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave toggled to No (the default).`,
+						Description: `Extract each incoming metric to multiple events, one per data point. Recommended when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave disabled.`,
+					},
+					"sampling_rate": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The rate_by_service hint sent to connected tracers as the catch-all sampling rate. Applies to any service/environment not explicitly listed in Per-Service Sampling Rules. 1.0 = keep all traces (default); 0.0 = suggest dropping all.`,
+					},
+					"sampling_rules": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Per-service sampling rate hints. Each row maps to a "service:<s>,env:<e>" key in the rate_by_service response sent to tracers.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"service": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Datadog service name`,
+								},
+								"environment": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Datadog environment name (example: prod, staging)`,
+								},
+								"rate": schema.Float64Attribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Sampling rate for this service/environment combination (0.0–1.0)`,
+								},
+							},
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -31512,9 +34336,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -31534,20 +34359,21 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Required:    true,
 								Optional:    false,
 								Computed:    false,
-								Description: `Toggle to Yes to send key validation requests from Datadog Agent to the Datadog API. If toggled to No (the default), Stream handles key validation requests by always responding that the key is valid.`,
+								Description: `Forward key validation requests from the Datadog Agent to the Datadog API. If disabled, Stream handles key validation requests locally by always responding that the key is valid.`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
-								Description: `Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).`,
+								Description: `Whether to reject certificates that cannot be verified against a valid CA (such as self-signed certificates)`,
 							},
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -31561,14 +34387,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -31598,7 +34426,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -31634,14 +34462,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -31697,24 +34527,32 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
 					},
 					"samples": schema.ListNestedAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Datagens`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"sample": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Data Generator File Name`,
 								},
 								"events_per_sec": schema.Float64Attribute{
 									Required:    true,
@@ -31733,9 +34571,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -31747,9 +34586,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -31763,14 +34603,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -31800,7 +34642,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -31836,14 +34678,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -31899,10 +34743,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -31932,9 +34782,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -32083,9 +34934,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -32124,9 +34976,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Required:    false,
@@ -32136,9 +34989,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -32153,9 +35007,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -32174,9 +35029,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -32206,7 +35062,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -32242,14 +35098,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -32305,10 +35163,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -32367,9 +35231,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    true,
@@ -32439,9 +35304,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -32453,14 +35319,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -32480,14 +35348,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -32517,7 +35387,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -32553,14 +35423,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -32616,10 +35488,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -32644,9 +35522,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -32658,9 +35537,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -32674,14 +35554,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -32711,7 +35593,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -32747,14 +35629,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -32810,10 +35694,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -32860,9 +35750,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -32932,9 +35823,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -32952,9 +35844,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -32973,9 +35866,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -33005,7 +35899,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -33041,14 +35935,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -33104,10 +36000,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -33136,9 +36038,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -33243,15 +36146,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Use Assume Role credentials when accessing Amazon SQS`,
 					},
+					"shared_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same credential settings for S3 and SQS`,
+					},
+					"shared_assume_role_arn": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same settings for S3 and SQS`,
+					},
 					"preprocess": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -33276,9 +36192,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -33339,20 +36256,57 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsassume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"sqsassume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"sqsduration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"sqsaws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"sqsaws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsaws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS secret key`,
 					},
 					"processed_tag_key": schema.StringAttribute{
 						Required:    false,
@@ -33378,14 +36332,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -33415,7 +36371,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -33451,14 +36407,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -33514,10 +36472,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -33546,9 +36510,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -33653,15 +36618,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Use Assume Role credentials when accessing Amazon SQS`,
 					},
+					"shared_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same credential settings for S3 and SQS`,
+					},
+					"shared_assume_role_arn": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same settings for S3 and SQS`,
+					},
 					"preprocess": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -33686,9 +36664,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -33755,20 +36734,57 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsassume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"sqsassume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"sqsduration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"sqsaws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"sqsaws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsaws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Required: false,
@@ -33804,9 +36820,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -33836,7 +36853,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -33872,14 +36889,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -33935,10 +36954,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -33962,9 +36987,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues.`,
 						Attributes: map[string]schema.Attribute{
 							"v3_auth_enabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Enabled`,
 							},
 							"allow_unmatched_trap": schema.BoolAttribute{
 								Required:    false,
@@ -33980,9 +37006,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
-											Optional: false,
-											Computed: false,
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `V3 name`,
 										},
 										"auth_protocol": schema.StringAttribute{
 											Required: false,
@@ -33990,9 +37017,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: false,
 										},
 										"auth_key": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `V3 authentication key`,
 										},
 										"priv_protocol": schema.StringAttribute{
 											Required: false,
@@ -34000,9 +37028,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: false,
 										},
 										"priv_key": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `V3 privacy key`,
 										},
 									},
 								},
@@ -34029,9 +37058,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -34061,9 +37091,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -34077,14 +37108,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -34114,7 +37147,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -34150,14 +37183,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -34213,10 +37248,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -34239,9 +37280,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -34389,9 +37431,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Authentication type`,
 								},
 								"token": schema.StringAttribute{
 									Required:    false,
@@ -34400,9 +37443,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Bearer token for Authorization header`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Required:    false,
@@ -34412,9 +37456,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -34426,9 +37471,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -34437,14 +37483,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Select or create a stored text secret`,
 								},
 								"username": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Username`,
 								},
 								"password": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Password`,
 								},
 								"credentials_secret": schema.StringAttribute{
 									Required:    false,
@@ -34463,9 +37511,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -34483,19 +37532,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -34533,14 +37585,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -34570,7 +37624,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -34606,14 +37660,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -34669,10 +37725,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -34695,9 +37757,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -34767,9 +37830,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -34793,9 +37857,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -34814,9 +37879,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -34846,7 +37912,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -34882,14 +37948,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -34945,10 +38013,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -34983,9 +38057,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -35055,9 +38130,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -35075,14 +38151,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -35113,9 +38191,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -35145,7 +38224,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -35181,14 +38260,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -35244,10 +38325,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -35361,9 +38448,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -35433,9 +38521,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -35459,9 +38548,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Load balance traffic across all Worker Processes`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
 						Required:    false,
@@ -35481,14 +38571,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -35518,7 +38610,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -35554,14 +38646,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -35617,10 +38711,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -35700,9 +38800,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -35733,9 +38834,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"path": schema.StringAttribute{
 						Required:    false,
@@ -35750,9 +38852,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.`,
 					},
 					"suppress_missing_path_errors": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Suppress errors when search path does not exist`,
 					},
 					"delete_files": schema.BoolAttribute{
 						Required:    false,
@@ -35790,14 +38893,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -35827,7 +38932,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -35863,14 +38968,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -35926,10 +39033,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -35952,9 +39065,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -36060,9 +39174,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -36098,9 +39213,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -36118,9 +39234,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"auth_token": schema.StringAttribute{
 						Required:    false,
@@ -36151,14 +39268,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -36188,7 +39307,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -36224,14 +39343,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -36287,10 +39408,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -36339,9 +39466,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -36413,9 +39541,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Persistence`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -36460,9 +39589,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Required:    false,
@@ -36482,9 +39612,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -36582,14 +39713,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -36619,7 +39752,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -36655,14 +39788,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -36718,10 +39853,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -36745,9 +39886,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `How to authenticate incoming client connections`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `mTLS settings`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -36913,9 +40055,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"subscription_name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Subscription name`,
 								},
 								"version": schema.StringAttribute{
 									Required:    false,
@@ -36973,9 +40116,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".`,
 								},
 								"query_selector": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Query builder mode`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Required:    false,
@@ -36985,9 +40129,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -36999,9 +40144,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"queries": schema.ListNestedAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Queries`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"path": schema.StringAttribute{
@@ -37036,9 +40182,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -37050,9 +40197,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"log_fingerprint_mismatch": schema.BoolAttribute{
 						Required:    false,
@@ -37072,14 +40220,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -37109,7 +40259,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -37145,14 +40295,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -37208,10 +40360,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -37222,6 +40380,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
 						ElementType: types.StringType,
+					},
+					"suppress_missing_log_errors": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `When enabled, missing event log channels will not cause the Source to report errors. Use in Fleets where some hosts may not have all configured event logs.`,
 					},
 					"read_mode": schema.StringAttribute{
 						Required:    false,
@@ -37261,9 +40425,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -37274,16 +40439,17 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 							},
 						},
 					},
-					"max_event_bytes": schema.Float64Attribute{
+					"max_event_bytes": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"disable_json_rendering": schema.BoolAttribute{
 						Required:    false,
@@ -37309,14 +40475,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -37346,7 +40514,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -37382,14 +40550,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -37445,10 +40615,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -37473,9 +40649,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -37487,9 +40664,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -37503,14 +40681,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -37540,7 +40720,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -37576,14 +40756,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -37639,10 +40821,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -37697,9 +40885,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -37711,9 +40900,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -37727,14 +40917,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -37764,7 +40956,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -37800,14 +40992,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -37863,10 +41057,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -37925,9 +41125,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.`,
 					},
 					"suppress_missing_path_errors": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Suppress errors when search path does not exist`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -37937,9 +41138,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -37951,9 +41153,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -37967,14 +41170,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -38004,7 +41209,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -38040,14 +41245,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -38103,10 +41310,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -38136,9 +41349,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `The client ID of the Wiz application`,
 					},
 					"content_config": schema.ListNestedAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Content types`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"content_type": schema.StringAttribute{
@@ -38148,14 +41362,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The name of the Wiz query`,
 								},
 								"content_description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable content`,
 								},
 								"state_tracking": schema.BoolAttribute{
 									Required:    false,
@@ -38263,9 +41479,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -38350,9 +41567,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -38378,14 +41596,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -38415,7 +41635,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -38451,14 +41671,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -38514,10 +41736,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -38535,20 +41763,23 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: "Optional `OpenAI-Project` request header value, typically `proj_xxxxxxxxxxxxxxxxxxxxxxxx`",
 					},
 					"content_config": schema.ListNestedAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Content Types`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"content_type": schema.StringAttribute{
-									Required: false,
-									Optional: false,
-									Computed: true,
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Content type`,
 								},
 								"content_description": schema.StringAttribute{
-									Required: false,
-									Optional: false,
-									Computed: true,
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Description`,
 								},
 								"collect_path": schema.StringAttribute{
 									Required:    false,
@@ -38557,14 +41788,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `OpenAI Organization API path`,
 								},
 								"docs_url": schema.StringAttribute{
-									Required: false,
-									Optional: false,
-									Computed: true,
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Docs URL`,
 								},
 								"disabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enabled`,
 								},
 								"state_tracking": schema.BoolAttribute{
 									Required:    false,
@@ -38598,33 +41831,38 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name`,
 											},
 											"value": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Value`,
 											},
 										},
 									},
 								},
 								"pagination_type": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Pagination type`,
 								},
 								"pagination_attribute": schema.ListAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
+									Description: `Pagination attributes`,
 									ElementType: types.StringType,
 								},
 								"pagination_last_page_expr": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Last page expression`,
 								},
 								"max_pages": schema.Float64Attribute{
 									Required:    false,
@@ -38682,9 +41920,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -38705,9 +41944,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 					},
 					"api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `API key`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    true,
@@ -38747,9 +41987,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -38816,9 +42057,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -38832,14 +42074,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -38869,7 +42113,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -38905,14 +42149,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -38968,10 +42214,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -39001,9 +42253,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -39152,9 +42405,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -39193,9 +42447,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Required:    false,
@@ -39205,9 +42460,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -39222,9 +42478,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -39243,9 +42500,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -39275,7 +42533,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -39311,14 +42569,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -39374,10 +42634,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -39450,9 +42716,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -39464,9 +42731,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -39485,9 +42753,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -39517,7 +42786,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -39553,14 +42822,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -39616,10 +42887,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -39648,9 +42925,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -39755,15 +43033,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Use Assume Role credentials when accessing Amazon SQS`,
 					},
+					"shared_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same credential settings for S3 and SQS`,
+					},
+					"shared_assume_role_arn": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same settings for S3 and SQS`,
+					},
 					"preprocess": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
 							},
 							"command": schema.StringAttribute{
 								Required:    false,
@@ -39788,9 +43079,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -39845,20 +43137,57 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsassume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"sqsassume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"sqsduration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"sqsaws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"sqsaws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsaws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS secret key`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Required: false,
@@ -39879,7 +43208,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					},
 				},
 			},
-			"input_servicenow_table": schema.SingleNestedAttribute{
+			"input_bedrock_s3": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -39889,14 +43218,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -39926,7 +43257,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -39962,14 +43293,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -40025,10 +43358,487 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"queue_name": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: "The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.",
+					},
+					"file_filter": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Regex matching file names to download and process. Defaults to: .*`,
+					},
+					"aws_account_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Secret key`,
+					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
+					},
+					"reuse_connections": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reuse connections between requests, which can improve performance`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						ElementType: types.StringType,
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+					},
+					"max_messages": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+					},
+					"visibility_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+					},
+					"num_receivers": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+					},
+					"skip_on_error": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.`,
+					},
+					"include_sqs_metadata": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use Assume Role credentials to access Amazon S3`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"enable_sqsassume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use Assume Role credentials when accessing Amazon SQS`,
+					},
+					"shared_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same credential settings for S3 and SQS`,
+					},
+					"shared_assume_role_arn": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use the same settings for S3 and SQS`,
+					},
+					"preprocess": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Disabled`,
+							},
+							"command": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+							},
+							"args": schema.ListAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Arguments to be added to the custom command`,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Fields to add to events from this input`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+					},
+					"parquet_chunk_size_mb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum file size for each Parquet chunk`,
+					},
+					"parquet_chunk_download_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+					},
+					"checkpointing": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `Resume processing files after an interruption`,
+							},
+							"retries": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+							},
+						},
+					},
+					"poll_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+					},
+					"encoding": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_api_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Access key`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsassume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"sqsassume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `External ID to use when assuming role`,
+					},
+					"sqsduration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"sqsaws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"sqsaws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"sqsaws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `SQS secret key`,
+					},
+					"tag_after_processing": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+					},
+					"processed_tag_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+					"processed_tag_value": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.`,
+					},
+				},
+			},
+			"input_servicenow_table": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Unique ID for this input`,
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
+					},
+					"disabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select whether to send data to Routes, or directly to Destinations.`,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"cribl_source_provenance": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"origin": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Feature that created the Source.`,
+							},
+							"destination_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+							},
+							"source_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+						},
+					},
+					"connections": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"pipeline": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
+								},
+								"output": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
+								},
+							},
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"mode": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"max_buffer_size_bytes": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+							},
+							"commit_frequency": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The number of events to send downstream before committing that Stream has read them`,
+							},
+							"max_file_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"max_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+							},
+							"compress": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"pq_controls": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -40173,9 +43983,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -40242,9 +44053,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -40321,9 +44133,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"client_id": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `ServiceNow OAuth client ID`,
 					},
 					"client_text_secret": schema.StringAttribute{
 						Required:    false,
@@ -40361,14 +44174,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -40398,7 +44213,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -40434,14 +44249,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -40497,10 +44314,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -40542,14 +44365,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"allowed_indexes_at_token": schema.ListAttribute{
 									Required:    false,
@@ -40566,9 +44391,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -40588,9 +44414,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
 							},
 							"request_cert": schema.BoolAttribute{
 								Required:    false,
@@ -40726,9 +44553,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -40746,36 +44574,37 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 						ElementType: types.StringType,
 					},
-					"hec_acks": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `Whether to enable Zscaler HEC acknowledgements`,
-					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+					},
+					"hec_acks": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Whether HEC acknowledgements are enabled. Always true for Zscaler sources.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -40789,14 +44618,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -40826,7 +44657,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -40862,14 +44693,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -40925,10 +44758,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -40953,10 +44792,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Select Secret to use a text secret to authenticate`,
+									Required: false,
+									Optional: true,
+									Computed: false,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -40971,14 +44809,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
 								},
 								"allowed_indexes_at_token": schema.ListAttribute{
 									Required:    false,
@@ -40995,9 +44835,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Required: true,
-												Optional: false,
-												Computed: false,
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
 											},
 											"value": schema.StringAttribute{
 												Required:    true,
@@ -41012,9 +44853,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -41156,9 +44998,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -41175,19 +45018,6 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
 						ElementType: types.StringType,
-					},
-					"breaker_rulesets": schema.ListAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
-						ElementType: types.StringType,
-					},
-					"stale_channel_flush_ms": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Required:    false,
@@ -41209,14 +45039,28 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						ElementType: types.StringType,
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
-			"input_openai_compliance_logs": schema.SingleNestedAttribute{
+			"input_sysdig_hec": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -41226,14 +45070,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -41263,7 +45109,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -41299,14 +45145,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -41362,18 +45210,901 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"host": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Port to listen on`,
+					},
+					"auth_tokens": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Required: false,
+									Optional: true,
+									Computed: false,
+								},
+								"token_secret": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select or create a stored text secret`,
+								},
+								"token": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+								},
+								"enabled": schema.BoolAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
+								},
+								"description": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
+								},
+								"allowed_indexes_at_token": schema.ListAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									ElementType: types.StringType,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Fields to add to events referencing this token`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The name of the predefined certificate`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"min_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"max_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
+					},
+					"capture_headers": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Add request headers to events, in the __headers field`,
+					},
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+					},
+					"request_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+					},
+					"hec_api": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Absolute path on which to listen for the Sysdig HTTP Event Collector API requests. This input supports the /event and /raw endpoints.`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+					},
+					"allowed_indexes": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						ElementType: types.StringType,
+					},
+					"access_control_allow_origin": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"access_control_allow_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						ElementType: types.StringType,
+					},
+					"emit_token_metrics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
+					},
+				},
+			},
+			"input_upwind_hec": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Unique ID for this input`,
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Source type identifier.`,
+					},
+					"disabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select whether to send data to Routes, or directly to Destinations.`,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"cribl_source_provenance": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"origin": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Feature that created the Source.`,
+							},
+							"destination_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+							},
+							"source_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+						},
+					},
+					"connections": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"pipeline": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
+								},
+								"output": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
+								},
+							},
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"mode": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"max_buffer_size_bytes": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+							},
+							"commit_frequency": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The number of events to send downstream before committing that Stream has read them`,
+							},
+							"max_file_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"max_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+							},
+							"compress": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"pq_controls": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"host": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses).`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Port to listen on`,
+					},
+					"auth_tokens": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Required: false,
+									Optional: true,
+									Computed: false,
+								},
+								"token_secret": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select or create a stored text secret`,
+								},
+								"token": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+								},
+								"enabled": schema.BoolAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enable token`,
+								},
+								"description": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Description`,
+								},
+								"allowed_indexes_at_token": schema.ListAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									ElementType: types.StringType,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Fields to add to events referencing this token`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `Name of the metadata field.`,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Optional:    false,
+												Computed:    false,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `If true, TLS is disabled on this connection.`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The name of the predefined certificate`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"min_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"max_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
+					},
+					"capture_headers": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Add request headers to events, in the __headers field`,
+					},
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+					},
+					"request_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.`,
+					},
+					"hec_api": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Absolute path on which to listen for the Upwind HTTP Event Collector API requests. This input supports the /event endpoint.`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+					},
+					"allowed_indexes": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						ElementType: types.StringType,
+					},
+					"access_control_allow_origin": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"access_control_allow_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						ElementType: types.StringType,
+					},
+					"emit_token_metrics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
+					},
+				},
+			},
+			"input_openai_compliance_logs": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Unique ID for this input`,
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
+					},
+					"disabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select whether to send data to Routes, or directly to Destinations.`,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"cribl_source_provenance": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"origin": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Feature that created the Source.`,
+							},
+							"destination_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the S3 bucket or Firehose delivery stream configured as the Source.`,
+							},
+							"source_arn": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+						},
+					},
+					"connections": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"pipeline": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
+								},
+								"output": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
+								},
+							},
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: false,
+						Attributes: map[string]schema.Attribute{
+							"mode": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"max_buffer_size_bytes": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+							},
+							"commit_frequency": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The number of events to send downstream before committing that Stream has read them`,
+							},
+							"max_file_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"max_size": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+							},
+							"path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+							},
+							"compress": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
+							"pq_controls": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
 					},
 					"api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `API key`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    true,
@@ -41382,14 +46113,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Select or create a stored text secret`,
 					},
 					"account_type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Account type`,
 					},
 					"cron_schedule": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Cron schedule`,
 					},
 					"earliest": schema.StringAttribute{
 						Required:    false,
@@ -41464,9 +46197,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -41546,9 +46280,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 					"workspace_id": schema.StringAttribute{
 						Required:    false,
@@ -41606,14 +46341,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -41643,7 +46380,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -41679,14 +46416,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -41742,18 +46481,25 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
 					},
 					"api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `API key`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    true,
@@ -41761,75 +46507,417 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed:    false,
 						Description: `Select or create a stored Anthropic API key`,
 					},
-					"content_config": schema.ListNestedAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"content_type": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
-								},
-								"content_description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
-								},
-								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
-								},
-								"state_tracking": schema.BoolAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Track collection progress between consecutive scheduled executions`,
-								},
-								"state_update_expression": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `JavaScript expression that defines how to update the state from an event`,
-								},
-								"state_merge_expression": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `JavaScript expression that defines which state to keep when merging task state`,
-								},
-								"manage_state": schema.MapAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									ElementType: types.StringType,
-								},
-								"cron_schedule": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Schedule on which to run this collection job`,
-								},
-								"earliest": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Earliest time for data collection, relative to now`,
-								},
-								"latest": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
-									Computed:    false,
-									Description: `Latest time for data collection, relative to now`,
-								},
-								"job_timeout": schema.StringAttribute{
-									Required:    false,
-									Optional:    true,
-									Computed:    false,
-									Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
-								},
+					"activities": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Activities`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Earliest time for data collection, relative to now`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Latest time for data collection, relative to now`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+							"state_tracking": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Track collection progress between consecutive scheduled executions`,
+							},
+							"state_update_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines how to update the state from an event`,
+							},
+							"state_merge_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines which state to keep when merging task state`,
+							},
+							"manage_state": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"chats": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Chats`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Earliest time for data collection, relative to now`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Latest time for data collection, relative to now`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+							"state_tracking": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Track collection progress between consecutive scheduled executions`,
+							},
+							"state_update_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines how to update the state from an event`,
+							},
+							"state_merge_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines which state to keep when merging task state`,
+							},
+							"manage_state": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"projects": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Projects`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Earliest time for data collection, relative to now`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Latest time for data collection, relative to now`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+							"state_tracking": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Track collection progress between consecutive scheduled executions`,
+							},
+							"state_update_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines how to update the state from an event`,
+							},
+							"state_merge_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines which state to keep when merging task state`,
+							},
+							"manage_state": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"chat_messages": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Chat Messages`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Earliest time for data collection, relative to now`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Latest time for data collection, relative to now`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+							"state_tracking": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Track collection progress between consecutive scheduled executions`,
+							},
+							"state_update_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines how to update the state from an event`,
+							},
+							"state_merge_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines which state to keep when merging task state`,
+							},
+							"manage_state": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"project_details": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Project Details`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Earliest time for data collection, relative to now`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Latest time for data collection, relative to now`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+							"state_tracking": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Track collection progress between consecutive scheduled executions`,
+							},
+							"state_update_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines how to update the state from an event`,
+							},
+							"state_merge_expression": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `JavaScript expression that defines which state to keep when merging task state`,
+							},
+							"manage_state": schema.MapAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"groups": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Groups`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+						},
+					},
+					"organizations": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Organizations`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+						},
+					},
+					"org_users": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Organization Users`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+							},
+						},
+					},
+					"org_roles": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Organization Roles`,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enabled`,
+							},
+							"cron_schedule": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Schedule on which to run this collection job`,
+							},
+							"job_timeout": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 							},
 						},
 					},
@@ -41871,9 +46959,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -41940,9 +47029,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -41956,14 +47046,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Connector type identifier.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If true, the Source is disabled and will not collect data.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -41993,7 +47085,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
@@ -42029,14 +47121,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"pipeline": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Pipeline or Pack to process data before sending to the Destination.`,
 								},
 								"output": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Destination to send data to when not using Routes.`,
 								},
 							},
 						},
@@ -42092,10 +47186,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional: true,
 								Computed: false,
 							},
+							"on_backpressure": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: false,
+							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Description: `Management controls for the persistent queue.`,
 								ElementType: types.StringType,
 							},
 						},
@@ -42180,9 +47280,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
@@ -42249,9 +47350,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -47240,6 +52342,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.RetryRules = types.ObjectNull(InputMicrosoftGraphRetryRulesAttrTypes())
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.BreakerRulesets.IsNull() || state.InputMicrosoftGraph.BreakerRulesets.IsUnknown())) {
+			if !api.InputMicrosoftGraph.BreakerRulesets.IsNull() && !api.InputMicrosoftGraph.BreakerRulesets.IsUnknown() {
+				state.InputMicrosoftGraph.BreakerRulesets = api.InputMicrosoftGraph.BreakerRulesets
+			} else if state.InputMicrosoftGraph.BreakerRulesets.IsNull() || state.InputMicrosoftGraph.BreakerRulesets.IsUnknown() {
+				state.InputMicrosoftGraph.BreakerRulesets = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.StaleChannelFlushMs.IsNull() || state.InputMicrosoftGraph.StaleChannelFlushMs.IsUnknown())) {
+			if !api.InputMicrosoftGraph.StaleChannelFlushMs.IsNull() && !api.InputMicrosoftGraph.StaleChannelFlushMs.IsUnknown() {
+				state.InputMicrosoftGraph.StaleChannelFlushMs = api.InputMicrosoftGraph.StaleChannelFlushMs
+			} else if state.InputMicrosoftGraph.StaleChannelFlushMs.IsNull() || state.InputMicrosoftGraph.StaleChannelFlushMs.IsUnknown() {
+				state.InputMicrosoftGraph.StaleChannelFlushMs = types.Float64Null()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.Description.IsNull() || state.InputMicrosoftGraph.Description.IsUnknown())) {
 			if !api.InputMicrosoftGraph.Description.IsNull() && !api.InputMicrosoftGraph.Description.IsUnknown() {
 				state.InputMicrosoftGraph.Description = api.InputMicrosoftGraph.Description
@@ -50216,6 +55332,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.EnableSQSAssumeRole = types.BoolNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SharedCredentials.IsNull() || state.InputCrowdstrike.SharedCredentials.IsUnknown())) {
+			if !api.InputCrowdstrike.SharedCredentials.IsNull() && !api.InputCrowdstrike.SharedCredentials.IsUnknown() {
+				state.InputCrowdstrike.SharedCredentials = api.InputCrowdstrike.SharedCredentials
+			} else if state.InputCrowdstrike.SharedCredentials.IsNull() || state.InputCrowdstrike.SharedCredentials.IsUnknown() {
+				state.InputCrowdstrike.SharedCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SharedAssumeRoleArn.IsNull() || state.InputCrowdstrike.SharedAssumeRoleArn.IsUnknown())) {
+			if !api.InputCrowdstrike.SharedAssumeRoleArn.IsNull() && !api.InputCrowdstrike.SharedAssumeRoleArn.IsUnknown() {
+				state.InputCrowdstrike.SharedAssumeRoleArn = api.InputCrowdstrike.SharedAssumeRoleArn
+			} else if state.InputCrowdstrike.SharedAssumeRoleArn.IsNull() || state.InputCrowdstrike.SharedAssumeRoleArn.IsUnknown() {
+				state.InputCrowdstrike.SharedAssumeRoleArn = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Preprocess.IsNull() || state.InputCrowdstrike.Preprocess.IsUnknown())) {
 			if !api.InputCrowdstrike.Preprocess.IsNull() && !api.InputCrowdstrike.Preprocess.IsUnknown() {
 				state.InputCrowdstrike.Preprocess = api.InputCrowdstrike.Preprocess
@@ -50270,6 +55400,48 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.AwsSecret = api.InputCrowdstrike.AwsSecret
 			} else if state.InputCrowdstrike.AwsSecret.IsNull() || state.InputCrowdstrike.AwsSecret.IsUnknown() {
 				state.InputCrowdstrike.AwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSAssumeRoleArn.IsNull() || state.InputCrowdstrike.SQSAssumeRoleArn.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSAssumeRoleArn.IsNull() && !api.InputCrowdstrike.SQSAssumeRoleArn.IsUnknown() {
+				state.InputCrowdstrike.SQSAssumeRoleArn = api.InputCrowdstrike.SQSAssumeRoleArn
+			} else if state.InputCrowdstrike.SQSAssumeRoleArn.IsNull() || state.InputCrowdstrike.SQSAssumeRoleArn.IsUnknown() {
+				state.InputCrowdstrike.SQSAssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSAssumeRoleExternalID.IsNull() || state.InputCrowdstrike.SQSAssumeRoleExternalID.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSAssumeRoleExternalID.IsNull() && !api.InputCrowdstrike.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputCrowdstrike.SQSAssumeRoleExternalID = api.InputCrowdstrike.SQSAssumeRoleExternalID
+			} else if state.InputCrowdstrike.SQSAssumeRoleExternalID.IsNull() || state.InputCrowdstrike.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputCrowdstrike.SQSAssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSDurationSeconds.IsNull() || state.InputCrowdstrike.SQSDurationSeconds.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSDurationSeconds.IsNull() && !api.InputCrowdstrike.SQSDurationSeconds.IsUnknown() {
+				state.InputCrowdstrike.SQSDurationSeconds = api.InputCrowdstrike.SQSDurationSeconds
+			} else if state.InputCrowdstrike.SQSDurationSeconds.IsNull() || state.InputCrowdstrike.SQSDurationSeconds.IsUnknown() {
+				state.InputCrowdstrike.SQSDurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSAwsAuthenticationMethod.IsNull() || state.InputCrowdstrike.SQSAwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSAwsAuthenticationMethod.IsNull() && !api.InputCrowdstrike.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsAuthenticationMethod = api.InputCrowdstrike.SQSAwsAuthenticationMethod
+			} else if state.InputCrowdstrike.SQSAwsAuthenticationMethod.IsNull() || state.InputCrowdstrike.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSAwsSecret.IsNull() || state.InputCrowdstrike.SQSAwsSecret.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSAwsSecret.IsNull() && !api.InputCrowdstrike.SQSAwsSecret.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsSecret = api.InputCrowdstrike.SQSAwsSecret
+			} else if state.InputCrowdstrike.SQSAwsSecret.IsNull() || state.InputCrowdstrike.SQSAwsSecret.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.SQSAwsSecretKey.IsNull() || state.InputCrowdstrike.SQSAwsSecretKey.IsUnknown())) {
+			if !api.InputCrowdstrike.SQSAwsSecretKey.IsNull() && !api.InputCrowdstrike.SQSAwsSecretKey.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsSecretKey = api.InputCrowdstrike.SQSAwsSecretKey
+			} else if state.InputCrowdstrike.SQSAwsSecretKey.IsNull() || state.InputCrowdstrike.SQSAwsSecretKey.IsUnknown() {
+				state.InputCrowdstrike.SQSAwsSecretKey = types.StringNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.TagAfterProcessing.IsNull() || state.InputCrowdstrike.TagAfterProcessing.IsUnknown())) {
@@ -50478,6 +55650,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.ExtractMetrics = api.InputDatadogAgent.ExtractMetrics
 			} else if state.InputDatadogAgent.ExtractMetrics.IsNull() || state.InputDatadogAgent.ExtractMetrics.IsUnknown() {
 				state.InputDatadogAgent.ExtractMetrics = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.SamplingRate.IsNull() || state.InputDatadogAgent.SamplingRate.IsUnknown())) {
+			if !api.InputDatadogAgent.SamplingRate.IsNull() && !api.InputDatadogAgent.SamplingRate.IsUnknown() {
+				state.InputDatadogAgent.SamplingRate = api.InputDatadogAgent.SamplingRate
+			} else if state.InputDatadogAgent.SamplingRate.IsNull() || state.InputDatadogAgent.SamplingRate.IsUnknown() {
+				state.InputDatadogAgent.SamplingRate = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.SamplingRules.IsNull() || state.InputDatadogAgent.SamplingRules.IsUnknown())) {
+			if !api.InputDatadogAgent.SamplingRules.IsNull() && !api.InputDatadogAgent.SamplingRules.IsUnknown() {
+				state.InputDatadogAgent.SamplingRules = api.InputDatadogAgent.SamplingRules
+			} else if state.InputDatadogAgent.SamplingRules.IsNull() || state.InputDatadogAgent.SamplingRules.IsUnknown() {
+				state.InputDatadogAgent.SamplingRules = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()})
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Metadata.IsNull() || state.InputDatadogAgent.Metadata.IsUnknown())) {
@@ -51588,6 +56774,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3.EnableSQSAssumeRole = types.BoolNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SharedCredentials.IsNull() || state.InputS3.SharedCredentials.IsUnknown())) {
+			if !api.InputS3.SharedCredentials.IsNull() && !api.InputS3.SharedCredentials.IsUnknown() {
+				state.InputS3.SharedCredentials = api.InputS3.SharedCredentials
+			} else if state.InputS3.SharedCredentials.IsNull() || state.InputS3.SharedCredentials.IsUnknown() {
+				state.InputS3.SharedCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SharedAssumeRoleArn.IsNull() || state.InputS3.SharedAssumeRoleArn.IsUnknown())) {
+			if !api.InputS3.SharedAssumeRoleArn.IsNull() && !api.InputS3.SharedAssumeRoleArn.IsUnknown() {
+				state.InputS3.SharedAssumeRoleArn = api.InputS3.SharedAssumeRoleArn
+			} else if state.InputS3.SharedAssumeRoleArn.IsNull() || state.InputS3.SharedAssumeRoleArn.IsUnknown() {
+				state.InputS3.SharedAssumeRoleArn = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.Preprocess.IsNull() || state.InputS3.Preprocess.IsUnknown())) {
 			if !api.InputS3.Preprocess.IsNull() && !api.InputS3.Preprocess.IsUnknown() {
 				state.InputS3.Preprocess = api.InputS3.Preprocess
@@ -51663,6 +56863,48 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3.AwsSecret = api.InputS3.AwsSecret
 			} else if state.InputS3.AwsSecret.IsNull() || state.InputS3.AwsSecret.IsUnknown() {
 				state.InputS3.AwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSAssumeRoleArn.IsNull() || state.InputS3.SQSAssumeRoleArn.IsUnknown())) {
+			if !api.InputS3.SQSAssumeRoleArn.IsNull() && !api.InputS3.SQSAssumeRoleArn.IsUnknown() {
+				state.InputS3.SQSAssumeRoleArn = api.InputS3.SQSAssumeRoleArn
+			} else if state.InputS3.SQSAssumeRoleArn.IsNull() || state.InputS3.SQSAssumeRoleArn.IsUnknown() {
+				state.InputS3.SQSAssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSAssumeRoleExternalID.IsNull() || state.InputS3.SQSAssumeRoleExternalID.IsUnknown())) {
+			if !api.InputS3.SQSAssumeRoleExternalID.IsNull() && !api.InputS3.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputS3.SQSAssumeRoleExternalID = api.InputS3.SQSAssumeRoleExternalID
+			} else if state.InputS3.SQSAssumeRoleExternalID.IsNull() || state.InputS3.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputS3.SQSAssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSDurationSeconds.IsNull() || state.InputS3.SQSDurationSeconds.IsUnknown())) {
+			if !api.InputS3.SQSDurationSeconds.IsNull() && !api.InputS3.SQSDurationSeconds.IsUnknown() {
+				state.InputS3.SQSDurationSeconds = api.InputS3.SQSDurationSeconds
+			} else if state.InputS3.SQSDurationSeconds.IsNull() || state.InputS3.SQSDurationSeconds.IsUnknown() {
+				state.InputS3.SQSDurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSAwsAuthenticationMethod.IsNull() || state.InputS3.SQSAwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputS3.SQSAwsAuthenticationMethod.IsNull() && !api.InputS3.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputS3.SQSAwsAuthenticationMethod = api.InputS3.SQSAwsAuthenticationMethod
+			} else if state.InputS3.SQSAwsAuthenticationMethod.IsNull() || state.InputS3.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputS3.SQSAwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSAwsSecret.IsNull() || state.InputS3.SQSAwsSecret.IsUnknown())) {
+			if !api.InputS3.SQSAwsSecret.IsNull() && !api.InputS3.SQSAwsSecret.IsUnknown() {
+				state.InputS3.SQSAwsSecret = api.InputS3.SQSAwsSecret
+			} else if state.InputS3.SQSAwsSecret.IsNull() || state.InputS3.SQSAwsSecret.IsUnknown() {
+				state.InputS3.SQSAwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3.SQSAwsSecretKey.IsNull() || state.InputS3.SQSAwsSecretKey.IsUnknown())) {
+			if !api.InputS3.SQSAwsSecretKey.IsNull() && !api.InputS3.SQSAwsSecretKey.IsUnknown() {
+				state.InputS3.SQSAwsSecretKey = api.InputS3.SQSAwsSecretKey
+			} else if state.InputS3.SQSAwsSecretKey.IsNull() || state.InputS3.SQSAwsSecretKey.IsUnknown() {
+				state.InputS3.SQSAwsSecretKey = types.StringNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.ProcessedTagKey.IsNull() || state.InputS3.ProcessedTagKey.IsUnknown())) {
@@ -51915,6 +57157,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3Inventory.EnableSQSAssumeRole = types.BoolNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SharedCredentials.IsNull() || state.InputS3Inventory.SharedCredentials.IsUnknown())) {
+			if !api.InputS3Inventory.SharedCredentials.IsNull() && !api.InputS3Inventory.SharedCredentials.IsUnknown() {
+				state.InputS3Inventory.SharedCredentials = api.InputS3Inventory.SharedCredentials
+			} else if state.InputS3Inventory.SharedCredentials.IsNull() || state.InputS3Inventory.SharedCredentials.IsUnknown() {
+				state.InputS3Inventory.SharedCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SharedAssumeRoleArn.IsNull() || state.InputS3Inventory.SharedAssumeRoleArn.IsUnknown())) {
+			if !api.InputS3Inventory.SharedAssumeRoleArn.IsNull() && !api.InputS3Inventory.SharedAssumeRoleArn.IsUnknown() {
+				state.InputS3Inventory.SharedAssumeRoleArn = api.InputS3Inventory.SharedAssumeRoleArn
+			} else if state.InputS3Inventory.SharedAssumeRoleArn.IsNull() || state.InputS3Inventory.SharedAssumeRoleArn.IsUnknown() {
+				state.InputS3Inventory.SharedAssumeRoleArn = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Preprocess.IsNull() || state.InputS3Inventory.Preprocess.IsUnknown())) {
 			if !api.InputS3Inventory.Preprocess.IsNull() && !api.InputS3Inventory.Preprocess.IsUnknown() {
 				state.InputS3Inventory.Preprocess = api.InputS3Inventory.Preprocess
@@ -51997,6 +57253,48 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3Inventory.AwsSecret = api.InputS3Inventory.AwsSecret
 			} else if state.InputS3Inventory.AwsSecret.IsNull() || state.InputS3Inventory.AwsSecret.IsUnknown() {
 				state.InputS3Inventory.AwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSAssumeRoleArn.IsNull() || state.InputS3Inventory.SQSAssumeRoleArn.IsUnknown())) {
+			if !api.InputS3Inventory.SQSAssumeRoleArn.IsNull() && !api.InputS3Inventory.SQSAssumeRoleArn.IsUnknown() {
+				state.InputS3Inventory.SQSAssumeRoleArn = api.InputS3Inventory.SQSAssumeRoleArn
+			} else if state.InputS3Inventory.SQSAssumeRoleArn.IsNull() || state.InputS3Inventory.SQSAssumeRoleArn.IsUnknown() {
+				state.InputS3Inventory.SQSAssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSAssumeRoleExternalID.IsNull() || state.InputS3Inventory.SQSAssumeRoleExternalID.IsUnknown())) {
+			if !api.InputS3Inventory.SQSAssumeRoleExternalID.IsNull() && !api.InputS3Inventory.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputS3Inventory.SQSAssumeRoleExternalID = api.InputS3Inventory.SQSAssumeRoleExternalID
+			} else if state.InputS3Inventory.SQSAssumeRoleExternalID.IsNull() || state.InputS3Inventory.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputS3Inventory.SQSAssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSDurationSeconds.IsNull() || state.InputS3Inventory.SQSDurationSeconds.IsUnknown())) {
+			if !api.InputS3Inventory.SQSDurationSeconds.IsNull() && !api.InputS3Inventory.SQSDurationSeconds.IsUnknown() {
+				state.InputS3Inventory.SQSDurationSeconds = api.InputS3Inventory.SQSDurationSeconds
+			} else if state.InputS3Inventory.SQSDurationSeconds.IsNull() || state.InputS3Inventory.SQSDurationSeconds.IsUnknown() {
+				state.InputS3Inventory.SQSDurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSAwsAuthenticationMethod.IsNull() || state.InputS3Inventory.SQSAwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputS3Inventory.SQSAwsAuthenticationMethod.IsNull() && !api.InputS3Inventory.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputS3Inventory.SQSAwsAuthenticationMethod = api.InputS3Inventory.SQSAwsAuthenticationMethod
+			} else if state.InputS3Inventory.SQSAwsAuthenticationMethod.IsNull() || state.InputS3Inventory.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputS3Inventory.SQSAwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSAwsSecret.IsNull() || state.InputS3Inventory.SQSAwsSecret.IsUnknown())) {
+			if !api.InputS3Inventory.SQSAwsSecret.IsNull() && !api.InputS3Inventory.SQSAwsSecret.IsUnknown() {
+				state.InputS3Inventory.SQSAwsSecret = api.InputS3Inventory.SQSAwsSecret
+			} else if state.InputS3Inventory.SQSAwsSecret.IsNull() || state.InputS3Inventory.SQSAwsSecret.IsUnknown() {
+				state.InputS3Inventory.SQSAwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.SQSAwsSecretKey.IsNull() || state.InputS3Inventory.SQSAwsSecretKey.IsUnknown())) {
+			if !api.InputS3Inventory.SQSAwsSecretKey.IsNull() && !api.InputS3Inventory.SQSAwsSecretKey.IsUnknown() {
+				state.InputS3Inventory.SQSAwsSecretKey = api.InputS3Inventory.SQSAwsSecretKey
+			} else if state.InputS3Inventory.SQSAwsSecretKey.IsNull() || state.InputS3Inventory.SQSAwsSecretKey.IsUnknown() {
+				state.InputS3Inventory.SQSAwsSecretKey = types.StringNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.TagAfterProcessing.IsNull() || state.InputS3Inventory.TagAfterProcessing.IsUnknown())) {
@@ -54044,6 +59342,13 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWinEventLogs.LogNames = types.ListNull(types.StringType)
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.SuppressMissingLogErrors.IsNull() || state.InputWinEventLogs.SuppressMissingLogErrors.IsUnknown())) {
+			if !api.InputWinEventLogs.SuppressMissingLogErrors.IsNull() && !api.InputWinEventLogs.SuppressMissingLogErrors.IsUnknown() {
+				state.InputWinEventLogs.SuppressMissingLogErrors = api.InputWinEventLogs.SuppressMissingLogErrors
+			} else if state.InputWinEventLogs.SuppressMissingLogErrors.IsNull() || state.InputWinEventLogs.SuppressMissingLogErrors.IsUnknown() {
+				state.InputWinEventLogs.SuppressMissingLogErrors = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.ReadMode.IsNull() || state.InputWinEventLogs.ReadMode.IsUnknown())) {
 			if !api.InputWinEventLogs.ReadMode.IsNull() && !api.InputWinEventLogs.ReadMode.IsUnknown() {
 				state.InputWinEventLogs.ReadMode = api.InputWinEventLogs.ReadMode
@@ -54090,7 +59395,7 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			if !api.InputWinEventLogs.MaxEventBytes.IsNull() && !api.InputWinEventLogs.MaxEventBytes.IsUnknown() {
 				state.InputWinEventLogs.MaxEventBytes = api.InputWinEventLogs.MaxEventBytes
 			} else if state.InputWinEventLogs.MaxEventBytes.IsNull() || state.InputWinEventLogs.MaxEventBytes.IsUnknown() {
-				state.InputWinEventLogs.MaxEventBytes = types.Float64Null()
+				state.InputWinEventLogs.MaxEventBytes = types.Int64Null()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.Description.IsNull() || state.InputWinEventLogs.Description.IsUnknown())) {
@@ -55533,6 +60838,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.EnableSQSAssumeRole = types.BoolNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SharedCredentials.IsNull() || state.InputSecurityLake.SharedCredentials.IsUnknown())) {
+			if !api.InputSecurityLake.SharedCredentials.IsNull() && !api.InputSecurityLake.SharedCredentials.IsUnknown() {
+				state.InputSecurityLake.SharedCredentials = api.InputSecurityLake.SharedCredentials
+			} else if state.InputSecurityLake.SharedCredentials.IsNull() || state.InputSecurityLake.SharedCredentials.IsUnknown() {
+				state.InputSecurityLake.SharedCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SharedAssumeRoleArn.IsNull() || state.InputSecurityLake.SharedAssumeRoleArn.IsUnknown())) {
+			if !api.InputSecurityLake.SharedAssumeRoleArn.IsNull() && !api.InputSecurityLake.SharedAssumeRoleArn.IsUnknown() {
+				state.InputSecurityLake.SharedAssumeRoleArn = api.InputSecurityLake.SharedAssumeRoleArn
+			} else if state.InputSecurityLake.SharedAssumeRoleArn.IsNull() || state.InputSecurityLake.SharedAssumeRoleArn.IsUnknown() {
+				state.InputSecurityLake.SharedAssumeRoleArn = types.BoolNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Preprocess.IsNull() || state.InputSecurityLake.Preprocess.IsUnknown())) {
 			if !api.InputSecurityLake.Preprocess.IsNull() && !api.InputSecurityLake.Preprocess.IsUnknown() {
 				state.InputSecurityLake.Preprocess = api.InputSecurityLake.Preprocess
@@ -55603,6 +60922,48 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.AwsSecret = types.StringNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSAssumeRoleArn.IsNull() || state.InputSecurityLake.SQSAssumeRoleArn.IsUnknown())) {
+			if !api.InputSecurityLake.SQSAssumeRoleArn.IsNull() && !api.InputSecurityLake.SQSAssumeRoleArn.IsUnknown() {
+				state.InputSecurityLake.SQSAssumeRoleArn = api.InputSecurityLake.SQSAssumeRoleArn
+			} else if state.InputSecurityLake.SQSAssumeRoleArn.IsNull() || state.InputSecurityLake.SQSAssumeRoleArn.IsUnknown() {
+				state.InputSecurityLake.SQSAssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSAssumeRoleExternalID.IsNull() || state.InputSecurityLake.SQSAssumeRoleExternalID.IsUnknown())) {
+			if !api.InputSecurityLake.SQSAssumeRoleExternalID.IsNull() && !api.InputSecurityLake.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputSecurityLake.SQSAssumeRoleExternalID = api.InputSecurityLake.SQSAssumeRoleExternalID
+			} else if state.InputSecurityLake.SQSAssumeRoleExternalID.IsNull() || state.InputSecurityLake.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputSecurityLake.SQSAssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSDurationSeconds.IsNull() || state.InputSecurityLake.SQSDurationSeconds.IsUnknown())) {
+			if !api.InputSecurityLake.SQSDurationSeconds.IsNull() && !api.InputSecurityLake.SQSDurationSeconds.IsUnknown() {
+				state.InputSecurityLake.SQSDurationSeconds = api.InputSecurityLake.SQSDurationSeconds
+			} else if state.InputSecurityLake.SQSDurationSeconds.IsNull() || state.InputSecurityLake.SQSDurationSeconds.IsUnknown() {
+				state.InputSecurityLake.SQSDurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSAwsAuthenticationMethod.IsNull() || state.InputSecurityLake.SQSAwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputSecurityLake.SQSAwsAuthenticationMethod.IsNull() && !api.InputSecurityLake.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputSecurityLake.SQSAwsAuthenticationMethod = api.InputSecurityLake.SQSAwsAuthenticationMethod
+			} else if state.InputSecurityLake.SQSAwsAuthenticationMethod.IsNull() || state.InputSecurityLake.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputSecurityLake.SQSAwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSAwsSecret.IsNull() || state.InputSecurityLake.SQSAwsSecret.IsUnknown())) {
+			if !api.InputSecurityLake.SQSAwsSecret.IsNull() && !api.InputSecurityLake.SQSAwsSecret.IsUnknown() {
+				state.InputSecurityLake.SQSAwsSecret = api.InputSecurityLake.SQSAwsSecret
+			} else if state.InputSecurityLake.SQSAwsSecret.IsNull() || state.InputSecurityLake.SQSAwsSecret.IsUnknown() {
+				state.InputSecurityLake.SQSAwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.SQSAwsSecretKey.IsNull() || state.InputSecurityLake.SQSAwsSecretKey.IsUnknown())) {
+			if !api.InputSecurityLake.SQSAwsSecretKey.IsNull() && !api.InputSecurityLake.SQSAwsSecretKey.IsUnknown() {
+				state.InputSecurityLake.SQSAwsSecretKey = api.InputSecurityLake.SQSAwsSecretKey
+			} else if state.InputSecurityLake.SQSAwsSecretKey.IsNull() || state.InputSecurityLake.SQSAwsSecretKey.IsUnknown() {
+				state.InputSecurityLake.SQSAwsSecretKey = types.StringNull()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.TagAfterProcessing.IsNull() || state.InputSecurityLake.TagAfterProcessing.IsUnknown())) {
 			if !api.InputSecurityLake.TagAfterProcessing.IsNull() && !api.InputSecurityLake.TagAfterProcessing.IsUnknown() {
 				state.InputSecurityLake.TagAfterProcessing = api.InputSecurityLake.TagAfterProcessing
@@ -55622,6 +60983,389 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.ProcessedTagValue = api.InputSecurityLake.ProcessedTagValue
 			} else if state.InputSecurityLake.ProcessedTagValue.IsNull() || state.InputSecurityLake.ProcessedTagValue.IsUnknown() {
 				state.InputSecurityLake.ProcessedTagValue = types.StringNull()
+			}
+		}
+	}
+	if api.InputBedrockS3 != nil {
+		if state.InputBedrockS3 == nil {
+			state.InputBedrockS3 = &InputBedrockS3Model{}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ID.IsNull() || state.InputBedrockS3.ID.IsUnknown())) {
+			if !api.InputBedrockS3.ID.IsNull() && !api.InputBedrockS3.ID.IsUnknown() {
+				state.InputBedrockS3.ID = api.InputBedrockS3.ID
+			} else if state.InputBedrockS3.ID.IsNull() || state.InputBedrockS3.ID.IsUnknown() {
+				state.InputBedrockS3.ID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Type.IsNull() || state.InputBedrockS3.Type.IsUnknown())) {
+			if !api.InputBedrockS3.Type.IsNull() && !api.InputBedrockS3.Type.IsUnknown() {
+				state.InputBedrockS3.Type = api.InputBedrockS3.Type
+			} else if state.InputBedrockS3.Type.IsNull() || state.InputBedrockS3.Type.IsUnknown() {
+				state.InputBedrockS3.Type = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Disabled.IsNull() || state.InputBedrockS3.Disabled.IsUnknown())) {
+			if !api.InputBedrockS3.Disabled.IsNull() && !api.InputBedrockS3.Disabled.IsUnknown() {
+				state.InputBedrockS3.Disabled = api.InputBedrockS3.Disabled
+			} else if state.InputBedrockS3.Disabled.IsNull() || state.InputBedrockS3.Disabled.IsUnknown() {
+				state.InputBedrockS3.Disabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Pipeline.IsNull() || state.InputBedrockS3.Pipeline.IsUnknown())) {
+			if !api.InputBedrockS3.Pipeline.IsNull() && !api.InputBedrockS3.Pipeline.IsUnknown() {
+				state.InputBedrockS3.Pipeline = api.InputBedrockS3.Pipeline
+			} else if state.InputBedrockS3.Pipeline.IsNull() || state.InputBedrockS3.Pipeline.IsUnknown() {
+				state.InputBedrockS3.Pipeline = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SendToRoutes.IsNull() || state.InputBedrockS3.SendToRoutes.IsUnknown())) {
+			if !api.InputBedrockS3.SendToRoutes.IsNull() && !api.InputBedrockS3.SendToRoutes.IsUnknown() {
+				state.InputBedrockS3.SendToRoutes = api.InputBedrockS3.SendToRoutes
+			} else if state.InputBedrockS3.SendToRoutes.IsNull() || state.InputBedrockS3.SendToRoutes.IsUnknown() {
+				state.InputBedrockS3.SendToRoutes = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Environment.IsNull() || state.InputBedrockS3.Environment.IsUnknown())) {
+			if !api.InputBedrockS3.Environment.IsNull() && !api.InputBedrockS3.Environment.IsUnknown() {
+				state.InputBedrockS3.Environment = api.InputBedrockS3.Environment
+			} else if state.InputBedrockS3.Environment.IsNull() || state.InputBedrockS3.Environment.IsUnknown() {
+				state.InputBedrockS3.Environment = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.PqEnabled.IsNull() || state.InputBedrockS3.PqEnabled.IsUnknown())) {
+			if !api.InputBedrockS3.PqEnabled.IsNull() && !api.InputBedrockS3.PqEnabled.IsUnknown() {
+				state.InputBedrockS3.PqEnabled = api.InputBedrockS3.PqEnabled
+			} else if state.InputBedrockS3.PqEnabled.IsNull() || state.InputBedrockS3.PqEnabled.IsUnknown() {
+				state.InputBedrockS3.PqEnabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Streamtags.IsNull() || state.InputBedrockS3.Streamtags.IsUnknown())) {
+			if !api.InputBedrockS3.Streamtags.IsNull() && !api.InputBedrockS3.Streamtags.IsUnknown() {
+				state.InputBedrockS3.Streamtags = api.InputBedrockS3.Streamtags
+			} else if state.InputBedrockS3.Streamtags.IsNull() || state.InputBedrockS3.Streamtags.IsUnknown() {
+				state.InputBedrockS3.Streamtags = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.CriblSourceProvenance.IsNull() || state.InputBedrockS3.CriblSourceProvenance.IsUnknown())) {
+			if !api.InputBedrockS3.CriblSourceProvenance.IsNull() && !api.InputBedrockS3.CriblSourceProvenance.IsUnknown() {
+				state.InputBedrockS3.CriblSourceProvenance = api.InputBedrockS3.CriblSourceProvenance
+			} else if state.InputBedrockS3.CriblSourceProvenance.IsNull() || state.InputBedrockS3.CriblSourceProvenance.IsUnknown() {
+				state.InputBedrockS3.CriblSourceProvenance = types.ObjectNull(InputBedrockS3CriblSourceProvenanceAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Connections.IsNull() || state.InputBedrockS3.Connections.IsUnknown())) {
+			if !api.InputBedrockS3.Connections.IsNull() && !api.InputBedrockS3.Connections.IsUnknown() {
+				state.InputBedrockS3.Connections = api.InputBedrockS3.Connections
+			} else if state.InputBedrockS3.Connections.IsNull() || state.InputBedrockS3.Connections.IsUnknown() {
+				state.InputBedrockS3.Connections = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Pq.IsNull() || state.InputBedrockS3.Pq.IsUnknown())) {
+			if !api.InputBedrockS3.Pq.IsNull() && !api.InputBedrockS3.Pq.IsUnknown() {
+				state.InputBedrockS3.Pq = api.InputBedrockS3.Pq
+			} else if state.InputBedrockS3.Pq.IsNull() || state.InputBedrockS3.Pq.IsUnknown() {
+				state.InputBedrockS3.Pq = types.ObjectNull(InputBedrockS3PqAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.QueueName.IsNull() || state.InputBedrockS3.QueueName.IsUnknown())) {
+			if !api.InputBedrockS3.QueueName.IsNull() && !api.InputBedrockS3.QueueName.IsUnknown() {
+				state.InputBedrockS3.QueueName = api.InputBedrockS3.QueueName
+			} else if state.InputBedrockS3.QueueName.IsNull() || state.InputBedrockS3.QueueName.IsUnknown() {
+				state.InputBedrockS3.QueueName = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.FileFilter.IsNull() || state.InputBedrockS3.FileFilter.IsUnknown())) {
+			if !api.InputBedrockS3.FileFilter.IsNull() && !api.InputBedrockS3.FileFilter.IsUnknown() {
+				state.InputBedrockS3.FileFilter = api.InputBedrockS3.FileFilter
+			} else if state.InputBedrockS3.FileFilter.IsNull() || state.InputBedrockS3.FileFilter.IsUnknown() {
+				state.InputBedrockS3.FileFilter = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AwsAccountID.IsNull() || state.InputBedrockS3.AwsAccountID.IsUnknown())) {
+			if !api.InputBedrockS3.AwsAccountID.IsNull() && !api.InputBedrockS3.AwsAccountID.IsUnknown() {
+				state.InputBedrockS3.AwsAccountID = api.InputBedrockS3.AwsAccountID
+			} else if state.InputBedrockS3.AwsAccountID.IsNull() || state.InputBedrockS3.AwsAccountID.IsUnknown() {
+				state.InputBedrockS3.AwsAccountID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AwsAuthenticationMethod.IsNull() || state.InputBedrockS3.AwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputBedrockS3.AwsAuthenticationMethod.IsNull() && !api.InputBedrockS3.AwsAuthenticationMethod.IsUnknown() {
+				state.InputBedrockS3.AwsAuthenticationMethod = api.InputBedrockS3.AwsAuthenticationMethod
+			} else if state.InputBedrockS3.AwsAuthenticationMethod.IsNull() || state.InputBedrockS3.AwsAuthenticationMethod.IsUnknown() {
+				state.InputBedrockS3.AwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AwsSecretKey.IsNull() || state.InputBedrockS3.AwsSecretKey.IsUnknown())) {
+			if !api.InputBedrockS3.AwsSecretKey.IsNull() && !api.InputBedrockS3.AwsSecretKey.IsUnknown() {
+				state.InputBedrockS3.AwsSecretKey = api.InputBedrockS3.AwsSecretKey
+			} else if state.InputBedrockS3.AwsSecretKey.IsNull() || state.InputBedrockS3.AwsSecretKey.IsUnknown() {
+				state.InputBedrockS3.AwsSecretKey = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Region.IsNull() || state.InputBedrockS3.Region.IsUnknown())) {
+			if !api.InputBedrockS3.Region.IsNull() && !api.InputBedrockS3.Region.IsUnknown() {
+				state.InputBedrockS3.Region = api.InputBedrockS3.Region
+			} else if state.InputBedrockS3.Region.IsNull() || state.InputBedrockS3.Region.IsUnknown() {
+				state.InputBedrockS3.Region = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Endpoint.IsNull() || state.InputBedrockS3.Endpoint.IsUnknown())) {
+			if !api.InputBedrockS3.Endpoint.IsNull() && !api.InputBedrockS3.Endpoint.IsUnknown() {
+				state.InputBedrockS3.Endpoint = api.InputBedrockS3.Endpoint
+			} else if state.InputBedrockS3.Endpoint.IsNull() || state.InputBedrockS3.Endpoint.IsUnknown() {
+				state.InputBedrockS3.Endpoint = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ReuseConnections.IsNull() || state.InputBedrockS3.ReuseConnections.IsUnknown())) {
+			if !api.InputBedrockS3.ReuseConnections.IsNull() && !api.InputBedrockS3.ReuseConnections.IsUnknown() {
+				state.InputBedrockS3.ReuseConnections = api.InputBedrockS3.ReuseConnections
+			} else if state.InputBedrockS3.ReuseConnections.IsNull() || state.InputBedrockS3.ReuseConnections.IsUnknown() {
+				state.InputBedrockS3.ReuseConnections = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.RejectUnauthorized.IsNull() || state.InputBedrockS3.RejectUnauthorized.IsUnknown())) {
+			if !api.InputBedrockS3.RejectUnauthorized.IsNull() && !api.InputBedrockS3.RejectUnauthorized.IsUnknown() {
+				state.InputBedrockS3.RejectUnauthorized = api.InputBedrockS3.RejectUnauthorized
+			} else if state.InputBedrockS3.RejectUnauthorized.IsNull() || state.InputBedrockS3.RejectUnauthorized.IsUnknown() {
+				state.InputBedrockS3.RejectUnauthorized = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.BreakerRulesets.IsNull() || state.InputBedrockS3.BreakerRulesets.IsUnknown())) {
+			if !api.InputBedrockS3.BreakerRulesets.IsNull() && !api.InputBedrockS3.BreakerRulesets.IsUnknown() {
+				state.InputBedrockS3.BreakerRulesets = api.InputBedrockS3.BreakerRulesets
+			} else if state.InputBedrockS3.BreakerRulesets.IsNull() || state.InputBedrockS3.BreakerRulesets.IsUnknown() {
+				state.InputBedrockS3.BreakerRulesets = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.StaleChannelFlushMs.IsNull() || state.InputBedrockS3.StaleChannelFlushMs.IsUnknown())) {
+			if !api.InputBedrockS3.StaleChannelFlushMs.IsNull() && !api.InputBedrockS3.StaleChannelFlushMs.IsUnknown() {
+				state.InputBedrockS3.StaleChannelFlushMs = api.InputBedrockS3.StaleChannelFlushMs
+			} else if state.InputBedrockS3.StaleChannelFlushMs.IsNull() || state.InputBedrockS3.StaleChannelFlushMs.IsUnknown() {
+				state.InputBedrockS3.StaleChannelFlushMs = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.MaxMessages.IsNull() || state.InputBedrockS3.MaxMessages.IsUnknown())) {
+			if !api.InputBedrockS3.MaxMessages.IsNull() && !api.InputBedrockS3.MaxMessages.IsUnknown() {
+				state.InputBedrockS3.MaxMessages = api.InputBedrockS3.MaxMessages
+			} else if state.InputBedrockS3.MaxMessages.IsNull() || state.InputBedrockS3.MaxMessages.IsUnknown() {
+				state.InputBedrockS3.MaxMessages = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.VisibilityTimeout.IsNull() || state.InputBedrockS3.VisibilityTimeout.IsUnknown())) {
+			if !api.InputBedrockS3.VisibilityTimeout.IsNull() && !api.InputBedrockS3.VisibilityTimeout.IsUnknown() {
+				state.InputBedrockS3.VisibilityTimeout = api.InputBedrockS3.VisibilityTimeout
+			} else if state.InputBedrockS3.VisibilityTimeout.IsNull() || state.InputBedrockS3.VisibilityTimeout.IsUnknown() {
+				state.InputBedrockS3.VisibilityTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.NumReceivers.IsNull() || state.InputBedrockS3.NumReceivers.IsUnknown())) {
+			if !api.InputBedrockS3.NumReceivers.IsNull() && !api.InputBedrockS3.NumReceivers.IsUnknown() {
+				state.InputBedrockS3.NumReceivers = api.InputBedrockS3.NumReceivers
+			} else if state.InputBedrockS3.NumReceivers.IsNull() || state.InputBedrockS3.NumReceivers.IsUnknown() {
+				state.InputBedrockS3.NumReceivers = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SocketTimeout.IsNull() || state.InputBedrockS3.SocketTimeout.IsUnknown())) {
+			if !api.InputBedrockS3.SocketTimeout.IsNull() && !api.InputBedrockS3.SocketTimeout.IsUnknown() {
+				state.InputBedrockS3.SocketTimeout = api.InputBedrockS3.SocketTimeout
+			} else if state.InputBedrockS3.SocketTimeout.IsNull() || state.InputBedrockS3.SocketTimeout.IsUnknown() {
+				state.InputBedrockS3.SocketTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SkipOnError.IsNull() || state.InputBedrockS3.SkipOnError.IsUnknown())) {
+			if !api.InputBedrockS3.SkipOnError.IsNull() && !api.InputBedrockS3.SkipOnError.IsUnknown() {
+				state.InputBedrockS3.SkipOnError = api.InputBedrockS3.SkipOnError
+			} else if state.InputBedrockS3.SkipOnError.IsNull() || state.InputBedrockS3.SkipOnError.IsUnknown() {
+				state.InputBedrockS3.SkipOnError = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.IncludeSqsMetadata.IsNull() || state.InputBedrockS3.IncludeSqsMetadata.IsUnknown())) {
+			if !api.InputBedrockS3.IncludeSqsMetadata.IsNull() && !api.InputBedrockS3.IncludeSqsMetadata.IsUnknown() {
+				state.InputBedrockS3.IncludeSqsMetadata = api.InputBedrockS3.IncludeSqsMetadata
+			} else if state.InputBedrockS3.IncludeSqsMetadata.IsNull() || state.InputBedrockS3.IncludeSqsMetadata.IsUnknown() {
+				state.InputBedrockS3.IncludeSqsMetadata = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.EnableAssumeRole.IsNull() || state.InputBedrockS3.EnableAssumeRole.IsUnknown())) {
+			if !api.InputBedrockS3.EnableAssumeRole.IsNull() && !api.InputBedrockS3.EnableAssumeRole.IsUnknown() {
+				state.InputBedrockS3.EnableAssumeRole = api.InputBedrockS3.EnableAssumeRole
+			} else if state.InputBedrockS3.EnableAssumeRole.IsNull() || state.InputBedrockS3.EnableAssumeRole.IsUnknown() {
+				state.InputBedrockS3.EnableAssumeRole = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AssumeRoleArn.IsNull() || state.InputBedrockS3.AssumeRoleArn.IsUnknown())) {
+			if !api.InputBedrockS3.AssumeRoleArn.IsNull() && !api.InputBedrockS3.AssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.AssumeRoleArn = api.InputBedrockS3.AssumeRoleArn
+			} else if state.InputBedrockS3.AssumeRoleArn.IsNull() || state.InputBedrockS3.AssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.AssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AssumeRoleExternalID.IsNull() || state.InputBedrockS3.AssumeRoleExternalID.IsUnknown())) {
+			if !api.InputBedrockS3.AssumeRoleExternalID.IsNull() && !api.InputBedrockS3.AssumeRoleExternalID.IsUnknown() {
+				state.InputBedrockS3.AssumeRoleExternalID = api.InputBedrockS3.AssumeRoleExternalID
+			} else if state.InputBedrockS3.AssumeRoleExternalID.IsNull() || state.InputBedrockS3.AssumeRoleExternalID.IsUnknown() {
+				state.InputBedrockS3.AssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.DurationSeconds.IsNull() || state.InputBedrockS3.DurationSeconds.IsUnknown())) {
+			if !api.InputBedrockS3.DurationSeconds.IsNull() && !api.InputBedrockS3.DurationSeconds.IsUnknown() {
+				state.InputBedrockS3.DurationSeconds = api.InputBedrockS3.DurationSeconds
+			} else if state.InputBedrockS3.DurationSeconds.IsNull() || state.InputBedrockS3.DurationSeconds.IsUnknown() {
+				state.InputBedrockS3.DurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.EnableSQSAssumeRole.IsNull() || state.InputBedrockS3.EnableSQSAssumeRole.IsUnknown())) {
+			if !api.InputBedrockS3.EnableSQSAssumeRole.IsNull() && !api.InputBedrockS3.EnableSQSAssumeRole.IsUnknown() {
+				state.InputBedrockS3.EnableSQSAssumeRole = api.InputBedrockS3.EnableSQSAssumeRole
+			} else if state.InputBedrockS3.EnableSQSAssumeRole.IsNull() || state.InputBedrockS3.EnableSQSAssumeRole.IsUnknown() {
+				state.InputBedrockS3.EnableSQSAssumeRole = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SharedCredentials.IsNull() || state.InputBedrockS3.SharedCredentials.IsUnknown())) {
+			if !api.InputBedrockS3.SharedCredentials.IsNull() && !api.InputBedrockS3.SharedCredentials.IsUnknown() {
+				state.InputBedrockS3.SharedCredentials = api.InputBedrockS3.SharedCredentials
+			} else if state.InputBedrockS3.SharedCredentials.IsNull() || state.InputBedrockS3.SharedCredentials.IsUnknown() {
+				state.InputBedrockS3.SharedCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SharedAssumeRoleArn.IsNull() || state.InputBedrockS3.SharedAssumeRoleArn.IsUnknown())) {
+			if !api.InputBedrockS3.SharedAssumeRoleArn.IsNull() && !api.InputBedrockS3.SharedAssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.SharedAssumeRoleArn = api.InputBedrockS3.SharedAssumeRoleArn
+			} else if state.InputBedrockS3.SharedAssumeRoleArn.IsNull() || state.InputBedrockS3.SharedAssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.SharedAssumeRoleArn = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Preprocess.IsNull() || state.InputBedrockS3.Preprocess.IsUnknown())) {
+			if !api.InputBedrockS3.Preprocess.IsNull() && !api.InputBedrockS3.Preprocess.IsUnknown() {
+				state.InputBedrockS3.Preprocess = api.InputBedrockS3.Preprocess
+			} else if state.InputBedrockS3.Preprocess.IsNull() || state.InputBedrockS3.Preprocess.IsUnknown() {
+				state.InputBedrockS3.Preprocess = types.ObjectNull(InputBedrockS3PreprocessAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Metadata.IsNull() || state.InputBedrockS3.Metadata.IsUnknown())) {
+			if !api.InputBedrockS3.Metadata.IsNull() && !api.InputBedrockS3.Metadata.IsUnknown() {
+				state.InputBedrockS3.Metadata = api.InputBedrockS3.Metadata
+			} else if state.InputBedrockS3.Metadata.IsNull() || state.InputBedrockS3.Metadata.IsUnknown() {
+				state.InputBedrockS3.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ParquetChunkSizeMB.IsNull() || state.InputBedrockS3.ParquetChunkSizeMB.IsUnknown())) {
+			if !api.InputBedrockS3.ParquetChunkSizeMB.IsNull() && !api.InputBedrockS3.ParquetChunkSizeMB.IsUnknown() {
+				state.InputBedrockS3.ParquetChunkSizeMB = api.InputBedrockS3.ParquetChunkSizeMB
+			} else if state.InputBedrockS3.ParquetChunkSizeMB.IsNull() || state.InputBedrockS3.ParquetChunkSizeMB.IsUnknown() {
+				state.InputBedrockS3.ParquetChunkSizeMB = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ParquetChunkDownloadTimeout.IsNull() || state.InputBedrockS3.ParquetChunkDownloadTimeout.IsUnknown())) {
+			if !api.InputBedrockS3.ParquetChunkDownloadTimeout.IsNull() && !api.InputBedrockS3.ParquetChunkDownloadTimeout.IsUnknown() {
+				state.InputBedrockS3.ParquetChunkDownloadTimeout = api.InputBedrockS3.ParquetChunkDownloadTimeout
+			} else if state.InputBedrockS3.ParquetChunkDownloadTimeout.IsNull() || state.InputBedrockS3.ParquetChunkDownloadTimeout.IsUnknown() {
+				state.InputBedrockS3.ParquetChunkDownloadTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Checkpointing.IsNull() || state.InputBedrockS3.Checkpointing.IsUnknown())) {
+			if !api.InputBedrockS3.Checkpointing.IsNull() && !api.InputBedrockS3.Checkpointing.IsUnknown() {
+				state.InputBedrockS3.Checkpointing = api.InputBedrockS3.Checkpointing
+			} else if state.InputBedrockS3.Checkpointing.IsNull() || state.InputBedrockS3.Checkpointing.IsUnknown() {
+				state.InputBedrockS3.Checkpointing = types.ObjectNull(InputBedrockS3CheckpointingAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.PollTimeout.IsNull() || state.InputBedrockS3.PollTimeout.IsUnknown())) {
+			if !api.InputBedrockS3.PollTimeout.IsNull() && !api.InputBedrockS3.PollTimeout.IsUnknown() {
+				state.InputBedrockS3.PollTimeout = api.InputBedrockS3.PollTimeout
+			} else if state.InputBedrockS3.PollTimeout.IsNull() || state.InputBedrockS3.PollTimeout.IsUnknown() {
+				state.InputBedrockS3.PollTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Encoding.IsNull() || state.InputBedrockS3.Encoding.IsUnknown())) {
+			if !api.InputBedrockS3.Encoding.IsNull() && !api.InputBedrockS3.Encoding.IsUnknown() {
+				state.InputBedrockS3.Encoding = api.InputBedrockS3.Encoding
+			} else if state.InputBedrockS3.Encoding.IsNull() || state.InputBedrockS3.Encoding.IsUnknown() {
+				state.InputBedrockS3.Encoding = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Description.IsNull() || state.InputBedrockS3.Description.IsUnknown())) {
+			if !api.InputBedrockS3.Description.IsNull() && !api.InputBedrockS3.Description.IsUnknown() {
+				state.InputBedrockS3.Description = api.InputBedrockS3.Description
+			} else if state.InputBedrockS3.Description.IsNull() || state.InputBedrockS3.Description.IsUnknown() {
+				state.InputBedrockS3.Description = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AwsAPIKey.IsNull() || state.InputBedrockS3.AwsAPIKey.IsUnknown())) {
+			if !api.InputBedrockS3.AwsAPIKey.IsNull() && !api.InputBedrockS3.AwsAPIKey.IsUnknown() {
+				state.InputBedrockS3.AwsAPIKey = api.InputBedrockS3.AwsAPIKey
+			} else if state.InputBedrockS3.AwsAPIKey.IsNull() || state.InputBedrockS3.AwsAPIKey.IsUnknown() {
+				state.InputBedrockS3.AwsAPIKey = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.AwsSecret.IsNull() || state.InputBedrockS3.AwsSecret.IsUnknown())) {
+			if !api.InputBedrockS3.AwsSecret.IsNull() && !api.InputBedrockS3.AwsSecret.IsUnknown() {
+				state.InputBedrockS3.AwsSecret = api.InputBedrockS3.AwsSecret
+			} else if state.InputBedrockS3.AwsSecret.IsNull() || state.InputBedrockS3.AwsSecret.IsUnknown() {
+				state.InputBedrockS3.AwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSAssumeRoleArn.IsNull() || state.InputBedrockS3.SQSAssumeRoleArn.IsUnknown())) {
+			if !api.InputBedrockS3.SQSAssumeRoleArn.IsNull() && !api.InputBedrockS3.SQSAssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.SQSAssumeRoleArn = api.InputBedrockS3.SQSAssumeRoleArn
+			} else if state.InputBedrockS3.SQSAssumeRoleArn.IsNull() || state.InputBedrockS3.SQSAssumeRoleArn.IsUnknown() {
+				state.InputBedrockS3.SQSAssumeRoleArn = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSAssumeRoleExternalID.IsNull() || state.InputBedrockS3.SQSAssumeRoleExternalID.IsUnknown())) {
+			if !api.InputBedrockS3.SQSAssumeRoleExternalID.IsNull() && !api.InputBedrockS3.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputBedrockS3.SQSAssumeRoleExternalID = api.InputBedrockS3.SQSAssumeRoleExternalID
+			} else if state.InputBedrockS3.SQSAssumeRoleExternalID.IsNull() || state.InputBedrockS3.SQSAssumeRoleExternalID.IsUnknown() {
+				state.InputBedrockS3.SQSAssumeRoleExternalID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSDurationSeconds.IsNull() || state.InputBedrockS3.SQSDurationSeconds.IsUnknown())) {
+			if !api.InputBedrockS3.SQSDurationSeconds.IsNull() && !api.InputBedrockS3.SQSDurationSeconds.IsUnknown() {
+				state.InputBedrockS3.SQSDurationSeconds = api.InputBedrockS3.SQSDurationSeconds
+			} else if state.InputBedrockS3.SQSDurationSeconds.IsNull() || state.InputBedrockS3.SQSDurationSeconds.IsUnknown() {
+				state.InputBedrockS3.SQSDurationSeconds = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSAwsAuthenticationMethod.IsNull() || state.InputBedrockS3.SQSAwsAuthenticationMethod.IsUnknown())) {
+			if !api.InputBedrockS3.SQSAwsAuthenticationMethod.IsNull() && !api.InputBedrockS3.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputBedrockS3.SQSAwsAuthenticationMethod = api.InputBedrockS3.SQSAwsAuthenticationMethod
+			} else if state.InputBedrockS3.SQSAwsAuthenticationMethod.IsNull() || state.InputBedrockS3.SQSAwsAuthenticationMethod.IsUnknown() {
+				state.InputBedrockS3.SQSAwsAuthenticationMethod = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSAwsSecret.IsNull() || state.InputBedrockS3.SQSAwsSecret.IsUnknown())) {
+			if !api.InputBedrockS3.SQSAwsSecret.IsNull() && !api.InputBedrockS3.SQSAwsSecret.IsUnknown() {
+				state.InputBedrockS3.SQSAwsSecret = api.InputBedrockS3.SQSAwsSecret
+			} else if state.InputBedrockS3.SQSAwsSecret.IsNull() || state.InputBedrockS3.SQSAwsSecret.IsUnknown() {
+				state.InputBedrockS3.SQSAwsSecret = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.SQSAwsSecretKey.IsNull() || state.InputBedrockS3.SQSAwsSecretKey.IsUnknown())) {
+			if !api.InputBedrockS3.SQSAwsSecretKey.IsNull() && !api.InputBedrockS3.SQSAwsSecretKey.IsUnknown() {
+				state.InputBedrockS3.SQSAwsSecretKey = api.InputBedrockS3.SQSAwsSecretKey
+			} else if state.InputBedrockS3.SQSAwsSecretKey.IsNull() || state.InputBedrockS3.SQSAwsSecretKey.IsUnknown() {
+				state.InputBedrockS3.SQSAwsSecretKey = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.TagAfterProcessing.IsNull() || state.InputBedrockS3.TagAfterProcessing.IsUnknown())) {
+			if !api.InputBedrockS3.TagAfterProcessing.IsNull() && !api.InputBedrockS3.TagAfterProcessing.IsUnknown() {
+				state.InputBedrockS3.TagAfterProcessing = api.InputBedrockS3.TagAfterProcessing
+			} else if state.InputBedrockS3.TagAfterProcessing.IsNull() || state.InputBedrockS3.TagAfterProcessing.IsUnknown() {
+				state.InputBedrockS3.TagAfterProcessing = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ProcessedTagKey.IsNull() || state.InputBedrockS3.ProcessedTagKey.IsUnknown())) {
+			if !api.InputBedrockS3.ProcessedTagKey.IsNull() && !api.InputBedrockS3.ProcessedTagKey.IsUnknown() {
+				state.InputBedrockS3.ProcessedTagKey = api.InputBedrockS3.ProcessedTagKey
+			} else if state.InputBedrockS3.ProcessedTagKey.IsNull() || state.InputBedrockS3.ProcessedTagKey.IsUnknown() {
+				state.InputBedrockS3.ProcessedTagKey = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ProcessedTagValue.IsNull() || state.InputBedrockS3.ProcessedTagValue.IsUnknown())) {
+			if !api.InputBedrockS3.ProcessedTagValue.IsNull() && !api.InputBedrockS3.ProcessedTagValue.IsUnknown() {
+				state.InputBedrockS3.ProcessedTagValue = api.InputBedrockS3.ProcessedTagValue
+			} else if state.InputBedrockS3.ProcessedTagValue.IsNull() || state.InputBedrockS3.ProcessedTagValue.IsUnknown() {
+				state.InputBedrockS3.ProcessedTagValue = types.StringNull()
 			}
 		}
 	}
@@ -56166,13 +61910,6 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.HecAcks.IsNull() || state.InputZscalerHec.HecAcks.IsUnknown())) {
-			if !api.InputZscalerHec.HecAcks.IsNull() && !api.InputZscalerHec.HecAcks.IsUnknown() {
-				state.InputZscalerHec.HecAcks = api.InputZscalerHec.HecAcks
-			} else if state.InputZscalerHec.HecAcks.IsNull() || state.InputZscalerHec.HecAcks.IsUnknown() {
-				state.InputZscalerHec.HecAcks = types.BoolNull()
-			}
-		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.AccessControlAllowOrigin.IsNull() || state.InputZscalerHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputZscalerHec.AccessControlAllowOrigin.IsNull() && !api.InputZscalerHec.AccessControlAllowOrigin.IsUnknown() {
 				state.InputZscalerHec.AccessControlAllowOrigin = api.InputZscalerHec.AccessControlAllowOrigin
@@ -56192,6 +61929,13 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.EmitTokenMetrics = api.InputZscalerHec.EmitTokenMetrics
 			} else if state.InputZscalerHec.EmitTokenMetrics.IsNull() || state.InputZscalerHec.EmitTokenMetrics.IsUnknown() {
 				state.InputZscalerHec.EmitTokenMetrics = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.HecAcks.IsNull() || state.InputZscalerHec.HecAcks.IsUnknown())) {
+			if !api.InputZscalerHec.HecAcks.IsNull() && !api.InputZscalerHec.HecAcks.IsUnknown() {
+				state.InputZscalerHec.HecAcks = api.InputZscalerHec.HecAcks
+			} else if state.InputZscalerHec.HecAcks.IsNull() || state.InputZscalerHec.HecAcks.IsUnknown() {
+				state.InputZscalerHec.HecAcks = types.BoolNull()
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Description.IsNull() || state.InputZscalerHec.Description.IsUnknown())) {
@@ -56402,20 +62146,6 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.BreakerRulesets.IsNull() || state.InputCloudflareHec.BreakerRulesets.IsUnknown())) {
-			if !api.InputCloudflareHec.BreakerRulesets.IsNull() && !api.InputCloudflareHec.BreakerRulesets.IsUnknown() {
-				state.InputCloudflareHec.BreakerRulesets = api.InputCloudflareHec.BreakerRulesets
-			} else if state.InputCloudflareHec.BreakerRulesets.IsNull() || state.InputCloudflareHec.BreakerRulesets.IsUnknown() {
-				state.InputCloudflareHec.BreakerRulesets = types.ListNull(types.StringType)
-			}
-		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.StaleChannelFlushMs.IsNull() || state.InputCloudflareHec.StaleChannelFlushMs.IsUnknown())) {
-			if !api.InputCloudflareHec.StaleChannelFlushMs.IsNull() && !api.InputCloudflareHec.StaleChannelFlushMs.IsUnknown() {
-				state.InputCloudflareHec.StaleChannelFlushMs = api.InputCloudflareHec.StaleChannelFlushMs
-			} else if state.InputCloudflareHec.StaleChannelFlushMs.IsNull() || state.InputCloudflareHec.StaleChannelFlushMs.IsUnknown() {
-				state.InputCloudflareHec.StaleChannelFlushMs = types.Float64Null()
-			}
-		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.AccessControlAllowOrigin.IsNull() || state.InputCloudflareHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputCloudflareHec.AccessControlAllowOrigin.IsNull() && !api.InputCloudflareHec.AccessControlAllowOrigin.IsUnknown() {
 				state.InputCloudflareHec.AccessControlAllowOrigin = api.InputCloudflareHec.AccessControlAllowOrigin
@@ -56437,11 +62167,483 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.EmitTokenMetrics = types.BoolNull()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.BreakerRulesets.IsNull() || state.InputCloudflareHec.BreakerRulesets.IsUnknown())) {
+			if !api.InputCloudflareHec.BreakerRulesets.IsNull() && !api.InputCloudflareHec.BreakerRulesets.IsUnknown() {
+				state.InputCloudflareHec.BreakerRulesets = api.InputCloudflareHec.BreakerRulesets
+			} else if state.InputCloudflareHec.BreakerRulesets.IsNull() || state.InputCloudflareHec.BreakerRulesets.IsUnknown() {
+				state.InputCloudflareHec.BreakerRulesets = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.StaleChannelFlushMs.IsNull() || state.InputCloudflareHec.StaleChannelFlushMs.IsUnknown())) {
+			if !api.InputCloudflareHec.StaleChannelFlushMs.IsNull() && !api.InputCloudflareHec.StaleChannelFlushMs.IsUnknown() {
+				state.InputCloudflareHec.StaleChannelFlushMs = api.InputCloudflareHec.StaleChannelFlushMs
+			} else if state.InputCloudflareHec.StaleChannelFlushMs.IsNull() || state.InputCloudflareHec.StaleChannelFlushMs.IsUnknown() {
+				state.InputCloudflareHec.StaleChannelFlushMs = types.Float64Null()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Description.IsNull() || state.InputCloudflareHec.Description.IsUnknown())) {
 			if !api.InputCloudflareHec.Description.IsNull() && !api.InputCloudflareHec.Description.IsUnknown() {
 				state.InputCloudflareHec.Description = api.InputCloudflareHec.Description
 			} else if state.InputCloudflareHec.Description.IsNull() || state.InputCloudflareHec.Description.IsUnknown() {
 				state.InputCloudflareHec.Description = types.StringNull()
+			}
+		}
+	}
+	if api.InputSysdigHec != nil {
+		if state.InputSysdigHec == nil {
+			state.InputSysdigHec = &InputSysdigHecModel{}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.ID.IsNull() || state.InputSysdigHec.ID.IsUnknown())) {
+			if !api.InputSysdigHec.ID.IsNull() && !api.InputSysdigHec.ID.IsUnknown() {
+				state.InputSysdigHec.ID = api.InputSysdigHec.ID
+			} else if state.InputSysdigHec.ID.IsNull() || state.InputSysdigHec.ID.IsUnknown() {
+				state.InputSysdigHec.ID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Type.IsNull() || state.InputSysdigHec.Type.IsUnknown())) {
+			if !api.InputSysdigHec.Type.IsNull() && !api.InputSysdigHec.Type.IsUnknown() {
+				state.InputSysdigHec.Type = api.InputSysdigHec.Type
+			} else if state.InputSysdigHec.Type.IsNull() || state.InputSysdigHec.Type.IsUnknown() {
+				state.InputSysdigHec.Type = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Disabled.IsNull() || state.InputSysdigHec.Disabled.IsUnknown())) {
+			if !api.InputSysdigHec.Disabled.IsNull() && !api.InputSysdigHec.Disabled.IsUnknown() {
+				state.InputSysdigHec.Disabled = api.InputSysdigHec.Disabled
+			} else if state.InputSysdigHec.Disabled.IsNull() || state.InputSysdigHec.Disabled.IsUnknown() {
+				state.InputSysdigHec.Disabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Pipeline.IsNull() || state.InputSysdigHec.Pipeline.IsUnknown())) {
+			if !api.InputSysdigHec.Pipeline.IsNull() && !api.InputSysdigHec.Pipeline.IsUnknown() {
+				state.InputSysdigHec.Pipeline = api.InputSysdigHec.Pipeline
+			} else if state.InputSysdigHec.Pipeline.IsNull() || state.InputSysdigHec.Pipeline.IsUnknown() {
+				state.InputSysdigHec.Pipeline = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.SendToRoutes.IsNull() || state.InputSysdigHec.SendToRoutes.IsUnknown())) {
+			if !api.InputSysdigHec.SendToRoutes.IsNull() && !api.InputSysdigHec.SendToRoutes.IsUnknown() {
+				state.InputSysdigHec.SendToRoutes = api.InputSysdigHec.SendToRoutes
+			} else if state.InputSysdigHec.SendToRoutes.IsNull() || state.InputSysdigHec.SendToRoutes.IsUnknown() {
+				state.InputSysdigHec.SendToRoutes = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Environment.IsNull() || state.InputSysdigHec.Environment.IsUnknown())) {
+			if !api.InputSysdigHec.Environment.IsNull() && !api.InputSysdigHec.Environment.IsUnknown() {
+				state.InputSysdigHec.Environment = api.InputSysdigHec.Environment
+			} else if state.InputSysdigHec.Environment.IsNull() || state.InputSysdigHec.Environment.IsUnknown() {
+				state.InputSysdigHec.Environment = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.PqEnabled.IsNull() || state.InputSysdigHec.PqEnabled.IsUnknown())) {
+			if !api.InputSysdigHec.PqEnabled.IsNull() && !api.InputSysdigHec.PqEnabled.IsUnknown() {
+				state.InputSysdigHec.PqEnabled = api.InputSysdigHec.PqEnabled
+			} else if state.InputSysdigHec.PqEnabled.IsNull() || state.InputSysdigHec.PqEnabled.IsUnknown() {
+				state.InputSysdigHec.PqEnabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Streamtags.IsNull() || state.InputSysdigHec.Streamtags.IsUnknown())) {
+			if !api.InputSysdigHec.Streamtags.IsNull() && !api.InputSysdigHec.Streamtags.IsUnknown() {
+				state.InputSysdigHec.Streamtags = api.InputSysdigHec.Streamtags
+			} else if state.InputSysdigHec.Streamtags.IsNull() || state.InputSysdigHec.Streamtags.IsUnknown() {
+				state.InputSysdigHec.Streamtags = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.CriblSourceProvenance.IsNull() || state.InputSysdigHec.CriblSourceProvenance.IsUnknown())) {
+			if !api.InputSysdigHec.CriblSourceProvenance.IsNull() && !api.InputSysdigHec.CriblSourceProvenance.IsUnknown() {
+				state.InputSysdigHec.CriblSourceProvenance = api.InputSysdigHec.CriblSourceProvenance
+			} else if state.InputSysdigHec.CriblSourceProvenance.IsNull() || state.InputSysdigHec.CriblSourceProvenance.IsUnknown() {
+				state.InputSysdigHec.CriblSourceProvenance = types.ObjectNull(InputSysdigHecCriblSourceProvenanceAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Connections.IsNull() || state.InputSysdigHec.Connections.IsUnknown())) {
+			if !api.InputSysdigHec.Connections.IsNull() && !api.InputSysdigHec.Connections.IsUnknown() {
+				state.InputSysdigHec.Connections = api.InputSysdigHec.Connections
+			} else if state.InputSysdigHec.Connections.IsNull() || state.InputSysdigHec.Connections.IsUnknown() {
+				state.InputSysdigHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Pq.IsNull() || state.InputSysdigHec.Pq.IsUnknown())) {
+			if !api.InputSysdigHec.Pq.IsNull() && !api.InputSysdigHec.Pq.IsUnknown() {
+				state.InputSysdigHec.Pq = api.InputSysdigHec.Pq
+			} else if state.InputSysdigHec.Pq.IsNull() || state.InputSysdigHec.Pq.IsUnknown() {
+				state.InputSysdigHec.Pq = types.ObjectNull(InputSysdigHecPqAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Host.IsNull() || state.InputSysdigHec.Host.IsUnknown())) {
+			if !api.InputSysdigHec.Host.IsNull() && !api.InputSysdigHec.Host.IsUnknown() {
+				state.InputSysdigHec.Host = api.InputSysdigHec.Host
+			} else if state.InputSysdigHec.Host.IsNull() || state.InputSysdigHec.Host.IsUnknown() {
+				state.InputSysdigHec.Host = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Port.IsNull() || state.InputSysdigHec.Port.IsUnknown())) {
+			if !api.InputSysdigHec.Port.IsNull() && !api.InputSysdigHec.Port.IsUnknown() {
+				state.InputSysdigHec.Port = api.InputSysdigHec.Port
+			} else if state.InputSysdigHec.Port.IsNull() || state.InputSysdigHec.Port.IsUnknown() {
+				state.InputSysdigHec.Port = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AuthTokens.IsNull() || state.InputSysdigHec.AuthTokens.IsUnknown())) {
+			if !api.InputSysdigHec.AuthTokens.IsNull() && !api.InputSysdigHec.AuthTokens.IsUnknown() {
+				state.InputSysdigHec.AuthTokens = api.InputSysdigHec.AuthTokens
+			} else if state.InputSysdigHec.AuthTokens.IsNull() || state.InputSysdigHec.AuthTokens.IsUnknown() {
+				state.InputSysdigHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.TLS.IsNull() || state.InputSysdigHec.TLS.IsUnknown())) {
+			if !api.InputSysdigHec.TLS.IsNull() && !api.InputSysdigHec.TLS.IsUnknown() {
+				state.InputSysdigHec.TLS = api.InputSysdigHec.TLS
+			} else if state.InputSysdigHec.TLS.IsNull() || state.InputSysdigHec.TLS.IsUnknown() {
+				state.InputSysdigHec.TLS = types.ObjectNull(InputSysdigHecTLSAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.MaxActiveReq.IsNull() || state.InputSysdigHec.MaxActiveReq.IsUnknown())) {
+			if !api.InputSysdigHec.MaxActiveReq.IsNull() && !api.InputSysdigHec.MaxActiveReq.IsUnknown() {
+				state.InputSysdigHec.MaxActiveReq = api.InputSysdigHec.MaxActiveReq
+			} else if state.InputSysdigHec.MaxActiveReq.IsNull() || state.InputSysdigHec.MaxActiveReq.IsUnknown() {
+				state.InputSysdigHec.MaxActiveReq = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.MaxRequestsPerSocket.IsNull() || state.InputSysdigHec.MaxRequestsPerSocket.IsUnknown())) {
+			if !api.InputSysdigHec.MaxRequestsPerSocket.IsNull() && !api.InputSysdigHec.MaxRequestsPerSocket.IsUnknown() {
+				state.InputSysdigHec.MaxRequestsPerSocket = api.InputSysdigHec.MaxRequestsPerSocket
+			} else if state.InputSysdigHec.MaxRequestsPerSocket.IsNull() || state.InputSysdigHec.MaxRequestsPerSocket.IsUnknown() {
+				state.InputSysdigHec.MaxRequestsPerSocket = types.Int64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.EnableProxyHeader.IsNull() || state.InputSysdigHec.EnableProxyHeader.IsUnknown())) {
+			if !api.InputSysdigHec.EnableProxyHeader.IsNull() && !api.InputSysdigHec.EnableProxyHeader.IsUnknown() {
+				state.InputSysdigHec.EnableProxyHeader = api.InputSysdigHec.EnableProxyHeader
+			} else if state.InputSysdigHec.EnableProxyHeader.IsNull() || state.InputSysdigHec.EnableProxyHeader.IsUnknown() {
+				state.InputSysdigHec.EnableProxyHeader = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.CaptureHeaders.IsNull() || state.InputSysdigHec.CaptureHeaders.IsUnknown())) {
+			if !api.InputSysdigHec.CaptureHeaders.IsNull() && !api.InputSysdigHec.CaptureHeaders.IsUnknown() {
+				state.InputSysdigHec.CaptureHeaders = api.InputSysdigHec.CaptureHeaders
+			} else if state.InputSysdigHec.CaptureHeaders.IsNull() || state.InputSysdigHec.CaptureHeaders.IsUnknown() {
+				state.InputSysdigHec.CaptureHeaders = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.ActivityLogSampleRate.IsNull() || state.InputSysdigHec.ActivityLogSampleRate.IsUnknown())) {
+			if !api.InputSysdigHec.ActivityLogSampleRate.IsNull() && !api.InputSysdigHec.ActivityLogSampleRate.IsUnknown() {
+				state.InputSysdigHec.ActivityLogSampleRate = api.InputSysdigHec.ActivityLogSampleRate
+			} else if state.InputSysdigHec.ActivityLogSampleRate.IsNull() || state.InputSysdigHec.ActivityLogSampleRate.IsUnknown() {
+				state.InputSysdigHec.ActivityLogSampleRate = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.RequestTimeout.IsNull() || state.InputSysdigHec.RequestTimeout.IsUnknown())) {
+			if !api.InputSysdigHec.RequestTimeout.IsNull() && !api.InputSysdigHec.RequestTimeout.IsUnknown() {
+				state.InputSysdigHec.RequestTimeout = api.InputSysdigHec.RequestTimeout
+			} else if state.InputSysdigHec.RequestTimeout.IsNull() || state.InputSysdigHec.RequestTimeout.IsUnknown() {
+				state.InputSysdigHec.RequestTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.SocketTimeout.IsNull() || state.InputSysdigHec.SocketTimeout.IsUnknown())) {
+			if !api.InputSysdigHec.SocketTimeout.IsNull() && !api.InputSysdigHec.SocketTimeout.IsUnknown() {
+				state.InputSysdigHec.SocketTimeout = api.InputSysdigHec.SocketTimeout
+			} else if state.InputSysdigHec.SocketTimeout.IsNull() || state.InputSysdigHec.SocketTimeout.IsUnknown() {
+				state.InputSysdigHec.SocketTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.KeepAliveTimeout.IsNull() || state.InputSysdigHec.KeepAliveTimeout.IsUnknown())) {
+			if !api.InputSysdigHec.KeepAliveTimeout.IsNull() && !api.InputSysdigHec.KeepAliveTimeout.IsUnknown() {
+				state.InputSysdigHec.KeepAliveTimeout = api.InputSysdigHec.KeepAliveTimeout
+			} else if state.InputSysdigHec.KeepAliveTimeout.IsNull() || state.InputSysdigHec.KeepAliveTimeout.IsUnknown() {
+				state.InputSysdigHec.KeepAliveTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.IpAllowlistRegex.IsNull() || state.InputSysdigHec.IpAllowlistRegex.IsUnknown())) {
+			if !api.InputSysdigHec.IpAllowlistRegex.IsNull() && !api.InputSysdigHec.IpAllowlistRegex.IsUnknown() {
+				state.InputSysdigHec.IpAllowlistRegex = api.InputSysdigHec.IpAllowlistRegex
+			} else if state.InputSysdigHec.IpAllowlistRegex.IsNull() || state.InputSysdigHec.IpAllowlistRegex.IsUnknown() {
+				state.InputSysdigHec.IpAllowlistRegex = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.IpDenylistRegex.IsNull() || state.InputSysdigHec.IpDenylistRegex.IsUnknown())) {
+			if !api.InputSysdigHec.IpDenylistRegex.IsNull() && !api.InputSysdigHec.IpDenylistRegex.IsUnknown() {
+				state.InputSysdigHec.IpDenylistRegex = api.InputSysdigHec.IpDenylistRegex
+			} else if state.InputSysdigHec.IpDenylistRegex.IsNull() || state.InputSysdigHec.IpDenylistRegex.IsUnknown() {
+				state.InputSysdigHec.IpDenylistRegex = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.HecAPI.IsNull() || state.InputSysdigHec.HecAPI.IsUnknown())) {
+			if !api.InputSysdigHec.HecAPI.IsNull() && !api.InputSysdigHec.HecAPI.IsUnknown() {
+				state.InputSysdigHec.HecAPI = api.InputSysdigHec.HecAPI
+			} else if state.InputSysdigHec.HecAPI.IsNull() || state.InputSysdigHec.HecAPI.IsUnknown() {
+				state.InputSysdigHec.HecAPI = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Metadata.IsNull() || state.InputSysdigHec.Metadata.IsUnknown())) {
+			if !api.InputSysdigHec.Metadata.IsNull() && !api.InputSysdigHec.Metadata.IsUnknown() {
+				state.InputSysdigHec.Metadata = api.InputSysdigHec.Metadata
+			} else if state.InputSysdigHec.Metadata.IsNull() || state.InputSysdigHec.Metadata.IsUnknown() {
+				state.InputSysdigHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AllowedIndexes.IsNull() || state.InputSysdigHec.AllowedIndexes.IsUnknown())) {
+			if !api.InputSysdigHec.AllowedIndexes.IsNull() && !api.InputSysdigHec.AllowedIndexes.IsUnknown() {
+				state.InputSysdigHec.AllowedIndexes = api.InputSysdigHec.AllowedIndexes
+			} else if state.InputSysdigHec.AllowedIndexes.IsNull() || state.InputSysdigHec.AllowedIndexes.IsUnknown() {
+				state.InputSysdigHec.AllowedIndexes = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AccessControlAllowOrigin.IsNull() || state.InputSysdigHec.AccessControlAllowOrigin.IsUnknown())) {
+			if !api.InputSysdigHec.AccessControlAllowOrigin.IsNull() && !api.InputSysdigHec.AccessControlAllowOrigin.IsUnknown() {
+				state.InputSysdigHec.AccessControlAllowOrigin = api.InputSysdigHec.AccessControlAllowOrigin
+			} else if state.InputSysdigHec.AccessControlAllowOrigin.IsNull() || state.InputSysdigHec.AccessControlAllowOrigin.IsUnknown() {
+				state.InputSysdigHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AccessControlAllowHeaders.IsNull() || state.InputSysdigHec.AccessControlAllowHeaders.IsUnknown())) {
+			if !api.InputSysdigHec.AccessControlAllowHeaders.IsNull() && !api.InputSysdigHec.AccessControlAllowHeaders.IsUnknown() {
+				state.InputSysdigHec.AccessControlAllowHeaders = api.InputSysdigHec.AccessControlAllowHeaders
+			} else if state.InputSysdigHec.AccessControlAllowHeaders.IsNull() || state.InputSysdigHec.AccessControlAllowHeaders.IsUnknown() {
+				state.InputSysdigHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.EmitTokenMetrics.IsNull() || state.InputSysdigHec.EmitTokenMetrics.IsUnknown())) {
+			if !api.InputSysdigHec.EmitTokenMetrics.IsNull() && !api.InputSysdigHec.EmitTokenMetrics.IsUnknown() {
+				state.InputSysdigHec.EmitTokenMetrics = api.InputSysdigHec.EmitTokenMetrics
+			} else if state.InputSysdigHec.EmitTokenMetrics.IsNull() || state.InputSysdigHec.EmitTokenMetrics.IsUnknown() {
+				state.InputSysdigHec.EmitTokenMetrics = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Description.IsNull() || state.InputSysdigHec.Description.IsUnknown())) {
+			if !api.InputSysdigHec.Description.IsNull() && !api.InputSysdigHec.Description.IsUnknown() {
+				state.InputSysdigHec.Description = api.InputSysdigHec.Description
+			} else if state.InputSysdigHec.Description.IsNull() || state.InputSysdigHec.Description.IsUnknown() {
+				state.InputSysdigHec.Description = types.StringNull()
+			}
+		}
+	}
+	if api.InputUpwindHec != nil {
+		if state.InputUpwindHec == nil {
+			state.InputUpwindHec = &InputUpwindHecModel{}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.ID.IsNull() || state.InputUpwindHec.ID.IsUnknown())) {
+			if !api.InputUpwindHec.ID.IsNull() && !api.InputUpwindHec.ID.IsUnknown() {
+				state.InputUpwindHec.ID = api.InputUpwindHec.ID
+			} else if state.InputUpwindHec.ID.IsNull() || state.InputUpwindHec.ID.IsUnknown() {
+				state.InputUpwindHec.ID = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Type.IsNull() || state.InputUpwindHec.Type.IsUnknown())) {
+			if !api.InputUpwindHec.Type.IsNull() && !api.InputUpwindHec.Type.IsUnknown() {
+				state.InputUpwindHec.Type = api.InputUpwindHec.Type
+			} else if state.InputUpwindHec.Type.IsNull() || state.InputUpwindHec.Type.IsUnknown() {
+				state.InputUpwindHec.Type = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Disabled.IsNull() || state.InputUpwindHec.Disabled.IsUnknown())) {
+			if !api.InputUpwindHec.Disabled.IsNull() && !api.InputUpwindHec.Disabled.IsUnknown() {
+				state.InputUpwindHec.Disabled = api.InputUpwindHec.Disabled
+			} else if state.InputUpwindHec.Disabled.IsNull() || state.InputUpwindHec.Disabled.IsUnknown() {
+				state.InputUpwindHec.Disabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Pipeline.IsNull() || state.InputUpwindHec.Pipeline.IsUnknown())) {
+			if !api.InputUpwindHec.Pipeline.IsNull() && !api.InputUpwindHec.Pipeline.IsUnknown() {
+				state.InputUpwindHec.Pipeline = api.InputUpwindHec.Pipeline
+			} else if state.InputUpwindHec.Pipeline.IsNull() || state.InputUpwindHec.Pipeline.IsUnknown() {
+				state.InputUpwindHec.Pipeline = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.SendToRoutes.IsNull() || state.InputUpwindHec.SendToRoutes.IsUnknown())) {
+			if !api.InputUpwindHec.SendToRoutes.IsNull() && !api.InputUpwindHec.SendToRoutes.IsUnknown() {
+				state.InputUpwindHec.SendToRoutes = api.InputUpwindHec.SendToRoutes
+			} else if state.InputUpwindHec.SendToRoutes.IsNull() || state.InputUpwindHec.SendToRoutes.IsUnknown() {
+				state.InputUpwindHec.SendToRoutes = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Environment.IsNull() || state.InputUpwindHec.Environment.IsUnknown())) {
+			if !api.InputUpwindHec.Environment.IsNull() && !api.InputUpwindHec.Environment.IsUnknown() {
+				state.InputUpwindHec.Environment = api.InputUpwindHec.Environment
+			} else if state.InputUpwindHec.Environment.IsNull() || state.InputUpwindHec.Environment.IsUnknown() {
+				state.InputUpwindHec.Environment = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.PqEnabled.IsNull() || state.InputUpwindHec.PqEnabled.IsUnknown())) {
+			if !api.InputUpwindHec.PqEnabled.IsNull() && !api.InputUpwindHec.PqEnabled.IsUnknown() {
+				state.InputUpwindHec.PqEnabled = api.InputUpwindHec.PqEnabled
+			} else if state.InputUpwindHec.PqEnabled.IsNull() || state.InputUpwindHec.PqEnabled.IsUnknown() {
+				state.InputUpwindHec.PqEnabled = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Streamtags.IsNull() || state.InputUpwindHec.Streamtags.IsUnknown())) {
+			if !api.InputUpwindHec.Streamtags.IsNull() && !api.InputUpwindHec.Streamtags.IsUnknown() {
+				state.InputUpwindHec.Streamtags = api.InputUpwindHec.Streamtags
+			} else if state.InputUpwindHec.Streamtags.IsNull() || state.InputUpwindHec.Streamtags.IsUnknown() {
+				state.InputUpwindHec.Streamtags = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.CriblSourceProvenance.IsNull() || state.InputUpwindHec.CriblSourceProvenance.IsUnknown())) {
+			if !api.InputUpwindHec.CriblSourceProvenance.IsNull() && !api.InputUpwindHec.CriblSourceProvenance.IsUnknown() {
+				state.InputUpwindHec.CriblSourceProvenance = api.InputUpwindHec.CriblSourceProvenance
+			} else if state.InputUpwindHec.CriblSourceProvenance.IsNull() || state.InputUpwindHec.CriblSourceProvenance.IsUnknown() {
+				state.InputUpwindHec.CriblSourceProvenance = types.ObjectNull(InputUpwindHecCriblSourceProvenanceAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Connections.IsNull() || state.InputUpwindHec.Connections.IsUnknown())) {
+			if !api.InputUpwindHec.Connections.IsNull() && !api.InputUpwindHec.Connections.IsUnknown() {
+				state.InputUpwindHec.Connections = api.InputUpwindHec.Connections
+			} else if state.InputUpwindHec.Connections.IsNull() || state.InputUpwindHec.Connections.IsUnknown() {
+				state.InputUpwindHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Pq.IsNull() || state.InputUpwindHec.Pq.IsUnknown())) {
+			if !api.InputUpwindHec.Pq.IsNull() && !api.InputUpwindHec.Pq.IsUnknown() {
+				state.InputUpwindHec.Pq = api.InputUpwindHec.Pq
+			} else if state.InputUpwindHec.Pq.IsNull() || state.InputUpwindHec.Pq.IsUnknown() {
+				state.InputUpwindHec.Pq = types.ObjectNull(InputUpwindHecPqAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Host.IsNull() || state.InputUpwindHec.Host.IsUnknown())) {
+			if !api.InputUpwindHec.Host.IsNull() && !api.InputUpwindHec.Host.IsUnknown() {
+				state.InputUpwindHec.Host = api.InputUpwindHec.Host
+			} else if state.InputUpwindHec.Host.IsNull() || state.InputUpwindHec.Host.IsUnknown() {
+				state.InputUpwindHec.Host = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Port.IsNull() || state.InputUpwindHec.Port.IsUnknown())) {
+			if !api.InputUpwindHec.Port.IsNull() && !api.InputUpwindHec.Port.IsUnknown() {
+				state.InputUpwindHec.Port = api.InputUpwindHec.Port
+			} else if state.InputUpwindHec.Port.IsNull() || state.InputUpwindHec.Port.IsUnknown() {
+				state.InputUpwindHec.Port = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AuthTokens.IsNull() || state.InputUpwindHec.AuthTokens.IsUnknown())) {
+			if !api.InputUpwindHec.AuthTokens.IsNull() && !api.InputUpwindHec.AuthTokens.IsUnknown() {
+				state.InputUpwindHec.AuthTokens = api.InputUpwindHec.AuthTokens
+			} else if state.InputUpwindHec.AuthTokens.IsNull() || state.InputUpwindHec.AuthTokens.IsUnknown() {
+				state.InputUpwindHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.TLS.IsNull() || state.InputUpwindHec.TLS.IsUnknown())) {
+			if !api.InputUpwindHec.TLS.IsNull() && !api.InputUpwindHec.TLS.IsUnknown() {
+				state.InputUpwindHec.TLS = api.InputUpwindHec.TLS
+			} else if state.InputUpwindHec.TLS.IsNull() || state.InputUpwindHec.TLS.IsUnknown() {
+				state.InputUpwindHec.TLS = types.ObjectNull(InputUpwindHecTLSAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.MaxActiveReq.IsNull() || state.InputUpwindHec.MaxActiveReq.IsUnknown())) {
+			if !api.InputUpwindHec.MaxActiveReq.IsNull() && !api.InputUpwindHec.MaxActiveReq.IsUnknown() {
+				state.InputUpwindHec.MaxActiveReq = api.InputUpwindHec.MaxActiveReq
+			} else if state.InputUpwindHec.MaxActiveReq.IsNull() || state.InputUpwindHec.MaxActiveReq.IsUnknown() {
+				state.InputUpwindHec.MaxActiveReq = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.MaxRequestsPerSocket.IsNull() || state.InputUpwindHec.MaxRequestsPerSocket.IsUnknown())) {
+			if !api.InputUpwindHec.MaxRequestsPerSocket.IsNull() && !api.InputUpwindHec.MaxRequestsPerSocket.IsUnknown() {
+				state.InputUpwindHec.MaxRequestsPerSocket = api.InputUpwindHec.MaxRequestsPerSocket
+			} else if state.InputUpwindHec.MaxRequestsPerSocket.IsNull() || state.InputUpwindHec.MaxRequestsPerSocket.IsUnknown() {
+				state.InputUpwindHec.MaxRequestsPerSocket = types.Int64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.EnableProxyHeader.IsNull() || state.InputUpwindHec.EnableProxyHeader.IsUnknown())) {
+			if !api.InputUpwindHec.EnableProxyHeader.IsNull() && !api.InputUpwindHec.EnableProxyHeader.IsUnknown() {
+				state.InputUpwindHec.EnableProxyHeader = api.InputUpwindHec.EnableProxyHeader
+			} else if state.InputUpwindHec.EnableProxyHeader.IsNull() || state.InputUpwindHec.EnableProxyHeader.IsUnknown() {
+				state.InputUpwindHec.EnableProxyHeader = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.CaptureHeaders.IsNull() || state.InputUpwindHec.CaptureHeaders.IsUnknown())) {
+			if !api.InputUpwindHec.CaptureHeaders.IsNull() && !api.InputUpwindHec.CaptureHeaders.IsUnknown() {
+				state.InputUpwindHec.CaptureHeaders = api.InputUpwindHec.CaptureHeaders
+			} else if state.InputUpwindHec.CaptureHeaders.IsNull() || state.InputUpwindHec.CaptureHeaders.IsUnknown() {
+				state.InputUpwindHec.CaptureHeaders = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.ActivityLogSampleRate.IsNull() || state.InputUpwindHec.ActivityLogSampleRate.IsUnknown())) {
+			if !api.InputUpwindHec.ActivityLogSampleRate.IsNull() && !api.InputUpwindHec.ActivityLogSampleRate.IsUnknown() {
+				state.InputUpwindHec.ActivityLogSampleRate = api.InputUpwindHec.ActivityLogSampleRate
+			} else if state.InputUpwindHec.ActivityLogSampleRate.IsNull() || state.InputUpwindHec.ActivityLogSampleRate.IsUnknown() {
+				state.InputUpwindHec.ActivityLogSampleRate = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.RequestTimeout.IsNull() || state.InputUpwindHec.RequestTimeout.IsUnknown())) {
+			if !api.InputUpwindHec.RequestTimeout.IsNull() && !api.InputUpwindHec.RequestTimeout.IsUnknown() {
+				state.InputUpwindHec.RequestTimeout = api.InputUpwindHec.RequestTimeout
+			} else if state.InputUpwindHec.RequestTimeout.IsNull() || state.InputUpwindHec.RequestTimeout.IsUnknown() {
+				state.InputUpwindHec.RequestTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.SocketTimeout.IsNull() || state.InputUpwindHec.SocketTimeout.IsUnknown())) {
+			if !api.InputUpwindHec.SocketTimeout.IsNull() && !api.InputUpwindHec.SocketTimeout.IsUnknown() {
+				state.InputUpwindHec.SocketTimeout = api.InputUpwindHec.SocketTimeout
+			} else if state.InputUpwindHec.SocketTimeout.IsNull() || state.InputUpwindHec.SocketTimeout.IsUnknown() {
+				state.InputUpwindHec.SocketTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.KeepAliveTimeout.IsNull() || state.InputUpwindHec.KeepAliveTimeout.IsUnknown())) {
+			if !api.InputUpwindHec.KeepAliveTimeout.IsNull() && !api.InputUpwindHec.KeepAliveTimeout.IsUnknown() {
+				state.InputUpwindHec.KeepAliveTimeout = api.InputUpwindHec.KeepAliveTimeout
+			} else if state.InputUpwindHec.KeepAliveTimeout.IsNull() || state.InputUpwindHec.KeepAliveTimeout.IsUnknown() {
+				state.InputUpwindHec.KeepAliveTimeout = types.Float64Null()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.IpAllowlistRegex.IsNull() || state.InputUpwindHec.IpAllowlistRegex.IsUnknown())) {
+			if !api.InputUpwindHec.IpAllowlistRegex.IsNull() && !api.InputUpwindHec.IpAllowlistRegex.IsUnknown() {
+				state.InputUpwindHec.IpAllowlistRegex = api.InputUpwindHec.IpAllowlistRegex
+			} else if state.InputUpwindHec.IpAllowlistRegex.IsNull() || state.InputUpwindHec.IpAllowlistRegex.IsUnknown() {
+				state.InputUpwindHec.IpAllowlistRegex = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.IpDenylistRegex.IsNull() || state.InputUpwindHec.IpDenylistRegex.IsUnknown())) {
+			if !api.InputUpwindHec.IpDenylistRegex.IsNull() && !api.InputUpwindHec.IpDenylistRegex.IsUnknown() {
+				state.InputUpwindHec.IpDenylistRegex = api.InputUpwindHec.IpDenylistRegex
+			} else if state.InputUpwindHec.IpDenylistRegex.IsNull() || state.InputUpwindHec.IpDenylistRegex.IsUnknown() {
+				state.InputUpwindHec.IpDenylistRegex = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.HecAPI.IsNull() || state.InputUpwindHec.HecAPI.IsUnknown())) {
+			if !api.InputUpwindHec.HecAPI.IsNull() && !api.InputUpwindHec.HecAPI.IsUnknown() {
+				state.InputUpwindHec.HecAPI = api.InputUpwindHec.HecAPI
+			} else if state.InputUpwindHec.HecAPI.IsNull() || state.InputUpwindHec.HecAPI.IsUnknown() {
+				state.InputUpwindHec.HecAPI = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Metadata.IsNull() || state.InputUpwindHec.Metadata.IsUnknown())) {
+			if !api.InputUpwindHec.Metadata.IsNull() && !api.InputUpwindHec.Metadata.IsUnknown() {
+				state.InputUpwindHec.Metadata = api.InputUpwindHec.Metadata
+			} else if state.InputUpwindHec.Metadata.IsNull() || state.InputUpwindHec.Metadata.IsUnknown() {
+				state.InputUpwindHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()})
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AllowedIndexes.IsNull() || state.InputUpwindHec.AllowedIndexes.IsUnknown())) {
+			if !api.InputUpwindHec.AllowedIndexes.IsNull() && !api.InputUpwindHec.AllowedIndexes.IsUnknown() {
+				state.InputUpwindHec.AllowedIndexes = api.InputUpwindHec.AllowedIndexes
+			} else if state.InputUpwindHec.AllowedIndexes.IsNull() || state.InputUpwindHec.AllowedIndexes.IsUnknown() {
+				state.InputUpwindHec.AllowedIndexes = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AccessControlAllowOrigin.IsNull() || state.InputUpwindHec.AccessControlAllowOrigin.IsUnknown())) {
+			if !api.InputUpwindHec.AccessControlAllowOrigin.IsNull() && !api.InputUpwindHec.AccessControlAllowOrigin.IsUnknown() {
+				state.InputUpwindHec.AccessControlAllowOrigin = api.InputUpwindHec.AccessControlAllowOrigin
+			} else if state.InputUpwindHec.AccessControlAllowOrigin.IsNull() || state.InputUpwindHec.AccessControlAllowOrigin.IsUnknown() {
+				state.InputUpwindHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AccessControlAllowHeaders.IsNull() || state.InputUpwindHec.AccessControlAllowHeaders.IsUnknown())) {
+			if !api.InputUpwindHec.AccessControlAllowHeaders.IsNull() && !api.InputUpwindHec.AccessControlAllowHeaders.IsUnknown() {
+				state.InputUpwindHec.AccessControlAllowHeaders = api.InputUpwindHec.AccessControlAllowHeaders
+			} else if state.InputUpwindHec.AccessControlAllowHeaders.IsNull() || state.InputUpwindHec.AccessControlAllowHeaders.IsUnknown() {
+				state.InputUpwindHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.EmitTokenMetrics.IsNull() || state.InputUpwindHec.EmitTokenMetrics.IsUnknown())) {
+			if !api.InputUpwindHec.EmitTokenMetrics.IsNull() && !api.InputUpwindHec.EmitTokenMetrics.IsUnknown() {
+				state.InputUpwindHec.EmitTokenMetrics = api.InputUpwindHec.EmitTokenMetrics
+			} else if state.InputUpwindHec.EmitTokenMetrics.IsNull() || state.InputUpwindHec.EmitTokenMetrics.IsUnknown() {
+				state.InputUpwindHec.EmitTokenMetrics = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Description.IsNull() || state.InputUpwindHec.Description.IsUnknown())) {
+			if !api.InputUpwindHec.Description.IsNull() && !api.InputUpwindHec.Description.IsUnknown() {
+				state.InputUpwindHec.Description = api.InputUpwindHec.Description
+			} else if state.InputUpwindHec.Description.IsNull() || state.InputUpwindHec.Description.IsUnknown() {
+				state.InputUpwindHec.Description = types.StringNull()
 			}
 		}
 	}
@@ -56811,11 +63013,67 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.TextSecret = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.ContentConfig.IsNull() || state.InputAnthropicCompliance.ContentConfig.IsUnknown())) {
-			if !api.InputAnthropicCompliance.ContentConfig.IsNull() && !api.InputAnthropicCompliance.ContentConfig.IsUnknown() {
-				state.InputAnthropicCompliance.ContentConfig = api.InputAnthropicCompliance.ContentConfig
-			} else if state.InputAnthropicCompliance.ContentConfig.IsNull() || state.InputAnthropicCompliance.ContentConfig.IsUnknown() {
-				state.InputAnthropicCompliance.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceContentConfigAttrTypes()})
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Activities.IsNull() || state.InputAnthropicCompliance.Activities.IsUnknown())) {
+			if !api.InputAnthropicCompliance.Activities.IsNull() && !api.InputAnthropicCompliance.Activities.IsUnknown() {
+				state.InputAnthropicCompliance.Activities = api.InputAnthropicCompliance.Activities
+			} else if state.InputAnthropicCompliance.Activities.IsNull() || state.InputAnthropicCompliance.Activities.IsUnknown() {
+				state.InputAnthropicCompliance.Activities = types.ObjectNull(InputAnthropicComplianceActivitiesAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Chats.IsNull() || state.InputAnthropicCompliance.Chats.IsUnknown())) {
+			if !api.InputAnthropicCompliance.Chats.IsNull() && !api.InputAnthropicCompliance.Chats.IsUnknown() {
+				state.InputAnthropicCompliance.Chats = api.InputAnthropicCompliance.Chats
+			} else if state.InputAnthropicCompliance.Chats.IsNull() || state.InputAnthropicCompliance.Chats.IsUnknown() {
+				state.InputAnthropicCompliance.Chats = types.ObjectNull(InputAnthropicComplianceChatsAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Projects.IsNull() || state.InputAnthropicCompliance.Projects.IsUnknown())) {
+			if !api.InputAnthropicCompliance.Projects.IsNull() && !api.InputAnthropicCompliance.Projects.IsUnknown() {
+				state.InputAnthropicCompliance.Projects = api.InputAnthropicCompliance.Projects
+			} else if state.InputAnthropicCompliance.Projects.IsNull() || state.InputAnthropicCompliance.Projects.IsUnknown() {
+				state.InputAnthropicCompliance.Projects = types.ObjectNull(InputAnthropicComplianceProjectsAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.ChatMessages.IsNull() || state.InputAnthropicCompliance.ChatMessages.IsUnknown())) {
+			if !api.InputAnthropicCompliance.ChatMessages.IsNull() && !api.InputAnthropicCompliance.ChatMessages.IsUnknown() {
+				state.InputAnthropicCompliance.ChatMessages = api.InputAnthropicCompliance.ChatMessages
+			} else if state.InputAnthropicCompliance.ChatMessages.IsNull() || state.InputAnthropicCompliance.ChatMessages.IsUnknown() {
+				state.InputAnthropicCompliance.ChatMessages = types.ObjectNull(InputAnthropicComplianceChatMessagesAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.ProjectDetails.IsNull() || state.InputAnthropicCompliance.ProjectDetails.IsUnknown())) {
+			if !api.InputAnthropicCompliance.ProjectDetails.IsNull() && !api.InputAnthropicCompliance.ProjectDetails.IsUnknown() {
+				state.InputAnthropicCompliance.ProjectDetails = api.InputAnthropicCompliance.ProjectDetails
+			} else if state.InputAnthropicCompliance.ProjectDetails.IsNull() || state.InputAnthropicCompliance.ProjectDetails.IsUnknown() {
+				state.InputAnthropicCompliance.ProjectDetails = types.ObjectNull(InputAnthropicComplianceProjectDetailsAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Groups.IsNull() || state.InputAnthropicCompliance.Groups.IsUnknown())) {
+			if !api.InputAnthropicCompliance.Groups.IsNull() && !api.InputAnthropicCompliance.Groups.IsUnknown() {
+				state.InputAnthropicCompliance.Groups = api.InputAnthropicCompliance.Groups
+			} else if state.InputAnthropicCompliance.Groups.IsNull() || state.InputAnthropicCompliance.Groups.IsUnknown() {
+				state.InputAnthropicCompliance.Groups = types.ObjectNull(InputAnthropicComplianceGroupsAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Organizations.IsNull() || state.InputAnthropicCompliance.Organizations.IsUnknown())) {
+			if !api.InputAnthropicCompliance.Organizations.IsNull() && !api.InputAnthropicCompliance.Organizations.IsUnknown() {
+				state.InputAnthropicCompliance.Organizations = api.InputAnthropicCompliance.Organizations
+			} else if state.InputAnthropicCompliance.Organizations.IsNull() || state.InputAnthropicCompliance.Organizations.IsUnknown() {
+				state.InputAnthropicCompliance.Organizations = types.ObjectNull(InputAnthropicComplianceOrganizationsAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.OrgUsers.IsNull() || state.InputAnthropicCompliance.OrgUsers.IsUnknown())) {
+			if !api.InputAnthropicCompliance.OrgUsers.IsNull() && !api.InputAnthropicCompliance.OrgUsers.IsUnknown() {
+				state.InputAnthropicCompliance.OrgUsers = api.InputAnthropicCompliance.OrgUsers
+			} else if state.InputAnthropicCompliance.OrgUsers.IsNull() || state.InputAnthropicCompliance.OrgUsers.IsUnknown() {
+				state.InputAnthropicCompliance.OrgUsers = types.ObjectNull(InputAnthropicComplianceOrgUsersAttrTypes())
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.OrgRoles.IsNull() || state.InputAnthropicCompliance.OrgRoles.IsUnknown())) {
+			if !api.InputAnthropicCompliance.OrgRoles.IsNull() && !api.InputAnthropicCompliance.OrgRoles.IsUnknown() {
+				state.InputAnthropicCompliance.OrgRoles = api.InputAnthropicCompliance.OrgRoles
+			} else if state.InputAnthropicCompliance.OrgRoles.IsNull() || state.InputAnthropicCompliance.OrgRoles.IsUnknown() {
+				state.InputAnthropicCompliance.OrgRoles = types.ObjectNull(InputAnthropicComplianceOrgRolesAttrTypes())
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.RequestTimeout.IsNull() || state.InputAnthropicCompliance.RequestTimeout.IsUnknown())) {

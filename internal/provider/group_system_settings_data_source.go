@@ -53,69 +53,88 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"base_url": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Base URL for the API server. Used when the server is behind a reverse proxy.`,
 								},
 								"disable_api_cache": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, disable the API response cache. Otherwise, <code>false</code>.`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, the API server is disabled. Otherwise, <code>false</code>.`,
 								},
 								"headers": schema.MapAttribute{
 									Computed:    true,
+									Description: `Custom HTTP response headers to include in every API response.`,
 									ElementType: types.StringType,
 								},
 								"host": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Hostname or IP address the API server listens on.`,
 								},
-								"idle_session_ttl": schema.Float64Attribute{
-									Computed: true,
+								"idle_session_ttl": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Idle session timeout in seconds. Sessions are invalidated after the specified seconds of inactivity.`,
 								},
 								"listen_on_port": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, bind to the configured port as the server listen port. Otherwise, <code>false</code>.`,
 								},
 								"login_rate_limit": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Rate limit for login attempts. Value is a string such as <code>100/min</code>.`,
 								},
-								"port": schema.Float64Attribute{
-									Computed: true,
+								"port": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Port number the API server listens on.`,
 								},
 								"protocol": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `API protocol: <code>http</code> or <code>https</code>.`,
 								},
 								"scripts": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable JavaScript scripting support in the API. Otherwise, <code>false</code>.`,
 								},
 								"sensitive_fields": schema.ListAttribute{
 									Computed:    true,
+									Description: `List of field names whose values are redacted in API responses and logs.`,
 									ElementType: types.StringType,
 								},
 								"ssl": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.`,
 										},
 										"cert_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Filesystem path to the PEM-encoded TLS certificate.`,
 										},
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.`,
 										},
 										"passphrase": schema.StringAttribute{
-											Computed:  true,
-											Sensitive: true,
+											Computed:    true,
+											Sensitive:   true,
+											Description: `Passphrase to decrypt the TLS private key, if encrypted.`,
 										},
 										"priv_key_path": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Filesystem path to the PEM-encoded TLS private key.`,
 										},
 									},
 								},
 								"sso_rate_limit": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Rate limit for SSO authentication attempts. Value is a string such as <code>100/min</code>.`,
 								},
 								"worker_remote_access": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable remote access (teleporting) to Worker Processes via the API. Otherwise, <code>false</code>.`,
 								},
 							},
 						},
@@ -123,18 +142,22 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable Apps. Otherwise, <code>false</code>.`,
 								},
 							},
 						},
 						"backups": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Configuration backup settings, including storage location and retention period.`,
 							Attributes: map[string]schema.Attribute{
 								"backup_persistence": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `How long to retain backups. Value is a duration string such as <code>24h</code>.`,
 								},
 								"backups_directory": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Filesystem path where configuration backups are stored.`,
 								},
 							},
 						},
@@ -142,21 +165,26 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, display the custom logo in the UI. Otherwise, <code>false</code>.`,
 								},
 								"logo_description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Description text displayed alongside the custom logo.`,
 								},
 								"logo_image": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Custom logo image as a base64-encoded data URI (PNG or JPEG, maximum 2 MB).`,
 								},
 							},
 						},
 						"pii": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Personally identifiable information (PII) detection configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"enable_pii_detection": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable PII detection for events processed by the Cribl instance. Otherwise, <code>false</code>.`,
 								},
 							},
 						},
@@ -164,34 +192,41 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"use_env_vars": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, use proxy settings from environment variables (<code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>NO_PROXY</code>). Otherwise, <code>false</code>.`,
 								},
 							},
 						},
 						"rollback": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Automatic rollback settings applied when an upgrade fails.`,
 							Attributes: map[string]schema.Attribute{
 								"rollback_enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable automatic rollback if an upgrade fails. Otherwise, <code>false</code>.`,
 								},
-								"rollback_retries": schema.Float64Attribute{
-									Computed: true,
+								"rollback_retries": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Number of times to retry a rollback before marking it as failed.`,
 								},
-								"rollback_timeout": schema.Float64Attribute{
-									Computed: true,
+								"rollback_timeout": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum duration in milliseconds to wait for a rollback to complete before marking it as failed.`,
 								},
 							},
 						},
 						"shutdown": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"drain_timeout": schema.Float64Attribute{
-									Computed: true,
+								"drain_timeout": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum time in milliseconds to wait for in-flight events to drain before forcing a shutdown.`,
 								},
 							},
 						},
 						"sni": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Server Name Indication (SNI) routing configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"disable_sni_routing": schema.BoolAttribute{
 									Computed: true,
@@ -202,7 +237,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"directory": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Filesystem directory path where Unix domain socket files are created.`,
 								},
 							},
 						},
@@ -210,23 +246,28 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"feature_flag_overrides": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `List of feature flag overrides applied to this Cribl instance.`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"disabled": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `If <code>true</code>, the feature flag is disabled. Otherwise, <code>false</code>.`,
 											},
 											"flag_id": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Unique identifier of the feature flag to override.`,
 											},
 										},
 									},
 								},
-								"log_file_max_files": schema.Float64Attribute{
-									Computed: true,
+								"log_file_max_files": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of log files to retain before rotating.`,
 								},
 								"log_file_max_size": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Maximum size of each log file. Value is a numeral and unit such as <code>10 MB</code>.`,
 								},
 							},
 						},
@@ -234,7 +275,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"intercom": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable Intercom integration for in-product messaging. Otherwise, <code>false</code>.`,
 								},
 								"upgrade": schema.StringAttribute{
 									Computed: true,
@@ -242,98 +284,141 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"tls": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Global TLS/SSL settings applied to all outbound connections that do not specify their own TLS configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"default_cipher_list": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Cipher suite list to use for TLS connections. <code>DEFAULT</code> means the system default.`,
 								},
 								"default_ecdh_curve": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `ECDH curve name for TLS key exchange. Use <code>auto</code> to let Node.js choose.`,
 								},
 								"max_version": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Maximum TLS protocol version to accept.`,
 								},
 								"min_version": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Minimum TLS protocol version to accept.`,
 								},
 								"reject_unauthorized": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, reject TLS certificates that cannot be verified against a valid Certificate Authority. Otherwise, <code>false</code>.`,
 								},
 							},
 						},
 						"upgrade_group_settings": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Rolling upgrade group settings that control how many nodes are upgraded at a time.`,
 							Attributes: map[string]schema.Attribute{
 								"is_rolling": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, perform a rolling upgrade that updates nodes incrementally. If <code>false</code>, upgrade all nodes simultaneously.`,
 								},
-								"quantity": schema.Float64Attribute{
-									Computed: true,
+								"quantity": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Percentage of nodes to upgrade at a time during a rolling upgrade.`,
 								},
-								"retry_count": schema.Float64Attribute{
-									Computed: true,
+								"retry_count": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Number of times to retry upgrading a node before marking it as failed.`,
 								},
-								"retry_delay": schema.Float64Attribute{
-									Computed: true,
+								"retry_delay": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Delay in milliseconds between upgrade retries when a node fails to upgrade.`,
 								},
 							},
 						},
 						"upgrade_settings": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Automatic upgrade scheduling and package source configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"automatic_upgrade_check_period": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `How frequently to check for available upgrades. Value is a duration string such as <code>24h</code>.`,
 								},
 								"disable_automatic_upgrade": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, automatic upgrades are disabled. Otherwise, <code>false</code>.`,
 								},
 								"enable_legacy_edge_upgrade": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable the legacy upgrade flow for Edge Nodes. Otherwise, <code>false</code>.`,
 								},
 								"package_urls": schema.ListNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `List of custom package URLs to use for manual upgrades.`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"package_hash_url": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `URL of the hash file used to verify the package download.`,
 											},
 											"package_url": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `URL of the upgrade package file.`,
 											},
 										},
 									},
 								},
 								"upgrade_source": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Upgrade source: <code>cribl</code> for official Cribl packages or <code>custom</code> for a custom package URL.`,
 								},
 							},
 						},
 						"workers": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"count": schema.Float64Attribute{
-									Computed: true,
+								"count": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Number of Worker Processes to spawn. Set to <code>0</code> to use the number of available CPU cores.`,
 								},
 								"enable_heap_snapshots": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, enable V8 heap snapshot generation on out-of-memory errors. Otherwise, <code>false</code>.`,
 								},
-								"load_throttle_perc": schema.Float64Attribute{
-									Computed: true,
+								"load_throttle_perc": schema.Int64Attribute{
+									Computed:    true,
+									Description: `CPU load percentage threshold above which new connections are throttled.`,
 								},
-								"memory": schema.Float64Attribute{
-									Computed: true,
+								"memory": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.`,
 								},
-								"minimum": schema.Float64Attribute{
-									Computed: true,
+								"minimum": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Minimum number of Worker Processes to keep running.`,
 								},
-								"startup_max_conns": schema.Float64Attribute{
-									Computed: true,
+								"restart_unresponsive_processes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, automatically restart Worker Processes that become unresponsive. Otherwise, <code>false</code>.`,
 								},
-								"startup_throttle_timeout": schema.Float64Attribute{
-									Computed: true,
+								"startup_max_conns": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of connections to accept during Worker Process startup before throttling begins.`,
+								},
+								"startup_throttle_timeout": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Timeout in milliseconds to wait for Worker Processes to reach idle before ending the startup throttle period.`,
 								},
 								"v8_single_thread": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `If <code>true</code>, run all worker threads in a single V8 isolate. Otherwise, <code>false</code>.`,
+								},
+								"worker_process_config_update_concurrency": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of Worker Processes that can reload configuration concurrently.`,
+								},
+								"worker_process_reload_timeout": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Timeout in milliseconds to wait for a Worker Process to reload configuration before treating the reload as failed.`,
+								},
+								"worker_thread_pool_size": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Size of the Worker thread pool used for CPU-bound tasks.`,
 								},
 							},
 						},

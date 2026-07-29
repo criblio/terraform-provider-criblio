@@ -1139,6 +1139,24 @@ func SearchDashboardTerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+	switch name {
+	case "cache_ttl_seconds":
+		return prefix + "cacheTTLSeconds"
+	case "dashboard_element":
+		return prefix + "dashboard_element"
+	case "dashboard_element_input":
+		return prefix + "dashboard_element_input"
+	case "dashboard_element_visualization":
+		return prefix + "dashboard_element_visualization"
+	case "search_query_inline":
+		return prefix + "search_query_inline"
+	case "search_query_metric":
+		return prefix + "search_query_metric"
+	case "search_query_saved":
+		return prefix + "search_query_saved"
+	case "search_query_values":
+		return prefix + "search_query_values"
+	}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {

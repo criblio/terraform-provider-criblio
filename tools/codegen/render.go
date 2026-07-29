@@ -251,6 +251,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"variantRequiredAPINames":          variantRequiredAPINames,
 		"goStringSliceLiteral":             goStringSliceLiteral,
 		"goStringLiteral":                  goStringLiteral,
+		"apiNameOverrides":                 apiNameOverrides,
 		"listElementAttrType":              listElementAttrType,
 		"emptyJSONValue":                   emptyJSONValue,
 		"goValueLiteral":                   goValueLiteral,
@@ -263,6 +264,42 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("execute template %q: %v", kind, err)
 	}
 	return output.Bytes(), nil
+}
+
+func apiNameOverrides(resource parser.ResourceDef) []parser.FieldDef {
+	byTerraformName := make(map[string]parser.FieldDef)
+	var collect func([]parser.FieldDef)
+	collect = func(fields []parser.FieldDef) {
+		for _, field := range fields {
+			if field.APIName != "" && field.TerraformName != "" && field.APIName != defaultAPIName(field.TerraformName) {
+				byTerraformName[field.TerraformName] = field
+			}
+			collect(field.Fields)
+		}
+	}
+	collect(resource.Fields)
+	for _, variant := range resource.OneOfVariants {
+		collect(variant.Fields)
+	}
+	overrides := make([]parser.FieldDef, 0, len(byTerraformName))
+	for _, field := range byTerraformName {
+		overrides = append(overrides, field)
+	}
+	slices.SortFunc(overrides, func(a, b parser.FieldDef) int {
+		return strings.Compare(a.TerraformName, b.TerraformName)
+	})
+	return overrides
+}
+
+func defaultAPIName(name string) string {
+	parts := strings.Split(name, "_")
+	for i := 1; i < len(parts); i++ {
+		if parts[i] == "" {
+			continue
+		}
+		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+	}
+	return strings.Join(parts, "")
 }
 
 func restWriteCall(op parser.OperationDef) string {

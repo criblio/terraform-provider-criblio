@@ -124,7 +124,6 @@ type SearchDatasetAPIModel struct {
 
 type DatasetAmazonSecurityLakeCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -134,7 +133,6 @@ type DatasetAmazonSecurityLakeCacheConnectionInfoModel struct {
 
 type DatasetAmazonSecurityLakeCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -145,7 +143,6 @@ type DatasetAmazonSecurityLakeCacheConnectionInfoAPIModel struct {
 func DatasetAmazonSecurityLakeCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -205,7 +202,6 @@ func DatasetAmazonSecurityLakeMetadataLatestRunInfoAttrTypes() map[string]attr.T
 
 type DatasetApiAwsCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -215,7 +211,6 @@ type DatasetApiAwsCacheConnectionInfoModel struct {
 
 type DatasetApiAwsCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -226,7 +221,6 @@ type DatasetApiAwsCacheConnectionInfoAPIModel struct {
 func DatasetApiAwsCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -286,7 +280,6 @@ func DatasetApiAwsMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiAzureCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -296,7 +289,6 @@ type DatasetApiAzureCacheConnectionInfoModel struct {
 
 type DatasetApiAzureCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -307,7 +299,6 @@ type DatasetApiAzureCacheConnectionInfoAPIModel struct {
 func DatasetApiAzureCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -367,7 +358,6 @@ func DatasetApiAzureMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiAzureDataExplorerCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -377,7 +367,6 @@ type DatasetApiAzureDataExplorerCacheConnectionInfoModel struct {
 
 type DatasetApiAzureDataExplorerCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -388,7 +377,6 @@ type DatasetApiAzureDataExplorerCacheConnectionInfoAPIModel struct {
 func DatasetApiAzureDataExplorerCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -448,7 +436,6 @@ func DatasetApiAzureDataExplorerMetadataLatestRunInfoAttrTypes() map[string]attr
 
 type DatasetApiElasticsearchCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -458,7 +445,6 @@ type DatasetApiElasticsearchCacheConnectionInfoModel struct {
 
 type DatasetApiElasticsearchCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -469,7 +455,6 @@ type DatasetApiElasticsearchCacheConnectionInfoAPIModel struct {
 func DatasetApiElasticsearchCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -546,7 +531,6 @@ func DatasetApiGcpEndpointConfigsAttrTypes() map[string]attr.Type {
 
 type DatasetApiGcpCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -556,7 +540,6 @@ type DatasetApiGcpCacheConnectionInfoModel struct {
 
 type DatasetApiGcpCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -567,7 +550,6 @@ type DatasetApiGcpCacheConnectionInfoAPIModel struct {
 func DatasetApiGcpCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -627,7 +609,6 @@ func DatasetApiGcpMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiGoogleWorkspaceCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -637,7 +618,6 @@ type DatasetApiGoogleWorkspaceCacheConnectionInfoModel struct {
 
 type DatasetApiGoogleWorkspaceCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -648,7 +628,6 @@ type DatasetApiGoogleWorkspaceCacheConnectionInfoAPIModel struct {
 func DatasetApiGoogleWorkspaceCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -708,7 +687,6 @@ func DatasetApiGoogleWorkspaceMetadataLatestRunInfoAttrTypes() map[string]attr.T
 
 type DatasetApiHttpCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -718,7 +696,6 @@ type DatasetApiHttpCacheConnectionInfoModel struct {
 
 type DatasetApiHttpCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -729,7 +706,6 @@ type DatasetApiHttpCacheConnectionInfoAPIModel struct {
 func DatasetApiHttpCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -789,7 +765,6 @@ func DatasetApiHttpMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiLogAnalyticsCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -799,7 +774,6 @@ type DatasetApiLogAnalyticsCacheConnectionInfoModel struct {
 
 type DatasetApiLogAnalyticsCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -810,7 +784,6 @@ type DatasetApiLogAnalyticsCacheConnectionInfoAPIModel struct {
 func DatasetApiLogAnalyticsCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -870,7 +843,6 @@ func DatasetApiLogAnalyticsMetadataLatestRunInfoAttrTypes() map[string]attr.Type
 
 type DatasetApiMsgraphCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -880,7 +852,6 @@ type DatasetApiMsgraphCacheConnectionInfoModel struct {
 
 type DatasetApiMsgraphCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -891,7 +862,6 @@ type DatasetApiMsgraphCacheConnectionInfoAPIModel struct {
 func DatasetApiMsgraphCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -951,7 +921,6 @@ func DatasetApiMsgraphMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiOktaCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -961,7 +930,6 @@ type DatasetApiOktaCacheConnectionInfoModel struct {
 
 type DatasetApiOktaCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -972,7 +940,6 @@ type DatasetApiOktaCacheConnectionInfoAPIModel struct {
 func DatasetApiOktaCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1032,7 +999,6 @@ func DatasetApiOktaMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiOpensearchCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1042,7 +1008,6 @@ type DatasetApiOpensearchCacheConnectionInfoModel struct {
 
 type DatasetApiOpensearchCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1053,7 +1018,6 @@ type DatasetApiOpensearchCacheConnectionInfoAPIModel struct {
 func DatasetApiOpensearchCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1113,7 +1077,6 @@ func DatasetApiOpensearchMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiTailscaleCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1123,7 +1086,6 @@ type DatasetApiTailscaleCacheConnectionInfoModel struct {
 
 type DatasetApiTailscaleCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1134,7 +1096,6 @@ type DatasetApiTailscaleCacheConnectionInfoAPIModel struct {
 func DatasetApiTailscaleCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1194,7 +1155,6 @@ func DatasetApiTailscaleMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetApiZoomCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1204,7 +1164,6 @@ type DatasetApiZoomCacheConnectionInfoModel struct {
 
 type DatasetApiZoomCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1215,7 +1174,6 @@ type DatasetApiZoomCacheConnectionInfoAPIModel struct {
 func DatasetApiZoomCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1275,7 +1233,6 @@ func DatasetApiZoomMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetAzureBlobCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1285,7 +1242,6 @@ type DatasetAzureBlobCacheConnectionInfoModel struct {
 
 type DatasetAzureBlobCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1296,7 +1252,6 @@ type DatasetAzureBlobCacheConnectionInfoAPIModel struct {
 func DatasetAzureBlobCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1356,7 +1311,6 @@ func DatasetAzureBlobMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetClickhouseCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1366,7 +1320,6 @@ type DatasetClickhouseCacheConnectionInfoModel struct {
 
 type DatasetClickhouseCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1377,7 +1330,6 @@ type DatasetClickhouseCacheConnectionInfoAPIModel struct {
 func DatasetClickhouseCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1437,7 +1389,6 @@ func DatasetClickhouseMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetCriblEdgeCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1447,7 +1398,6 @@ type DatasetCriblEdgeCacheConnectionInfoModel struct {
 
 type DatasetCriblEdgeCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1458,7 +1408,6 @@ type DatasetCriblEdgeCacheConnectionInfoAPIModel struct {
 func DatasetCriblEdgeCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1518,7 +1467,6 @@ func DatasetCriblEdgeMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetCriblLakeCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1528,7 +1476,6 @@ type DatasetCriblLakeCacheConnectionInfoModel struct {
 
 type DatasetCriblLakeCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1539,7 +1486,6 @@ type DatasetCriblLakeCacheConnectionInfoAPIModel struct {
 func DatasetCriblLakeCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1616,7 +1562,6 @@ func DatasetCriblLeaderExtraPathsAttrTypes() map[string]attr.Type {
 
 type DatasetCriblLeaderCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1626,7 +1571,6 @@ type DatasetCriblLeaderCacheConnectionInfoModel struct {
 
 type DatasetCriblLeaderCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1637,7 +1581,6 @@ type DatasetCriblLeaderCacheConnectionInfoAPIModel struct {
 func DatasetCriblLeaderCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1697,7 +1640,6 @@ func DatasetCriblLeaderMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetCriblLocalCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1707,7 +1649,6 @@ type DatasetCriblLocalCacheConnectionInfoModel struct {
 
 type DatasetCriblLocalCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1718,7 +1659,6 @@ type DatasetCriblLocalCacheConnectionInfoAPIModel struct {
 func DatasetCriblLocalCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1778,7 +1718,6 @@ func DatasetCriblLocalMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetCriblMetaCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1788,7 +1727,6 @@ type DatasetCriblMetaCacheConnectionInfoModel struct {
 
 type DatasetCriblMetaCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1799,7 +1737,6 @@ type DatasetCriblMetaCacheConnectionInfoAPIModel struct {
 func DatasetCriblMetaCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1859,7 +1796,6 @@ func DatasetCriblMetaMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetCriblSearchCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1869,7 +1805,6 @@ type DatasetCriblSearchCacheConnectionInfoModel struct {
 
 type DatasetCriblSearchCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1880,7 +1815,6 @@ type DatasetCriblSearchCacheConnectionInfoAPIModel struct {
 func DatasetCriblSearchCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -1963,7 +1897,6 @@ func DatasetGcsExtraPathsAttrTypes() map[string]attr.Type {
 
 type DatasetGcsCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -1973,7 +1906,6 @@ type DatasetGcsCacheConnectionInfoModel struct {
 
 type DatasetGcsCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -1984,7 +1916,6 @@ type DatasetGcsCacheConnectionInfoAPIModel struct {
 func DatasetGcsCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -2044,7 +1975,6 @@ func DatasetGcsMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetPrometheusCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -2054,7 +1984,6 @@ type DatasetPrometheusCacheConnectionInfoModel struct {
 
 type DatasetPrometheusCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -2065,7 +1994,6 @@ type DatasetPrometheusCacheConnectionInfoAPIModel struct {
 func DatasetPrometheusCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -2125,7 +2053,6 @@ func DatasetPrometheusMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 
 type DatasetS3CacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -2135,7 +2062,6 @@ type DatasetS3CacheConnectionInfoModel struct {
 
 type DatasetS3CacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -2146,7 +2072,6 @@ type DatasetS3CacheConnectionInfoAPIModel struct {
 func DatasetS3CacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -2281,7 +2206,6 @@ func DatasetS3PathsFiltersAttrTypes() map[string]attr.Type {
 
 type DatasetSnowflakeCacheConnectionInfoModel struct {
 	AcceleratedFields       types.List    `tfsdk:"accelerated_fields" json:"acceleratedFields,omitempty"`
-	BackfillStatus          types.String  `tfsdk:"backfill_status" json:"backfillStatus,omitempty"`
 	CacheRef                types.String  `tfsdk:"cache_ref" json:"cacheRef,omitempty"`
 	CreatedAt               types.Float64 `tfsdk:"created_at" json:"createdAt,omitempty"`
 	LakehouseConnectionType types.String  `tfsdk:"lakehouse_connection_type" json:"lakehouseConnectionType,omitempty"`
@@ -2291,7 +2215,6 @@ type DatasetSnowflakeCacheConnectionInfoModel struct {
 
 type DatasetSnowflakeCacheConnectionInfoAPIModel struct {
 	AcceleratedFields       []string `json:"acceleratedFields,omitempty"`
-	BackfillStatus          *string  `json:"backfillStatus,omitempty"`
 	CacheRef                *string  `json:"cacheRef,omitempty"`
 	CreatedAt               *float64 `json:"createdAt,omitempty"`
 	LakehouseConnectionType *string  `json:"lakehouseConnectionType,omitempty"`
@@ -2302,7 +2225,6 @@ type DatasetSnowflakeCacheConnectionInfoAPIModel struct {
 func DatasetSnowflakeCacheConnectionInfoAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"accelerated_fields":        types.ListType{ElemType: types.StringType},
-		"backfill_status":           types.StringType,
 		"cache_ref":                 types.StringType,
 		"created_at":                types.Float64Type,
 		"lakehouse_connection_type": types.StringType,
@@ -2421,6 +2343,10 @@ func SearchDatasetTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "provider_id":
+		return prefix + "provider"
 	}
 	var output strings.Builder
 	upperNext := false

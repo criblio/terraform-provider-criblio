@@ -25,27 +25,27 @@ resource "criblio_deploy" "my_deploy" {
 ### Required
 
 - `id` (String) The <code>id</code> of the target Worker Group, Outpost Group, or Edge Fleet for commit deployment.
-- `version` (String)
+- `version` (String) Commit hash to deploy to the Worker Group, Outpost Group, or Edge Fleet.
 
 ### Optional
 
-- `lookups` (Attributes List) (see [below for nested schema](#nestedatt--lookups))
+- `lookups` (Attributes List) Optional list of lookup file deployments to include with the commit deployment. (see [below for nested schema](#nestedatt--lookups))
 
 <a id="nestedatt--lookups"></a>
 ### Nested Schema for `lookups`
 
 Required:
 
-- `context` (String)
-- `lookups` (Attributes List) (see [below for nested schema](#nestedatt--lookups--lookups))
+- `context` (String) Lookup context to deploy. Use <code>cribl</code> for the default context or a Pack <code>id</code> for Pack lookups.
+- `lookups` (Attributes List) List of lookup files to deploy in this context. (see [below for nested schema](#nestedatt--lookups--lookups))
 
 <a id="nestedatt--lookups--lookups"></a>
 ### Nested Schema for `lookups.lookups`
 
 Required:
 
-- `file` (String)
-- `version` (String)
+- `file` (String) Unique identifier (file name) of the lookup to deploy.
+- `version` (String) Version of the lookup file to deploy.
 
 ## Import
 

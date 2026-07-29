@@ -98,6 +98,12 @@ func LakehouseDatasetConnectionTerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+	switch name {
+	case "lake_dataset_id":
+		return prefix + "lake_dataset_id"
+	case "lakehouse_id":
+		return prefix + "lakehouse_id"
+	}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {

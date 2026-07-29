@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"unicode"
 
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
@@ -40,6 +41,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if flattenItemsToTopLevelTypes[r.TypeName] {
 		flattenItemsListToTopLevel(attrs)
 	}
+	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" {
+		ensurePipelineConfForExport(attrs)
+	}
 	// criblio_pack: exports is an install-time parameter (RequiresReplaceIfConfigured). The API does
 	// not return it on GET so state has exports=null after import, while items[0].exports (flattened
 	// above) can be ["*"], causing destroy+recreate on every apply. Drop it from HCL config.
@@ -48,6 +52,9 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	}
 	if (r.TypeName == "criblio_routes" || r.TypeName == "criblio_pack_routes") && attrs["routes"].Kind != hcl.KindNull {
 		attrs["routes"] = normalizeRoutesForExport(attrs["routes"])
+	}
+	if r.TypeName == "criblio_destination" || r.TypeName == "criblio_pack_destination" {
+		trimRouterFilterWhitespace(attrs)
 	}
 	if r.TypeName == "criblio_appscope_config" {
 		custom.ApplyAppscopeConfigDefaults(attrs)
@@ -159,6 +166,50 @@ func normalizeRoutesForExport(routesVal hcl.Value) hcl.Value {
 		}
 	}
 	return routesVal
+}
+
+func ensurePipelineConfForExport(attrs map[string]hcl.Value) {
+	conf, ok := attrs["conf"]
+	if !ok || conf.Kind == hcl.KindNull {
+		attrs["conf"] = hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"output": {Kind: hcl.KindString, String: "default"},
+		}}
+		return
+	}
+	if conf.Kind != hcl.KindMap {
+		return
+	}
+	output, ok := conf.Map["output"]
+	if !ok || output.Kind == hcl.KindNull || (output.Kind == hcl.KindString && output.String == "") {
+		conf.Map["output"] = hcl.Value{Kind: hcl.KindString, String: "default"}
+		attrs["conf"] = conf
+	}
+}
+
+// trimRouterFilterWhitespace removes whitespace that Cribl may append to
+// router filter expressions before bulk-export emits them as configuration.
+func trimRouterFilterWhitespace(attrs map[string]hcl.Value) {
+	router, ok := attrs["output_router"]
+	if !ok || router.Kind != hcl.KindMap {
+		return
+	}
+	rules, ok := router.Map["rules"]
+	if !ok || rules.Kind != hcl.KindList {
+		return
+	}
+	for i := range rules.List {
+		if rules.List[i].Kind != hcl.KindMap {
+			continue
+		}
+		filter, ok := rules.List[i].Map["filter"]
+		if !ok || filter.Kind != hcl.KindString {
+			continue
+		}
+		filter.String = strings.TrimRightFunc(filter.String, unicode.IsSpace)
+		rules.List[i].Map["filter"] = filter
+	}
+	router.Map["rules"] = rules
+	attrs["output_router"] = router
 }
 
 func removeNullListItems(v hcl.Value) hcl.Value {

@@ -371,6 +371,14 @@ func {{ .StructName }}TerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+{{- with apiNameOverrides . }}
+	switch name {
+{{- range . }}
+	case {{ printf "%q" .TerraformName }}:
+		return prefix + {{ printf "%q" .APIName }}
+{{- end }}
+	}
+{{- end }}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {
@@ -2020,6 +2028,12 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- end }}
 {{- end }}
+{{- else if eq .ApplyStrategy "preferState" }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+			if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+				state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+			}
+		}
 {{- else }}
 {{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}

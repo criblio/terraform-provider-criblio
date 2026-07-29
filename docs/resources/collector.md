@@ -1674,6 +1674,8 @@ Optional:
 
 - `type` (String)
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
+- `destructive` (Boolean) Delete files after they are collected.
+- `encoding` (String) Character encoding used to parse collected data.
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf`
@@ -1688,6 +1690,11 @@ Optional:
 - `recurse` (Boolean)
 - `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--extractors))
 - `max_batch_size` (Integer)
+- `include_metadata` (Boolean) Include Azure Blob metadata in collected events.
+- `include_tags` (Boolean) Include Azure Blob tags in collected events.
+- `disable_time_filter` (Boolean) Disable Collector event time filtering when a date range is specified.
+- `parquet_chunk_size_mb` (Number) Maximum file size in MB for each Parquet chunk.
+- `parquet_chunk_download_timeout` (Number) Maximum time in seconds allowed to download a Parquet chunk.
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf.extractors`

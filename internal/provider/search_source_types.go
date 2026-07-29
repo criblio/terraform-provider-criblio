@@ -276,6 +276,16 @@ func SearchSourceTerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+	switch name {
+	case "cribl_api":
+		return prefix + "criblAPI"
+	case "elastic_api":
+		return prefix + "elasticAPI"
+	case "prometheus_api":
+		return prefix + "prometheusAPI"
+	case "splunk_hec_api":
+		return prefix + "splunkHecAPI"
+	}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {

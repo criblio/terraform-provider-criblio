@@ -82,9 +82,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 				Description: `Pipeline to process data before sending out to this output`,
 			},
 			"type": schema.StringAttribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Connector type identifier.`,
 			},
 
 			"output_default": schema.SingleNestedAttribute{
@@ -97,9 +98,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -124,7 +126,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"default_id": schema.StringAttribute{
@@ -145,9 +147,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -172,7 +175,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -244,14 +247,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -314,9 +319,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -361,9 +367,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -427,9 +434,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_source_expression": schema.StringAttribute{
 						Required:    false,
@@ -546,18 +554,21 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -659,6 +670,46 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 							},
 						},
 					},
+					"refresh_token_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -672,9 +723,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Webhook URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -716,9 +768,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -743,7 +796,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"keep_alive": schema.BoolAttribute{
@@ -804,14 +857,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -874,9 +929,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -910,9 +966,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"login_url": schema.StringAttribute{
 						Required:    false,
@@ -926,6 +983,46 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Sensitive:   true,
 						Description: `Secret parameter value to pass in request body`,
+					},
+					"refresh_token_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
 					},
 					"client_id": schema.StringAttribute{
 						Required:    false,
@@ -952,9 +1049,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"format": schema.StringAttribute{
 						Required: false,
@@ -1076,6 +1174,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -1114,9 +1213,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1141,7 +1241,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1183,7 +1283,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -1241,9 +1341,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Use to troubleshoot issues with sending data`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"load_balanced": schema.BoolAttribute{
 						Required:    false,
@@ -1344,9 +1445,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1494,6 +1596,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1535,7 +1638,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"host": schema.StringAttribute{
@@ -1579,9 +1682,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1673,9 +1777,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Required:    false,
@@ -1755,6 +1860,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -1782,9 +1888,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1809,7 +1916,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dns_resolve_period_sec": schema.Float64Attribute{
@@ -1859,9 +1966,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1965,9 +2073,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Required:    false,
@@ -2170,6 +2279,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -2197,9 +2307,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2224,7 +2335,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -2233,27 +2344,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
-					"next_queue": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -2356,14 +2456,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2431,9 +2533,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -2461,15 +2564,28 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"next_queue": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
+					},
+					"tcp_routing": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -2490,9 +2606,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Splunk HEC Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -2602,6 +2719,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -2616,9 +2734,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2643,20 +2762,8 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"next_queue": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -2664,9 +2771,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -2769,14 +2877,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2838,9 +2948,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -2868,11 +2979,6 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
-					"on_backpressure": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
 					"wiz_connector_id": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2883,23 +2989,43 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Your Wiz deployment environment.`,
+						Description: `Your Wiz deployment environment`,
 					},
 					"data_center": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
+						Description: `Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
 					},
 					"wiz_sourcetype": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Wiz Defend Source type`,
+					},
+					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"token": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Wiz Defend Auth token`,
+					},
+					"text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored text secret`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -2968,20 +3094,8 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
-					},
-					"token": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Sensitive:   true,
-						Description: `Wiz Defend Auth token`,
-					},
-					"text_secret": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Select or create a stored text secret`,
 					},
 				},
 			},
@@ -3022,7 +3136,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -3054,9 +3168,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -3149,9 +3264,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Required:    false,
@@ -3295,6 +3411,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -3322,9 +3439,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3349,7 +3467,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -3415,14 +3533,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -3485,9 +3605,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3521,9 +3642,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -3605,6 +3727,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -3619,9 +3742,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3646,7 +3770,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -3712,14 +3836,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -3782,9 +3908,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3818,9 +3945,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -3902,6 +4030,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -3916,9 +4045,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3943,7 +4073,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -4108,9 +4238,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -4170,14 +4301,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -4263,7 +4396,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -4533,9 +4666,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -4607,14 +4741,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -4700,7 +4836,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"container_name": schema.StringAttribute{
@@ -4888,14 +5024,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"storage_class": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Blob access tier`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -4955,14 +5093,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5082,9 +5222,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5109,7 +5250,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cluster_url": schema.StringAttribute{
@@ -5137,9 +5278,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.`,
 					},
 					"ingest_mode": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Ingestion mode`,
 					},
 					"oauth_endpoint": schema.StringAttribute{
 						Required: false,
@@ -5171,9 +5313,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `The type of OAuth 2.0 client credentials grant flow to use`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -5264,14 +5407,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5494,14 +5639,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"prefix": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Prefix (optional)`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5514,9 +5661,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5541,14 +5689,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5593,9 +5743,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -5734,6 +5885,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -5748,9 +5900,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5775,7 +5928,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_type": schema.StringAttribute{
@@ -5841,14 +5994,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -5917,9 +6072,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -5959,9 +6115,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Enter workspace ID and workspace key directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6030,6 +6187,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"workspace_id": schema.StringAttribute{
@@ -6089,7 +6247,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"stream_name": schema.StringAttribute{
@@ -6104,10 +6262,11 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -6199,14 +6358,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -6287,6 +6448,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -6301,9 +6463,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6328,7 +6491,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dataset": schema.StringAttribute{
@@ -6389,14 +6552,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -6459,9 +6624,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -6500,9 +6666,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6571,6 +6738,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"team": schema.StringAttribute{
@@ -6597,9 +6765,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6624,7 +6793,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -6722,9 +6891,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -6826,9 +6996,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -6844,9 +7015,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6915,11 +7087,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_google_chronicle": schema.SingleNestedAttribute{
+			"output_google_bigquery": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -6929,9 +7102,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6956,18 +7130,211 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"project_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Google Cloud project ID that contains the BigQuery dataset`,
+					},
+					"dataset_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `BigQuery dataset ID`,
+					},
+					"table_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `BigQuery table ID`,
+					},
+					"timestamp_column": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Column name to write event time (`_time`) as a BigQuery TIMESTAMP. Used for time partitioning",
+					},
+					"google_auth_method": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), or Secret to select or create a stored secret that references Google service account credentials`,
+					},
+					"secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Select or create a stored text secret`,
+					},
+					"flush_period": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
+					},
+					"max_queue_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of queued batches before blocking`,
+					},
+					"max_record_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size (KB) of a single append request. BigQuery limit is 10 MB`,
+					},
+					"max_in_progress": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum number of in-progress API requests before backpressure is applied`,
+					},
+					"max_send_retries": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_google_chronicle": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
@@ -7009,9 +7376,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -7040,9 +7408,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"log_format_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Send events as`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -7102,14 +7471,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7144,9 +7515,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"extra_log_types": schema.ListNestedAttribute{
 						Required:    false,
@@ -7156,14 +7528,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"log_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Log Type`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -7200,14 +7574,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -7310,6 +7686,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -7324,9 +7701,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7351,7 +7729,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -7373,9 +7751,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Google Cloud Storage service endpoint`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -7567,9 +7946,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -7629,14 +8009,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -7714,9 +8096,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7741,13 +8124,14 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_location_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log location type`,
 					},
 					"log_name_expression": schema.StringAttribute{
 						Required:    false,
@@ -7756,9 +8140,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.`,
 					},
 					"sanitize_log_names": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Validate and correct log name`,
 					},
 					"payload_format": schema.StringAttribute{
 						Required:    false,
@@ -8068,9 +8453,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"log_location_expression": schema.StringAttribute{
 						Required:    false,
@@ -8151,6 +8537,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8165,9 +8552,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8192,18 +8580,20 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"otlp_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,
@@ -8225,14 +8615,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -8296,9 +8688,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -8362,9 +8755,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"secret": schema.StringAttribute{
 						Required:    false,
@@ -8440,6 +8834,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8481,7 +8876,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_name": schema.StringAttribute{
@@ -8568,9 +8963,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -8639,6 +9035,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8653,9 +9050,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8680,7 +9078,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -8863,9 +9261,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.`,
 					},
 					"timezone_offset": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Timezone offset`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -8881,9 +9280,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: "HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.",
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Required:    false,
@@ -8948,7 +9348,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -9003,9 +9403,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -9037,9 +9438,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -9078,14 +9480,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -9116,9 +9520,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -9244,20 +9649,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -9330,14 +9738,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -9350,14 +9760,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -9370,9 +9782,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -9436,9 +9849,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Required:    false,
@@ -9519,6 +9933,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9560,7 +9975,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -9576,9 +9991,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -9681,9 +10097,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -9715,9 +10132,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -9756,14 +10174,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -9794,9 +10214,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -9922,20 +10343,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -10008,14 +10432,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -10028,14 +10454,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -10048,9 +10476,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Required:    false,
@@ -10131,6 +10560,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10172,7 +10602,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -10227,9 +10657,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -10261,9 +10692,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -10302,14 +10734,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -10340,9 +10774,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -10468,10 +10903,11 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -10527,9 +10963,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -10593,14 +11030,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -10687,6 +11126,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10701,9 +11141,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -10728,7 +11169,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -10801,14 +11242,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10865,9 +11308,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -10896,20 +11340,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"extra_params": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Extra parameters`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10920,20 +11367,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -10996,9 +11446,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -11019,9 +11470,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Bulk API URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -11118,6 +11570,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11132,9 +11585,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11159,7 +11613,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -11226,14 +11680,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11258,14 +11714,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11276,20 +11734,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -11368,9 +11829,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -11404,9 +11866,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -11475,6 +11938,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11489,9 +11953,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11516,7 +11981,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -11544,9 +12009,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    false,
@@ -11609,14 +12075,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11679,9 +12147,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -11726,9 +12195,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -11802,6 +12272,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -11829,9 +12300,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11856,7 +12328,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -11928,14 +12400,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11998,9 +12472,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -12039,9 +12514,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -12115,6 +12591,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -12142,9 +12619,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12169,7 +12647,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -12254,14 +12732,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12324,9 +12804,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -12366,9 +12847,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `InfluxDB authentication type`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"database": schema.StringAttribute{
 						Required:    false,
@@ -12455,18 +12937,21 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -12499,9 +12984,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12526,7 +13012,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_group_name": schema.StringAttribute{
@@ -12547,10 +13033,11 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -12624,14 +13111,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -12706,6 +13195,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12720,9 +13210,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12747,7 +13238,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -12987,9 +13478,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -13061,14 +13553,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -13127,9 +13621,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13154,7 +13649,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13193,9 +13688,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13287,6 +13783,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13301,9 +13798,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13328,7 +13826,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13367,9 +13865,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13461,6 +13960,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13475,9 +13975,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13502,7 +14003,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13541,9 +14042,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13635,6 +14137,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13649,9 +14152,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13676,7 +14180,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"rules": schema.ListNestedAttribute{
@@ -13714,9 +14218,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -13730,9 +14235,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13757,7 +14263,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_arn": schema.StringAttribute{
@@ -13784,10 +14290,11 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -13843,14 +14350,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -13925,6 +14434,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13966,7 +14476,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"queue_name": schema.StringAttribute{
@@ -14005,10 +14515,11 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -14088,14 +14599,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -14170,6 +14683,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14211,7 +14725,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -14242,10 +14756,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.`,
 					},
+					"enable_ip_spoofing": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Send SNMP Trap traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"max_record_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `MTU in bytes. The actual maximum SNMP Trap payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). Payloads exceeding this limit will be dropped.`,
 					},
 				},
 			},
@@ -14259,9 +14786,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14286,7 +14814,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -14365,14 +14893,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14435,9 +14965,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14477,9 +15008,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -14548,6 +15080,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14562,9 +15095,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14589,7 +15123,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"content_type": schema.StringAttribute{
@@ -14711,14 +15245,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14781,9 +15317,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14828,9 +15365,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -14904,6 +15442,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -14931,9 +15470,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14958,7 +15498,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"loki_url": schema.StringAttribute{
@@ -14992,14 +15532,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15144,14 +15686,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15214,9 +15758,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15250,9 +15795,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -15327,6 +15873,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -15341,9 +15888,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15368,7 +15916,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -15396,14 +15944,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15459,14 +16009,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15529,9 +16081,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15577,9 +16130,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -15686,11 +16240,12 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_prometheus": schema.SingleNestedAttribute{
+			"output_amazon_managed_prometheus": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -15700,9 +16255,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15727,14 +16283,64 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The endpoint to send metrics to`,
+						Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
+					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Region where the AMSP is located`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access AMSP`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"metric_rename_expr": schema.StringAttribute{
 						Required:    false,
@@ -15764,21 +16370,13 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Maximum size, in KB, of the request body`,
+						Description: `Maximum uncompressed size, in KB, of the request body. The 1 MB cap is intentional and protects against data that compresses poorly, since oversized requests fail with a non-retryable 413.`,
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
-					},
-					"reject_unauthorized": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
-        that value will take precedence.`,
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15796,18 +16394,20 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Headers to add to all events`,
+						Description: `Headers to add to all events. SigV4-managed headers and the Prometheus remote-write protocol version header are generated by this Destination and cannot be configured here.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15870,9 +16470,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15905,15 +16506,17 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Optional: true,
 						Computed: true,
 					},
-					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"metrics_flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15988,18 +16591,329 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
-					"username": schema.StringAttribute{
+				},
+			},
+			"output_prometheus": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The endpoint to send metrics to`,
+					},
+					"metric_rename_expr": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+					},
+					"send_metadata": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Generate and send metadata (`type` and `metricFamilyName`) requests",
+					},
+					"use_prometheus_histogram_bucket_suffix": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Serialize histogram bucket series as `<metric>_bucket` to match Prometheus histogram naming convention",
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"auth_type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Remote Write authentication type`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"metrics_flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+					"username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
+					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -16020,6 +16934,53 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed:    true,
 						Description: `Select or create a stored text secret`,
 					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `AWS region used to sign Remote Write requests`,
+					},
+					"aws_service": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "ID used to sign Remote Write requests (for example, `aps` for Amazon Managed Service for Prometheus)",
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Prometheus`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
 				},
 			},
 			"output_ring": schema.SingleNestedAttribute{
@@ -16032,9 +16993,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16059,7 +17021,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"format": schema.StringAttribute{
@@ -16103,9 +17065,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -16119,9 +17082,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16146,7 +17110,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -16177,9 +17141,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"http_traces_endpoint_override": schema.StringAttribute{
 						Required:    false,
@@ -16207,14 +17172,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16284,20 +17251,23 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -16420,14 +17390,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -16479,9 +17451,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -16515,9 +17488,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -16636,6 +17610,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -16650,9 +17625,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16677,7 +17653,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -16693,9 +17669,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Auth token name`,
 					},
 					"otlp_version": schema.StringAttribute{
 						Required: false,
@@ -16749,14 +17726,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16820,9 +17799,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -16846,14 +17826,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -16905,9 +17887,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -16941,9 +17924,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17062,6 +18046,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -17076,9 +18061,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17103,7 +18089,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"message_field": schema.StringAttribute{
@@ -17177,9 +18163,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -17265,14 +18252,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -17312,9 +18301,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -17388,6 +18378,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -17442,7 +18433,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -17474,9 +18465,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17566,9 +18558,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -17592,9 +18585,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Required:    false,
@@ -17738,6 +18732,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -17752,9 +18747,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17779,7 +18775,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -17794,9 +18790,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17918,14 +18915,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -17988,9 +18987,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18032,14 +19032,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -18050,9 +19052,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -18073,9 +19076,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -18172,6 +19176,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18186,9 +19191,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18213,7 +19219,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -18228,9 +19234,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -18352,14 +19359,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -18422,9 +19431,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18466,14 +19476,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -18490,9 +19502,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -18507,9 +19520,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -18606,6 +19620,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18620,9 +19635,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18647,7 +19663,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -18708,14 +19724,16 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -18788,9 +19806,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18824,9 +19843,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -18908,6 +19928,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18922,9 +19943,10 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18949,7 +19971,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -19011,14 +20033,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -19091,9 +20115,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -19127,15 +20152,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Next-Gen SIEM authentication token`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    false,
@@ -19210,6 +20237,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -19224,9 +20252,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19251,7 +20280,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -19522,9 +20551,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -19596,14 +20626,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -19689,7 +20721,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -19908,10 +20940,11 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"object_acl": schema.StringAttribute{
 						Required: false,
@@ -19988,14 +21021,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -20019,9 +21054,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -20077,9 +21113,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20104,80 +21141,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"endpoint": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
-					},
-					"enable_assume_role": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Use Assume Role credentials to access S3`,
-					},
-					"assume_role_arn": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Amazon Resource Name (ARN) of the role to assume`,
-					},
-					"assume_role_external_id": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `External ID to use when assuming role`,
-					},
-					"duration_seconds": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
-					},
-					"reuse_connections": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Reuse connections between requests, which can improve performance`,
-					},
-					"reject_unauthorized": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
-					},
-					"bucket": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: "Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
-					},
-					"region": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Region where the S3 bucket is located`,
-					},
-					"dest_path": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Lake dataset to send the data to.`,
-					},
-					"verify_permissions": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Disable if you can access files within the bucket but not the bucket itself`,
-					},
-					"max_closing_files_to_backpressure": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -20323,54 +21288,133 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							},
 						},
 					},
-					"aws_secret_key": schema.StringAttribute{
+					"storage_location_id": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Sensitive:   true,
-						Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+						Description: `Storage location that contains the target Lake dataset.`,
 					},
-					"object_acl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"storage_class": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"server_side_encryption": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"kms_key_id": schema.StringAttribute{
+					"dest_path": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
-					},
-					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Description: `Lake dataset to send the data to.`,
 					},
 					"format": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
-					"max_concurrent_file_parts": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
-					},
-					"description": schema.StringAttribute{
+					"dynamic_dataset": schema.BoolAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"max_concurrent_file_parts": schema.Float64Attribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Required:    false,
@@ -20408,9 +21452,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20435,7 +21480,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"time_window": schema.StringAttribute{
@@ -20468,9 +21513,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -20484,9 +21530,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20511,7 +21558,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -20526,9 +21573,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Required:    false,
@@ -20537,16 +21585,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `How event fields are mapped to ClickHouse columns`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Required:    false,
@@ -20560,9 +21606,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -20665,14 +21712,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -20735,9 +21784,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -20783,20 +21833,23 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -20830,9 +21883,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -20923,11 +21977,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_local_search_storage": schema.SingleNestedAttribute{
+			"output_customer_metrics_storage": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -20937,9 +21992,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20964,14 +22020,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `URL of the database instance. Example: http://localhost:8123/`,
+						Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -20979,33 +22035,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `How event fields are mapped to columns.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+						Description: `Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -21013,9 +22068,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -21118,14 +22174,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -21188,9 +22246,474 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"workload": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
+					"dump_format_errors_to_disk": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log the most recent event that fails to match the table schema`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
+					},
+					"password": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
+					},
+					"credentials_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a secret that references your credentials`,
+					},
+					"sql_username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username for certificate authentication`,
+					},
+					"wait_for_async_inserts": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.`,
+					},
+					"exclude_mapping_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to exclude from sending to ClickHouse`,
+						ElementType: types.StringType,
+					},
+					"describe_table": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
+					},
+					"column_mappings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"column_name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name of the column in ClickHouse that will store field value`,
+								},
+								"column_type": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Type of the column in the ClickHouse database`,
+								},
+								"column_value_expression": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `JavaScript expression to compute value to be inserted into ClickHouse table`,
+								},
+							},
+						},
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_local_search_storage": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `URL of the database instance. Example: http://localhost:8123/`,
+					},
+					"auth_type": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"database": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Database`,
+					},
+					"table_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+					},
+					"format": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+					},
+					"mapping_type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How event fields are mapped to columns.`,
+					},
+					"async_inserts": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
+							},
+							"servername": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+							},
+							"max_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+						},
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"compress": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Compress the payload body before sending`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21289,20 +22812,23 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -21336,9 +22862,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -21429,6 +22956,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -21443,9 +22971,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21470,7 +22999,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -21531,14 +23060,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -21601,9 +23132,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21649,9 +23181,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -21672,9 +23205,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `XSIAM Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"weight": schema.Float64Attribute{
@@ -21778,6 +23312,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -21819,7 +23354,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -21857,9 +23392,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: "Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_record_size": schema.Float64Attribute{
 						Required:    false,
@@ -21879,9 +23415,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21906,7 +23443,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -21972,14 +23509,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22042,9 +23581,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22078,9 +23618,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"format": schema.StringAttribute{
 						Required:    false,
@@ -22089,14 +23630,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `How to format events before sending. Defaults to JSON. Plaintext is not currently supported.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Endpoint`,
 					},
 					"telemetry_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Telemetry type`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Required:    false,
@@ -22105,9 +23648,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -22176,6 +23720,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"token": schema.StringAttribute{
@@ -22221,9 +23766,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22248,7 +23794,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -22304,14 +23850,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -22388,9 +23936,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Api-Token name`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -22398,9 +23947,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -22424,14 +23974,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22483,9 +24035,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22580,6 +24133,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -22594,9 +24148,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22621,20 +24176,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"region": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
-					},
-					"endpoint": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
@@ -22688,14 +24231,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22757,9 +24302,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22787,15 +24333,28 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -22967,6 +24526,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -22981,9 +24541,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23008,18 +24569,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
@@ -23061,9 +24624,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -23149,14 +24713,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -23191,9 +24757,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"ingestion_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Chronicle API ingestion method`,
 					},
 					"namespace": schema.StringAttribute{
 						Required:    false,
@@ -23233,14 +24800,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 								"rbac_enabled": schema.BoolAttribute{
 									Required:    false,
@@ -23258,9 +24827,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Required:    false,
@@ -23341,6 +24911,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -23355,9 +24926,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23382,7 +24954,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -23601,9 +25173,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -23663,14 +25236,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -23719,7 +25294,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 				},
 			},
-			"output_microsoft_fabric": schema.SingleNestedAttribute{
+			"output_snowflake_streaming": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -23729,9 +25304,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23756,7 +25332,348 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"account_identifier": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT)`,
+					},
+					"user": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake user with key-pair authentication configured`,
+					},
+					"pem": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Private key`,
+						Attributes: map[string]schema.Attribute{
+							"key_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Select the stored secret containing the RSA private key (PEM format) for Snowflake key-pair authentication`,
+							},
+						},
+					},
+					"database": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target database`,
+					},
+					"schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target schema`,
+					},
+					"table": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target table`,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override endpoint URL (for PrivateLink or custom deployments). Defaults to https://<accountIdentifier>.snowflakecomputing.com:443`,
+					},
+					"role": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake role to assume for this connection`,
+					},
+					"keep_alive": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Keep connections open between requests. Disable only if experiencing connection pooling issues.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events per request. Default is 0 (unlimited, size-gated only).`,
+					},
+					"compress": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Compress the payload body using zstd compression before sending.`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"control_request_timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Timeout in seconds for token exchange, channel open/close, and hostname discovery. Defaults to 30 seconds.`,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_microsoft_fabric": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -23848,9 +25765,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"mechanism": schema.StringAttribute{
 								Required: false,
@@ -23933,9 +25851,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -23957,9 +25876,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Bootstrap server from Fabric Eventstream's endpoint`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -24028,6 +25948,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -24042,9 +25963,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24069,14 +25991,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Required:    false,
@@ -24299,9 +26220,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -24367,14 +26289,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -24433,9 +26357,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24460,7 +26385,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -24678,9 +26603,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Nutanix Objects S3-compatible endpoint URL (example: https://objects.nutanix.local)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -24746,14 +26672,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -24812,9 +26740,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24839,7 +26768,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25051,9 +26980,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Storj S3-compatible gateway endpoint URL (example: https://gateway.storjshare.io)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25119,14 +27049,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25185,9 +27117,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25212,7 +27145,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25424,9 +27357,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `AlphaSOC S3-compatible endpoint URL (example: https://s3.alphasoc.net)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25492,14 +27426,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25558,9 +27494,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25585,7 +27522,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25808,9 +27745,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Dell PowerScale OneFS S3-compatible endpoint URL (example: https://powerscale.example.com:9021)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25876,14 +27814,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25942,9 +27882,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25969,7 +27910,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -26208,9 +28149,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -26276,14 +28218,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -26342,9 +28286,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26369,7 +28314,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -26587,9 +28532,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Scality RING S3-compatible endpoint URL (example: https://s3.scality.example.com)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -26655,14 +28601,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -26721,9 +28669,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26748,13 +28697,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Required:    false,
@@ -26964,10 +28914,35 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: "Alibaba OSS S3-compatible endpoint URL. Examples: public `https://s3.oss-{region}.aliyuncs.com`, internal `https://s3.oss-{region}-internal.aliyuncs.com`",
 					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Alibaba OSS`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ARN of the RAM role to assume. Format: acs:ram::<account-id>:role/<role-name>. Example: acs:ram::123456789:role/OSSAccessRole`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID for the assumed role (optional, for security when configured in the role trust policy)`,
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -27033,14 +29008,393 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+					},
+					"empty_dir_cleanup_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How frequently, in seconds, to clean up empty directories`,
+					},
+					"directory_batch_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+					},
+					"deadletter_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+					},
+					"max_retry_num": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+					},
+				},
+			},
+			"output_ibm_cloud_s3": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"reuse_connections": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Reuse connections between requests, which can improve performance`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+					},
+					"bucket": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Name of the destination IBM Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+					},
+					"dest_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+					},
+					"max_concurrent_file_parts": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+					},
+					"verify_permissions": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Disable if you can access files within the bucket but not the bucket itself`,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+					},
+					"stage_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+					},
+					"add_id_to_stage_path": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Add the Output ID value to staging location`,
+					},
+					"remove_empty_dirs": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Remove empty staging directories after moving files`,
+					},
+					"partition_expr": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+					},
+					"format": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"base_file_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+					},
+					"file_name_suffix": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+					},
+					"max_file_size_mb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+					},
+					"max_file_open_time_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_file_idle_time_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_open_files": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+					},
+					"header_line": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `If set, this line will be written to the beginning of each output file`,
+					},
+					"write_high_water_mark": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Buffer size used to write to a file`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"deadletter_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+					},
+					"on_disk_full_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"force_close_on_shutdown": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+					},
+					"retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+							},
+							"initial_backoff_ms": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"backoff_multiplier": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"max_backoff_ms": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"jitter_percent": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+							},
+						},
+					},
+					"orphans": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+							},
+							"period_min": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Minimum interval between reconciliation runs`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -27623,6 +29977,26 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputWebhook.OauthHeaders.IsNull() || state.OutputWebhook.OauthHeaders.IsUnknown() {
 			state.OutputWebhook.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookOauthHeadersAttrTypes()})
 		}
+		if !api.OutputWebhook.RefreshTokenField.IsNull() && !api.OutputWebhook.RefreshTokenField.IsUnknown() {
+			state.OutputWebhook.RefreshTokenField = api.OutputWebhook.RefreshTokenField
+		} else if state.OutputWebhook.RefreshTokenField.IsNull() || state.OutputWebhook.RefreshTokenField.IsUnknown() {
+			state.OutputWebhook.RefreshTokenField = types.StringNull()
+		}
+		if !api.OutputWebhook.RotateRefreshToken.IsNull() && !api.OutputWebhook.RotateRefreshToken.IsUnknown() {
+			state.OutputWebhook.RotateRefreshToken = api.OutputWebhook.RotateRefreshToken
+		} else if state.OutputWebhook.RotateRefreshToken.IsNull() || state.OutputWebhook.RotateRefreshToken.IsUnknown() {
+			state.OutputWebhook.RotateRefreshToken = types.BoolNull()
+		}
+		if !api.OutputWebhook.RefreshURL.IsNull() && !api.OutputWebhook.RefreshURL.IsUnknown() {
+			state.OutputWebhook.RefreshURL = api.OutputWebhook.RefreshURL
+		} else if state.OutputWebhook.RefreshURL.IsNull() || state.OutputWebhook.RefreshURL.IsUnknown() {
+			state.OutputWebhook.RefreshURL = types.StringNull()
+		}
+		if !api.OutputWebhook.RefreshRequestParams.IsNull() && !api.OutputWebhook.RefreshRequestParams.IsUnknown() {
+			state.OutputWebhook.RefreshRequestParams = api.OutputWebhook.RefreshRequestParams
+		} else if state.OutputWebhook.RefreshRequestParams.IsNull() || state.OutputWebhook.RefreshRequestParams.IsUnknown() {
+			state.OutputWebhook.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookRefreshRequestParamsAttrTypes()})
+		}
 		if !api.OutputWebhook.URL.IsNull() && !api.OutputWebhook.URL.IsUnknown() {
 			state.OutputWebhook.URL = api.OutputWebhook.URL
 		} else if state.OutputWebhook.URL.IsNull() || state.OutputWebhook.URL.IsUnknown() {
@@ -27777,6 +30151,26 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
 		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
 			state.OutputSentinel.Secret = types.StringNull()
+		}
+		if !api.OutputSentinel.RefreshTokenField.IsNull() && !api.OutputSentinel.RefreshTokenField.IsUnknown() {
+			state.OutputSentinel.RefreshTokenField = api.OutputSentinel.RefreshTokenField
+		} else if state.OutputSentinel.RefreshTokenField.IsNull() || state.OutputSentinel.RefreshTokenField.IsUnknown() {
+			state.OutputSentinel.RefreshTokenField = types.StringNull()
+		}
+		if !api.OutputSentinel.RotateRefreshToken.IsNull() && !api.OutputSentinel.RotateRefreshToken.IsUnknown() {
+			state.OutputSentinel.RotateRefreshToken = api.OutputSentinel.RotateRefreshToken
+		} else if state.OutputSentinel.RotateRefreshToken.IsNull() || state.OutputSentinel.RotateRefreshToken.IsUnknown() {
+			state.OutputSentinel.RotateRefreshToken = types.BoolNull()
+		}
+		if !api.OutputSentinel.RefreshURL.IsNull() && !api.OutputSentinel.RefreshURL.IsUnknown() {
+			state.OutputSentinel.RefreshURL = api.OutputSentinel.RefreshURL
+		} else if state.OutputSentinel.RefreshURL.IsNull() || state.OutputSentinel.RefreshURL.IsUnknown() {
+			state.OutputSentinel.RefreshURL = types.StringNull()
+		}
+		if !api.OutputSentinel.RefreshRequestParams.IsNull() && !api.OutputSentinel.RefreshRequestParams.IsUnknown() {
+			state.OutputSentinel.RefreshRequestParams = api.OutputSentinel.RefreshRequestParams
+		} else if state.OutputSentinel.RefreshRequestParams.IsNull() || state.OutputSentinel.RefreshRequestParams.IsUnknown() {
+			state.OutputSentinel.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()})
 		}
 		if !api.OutputSentinel.ClientID.IsNull() && !api.OutputSentinel.ClientID.IsUnknown() {
 			state.OutputSentinel.ClientID = api.OutputSentinel.ClientID
@@ -28623,16 +31017,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputSplunkHec.LoadBalanced.IsNull() || state.OutputSplunkHec.LoadBalanced.IsUnknown() {
 			state.OutputSplunkHec.LoadBalanced = types.BoolNull()
 		}
-		if !api.OutputSplunkHec.NextQueue.IsNull() && !api.OutputSplunkHec.NextQueue.IsUnknown() {
-			state.OutputSplunkHec.NextQueue = api.OutputSplunkHec.NextQueue
-		} else if state.OutputSplunkHec.NextQueue.IsNull() || state.OutputSplunkHec.NextQueue.IsUnknown() {
-			state.OutputSplunkHec.NextQueue = types.StringNull()
-		}
-		if !api.OutputSplunkHec.TcpRouting.IsNull() && !api.OutputSplunkHec.TcpRouting.IsUnknown() {
-			state.OutputSplunkHec.TcpRouting = api.OutputSplunkHec.TcpRouting
-		} else if state.OutputSplunkHec.TcpRouting.IsNull() || state.OutputSplunkHec.TcpRouting.IsUnknown() {
-			state.OutputSplunkHec.TcpRouting = types.StringNull()
-		}
 		if !api.OutputSplunkHec.TLS.IsNull() && !api.OutputSplunkHec.TLS.IsUnknown() {
 			state.OutputSplunkHec.TLS = api.OutputSplunkHec.TLS
 		} else if state.OutputSplunkHec.TLS.IsNull() || state.OutputSplunkHec.TLS.IsUnknown() {
@@ -28712,6 +31096,16 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputSplunkHec.ResponseHonorRetryAfterHeader = api.OutputSplunkHec.ResponseHonorRetryAfterHeader
 		} else if state.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSplunkHec.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSplunkHec.NextQueue.IsNull() && !api.OutputSplunkHec.NextQueue.IsUnknown() {
+			state.OutputSplunkHec.NextQueue = api.OutputSplunkHec.NextQueue
+		} else if state.OutputSplunkHec.NextQueue.IsNull() || state.OutputSplunkHec.NextQueue.IsUnknown() {
+			state.OutputSplunkHec.NextQueue = types.StringNull()
+		}
+		if !api.OutputSplunkHec.TcpRouting.IsNull() && !api.OutputSplunkHec.TcpRouting.IsUnknown() {
+			state.OutputSplunkHec.TcpRouting = api.OutputSplunkHec.TcpRouting
+		} else if state.OutputSplunkHec.TcpRouting.IsNull() || state.OutputSplunkHec.TcpRouting.IsUnknown() {
+			state.OutputSplunkHec.TcpRouting = types.StringNull()
 		}
 		if !api.OutputSplunkHec.OnBackpressure.IsNull() && !api.OutputSplunkHec.OnBackpressure.IsUnknown() {
 			state.OutputSplunkHec.OnBackpressure = api.OutputSplunkHec.OnBackpressure
@@ -28858,16 +31252,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputWizHec.Streamtags.IsNull() || state.OutputWizHec.Streamtags.IsUnknown() {
 			state.OutputWizHec.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputWizHec.NextQueue.IsNull() && !api.OutputWizHec.NextQueue.IsUnknown() {
-			state.OutputWizHec.NextQueue = api.OutputWizHec.NextQueue
-		} else if state.OutputWizHec.NextQueue.IsNull() || state.OutputWizHec.NextQueue.IsUnknown() {
-			state.OutputWizHec.NextQueue = types.StringNull()
-		}
-		if !api.OutputWizHec.TcpRouting.IsNull() && !api.OutputWizHec.TcpRouting.IsUnknown() {
-			state.OutputWizHec.TcpRouting = api.OutputWizHec.TcpRouting
-		} else if state.OutputWizHec.TcpRouting.IsNull() || state.OutputWizHec.TcpRouting.IsUnknown() {
-			state.OutputWizHec.TcpRouting = types.StringNull()
-		}
 		if !api.OutputWizHec.TLS.IsNull() && !api.OutputWizHec.TLS.IsUnknown() {
 			state.OutputWizHec.TLS = api.OutputWizHec.TLS
 		} else if state.OutputWizHec.TLS.IsNull() || state.OutputWizHec.TLS.IsUnknown() {
@@ -28943,11 +31327,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputWizHec.ResponseHonorRetryAfterHeader.IsNull() || state.OutputWizHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputWizHec.ResponseHonorRetryAfterHeader = types.BoolNull()
 		}
-		if !api.OutputWizHec.OnBackpressure.IsNull() && !api.OutputWizHec.OnBackpressure.IsUnknown() {
-			state.OutputWizHec.OnBackpressure = api.OutputWizHec.OnBackpressure
-		} else if state.OutputWizHec.OnBackpressure.IsNull() || state.OutputWizHec.OnBackpressure.IsUnknown() {
-			state.OutputWizHec.OnBackpressure = types.StringNull()
-		}
 		if !api.OutputWizHec.WizConnectorID.IsNull() && !api.OutputWizHec.WizConnectorID.IsUnknown() {
 			state.OutputWizHec.WizConnectorID = api.OutputWizHec.WizConnectorID
 		} else if state.OutputWizHec.WizConnectorID.IsNull() || state.OutputWizHec.WizConnectorID.IsUnknown() {
@@ -28968,10 +31347,25 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputWizHec.WizSourcetype.IsNull() || state.OutputWizHec.WizSourcetype.IsUnknown() {
 			state.OutputWizHec.WizSourcetype = types.StringNull()
 		}
+		if !api.OutputWizHec.OnBackpressure.IsNull() && !api.OutputWizHec.OnBackpressure.IsUnknown() {
+			state.OutputWizHec.OnBackpressure = api.OutputWizHec.OnBackpressure
+		} else if state.OutputWizHec.OnBackpressure.IsNull() || state.OutputWizHec.OnBackpressure.IsUnknown() {
+			state.OutputWizHec.OnBackpressure = types.StringNull()
+		}
 		if !api.OutputWizHec.Description.IsNull() && !api.OutputWizHec.Description.IsUnknown() {
 			state.OutputWizHec.Description = api.OutputWizHec.Description
 		} else if state.OutputWizHec.Description.IsNull() || state.OutputWizHec.Description.IsUnknown() {
 			state.OutputWizHec.Description = types.StringNull()
+		}
+		if !api.OutputWizHec.Token.IsNull() && !api.OutputWizHec.Token.IsUnknown() {
+			state.OutputWizHec.Token = stringFromAPIOrPrior(api.OutputWizHec.Token.ValueString(), state.OutputWizHec.Token)
+		} else if state.OutputWizHec.Token.IsNull() || state.OutputWizHec.Token.IsUnknown() {
+			state.OutputWizHec.Token = types.StringNull()
+		}
+		if !api.OutputWizHec.TextSecret.IsNull() && !api.OutputWizHec.TextSecret.IsUnknown() {
+			state.OutputWizHec.TextSecret = api.OutputWizHec.TextSecret
+		} else if state.OutputWizHec.TextSecret.IsNull() || state.OutputWizHec.TextSecret.IsUnknown() {
+			state.OutputWizHec.TextSecret = types.StringNull()
 		}
 		if !api.OutputWizHec.PqStrictOrdering.IsNull() && !api.OutputWizHec.PqStrictOrdering.IsUnknown() {
 			state.OutputWizHec.PqStrictOrdering = api.OutputWizHec.PqStrictOrdering
@@ -29032,16 +31426,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputWizHec.PqControls = api.OutputWizHec.PqControls
 		} else if state.OutputWizHec.PqControls.IsNull() || state.OutputWizHec.PqControls.IsUnknown() {
 			state.OutputWizHec.PqControls = types.MapNull(types.StringType)
-		}
-		if !api.OutputWizHec.Token.IsNull() && !api.OutputWizHec.Token.IsUnknown() {
-			state.OutputWizHec.Token = stringFromAPIOrPrior(api.OutputWizHec.Token.ValueString(), state.OutputWizHec.Token)
-		} else if state.OutputWizHec.Token.IsNull() || state.OutputWizHec.Token.IsUnknown() {
-			state.OutputWizHec.Token = types.StringNull()
-		}
-		if !api.OutputWizHec.TextSecret.IsNull() && !api.OutputWizHec.TextSecret.IsUnknown() {
-			state.OutputWizHec.TextSecret = api.OutputWizHec.TextSecret
-		} else if state.OutputWizHec.TextSecret.IsNull() || state.OutputWizHec.TextSecret.IsUnknown() {
-			state.OutputWizHec.TextSecret = types.StringNull()
 		}
 	}
 	if api.OutputTcpjson != nil {
@@ -31712,6 +34096,166 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputAzureEventhub.PqControls = api.OutputAzureEventhub.PqControls
 		} else if state.OutputAzureEventhub.PqControls.IsNull() || state.OutputAzureEventhub.PqControls.IsUnknown() {
 			state.OutputAzureEventhub.PqControls = types.MapNull(types.StringType)
+		}
+	}
+	if api.OutputGoogleBigquery != nil {
+		if state.OutputGoogleBigquery == nil {
+			state.OutputGoogleBigquery = &OutputGoogleBigqueryModel{}
+		}
+		if !api.OutputGoogleBigquery.ID.IsNull() && !api.OutputGoogleBigquery.ID.IsUnknown() {
+			state.OutputGoogleBigquery.ID = api.OutputGoogleBigquery.ID
+		} else if state.OutputGoogleBigquery.ID.IsNull() || state.OutputGoogleBigquery.ID.IsUnknown() {
+			state.OutputGoogleBigquery.ID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Type.IsNull() && !api.OutputGoogleBigquery.Type.IsUnknown() {
+			state.OutputGoogleBigquery.Type = api.OutputGoogleBigquery.Type
+		} else if state.OutputGoogleBigquery.Type.IsNull() || state.OutputGoogleBigquery.Type.IsUnknown() {
+			state.OutputGoogleBigquery.Type = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Pipeline.IsNull() && !api.OutputGoogleBigquery.Pipeline.IsUnknown() {
+			state.OutputGoogleBigquery.Pipeline = api.OutputGoogleBigquery.Pipeline
+		} else if state.OutputGoogleBigquery.Pipeline.IsNull() || state.OutputGoogleBigquery.Pipeline.IsUnknown() {
+			state.OutputGoogleBigquery.Pipeline = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.SystemFields.IsNull() && !api.OutputGoogleBigquery.SystemFields.IsUnknown() {
+			state.OutputGoogleBigquery.SystemFields = api.OutputGoogleBigquery.SystemFields
+		} else if state.OutputGoogleBigquery.SystemFields.IsNull() || state.OutputGoogleBigquery.SystemFields.IsUnknown() {
+			state.OutputGoogleBigquery.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleBigquery.Environment.IsNull() && !api.OutputGoogleBigquery.Environment.IsUnknown() {
+			state.OutputGoogleBigquery.Environment = api.OutputGoogleBigquery.Environment
+		} else if state.OutputGoogleBigquery.Environment.IsNull() || state.OutputGoogleBigquery.Environment.IsUnknown() {
+			state.OutputGoogleBigquery.Environment = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Streamtags.IsNull() && !api.OutputGoogleBigquery.Streamtags.IsUnknown() {
+			state.OutputGoogleBigquery.Streamtags = api.OutputGoogleBigquery.Streamtags
+		} else if state.OutputGoogleBigquery.Streamtags.IsNull() || state.OutputGoogleBigquery.Streamtags.IsUnknown() {
+			state.OutputGoogleBigquery.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleBigquery.ProjectID.IsNull() && !api.OutputGoogleBigquery.ProjectID.IsUnknown() {
+			state.OutputGoogleBigquery.ProjectID = api.OutputGoogleBigquery.ProjectID
+		} else if state.OutputGoogleBigquery.ProjectID.IsNull() || state.OutputGoogleBigquery.ProjectID.IsUnknown() {
+			state.OutputGoogleBigquery.ProjectID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.DatasetID.IsNull() && !api.OutputGoogleBigquery.DatasetID.IsUnknown() {
+			state.OutputGoogleBigquery.DatasetID = api.OutputGoogleBigquery.DatasetID
+		} else if state.OutputGoogleBigquery.DatasetID.IsNull() || state.OutputGoogleBigquery.DatasetID.IsUnknown() {
+			state.OutputGoogleBigquery.DatasetID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.TableID.IsNull() && !api.OutputGoogleBigquery.TableID.IsUnknown() {
+			state.OutputGoogleBigquery.TableID = api.OutputGoogleBigquery.TableID
+		} else if state.OutputGoogleBigquery.TableID.IsNull() || state.OutputGoogleBigquery.TableID.IsUnknown() {
+			state.OutputGoogleBigquery.TableID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.TimestampColumn.IsNull() && !api.OutputGoogleBigquery.TimestampColumn.IsUnknown() {
+			state.OutputGoogleBigquery.TimestampColumn = api.OutputGoogleBigquery.TimestampColumn
+		} else if state.OutputGoogleBigquery.TimestampColumn.IsNull() || state.OutputGoogleBigquery.TimestampColumn.IsUnknown() {
+			state.OutputGoogleBigquery.TimestampColumn = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.GoogleAuthMethod.IsNull() && !api.OutputGoogleBigquery.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleBigquery.GoogleAuthMethod = api.OutputGoogleBigquery.GoogleAuthMethod
+		} else if state.OutputGoogleBigquery.GoogleAuthMethod.IsNull() || state.OutputGoogleBigquery.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleBigquery.GoogleAuthMethod = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Secret.IsNull() && !api.OutputGoogleBigquery.Secret.IsUnknown() {
+			state.OutputGoogleBigquery.Secret = stringFromAPIOrPrior(api.OutputGoogleBigquery.Secret.ValueString(), state.OutputGoogleBigquery.Secret)
+		} else if state.OutputGoogleBigquery.Secret.IsNull() || state.OutputGoogleBigquery.Secret.IsUnknown() {
+			state.OutputGoogleBigquery.Secret = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.FlushPeriod.IsNull() && !api.OutputGoogleBigquery.FlushPeriod.IsUnknown() {
+			state.OutputGoogleBigquery.FlushPeriod = api.OutputGoogleBigquery.FlushPeriod
+		} else if state.OutputGoogleBigquery.FlushPeriod.IsNull() || state.OutputGoogleBigquery.FlushPeriod.IsUnknown() {
+			state.OutputGoogleBigquery.FlushPeriod = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxQueueSize.IsNull() && !api.OutputGoogleBigquery.MaxQueueSize.IsUnknown() {
+			state.OutputGoogleBigquery.MaxQueueSize = api.OutputGoogleBigquery.MaxQueueSize
+		} else if state.OutputGoogleBigquery.MaxQueueSize.IsNull() || state.OutputGoogleBigquery.MaxQueueSize.IsUnknown() {
+			state.OutputGoogleBigquery.MaxQueueSize = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxRecordSizeKB.IsNull() && !api.OutputGoogleBigquery.MaxRecordSizeKB.IsUnknown() {
+			state.OutputGoogleBigquery.MaxRecordSizeKB = api.OutputGoogleBigquery.MaxRecordSizeKB
+		} else if state.OutputGoogleBigquery.MaxRecordSizeKB.IsNull() || state.OutputGoogleBigquery.MaxRecordSizeKB.IsUnknown() {
+			state.OutputGoogleBigquery.MaxRecordSizeKB = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxInProgress.IsNull() && !api.OutputGoogleBigquery.MaxInProgress.IsUnknown() {
+			state.OutputGoogleBigquery.MaxInProgress = api.OutputGoogleBigquery.MaxInProgress
+		} else if state.OutputGoogleBigquery.MaxInProgress.IsNull() || state.OutputGoogleBigquery.MaxInProgress.IsUnknown() {
+			state.OutputGoogleBigquery.MaxInProgress = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxSendRetries.IsNull() && !api.OutputGoogleBigquery.MaxSendRetries.IsUnknown() {
+			state.OutputGoogleBigquery.MaxSendRetries = api.OutputGoogleBigquery.MaxSendRetries
+		} else if state.OutputGoogleBigquery.MaxSendRetries.IsNull() || state.OutputGoogleBigquery.MaxSendRetries.IsUnknown() {
+			state.OutputGoogleBigquery.MaxSendRetries = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.OnBackpressure.IsNull() && !api.OutputGoogleBigquery.OnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.OnBackpressure = api.OutputGoogleBigquery.OnBackpressure
+		} else if state.OutputGoogleBigquery.OnBackpressure.IsNull() || state.OutputGoogleBigquery.OnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Description.IsNull() && !api.OutputGoogleBigquery.Description.IsUnknown() {
+			state.OutputGoogleBigquery.Description = api.OutputGoogleBigquery.Description
+		} else if state.OutputGoogleBigquery.Description.IsNull() || state.OutputGoogleBigquery.Description.IsUnknown() {
+			state.OutputGoogleBigquery.Description = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqStrictOrdering.IsNull() && !api.OutputGoogleBigquery.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleBigquery.PqStrictOrdering = api.OutputGoogleBigquery.PqStrictOrdering
+		} else if state.OutputGoogleBigquery.PqStrictOrdering.IsNull() || state.OutputGoogleBigquery.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleBigquery.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputGoogleBigquery.PqRatePerSec.IsNull() && !api.OutputGoogleBigquery.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqRatePerSec = api.OutputGoogleBigquery.PqRatePerSec
+		} else if state.OutputGoogleBigquery.PqRatePerSec.IsNull() || state.OutputGoogleBigquery.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMode.IsNull() && !api.OutputGoogleBigquery.PqMode.IsUnknown() {
+			state.OutputGoogleBigquery.PqMode = api.OutputGoogleBigquery.PqMode
+		} else if state.OutputGoogleBigquery.PqMode.IsNull() || state.OutputGoogleBigquery.PqMode.IsUnknown() {
+			state.OutputGoogleBigquery.PqMode = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBufferSize.IsNull() && !api.OutputGoogleBigquery.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSize = api.OutputGoogleBigquery.PqMaxBufferSize
+		} else if state.OutputGoogleBigquery.PqMaxBufferSize.IsNull() || state.OutputGoogleBigquery.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBackpressureSec.IsNull() && !api.OutputGoogleBigquery.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBackpressureSec = api.OutputGoogleBigquery.PqMaxBackpressureSec
+		} else if state.OutputGoogleBigquery.PqMaxBackpressureSec.IsNull() || state.OutputGoogleBigquery.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMaxFileSize.IsNull() && !api.OutputGoogleBigquery.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxFileSize = api.OutputGoogleBigquery.PqMaxFileSize
+		} else if state.OutputGoogleBigquery.PqMaxFileSize.IsNull() || state.OutputGoogleBigquery.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxSize.IsNull() && !api.OutputGoogleBigquery.PqMaxSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxSize = api.OutputGoogleBigquery.PqMaxSize
+		} else if state.OutputGoogleBigquery.PqMaxSize.IsNull() || state.OutputGoogleBigquery.PqMaxSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqPath.IsNull() && !api.OutputGoogleBigquery.PqPath.IsUnknown() {
+			state.OutputGoogleBigquery.PqPath = api.OutputGoogleBigquery.PqPath
+		} else if state.OutputGoogleBigquery.PqPath.IsNull() || state.OutputGoogleBigquery.PqPath.IsUnknown() {
+			state.OutputGoogleBigquery.PqPath = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqCompress.IsNull() && !api.OutputGoogleBigquery.PqCompress.IsUnknown() {
+			state.OutputGoogleBigquery.PqCompress = api.OutputGoogleBigquery.PqCompress
+		} else if state.OutputGoogleBigquery.PqCompress.IsNull() || state.OutputGoogleBigquery.PqCompress.IsUnknown() {
+			state.OutputGoogleBigquery.PqCompress = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqOnBackpressure.IsNull() && !api.OutputGoogleBigquery.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.PqOnBackpressure = api.OutputGoogleBigquery.PqOnBackpressure
+		} else if state.OutputGoogleBigquery.PqOnBackpressure.IsNull() || state.OutputGoogleBigquery.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsNull() && !api.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSizeBytes = api.OutputGoogleBigquery.PqMaxBufferSizeBytes
+		} else if state.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsNull() || state.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqControls.IsNull() && !api.OutputGoogleBigquery.PqControls.IsUnknown() {
+			state.OutputGoogleBigquery.PqControls = api.OutputGoogleBigquery.PqControls
+		} else if state.OutputGoogleBigquery.PqControls.IsNull() || state.OutputGoogleBigquery.PqControls.IsUnknown() {
+			state.OutputGoogleBigquery.PqControls = types.MapNull(types.StringType)
 		}
 	}
 	if api.OutputGoogleChronicle != nil {
@@ -35943,10 +38487,10 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputRouter.Streamtags.IsNull() || state.OutputRouter.Streamtags.IsUnknown() {
 			state.OutputRouter.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
-			state.OutputRouter.Rules = api.OutputRouter.Rules
-		} else if state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown() {
-			state.OutputRouter.Rules = types.ListNull(types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()})
+		if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown())) {
+			if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
+				state.OutputRouter.Rules = api.OutputRouter.Rules
+			}
 		}
 		if !api.OutputRouter.Description.IsNull() && !api.OutputRouter.Description.IsUnknown() {
 			state.OutputRouter.Description = api.OutputRouter.Description
@@ -36388,10 +38932,20 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputSnmp.DnsResolvePeriodSec.IsNull() || state.OutputSnmp.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputSnmp.DnsResolvePeriodSec = types.Float64Null()
 		}
+		if !api.OutputSnmp.EnableIpSpoofing.IsNull() && !api.OutputSnmp.EnableIpSpoofing.IsUnknown() {
+			state.OutputSnmp.EnableIpSpoofing = api.OutputSnmp.EnableIpSpoofing
+		} else if state.OutputSnmp.EnableIpSpoofing.IsNull() || state.OutputSnmp.EnableIpSpoofing.IsUnknown() {
+			state.OutputSnmp.EnableIpSpoofing = types.BoolNull()
+		}
 		if !api.OutputSnmp.Description.IsNull() && !api.OutputSnmp.Description.IsUnknown() {
 			state.OutputSnmp.Description = api.OutputSnmp.Description
 		} else if state.OutputSnmp.Description.IsNull() || state.OutputSnmp.Description.IsUnknown() {
 			state.OutputSnmp.Description = types.StringNull()
+		}
+		if !api.OutputSnmp.MaxRecordSize.IsNull() && !api.OutputSnmp.MaxRecordSize.IsUnknown() {
+			state.OutputSnmp.MaxRecordSize = api.OutputSnmp.MaxRecordSize
+		} else if state.OutputSnmp.MaxRecordSize.IsNull() || state.OutputSnmp.MaxRecordSize.IsUnknown() {
+			state.OutputSnmp.MaxRecordSize = types.Float64Null()
 		}
 	}
 	if api.OutputSumoLogic != nil {
@@ -37299,6 +39853,241 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputLoki.PqControls = types.MapNull(types.StringType)
 		}
 	}
+	if api.OutputAmazonManagedPrometheus != nil {
+		if state.OutputAmazonManagedPrometheus == nil {
+			state.OutputAmazonManagedPrometheus = &OutputAmazonManagedPrometheusModel{}
+		}
+		if !api.OutputAmazonManagedPrometheus.ID.IsNull() && !api.OutputAmazonManagedPrometheus.ID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ID = api.OutputAmazonManagedPrometheus.ID
+		} else if state.OutputAmazonManagedPrometheus.ID.IsNull() || state.OutputAmazonManagedPrometheus.ID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ID = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Type.IsNull() && !api.OutputAmazonManagedPrometheus.Type.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Type = api.OutputAmazonManagedPrometheus.Type
+		} else if state.OutputAmazonManagedPrometheus.Type.IsNull() || state.OutputAmazonManagedPrometheus.Type.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Type = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Pipeline.IsNull() && !api.OutputAmazonManagedPrometheus.Pipeline.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Pipeline = api.OutputAmazonManagedPrometheus.Pipeline
+		} else if state.OutputAmazonManagedPrometheus.Pipeline.IsNull() || state.OutputAmazonManagedPrometheus.Pipeline.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Pipeline = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SystemFields.IsNull() && !api.OutputAmazonManagedPrometheus.SystemFields.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SystemFields = api.OutputAmazonManagedPrometheus.SystemFields
+		} else if state.OutputAmazonManagedPrometheus.SystemFields.IsNull() || state.OutputAmazonManagedPrometheus.SystemFields.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.Environment.IsNull() && !api.OutputAmazonManagedPrometheus.Environment.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Environment = api.OutputAmazonManagedPrometheus.Environment
+		} else if state.OutputAmazonManagedPrometheus.Environment.IsNull() || state.OutputAmazonManagedPrometheus.Environment.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Environment = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Streamtags.IsNull() && !api.OutputAmazonManagedPrometheus.Streamtags.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Streamtags = api.OutputAmazonManagedPrometheus.Streamtags
+		} else if state.OutputAmazonManagedPrometheus.Streamtags.IsNull() || state.OutputAmazonManagedPrometheus.Streamtags.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.URL.IsNull() && !api.OutputAmazonManagedPrometheus.URL.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.URL = api.OutputAmazonManagedPrometheus.URL
+		} else if state.OutputAmazonManagedPrometheus.URL.IsNull() || state.OutputAmazonManagedPrometheus.URL.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.URL = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsNull() && !api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod = api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod
+		} else if state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsNull() || state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsSecretKey.IsNull() && !api.OutputAmazonManagedPrometheus.AwsSecretKey.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecretKey = stringFromAPIOrPrior(api.OutputAmazonManagedPrometheus.AwsSecretKey.ValueString(), state.OutputAmazonManagedPrometheus.AwsSecretKey)
+		} else if state.OutputAmazonManagedPrometheus.AwsSecretKey.IsNull() || state.OutputAmazonManagedPrometheus.AwsSecretKey.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecretKey = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Region.IsNull() && !api.OutputAmazonManagedPrometheus.Region.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Region = api.OutputAmazonManagedPrometheus.Region
+		} else if state.OutputAmazonManagedPrometheus.Region.IsNull() || state.OutputAmazonManagedPrometheus.Region.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Region = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.RejectUnauthorized.IsNull() && !api.OutputAmazonManagedPrometheus.RejectUnauthorized.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.RejectUnauthorized = api.OutputAmazonManagedPrometheus.RejectUnauthorized
+		} else if state.OutputAmazonManagedPrometheus.RejectUnauthorized.IsNull() || state.OutputAmazonManagedPrometheus.RejectUnauthorized.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.EnableAssumeRole.IsNull() && !api.OutputAmazonManagedPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.EnableAssumeRole = api.OutputAmazonManagedPrometheus.EnableAssumeRole
+		} else if state.OutputAmazonManagedPrometheus.EnableAssumeRole.IsNull() || state.OutputAmazonManagedPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AssumeRoleArn.IsNull() && !api.OutputAmazonManagedPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleArn = api.OutputAmazonManagedPrometheus.AssumeRoleArn
+		} else if state.OutputAmazonManagedPrometheus.AssumeRoleArn.IsNull() || state.OutputAmazonManagedPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsNull() && !api.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleExternalID = api.OutputAmazonManagedPrometheus.AssumeRoleExternalID
+		} else if state.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsNull() || state.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleExternalID = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.DurationSeconds.IsNull() && !api.OutputAmazonManagedPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.DurationSeconds = api.OutputAmazonManagedPrometheus.DurationSeconds
+		} else if state.OutputAmazonManagedPrometheus.DurationSeconds.IsNull() || state.OutputAmazonManagedPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.DurationSeconds = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MetricRenameExpr.IsNull() && !api.OutputAmazonManagedPrometheus.MetricRenameExpr.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricRenameExpr = api.OutputAmazonManagedPrometheus.MetricRenameExpr
+		} else if state.OutputAmazonManagedPrometheus.MetricRenameExpr.IsNull() || state.OutputAmazonManagedPrometheus.MetricRenameExpr.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricRenameExpr = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SendMetadata.IsNull() && !api.OutputAmazonManagedPrometheus.SendMetadata.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SendMetadata = api.OutputAmazonManagedPrometheus.SendMetadata
+		} else if state.OutputAmazonManagedPrometheus.SendMetadata.IsNull() || state.OutputAmazonManagedPrometheus.SendMetadata.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SendMetadata = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsNull() && !api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix = api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix
+		} else if state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsNull() || state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Concurrency.IsNull() && !api.OutputAmazonManagedPrometheus.Concurrency.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Concurrency = api.OutputAmazonManagedPrometheus.Concurrency
+		} else if state.OutputAmazonManagedPrometheus.Concurrency.IsNull() || state.OutputAmazonManagedPrometheus.Concurrency.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Concurrency = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsNull() && !api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB = api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB
+		} else if state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsNull() || state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsNull() && !api.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadEvents = api.OutputAmazonManagedPrometheus.MaxPayloadEvents
+		} else if state.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsNull() || state.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.TimeoutSec.IsNull() && !api.OutputAmazonManagedPrometheus.TimeoutSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutSec = api.OutputAmazonManagedPrometheus.TimeoutSec
+		} else if state.OutputAmazonManagedPrometheus.TimeoutSec.IsNull() || state.OutputAmazonManagedPrometheus.TimeoutSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.FlushPeriodSec.IsNull() && !api.OutputAmazonManagedPrometheus.FlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FlushPeriodSec = api.OutputAmazonManagedPrometheus.FlushPeriodSec
+		} else if state.OutputAmazonManagedPrometheus.FlushPeriodSec.IsNull() || state.OutputAmazonManagedPrometheus.FlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsNull() && !api.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = api.OutputAmazonManagedPrometheus.ExtraHttpHeaders
+		} else if state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsNull() || state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusExtraHttpHeadersAttrTypes()})
+		}
+		if !api.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsNull() && !api.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UseRoundRobinDns = api.OutputAmazonManagedPrometheus.UseRoundRobinDns
+		} else if state.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsNull() || state.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UseRoundRobinDns = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsNull() && !api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode = api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode
+		} else if state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsNull() || state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SafeHeaders.IsNull() && !api.OutputAmazonManagedPrometheus.SafeHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SafeHeaders = api.OutputAmazonManagedPrometheus.SafeHeaders
+		} else if state.OutputAmazonManagedPrometheus.SafeHeaders.IsNull() || state.OutputAmazonManagedPrometheus.SafeHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsNull() && !api.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = api.OutputAmazonManagedPrometheus.ResponseRetrySettings
+		} else if state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsNull() || state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusResponseRetrySettingsAttrTypes()})
+		}
+		if !api.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsNull() && !api.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutRetrySettings = api.OutputAmazonManagedPrometheus.TimeoutRetrySettings
+		} else if state.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsNull() || state.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutRetrySettings = types.ObjectNull(OutputAmazonManagedPrometheusTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader = api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader
+		} else if state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsNull() || state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.OnBackpressure.IsNull() && !api.OutputAmazonManagedPrometheus.OnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.OnBackpressure = api.OutputAmazonManagedPrometheus.OnBackpressure
+		} else if state.OutputAmazonManagedPrometheus.OnBackpressure.IsNull() || state.OutputAmazonManagedPrometheus.OnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Description.IsNull() && !api.OutputAmazonManagedPrometheus.Description.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Description = api.OutputAmazonManagedPrometheus.Description
+		} else if state.OutputAmazonManagedPrometheus.Description.IsNull() || state.OutputAmazonManagedPrometheus.Description.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Description = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsSecret.IsNull() && !api.OutputAmazonManagedPrometheus.AwsSecret.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecret = api.OutputAmazonManagedPrometheus.AwsSecret
+		} else if state.OutputAmazonManagedPrometheus.AwsSecret.IsNull() || state.OutputAmazonManagedPrometheus.AwsSecret.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecret = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsNull() && !api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec = api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec
+		} else if state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsNull() || state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqStrictOrdering.IsNull() && !api.OutputAmazonManagedPrometheus.PqStrictOrdering.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqStrictOrdering = api.OutputAmazonManagedPrometheus.PqStrictOrdering
+		} else if state.OutputAmazonManagedPrometheus.PqStrictOrdering.IsNull() || state.OutputAmazonManagedPrometheus.PqStrictOrdering.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqRatePerSec.IsNull() && !api.OutputAmazonManagedPrometheus.PqRatePerSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqRatePerSec = api.OutputAmazonManagedPrometheus.PqRatePerSec
+		} else if state.OutputAmazonManagedPrometheus.PqRatePerSec.IsNull() || state.OutputAmazonManagedPrometheus.PqRatePerSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMode.IsNull() && !api.OutputAmazonManagedPrometheus.PqMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMode = api.OutputAmazonManagedPrometheus.PqMode
+		} else if state.OutputAmazonManagedPrometheus.PqMode.IsNull() || state.OutputAmazonManagedPrometheus.PqMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMode = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSize = api.OutputAmazonManagedPrometheus.PqMaxBufferSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec = api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxFileSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxFileSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxFileSize = api.OutputAmazonManagedPrometheus.PqMaxFileSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxFileSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxFileSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxSize = api.OutputAmazonManagedPrometheus.PqMaxSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqPath.IsNull() && !api.OutputAmazonManagedPrometheus.PqPath.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqPath = api.OutputAmazonManagedPrometheus.PqPath
+		} else if state.OutputAmazonManagedPrometheus.PqPath.IsNull() || state.OutputAmazonManagedPrometheus.PqPath.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqPath = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqCompress.IsNull() && !api.OutputAmazonManagedPrometheus.PqCompress.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqCompress = api.OutputAmazonManagedPrometheus.PqCompress
+		} else if state.OutputAmazonManagedPrometheus.PqCompress.IsNull() || state.OutputAmazonManagedPrometheus.PqCompress.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqCompress = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqOnBackpressure.IsNull() && !api.OutputAmazonManagedPrometheus.PqOnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqOnBackpressure = api.OutputAmazonManagedPrometheus.PqOnBackpressure
+		} else if state.OutputAmazonManagedPrometheus.PqOnBackpressure.IsNull() || state.OutputAmazonManagedPrometheus.PqOnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes = api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqControls.IsNull() && !api.OutputAmazonManagedPrometheus.PqControls.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqControls = api.OutputAmazonManagedPrometheus.PqControls
+		} else if state.OutputAmazonManagedPrometheus.PqControls.IsNull() || state.OutputAmazonManagedPrometheus.PqControls.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputPrometheus != nil {
 		if state.OutputPrometheus == nil {
 			state.OutputPrometheus = &OutputPrometheusModel{}
@@ -37522,6 +40311,46 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputPrometheus.TextSecret = api.OutputPrometheus.TextSecret
 		} else if state.OutputPrometheus.TextSecret.IsNull() || state.OutputPrometheus.TextSecret.IsUnknown() {
 			state.OutputPrometheus.TextSecret = types.StringNull()
+		}
+		if !api.OutputPrometheus.AwsAuthenticationMethod.IsNull() && !api.OutputPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputPrometheus.AwsAuthenticationMethod = api.OutputPrometheus.AwsAuthenticationMethod
+		} else if state.OutputPrometheus.AwsAuthenticationMethod.IsNull() || state.OutputPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputPrometheus.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputPrometheus.AwsSecret.IsNull() && !api.OutputPrometheus.AwsSecret.IsUnknown() {
+			state.OutputPrometheus.AwsSecret = api.OutputPrometheus.AwsSecret
+		} else if state.OutputPrometheus.AwsSecret.IsNull() || state.OutputPrometheus.AwsSecret.IsUnknown() {
+			state.OutputPrometheus.AwsSecret = types.StringNull()
+		}
+		if !api.OutputPrometheus.Region.IsNull() && !api.OutputPrometheus.Region.IsUnknown() {
+			state.OutputPrometheus.Region = api.OutputPrometheus.Region
+		} else if state.OutputPrometheus.Region.IsNull() || state.OutputPrometheus.Region.IsUnknown() {
+			state.OutputPrometheus.Region = types.StringNull()
+		}
+		if !api.OutputPrometheus.AwsService.IsNull() && !api.OutputPrometheus.AwsService.IsUnknown() {
+			state.OutputPrometheus.AwsService = api.OutputPrometheus.AwsService
+		} else if state.OutputPrometheus.AwsService.IsNull() || state.OutputPrometheus.AwsService.IsUnknown() {
+			state.OutputPrometheus.AwsService = types.StringNull()
+		}
+		if !api.OutputPrometheus.EnableAssumeRole.IsNull() && !api.OutputPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputPrometheus.EnableAssumeRole = api.OutputPrometheus.EnableAssumeRole
+		} else if state.OutputPrometheus.EnableAssumeRole.IsNull() || state.OutputPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputPrometheus.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputPrometheus.AssumeRoleArn.IsNull() && !api.OutputPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleArn = api.OutputPrometheus.AssumeRoleArn
+		} else if state.OutputPrometheus.AssumeRoleArn.IsNull() || state.OutputPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputPrometheus.AssumeRoleExternalID.IsNull() && !api.OutputPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleExternalID = api.OutputPrometheus.AssumeRoleExternalID
+		} else if state.OutputPrometheus.AssumeRoleExternalID.IsNull() || state.OutputPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleExternalID = types.StringNull()
+		}
+		if !api.OutputPrometheus.DurationSeconds.IsNull() && !api.OutputPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputPrometheus.DurationSeconds = api.OutputPrometheus.DurationSeconds
+		} else if state.OutputPrometheus.DurationSeconds.IsNull() || state.OutputPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputPrometheus.DurationSeconds = types.Float64Null()
 		}
 	}
 	if api.OutputRing != nil {
@@ -40103,66 +42932,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputCriblLake.Streamtags.IsNull() || state.OutputCriblLake.Streamtags.IsUnknown() {
 			state.OutputCriblLake.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputCriblLake.Endpoint.IsNull() && !api.OutputCriblLake.Endpoint.IsUnknown() {
-			state.OutputCriblLake.Endpoint = api.OutputCriblLake.Endpoint
-		} else if state.OutputCriblLake.Endpoint.IsNull() || state.OutputCriblLake.Endpoint.IsUnknown() {
-			state.OutputCriblLake.Endpoint = types.StringNull()
-		}
-		if !api.OutputCriblLake.EnableAssumeRole.IsNull() && !api.OutputCriblLake.EnableAssumeRole.IsUnknown() {
-			state.OutputCriblLake.EnableAssumeRole = api.OutputCriblLake.EnableAssumeRole
-		} else if state.OutputCriblLake.EnableAssumeRole.IsNull() || state.OutputCriblLake.EnableAssumeRole.IsUnknown() {
-			state.OutputCriblLake.EnableAssumeRole = types.BoolNull()
-		}
-		if !api.OutputCriblLake.AssumeRoleArn.IsNull() && !api.OutputCriblLake.AssumeRoleArn.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleArn = api.OutputCriblLake.AssumeRoleArn
-		} else if state.OutputCriblLake.AssumeRoleArn.IsNull() || state.OutputCriblLake.AssumeRoleArn.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleArn = types.StringNull()
-		}
-		if !api.OutputCriblLake.AssumeRoleExternalID.IsNull() && !api.OutputCriblLake.AssumeRoleExternalID.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleExternalID = api.OutputCriblLake.AssumeRoleExternalID
-		} else if state.OutputCriblLake.AssumeRoleExternalID.IsNull() || state.OutputCriblLake.AssumeRoleExternalID.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleExternalID = types.StringNull()
-		}
-		if !api.OutputCriblLake.DurationSeconds.IsNull() && !api.OutputCriblLake.DurationSeconds.IsUnknown() {
-			state.OutputCriblLake.DurationSeconds = api.OutputCriblLake.DurationSeconds
-		} else if state.OutputCriblLake.DurationSeconds.IsNull() || state.OutputCriblLake.DurationSeconds.IsUnknown() {
-			state.OutputCriblLake.DurationSeconds = types.Float64Null()
-		}
-		if !api.OutputCriblLake.ReuseConnections.IsNull() && !api.OutputCriblLake.ReuseConnections.IsUnknown() {
-			state.OutputCriblLake.ReuseConnections = api.OutputCriblLake.ReuseConnections
-		} else if state.OutputCriblLake.ReuseConnections.IsNull() || state.OutputCriblLake.ReuseConnections.IsUnknown() {
-			state.OutputCriblLake.ReuseConnections = types.BoolNull()
-		}
-		if !api.OutputCriblLake.RejectUnauthorized.IsNull() && !api.OutputCriblLake.RejectUnauthorized.IsUnknown() {
-			state.OutputCriblLake.RejectUnauthorized = api.OutputCriblLake.RejectUnauthorized
-		} else if state.OutputCriblLake.RejectUnauthorized.IsNull() || state.OutputCriblLake.RejectUnauthorized.IsUnknown() {
-			state.OutputCriblLake.RejectUnauthorized = types.BoolNull()
-		}
-		if !api.OutputCriblLake.Bucket.IsNull() && !api.OutputCriblLake.Bucket.IsUnknown() {
-			state.OutputCriblLake.Bucket = api.OutputCriblLake.Bucket
-		} else if state.OutputCriblLake.Bucket.IsNull() || state.OutputCriblLake.Bucket.IsUnknown() {
-			state.OutputCriblLake.Bucket = types.StringNull()
-		}
-		if !api.OutputCriblLake.Region.IsNull() && !api.OutputCriblLake.Region.IsUnknown() {
-			state.OutputCriblLake.Region = api.OutputCriblLake.Region
-		} else if state.OutputCriblLake.Region.IsNull() || state.OutputCriblLake.Region.IsUnknown() {
-			state.OutputCriblLake.Region = types.StringNull()
-		}
-		if !api.OutputCriblLake.DestPath.IsNull() && !api.OutputCriblLake.DestPath.IsUnknown() {
-			state.OutputCriblLake.DestPath = api.OutputCriblLake.DestPath
-		} else if state.OutputCriblLake.DestPath.IsNull() || state.OutputCriblLake.DestPath.IsUnknown() {
-			state.OutputCriblLake.DestPath = types.StringNull()
-		}
-		if !api.OutputCriblLake.VerifyPermissions.IsNull() && !api.OutputCriblLake.VerifyPermissions.IsUnknown() {
-			state.OutputCriblLake.VerifyPermissions = api.OutputCriblLake.VerifyPermissions
-		} else if state.OutputCriblLake.VerifyPermissions.IsNull() || state.OutputCriblLake.VerifyPermissions.IsUnknown() {
-			state.OutputCriblLake.VerifyPermissions = types.BoolNull()
-		}
-		if !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() && !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
-			state.OutputCriblLake.MaxClosingFilesToBackpressure = api.OutputCriblLake.MaxClosingFilesToBackpressure
-		} else if state.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() || state.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
-			state.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64Null()
-		}
 		if !api.OutputCriblLake.StagePath.IsNull() && !api.OutputCriblLake.StagePath.IsUnknown() {
 			state.OutputCriblLake.StagePath = api.OutputCriblLake.StagePath
 		} else if state.OutputCriblLake.StagePath.IsNull() || state.OutputCriblLake.StagePath.IsUnknown() {
@@ -40248,40 +43017,30 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputCriblLake.Orphans.IsNull() || state.OutputCriblLake.Orphans.IsUnknown() {
 			state.OutputCriblLake.Orphans = types.ObjectNull(OutputCriblLakeOrphansAttrTypes())
 		}
-		if !api.OutputCriblLake.AwsSecretKey.IsNull() && !api.OutputCriblLake.AwsSecretKey.IsUnknown() {
-			state.OutputCriblLake.AwsSecretKey = stringFromAPIOrPrior(api.OutputCriblLake.AwsSecretKey.ValueString(), state.OutputCriblLake.AwsSecretKey)
-		} else if state.OutputCriblLake.AwsSecretKey.IsNull() || state.OutputCriblLake.AwsSecretKey.IsUnknown() {
-			state.OutputCriblLake.AwsSecretKey = types.StringNull()
+		if !api.OutputCriblLake.StorageLocationID.IsNull() && !api.OutputCriblLake.StorageLocationID.IsUnknown() {
+			state.OutputCriblLake.StorageLocationID = api.OutputCriblLake.StorageLocationID
+		} else if state.OutputCriblLake.StorageLocationID.IsNull() || state.OutputCriblLake.StorageLocationID.IsUnknown() {
+			state.OutputCriblLake.StorageLocationID = types.StringNull()
 		}
-		if !api.OutputCriblLake.ObjectACL.IsNull() && !api.OutputCriblLake.ObjectACL.IsUnknown() {
-			state.OutputCriblLake.ObjectACL = api.OutputCriblLake.ObjectACL
-		} else if state.OutputCriblLake.ObjectACL.IsNull() || state.OutputCriblLake.ObjectACL.IsUnknown() {
-			state.OutputCriblLake.ObjectACL = types.StringNull()
-		}
-		if !api.OutputCriblLake.StorageClass.IsNull() && !api.OutputCriblLake.StorageClass.IsUnknown() {
-			state.OutputCriblLake.StorageClass = api.OutputCriblLake.StorageClass
-		} else if state.OutputCriblLake.StorageClass.IsNull() || state.OutputCriblLake.StorageClass.IsUnknown() {
-			state.OutputCriblLake.StorageClass = types.StringNull()
-		}
-		if !api.OutputCriblLake.ServerSideEncryption.IsNull() && !api.OutputCriblLake.ServerSideEncryption.IsUnknown() {
-			state.OutputCriblLake.ServerSideEncryption = api.OutputCriblLake.ServerSideEncryption
-		} else if state.OutputCriblLake.ServerSideEncryption.IsNull() || state.OutputCriblLake.ServerSideEncryption.IsUnknown() {
-			state.OutputCriblLake.ServerSideEncryption = types.StringNull()
-		}
-		if !api.OutputCriblLake.KmsKeyID.IsNull() && !api.OutputCriblLake.KmsKeyID.IsUnknown() {
-			state.OutputCriblLake.KmsKeyID = api.OutputCriblLake.KmsKeyID
-		} else if state.OutputCriblLake.KmsKeyID.IsNull() || state.OutputCriblLake.KmsKeyID.IsUnknown() {
-			state.OutputCriblLake.KmsKeyID = types.StringNull()
-		}
-		if !api.OutputCriblLake.AwsAuthenticationMethod.IsNull() && !api.OutputCriblLake.AwsAuthenticationMethod.IsUnknown() {
-			state.OutputCriblLake.AwsAuthenticationMethod = api.OutputCriblLake.AwsAuthenticationMethod
-		} else if state.OutputCriblLake.AwsAuthenticationMethod.IsNull() || state.OutputCriblLake.AwsAuthenticationMethod.IsUnknown() {
-			state.OutputCriblLake.AwsAuthenticationMethod = types.StringNull()
+		if !api.OutputCriblLake.DestPath.IsNull() && !api.OutputCriblLake.DestPath.IsUnknown() {
+			state.OutputCriblLake.DestPath = api.OutputCriblLake.DestPath
+		} else if state.OutputCriblLake.DestPath.IsNull() || state.OutputCriblLake.DestPath.IsUnknown() {
+			state.OutputCriblLake.DestPath = types.StringNull()
 		}
 		if !api.OutputCriblLake.Format.IsNull() && !api.OutputCriblLake.Format.IsUnknown() {
 			state.OutputCriblLake.Format = api.OutputCriblLake.Format
 		} else if state.OutputCriblLake.Format.IsNull() || state.OutputCriblLake.Format.IsUnknown() {
 			state.OutputCriblLake.Format = types.StringNull()
+		}
+		if !api.OutputCriblLake.DynamicDataset.IsNull() && !api.OutputCriblLake.DynamicDataset.IsUnknown() {
+			state.OutputCriblLake.DynamicDataset = api.OutputCriblLake.DynamicDataset
+		} else if state.OutputCriblLake.DynamicDataset.IsNull() || state.OutputCriblLake.DynamicDataset.IsUnknown() {
+			state.OutputCriblLake.DynamicDataset = types.BoolNull()
+		}
+		if !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() && !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputCriblLake.MaxClosingFilesToBackpressure = api.OutputCriblLake.MaxClosingFilesToBackpressure
+		} else if state.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() || state.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64Null()
 		}
 		if !api.OutputCriblLake.MaxConcurrentFileParts.IsNull() && !api.OutputCriblLake.MaxConcurrentFileParts.IsUnknown() {
 			state.OutputCriblLake.MaxConcurrentFileParts = api.OutputCriblLake.MaxConcurrentFileParts
@@ -40292,6 +43051,71 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputCriblLake.Description = api.OutputCriblLake.Description
 		} else if state.OutputCriblLake.Description.IsNull() || state.OutputCriblLake.Description.IsUnknown() {
 			state.OutputCriblLake.Description = types.StringNull()
+		}
+		if !api.OutputCriblLake.Compress.IsNull() && !api.OutputCriblLake.Compress.IsUnknown() {
+			state.OutputCriblLake.Compress = api.OutputCriblLake.Compress
+		} else if state.OutputCriblLake.Compress.IsNull() || state.OutputCriblLake.Compress.IsUnknown() {
+			state.OutputCriblLake.Compress = types.StringNull()
+		}
+		if !api.OutputCriblLake.CompressionLevel.IsNull() && !api.OutputCriblLake.CompressionLevel.IsUnknown() {
+			state.OutputCriblLake.CompressionLevel = api.OutputCriblLake.CompressionLevel
+		} else if state.OutputCriblLake.CompressionLevel.IsNull() || state.OutputCriblLake.CompressionLevel.IsUnknown() {
+			state.OutputCriblLake.CompressionLevel = types.StringNull()
+		}
+		if !api.OutputCriblLake.AutomaticSchema.IsNull() && !api.OutputCriblLake.AutomaticSchema.IsUnknown() {
+			state.OutputCriblLake.AutomaticSchema = api.OutputCriblLake.AutomaticSchema
+		} else if state.OutputCriblLake.AutomaticSchema.IsNull() || state.OutputCriblLake.AutomaticSchema.IsUnknown() {
+			state.OutputCriblLake.AutomaticSchema = types.BoolNull()
+		}
+		if !api.OutputCriblLake.ParquetSchema.IsNull() && !api.OutputCriblLake.ParquetSchema.IsUnknown() {
+			state.OutputCriblLake.ParquetSchema = api.OutputCriblLake.ParquetSchema
+		} else if state.OutputCriblLake.ParquetSchema.IsNull() || state.OutputCriblLake.ParquetSchema.IsUnknown() {
+			state.OutputCriblLake.ParquetSchema = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetVersion.IsNull() && !api.OutputCriblLake.ParquetVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetVersion = api.OutputCriblLake.ParquetVersion
+		} else if state.OutputCriblLake.ParquetVersion.IsNull() || state.OutputCriblLake.ParquetVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetVersion = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetDataPageVersion.IsNull() && !api.OutputCriblLake.ParquetDataPageVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetDataPageVersion = api.OutputCriblLake.ParquetDataPageVersion
+		} else if state.OutputCriblLake.ParquetDataPageVersion.IsNull() || state.OutputCriblLake.ParquetDataPageVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetDataPageVersion = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetRowGroupLength.IsNull() && !api.OutputCriblLake.ParquetRowGroupLength.IsUnknown() {
+			state.OutputCriblLake.ParquetRowGroupLength = api.OutputCriblLake.ParquetRowGroupLength
+		} else if state.OutputCriblLake.ParquetRowGroupLength.IsNull() || state.OutputCriblLake.ParquetRowGroupLength.IsUnknown() {
+			state.OutputCriblLake.ParquetRowGroupLength = types.Float64Null()
+		}
+		if !api.OutputCriblLake.ParquetPageSize.IsNull() && !api.OutputCriblLake.ParquetPageSize.IsUnknown() {
+			state.OutputCriblLake.ParquetPageSize = api.OutputCriblLake.ParquetPageSize
+		} else if state.OutputCriblLake.ParquetPageSize.IsNull() || state.OutputCriblLake.ParquetPageSize.IsUnknown() {
+			state.OutputCriblLake.ParquetPageSize = types.StringNull()
+		}
+		if !api.OutputCriblLake.ShouldLogInvalidRows.IsNull() && !api.OutputCriblLake.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputCriblLake.ShouldLogInvalidRows = api.OutputCriblLake.ShouldLogInvalidRows
+		} else if state.OutputCriblLake.ShouldLogInvalidRows.IsNull() || state.OutputCriblLake.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputCriblLake.ShouldLogInvalidRows = types.BoolNull()
+		}
+		if !api.OutputCriblLake.KeyValueMetadata.IsNull() && !api.OutputCriblLake.KeyValueMetadata.IsUnknown() {
+			state.OutputCriblLake.KeyValueMetadata = api.OutputCriblLake.KeyValueMetadata
+		} else if state.OutputCriblLake.KeyValueMetadata.IsNull() || state.OutputCriblLake.KeyValueMetadata.IsUnknown() {
+			state.OutputCriblLake.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCriblLakeKeyValueMetadataAttrTypes()})
+		}
+		if !api.OutputCriblLake.EnableStatistics.IsNull() && !api.OutputCriblLake.EnableStatistics.IsUnknown() {
+			state.OutputCriblLake.EnableStatistics = api.OutputCriblLake.EnableStatistics
+		} else if state.OutputCriblLake.EnableStatistics.IsNull() || state.OutputCriblLake.EnableStatistics.IsUnknown() {
+			state.OutputCriblLake.EnableStatistics = types.BoolNull()
+		}
+		if !api.OutputCriblLake.EnableWritePageIndex.IsNull() && !api.OutputCriblLake.EnableWritePageIndex.IsUnknown() {
+			state.OutputCriblLake.EnableWritePageIndex = api.OutputCriblLake.EnableWritePageIndex
+		} else if state.OutputCriblLake.EnableWritePageIndex.IsNull() || state.OutputCriblLake.EnableWritePageIndex.IsUnknown() {
+			state.OutputCriblLake.EnableWritePageIndex = types.BoolNull()
+		}
+		if !api.OutputCriblLake.EnablePageChecksum.IsNull() && !api.OutputCriblLake.EnablePageChecksum.IsUnknown() {
+			state.OutputCriblLake.EnablePageChecksum = api.OutputCriblLake.EnablePageChecksum
+		} else if state.OutputCriblLake.EnablePageChecksum.IsNull() || state.OutputCriblLake.EnablePageChecksum.IsUnknown() {
+			state.OutputCriblLake.EnablePageChecksum = types.BoolNull()
 		}
 		if !api.OutputCriblLake.EmptyDirCleanupSec.IsNull() && !api.OutputCriblLake.EmptyDirCleanupSec.IsUnknown() {
 			state.OutputCriblLake.EmptyDirCleanupSec = api.OutputCriblLake.EmptyDirCleanupSec
@@ -40642,6 +43466,271 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputClickHouse.PqControls = api.OutputClickHouse.PqControls
 		} else if state.OutputClickHouse.PqControls.IsNull() || state.OutputClickHouse.PqControls.IsUnknown() {
 			state.OutputClickHouse.PqControls = types.MapNull(types.StringType)
+		}
+	}
+	if api.OutputCustomerMetricsStorage != nil {
+		if state.OutputCustomerMetricsStorage == nil {
+			state.OutputCustomerMetricsStorage = &OutputCustomerMetricsStorageModel{}
+		}
+		if !api.OutputCustomerMetricsStorage.ID.IsNull() && !api.OutputCustomerMetricsStorage.ID.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ID = api.OutputCustomerMetricsStorage.ID
+		} else if state.OutputCustomerMetricsStorage.ID.IsNull() || state.OutputCustomerMetricsStorage.ID.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ID = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Type.IsNull() && !api.OutputCustomerMetricsStorage.Type.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Type = api.OutputCustomerMetricsStorage.Type
+		} else if state.OutputCustomerMetricsStorage.Type.IsNull() || state.OutputCustomerMetricsStorage.Type.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Type = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Pipeline.IsNull() && !api.OutputCustomerMetricsStorage.Pipeline.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Pipeline = api.OutputCustomerMetricsStorage.Pipeline
+		} else if state.OutputCustomerMetricsStorage.Pipeline.IsNull() || state.OutputCustomerMetricsStorage.Pipeline.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Pipeline = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SystemFields.IsNull() && !api.OutputCustomerMetricsStorage.SystemFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SystemFields = api.OutputCustomerMetricsStorage.SystemFields
+		} else if state.OutputCustomerMetricsStorage.SystemFields.IsNull() || state.OutputCustomerMetricsStorage.SystemFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.Environment.IsNull() && !api.OutputCustomerMetricsStorage.Environment.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Environment = api.OutputCustomerMetricsStorage.Environment
+		} else if state.OutputCustomerMetricsStorage.Environment.IsNull() || state.OutputCustomerMetricsStorage.Environment.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Environment = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Streamtags.IsNull() && !api.OutputCustomerMetricsStorage.Streamtags.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Streamtags = api.OutputCustomerMetricsStorage.Streamtags
+		} else if state.OutputCustomerMetricsStorage.Streamtags.IsNull() || state.OutputCustomerMetricsStorage.Streamtags.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.URL.IsNull() && !api.OutputCustomerMetricsStorage.URL.IsUnknown() {
+			state.OutputCustomerMetricsStorage.URL = api.OutputCustomerMetricsStorage.URL
+		} else if state.OutputCustomerMetricsStorage.URL.IsNull() || state.OutputCustomerMetricsStorage.URL.IsUnknown() {
+			state.OutputCustomerMetricsStorage.URL = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.AuthType.IsNull() && !api.OutputCustomerMetricsStorage.AuthType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AuthType = api.OutputCustomerMetricsStorage.AuthType
+		} else if state.OutputCustomerMetricsStorage.AuthType.IsNull() || state.OutputCustomerMetricsStorage.AuthType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AuthType = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Database.IsNull() && !api.OutputCustomerMetricsStorage.Database.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Database = api.OutputCustomerMetricsStorage.Database
+		} else if state.OutputCustomerMetricsStorage.Database.IsNull() || state.OutputCustomerMetricsStorage.Database.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Database = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TableName.IsNull() && !api.OutputCustomerMetricsStorage.TableName.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TableName = api.OutputCustomerMetricsStorage.TableName
+		} else if state.OutputCustomerMetricsStorage.TableName.IsNull() || state.OutputCustomerMetricsStorage.TableName.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TableName = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Format.IsNull() && !api.OutputCustomerMetricsStorage.Format.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Format = api.OutputCustomerMetricsStorage.Format
+		} else if state.OutputCustomerMetricsStorage.Format.IsNull() || state.OutputCustomerMetricsStorage.Format.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Format = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.MappingType.IsNull() && !api.OutputCustomerMetricsStorage.MappingType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MappingType = api.OutputCustomerMetricsStorage.MappingType
+		} else if state.OutputCustomerMetricsStorage.MappingType.IsNull() || state.OutputCustomerMetricsStorage.MappingType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MappingType = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.AsyncInserts.IsNull() && !api.OutputCustomerMetricsStorage.AsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AsyncInserts = api.OutputCustomerMetricsStorage.AsyncInserts
+		} else if state.OutputCustomerMetricsStorage.AsyncInserts.IsNull() || state.OutputCustomerMetricsStorage.AsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AsyncInserts = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TLS.IsNull() && !api.OutputCustomerMetricsStorage.TLS.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TLS = api.OutputCustomerMetricsStorage.TLS
+		} else if state.OutputCustomerMetricsStorage.TLS.IsNull() || state.OutputCustomerMetricsStorage.TLS.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TLS = types.ObjectNull(OutputCustomerMetricsStorageTLSAttrTypes())
+		}
+		if !api.OutputCustomerMetricsStorage.Concurrency.IsNull() && !api.OutputCustomerMetricsStorage.Concurrency.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Concurrency = api.OutputCustomerMetricsStorage.Concurrency
+		} else if state.OutputCustomerMetricsStorage.Concurrency.IsNull() || state.OutputCustomerMetricsStorage.Concurrency.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Concurrency = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsNull() && !api.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadSizeKB = api.OutputCustomerMetricsStorage.MaxPayloadSizeKB
+		} else if state.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsNull() || state.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.MaxPayloadEvents.IsNull() && !api.OutputCustomerMetricsStorage.MaxPayloadEvents.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadEvents = api.OutputCustomerMetricsStorage.MaxPayloadEvents
+		} else if state.OutputCustomerMetricsStorage.MaxPayloadEvents.IsNull() || state.OutputCustomerMetricsStorage.MaxPayloadEvents.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.Compress.IsNull() && !api.OutputCustomerMetricsStorage.Compress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Compress = api.OutputCustomerMetricsStorage.Compress
+		} else if state.OutputCustomerMetricsStorage.Compress.IsNull() || state.OutputCustomerMetricsStorage.Compress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Compress = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.RejectUnauthorized.IsNull() && !api.OutputCustomerMetricsStorage.RejectUnauthorized.IsUnknown() {
+			state.OutputCustomerMetricsStorage.RejectUnauthorized = api.OutputCustomerMetricsStorage.RejectUnauthorized
+		} else if state.OutputCustomerMetricsStorage.RejectUnauthorized.IsNull() || state.OutputCustomerMetricsStorage.RejectUnauthorized.IsUnknown() {
+			state.OutputCustomerMetricsStorage.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TimeoutSec.IsNull() && !api.OutputCustomerMetricsStorage.TimeoutSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutSec = api.OutputCustomerMetricsStorage.TimeoutSec
+		} else if state.OutputCustomerMetricsStorage.TimeoutSec.IsNull() || state.OutputCustomerMetricsStorage.TimeoutSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.FlushPeriodSec.IsNull() && !api.OutputCustomerMetricsStorage.FlushPeriodSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FlushPeriodSec = api.OutputCustomerMetricsStorage.FlushPeriodSec
+		} else if state.OutputCustomerMetricsStorage.FlushPeriodSec.IsNull() || state.OutputCustomerMetricsStorage.FlushPeriodSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsNull() && !api.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = api.OutputCustomerMetricsStorage.ExtraHttpHeaders
+		} else if state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsNull() || state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageExtraHttpHeadersAttrTypes()})
+		}
+		if !api.OutputCustomerMetricsStorage.UseRoundRobinDns.IsNull() && !api.OutputCustomerMetricsStorage.UseRoundRobinDns.IsUnknown() {
+			state.OutputCustomerMetricsStorage.UseRoundRobinDns = api.OutputCustomerMetricsStorage.UseRoundRobinDns
+		} else if state.OutputCustomerMetricsStorage.UseRoundRobinDns.IsNull() || state.OutputCustomerMetricsStorage.UseRoundRobinDns.IsUnknown() {
+			state.OutputCustomerMetricsStorage.UseRoundRobinDns = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsNull() && !api.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FailedRequestLoggingMode = api.OutputCustomerMetricsStorage.FailedRequestLoggingMode
+		} else if state.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsNull() || state.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SafeHeaders.IsNull() && !api.OutputCustomerMetricsStorage.SafeHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SafeHeaders = api.OutputCustomerMetricsStorage.SafeHeaders
+		} else if state.OutputCustomerMetricsStorage.SafeHeaders.IsNull() || state.OutputCustomerMetricsStorage.SafeHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.ResponseRetrySettings.IsNull() && !api.OutputCustomerMetricsStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = api.OutputCustomerMetricsStorage.ResponseRetrySettings
+		} else if state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsNull() || state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageResponseRetrySettingsAttrTypes()})
+		}
+		if !api.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsNull() && !api.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutRetrySettings = api.OutputCustomerMetricsStorage.TimeoutRetrySettings
+		} else if state.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsNull() || state.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutRetrySettings = types.ObjectNull(OutputCustomerMetricsStorageTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader = api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader
+		} else if state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsNull() || state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Workload.IsNull() && !api.OutputCustomerMetricsStorage.Workload.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Workload = api.OutputCustomerMetricsStorage.Workload
+		} else if state.OutputCustomerMetricsStorage.Workload.IsNull() || state.OutputCustomerMetricsStorage.Workload.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Workload = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsNull() && !api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk = api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk
+		} else if state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsNull() || state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.OnBackpressure.IsNull() && !api.OutputCustomerMetricsStorage.OnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.OnBackpressure = api.OutputCustomerMetricsStorage.OnBackpressure
+		} else if state.OutputCustomerMetricsStorage.OnBackpressure.IsNull() || state.OutputCustomerMetricsStorage.OnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Description.IsNull() && !api.OutputCustomerMetricsStorage.Description.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Description = api.OutputCustomerMetricsStorage.Description
+		} else if state.OutputCustomerMetricsStorage.Description.IsNull() || state.OutputCustomerMetricsStorage.Description.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Description = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Username.IsNull() && !api.OutputCustomerMetricsStorage.Username.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Username = api.OutputCustomerMetricsStorage.Username
+		} else if state.OutputCustomerMetricsStorage.Username.IsNull() || state.OutputCustomerMetricsStorage.Username.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Username = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Password.IsNull() && !api.OutputCustomerMetricsStorage.Password.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Password = stringFromAPIOrPrior(api.OutputCustomerMetricsStorage.Password.ValueString(), state.OutputCustomerMetricsStorage.Password)
+		} else if state.OutputCustomerMetricsStorage.Password.IsNull() || state.OutputCustomerMetricsStorage.Password.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Password = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.CredentialsSecret.IsNull() && !api.OutputCustomerMetricsStorage.CredentialsSecret.IsUnknown() {
+			state.OutputCustomerMetricsStorage.CredentialsSecret = api.OutputCustomerMetricsStorage.CredentialsSecret
+		} else if state.OutputCustomerMetricsStorage.CredentialsSecret.IsNull() || state.OutputCustomerMetricsStorage.CredentialsSecret.IsUnknown() {
+			state.OutputCustomerMetricsStorage.CredentialsSecret = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SqlUsername.IsNull() && !api.OutputCustomerMetricsStorage.SqlUsername.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SqlUsername = api.OutputCustomerMetricsStorage.SqlUsername
+		} else if state.OutputCustomerMetricsStorage.SqlUsername.IsNull() || state.OutputCustomerMetricsStorage.SqlUsername.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SqlUsername = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsNull() && !api.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.WaitForAsyncInserts = api.OutputCustomerMetricsStorage.WaitForAsyncInserts
+		} else if state.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsNull() || state.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.WaitForAsyncInserts = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.ExcludeMappingFields.IsNull() && !api.OutputCustomerMetricsStorage.ExcludeMappingFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExcludeMappingFields = api.OutputCustomerMetricsStorage.ExcludeMappingFields
+		} else if state.OutputCustomerMetricsStorage.ExcludeMappingFields.IsNull() || state.OutputCustomerMetricsStorage.ExcludeMappingFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExcludeMappingFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.DescribeTable.IsNull() && !api.OutputCustomerMetricsStorage.DescribeTable.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DescribeTable = api.OutputCustomerMetricsStorage.DescribeTable
+		} else if state.OutputCustomerMetricsStorage.DescribeTable.IsNull() || state.OutputCustomerMetricsStorage.DescribeTable.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DescribeTable = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.ColumnMappings.IsNull() && !api.OutputCustomerMetricsStorage.ColumnMappings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ColumnMappings = api.OutputCustomerMetricsStorage.ColumnMappings
+		} else if state.OutputCustomerMetricsStorage.ColumnMappings.IsNull() || state.OutputCustomerMetricsStorage.ColumnMappings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageColumnMappingsAttrTypes()})
+		}
+		if !api.OutputCustomerMetricsStorage.PqStrictOrdering.IsNull() && !api.OutputCustomerMetricsStorage.PqStrictOrdering.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqStrictOrdering = api.OutputCustomerMetricsStorage.PqStrictOrdering
+		} else if state.OutputCustomerMetricsStorage.PqStrictOrdering.IsNull() || state.OutputCustomerMetricsStorage.PqStrictOrdering.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqRatePerSec.IsNull() && !api.OutputCustomerMetricsStorage.PqRatePerSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqRatePerSec = api.OutputCustomerMetricsStorage.PqRatePerSec
+		} else if state.OutputCustomerMetricsStorage.PqRatePerSec.IsNull() || state.OutputCustomerMetricsStorage.PqRatePerSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMode.IsNull() && !api.OutputCustomerMetricsStorage.PqMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMode = api.OutputCustomerMetricsStorage.PqMode
+		} else if state.OutputCustomerMetricsStorage.PqMode.IsNull() || state.OutputCustomerMetricsStorage.PqMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMode = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBufferSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBufferSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSize = api.OutputCustomerMetricsStorage.PqMaxBufferSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxBufferSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBufferSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBackpressureSec = api.OutputCustomerMetricsStorage.PqMaxBackpressureSec
+		} else if state.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxFileSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxFileSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxFileSize = api.OutputCustomerMetricsStorage.PqMaxFileSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxFileSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxFileSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxSize = api.OutputCustomerMetricsStorage.PqMaxSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqPath.IsNull() && !api.OutputCustomerMetricsStorage.PqPath.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqPath = api.OutputCustomerMetricsStorage.PqPath
+		} else if state.OutputCustomerMetricsStorage.PqPath.IsNull() || state.OutputCustomerMetricsStorage.PqPath.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqPath = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqCompress.IsNull() && !api.OutputCustomerMetricsStorage.PqCompress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqCompress = api.OutputCustomerMetricsStorage.PqCompress
+		} else if state.OutputCustomerMetricsStorage.PqCompress.IsNull() || state.OutputCustomerMetricsStorage.PqCompress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqCompress = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqOnBackpressure.IsNull() && !api.OutputCustomerMetricsStorage.PqOnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqOnBackpressure = api.OutputCustomerMetricsStorage.PqOnBackpressure
+		} else if state.OutputCustomerMetricsStorage.PqOnBackpressure.IsNull() || state.OutputCustomerMetricsStorage.PqOnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes = api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes
+		} else if state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqControls.IsNull() && !api.OutputCustomerMetricsStorage.PqControls.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqControls = api.OutputCustomerMetricsStorage.PqControls
+		} else if state.OutputCustomerMetricsStorage.PqControls.IsNull() || state.OutputCustomerMetricsStorage.PqControls.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqControls = types.MapNull(types.StringType)
 		}
 	}
 	if api.OutputLocalSearchStorage != nil {
@@ -41723,16 +44812,6 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputSentinelOneAiSiem.Streamtags.IsNull() || state.OutputSentinelOneAiSiem.Streamtags.IsUnknown() {
 			state.OutputSentinelOneAiSiem.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputSentinelOneAiSiem.Region.IsNull() && !api.OutputSentinelOneAiSiem.Region.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Region = api.OutputSentinelOneAiSiem.Region
-		} else if state.OutputSentinelOneAiSiem.Region.IsNull() || state.OutputSentinelOneAiSiem.Region.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Region = types.StringNull()
-		}
-		if !api.OutputSentinelOneAiSiem.Endpoint.IsNull() && !api.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Endpoint = api.OutputSentinelOneAiSiem.Endpoint
-		} else if state.OutputSentinelOneAiSiem.Endpoint.IsNull() || state.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
-		}
 		if !api.OutputSentinelOneAiSiem.Concurrency.IsNull() && !api.OutputSentinelOneAiSiem.Concurrency.IsUnknown() {
 			state.OutputSentinelOneAiSiem.Concurrency = api.OutputSentinelOneAiSiem.Concurrency
 		} else if state.OutputSentinelOneAiSiem.Concurrency.IsNull() || state.OutputSentinelOneAiSiem.Concurrency.IsUnknown() {
@@ -41802,6 +44881,16 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = api.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader
 		} else if state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSentinelOneAiSiem.Region.IsNull() && !api.OutputSentinelOneAiSiem.Region.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Region = api.OutputSentinelOneAiSiem.Region
+		} else if state.OutputSentinelOneAiSiem.Region.IsNull() || state.OutputSentinelOneAiSiem.Region.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Region = types.StringNull()
+		}
+		if !api.OutputSentinelOneAiSiem.Endpoint.IsNull() && !api.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Endpoint = api.OutputSentinelOneAiSiem.Endpoint
+		} else if state.OutputSentinelOneAiSiem.Endpoint.IsNull() || state.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
 		}
 		if !api.OutputSentinelOneAiSiem.OnBackpressure.IsNull() && !api.OutputSentinelOneAiSiem.OnBackpressure.IsUnknown() {
 			state.OutputSentinelOneAiSiem.OnBackpressure = api.OutputSentinelOneAiSiem.OnBackpressure
@@ -42472,6 +45561,226 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputDatabricks.MaxRetryNum = api.OutputDatabricks.MaxRetryNum
 		} else if state.OutputDatabricks.MaxRetryNum.IsNull() || state.OutputDatabricks.MaxRetryNum.IsUnknown() {
 			state.OutputDatabricks.MaxRetryNum = types.Float64Null()
+		}
+	}
+	if api.OutputSnowflakeStreaming != nil {
+		if state.OutputSnowflakeStreaming == nil {
+			state.OutputSnowflakeStreaming = &OutputSnowflakeStreamingModel{}
+		}
+		if !api.OutputSnowflakeStreaming.ID.IsNull() && !api.OutputSnowflakeStreaming.ID.IsUnknown() {
+			state.OutputSnowflakeStreaming.ID = api.OutputSnowflakeStreaming.ID
+		} else if state.OutputSnowflakeStreaming.ID.IsNull() || state.OutputSnowflakeStreaming.ID.IsUnknown() {
+			state.OutputSnowflakeStreaming.ID = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Type.IsNull() && !api.OutputSnowflakeStreaming.Type.IsUnknown() {
+			state.OutputSnowflakeStreaming.Type = api.OutputSnowflakeStreaming.Type
+		} else if state.OutputSnowflakeStreaming.Type.IsNull() || state.OutputSnowflakeStreaming.Type.IsUnknown() {
+			state.OutputSnowflakeStreaming.Type = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Pipeline.IsNull() && !api.OutputSnowflakeStreaming.Pipeline.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pipeline = api.OutputSnowflakeStreaming.Pipeline
+		} else if state.OutputSnowflakeStreaming.Pipeline.IsNull() || state.OutputSnowflakeStreaming.Pipeline.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pipeline = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.SystemFields.IsNull() && !api.OutputSnowflakeStreaming.SystemFields.IsUnknown() {
+			state.OutputSnowflakeStreaming.SystemFields = api.OutputSnowflakeStreaming.SystemFields
+		} else if state.OutputSnowflakeStreaming.SystemFields.IsNull() || state.OutputSnowflakeStreaming.SystemFields.IsUnknown() {
+			state.OutputSnowflakeStreaming.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.Environment.IsNull() && !api.OutputSnowflakeStreaming.Environment.IsUnknown() {
+			state.OutputSnowflakeStreaming.Environment = api.OutputSnowflakeStreaming.Environment
+		} else if state.OutputSnowflakeStreaming.Environment.IsNull() || state.OutputSnowflakeStreaming.Environment.IsUnknown() {
+			state.OutputSnowflakeStreaming.Environment = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Streamtags.IsNull() && !api.OutputSnowflakeStreaming.Streamtags.IsUnknown() {
+			state.OutputSnowflakeStreaming.Streamtags = api.OutputSnowflakeStreaming.Streamtags
+		} else if state.OutputSnowflakeStreaming.Streamtags.IsNull() || state.OutputSnowflakeStreaming.Streamtags.IsUnknown() {
+			state.OutputSnowflakeStreaming.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.AccountIDentifier.IsNull() && !api.OutputSnowflakeStreaming.AccountIDentifier.IsUnknown() {
+			state.OutputSnowflakeStreaming.AccountIDentifier = api.OutputSnowflakeStreaming.AccountIDentifier
+		} else if state.OutputSnowflakeStreaming.AccountIDentifier.IsNull() || state.OutputSnowflakeStreaming.AccountIDentifier.IsUnknown() {
+			state.OutputSnowflakeStreaming.AccountIDentifier = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.User.IsNull() && !api.OutputSnowflakeStreaming.User.IsUnknown() {
+			state.OutputSnowflakeStreaming.User = api.OutputSnowflakeStreaming.User
+		} else if state.OutputSnowflakeStreaming.User.IsNull() || state.OutputSnowflakeStreaming.User.IsUnknown() {
+			state.OutputSnowflakeStreaming.User = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Pem.IsNull() && !api.OutputSnowflakeStreaming.Pem.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pem = api.OutputSnowflakeStreaming.Pem
+		} else if state.OutputSnowflakeStreaming.Pem.IsNull() || state.OutputSnowflakeStreaming.Pem.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pem = types.ObjectNull(OutputSnowflakeStreamingPemAttrTypes())
+		}
+		if !api.OutputSnowflakeStreaming.Database.IsNull() && !api.OutputSnowflakeStreaming.Database.IsUnknown() {
+			state.OutputSnowflakeStreaming.Database = api.OutputSnowflakeStreaming.Database
+		} else if state.OutputSnowflakeStreaming.Database.IsNull() || state.OutputSnowflakeStreaming.Database.IsUnknown() {
+			state.OutputSnowflakeStreaming.Database = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Schema.IsNull() && !api.OutputSnowflakeStreaming.Schema.IsUnknown() {
+			state.OutputSnowflakeStreaming.Schema = api.OutputSnowflakeStreaming.Schema
+		} else if state.OutputSnowflakeStreaming.Schema.IsNull() || state.OutputSnowflakeStreaming.Schema.IsUnknown() {
+			state.OutputSnowflakeStreaming.Schema = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Table.IsNull() && !api.OutputSnowflakeStreaming.Table.IsUnknown() {
+			state.OutputSnowflakeStreaming.Table = api.OutputSnowflakeStreaming.Table
+		} else if state.OutputSnowflakeStreaming.Table.IsNull() || state.OutputSnowflakeStreaming.Table.IsUnknown() {
+			state.OutputSnowflakeStreaming.Table = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.URL.IsNull() && !api.OutputSnowflakeStreaming.URL.IsUnknown() {
+			state.OutputSnowflakeStreaming.URL = api.OutputSnowflakeStreaming.URL
+		} else if state.OutputSnowflakeStreaming.URL.IsNull() || state.OutputSnowflakeStreaming.URL.IsUnknown() {
+			state.OutputSnowflakeStreaming.URL = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Role.IsNull() && !api.OutputSnowflakeStreaming.Role.IsUnknown() {
+			state.OutputSnowflakeStreaming.Role = api.OutputSnowflakeStreaming.Role
+		} else if state.OutputSnowflakeStreaming.Role.IsNull() || state.OutputSnowflakeStreaming.Role.IsUnknown() {
+			state.OutputSnowflakeStreaming.Role = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.KeepAlive.IsNull() && !api.OutputSnowflakeStreaming.KeepAlive.IsUnknown() {
+			state.OutputSnowflakeStreaming.KeepAlive = api.OutputSnowflakeStreaming.KeepAlive
+		} else if state.OutputSnowflakeStreaming.KeepAlive.IsNull() || state.OutputSnowflakeStreaming.KeepAlive.IsUnknown() {
+			state.OutputSnowflakeStreaming.KeepAlive = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.Concurrency.IsNull() && !api.OutputSnowflakeStreaming.Concurrency.IsUnknown() {
+			state.OutputSnowflakeStreaming.Concurrency = api.OutputSnowflakeStreaming.Concurrency
+		} else if state.OutputSnowflakeStreaming.Concurrency.IsNull() || state.OutputSnowflakeStreaming.Concurrency.IsUnknown() {
+			state.OutputSnowflakeStreaming.Concurrency = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsNull() && !api.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadSizeKB = api.OutputSnowflakeStreaming.MaxPayloadSizeKB
+		} else if state.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsNull() || state.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.MaxPayloadEvents.IsNull() && !api.OutputSnowflakeStreaming.MaxPayloadEvents.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadEvents = api.OutputSnowflakeStreaming.MaxPayloadEvents
+		} else if state.OutputSnowflakeStreaming.MaxPayloadEvents.IsNull() || state.OutputSnowflakeStreaming.MaxPayloadEvents.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.Compress.IsNull() && !api.OutputSnowflakeStreaming.Compress.IsUnknown() {
+			state.OutputSnowflakeStreaming.Compress = api.OutputSnowflakeStreaming.Compress
+		} else if state.OutputSnowflakeStreaming.Compress.IsNull() || state.OutputSnowflakeStreaming.Compress.IsUnknown() {
+			state.OutputSnowflakeStreaming.Compress = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.RejectUnauthorized.IsNull() && !api.OutputSnowflakeStreaming.RejectUnauthorized.IsUnknown() {
+			state.OutputSnowflakeStreaming.RejectUnauthorized = api.OutputSnowflakeStreaming.RejectUnauthorized
+		} else if state.OutputSnowflakeStreaming.RejectUnauthorized.IsNull() || state.OutputSnowflakeStreaming.RejectUnauthorized.IsUnknown() {
+			state.OutputSnowflakeStreaming.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.TimeoutSec.IsNull() && !api.OutputSnowflakeStreaming.TimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutSec = api.OutputSnowflakeStreaming.TimeoutSec
+		} else if state.OutputSnowflakeStreaming.TimeoutSec.IsNull() || state.OutputSnowflakeStreaming.TimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.FlushPeriodSec.IsNull() && !api.OutputSnowflakeStreaming.FlushPeriodSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.FlushPeriodSec = api.OutputSnowflakeStreaming.FlushPeriodSec
+		} else if state.OutputSnowflakeStreaming.FlushPeriodSec.IsNull() || state.OutputSnowflakeStreaming.FlushPeriodSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.ExtraHttpHeaders.IsNull() && !api.OutputSnowflakeStreaming.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = api.OutputSnowflakeStreaming.ExtraHttpHeaders
+		} else if state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsNull() || state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingExtraHttpHeadersAttrTypes()})
+		}
+		if !api.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsNull() && !api.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.FailedRequestLoggingMode = api.OutputSnowflakeStreaming.FailedRequestLoggingMode
+		} else if state.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsNull() || state.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.SafeHeaders.IsNull() && !api.OutputSnowflakeStreaming.SafeHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.SafeHeaders = api.OutputSnowflakeStreaming.SafeHeaders
+		} else if state.OutputSnowflakeStreaming.SafeHeaders.IsNull() || state.OutputSnowflakeStreaming.SafeHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsNull() && !api.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.ControlRequestTimeoutSec = api.OutputSnowflakeStreaming.ControlRequestTimeoutSec
+		} else if state.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsNull() || state.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.ControlRequestTimeoutSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.ResponseRetrySettings.IsNull() && !api.OutputSnowflakeStreaming.ResponseRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = api.OutputSnowflakeStreaming.ResponseRetrySettings
+		} else if state.OutputSnowflakeStreaming.ResponseRetrySettings.IsNull() || state.OutputSnowflakeStreaming.ResponseRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingResponseRetrySettingsAttrTypes()})
+		}
+		if !api.OutputSnowflakeStreaming.TimeoutRetrySettings.IsNull() && !api.OutputSnowflakeStreaming.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutRetrySettings = api.OutputSnowflakeStreaming.TimeoutRetrySettings
+		} else if state.OutputSnowflakeStreaming.TimeoutRetrySettings.IsNull() || state.OutputSnowflakeStreaming.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutRetrySettings = types.ObjectNull(OutputSnowflakeStreamingTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader = api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader
+		} else if state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.OnBackpressure.IsNull() && !api.OutputSnowflakeStreaming.OnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.OnBackpressure = api.OutputSnowflakeStreaming.OnBackpressure
+		} else if state.OutputSnowflakeStreaming.OnBackpressure.IsNull() || state.OutputSnowflakeStreaming.OnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Description.IsNull() && !api.OutputSnowflakeStreaming.Description.IsUnknown() {
+			state.OutputSnowflakeStreaming.Description = api.OutputSnowflakeStreaming.Description
+		} else if state.OutputSnowflakeStreaming.Description.IsNull() || state.OutputSnowflakeStreaming.Description.IsUnknown() {
+			state.OutputSnowflakeStreaming.Description = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqStrictOrdering.IsNull() && !api.OutputSnowflakeStreaming.PqStrictOrdering.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqStrictOrdering = api.OutputSnowflakeStreaming.PqStrictOrdering
+		} else if state.OutputSnowflakeStreaming.PqStrictOrdering.IsNull() || state.OutputSnowflakeStreaming.PqStrictOrdering.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqRatePerSec.IsNull() && !api.OutputSnowflakeStreaming.PqRatePerSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqRatePerSec = api.OutputSnowflakeStreaming.PqRatePerSec
+		} else if state.OutputSnowflakeStreaming.PqRatePerSec.IsNull() || state.OutputSnowflakeStreaming.PqRatePerSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMode.IsNull() && !api.OutputSnowflakeStreaming.PqMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMode = api.OutputSnowflakeStreaming.PqMode
+		} else if state.OutputSnowflakeStreaming.PqMode.IsNull() || state.OutputSnowflakeStreaming.PqMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMode = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBufferSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBufferSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSize = api.OutputSnowflakeStreaming.PqMaxBufferSize
+		} else if state.OutputSnowflakeStreaming.PqMaxBufferSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxBufferSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBackpressureSec = api.OutputSnowflakeStreaming.PqMaxBackpressureSec
+		} else if state.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsNull() || state.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxFileSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxFileSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxFileSize = api.OutputSnowflakeStreaming.PqMaxFileSize
+		} else if state.OutputSnowflakeStreaming.PqMaxFileSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxFileSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxSize = api.OutputSnowflakeStreaming.PqMaxSize
+		} else if state.OutputSnowflakeStreaming.PqMaxSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqPath.IsNull() && !api.OutputSnowflakeStreaming.PqPath.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqPath = api.OutputSnowflakeStreaming.PqPath
+		} else if state.OutputSnowflakeStreaming.PqPath.IsNull() || state.OutputSnowflakeStreaming.PqPath.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqPath = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqCompress.IsNull() && !api.OutputSnowflakeStreaming.PqCompress.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqCompress = api.OutputSnowflakeStreaming.PqCompress
+		} else if state.OutputSnowflakeStreaming.PqCompress.IsNull() || state.OutputSnowflakeStreaming.PqCompress.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqCompress = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqOnBackpressure.IsNull() && !api.OutputSnowflakeStreaming.PqOnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqOnBackpressure = api.OutputSnowflakeStreaming.PqOnBackpressure
+		} else if state.OutputSnowflakeStreaming.PqOnBackpressure.IsNull() || state.OutputSnowflakeStreaming.PqOnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes = api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes
+		} else if state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsNull() || state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqControls.IsNull() && !api.OutputSnowflakeStreaming.PqControls.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqControls = api.OutputSnowflakeStreaming.PqControls
+		} else if state.OutputSnowflakeStreaming.PqControls.IsNull() || state.OutputSnowflakeStreaming.PqControls.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqControls = types.MapNull(types.StringType)
 		}
 	}
 	if api.OutputMicrosoftFabric != nil {
@@ -44793,6 +48102,26 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		} else if state.OutputAlibabaCloudS3.Endpoint.IsNull() || state.OutputAlibabaCloudS3.Endpoint.IsUnknown() {
 			state.OutputAlibabaCloudS3.Endpoint = types.StringNull()
 		}
+		if !api.OutputAlibabaCloudS3.EnableAssumeRole.IsNull() && !api.OutputAlibabaCloudS3.EnableAssumeRole.IsUnknown() {
+			state.OutputAlibabaCloudS3.EnableAssumeRole = api.OutputAlibabaCloudS3.EnableAssumeRole
+		} else if state.OutputAlibabaCloudS3.EnableAssumeRole.IsNull() || state.OutputAlibabaCloudS3.EnableAssumeRole.IsUnknown() {
+			state.OutputAlibabaCloudS3.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputAlibabaCloudS3.DurationSeconds.IsNull() && !api.OutputAlibabaCloudS3.DurationSeconds.IsUnknown() {
+			state.OutputAlibabaCloudS3.DurationSeconds = api.OutputAlibabaCloudS3.DurationSeconds
+		} else if state.OutputAlibabaCloudS3.DurationSeconds.IsNull() || state.OutputAlibabaCloudS3.DurationSeconds.IsUnknown() {
+			state.OutputAlibabaCloudS3.DurationSeconds = types.Float64Null()
+		}
+		if !api.OutputAlibabaCloudS3.AssumeRoleArn.IsNull() && !api.OutputAlibabaCloudS3.AssumeRoleArn.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleArn = api.OutputAlibabaCloudS3.AssumeRoleArn
+		} else if state.OutputAlibabaCloudS3.AssumeRoleArn.IsNull() || state.OutputAlibabaCloudS3.AssumeRoleArn.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputAlibabaCloudS3.AssumeRoleExternalID.IsNull() && !api.OutputAlibabaCloudS3.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleExternalID = api.OutputAlibabaCloudS3.AssumeRoleExternalID
+		} else if state.OutputAlibabaCloudS3.AssumeRoleExternalID.IsNull() || state.OutputAlibabaCloudS3.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleExternalID = types.StringNull()
+		}
 		if !api.OutputAlibabaCloudS3.Description.IsNull() && !api.OutputAlibabaCloudS3.Description.IsUnknown() {
 			state.OutputAlibabaCloudS3.Description = api.OutputAlibabaCloudS3.Description
 		} else if state.OutputAlibabaCloudS3.Description.IsNull() || state.OutputAlibabaCloudS3.Description.IsUnknown() {
@@ -44887,6 +48216,276 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputAlibabaCloudS3.MaxRetryNum = api.OutputAlibabaCloudS3.MaxRetryNum
 		} else if state.OutputAlibabaCloudS3.MaxRetryNum.IsNull() || state.OutputAlibabaCloudS3.MaxRetryNum.IsUnknown() {
 			state.OutputAlibabaCloudS3.MaxRetryNum = types.Float64Null()
+		}
+	}
+	if api.OutputIbmCloudS3 != nil {
+		if state.OutputIbmCloudS3 == nil {
+			state.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
+		}
+		if !api.OutputIbmCloudS3.ID.IsNull() && !api.OutputIbmCloudS3.ID.IsUnknown() {
+			state.OutputIbmCloudS3.ID = api.OutputIbmCloudS3.ID
+		} else if state.OutputIbmCloudS3.ID.IsNull() || state.OutputIbmCloudS3.ID.IsUnknown() {
+			state.OutputIbmCloudS3.ID = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Type.IsNull() && !api.OutputIbmCloudS3.Type.IsUnknown() {
+			state.OutputIbmCloudS3.Type = api.OutputIbmCloudS3.Type
+		} else if state.OutputIbmCloudS3.Type.IsNull() || state.OutputIbmCloudS3.Type.IsUnknown() {
+			state.OutputIbmCloudS3.Type = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Pipeline.IsNull() && !api.OutputIbmCloudS3.Pipeline.IsUnknown() {
+			state.OutputIbmCloudS3.Pipeline = api.OutputIbmCloudS3.Pipeline
+		} else if state.OutputIbmCloudS3.Pipeline.IsNull() || state.OutputIbmCloudS3.Pipeline.IsUnknown() {
+			state.OutputIbmCloudS3.Pipeline = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.SystemFields.IsNull() && !api.OutputIbmCloudS3.SystemFields.IsUnknown() {
+			state.OutputIbmCloudS3.SystemFields = api.OutputIbmCloudS3.SystemFields
+		} else if state.OutputIbmCloudS3.SystemFields.IsNull() || state.OutputIbmCloudS3.SystemFields.IsUnknown() {
+			state.OutputIbmCloudS3.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputIbmCloudS3.Environment.IsNull() && !api.OutputIbmCloudS3.Environment.IsUnknown() {
+			state.OutputIbmCloudS3.Environment = api.OutputIbmCloudS3.Environment
+		} else if state.OutputIbmCloudS3.Environment.IsNull() || state.OutputIbmCloudS3.Environment.IsUnknown() {
+			state.OutputIbmCloudS3.Environment = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Streamtags.IsNull() && !api.OutputIbmCloudS3.Streamtags.IsUnknown() {
+			state.OutputIbmCloudS3.Streamtags = api.OutputIbmCloudS3.Streamtags
+		} else if state.OutputIbmCloudS3.Streamtags.IsNull() || state.OutputIbmCloudS3.Streamtags.IsUnknown() {
+			state.OutputIbmCloudS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputIbmCloudS3.Endpoint.IsNull() && !api.OutputIbmCloudS3.Endpoint.IsUnknown() {
+			state.OutputIbmCloudS3.Endpoint = api.OutputIbmCloudS3.Endpoint
+		} else if state.OutputIbmCloudS3.Endpoint.IsNull() || state.OutputIbmCloudS3.Endpoint.IsUnknown() {
+			state.OutputIbmCloudS3.Endpoint = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AwsAuthenticationMethod.IsNull() && !api.OutputIbmCloudS3.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputIbmCloudS3.AwsAuthenticationMethod = api.OutputIbmCloudS3.AwsAuthenticationMethod
+		} else if state.OutputIbmCloudS3.AwsAuthenticationMethod.IsNull() || state.OutputIbmCloudS3.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputIbmCloudS3.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ReuseConnections.IsNull() && !api.OutputIbmCloudS3.ReuseConnections.IsUnknown() {
+			state.OutputIbmCloudS3.ReuseConnections = api.OutputIbmCloudS3.ReuseConnections
+		} else if state.OutputIbmCloudS3.ReuseConnections.IsNull() || state.OutputIbmCloudS3.ReuseConnections.IsUnknown() {
+			state.OutputIbmCloudS3.ReuseConnections = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RejectUnauthorized.IsNull() && !api.OutputIbmCloudS3.RejectUnauthorized.IsUnknown() {
+			state.OutputIbmCloudS3.RejectUnauthorized = api.OutputIbmCloudS3.RejectUnauthorized
+		} else if state.OutputIbmCloudS3.RejectUnauthorized.IsNull() || state.OutputIbmCloudS3.RejectUnauthorized.IsUnknown() {
+			state.OutputIbmCloudS3.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.Bucket.IsNull() && !api.OutputIbmCloudS3.Bucket.IsUnknown() {
+			state.OutputIbmCloudS3.Bucket = api.OutputIbmCloudS3.Bucket
+		} else if state.OutputIbmCloudS3.Bucket.IsNull() || state.OutputIbmCloudS3.Bucket.IsUnknown() {
+			state.OutputIbmCloudS3.Bucket = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.DestPath.IsNull() && !api.OutputIbmCloudS3.DestPath.IsUnknown() {
+			state.OutputIbmCloudS3.DestPath = api.OutputIbmCloudS3.DestPath
+		} else if state.OutputIbmCloudS3.DestPath.IsNull() || state.OutputIbmCloudS3.DestPath.IsUnknown() {
+			state.OutputIbmCloudS3.DestPath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxConcurrentFileParts.IsNull() && !api.OutputIbmCloudS3.MaxConcurrentFileParts.IsUnknown() {
+			state.OutputIbmCloudS3.MaxConcurrentFileParts = api.OutputIbmCloudS3.MaxConcurrentFileParts
+		} else if state.OutputIbmCloudS3.MaxConcurrentFileParts.IsNull() || state.OutputIbmCloudS3.MaxConcurrentFileParts.IsUnknown() {
+			state.OutputIbmCloudS3.MaxConcurrentFileParts = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.VerifyPermissions.IsNull() && !api.OutputIbmCloudS3.VerifyPermissions.IsUnknown() {
+			state.OutputIbmCloudS3.VerifyPermissions = api.OutputIbmCloudS3.VerifyPermissions
+		} else if state.OutputIbmCloudS3.VerifyPermissions.IsNull() || state.OutputIbmCloudS3.VerifyPermissions.IsUnknown() {
+			state.OutputIbmCloudS3.VerifyPermissions = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsNull() && !api.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.MaxClosingFilesToBackpressure = api.OutputIbmCloudS3.MaxClosingFilesToBackpressure
+		} else if state.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsNull() || state.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.MaxClosingFilesToBackpressure = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.StagePath.IsNull() && !api.OutputIbmCloudS3.StagePath.IsUnknown() {
+			state.OutputIbmCloudS3.StagePath = api.OutputIbmCloudS3.StagePath
+		} else if state.OutputIbmCloudS3.StagePath.IsNull() || state.OutputIbmCloudS3.StagePath.IsUnknown() {
+			state.OutputIbmCloudS3.StagePath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AddIDToStagePath.IsNull() && !api.OutputIbmCloudS3.AddIDToStagePath.IsUnknown() {
+			state.OutputIbmCloudS3.AddIDToStagePath = api.OutputIbmCloudS3.AddIDToStagePath
+		} else if state.OutputIbmCloudS3.AddIDToStagePath.IsNull() || state.OutputIbmCloudS3.AddIDToStagePath.IsUnknown() {
+			state.OutputIbmCloudS3.AddIDToStagePath = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RemoveEmptyDirs.IsNull() && !api.OutputIbmCloudS3.RemoveEmptyDirs.IsUnknown() {
+			state.OutputIbmCloudS3.RemoveEmptyDirs = api.OutputIbmCloudS3.RemoveEmptyDirs
+		} else if state.OutputIbmCloudS3.RemoveEmptyDirs.IsNull() || state.OutputIbmCloudS3.RemoveEmptyDirs.IsUnknown() {
+			state.OutputIbmCloudS3.RemoveEmptyDirs = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.PartitionExpr.IsNull() && !api.OutputIbmCloudS3.PartitionExpr.IsUnknown() {
+			state.OutputIbmCloudS3.PartitionExpr = api.OutputIbmCloudS3.PartitionExpr
+		} else if state.OutputIbmCloudS3.PartitionExpr.IsNull() || state.OutputIbmCloudS3.PartitionExpr.IsUnknown() {
+			state.OutputIbmCloudS3.PartitionExpr = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Format.IsNull() && !api.OutputIbmCloudS3.Format.IsUnknown() {
+			state.OutputIbmCloudS3.Format = api.OutputIbmCloudS3.Format
+		} else if state.OutputIbmCloudS3.Format.IsNull() || state.OutputIbmCloudS3.Format.IsUnknown() {
+			state.OutputIbmCloudS3.Format = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.BaseFileName.IsNull() && !api.OutputIbmCloudS3.BaseFileName.IsUnknown() {
+			state.OutputIbmCloudS3.BaseFileName = api.OutputIbmCloudS3.BaseFileName
+		} else if state.OutputIbmCloudS3.BaseFileName.IsNull() || state.OutputIbmCloudS3.BaseFileName.IsUnknown() {
+			state.OutputIbmCloudS3.BaseFileName = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.FileNameSuffix.IsNull() && !api.OutputIbmCloudS3.FileNameSuffix.IsUnknown() {
+			state.OutputIbmCloudS3.FileNameSuffix = api.OutputIbmCloudS3.FileNameSuffix
+		} else if state.OutputIbmCloudS3.FileNameSuffix.IsNull() || state.OutputIbmCloudS3.FileNameSuffix.IsUnknown() {
+			state.OutputIbmCloudS3.FileNameSuffix = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxFileSizeMB.IsNull() && !api.OutputIbmCloudS3.MaxFileSizeMB.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileSizeMB = api.OutputIbmCloudS3.MaxFileSizeMB
+		} else if state.OutputIbmCloudS3.MaxFileSizeMB.IsNull() || state.OutputIbmCloudS3.MaxFileSizeMB.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileSizeMB = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxFileOpenTimeSec.IsNull() && !api.OutputIbmCloudS3.MaxFileOpenTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileOpenTimeSec = api.OutputIbmCloudS3.MaxFileOpenTimeSec
+		} else if state.OutputIbmCloudS3.MaxFileOpenTimeSec.IsNull() || state.OutputIbmCloudS3.MaxFileOpenTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileOpenTimeSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxFileIDleTimeSec.IsNull() && !api.OutputIbmCloudS3.MaxFileIDleTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileIDleTimeSec = api.OutputIbmCloudS3.MaxFileIDleTimeSec
+		} else if state.OutputIbmCloudS3.MaxFileIDleTimeSec.IsNull() || state.OutputIbmCloudS3.MaxFileIDleTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileIDleTimeSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxOpenFiles.IsNull() && !api.OutputIbmCloudS3.MaxOpenFiles.IsUnknown() {
+			state.OutputIbmCloudS3.MaxOpenFiles = api.OutputIbmCloudS3.MaxOpenFiles
+		} else if state.OutputIbmCloudS3.MaxOpenFiles.IsNull() || state.OutputIbmCloudS3.MaxOpenFiles.IsUnknown() {
+			state.OutputIbmCloudS3.MaxOpenFiles = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.HeaderLine.IsNull() && !api.OutputIbmCloudS3.HeaderLine.IsUnknown() {
+			state.OutputIbmCloudS3.HeaderLine = api.OutputIbmCloudS3.HeaderLine
+		} else if state.OutputIbmCloudS3.HeaderLine.IsNull() || state.OutputIbmCloudS3.HeaderLine.IsUnknown() {
+			state.OutputIbmCloudS3.HeaderLine = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.WriteHighWaterMark.IsNull() && !api.OutputIbmCloudS3.WriteHighWaterMark.IsUnknown() {
+			state.OutputIbmCloudS3.WriteHighWaterMark = api.OutputIbmCloudS3.WriteHighWaterMark
+		} else if state.OutputIbmCloudS3.WriteHighWaterMark.IsNull() || state.OutputIbmCloudS3.WriteHighWaterMark.IsUnknown() {
+			state.OutputIbmCloudS3.WriteHighWaterMark = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.OnBackpressure.IsNull() && !api.OutputIbmCloudS3.OnBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnBackpressure = api.OutputIbmCloudS3.OnBackpressure
+		} else if state.OutputIbmCloudS3.OnBackpressure.IsNull() || state.OutputIbmCloudS3.OnBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.DeadletterEnabled.IsNull() && !api.OutputIbmCloudS3.DeadletterEnabled.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterEnabled = api.OutputIbmCloudS3.DeadletterEnabled
+		} else if state.OutputIbmCloudS3.DeadletterEnabled.IsNull() || state.OutputIbmCloudS3.DeadletterEnabled.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterEnabled = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.OnDiskFullBackpressure.IsNull() && !api.OutputIbmCloudS3.OnDiskFullBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnDiskFullBackpressure = api.OutputIbmCloudS3.OnDiskFullBackpressure
+		} else if state.OutputIbmCloudS3.OnDiskFullBackpressure.IsNull() || state.OutputIbmCloudS3.OnDiskFullBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnDiskFullBackpressure = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ForceCloseOnShutdown.IsNull() && !api.OutputIbmCloudS3.ForceCloseOnShutdown.IsUnknown() {
+			state.OutputIbmCloudS3.ForceCloseOnShutdown = api.OutputIbmCloudS3.ForceCloseOnShutdown
+		} else if state.OutputIbmCloudS3.ForceCloseOnShutdown.IsNull() || state.OutputIbmCloudS3.ForceCloseOnShutdown.IsUnknown() {
+			state.OutputIbmCloudS3.ForceCloseOnShutdown = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RetrySettings.IsNull() && !api.OutputIbmCloudS3.RetrySettings.IsUnknown() {
+			state.OutputIbmCloudS3.RetrySettings = api.OutputIbmCloudS3.RetrySettings
+		} else if state.OutputIbmCloudS3.RetrySettings.IsNull() || state.OutputIbmCloudS3.RetrySettings.IsUnknown() {
+			state.OutputIbmCloudS3.RetrySettings = types.ObjectNull(OutputIbmCloudS3RetrySettingsAttrTypes())
+		}
+		if !api.OutputIbmCloudS3.Orphans.IsNull() && !api.OutputIbmCloudS3.Orphans.IsUnknown() {
+			state.OutputIbmCloudS3.Orphans = api.OutputIbmCloudS3.Orphans
+		} else if state.OutputIbmCloudS3.Orphans.IsNull() || state.OutputIbmCloudS3.Orphans.IsUnknown() {
+			state.OutputIbmCloudS3.Orphans = types.ObjectNull(OutputIbmCloudS3OrphansAttrTypes())
+		}
+		if !api.OutputIbmCloudS3.Description.IsNull() && !api.OutputIbmCloudS3.Description.IsUnknown() {
+			state.OutputIbmCloudS3.Description = api.OutputIbmCloudS3.Description
+		} else if state.OutputIbmCloudS3.Description.IsNull() || state.OutputIbmCloudS3.Description.IsUnknown() {
+			state.OutputIbmCloudS3.Description = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AwsSecret.IsNull() && !api.OutputIbmCloudS3.AwsSecret.IsUnknown() {
+			state.OutputIbmCloudS3.AwsSecret = api.OutputIbmCloudS3.AwsSecret
+		} else if state.OutputIbmCloudS3.AwsSecret.IsNull() || state.OutputIbmCloudS3.AwsSecret.IsUnknown() {
+			state.OutputIbmCloudS3.AwsSecret = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Compress.IsNull() && !api.OutputIbmCloudS3.Compress.IsUnknown() {
+			state.OutputIbmCloudS3.Compress = api.OutputIbmCloudS3.Compress
+		} else if state.OutputIbmCloudS3.Compress.IsNull() || state.OutputIbmCloudS3.Compress.IsUnknown() {
+			state.OutputIbmCloudS3.Compress = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.CompressionLevel.IsNull() && !api.OutputIbmCloudS3.CompressionLevel.IsUnknown() {
+			state.OutputIbmCloudS3.CompressionLevel = api.OutputIbmCloudS3.CompressionLevel
+		} else if state.OutputIbmCloudS3.CompressionLevel.IsNull() || state.OutputIbmCloudS3.CompressionLevel.IsUnknown() {
+			state.OutputIbmCloudS3.CompressionLevel = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AutomaticSchema.IsNull() && !api.OutputIbmCloudS3.AutomaticSchema.IsUnknown() {
+			state.OutputIbmCloudS3.AutomaticSchema = api.OutputIbmCloudS3.AutomaticSchema
+		} else if state.OutputIbmCloudS3.AutomaticSchema.IsNull() || state.OutputIbmCloudS3.AutomaticSchema.IsUnknown() {
+			state.OutputIbmCloudS3.AutomaticSchema = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetSchema.IsNull() && !api.OutputIbmCloudS3.ParquetSchema.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetSchema = api.OutputIbmCloudS3.ParquetSchema
+		} else if state.OutputIbmCloudS3.ParquetSchema.IsNull() || state.OutputIbmCloudS3.ParquetSchema.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetSchema = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetVersion.IsNull() && !api.OutputIbmCloudS3.ParquetVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetVersion = api.OutputIbmCloudS3.ParquetVersion
+		} else if state.OutputIbmCloudS3.ParquetVersion.IsNull() || state.OutputIbmCloudS3.ParquetVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetVersion = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetDataPageVersion.IsNull() && !api.OutputIbmCloudS3.ParquetDataPageVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetDataPageVersion = api.OutputIbmCloudS3.ParquetDataPageVersion
+		} else if state.OutputIbmCloudS3.ParquetDataPageVersion.IsNull() || state.OutputIbmCloudS3.ParquetDataPageVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetDataPageVersion = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetRowGroupLength.IsNull() && !api.OutputIbmCloudS3.ParquetRowGroupLength.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetRowGroupLength = api.OutputIbmCloudS3.ParquetRowGroupLength
+		} else if state.OutputIbmCloudS3.ParquetRowGroupLength.IsNull() || state.OutputIbmCloudS3.ParquetRowGroupLength.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetRowGroupLength = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.ParquetPageSize.IsNull() && !api.OutputIbmCloudS3.ParquetPageSize.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetPageSize = api.OutputIbmCloudS3.ParquetPageSize
+		} else if state.OutputIbmCloudS3.ParquetPageSize.IsNull() || state.OutputIbmCloudS3.ParquetPageSize.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetPageSize = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ShouldLogInvalidRows.IsNull() && !api.OutputIbmCloudS3.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputIbmCloudS3.ShouldLogInvalidRows = api.OutputIbmCloudS3.ShouldLogInvalidRows
+		} else if state.OutputIbmCloudS3.ShouldLogInvalidRows.IsNull() || state.OutputIbmCloudS3.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputIbmCloudS3.ShouldLogInvalidRows = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.KeyValueMetadata.IsNull() && !api.OutputIbmCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputIbmCloudS3.KeyValueMetadata = api.OutputIbmCloudS3.KeyValueMetadata
+		} else if state.OutputIbmCloudS3.KeyValueMetadata.IsNull() || state.OutputIbmCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputIbmCloudS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputIbmCloudS3KeyValueMetadataAttrTypes()})
+		}
+		if !api.OutputIbmCloudS3.EnableStatistics.IsNull() && !api.OutputIbmCloudS3.EnableStatistics.IsUnknown() {
+			state.OutputIbmCloudS3.EnableStatistics = api.OutputIbmCloudS3.EnableStatistics
+		} else if state.OutputIbmCloudS3.EnableStatistics.IsNull() || state.OutputIbmCloudS3.EnableStatistics.IsUnknown() {
+			state.OutputIbmCloudS3.EnableStatistics = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EnableWritePageIndex.IsNull() && !api.OutputIbmCloudS3.EnableWritePageIndex.IsUnknown() {
+			state.OutputIbmCloudS3.EnableWritePageIndex = api.OutputIbmCloudS3.EnableWritePageIndex
+		} else if state.OutputIbmCloudS3.EnableWritePageIndex.IsNull() || state.OutputIbmCloudS3.EnableWritePageIndex.IsUnknown() {
+			state.OutputIbmCloudS3.EnableWritePageIndex = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EnablePageChecksum.IsNull() && !api.OutputIbmCloudS3.EnablePageChecksum.IsUnknown() {
+			state.OutputIbmCloudS3.EnablePageChecksum = api.OutputIbmCloudS3.EnablePageChecksum
+		} else if state.OutputIbmCloudS3.EnablePageChecksum.IsNull() || state.OutputIbmCloudS3.EnablePageChecksum.IsUnknown() {
+			state.OutputIbmCloudS3.EnablePageChecksum = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EmptyDirCleanupSec.IsNull() && !api.OutputIbmCloudS3.EmptyDirCleanupSec.IsUnknown() {
+			state.OutputIbmCloudS3.EmptyDirCleanupSec = api.OutputIbmCloudS3.EmptyDirCleanupSec
+		} else if state.OutputIbmCloudS3.EmptyDirCleanupSec.IsNull() || state.OutputIbmCloudS3.EmptyDirCleanupSec.IsUnknown() {
+			state.OutputIbmCloudS3.EmptyDirCleanupSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.DirectoryBatchSize.IsNull() && !api.OutputIbmCloudS3.DirectoryBatchSize.IsUnknown() {
+			state.OutputIbmCloudS3.DirectoryBatchSize = api.OutputIbmCloudS3.DirectoryBatchSize
+		} else if state.OutputIbmCloudS3.DirectoryBatchSize.IsNull() || state.OutputIbmCloudS3.DirectoryBatchSize.IsUnknown() {
+			state.OutputIbmCloudS3.DirectoryBatchSize = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.DeadletterPath.IsNull() && !api.OutputIbmCloudS3.DeadletterPath.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterPath = api.OutputIbmCloudS3.DeadletterPath
+		} else if state.OutputIbmCloudS3.DeadletterPath.IsNull() || state.OutputIbmCloudS3.DeadletterPath.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterPath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxRetryNum.IsNull() && !api.OutputIbmCloudS3.MaxRetryNum.IsUnknown() {
+			state.OutputIbmCloudS3.MaxRetryNum = api.OutputIbmCloudS3.MaxRetryNum
+		} else if state.OutputIbmCloudS3.MaxRetryNum.IsNull() || state.OutputIbmCloudS3.MaxRetryNum.IsUnknown() {
+			state.OutputIbmCloudS3.MaxRetryNum = types.Float64Null()
 		}
 	}
 }

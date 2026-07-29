@@ -31,21 +31,21 @@ resource "criblio_key" "my_key" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Key ID
 
 ### Optional
 
-- `algorithm` (String)
-- `description` (String)
-- `expires` (Number)
+- `algorithm` (String) Encryption algorithm
+- `description` (String) Description
+- `expires` (Number) Expiration time
 - `iv_size` (Integer) Length of the initialization vector, in bytes
-- `keyclass` (Number)
-- `kms` (String)
+- `keyclass` (Number) Key class
+- `kms` (String) KMS for this key
 - `use_iv` (Boolean) Seed encryption with a [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) to make the key more random and unique. Must be enabled with the aes-256-gcm algorithm.
 
 ### Read-Only
 
-- `created` (Number)
+- `created` (Number) Creation time
 - `group` (String) Name of the Worker Group/Fleet that created this key
 - `key_id` (String) API-assigned key ID returned by Cribl.
 

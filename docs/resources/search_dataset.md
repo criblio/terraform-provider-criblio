@@ -197,7 +197,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) Google Workspace Reports API endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_google_workspace_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -215,7 +215,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) HTTP API endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--apihttp_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -253,7 +253,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) Microsoft Graph endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_ms_graph_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -271,7 +271,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) Okta API endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_okta_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -308,7 +308,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) Tailscale API endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_tailscale_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -326,7 +326,7 @@ Optional:
 
 Optional:
 
-- `enabled_endpoints` (List of String)
+- `enabled_endpoints` (List of String) Zoom API endpoints to activate for this Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_zoom_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -382,8 +382,8 @@ Optional:
 Optional:
 
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
-- `fleets` (List of String)
-- `partitioning_scheme` (String)
+- `fleets` (List of String) The Cribl Edge Fleets to query. Use <code>*</code> to query all Fleets.
+- `partitioning_scheme` (String) Partitioning scheme Cribl uses to locate objects within the bucket or path.
 - `path` (String) Root directory or URI prefix to search. Supports environment variables and templating.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--edge_dataset--cache_connection_info))
@@ -418,7 +418,7 @@ Optional:
 
 Optional:
 
-- `extra_paths` (Attributes List) (see [below for nested schema](#nestedatt--cribl_leader_dataset--extra_paths))
+- `extra_paths` (Attributes List) Additional path entries searched beyond the primary path. (see [below for nested schema](#nestedatt--cribl_leader_dataset--extra_paths))
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `path` (String) Root directory or URI prefix to search. Supports environment variables and templating.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
@@ -454,7 +454,7 @@ Optional:
 
 Optional:
 
-- `datasets` (List of String)
+- `datasets` (List of String) Member Datasets that make up this composite Dataset.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--meta_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
@@ -492,7 +492,7 @@ Optional:
 - `bucket` (String) Google Cloud Storage (GCS) bucket name. Supports templating.
 - `extra_paths` (Attributes List) Additional bucket paths included in the Dataset. (see [below for nested schema](#nestedatt--gcs_dataset--extra_paths))
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
-- `partitioning_scheme` (String)
+- `partitioning_scheme` (String) Partitioning scheme Cribl uses to locate objects within the bucket or path.
 - `region` (String) Google Cloud region where the bucket is located.
 - `skip_event_time_filter` (Boolean) If <code>true</code>, queries use partition boundaries instead of per-event timestamps.
 - `storage_classes` (List of String) Storage classes to include when listing objects.
@@ -581,7 +581,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -615,7 +614,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -649,7 +647,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -683,7 +680,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -717,7 +713,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -759,7 +754,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -793,7 +787,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -827,7 +820,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -861,7 +853,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -895,7 +886,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -929,7 +919,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -963,7 +952,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -997,7 +985,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1031,7 +1018,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1065,7 +1051,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1099,7 +1084,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1133,7 +1117,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1167,7 +1150,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1209,7 +1191,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1243,7 +1224,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1277,7 +1257,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1311,7 +1290,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1346,7 +1324,7 @@ Optional:
 
 - `bucket` (String) Google Cloud Storage (GCS) bucket name. Supports templating.
 - `filter` (String) Filter expression evaluated against each object path under the bucket.
-- `partitioning_scheme` (String)
+- `partitioning_scheme` (String) Partitioning scheme Cribl uses to locate objects within the bucket or path.
 - `region` (String) Google Cloud region where the bucket is located.
 
 <a id="nestedatt--gcs_dataset--cache_connection_info"></a>
@@ -1355,7 +1333,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1389,7 +1366,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1423,7 +1399,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.
@@ -1489,7 +1464,6 @@ Optional:
 Optional:
 
 - `accelerated_fields` (List of String) Accelerated fields (materialized columns) for the cache connection.
-- `backfill_status` (String) Backfill status for data being loaded into the cache.
 - `cache_ref` (String) Unique identifier for the Lakehouse cache referenced by the Dataset.
 - `created_at` (Number) Timestamp (in Unix time) when the continuous data feed to the Lakehouse cache started, in milliseconds.
 - `lakehouse_connection_type` (String) If <code>new</code>, the Lakehouse was attached before data existed in the Dataset. If <code>existing</code>, the Lakehouse was attached after data existed in the Dataset.

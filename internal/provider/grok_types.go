@@ -17,35 +17,35 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type GrokModel struct {
-	Content types.String  `tfsdk:"content" json:"content,omitempty"`
-	GroupID types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Size    types.Float64 `tfsdk:"size" json:"size,omitempty"`
-	Tags    types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Content types.String `tfsdk:"content" json:"content,omitempty"`
+	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID      types.String `tfsdk:"id" json:"id,omitempty"`
+	Size    types.Int64  `tfsdk:"size" json:"size,omitempty"`
+	Tags    types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type GrokResourceModel struct {
-	Content types.String  `tfsdk:"content" json:"content,omitempty"`
-	GroupID types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Size    types.Float64 `tfsdk:"size" json:"size,omitempty"`
-	Tags    types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Content types.String `tfsdk:"content" json:"content,omitempty"`
+	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID      types.String `tfsdk:"id" json:"id,omitempty"`
+	Size    types.Int64  `tfsdk:"size" json:"size,omitempty"`
+	Tags    types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type GrokDataSourceModel struct {
-	Content types.String  `tfsdk:"content" json:"content,omitempty"`
-	GroupID types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Size    types.Float64 `tfsdk:"size" json:"size,omitempty"`
-	Tags    types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Content types.String `tfsdk:"content" json:"content,omitempty"`
+	GroupID types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID      types.String `tfsdk:"id" json:"id,omitempty"`
+	Size    types.Int64  `tfsdk:"size" json:"size,omitempty"`
+	Tags    types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type GrokAPIModel struct {
-	Content *string  `json:"content,omitempty"`
-	GroupID *string  `json:"groupId,omitempty"`
-	ID      *string  `json:"id,omitempty"`
-	Size    *float64 `json:"size,omitempty"`
-	Tags    *string  `json:"tags,omitempty"`
+	Content *string `json:"content,omitempty"`
+	GroupID *string `json:"groupId,omitempty"`
+	ID      *string `json:"id,omitempty"`
+	Size    *int64  `json:"size,omitempty"`
+	Tags    *string `json:"tags,omitempty"`
 }
 
 func GrokTerraformValueToJSON(value attr.Value) (any, error) {
@@ -297,9 +297,9 @@ func (m *GrokModel) UnmarshalJSON(data []byte) error {
 		m.ID = types.StringNull()
 	}
 	if input.Size != nil {
-		m.Size = types.Float64Value(*input.Size)
+		m.Size = types.Int64Value(*input.Size)
 	} else {
-		m.Size = types.Float64Null()
+		m.Size = types.Int64Null()
 	}
 	if input.Tags != nil {
 		m.Tags = types.StringValue(*input.Tags)

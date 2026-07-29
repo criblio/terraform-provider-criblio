@@ -52,7 +52,8 @@ func (d *PackVarsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Global Variable.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -60,23 +61,27 @@ func (d *PackVarsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Global variable name`,
+				Description: `Unique identifier for the Global Variable.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Library that contains the Global Variable.`,
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `The <code>id</code> of the Pack.`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Metadata tags for categorizing and filtering Global Variables.`,
 			},
 			"type": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Data type of the Global Variable value.`,
 			},
 			"value": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Value of the Global Variable. For <code>type: expression</code>, the value is a JavaScript expression.`,
 			},
 		},
 	}

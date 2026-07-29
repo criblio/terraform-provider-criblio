@@ -138,6 +138,14 @@ func KeyTerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+	switch name {
+	case "id":
+		return prefix + "keyId"
+	case "key_id":
+		return prefix + "terraformKeyId"
+	case "use_iv":
+		return prefix + "useIV"
+	}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {

@@ -44,9 +44,10 @@ func (r *GrokResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 		MarkdownDescription: "Grok Resource",
 		Attributes: map[string]schema.Attribute{
 			"content": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Grok pattern definitions in the file.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -58,23 +59,26 @@ func (r *GrokResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Grok file.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
-			"size": schema.Float64Attribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+			"size": schema.Int64Attribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `File size in bytes.`,
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Tags for filtering and grouping Grok files.`,
 			},
 		},
 	}
@@ -240,7 +244,7 @@ func applyGrokAPIToState(api *GrokModel, state *GrokModel, preserveInputs bool, 
 	if !api.Size.IsNull() && !api.Size.IsUnknown() {
 		state.Size = api.Size
 	} else if state.Size.IsNull() || state.Size.IsUnknown() {
-		state.Size = types.Float64Value(0)
+		state.Size = types.Int64Value(0)
 	}
 	if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 		state.Tags = api.Tags

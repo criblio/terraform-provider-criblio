@@ -96,6 +96,38 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas.InputCollectorAzureBlob.allOf.1.properties.collector.properties"
+    update:
+      destructive:
+        type: boolean
+        description: Delete files after they are collected.
+        x-terraform-optional-computed: true
+      encoding:
+        type: string
+        description: Character encoding used to parse collected data.
+        x-terraform-optional-computed: true
+  - target: "$.components.schemas.InputCollectorAzureBlob.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      includeMetadata:
+        type: boolean
+        description: Include Azure Blob metadata in collected events.
+        x-terraform-optional-computed: true
+      includeTags:
+        type: boolean
+        description: Include Azure Blob tags in collected events.
+        x-terraform-optional-computed: true
+      disableTimeFilter:
+        type: boolean
+        description: Disable Collector event time filtering when a date range is specified.
+        x-terraform-optional-computed: true
+      parquetChunkSizeMB:
+        type: number
+        description: Maximum file size in MB for each Parquet chunk.
+        x-terraform-optional-computed: true
+      parquetChunkDownloadTimeout:
+        type: number
+        description: Maximum time in seconds allowed to download a Parquet chunk.
+        x-terraform-optional-computed: true
   - target: "$.components.schemas"
     update:
       InputCollectorFilesystem:
@@ -301,6 +333,12 @@ actions:
       default: []
       x-terraform-optional-computed: true
       x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
+  - target: "$.components.schemas.OutputRouter.properties.rules"
+    update:
+      # Cribl trims router filter expressions when persisting them. Keep the
+      # configured rules in Terraform state so that normalization does not
+      # produce an inconsistent result during apply.
+      x-terraform-prefer-state: true
   - target: "$.components.schemas.RouteComment.properties.groupId"
     update:
       x-terraform-computed: true
@@ -832,6 +870,11 @@ actions:
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionResponseEnvelope.properties.count"
+    update:
+      # Response-envelope metadata is not part of an individual connection,
+      # and count is reserved at the Terraform resource/data-source root.
+      x-terraform-ignore: true
 
   - target: "$.paths./m/{groupId}/lib/appscope-configs.post"
     update:

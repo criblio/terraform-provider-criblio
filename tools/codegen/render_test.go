@@ -9,6 +9,25 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
+func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
+	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
+		APIName:       "collector",
+		TerraformName: "collector",
+		Fields: []parser.FieldDef{{
+			APIName:       "parquetChunkSizeMB",
+			TerraformName: "parquet_chunk_size_mb",
+		}},
+	}}}
+
+	overrides := apiNameOverrides(resource)
+	if len(overrides) != 1 {
+		t.Fatalf("apiNameOverrides returned %d entries, want 1", len(overrides))
+	}
+	if overrides[0].APIName != "parquetChunkSizeMB" {
+		t.Fatalf("API name = %q, want parquetChunkSizeMB", overrides[0].APIName)
+	}
+}
+
 func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	resources := parseFixture(t)
 	ignored, err := readIgnoreFile(filepath.Join("testdata", ".codegen-ignore"))
@@ -708,6 +727,23 @@ func TestRenderedSnippets(t *testing.T) {
 	}
 	assertNotContains(t, fixedAPIFieldExample, "engine_type")
 	assertContains(t, fixedAPIFieldExample, `id = "engine-01"`)
+}
+
+func TestOneOfPreferStatePreservesConfiguredValue(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "Destination",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:    "OutputRouter",
+			ModelName: "OutputRouterModel",
+			Fields: []parser.FieldDef{{
+				GoName:        "Rules",
+				ApplyStrategy: "preferState",
+			}},
+		}},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, "if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown()))")
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {

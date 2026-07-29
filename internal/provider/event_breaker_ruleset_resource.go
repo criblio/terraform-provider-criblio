@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/float64planmodifier"
+	custom_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/int64planmodifier"
 	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
@@ -47,9 +47,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 		MarkdownDescription: "EventBreakerRuleset Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the Event Breaker Ruleset.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -61,29 +62,31 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Event Breaker Ruleset.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Library classification for the Event Breaker Ruleset.`,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
-			"min_raw_length": schema.Float64Attribute{
+			"min_raw_length": schema.Int64Attribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
 				Description: `The  minimum number of characters in _raw to determine which rule to use`,
-				PlanModifiers: []planmodifier.Float64{
-					custom_float64planmodifier.SuppressDiff(custom_float64planmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.Int64{
+					custom_int64planmodifier.SuppressDiff(custom_int64planmodifier.ExplicitSuppress),
 				},
 			},
 			"rules": schema.ListNestedAttribute{
@@ -100,9 +103,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 					},
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Unique name for this Event Breaker Rule within the Ruleset.`,
 						},
 						"condition": schema.StringAttribute{
 							Required:    true,
@@ -111,9 +115,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.`,
 						},
 						"type": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Event breaking strategy to apply.`,
 						},
 						"timestamp_anchor_regex": schema.StringAttribute{
 							Required:    true,
@@ -128,19 +133,22 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Description: `Auto, manual format (strptime), or current time`,
 							Attributes: map[string]schema.Attribute{
 								"type": schema.StringAttribute{
-									Required: true,
-									Optional: false,
-									Computed: false,
+									Required:    true,
+									Optional:    false,
+									Computed:    false,
+									Description: `Timestamp extraction mode.`,
 								},
-								"length": schema.Float64Attribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+								"length": schema.Int64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Number of characters from the start of the event to search for a timestamp.`,
 								},
 								"format": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `strptime format string for manual timestamp parsing. Required when <code>type</code> is <code>format</code>.`,
 								},
 							},
 						},
@@ -162,7 +170,7 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Computed:    false,
 							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.`,
 						},
-						"max_event_bytes": schema.Float64Attribute{
+						"max_event_bytes": schema.Int64Attribute{
 							Required:    false,
 							Optional:    true,
 							Computed:    false,
@@ -176,9 +184,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Name of the field to extract from the event.`,
 									},
 									"value": schema.StringAttribute{
 										Required:    true,
@@ -196,9 +205,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Description: `Disable this breaker rule (enabled by default)`,
 						},
 						"parser_enabled": schema.BoolAttribute{
-							Required: false,
-							Optional: true,
-							Computed: true,
+							Required:    false,
+							Optional:    true,
+							Computed:    true,
+							Description: `If <code>true</code>, enable the parser for this rule. Otherwise, <code>false</code>.`,
 						},
 						"should_use_data_raw": schema.BoolAttribute{
 							Required:    false,
@@ -245,9 +255,10 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Tags for filtering and grouping Event Breaker Rulesets.`,
 			},
 		},
 	}

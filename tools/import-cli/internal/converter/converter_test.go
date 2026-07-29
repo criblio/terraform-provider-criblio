@@ -11,6 +11,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
@@ -126,6 +127,71 @@ func TestConvertFromResponseBody_source(t *testing.T) {
 	// Model should be *SourceResourceModel
 	_, ok = model.(*provider.SourceResourceModel)
 	assert.True(t, ok, "model should be *SourceResourceModel")
+}
+
+func TestConvertRawItemPackUsesTerraformTagsAsJSONFallback(t *testing.T) {
+	e := registry.Entry{TypeName: "criblio_pack", ModelTypeName: "PackResourceModel"}
+	raw := json.RawMessage(`{
+		"id":"sample-pack",
+		"author":"Cribl",
+		"description":"Sample",
+		"displayName":"Sample Pack",
+		"minLogStreamVersion":"4.10.0",
+		"source":"https://example.test/sample.crbl",
+		"version":"1.2.3"
+	}`)
+
+	model, err := ConvertRawItemWithIdentifiers(e, raw, map[string]string{"GroupID": "default", "ID": "sample-pack"})
+	require.NoError(t, err)
+	pack := model.(*provider.PackResourceModel)
+	assert.Equal(t, "Cribl", pack.Author.ValueString())
+	assert.Equal(t, "Sample", pack.Description.ValueString())
+	assert.Equal(t, "Sample Pack", pack.DisplayName.ValueString())
+	assert.Equal(t, "4.10.0", pack.MinLogStreamVersion.ValueString())
+	assert.Equal(t, "https://example.test/sample.crbl", pack.Source.ValueString())
+	assert.Equal(t, "1.2.3", pack.Version.ValueString())
+	attrs, err := hcl.ModelToValue(pack, nil)
+	require.NoError(t, err)
+	assert.Equal(t, "Cribl", attrs["author"].String)
+	assert.Equal(t, "Sample Pack", attrs["display_name"].String)
+	assert.Equal(t, "4.10.0", attrs["min_log_stream_version"].String)
+}
+
+func TestConvertRawItemCollectorKeepsAzureConfiguration(t *testing.T) {
+	e := registry.Entry{TypeName: "criblio_collector", ModelTypeName: "CollectorResourceModel"}
+	raw := json.RawMessage(`{
+		"id":"sitecore-azure",
+		"type":"collection",
+		"ttl":"4h",
+		"collector":{"type":"azure_blob","destructive":false,"encoding":"utf8","conf":{"authType":"manual","containerName":"logs","connectionString":"test","recurse":true,"includeMetadata":true,"includeTags":true,"maxBatchSize":10,"disableTimeFilter":false,"parquetChunkSizeMB":5,"parquetChunkDownloadTimeout":600}},
+		"input":{"type":"collection","metadata":[{"name":"source","value":"sitecore"}]},
+		"schedule":{"enabled":true}
+	}`)
+
+	model, err := ConvertRawItemWithIdentifiers(e, raw, map[string]string{"GroupID": "default", "ID": "sitecore-azure"})
+	require.NoError(t, err)
+	collector := model.(*provider.CollectorResourceModel)
+	require.NotNil(t, collector.InputCollectorAzureBlob)
+	assert.False(t, collector.InputCollectorAzureBlob.Collector.IsNull())
+	assert.False(t, collector.InputCollectorAzureBlob.Input.IsNull())
+	assert.False(t, collector.InputCollectorAzureBlob.Schedule.IsNull())
+	attrs, err := hcl.ModelToValue(collector, nil)
+	require.NoError(t, err)
+	azure := attrs["input_collector_azure_blob"]
+	assert.Equal(t, hcl.KindMap, azure.Kind)
+	collectorBlock := azure.Map["collector"]
+	assert.Equal(t, hcl.KindMap, collectorBlock.Kind)
+	assert.False(t, collectorBlock.Map["destructive"].Bool)
+	assert.Equal(t, "utf8", collectorBlock.Map["encoding"].String)
+	conf := collectorBlock.Map["conf"]
+	require.Contains(t, conf.Map, "parquet_chunk_size_mb")
+	require.Contains(t, conf.Map, "parquet_chunk_download_timeout")
+	assert.True(t, conf.Map["include_metadata"].Bool)
+	assert.True(t, conf.Map["include_tags"].Bool)
+	assert.False(t, conf.Map["disable_time_filter"].Bool)
+	assert.Equal(t, float64(5), conf.Map["parquet_chunk_size_mb"].Number)
+	assert.Equal(t, float64(600), conf.Map["parquet_chunk_download_timeout"].Number)
+	assert.Equal(t, hcl.KindMap, azure.Map["input"].Kind)
 }
 
 func TestConvertFromResponseBody_pipeline(t *testing.T) {

@@ -542,10 +542,10 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.WebhookTarget.Type.IsNull() || state.WebhookTarget.Type.IsUnknown() {
 			state.WebhookTarget.Type = types.StringNull()
 		}
-		if !api.WebhookTarget.SystemFields.IsNull() && !api.WebhookTarget.SystemFields.IsUnknown() {
-			state.WebhookTarget.SystemFields = api.WebhookTarget.SystemFields
-		} else if state.WebhookTarget.SystemFields.IsNull() || state.WebhookTarget.SystemFields.IsUnknown() {
-			state.WebhookTarget.SystemFields = types.ListNull(types.StringType)
+		if !preserveInputs || (fillMissingInputs && (state.WebhookTarget.SystemFields.IsNull() || state.WebhookTarget.SystemFields.IsUnknown())) {
+			if !api.WebhookTarget.SystemFields.IsNull() && !api.WebhookTarget.SystemFields.IsUnknown() {
+				state.WebhookTarget.SystemFields = api.WebhookTarget.SystemFields
+			}
 		}
 		if !api.WebhookTarget.URL.IsNull() && !api.WebhookTarget.URL.IsUnknown() {
 			state.WebhookTarget.URL = api.WebhookTarget.URL
@@ -597,10 +597,10 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.PagerDutyTarget.Type.IsNull() || state.PagerDutyTarget.Type.IsUnknown() {
 			state.PagerDutyTarget.Type = types.StringNull()
 		}
-		if !api.PagerDutyTarget.SystemFields.IsNull() && !api.PagerDutyTarget.SystemFields.IsUnknown() {
-			state.PagerDutyTarget.SystemFields = api.PagerDutyTarget.SystemFields
-		} else if state.PagerDutyTarget.SystemFields.IsNull() || state.PagerDutyTarget.SystemFields.IsUnknown() {
-			state.PagerDutyTarget.SystemFields = types.ListNull(types.StringType)
+		if !preserveInputs || (fillMissingInputs && (state.PagerDutyTarget.SystemFields.IsNull() || state.PagerDutyTarget.SystemFields.IsUnknown())) {
+			if !api.PagerDutyTarget.SystemFields.IsNull() && !api.PagerDutyTarget.SystemFields.IsUnknown() {
+				state.PagerDutyTarget.SystemFields = api.PagerDutyTarget.SystemFields
+			}
 		}
 		if !api.PagerDutyTarget.RoutingKey.IsNull() && !api.PagerDutyTarget.RoutingKey.IsUnknown() {
 			state.PagerDutyTarget.RoutingKey = api.PagerDutyTarget.RoutingKey
@@ -642,10 +642,10 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SlackTarget.Type.IsNull() || state.SlackTarget.Type.IsUnknown() {
 			state.SlackTarget.Type = types.StringNull()
 		}
-		if !api.SlackTarget.SystemFields.IsNull() && !api.SlackTarget.SystemFields.IsUnknown() {
-			state.SlackTarget.SystemFields = api.SlackTarget.SystemFields
-		} else if state.SlackTarget.SystemFields.IsNull() || state.SlackTarget.SystemFields.IsUnknown() {
-			state.SlackTarget.SystemFields = types.ListNull(types.StringType)
+		if !preserveInputs || (fillMissingInputs && (state.SlackTarget.SystemFields.IsNull() || state.SlackTarget.SystemFields.IsUnknown())) {
+			if !api.SlackTarget.SystemFields.IsNull() && !api.SlackTarget.SystemFields.IsUnknown() {
+				state.SlackTarget.SystemFields = api.SlackTarget.SystemFields
+			}
 		}
 		if !api.SlackTarget.URL.IsNull() && !api.SlackTarget.URL.IsUnknown() {
 			state.SlackTarget.URL = api.SlackTarget.URL
@@ -667,10 +667,10 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SnsTarget.Type.IsNull() || state.SnsTarget.Type.IsUnknown() {
 			state.SnsTarget.Type = types.StringNull()
 		}
-		if !api.SnsTarget.SystemFields.IsNull() && !api.SnsTarget.SystemFields.IsUnknown() {
-			state.SnsTarget.SystemFields = api.SnsTarget.SystemFields
-		} else if state.SnsTarget.SystemFields.IsNull() || state.SnsTarget.SystemFields.IsUnknown() {
-			state.SnsTarget.SystemFields = types.ListNull(types.StringType)
+		if !preserveInputs || (fillMissingInputs && (state.SnsTarget.SystemFields.IsNull() || state.SnsTarget.SystemFields.IsUnknown())) {
+			if !api.SnsTarget.SystemFields.IsNull() && !api.SnsTarget.SystemFields.IsUnknown() {
+				state.SnsTarget.SystemFields = api.SnsTarget.SystemFields
+			}
 		}
 		if !api.SnsTarget.AwsAuthenticationMethod.IsNull() && !api.SnsTarget.AwsAuthenticationMethod.IsUnknown() {
 			state.SnsTarget.AwsAuthenticationMethod = api.SnsTarget.AwsAuthenticationMethod
@@ -752,10 +752,10 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SmtpTarget.Type.IsNull() || state.SmtpTarget.Type.IsUnknown() {
 			state.SmtpTarget.Type = types.StringNull()
 		}
-		if !api.SmtpTarget.SystemFields.IsNull() && !api.SmtpTarget.SystemFields.IsUnknown() {
-			state.SmtpTarget.SystemFields = api.SmtpTarget.SystemFields
-		} else if state.SmtpTarget.SystemFields.IsNull() || state.SmtpTarget.SystemFields.IsUnknown() {
-			state.SmtpTarget.SystemFields = types.ListNull(types.StringType)
+		if !preserveInputs || (fillMissingInputs && (state.SmtpTarget.SystemFields.IsNull() || state.SmtpTarget.SystemFields.IsUnknown())) {
+			if !api.SmtpTarget.SystemFields.IsNull() && !api.SmtpTarget.SystemFields.IsUnknown() {
+				state.SmtpTarget.SystemFields = api.SmtpTarget.SystemFields
+			}
 		}
 		if !api.SmtpTarget.Host.IsNull() && !api.SmtpTarget.Host.IsUnknown() {
 			state.SmtpTarget.Host = api.SmtpTarget.Host

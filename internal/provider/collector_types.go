@@ -1369,54 +1369,75 @@ func InputCollectorAzureBlobInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorAzureBlobCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorAzureBlobCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorAzureBlobCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorAzureBlobCollectorConfModel struct {
-	ContainerName      types.String `tfsdk:"container_name" json:"containerName,omitempty"`
-	StorageAccountName types.String `tfsdk:"storage_account_name" json:"storageAccountName,omitempty"`
-	ConnectionString   types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
-	AuthType           types.String `tfsdk:"auth_type" json:"authType,omitempty"`
-	Path               types.String `tfsdk:"path" json:"path,omitempty"`
-	Recurse            types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
-	Extractors         types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
-	MaxBatchSize       types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	ContainerName               types.String  `tfsdk:"container_name" json:"containerName,omitempty"`
+	StorageAccountName          types.String  `tfsdk:"storage_account_name" json:"storageAccountName,omitempty"`
+	ConnectionString            types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	AuthType                    types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Path                        types.String  `tfsdk:"path" json:"path,omitempty"`
+	Recurse                     types.Bool    `tfsdk:"recurse" json:"recurse,omitempty"`
+	Extractors                  types.List    `tfsdk:"extractors" json:"extractors,omitempty"`
+	MaxBatchSize                types.Int64   `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	IncludeMetadata             types.Bool    `tfsdk:"include_metadata" json:"includeMetadata,omitempty"`
+	IncludeTags                 types.Bool    `tfsdk:"include_tags" json:"includeTags,omitempty"`
+	DisableTimeFilter           types.Bool    `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
 }
 
 type InputCollectorAzureBlobCollectorConfAPIModel struct {
-	ContainerName      *string `json:"containerName,omitempty"`
-	StorageAccountName *string `json:"storageAccountName,omitempty"`
-	ConnectionString   *string `json:"connectionString,omitempty"`
-	AuthType           *string `json:"authType,omitempty"`
-	Path               *string `json:"path,omitempty"`
-	Recurse            *bool   `json:"recurse,omitempty"`
-	Extractors         any     `json:"extractors,omitempty"`
-	MaxBatchSize       *int64  `json:"maxBatchSize,omitempty"`
+	ContainerName               *string  `json:"containerName,omitempty"`
+	StorageAccountName          *string  `json:"storageAccountName,omitempty"`
+	ConnectionString            *string  `json:"connectionString,omitempty"`
+	AuthType                    *string  `json:"authType,omitempty"`
+	Path                        *string  `json:"path,omitempty"`
+	Recurse                     *bool    `json:"recurse,omitempty"`
+	Extractors                  any      `json:"extractors,omitempty"`
+	MaxBatchSize                *int64   `json:"maxBatchSize,omitempty"`
+	IncludeMetadata             *bool    `json:"includeMetadata,omitempty"`
+	IncludeTags                 *bool    `json:"includeTags,omitempty"`
+	DisableTimeFilter           *bool    `json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          *float64 `json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout *float64 `json:"parquetChunkDownloadTimeout,omitempty"`
 }
 
 func InputCollectorAzureBlobCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"container_name":       types.StringType,
-		"storage_account_name": types.StringType,
-		"connection_string":    types.StringType,
-		"auth_type":            types.StringType,
-		"path":                 types.StringType,
-		"recurse":              types.BoolType,
-		"extractors":           types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfExtractorsAttrTypes()}},
-		"max_batch_size":       types.Int64Type,
+		"container_name":                 types.StringType,
+		"storage_account_name":           types.StringType,
+		"connection_string":              types.StringType,
+		"auth_type":                      types.StringType,
+		"path":                           types.StringType,
+		"recurse":                        types.BoolType,
+		"extractors":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfExtractorsAttrTypes()}},
+		"max_batch_size":                 types.Int64Type,
+		"include_metadata":               types.BoolType,
+		"include_tags":                   types.BoolType,
+		"disable_time_filter":            types.BoolType,
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
 	}
 }
 
@@ -2834,6 +2855,10 @@ func CollectorTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "parquet_chunk_size_mb":
+		return prefix + "parquetChunkSizeMB"
 	}
 	var output strings.Builder
 	upperNext := false

@@ -56,7 +56,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 				Description: `Pipeline to process data before sending out to this output`,
 			},
 			"type": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Connector type identifier.`,
 			},
 
 			"output_default": schema.SingleNestedAttribute{
@@ -67,7 +68,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -84,7 +86,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"default_id": schema.StringAttribute{
@@ -101,7 +103,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -118,7 +121,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -168,10 +171,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -216,7 +221,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -247,7 +253,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Computed:    true,
@@ -291,7 +298,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_source_expression": schema.StringAttribute{
 						Computed:    true,
@@ -368,14 +376,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -447,6 +458,34 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 							},
 						},
 					},
+					"refresh_token_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
 					"url": schema.StringAttribute{
 						Computed:    true,
 						Description: `URL of a webhook endpoint to send events to, such as http://localhost:10200`,
@@ -456,7 +495,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Webhook URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -488,7 +528,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -505,7 +546,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"keep_alive": schema.BoolAttribute{
@@ -548,10 +589,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -596,7 +639,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -620,7 +664,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"login_url": schema.StringAttribute{
 						Computed:    true,
@@ -630,6 +675,34 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Sensitive:   true,
 						Description: `Secret parameter value to pass in request body`,
+					},
+					"refresh_token_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
 					},
 					"client_id": schema.StringAttribute{
 						Computed:    true,
@@ -648,7 +721,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"format": schema.StringAttribute{
 						Computed: true,
@@ -728,6 +802,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -756,7 +831,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -773,7 +849,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -803,7 +879,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -843,7 +919,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Use to troubleshoot issues with sending data`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"load_balanced": schema.BoolAttribute{
 						Computed:    true,
@@ -912,7 +989,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -1010,6 +1088,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1039,7 +1118,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"host": schema.StringAttribute{
@@ -1069,7 +1148,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -1131,7 +1211,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Computed:    true,
@@ -1183,6 +1264,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -1204,7 +1286,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -1221,7 +1304,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dns_resolve_period_sec": schema.Float64Attribute{
@@ -1255,7 +1338,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -1325,7 +1409,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Computed:    true,
@@ -1462,6 +1547,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -1483,7 +1569,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -1500,26 +1587,19 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
-					"next_queue": schema.StringAttribute{
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Computed:    true,
@@ -1590,10 +1670,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -1641,7 +1723,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -1661,11 +1744,20 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"next_queue": schema.StringAttribute{
+						Computed:    true,
+						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
+					},
+					"tcp_routing": schema.StringAttribute{
+						Computed:    true,
+						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
@@ -1680,7 +1772,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Splunk HEC Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -1754,6 +1847,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1766,7 +1860,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -1783,22 +1878,15 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"next_queue": schema.StringAttribute{
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Computed:    true,
@@ -1869,10 +1957,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -1916,7 +2006,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -1936,26 +2027,37 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
-					"on_backpressure": schema.StringAttribute{
-						Computed: true,
-					},
 					"wiz_connector_id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.`,
 					},
 					"wiz_environment": schema.StringAttribute{
 						Computed:    true,
-						Description: `Your Wiz deployment environment.`,
+						Description: `Your Wiz deployment environment`,
 					},
 					"data_center": schema.StringAttribute{
 						Computed:    true,
-						Description: `Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
+						Description: `Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
 					},
 					"wiz_sourcetype": schema.StringAttribute{
+						Computed:    true,
+						Description: `Wiz Defend Source type`,
+					},
+					"on_backpressure": schema.StringAttribute{
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"token": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Wiz Defend Auth token`,
+					},
+					"text_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `Select or create a stored text secret`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -2000,16 +2102,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
-					},
-					"token": schema.StringAttribute{
-						Computed:    true,
-						Sensitive:   true,
-						Description: `Wiz Defend Auth token`,
-					},
-					"text_secret": schema.StringAttribute{
-						Computed:    true,
-						Description: `Select or create a stored text secret`,
 					},
 				},
 			},
@@ -2038,7 +2132,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -2060,7 +2154,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -2123,7 +2218,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -2219,6 +2315,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -2240,7 +2337,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -2257,7 +2355,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -2303,10 +2401,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2351,7 +2451,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -2375,7 +2476,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -2429,6 +2531,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -2441,7 +2544,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -2458,7 +2562,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -2504,10 +2608,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2552,7 +2658,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -2576,7 +2683,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -2630,6 +2738,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -2642,7 +2751,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -2659,7 +2769,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -2770,7 +2880,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Computed: true,
@@ -2810,10 +2921,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -2873,7 +2986,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -3053,7 +3166,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
@@ -3101,10 +3215,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3164,7 +3280,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"container_name": schema.StringAttribute{
@@ -3290,10 +3406,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Blob access tier`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Computed: true,
@@ -3333,10 +3451,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3420,7 +3540,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -3437,7 +3558,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cluster_url": schema.StringAttribute{
@@ -3457,7 +3578,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.`,
 					},
 					"ingest_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Ingestion mode`,
 					},
 					"oauth_endpoint": schema.StringAttribute{
 						Computed: true,
@@ -3479,7 +3601,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The type of OAuth 2.0 client credentials grant flow to use`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Computed:    true,
@@ -3540,10 +3663,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3694,10 +3819,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"prefix": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Prefix (optional)`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3708,7 +3835,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3727,10 +3855,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -3763,7 +3893,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -3856,6 +3987,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -3868,7 +4000,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -3885,7 +4018,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_type": schema.StringAttribute{
@@ -3931,10 +4064,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -3983,7 +4118,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -4011,7 +4147,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enter workspace ID and workspace key directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -4056,6 +4193,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"workspace_id": schema.StringAttribute{
@@ -4097,7 +4235,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"stream_name": schema.StringAttribute{
@@ -4108,8 +4246,9 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -4171,10 +4310,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -4227,6 +4368,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -4239,7 +4381,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -4256,7 +4399,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dataset": schema.StringAttribute{
@@ -4299,10 +4442,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -4347,7 +4492,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -4374,7 +4520,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -4419,6 +4566,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"team": schema.StringAttribute{
@@ -4439,7 +4587,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -4456,7 +4605,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -4522,7 +4671,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
 								Computed: true,
@@ -4590,7 +4740,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed:    true,
@@ -4602,7 +4753,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -4647,11 +4799,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_google_chronicle": schema.SingleNestedAttribute{
+			"output_google_bigquery": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -4659,7 +4812,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -4676,14 +4830,145 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"project_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Google Cloud project ID that contains the BigQuery dataset`,
+					},
+					"dataset_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `BigQuery dataset ID`,
+					},
+					"table_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `BigQuery table ID`,
+					},
+					"timestamp_column": schema.StringAttribute{
+						Computed:    true,
+						Description: "Column name to write event time (`_time`) as a BigQuery TIMESTAMP. Used for time partitioning",
+					},
+					"google_auth_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), or Secret to select or create a stored secret that references Google service account credentials`,
+					},
+					"secret": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Select or create a stored text secret`,
+					},
+					"flush_period": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
+					},
+					"max_queue_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of queued batches before blocking`,
+					},
+					"max_record_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum size (KB) of a single append request. BigQuery limit is 10 MB`,
+					},
+					"max_in_progress": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The maximum number of in-progress API requests before backpressure is applied`,
+					},
+					"max_send_retries": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_google_chronicle": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -4713,7 +4998,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -4734,7 +5020,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"log_format_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Send events as`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -4776,10 +5063,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -4804,7 +5093,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"extra_log_types": schema.ListNestedAttribute{
 						Computed:    true,
@@ -4812,10 +5102,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"log_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Log Type`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -4842,10 +5134,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -4914,6 +5208,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -4926,7 +5221,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -4943,7 +5239,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -4959,7 +5255,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Google Cloud Storage service endpoint`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"stage_path": schema.StringAttribute{
 						Computed:    true,
@@ -5087,7 +5384,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Computed: true,
@@ -5127,10 +5425,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5186,7 +5486,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -5203,18 +5504,20 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_location_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Log location type`,
 					},
 					"log_name_expression": schema.StringAttribute{
 						Computed:    true,
 						Description: `JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.`,
 					},
 					"sanitize_log_names": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Validate and correct log name`,
 					},
 					"payload_format": schema.StringAttribute{
 						Computed:    true,
@@ -5424,7 +5727,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"log_location_expression": schema.StringAttribute{
 						Computed:    true,
@@ -5477,6 +5781,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -5489,7 +5794,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -5506,14 +5812,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"otlp_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
@@ -5529,10 +5837,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5576,7 +5886,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -5620,7 +5931,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"secret": schema.StringAttribute{
 						Computed:    true,
@@ -5670,6 +5982,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -5699,7 +6012,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_name": schema.StringAttribute{
@@ -5758,7 +6071,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -5803,6 +6117,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -5815,7 +6130,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -5832,7 +6148,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -5955,7 +6271,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.`,
 					},
 					"timezone_offset": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Timezone offset`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
@@ -5967,7 +6284,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: "HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.",
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -6012,7 +6330,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -6049,7 +6367,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Computed:    true,
@@ -6071,7 +6390,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6098,10 +6418,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -6124,7 +6446,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
@@ -6210,14 +6533,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Computed:  true,
-								Sensitive: true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Computed: true,
@@ -6266,10 +6592,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -6280,10 +6608,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -6294,7 +6624,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -6338,7 +6669,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Computed:    true,
@@ -6391,6 +6723,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -6420,7 +6753,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -6432,7 +6765,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -6501,7 +6835,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Computed:    true,
@@ -6523,7 +6858,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6550,10 +6886,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -6576,7 +6914,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
@@ -6662,14 +7001,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Computed:  true,
-								Sensitive: true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Computed: true,
@@ -6718,10 +7060,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -6732,10 +7076,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -6746,7 +7092,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Computed:    true,
@@ -6799,6 +7146,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -6828,7 +7176,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -6865,7 +7213,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Computed:    true,
@@ -6887,7 +7236,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6914,10 +7264,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -6940,7 +7292,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
@@ -7026,8 +7379,9 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -7065,7 +7419,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -7109,10 +7464,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -7169,6 +7526,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -7181,7 +7539,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -7198,7 +7557,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -7249,10 +7608,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7293,7 +7654,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -7314,14 +7676,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"extra_params": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Extra parameters`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7330,14 +7695,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Computed:  true,
-								Sensitive: true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Computed: true,
@@ -7380,7 +7748,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
@@ -7395,7 +7764,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Bulk API URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -7460,6 +7830,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -7472,7 +7843,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -7489,7 +7861,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -7536,10 +7908,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7558,10 +7932,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7570,14 +7946,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Computed:  true,
-								Sensitive: true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Computed: true,
@@ -7632,7 +8011,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -7656,7 +8036,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -7701,6 +8082,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -7713,7 +8095,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -7730,7 +8113,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -7750,7 +8133,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Computed:    true,
@@ -7795,10 +8179,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7843,7 +8229,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -7874,7 +8261,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Computed: true,
@@ -7922,6 +8310,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -7943,7 +8332,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -7960,7 +8350,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -8010,10 +8400,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -8058,7 +8450,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -8085,7 +8478,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Computed: true,
@@ -8133,6 +8527,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -8154,7 +8549,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8171,7 +8567,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -8230,10 +8626,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -8278,7 +8676,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -8306,7 +8705,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `InfluxDB authentication type`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -8363,14 +8763,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -8395,7 +8798,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8412,7 +8816,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_group_name": schema.StringAttribute{
@@ -8427,8 +8831,9 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -8478,10 +8883,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -8530,6 +8937,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8542,7 +8950,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8559,7 +8968,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -8719,7 +9128,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
@@ -8767,10 +9177,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -8813,7 +9225,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8830,7 +9243,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -8857,7 +9270,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -8917,6 +9331,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8929,7 +9344,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -8946,7 +9362,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -8973,7 +9389,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -9033,6 +9450,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9045,7 +9463,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9062,7 +9481,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -9089,7 +9508,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -9149,6 +9569,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9161,7 +9582,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9178,7 +9600,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"rules": schema.ListNestedAttribute{
@@ -9206,7 +9628,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -9218,7 +9641,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9235,7 +9659,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_arn": schema.StringAttribute{
@@ -9254,8 +9678,9 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -9293,10 +9718,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -9345,6 +9772,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9374,7 +9802,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"queue_name": schema.StringAttribute{
@@ -9401,8 +9829,9 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -9456,10 +9885,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -9508,6 +9939,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9537,7 +9969,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -9560,8 +9992,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.`,
 					},
+					"enable_ip_spoofing": schema.BoolAttribute{
+						Computed:    true,
+						Description: "Send SNMP Trap traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
+					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"max_record_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `MTU in bytes. The actual maximum SNMP Trap payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). Payloads exceeding this limit will be dropped.`,
 					},
 				},
 			},
@@ -9573,7 +10014,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9590,7 +10032,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -9645,10 +10087,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -9693,7 +10137,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -9721,7 +10166,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -9766,6 +10212,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9778,7 +10225,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9795,7 +10243,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"content_type": schema.StringAttribute{
@@ -9879,10 +10327,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -9927,7 +10377,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -9958,7 +10409,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Computed: true,
@@ -10006,6 +10458,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -10027,7 +10480,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -10044,7 +10498,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"loki_url": schema.StringAttribute{
@@ -10068,10 +10522,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -10172,10 +10628,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10220,7 +10678,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -10244,7 +10703,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Computed:    true,
@@ -10293,6 +10753,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10305,7 +10766,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -10322,7 +10784,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -10342,10 +10804,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -10385,10 +10849,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10433,7 +10899,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -10465,7 +10932,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Computed:    true,
@@ -10536,6 +11004,246 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_amazon_managed_prometheus": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Computed: true,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `Region where the AMSP is located`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use Assume Role credentials to access AMSP`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"metric_rename_expr": schema.StringAttribute{
+						Computed:    true,
+						Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+					},
+					"send_metadata": schema.BoolAttribute{
+						Computed:    true,
+						Description: "Generate and send metadata (`type` and `metricFamilyName`) requests",
+					},
+					"use_prometheus_histogram_bucket_suffix": schema.BoolAttribute{
+						Computed:    true,
+						Description: "Serialize histogram bucket series as `<metric>_bucket` to match Prometheus histogram naming convention",
+					},
+					"concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum uncompressed size, in KB, of the request body. The 1 MB cap is intentional and protects against data that compresses poorly, since oversized requests fail with a non-retryable 413.`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Headers to add to all events. SigV4-managed headers and the Prometheus remote-write protocol version header are generated by this Destination and cannot be configured here.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"metrics_flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10565,7 +11273,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -10616,10 +11324,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10664,7 +11374,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -10688,10 +11399,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Remote Write authentication type`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"metrics_flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -10740,14 +11453,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -10762,6 +11478,37 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Select or create a stored text secret`,
 					},
+					"aws_authentication_method": schema.StringAttribute{
+						Computed: true,
+					},
+					"aws_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS region used to sign Remote Write requests`,
+					},
+					"aws_service": schema.StringAttribute{
+						Computed:    true,
+						Description: "ID used to sign Remote Write requests (for example, `aps` for Amazon Managed Service for Prometheus)",
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Prometheus`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
 				},
 			},
 			"output_ring": schema.SingleNestedAttribute{
@@ -10772,7 +11519,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -10789,7 +11537,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"format": schema.StringAttribute{
@@ -10819,7 +11567,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -10831,7 +11580,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -10848,7 +11598,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -10869,7 +11619,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"http_traces_endpoint_override": schema.StringAttribute{
 						Computed:    true,
@@ -10889,10 +11640,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -10940,14 +11693,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -11034,10 +11790,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11075,7 +11833,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -11099,7 +11858,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -11178,6 +11938,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11190,7 +11951,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -11207,7 +11969,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -11219,7 +11981,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Auth token name`,
 					},
 					"otlp_version": schema.StringAttribute{
 						Computed: true,
@@ -11255,10 +12018,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -11302,7 +12067,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed: true,
@@ -11320,10 +12086,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11361,7 +12129,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -11385,7 +12154,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -11464,6 +12234,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11476,7 +12247,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -11493,7 +12265,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"message_field": schema.StringAttribute{
@@ -11545,7 +12317,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -11605,10 +12378,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11636,7 +12411,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Computed: true,
@@ -11684,6 +12460,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -11722,7 +12499,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -11744,7 +12521,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -11806,7 +12584,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -11824,7 +12603,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -11920,6 +12700,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11932,7 +12713,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -11949,7 +12731,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -11960,7 +12742,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -12044,10 +12827,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12092,7 +12877,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -12122,10 +12908,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -12134,7 +12922,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
@@ -12149,7 +12938,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -12214,6 +13004,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12226,7 +13017,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -12243,7 +13035,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -12254,7 +13046,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed: true,
@@ -12338,10 +13131,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12386,7 +13181,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -12416,10 +13212,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -12432,7 +13230,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
@@ -12443,7 +13242,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -12508,6 +13308,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12520,7 +13321,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -12537,7 +13339,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -12580,10 +13382,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12634,7 +13438,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -12658,7 +13463,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -12712,6 +13518,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12724,7 +13531,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -12741,7 +13549,7 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -12785,10 +13593,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12839,7 +13649,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -12863,11 +13674,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Next-Gen SIEM authentication token`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -12916,6 +13729,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12928,7 +13742,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -12945,7 +13760,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -13126,7 +13941,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
@@ -13174,10 +13990,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -13237,7 +14055,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -13384,8 +14202,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"object_acl": schema.StringAttribute{
 						Computed: true,
@@ -13436,10 +14255,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -13457,7 +14278,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Computed:    true,
@@ -13497,7 +14319,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -13514,56 +14337,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"endpoint": schema.StringAttribute{
-						Computed:    true,
-						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
-					},
-					"enable_assume_role": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Use Assume Role credentials to access S3`,
-					},
-					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Description: `Amazon Resource Name (ARN) of the role to assume`,
-					},
-					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `External ID to use when assuming role`,
-					},
-					"duration_seconds": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
-					},
-					"reuse_connections": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Reuse connections between requests, which can improve performance`,
-					},
-					"reject_unauthorized": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
-					},
-					"bucket": schema.StringAttribute{
-						Computed:    true,
-						Description: "Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
-					},
-					"region": schema.StringAttribute{
-						Computed:    true,
-						Description: `Region where the S3 bucket is located`,
-					},
-					"dest_path": schema.StringAttribute{
-						Computed:    true,
-						Description: `Lake dataset to send the data to.`,
-					},
-					"verify_permissions": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Disable if you can access files within the bucket but not the bucket itself`,
-					},
-					"max_closing_files_to_backpressure": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
 					},
 					"stage_path": schema.StringAttribute{
 						Computed:    true,
@@ -13661,36 +14436,89 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							},
 						},
 					},
-					"aws_secret_key": schema.StringAttribute{
+					"storage_location_id": schema.StringAttribute{
 						Computed:    true,
-						Sensitive:   true,
-						Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+						Description: `Storage location that contains the target Lake dataset.`,
 					},
-					"object_acl": schema.StringAttribute{
-						Computed: true,
-					},
-					"storage_class": schema.StringAttribute{
-						Computed: true,
-					},
-					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
-					},
-					"kms_key_id": schema.StringAttribute{
+					"dest_path": schema.StringAttribute{
 						Computed:    true,
-						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
-					},
-					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Description: `Lake dataset to send the data to.`,
 					},
 					"format": schema.StringAttribute{
 						Computed: true,
 					},
+					"dynamic_dataset": schema.BoolAttribute{
+						Computed: true,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Computed: true,
+					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Computed: true,
 					},
 					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"compress": schema.StringAttribute{
 						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -13718,7 +14546,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -13735,7 +14564,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"time_window": schema.StringAttribute{
@@ -13758,7 +14587,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -13770,7 +14600,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -13787,7 +14618,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -13798,19 +14629,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Computed:    true,
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Computed:    true,
-						Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `How event fields are mapped to ClickHouse columns`,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Computed:    true,
@@ -13820,7 +14650,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Computed:    true,
@@ -13891,10 +14722,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -13939,7 +14772,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -13971,14 +14805,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Computed:    true,
@@ -14002,7 +14839,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -14063,11 +14901,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_local_search_storage": schema.SingleNestedAttribute{
+			"output_customer_metrics_storage": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -14075,7 +14914,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -14092,40 +14932,40 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
-						Description: `URL of the database instance. Example: http://localhost:8123/`,
+						Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Computed:    true,
-						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Computed:    true,
-						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `How event fields are mapped to columns.`,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+						Description: `Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Computed:    true,
@@ -14196,10 +15036,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14244,7 +15086,324 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"workload": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
+					"dump_format_errors_to_disk": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Log the most recent event that fails to match the table schema`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `Username`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
+					},
+					"credentials_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `Select or create a secret that references your credentials`,
+					},
+					"sql_username": schema.StringAttribute{
+						Computed:    true,
+						Description: `Username for certificate authentication`,
+					},
+					"wait_for_async_inserts": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.`,
+					},
+					"exclude_mapping_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to exclude from sending to ClickHouse`,
+						ElementType: types.StringType,
+					},
+					"describe_table": schema.StringAttribute{
+						Computed:    true,
+						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
+					},
+					"column_mappings": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Column Mapping`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"column_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the column in ClickHouse that will store field value`,
+								},
+								"column_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the column in the ClickHouse database`,
+								},
+								"column_value_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute value to be inserted into ClickHouse table`,
+								},
+							},
+						},
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_local_search_storage": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Computed:    true,
+						Description: `URL of the database instance. Example: http://localhost:8123/`,
+					},
+					"auth_type": schema.StringAttribute{
+						Computed: true,
+					},
+					"database": schema.StringAttribute{
+						Computed:    true,
+						Description: `Database`,
+					},
+					"table_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+					},
+					"format": schema.StringAttribute{
+						Computed:    true,
+						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+					},
+					"mapping_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `How event fields are mapped to columns.`,
+					},
+					"async_inserts": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Disabled`,
+							},
+							"servername": schema.StringAttribute{
+								Computed:    true,
+								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
 								Computed: true,
+							},
+							"max_version": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"compress": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Compress the payload body before sending`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -14309,14 +15468,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Computed:  true,
-						Sensitive: true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Computed:    true,
@@ -14340,7 +15502,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -14401,6 +15564,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14413,7 +15577,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -14430,7 +15595,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -14473,10 +15638,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14521,7 +15688,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -14553,7 +15721,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Computed:    true,
@@ -14568,7 +15737,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `XSIAM Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"weight": schema.Float64Attribute{
@@ -14638,6 +15808,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14667,7 +15838,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -14695,7 +15866,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: "Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_record_size": schema.Float64Attribute{
 						Computed:    true,
@@ -14711,7 +15883,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -14728,7 +15901,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -14774,10 +15947,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14822,7 +15997,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -14846,24 +16022,28 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"format": schema.StringAttribute{
 						Computed:    true,
 						Description: `How to format events before sending. Defaults to JSON. Plaintext is not currently supported.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Endpoint`,
 					},
 					"telemetry_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Telemetry type`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -14908,6 +16088,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"token": schema.StringAttribute{
@@ -14941,7 +16122,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -14958,7 +16140,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -14996,10 +16178,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15052,13 +16236,15 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Api-Token name`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed: true,
@@ -15076,10 +16262,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15117,7 +16305,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -15180,6 +16369,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -15192,7 +16382,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -15209,16 +16400,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"region": schema.StringAttribute{
-						Computed:    true,
-						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
-					},
-					"endpoint": schema.StringAttribute{
-						Computed:    true,
-						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Computed:    true,
@@ -15256,10 +16439,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15303,7 +16488,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -15323,11 +16509,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Computed:    true,
@@ -15441,6 +16636,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -15453,7 +16649,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -15470,14 +16667,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -15507,7 +16706,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Computed:    true,
@@ -15567,10 +16767,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15595,7 +16797,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"ingestion_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Chronicle API ingestion method`,
 					},
 					"namespace": schema.StringAttribute{
 						Computed:    true,
@@ -15623,10 +16826,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 								"rbac_enabled": schema.BoolAttribute{
 									Computed:    true,
@@ -15640,7 +16845,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Computed:    true,
@@ -15693,6 +16899,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -15705,7 +16912,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -15722,7 +16930,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -15869,7 +17077,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Computed: true,
@@ -15909,10 +17118,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15947,7 +17158,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 				},
 			},
-			"output_microsoft_fabric": schema.SingleNestedAttribute{
+			"output_snowflake_streaming": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -15955,7 +17166,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -15972,7 +17184,240 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"account_identifier": schema.StringAttribute{
+						Computed:    true,
+						Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT)`,
+					},
+					"user": schema.StringAttribute{
+						Computed:    true,
+						Description: `Snowflake user with key-pair authentication configured`,
+					},
+					"pem": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Private key`,
+						Attributes: map[string]schema.Attribute{
+							"key_name": schema.StringAttribute{
+								Computed:    true,
+								Description: `Select the stored secret containing the RSA private key (PEM format) for Snowflake key-pair authentication`,
+							},
+						},
+					},
+					"database": schema.StringAttribute{
+						Computed:    true,
+						Description: `Target database`,
+					},
+					"schema": schema.StringAttribute{
+						Computed:    true,
+						Description: `Target schema`,
+					},
+					"table": schema.StringAttribute{
+						Computed:    true,
+						Description: `Target table`,
+					},
+					"url": schema.StringAttribute{
+						Computed:    true,
+						Description: `Override endpoint URL (for PrivateLink or custom deployments). Defaults to https://<accountIdentifier>.snowflakecomputing.com:443`,
+					},
+					"role": schema.StringAttribute{
+						Computed:    true,
+						Description: `Snowflake role to assume for this connection`,
+					},
+					"keep_alive": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Keep connections open between requests. Disable only if experiencing connection pooling issues.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events per request. Default is 0 (unlimited, size-gated only).`,
+					},
+					"compress": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Compress the payload body using zstd compression before sending.`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"control_request_timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Timeout in seconds for token exchange, channel open/close, and hostname discovery. Defaults to 30 seconds.`,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_microsoft_fabric": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -16034,7 +17479,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"mechanism": schema.StringAttribute{
 								Computed: true,
@@ -16089,7 +17535,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Computed:    true,
@@ -16105,7 +17552,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Bootstrap server from Fabric Eventstream's endpoint`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -16150,6 +17598,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"pq_controls": schema.MapAttribute{
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -16162,7 +17611,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -16179,12 +17629,11 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed:    true,
-						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+						Computed: true,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -16333,7 +17782,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -16377,10 +17827,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16423,7 +17875,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -16440,7 +17893,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -16586,7 +18039,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Nutanix Objects S3-compatible endpoint URL (example: https://objects.nutanix.local)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -16630,10 +18084,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16676,7 +18132,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -16693,7 +18150,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -16835,7 +18292,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Storj S3-compatible gateway endpoint URL (example: https://gateway.storjshare.io)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -16879,10 +18337,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16925,7 +18385,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -16942,7 +18403,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -17084,7 +18545,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `AlphaSOC S3-compatible endpoint URL (example: https://s3.alphasoc.net)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -17128,10 +18590,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -17174,7 +18638,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -17191,7 +18656,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -17340,7 +18805,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Dell PowerScale OneFS S3-compatible endpoint URL (example: https://powerscale.example.com:9021)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -17384,10 +18850,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -17430,7 +18898,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -17447,7 +18916,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -17606,7 +19075,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -17650,10 +19120,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -17696,7 +19168,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -17713,7 +19186,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -17859,7 +19332,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Scality RING S3-compatible endpoint URL (example: https://s3.scality.example.com)`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -17903,10 +19377,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -17949,7 +19425,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -17966,11 +19443,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -18110,8 +19588,25 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: "Alibaba OSS S3-compatible endpoint URL. Examples: public `https://s3.oss-{region}.aliyuncs.com`, internal `https://s3.oss-{region}-internal.aliyuncs.com`",
 					},
+					"enable_assume_role": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Alibaba OSS`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `ARN of the RAM role to assume. Format: acs:ram::<account-id>:role/<role-name>. Example: acs:ram::123456789:role/OSSAccessRole`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `External ID for the assumed role (optional, for security when configured in the role trust policy)`,
+					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -18155,10 +19650,265 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+					},
+					"empty_dir_cleanup_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How frequently, in seconds, to clean up empty directories`,
+					},
+					"directory_batch_size": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+					},
+					"deadletter_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+					},
+					"max_retry_num": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+					},
+				},
+			},
+			"output_ibm_cloud_s3": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Computed: true,
+					},
+					"reuse_connections": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Reuse connections between requests, which can improve performance`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+					},
+					"bucket": schema.StringAttribute{
+						Computed:    true,
+						Description: "Name of the destination IBM Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+					},
+					"dest_path": schema.StringAttribute{
+						Computed:    true,
+						Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+					},
+					"max_concurrent_file_parts": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+					},
+					"verify_permissions": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Disable if you can access files within the bucket but not the bucket itself`,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+					},
+					"stage_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+					},
+					"add_id_to_stage_path": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Add the Output ID value to staging location`,
+					},
+					"remove_empty_dirs": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Remove empty staging directories after moving files`,
+					},
+					"partition_expr": schema.StringAttribute{
+						Computed:    true,
+						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+					},
+					"format": schema.StringAttribute{
+						Computed: true,
+					},
+					"base_file_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+					},
+					"file_name_suffix": schema.StringAttribute{
+						Computed:    true,
+						Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+					},
+					"max_file_size_mb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+					},
+					"max_file_open_time_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_file_idle_time_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_open_files": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+					},
+					"header_line": schema.StringAttribute{
+						Computed:    true,
+						Description: `If set, this line will be written to the beginning of each output file`,
+					},
+					"write_high_water_mark": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Buffer size used to write to a file`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"deadletter_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+					},
+					"on_disk_full_backpressure": schema.StringAttribute{
+						Computed: true,
+					},
+					"force_close_on_shutdown": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+					},
+					"retry_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+							},
+							"initial_backoff_ms": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"backoff_multiplier": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"max_backoff_ms": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"jitter_percent": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+							},
+						},
+					},
+					"orphans": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+							},
+							"period_min": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Minimum interval between reconciliation runs`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"compress": schema.StringAttribute{
+						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},

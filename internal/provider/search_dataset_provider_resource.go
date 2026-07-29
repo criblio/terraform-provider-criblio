@@ -1428,10 +1428,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIHttpProvider.Type.IsNull() || state.APIHttpProvider.Type.IsUnknown() {
 			state.APIHttpProvider.Type = types.StringNull()
 		}
-		if !api.APIHttpProvider.Description.IsNull() && !api.APIHttpProvider.Description.IsUnknown() {
-			state.APIHttpProvider.Description = api.APIHttpProvider.Description
-		} else if state.APIHttpProvider.Description.IsNull() || state.APIHttpProvider.Description.IsUnknown() {
-			state.APIHttpProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIHttpProvider.Description.IsNull() || state.APIHttpProvider.Description.IsUnknown())) {
+			if !api.APIHttpProvider.Description.IsNull() && !api.APIHttpProvider.Description.IsUnknown() {
+				state.APIHttpProvider.Description = api.APIHttpProvider.Description
+			}
 		}
 		if !api.APIHttpProvider.AvailableEndpoints.IsNull() && !api.APIHttpProvider.AvailableEndpoints.IsUnknown() {
 			state.APIHttpProvider.AvailableEndpoints = api.APIHttpProvider.AvailableEndpoints
@@ -1458,10 +1458,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIAwsProvider.Type.IsNull() || state.APIAwsProvider.Type.IsUnknown() {
 			state.APIAwsProvider.Type = types.StringNull()
 		}
-		if !api.APIAwsProvider.Description.IsNull() && !api.APIAwsProvider.Description.IsUnknown() {
-			state.APIAwsProvider.Description = api.APIAwsProvider.Description
-		} else if state.APIAwsProvider.Description.IsNull() || state.APIAwsProvider.Description.IsUnknown() {
-			state.APIAwsProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIAwsProvider.Description.IsNull() || state.APIAwsProvider.Description.IsUnknown())) {
+			if !api.APIAwsProvider.Description.IsNull() && !api.APIAwsProvider.Description.IsUnknown() {
+				state.APIAwsProvider.Description = api.APIAwsProvider.Description
+			}
 		}
 		if !api.APIAwsProvider.AccountConfigs.IsNull() && !api.APIAwsProvider.AccountConfigs.IsUnknown() {
 			state.APIAwsProvider.AccountConfigs = api.APIAwsProvider.AccountConfigs
@@ -1483,10 +1483,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIAzureProvider.Type.IsNull() || state.APIAzureProvider.Type.IsUnknown() {
 			state.APIAzureProvider.Type = types.StringNull()
 		}
-		if !api.APIAzureProvider.Description.IsNull() && !api.APIAzureProvider.Description.IsUnknown() {
-			state.APIAzureProvider.Description = api.APIAzureProvider.Description
-		} else if state.APIAzureProvider.Description.IsNull() || state.APIAzureProvider.Description.IsUnknown() {
-			state.APIAzureProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIAzureProvider.Description.IsNull() || state.APIAzureProvider.Description.IsUnknown())) {
+			if !api.APIAzureProvider.Description.IsNull() && !api.APIAzureProvider.Description.IsUnknown() {
+				state.APIAzureProvider.Description = api.APIAzureProvider.Description
+			}
 		}
 		if !api.APIAzureProvider.AccountConfigs.IsNull() && !api.APIAzureProvider.AccountConfigs.IsUnknown() {
 			state.APIAzureProvider.AccountConfigs = api.APIAzureProvider.AccountConfigs
@@ -1508,10 +1508,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIGcpProvider.Type.IsNull() || state.APIGcpProvider.Type.IsUnknown() {
 			state.APIGcpProvider.Type = types.StringNull()
 		}
-		if !api.APIGcpProvider.Description.IsNull() && !api.APIGcpProvider.Description.IsUnknown() {
-			state.APIGcpProvider.Description = api.APIGcpProvider.Description
-		} else if state.APIGcpProvider.Description.IsNull() || state.APIGcpProvider.Description.IsUnknown() {
-			state.APIGcpProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIGcpProvider.Description.IsNull() || state.APIGcpProvider.Description.IsUnknown())) {
+			if !api.APIGcpProvider.Description.IsNull() && !api.APIGcpProvider.Description.IsUnknown() {
+				state.APIGcpProvider.Description = api.APIGcpProvider.Description
+			}
 		}
 		if !api.APIGcpProvider.AccountConfigs.IsNull() && !api.APIGcpProvider.AccountConfigs.IsUnknown() {
 			state.APIGcpProvider.AccountConfigs = api.APIGcpProvider.AccountConfigs
@@ -1533,10 +1533,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIGoogleWorkspaceProvider.Type.IsNull() || state.APIGoogleWorkspaceProvider.Type.IsUnknown() {
 			state.APIGoogleWorkspaceProvider.Type = types.StringNull()
 		}
-		if !api.APIGoogleWorkspaceProvider.Description.IsNull() && !api.APIGoogleWorkspaceProvider.Description.IsUnknown() {
-			state.APIGoogleWorkspaceProvider.Description = api.APIGoogleWorkspaceProvider.Description
-		} else if state.APIGoogleWorkspaceProvider.Description.IsNull() || state.APIGoogleWorkspaceProvider.Description.IsUnknown() {
-			state.APIGoogleWorkspaceProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIGoogleWorkspaceProvider.Description.IsNull() || state.APIGoogleWorkspaceProvider.Description.IsUnknown())) {
+			if !api.APIGoogleWorkspaceProvider.Description.IsNull() && !api.APIGoogleWorkspaceProvider.Description.IsUnknown() {
+				state.APIGoogleWorkspaceProvider.Description = api.APIGoogleWorkspaceProvider.Description
+			}
 		}
 		if !api.APIGoogleWorkspaceProvider.AccountConfigs.IsNull() && !api.APIGoogleWorkspaceProvider.AccountConfigs.IsUnknown() {
 			state.APIGoogleWorkspaceProvider.AccountConfigs = api.APIGoogleWorkspaceProvider.AccountConfigs
@@ -1558,10 +1558,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIMsGraphProvider.Type.IsNull() || state.APIMsGraphProvider.Type.IsUnknown() {
 			state.APIMsGraphProvider.Type = types.StringNull()
 		}
-		if !api.APIMsGraphProvider.Description.IsNull() && !api.APIMsGraphProvider.Description.IsUnknown() {
-			state.APIMsGraphProvider.Description = api.APIMsGraphProvider.Description
-		} else if state.APIMsGraphProvider.Description.IsNull() || state.APIMsGraphProvider.Description.IsUnknown() {
-			state.APIMsGraphProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIMsGraphProvider.Description.IsNull() || state.APIMsGraphProvider.Description.IsUnknown())) {
+			if !api.APIMsGraphProvider.Description.IsNull() && !api.APIMsGraphProvider.Description.IsUnknown() {
+				state.APIMsGraphProvider.Description = api.APIMsGraphProvider.Description
+			}
 		}
 		if !api.APIMsGraphProvider.AccountConfigs.IsNull() && !api.APIMsGraphProvider.AccountConfigs.IsUnknown() {
 			state.APIMsGraphProvider.AccountConfigs = api.APIMsGraphProvider.AccountConfigs
@@ -1583,10 +1583,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIOktaProvider.Type.IsNull() || state.APIOktaProvider.Type.IsUnknown() {
 			state.APIOktaProvider.Type = types.StringNull()
 		}
-		if !api.APIOktaProvider.Description.IsNull() && !api.APIOktaProvider.Description.IsUnknown() {
-			state.APIOktaProvider.Description = api.APIOktaProvider.Description
-		} else if state.APIOktaProvider.Description.IsNull() || state.APIOktaProvider.Description.IsUnknown() {
-			state.APIOktaProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIOktaProvider.Description.IsNull() || state.APIOktaProvider.Description.IsUnknown())) {
+			if !api.APIOktaProvider.Description.IsNull() && !api.APIOktaProvider.Description.IsUnknown() {
+				state.APIOktaProvider.Description = api.APIOktaProvider.Description
+			}
 		}
 		if !api.APIOktaProvider.AccountConfigs.IsNull() && !api.APIOktaProvider.AccountConfigs.IsUnknown() {
 			state.APIOktaProvider.AccountConfigs = api.APIOktaProvider.AccountConfigs
@@ -1608,10 +1608,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APITailscaleProvider.Type.IsNull() || state.APITailscaleProvider.Type.IsUnknown() {
 			state.APITailscaleProvider.Type = types.StringNull()
 		}
-		if !api.APITailscaleProvider.Description.IsNull() && !api.APITailscaleProvider.Description.IsUnknown() {
-			state.APITailscaleProvider.Description = api.APITailscaleProvider.Description
-		} else if state.APITailscaleProvider.Description.IsNull() || state.APITailscaleProvider.Description.IsUnknown() {
-			state.APITailscaleProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APITailscaleProvider.Description.IsNull() || state.APITailscaleProvider.Description.IsUnknown())) {
+			if !api.APITailscaleProvider.Description.IsNull() && !api.APITailscaleProvider.Description.IsUnknown() {
+				state.APITailscaleProvider.Description = api.APITailscaleProvider.Description
+			}
 		}
 		if !api.APITailscaleProvider.AccountConfigs.IsNull() && !api.APITailscaleProvider.AccountConfigs.IsUnknown() {
 			state.APITailscaleProvider.AccountConfigs = api.APITailscaleProvider.AccountConfigs
@@ -1633,10 +1633,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIZoomProvider.Type.IsNull() || state.APIZoomProvider.Type.IsUnknown() {
 			state.APIZoomProvider.Type = types.StringNull()
 		}
-		if !api.APIZoomProvider.Description.IsNull() && !api.APIZoomProvider.Description.IsUnknown() {
-			state.APIZoomProvider.Description = api.APIZoomProvider.Description
-		} else if state.APIZoomProvider.Description.IsNull() || state.APIZoomProvider.Description.IsUnknown() {
-			state.APIZoomProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIZoomProvider.Description.IsNull() || state.APIZoomProvider.Description.IsUnknown())) {
+			if !api.APIZoomProvider.Description.IsNull() && !api.APIZoomProvider.Description.IsUnknown() {
+				state.APIZoomProvider.Description = api.APIZoomProvider.Description
+			}
 		}
 		if !api.APIZoomProvider.AccountConfigs.IsNull() && !api.APIZoomProvider.AccountConfigs.IsUnknown() {
 			state.APIZoomProvider.AccountConfigs = api.APIZoomProvider.AccountConfigs
@@ -1658,10 +1658,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIAzureDataExplorerProvider.Type.IsNull() || state.APIAzureDataExplorerProvider.Type.IsUnknown() {
 			state.APIAzureDataExplorerProvider.Type = types.StringNull()
 		}
-		if !api.APIAzureDataExplorerProvider.Description.IsNull() && !api.APIAzureDataExplorerProvider.Description.IsUnknown() {
-			state.APIAzureDataExplorerProvider.Description = api.APIAzureDataExplorerProvider.Description
-		} else if state.APIAzureDataExplorerProvider.Description.IsNull() || state.APIAzureDataExplorerProvider.Description.IsUnknown() {
-			state.APIAzureDataExplorerProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIAzureDataExplorerProvider.Description.IsNull() || state.APIAzureDataExplorerProvider.Description.IsUnknown())) {
+			if !api.APIAzureDataExplorerProvider.Description.IsNull() && !api.APIAzureDataExplorerProvider.Description.IsUnknown() {
+				state.APIAzureDataExplorerProvider.Description = api.APIAzureDataExplorerProvider.Description
+			}
 		}
 		if !api.APIAzureDataExplorerProvider.TenantID.IsNull() && !api.APIAzureDataExplorerProvider.TenantID.IsUnknown() {
 			state.APIAzureDataExplorerProvider.TenantID = api.APIAzureDataExplorerProvider.TenantID
@@ -1693,10 +1693,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.SnowflakeProvider.Type.IsNull() || state.SnowflakeProvider.Type.IsUnknown() {
 			state.SnowflakeProvider.Type = types.StringNull()
 		}
-		if !api.SnowflakeProvider.Description.IsNull() && !api.SnowflakeProvider.Description.IsUnknown() {
-			state.SnowflakeProvider.Description = api.SnowflakeProvider.Description
-		} else if state.SnowflakeProvider.Description.IsNull() || state.SnowflakeProvider.Description.IsUnknown() {
-			state.SnowflakeProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.SnowflakeProvider.Description.IsNull() || state.SnowflakeProvider.Description.IsUnknown())) {
+			if !api.SnowflakeProvider.Description.IsNull() && !api.SnowflakeProvider.Description.IsUnknown() {
+				state.SnowflakeProvider.Description = api.SnowflakeProvider.Description
+			}
 		}
 		if !api.SnowflakeProvider.AccountIDentifier.IsNull() && !api.SnowflakeProvider.AccountIDentifier.IsUnknown() {
 			state.SnowflakeProvider.AccountIDentifier = api.SnowflakeProvider.AccountIDentifier
@@ -1743,10 +1743,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.ClickHouseProvider.Type.IsNull() || state.ClickHouseProvider.Type.IsUnknown() {
 			state.ClickHouseProvider.Type = types.StringNull()
 		}
-		if !api.ClickHouseProvider.Description.IsNull() && !api.ClickHouseProvider.Description.IsUnknown() {
-			state.ClickHouseProvider.Description = api.ClickHouseProvider.Description
-		} else if state.ClickHouseProvider.Description.IsNull() || state.ClickHouseProvider.Description.IsUnknown() {
-			state.ClickHouseProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.ClickHouseProvider.Description.IsNull() || state.ClickHouseProvider.Description.IsUnknown())) {
+			if !api.ClickHouseProvider.Description.IsNull() && !api.ClickHouseProvider.Description.IsUnknown() {
+				state.ClickHouseProvider.Description = api.ClickHouseProvider.Description
+			}
 		}
 		if !api.ClickHouseProvider.Username.IsNull() && !api.ClickHouseProvider.Username.IsUnknown() {
 			state.ClickHouseProvider.Username = api.ClickHouseProvider.Username
@@ -1778,10 +1778,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.PrometheusProvider.Type.IsNull() || state.PrometheusProvider.Type.IsUnknown() {
 			state.PrometheusProvider.Type = types.StringNull()
 		}
-		if !api.PrometheusProvider.Description.IsNull() && !api.PrometheusProvider.Description.IsUnknown() {
-			state.PrometheusProvider.Description = api.PrometheusProvider.Description
-		} else if state.PrometheusProvider.Description.IsNull() || state.PrometheusProvider.Description.IsUnknown() {
-			state.PrometheusProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.PrometheusProvider.Description.IsNull() || state.PrometheusProvider.Description.IsUnknown())) {
+			if !api.PrometheusProvider.Description.IsNull() && !api.PrometheusProvider.Description.IsUnknown() {
+				state.PrometheusProvider.Description = api.PrometheusProvider.Description
+			}
 		}
 		if !api.PrometheusProvider.Endpoint.IsNull() && !api.PrometheusProvider.Endpoint.IsUnknown() {
 			state.PrometheusProvider.Endpoint = api.PrometheusProvider.Endpoint
@@ -1828,10 +1828,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIOpenSearchProvider.Type.IsNull() || state.APIOpenSearchProvider.Type.IsUnknown() {
 			state.APIOpenSearchProvider.Type = types.StringNull()
 		}
-		if !api.APIOpenSearchProvider.Description.IsNull() && !api.APIOpenSearchProvider.Description.IsUnknown() {
-			state.APIOpenSearchProvider.Description = api.APIOpenSearchProvider.Description
-		} else if state.APIOpenSearchProvider.Description.IsNull() || state.APIOpenSearchProvider.Description.IsUnknown() {
-			state.APIOpenSearchProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIOpenSearchProvider.Description.IsNull() || state.APIOpenSearchProvider.Description.IsUnknown())) {
+			if !api.APIOpenSearchProvider.Description.IsNull() && !api.APIOpenSearchProvider.Description.IsUnknown() {
+				state.APIOpenSearchProvider.Description = api.APIOpenSearchProvider.Description
+			}
 		}
 		if !api.APIOpenSearchProvider.Username.IsNull() && !api.APIOpenSearchProvider.Username.IsUnknown() {
 			state.APIOpenSearchProvider.Username = api.APIOpenSearchProvider.Username
@@ -1863,10 +1863,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.APIElasticSearchProvider.Type.IsNull() || state.APIElasticSearchProvider.Type.IsUnknown() {
 			state.APIElasticSearchProvider.Type = types.StringNull()
 		}
-		if !api.APIElasticSearchProvider.Description.IsNull() && !api.APIElasticSearchProvider.Description.IsUnknown() {
-			state.APIElasticSearchProvider.Description = api.APIElasticSearchProvider.Description
-		} else if state.APIElasticSearchProvider.Description.IsNull() || state.APIElasticSearchProvider.Description.IsUnknown() {
-			state.APIElasticSearchProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.APIElasticSearchProvider.Description.IsNull() || state.APIElasticSearchProvider.Description.IsUnknown())) {
+			if !api.APIElasticSearchProvider.Description.IsNull() && !api.APIElasticSearchProvider.Description.IsUnknown() {
+				state.APIElasticSearchProvider.Description = api.APIElasticSearchProvider.Description
+			}
 		}
 		if !api.APIElasticSearchProvider.Username.IsNull() && !api.APIElasticSearchProvider.Username.IsUnknown() {
 			state.APIElasticSearchProvider.Username = api.APIElasticSearchProvider.Username
@@ -1918,10 +1918,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.S3Provider.Type.IsNull() || state.S3Provider.Type.IsUnknown() {
 			state.S3Provider.Type = types.StringNull()
 		}
-		if !api.S3Provider.Description.IsNull() && !api.S3Provider.Description.IsUnknown() {
-			state.S3Provider.Description = api.S3Provider.Description
-		} else if state.S3Provider.Description.IsNull() || state.S3Provider.Description.IsUnknown() {
-			state.S3Provider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.S3Provider.Description.IsNull() || state.S3Provider.Description.IsUnknown())) {
+			if !api.S3Provider.Description.IsNull() && !api.S3Provider.Description.IsUnknown() {
+				state.S3Provider.Description = api.S3Provider.Description
+			}
 		}
 		if !api.S3Provider.AwsAuthenticationMethod.IsNull() && !api.S3Provider.AwsAuthenticationMethod.IsUnknown() {
 			state.S3Provider.AwsAuthenticationMethod = api.S3Provider.AwsAuthenticationMethod
@@ -2013,10 +2013,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.CriblLeaderProvider.Type.IsNull() || state.CriblLeaderProvider.Type.IsUnknown() {
 			state.CriblLeaderProvider.Type = types.StringNull()
 		}
-		if !api.CriblLeaderProvider.Description.IsNull() && !api.CriblLeaderProvider.Description.IsUnknown() {
-			state.CriblLeaderProvider.Description = api.CriblLeaderProvider.Description
-		} else if state.CriblLeaderProvider.Description.IsNull() || state.CriblLeaderProvider.Description.IsUnknown() {
-			state.CriblLeaderProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.CriblLeaderProvider.Description.IsNull() || state.CriblLeaderProvider.Description.IsUnknown())) {
+			if !api.CriblLeaderProvider.Description.IsNull() && !api.CriblLeaderProvider.Description.IsUnknown() {
+				state.CriblLeaderProvider.Description = api.CriblLeaderProvider.Description
+			}
 		}
 	}
 	if api.CriblSearchProvider != nil {
@@ -2033,10 +2033,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.CriblSearchProvider.Type.IsNull() || state.CriblSearchProvider.Type.IsUnknown() {
 			state.CriblSearchProvider.Type = types.StringNull()
 		}
-		if !api.CriblSearchProvider.Description.IsNull() && !api.CriblSearchProvider.Description.IsUnknown() {
-			state.CriblSearchProvider.Description = api.CriblSearchProvider.Description
-		} else if state.CriblSearchProvider.Description.IsNull() || state.CriblSearchProvider.Description.IsUnknown() {
-			state.CriblSearchProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.CriblSearchProvider.Description.IsNull() || state.CriblSearchProvider.Description.IsUnknown())) {
+			if !api.CriblSearchProvider.Description.IsNull() && !api.CriblSearchProvider.Description.IsUnknown() {
+				state.CriblSearchProvider.Description = api.CriblSearchProvider.Description
+			}
 		}
 	}
 	if api.MetaProvider != nil {
@@ -2053,10 +2053,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.MetaProvider.Type.IsNull() || state.MetaProvider.Type.IsUnknown() {
 			state.MetaProvider.Type = types.StringNull()
 		}
-		if !api.MetaProvider.Description.IsNull() && !api.MetaProvider.Description.IsUnknown() {
-			state.MetaProvider.Description = api.MetaProvider.Description
-		} else if state.MetaProvider.Description.IsNull() || state.MetaProvider.Description.IsUnknown() {
-			state.MetaProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.MetaProvider.Description.IsNull() || state.MetaProvider.Description.IsUnknown())) {
+			if !api.MetaProvider.Description.IsNull() && !api.MetaProvider.Description.IsUnknown() {
+				state.MetaProvider.Description = api.MetaProvider.Description
+			}
 		}
 	}
 	if api.EdgeProvider != nil {
@@ -2073,10 +2073,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.EdgeProvider.Type.IsNull() || state.EdgeProvider.Type.IsUnknown() {
 			state.EdgeProvider.Type = types.StringNull()
 		}
-		if !api.EdgeProvider.Description.IsNull() && !api.EdgeProvider.Description.IsUnknown() {
-			state.EdgeProvider.Description = api.EdgeProvider.Description
-		} else if state.EdgeProvider.Description.IsNull() || state.EdgeProvider.Description.IsUnknown() {
-			state.EdgeProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.EdgeProvider.Description.IsNull() || state.EdgeProvider.Description.IsUnknown())) {
+			if !api.EdgeProvider.Description.IsNull() && !api.EdgeProvider.Description.IsUnknown() {
+				state.EdgeProvider.Description = api.EdgeProvider.Description
+			}
 		}
 	}
 	if api.AzureBlobProvider != nil {
@@ -2093,10 +2093,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.AzureBlobProvider.Type.IsNull() || state.AzureBlobProvider.Type.IsUnknown() {
 			state.AzureBlobProvider.Type = types.StringNull()
 		}
-		if !api.AzureBlobProvider.Description.IsNull() && !api.AzureBlobProvider.Description.IsUnknown() {
-			state.AzureBlobProvider.Description = api.AzureBlobProvider.Description
-		} else if state.AzureBlobProvider.Description.IsNull() || state.AzureBlobProvider.Description.IsUnknown() {
-			state.AzureBlobProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.AzureBlobProvider.Description.IsNull() || state.AzureBlobProvider.Description.IsUnknown())) {
+			if !api.AzureBlobProvider.Description.IsNull() && !api.AzureBlobProvider.Description.IsUnknown() {
+				state.AzureBlobProvider.Description = api.AzureBlobProvider.Description
+			}
 		}
 		if !api.AzureBlobProvider.AuthenticationMethod.IsNull() && !api.AzureBlobProvider.AuthenticationMethod.IsUnknown() {
 			state.AzureBlobProvider.AuthenticationMethod = api.AzureBlobProvider.AuthenticationMethod
@@ -2153,10 +2153,10 @@ func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state
 		} else if state.GcsProvider.Type.IsNull() || state.GcsProvider.Type.IsUnknown() {
 			state.GcsProvider.Type = types.StringNull()
 		}
-		if !api.GcsProvider.Description.IsNull() && !api.GcsProvider.Description.IsUnknown() {
-			state.GcsProvider.Description = api.GcsProvider.Description
-		} else if state.GcsProvider.Description.IsNull() || state.GcsProvider.Description.IsUnknown() {
-			state.GcsProvider.Description = types.StringNull()
+		if !preserveInputs || (fillMissingInputs && (state.GcsProvider.Description.IsNull() || state.GcsProvider.Description.IsUnknown())) {
+			if !api.GcsProvider.Description.IsNull() && !api.GcsProvider.Description.IsUnknown() {
+				state.GcsProvider.Description = api.GcsProvider.Description
+			}
 		}
 		if !api.GcsProvider.ServiceAccountCredentials.IsNull() && !api.GcsProvider.ServiceAccountCredentials.IsUnknown() {
 			state.GcsProvider.ServiceAccountCredentials = api.GcsProvider.ServiceAccountCredentials

@@ -305,10 +305,11 @@ func (r *SearchDatatypeResource) Schema(_ context.Context, _ resource.SchemaRequ
 						Description: `Default timezone applied when parsed timestamps do not include a timezone offset.`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("auto"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("auto"),
+						Description: `Timestamp extraction mode. Set to <code>auto</code> to scan for a timestamp automatically using <code>scanDepth</code>.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("auto"),
 						},

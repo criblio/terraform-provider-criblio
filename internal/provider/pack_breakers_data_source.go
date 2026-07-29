@@ -36,18 +36,21 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "PackBreakers Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Event Breaker Ruleset.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required: true,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Event Breaker Ruleset.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Library classification for the Event Breaker Ruleset.`,
 			},
-			"min_raw_length": schema.Float64Attribute{
+			"min_raw_length": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The  minimum number of characters in _raw to determine which rule to use`,
 			},
@@ -60,14 +63,16 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique name for this Event Breaker Rule within the Ruleset.`,
 						},
 						"condition": schema.StringAttribute{
 							Computed:    true,
 							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.`,
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Event breaking strategy to apply.`,
 						},
 						"timestamp_anchor_regex": schema.StringAttribute{
 							Computed:    true,
@@ -78,13 +83,16 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Description: `Auto, manual format (strptime), or current time`,
 							Attributes: map[string]schema.Attribute{
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Timestamp extraction mode.`,
 								},
-								"length": schema.Float64Attribute{
-									Computed: true,
+								"length": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Number of characters from the start of the event to search for a timestamp.`,
 								},
 								"format": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `strptime format string for manual timestamp parsing. Required when <code>type</code> is <code>format</code>.`,
 								},
 							},
 						},
@@ -100,7 +108,7 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Computed:    true,
 							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.`,
 						},
-						"max_event_bytes": schema.Float64Attribute{
+						"max_event_bytes": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
 						},
@@ -110,7 +118,8 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Name of the field to extract from the event.`,
 									},
 									"value": schema.StringAttribute{
 										Computed:    true,
@@ -124,7 +133,8 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 							Description: `Disable this breaker rule (enabled by default)`,
 						},
 						"parser_enabled": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `If <code>true</code>, enable the parser for this rule. Otherwise, <code>false</code>.`,
 						},
 						"should_use_data_raw": schema.BoolAttribute{
 							Computed:    true,
@@ -155,7 +165,8 @@ func (d *PackBreakersDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Tags for filtering and grouping Event Breaker Rulesets.`,
 			},
 		},
 	}

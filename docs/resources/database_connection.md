@@ -15,14 +15,19 @@ DatabaseConnection Resource
 ```terraform
 resource "criblio_database_connection" "my_database_connection" {
   auth_type = "connectionString"
-  connection_string = "oracle.example.com:1521/ORCL"
+  connection_string = "tcps://oracle.example.com:2484/ORCL"
   connection_timeout = 15000
   database_type = "oracle"
-  description = "Oracle ERP database"
+  description = "Oracle database reached over TCPS with mutual TLS"
   group_id = "default"
-  id = "oracle-erp"
+  id = "oracle-mtls-db"
   password = "Oracle_Pass456!"
-  tags = "erp,oracle,finance"
+  tags = "erp,oracle,mtls,production"
+  tls = {
+    certificate_name = "oracle-client-cert"
+    disabled = false
+    reject_unauthorized = true
+  }
   user = "erp_user"
 }
 ```
@@ -32,23 +37,89 @@ resource "criblio_database_connection" "my_database_connection" {
 
 ### Required
 
-- `auth_type` (String)
-- `database_type` (String)
-- `description` (String)
+- `auth_type` (String) Authentication method for the Database Connection. Determines how credentials are provided.
+- `database_type` (String) Type of database engine for the connection.
+- `description` (String) Brief description of the Database Connection.
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier for the Database Connection.
 
 ### Optional
 
-- `config_obj` (String, Sensitive)
-- `connection_string` (String, Sensitive)
-- `connection_timeout` (Number)
-- `creds_secrets` (String, Sensitive)
-- `password` (String, Sensitive)
-- `request_timeout` (Number)
-- `tags` (String)
-- `text_secret` (String, Sensitive)
-- `user` (String)
+- `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
+- `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
+- `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
+- `creds_secrets` (String, Sensitive) Name of the stored credentials secret containing username and password. Used with Oracle connections.
+- `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
+- `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
+- `tags` (String) Comma-separated list of tags for categorizing and filtering Database Connections.
+- `text_secret` (String, Sensitive) Name of the stored text secret containing the connection string.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--tls))
+- `user` (String) Database username for authentication. Used with Oracle connections.
+
+### Read-Only
+
+- `items` (Attributes List) Database Connections returned in the response envelope. (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Required:
+
+- `auth_type` (String) Authentication method for the Database Connection. Determines how credentials are provided.
+- `database_type` (String) Type of database engine for the connection.
+- `description` (String) Brief description of the Database Connection.
+- `id` (String) Unique identifier for the Database Connection.
+
+Optional:
+
+- `config_obj` (String, Sensitive) JSON configuration object for advanced SQL Server connection settings.
+- `connection_string` (String, Sensitive) Database connection string with embedded credentials or server information.
+- `connection_timeout` (Integer) Maximum time (in milliseconds) to wait when establishing the database connection.
+- `creds_secrets` (String, Sensitive) Name of the stored credentials secret containing username and password. Used with Oracle connections.
+- `password` (String, Sensitive) Database password for authentication. Used with Oracle connections.
+- `request_timeout` (Integer) Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.
+- `tags` (String) Comma-separated list of tags for categorizing and filtering Database Connections.
+- `text_secret` (String, Sensitive) Name of the stored text secret containing the connection string.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--tls))
+- `user` (String) Database username for authentication. Used with Oracle connections.
+
+<a id="nestedatt--items--tls"></a>
+### Nested Schema for `items.tls`
+
+Required:
+
+- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the connection.
+
+Optional:
+
+- `ca_path` (String) Path to the Certificate Authority (CA) certificate file in PEM format.
+- `cert_path` (String) Path to the client certificate file in PEM format.
+- `certificate_name` (String) Name of a certificate stored in Cribl.
+- `max_version` (String) Maximum TLS version to allow for the connection.
+- `min_version` (String) Minimum TLS version to allow for the connection.
+- `passphrase` (String) Passphrase for the private key.
+- `priv_key_path` (String) Path to the private key file in PEM format.
+- `reject_unauthorized` (Boolean) If <code>true</code>, reject connections to servers with unverified TLS certificates.
+- `servername` (String) Server name for TLS Server Name Indication (SNI) extension.
+
+<a id="nestedatt--tls"></a>
+### Nested Schema for `tls`
+
+Required:
+
+- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the connection.
+
+Optional:
+
+- `ca_path` (String) Path to the Certificate Authority (CA) certificate file in PEM format.
+- `cert_path` (String) Path to the client certificate file in PEM format.
+- `certificate_name` (String) Name of a certificate stored in Cribl.
+- `max_version` (String) Maximum TLS version to allow for the connection.
+- `min_version` (String) Minimum TLS version to allow for the connection.
+- `passphrase` (String) Passphrase for the private key.
+- `priv_key_path` (String) Path to the private key file in PEM format.
+- `reject_unauthorized` (Boolean) If <code>true</code>, reject connections to servers with unverified TLS certificates.
+- `servername` (String) Server name for TLS Server Name Indication (SNI) extension.
 
 ## Import
 

@@ -36,27 +36,32 @@ func (d *RegexDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 		MarkdownDescription: "Regex Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Regex Library entry.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Regex Library entry.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Library classification for the Regex Library entry.`,
 			},
 			"regex": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Regular expression pattern.`,
 			},
 			"sample_data": schema.StringAttribute{
 				Computed:    true,
 				Description: `Optionally, paste in sample data to match against this regex`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Comma-separated list of tags for the Regex Library entry.`,
 			},
 		},
 	}
