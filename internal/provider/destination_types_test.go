@@ -85,3 +85,32 @@ func TestDestinationSplunkResponseResolvesPlannedUnknowns(t *testing.T) {
 		}
 	}
 }
+
+func TestDestinationRouterResponseResolvesUnknownRuleDescriptions(t *testing.T) {
+	ruleType := types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}
+	plannedRule := types.ObjectValueMust(OutputRouterRulesAttrTypes(), map[string]attr.Value{
+		"filter":      types.StringValue("true"),
+		"output":      types.StringValue("default"),
+		"description": types.StringUnknown(),
+		"final":       types.BoolValue(false),
+	})
+	apiRule := types.ObjectValueMust(OutputRouterRulesAttrTypes(), map[string]attr.Value{
+		"filter":      types.StringValue("true"),
+		"output":      types.StringValue("default"),
+		"description": types.StringNull(),
+		"final":       types.BoolValue(false),
+	})
+	state := DestinationModel{OutputRouter: &OutputRouterModel{
+		Rules: types.ListValueMust(ruleType, []attr.Value{plannedRule}),
+	}}
+	api := DestinationModel{OutputRouter: &OutputRouterModel{
+		Rules: types.ListValueMust(ruleType, []attr.Value{apiRule}),
+	}}
+
+	applyDestinationAPIToState(&api, &state, true, false)
+
+	description := state.OutputRouter.Rules.Elements()[0].(types.Object).Attributes()["description"].(types.String)
+	if description.IsUnknown() || !description.IsNull() {
+		t.Fatalf("expected resolved null description, got %#v", description)
+	}
+}

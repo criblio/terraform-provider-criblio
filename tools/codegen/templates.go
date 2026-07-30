@@ -2134,6 +2134,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 	}
 {{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+	if api.OutputRouter != nil && state.OutputRouter != nil &&
+		!api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() &&
+		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
+		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
+	}
+{{- end }}
 }
 
 func {{ .Name }}Debug(value any) string {
