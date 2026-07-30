@@ -255,22 +255,26 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 				Attributes: map[string]schema.Attribute{
 					"data_type": schema.ListAttribute{
-						Required:    true,
+						Optional:    true,
+						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Pack data_type tags (from pack metadata).`,
 					},
 					"domain": schema.ListAttribute{
-						Required:    true,
+						Optional:    true,
+						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Pack domain tags (from pack metadata).`,
 					},
 					"streamtags": schema.ListAttribute{
-						Required:    true,
+						Optional:    true,
+						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Pack streamtags (from pack metadata).`,
 					},
 					"technology": schema.ListAttribute{
-						Required:    true,
+						Optional:    true,
+						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Pack technology tags (from pack metadata).`,
 					},
