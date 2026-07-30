@@ -1074,11 +1074,22 @@ func TestTrimRouterFilterWhitespace(t *testing.T) {
 }
 
 func TestEnsurePipelineConfForExport(t *testing.T) {
-	attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindNull}}
+	t.Run("creates required conf when API omits it", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindNull}}
 
-	ensurePipelineConfForExport(attrs)
+		ensurePipelineConfForExport(attrs)
 
-	assert.Equal(t, "default", attrs["conf"].Map["output"].String)
+		assert.Equal(t, "default", attrs["conf"].Map["output"].String)
+	})
+	t.Run("does not add output to existing conf", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"description": {Kind: hcl.KindString, String: "existing"},
+		}}}
+
+		ensurePipelineConfForExport(attrs)
+
+		assert.NotContains(t, attrs["conf"].Map, "output")
+	})
 }
 
 func TestFilterAttrsBySchema(t *testing.T) {

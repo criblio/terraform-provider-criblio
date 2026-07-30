@@ -357,6 +357,15 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
 	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
 
+	searchDatasetTypes := renderTemplate(t, "types", parser.ResourceDef{
+		StructName: "SearchDataset",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "DatasetCriblSearch", ModelName: "DatasetCriblSearchModel", DiscriminatorValue: "cribl_search"},
+		},
+	})
+	assertContains(t, searchDatasetTypes, `if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {`)
+	assertContains(t, searchDatasetTypes, `return "cribl_search"`)
+
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
 		Read: parser.OperationDef{

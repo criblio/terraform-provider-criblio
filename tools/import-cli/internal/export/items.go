@@ -179,11 +179,6 @@ func ensurePipelineConfForExport(attrs map[string]hcl.Value) {
 	if conf.Kind != hcl.KindMap {
 		return
 	}
-	output, ok := conf.Map["output"]
-	if !ok || output.Kind == hcl.KindNull || (output.Kind == hcl.KindString && output.String == "") {
-		conf.Map["output"] = hcl.Value{Kind: hcl.KindString, String: "default"}
-		attrs["conf"] = conf
-	}
 }
 
 // trimRouterFilterWhitespace removes whitespace that Cribl may append to

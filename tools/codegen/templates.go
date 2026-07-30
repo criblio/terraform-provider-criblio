@@ -959,6 +959,11 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 	if value, ok := input["type"].(string); ok {
 		return value
 	}
+{{- if eq .StructName "SearchDataset" }}
+	if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {
+		return "cribl_search"
+	}
+{{- end }}
 	return ""
 }
 {{- if noDiscriminatorVariants . }}

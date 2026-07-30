@@ -2900,6 +2900,81 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
 					},
+					"stale_channel_flush_ms": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Time, in milliseconds, after which an inactive ingest channel is flushed.`,
+					},
+					"retention_period": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Dataset retention period, in days.`,
+					},
+					"expected_relative_time_range": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Expected relative time range for events stored in the Dataset.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Computed:    true,
+								Description: `Earliest expected event time, expressed as a relative duration.`,
+							},
+							"latest": schema.StringAttribute{
+								Computed:    true,
+								Description: `Latest expected event time, expressed as a relative duration.`,
+							},
+						},
+					},
+					"engine": schema.StringAttribute{
+						Computed:    true,
+						Description: `Identifier for the Lakehouse engine linked to the Dataset.`,
+					},
+					"event_storage_schema_version": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Event storage schema version used by the Dataset.`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether searches skip filtering events by event time.`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Computed:    true,
+						Description: `Storage classes that apply to the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"partitioning_scheme": schema.StringAttribute{
+						Computed:    true,
+						Description: `Partitioning scheme used by the Dataset.`,
+					},
+					"auto_detect_region": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to automatically detect the storage region.`,
+					},
+					"engine_deleted": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the linked Lakehouse engine no longer exists.`,
+					},
+					"favorites": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Users who marked the Dataset as a favorite, and when.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"time": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Timestamp (in Unix time) when the favorite was recorded.`,
+								},
+								"user_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The <code>id</code> of the user who set the Dataset as a favorite.`,
+								},
+							},
+						},
+					},
+					"favorite_count": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Number of users who marked the Dataset as a favorite.`,
+					},
+					"is_favorited": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the requesting user marked the Dataset as a favorite.`,
+					},
 				},
 			},
 			"gcs_dataset": schema.SingleNestedAttribute{

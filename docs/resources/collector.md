@@ -462,11 +462,12 @@ resource "criblio_collector" "my_collector" {
             value = "value1"
           }
         ]
-        authentication           = "basic"
-        capture_headers          = true
-        client_secret_param_name = "client_secret"
-        collect_body             = "{\"filter\":\"status=active\"}"
-        collect_method           = "get"
+        authentication            = "oauth"
+        capture_headers           = true
+        client_secret_param_name  = "client_secret"
+        client_secret_param_value = "test_client_secret"
+        collect_body              = "{\"filter\":\"status=active\"}"
+        collect_method            = "get"
         collect_request_headers = [
           {
             name  = "Accept"

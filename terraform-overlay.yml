@@ -2547,6 +2547,73 @@ actions:
   - target: "$.components.schemas.DatasetCriblSearch"
     update:
       x-terraform-name: cribl_search_dataset
+  - target: "$.components.schemas.DatasetCriblSearch.properties"
+    update:
+      staleChannelFlushMs:
+        type: integer
+        description: Time, in milliseconds, after which an inactive ingest channel is flushed.
+        x-terraform-optional-computed: true
+      retentionPeriod:
+        type: integer
+        description: Dataset retention period, in days.
+        x-terraform-optional-computed: true
+      expectedRelativeTimeRange:
+        type: object
+        description: Expected relative time range for events stored in the Dataset.
+        x-terraform-optional-computed: true
+        properties:
+          earliest:
+            type: string
+            description: Earliest expected event time, expressed as a relative duration.
+            x-terraform-optional-computed: true
+          latest:
+            type: string
+            description: Latest expected event time, expressed as a relative duration.
+            x-terraform-optional-computed: true
+      engine:
+        type: string
+        description: Identifier for the Lakehouse engine linked to the Dataset.
+        x-terraform-optional-computed: true
+      eventStorageSchemaVersion:
+        type: integer
+        description: Event storage schema version used by the Dataset.
+        x-terraform-optional-computed: true
+      skipEventTimeFilter:
+        type: boolean
+        description: Whether searches skip filtering events by event time.
+        x-terraform-optional-computed: true
+      storageClasses:
+        type: array
+        description: Storage classes that apply to the Dataset.
+        x-terraform-optional-computed: true
+        items:
+          type: string
+      partitioningScheme:
+        type: string
+        description: Partitioning scheme used by the Dataset.
+        x-terraform-optional-computed: true
+      autoDetectRegion:
+        type: boolean
+        description: Whether to automatically detect the storage region.
+        x-terraform-optional-computed: true
+      engineDeleted:
+        type: boolean
+        description: Whether the linked Lakehouse engine no longer exists.
+        x-terraform-computed: true
+      favorites:
+        type: array
+        description: Users who marked the Dataset as a favorite, and when.
+        x-terraform-computed: true
+        items:
+          $ref: "#/components/schemas/DatasetFavorite"
+      favoriteCount:
+        type: integer
+        description: Number of users who marked the Dataset as a favorite.
+        x-terraform-computed: true
+      isFavorited:
+        type: boolean
+        description: Whether the requesting user marked the Dataset as a favorite.
+        x-terraform-computed: true
   - target: "$.components.schemas.DatasetGcs"
     update:
       x-terraform-name: gcs_dataset

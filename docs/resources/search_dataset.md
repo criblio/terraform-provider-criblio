@@ -483,6 +483,19 @@ Optional:
 - `search_version` (String) Search execution version for the Dataset.
 - `tags` (String) Optional comma-separated tags for organizing and filtering Datasets.
 - `view_name` (String) Lakehouse cache view name, when applicable.
+- `stale_channel_flush_ms` (Integer) Time, in milliseconds, after which an inactive ingest channel is flushed.
+- `retention_period` (Integer) Dataset retention period, in days.
+- `expected_relative_time_range` (Attributes) Expected relative time range for events stored in the Dataset. (see [below for nested schema](#nestedatt--cribl_search_dataset--expected_relative_time_range))
+- `engine` (String) Identifier for the Lakehouse engine linked to the Dataset.
+- `event_storage_schema_version` (Integer) Event storage schema version used by the Dataset.
+- `skip_event_time_filter` (Boolean) Whether searches skip filtering events by event time.
+- `storage_classes` (List of String) Storage classes that apply to the Dataset.
+- `partitioning_scheme` (String) Partitioning scheme used by the Dataset.
+- `auto_detect_region` (Boolean) Whether to automatically detect the storage region.
+- `engine_deleted` (Boolean) Whether the linked Lakehouse engine no longer exists.
+- `favorites` (Attributes List) Users who marked the Dataset as a favorite, and when. (see [below for nested schema](#nestedatt--cribl_search_dataset--favorites))
+- `favorite_count` (Integer) Number of users who marked the Dataset as a favorite.
+- `is_favorited` (Boolean) Whether the requesting user marked the Dataset as a favorite.
 
 <a id="nestedatt--gcs_dataset"></a>
 ### Nested Schema for `gcs_dataset`
@@ -1316,6 +1329,22 @@ Optional:
 - `finished_at` (Integer) Timestamp (in Unix time) when the acceleration run finished (milliseconds).
 - `latest_scanned_time` (Integer) Timestamp (in Unix time) for the latest event that was observed during the scan (seconds).
 - `object_count` (Integer) Number of objects on the acceleration manifest after the scan completed.
+
+<a id="nestedatt--cribl_search_dataset--expected_relative_time_range"></a>
+### Nested Schema for `cribl_search_dataset.expected_relative_time_range`
+
+Optional:
+
+- `earliest` (String) Earliest expected event time, expressed as a relative duration.
+- `latest` (String) Latest expected event time, expressed as a relative duration.
+
+<a id="nestedatt--cribl_search_dataset--favorites"></a>
+### Nested Schema for `cribl_search_dataset.favorites`
+
+Optional:
+
+- `time` (Integer) Timestamp (in Unix time) when the favorite was recorded.
+- `user_id` (String) The <code>id</code> of the user who set the Dataset as a favorite.
 
 <a id="nestedatt--gcs_dataset--extra_paths"></a>
 ### Nested Schema for `gcs_dataset.extra_paths`

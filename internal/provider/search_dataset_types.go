@@ -1872,6 +1872,40 @@ func DatasetCriblSearchMetadataLatestRunInfoAttrTypes() map[string]attr.Type {
 	}
 }
 
+type DatasetCriblSearchExpectedRelativeTimeRangeModel struct {
+	Earliest types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest   types.String `tfsdk:"latest" json:"latest,omitempty"`
+}
+
+type DatasetCriblSearchExpectedRelativeTimeRangeAPIModel struct {
+	Earliest *string `json:"earliest,omitempty"`
+	Latest   *string `json:"latest,omitempty"`
+}
+
+func DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"earliest": types.StringType,
+		"latest":   types.StringType,
+	}
+}
+
+type DatasetCriblSearchFavoritesModel struct {
+	Time   types.Int64  `tfsdk:"time" json:"time,omitempty"`
+	UserID types.String `tfsdk:"user_id" json:"userId,omitempty"`
+}
+
+type DatasetCriblSearchFavoritesAPIModel struct {
+	Time   *int64  `json:"time,omitempty"`
+	UserID *string `json:"userId,omitempty"`
+}
+
+func DatasetCriblSearchFavoritesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"time":    types.Int64Type,
+		"user_id": types.StringType,
+	}
+}
+
 type DatasetGcsExtraPathsModel struct {
 	Bucket             types.String `tfsdk:"bucket" json:"bucket,omitempty"`
 	Filter             types.String `tfsdk:"filter" json:"filter,omitempty"`
@@ -8388,34 +8422,60 @@ func (m *DatasetCriblMetaModel) unmarshalPayload(input map[string]any) error {
 }
 
 type DatasetCriblSearchModel struct {
-	Type                  types.String `tfsdk:"type" json:"type,omitempty"`
-	BreakerRulesets       types.List   `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	CacheConnectionInfo   types.Object `tfsdk:"cache_connection_info" json:"cacheConnectionInfo,omitempty"`
-	Description           types.String `tfsdk:"description" json:"description,omitempty"`
-	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
-	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
-	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
-	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
-	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
-	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
-	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
-	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+	Type                      types.String `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets           types.List   `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	CacheConnectionInfo       types.Object `tfsdk:"cache_connection_info" json:"cacheConnectionInfo,omitempty"`
+	Description               types.String `tfsdk:"description" json:"description,omitempty"`
+	ExcludeInternalFields     types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
+	Filter                    types.String `tfsdk:"filter" json:"filter,omitempty"`
+	ID                        types.String `tfsdk:"id" json:"id,omitempty"`
+	Metadata                  types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
+	ProviderID                types.String `tfsdk:"provider_id" json:"provider,omitempty"`
+	SearchVersion             types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
+	Tags                      types.String `tfsdk:"tags" json:"tags,omitempty"`
+	ViewName                  types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+	StaleChannelFlushMs       types.Int64  `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	RetentionPeriod           types.Int64  `tfsdk:"retention_period" json:"retentionPeriod,omitempty"`
+	ExpectedRelativeTimeRange types.Object `tfsdk:"expected_relative_time_range" json:"expectedRelativeTimeRange,omitempty"`
+	Engine                    types.String `tfsdk:"engine" json:"engine,omitempty"`
+	EventStorageSchemaVersion types.Int64  `tfsdk:"event_storage_schema_version" json:"eventStorageSchemaVersion,omitempty"`
+	SkipEventTimeFilter       types.Bool   `tfsdk:"skip_event_time_filter" json:"skipEventTimeFilter,omitempty"`
+	StorageClasses            types.List   `tfsdk:"storage_classes" json:"storageClasses,omitempty"`
+	PartitioningScheme        types.String `tfsdk:"partitioning_scheme" json:"partitioningScheme,omitempty"`
+	AutoDetectRegion          types.Bool   `tfsdk:"auto_detect_region" json:"autoDetectRegion,omitempty"`
+	EngineDeleted             types.Bool   `tfsdk:"engine_deleted" json:"engineDeleted,omitempty"`
+	Favorites                 types.List   `tfsdk:"favorites" json:"favorites,omitempty"`
+	FavoriteCount             types.Int64  `tfsdk:"favorite_count" json:"favoriteCount,omitempty"`
+	IsFavorited               types.Bool   `tfsdk:"is_favorited" json:"isFavorited,omitempty"`
 }
 
 func DatasetCriblSearchModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type":                    types.StringType,
-		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
-		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblSearchCacheConnectionInfoAttrTypes()},
-		"description":             types.StringType,
-		"exclude_internal_fields": types.BoolType,
-		"filter":                  types.StringType,
-		"id":                      types.StringType,
-		"metadata":                types.ObjectType{AttrTypes: DatasetCriblSearchMetadataAttrTypes()},
-		"provider_id":             types.StringType,
-		"search_version":          types.StringType,
-		"tags":                    types.StringType,
-		"view_name":               types.StringType,
+		"type":                         types.StringType,
+		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
+		"cache_connection_info":        types.ObjectType{AttrTypes: DatasetCriblSearchCacheConnectionInfoAttrTypes()},
+		"description":                  types.StringType,
+		"exclude_internal_fields":      types.BoolType,
+		"filter":                       types.StringType,
+		"id":                           types.StringType,
+		"metadata":                     types.ObjectType{AttrTypes: DatasetCriblSearchMetadataAttrTypes()},
+		"provider_id":                  types.StringType,
+		"search_version":               types.StringType,
+		"tags":                         types.StringType,
+		"view_name":                    types.StringType,
+		"stale_channel_flush_ms":       types.Int64Type,
+		"retention_period":             types.Int64Type,
+		"expected_relative_time_range": types.ObjectType{AttrTypes: DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes()},
+		"engine":                       types.StringType,
+		"event_storage_schema_version": types.Int64Type,
+		"skip_event_time_filter":       types.BoolType,
+		"storage_classes":              types.ListType{ElemType: types.StringType},
+		"partitioning_scheme":          types.StringType,
+		"auto_detect_region":           types.BoolType,
+		"engine_deleted":               types.BoolType,
+		"favorites":                    types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()}},
+		"favorite_count":               types.Int64Type,
+		"is_favorited":                 types.BoolType,
 	}
 }
 
@@ -8504,6 +8564,97 @@ func (m DatasetCriblSearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
+	}
+	if !m.RetentionPeriod.IsNull() && !m.RetentionPeriod.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.RetentionPeriod)
+		if err != nil {
+			return nil, fmt.Errorf("convert retention_period to API value: %v", err)
+		}
+		output["retentionPeriod"] = value
+	}
+	if !m.ExpectedRelativeTimeRange.IsNull() && !m.ExpectedRelativeTimeRange.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ExpectedRelativeTimeRange)
+		if err != nil {
+			return nil, fmt.Errorf("convert expected_relative_time_range to API value: %v", err)
+		}
+		output["expectedRelativeTimeRange"] = value
+	}
+	if !m.Engine.IsNull() && !m.Engine.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Engine)
+		if err != nil {
+			return nil, fmt.Errorf("convert engine to API value: %v", err)
+		}
+		output["engine"] = value
+	}
+	if !m.EventStorageSchemaVersion.IsNull() && !m.EventStorageSchemaVersion.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.EventStorageSchemaVersion)
+		if err != nil {
+			return nil, fmt.Errorf("convert event_storage_schema_version to API value: %v", err)
+		}
+		output["eventStorageSchemaVersion"] = value
+	}
+	if !m.SkipEventTimeFilter.IsNull() && !m.SkipEventTimeFilter.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.SkipEventTimeFilter)
+		if err != nil {
+			return nil, fmt.Errorf("convert skip_event_time_filter to API value: %v", err)
+		}
+		output["skipEventTimeFilter"] = value
+	}
+	if !m.StorageClasses.IsNull() && !m.StorageClasses.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.StorageClasses)
+		if err != nil {
+			return nil, fmt.Errorf("convert storage_classes to API value: %v", err)
+		}
+		output["storageClasses"] = value
+	}
+	if !m.PartitioningScheme.IsNull() && !m.PartitioningScheme.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.PartitioningScheme)
+		if err != nil {
+			return nil, fmt.Errorf("convert partitioning_scheme to API value: %v", err)
+		}
+		output["partitioningScheme"] = value
+	}
+	if !m.AutoDetectRegion.IsNull() && !m.AutoDetectRegion.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.AutoDetectRegion)
+		if err != nil {
+			return nil, fmt.Errorf("convert auto_detect_region to API value: %v", err)
+		}
+		output["autoDetectRegion"] = value
+	}
+	if !m.EngineDeleted.IsNull() && !m.EngineDeleted.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.EngineDeleted)
+		if err != nil {
+			return nil, fmt.Errorf("convert engine_deleted to API value: %v", err)
+		}
+		output["engineDeleted"] = value
+	}
+	if !m.Favorites.IsNull() && !m.Favorites.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.Favorites)
+		if err != nil {
+			return nil, fmt.Errorf("convert favorites to API value: %v", err)
+		}
+		output["favorites"] = value
+	}
+	if !m.FavoriteCount.IsNull() && !m.FavoriteCount.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.FavoriteCount)
+		if err != nil {
+			return nil, fmt.Errorf("convert favorite_count to API value: %v", err)
+		}
+		output["favoriteCount"] = value
+	}
+	if !m.IsFavorited.IsNull() && !m.IsFavorited.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.IsFavorited)
+		if err != nil {
+			return nil, fmt.Errorf("convert is_favorited to API value: %v", err)
+		}
+		output["isFavorited"] = value
 	}
 	return output, nil
 }
@@ -8616,6 +8767,123 @@ func (m *DatasetCriblSearchModel) unmarshalPayload(input map[string]any) error {
 		m.ViewName = value.(types.String)
 	} else {
 		m.ViewName = types.StringNull()
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Int64)
+	} else {
+		m.StaleChannelFlushMs = types.Int64Null()
+	}
+	if item, ok := input["retentionPeriod"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert retentionPeriod from API value: %v", err)
+		}
+		m.RetentionPeriod = value.(types.Int64)
+	} else {
+		m.RetentionPeriod = types.Int64Null()
+	}
+	if item, ok := input["expectedRelativeTimeRange"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert expectedRelativeTimeRange from API value: %v", err)
+		}
+		m.ExpectedRelativeTimeRange = value.(types.Object)
+	} else {
+		m.ExpectedRelativeTimeRange = types.ObjectNull(DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes())
+	}
+	if item, ok := input["engine"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert engine from API value: %v", err)
+		}
+		m.Engine = value.(types.String)
+	} else {
+		m.Engine = types.StringNull()
+	}
+	if item, ok := input["eventStorageSchemaVersion"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert eventStorageSchemaVersion from API value: %v", err)
+		}
+		m.EventStorageSchemaVersion = value.(types.Int64)
+	} else {
+		m.EventStorageSchemaVersion = types.Int64Null()
+	}
+	if item, ok := input["skipEventTimeFilter"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert skipEventTimeFilter from API value: %v", err)
+		}
+		m.SkipEventTimeFilter = value.(types.Bool)
+	} else {
+		m.SkipEventTimeFilter = types.BoolNull()
+	}
+	if item, ok := input["storageClasses"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert storageClasses from API value: %v", err)
+		}
+		m.StorageClasses = value.(types.List)
+	} else {
+		m.StorageClasses = types.ListNull(types.StringType)
+	}
+	if item, ok := input["partitioningScheme"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert partitioningScheme from API value: %v", err)
+		}
+		m.PartitioningScheme = value.(types.String)
+	} else {
+		m.PartitioningScheme = types.StringNull()
+	}
+	if item, ok := input["autoDetectRegion"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert autoDetectRegion from API value: %v", err)
+		}
+		m.AutoDetectRegion = value.(types.Bool)
+	} else {
+		m.AutoDetectRegion = types.BoolNull()
+	}
+	if item, ok := input["engineDeleted"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert engineDeleted from API value: %v", err)
+		}
+		m.EngineDeleted = value.(types.Bool)
+	} else {
+		m.EngineDeleted = types.BoolNull()
+	}
+	if item, ok := input["favorites"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert favorites from API value: %v", err)
+		}
+		m.Favorites = value.(types.List)
+	} else {
+		m.Favorites = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()})
+	}
+	if item, ok := input["favoriteCount"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert favoriteCount from API value: %v", err)
+		}
+		m.FavoriteCount = value.(types.Int64)
+	} else {
+		m.FavoriteCount = types.Int64Null()
+	}
+	if item, ok := input["isFavorited"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert isFavorited from API value: %v", err)
+		}
+		m.IsFavorited = value.(types.Bool)
+	} else {
+		m.IsFavorited = types.BoolNull()
 	}
 	return nil
 }
@@ -9974,6 +10242,9 @@ func SearchDatasetOneOfDiscriminator(input map[string]any) string {
 	}
 	if value, ok := input["type"].(string); ok {
 		return value
+	}
+	if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {
+		return "cribl_search"
 	}
 	return ""
 }

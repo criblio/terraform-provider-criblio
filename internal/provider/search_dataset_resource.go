@@ -4269,6 +4269,115 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
 					},
+					"stale_channel_flush_ms": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time, in milliseconds, after which an inactive ingest channel is flushed.`,
+					},
+					"retention_period": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Dataset retention period, in days.`,
+					},
+					"expected_relative_time_range": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Expected relative time range for events stored in the Dataset.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Earliest expected event time, expressed as a relative duration.`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Latest expected event time, expressed as a relative duration.`,
+							},
+						},
+					},
+					"engine": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Identifier for the Lakehouse engine linked to the Dataset.`,
+					},
+					"event_storage_schema_version": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Event storage schema version used by the Dataset.`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether searches skip filtering events by event time.`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Storage classes that apply to the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"partitioning_scheme": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Partitioning scheme used by the Dataset.`,
+					},
+					"auto_detect_region": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether to automatically detect the storage region.`,
+					},
+					"engine_deleted": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether the linked Lakehouse engine no longer exists.`,
+					},
+					"favorites": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Users who marked the Dataset as a favorite, and when.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"time": schema.Int64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Timestamp (in Unix time) when the favorite was recorded.`,
+								},
+								"user_id": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The <code>id</code> of the user who set the Dataset as a favorite.`,
+								},
+							},
+						},
+					},
+					"favorite_count": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Number of users who marked the Dataset as a favorite.`,
+					},
+					"is_favorited": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether the requesting user marked the Dataset as a favorite.`,
+					},
 				},
 			},
 			"gcs_dataset": schema.SingleNestedAttribute{
@@ -7318,6 +7427,82 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblSearch.ViewName = api.DatasetCriblSearch.ViewName
 		} else if state.DatasetCriblSearch.ViewName.IsNull() || state.DatasetCriblSearch.ViewName.IsUnknown() {
 			state.DatasetCriblSearch.ViewName = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.StaleChannelFlushMs.IsNull() && !api.DatasetCriblSearch.StaleChannelFlushMs.IsUnknown() {
+			state.DatasetCriblSearch.StaleChannelFlushMs = api.DatasetCriblSearch.StaleChannelFlushMs
+		} else if state.DatasetCriblSearch.StaleChannelFlushMs.IsNull() || state.DatasetCriblSearch.StaleChannelFlushMs.IsUnknown() {
+			state.DatasetCriblSearch.StaleChannelFlushMs = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.RetentionPeriod.IsNull() && !api.DatasetCriblSearch.RetentionPeriod.IsUnknown() {
+			state.DatasetCriblSearch.RetentionPeriod = api.DatasetCriblSearch.RetentionPeriod
+		} else if state.DatasetCriblSearch.RetentionPeriod.IsNull() || state.DatasetCriblSearch.RetentionPeriod.IsUnknown() {
+			state.DatasetCriblSearch.RetentionPeriod = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.ExpectedRelativeTimeRange.IsNull() && !api.DatasetCriblSearch.ExpectedRelativeTimeRange.IsUnknown() {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = api.DatasetCriblSearch.ExpectedRelativeTimeRange
+		} else if state.DatasetCriblSearch.ExpectedRelativeTimeRange.IsNull() || state.DatasetCriblSearch.ExpectedRelativeTimeRange.IsUnknown() {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = types.ObjectNull(DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes())
+		}
+		if len(state.DatasetCriblSearch.ExpectedRelativeTimeRange.AttributeTypes(context.Background())) == 0 {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = types.ObjectNull(DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes())
+		}
+		if !api.DatasetCriblSearch.Engine.IsNull() && !api.DatasetCriblSearch.Engine.IsUnknown() {
+			state.DatasetCriblSearch.Engine = api.DatasetCriblSearch.Engine
+		} else if state.DatasetCriblSearch.Engine.IsNull() || state.DatasetCriblSearch.Engine.IsUnknown() {
+			state.DatasetCriblSearch.Engine = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.EventStorageSchemaVersion.IsNull() && !api.DatasetCriblSearch.EventStorageSchemaVersion.IsUnknown() {
+			state.DatasetCriblSearch.EventStorageSchemaVersion = api.DatasetCriblSearch.EventStorageSchemaVersion
+		} else if state.DatasetCriblSearch.EventStorageSchemaVersion.IsNull() || state.DatasetCriblSearch.EventStorageSchemaVersion.IsUnknown() {
+			state.DatasetCriblSearch.EventStorageSchemaVersion = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.SkipEventTimeFilter.IsNull() && !api.DatasetCriblSearch.SkipEventTimeFilter.IsUnknown() {
+			state.DatasetCriblSearch.SkipEventTimeFilter = api.DatasetCriblSearch.SkipEventTimeFilter
+		} else if state.DatasetCriblSearch.SkipEventTimeFilter.IsNull() || state.DatasetCriblSearch.SkipEventTimeFilter.IsUnknown() {
+			state.DatasetCriblSearch.SkipEventTimeFilter = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.StorageClasses.IsNull() && !api.DatasetCriblSearch.StorageClasses.IsUnknown() {
+			state.DatasetCriblSearch.StorageClasses = api.DatasetCriblSearch.StorageClasses
+		} else if state.DatasetCriblSearch.StorageClasses.IsNull() || state.DatasetCriblSearch.StorageClasses.IsUnknown() {
+			state.DatasetCriblSearch.StorageClasses = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetCriblSearch.StorageClasses.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblSearch.StorageClasses = types.ListNull(types.StringType)
+		}
+		if !api.DatasetCriblSearch.PartitioningScheme.IsNull() && !api.DatasetCriblSearch.PartitioningScheme.IsUnknown() {
+			state.DatasetCriblSearch.PartitioningScheme = api.DatasetCriblSearch.PartitioningScheme
+		} else if state.DatasetCriblSearch.PartitioningScheme.IsNull() || state.DatasetCriblSearch.PartitioningScheme.IsUnknown() {
+			state.DatasetCriblSearch.PartitioningScheme = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.AutoDetectRegion.IsNull() && !api.DatasetCriblSearch.AutoDetectRegion.IsUnknown() {
+			state.DatasetCriblSearch.AutoDetectRegion = api.DatasetCriblSearch.AutoDetectRegion
+		} else if state.DatasetCriblSearch.AutoDetectRegion.IsNull() || state.DatasetCriblSearch.AutoDetectRegion.IsUnknown() {
+			state.DatasetCriblSearch.AutoDetectRegion = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.EngineDeleted.IsNull() && !api.DatasetCriblSearch.EngineDeleted.IsUnknown() {
+			state.DatasetCriblSearch.EngineDeleted = api.DatasetCriblSearch.EngineDeleted
+		} else if state.DatasetCriblSearch.EngineDeleted.IsNull() || state.DatasetCriblSearch.EngineDeleted.IsUnknown() {
+			state.DatasetCriblSearch.EngineDeleted = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.Favorites.IsNull() && !api.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = api.DatasetCriblSearch.Favorites
+		} else if state.DatasetCriblSearch.Favorites.IsNull() || state.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()})
+		}
+		if state.DatasetCriblSearch.Favorites.IsNull() || state.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()})
+		} else if len(state.DatasetCriblSearch.Favorites.Elements()) == 0 {
+			state.DatasetCriblSearch.Favorites = types.ListValueMust(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()}, nil)
+		}
+		if !api.DatasetCriblSearch.FavoriteCount.IsNull() && !api.DatasetCriblSearch.FavoriteCount.IsUnknown() {
+			state.DatasetCriblSearch.FavoriteCount = api.DatasetCriblSearch.FavoriteCount
+		} else if state.DatasetCriblSearch.FavoriteCount.IsNull() || state.DatasetCriblSearch.FavoriteCount.IsUnknown() {
+			state.DatasetCriblSearch.FavoriteCount = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.IsFavorited.IsNull() && !api.DatasetCriblSearch.IsFavorited.IsUnknown() {
+			state.DatasetCriblSearch.IsFavorited = api.DatasetCriblSearch.IsFavorited
+		} else if state.DatasetCriblSearch.IsFavorited.IsNull() || state.DatasetCriblSearch.IsFavorited.IsUnknown() {
+			state.DatasetCriblSearch.IsFavorited = types.BoolNull()
 		}
 	}
 	if api.DatasetGcs != nil {
