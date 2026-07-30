@@ -146,7 +146,8 @@ func CriblLakeDatasetTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := CriblLakeDatasetTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -154,7 +155,8 @@ func CriblLakeDatasetTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[CriblLakeDatasetTerraformNameToAPIName(key)] = value
+			apiKey := CriblLakeDatasetTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

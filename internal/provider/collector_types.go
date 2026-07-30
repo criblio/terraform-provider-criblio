@@ -564,6 +564,7 @@ type InputCollectorRestCollectorConfModel struct {
 	Discovery                       types.Object `tfsdk:"discovery" json:"discovery,omitempty"`
 	Pagination                      types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
 	RetryRules                      types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	ClientSecretParamValue          types.String `tfsdk:"client_secret_param_value" json:"clientSecretParamValue,omitempty"`
 }
 
 type InputCollectorRestCollectorConfAPIModel struct {
@@ -600,6 +601,7 @@ type InputCollectorRestCollectorConfAPIModel struct {
 	Discovery                       any      `json:"discovery,omitempty"`
 	Pagination                      any      `json:"pagination,omitempty"`
 	RetryRules                      any      `json:"retryRules,omitempty"`
+	ClientSecretParamValue          *string  `json:"clientSecretParamValue,omitempty"`
 }
 
 func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
@@ -637,6 +639,7 @@ func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
 		"discovery":                          types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryAttrTypes()},
 		"pagination":                         types.ObjectType{AttrTypes: InputCollectorRestCollectorConfPaginationAttrTypes()},
 		"retry_rules":                        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRetryRulesAttrTypes()},
+		"client_secret_param_value":          types.StringType,
 	}
 }
 
@@ -2832,7 +2835,8 @@ func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := CollectorTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -2840,7 +2844,8 @@ func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[CollectorTerraformNameToAPIName(key)] = value
+			apiKey := CollectorTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

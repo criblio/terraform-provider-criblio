@@ -6361,7 +6361,8 @@ func DestinationTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := DestinationTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -6369,7 +6370,15 @@ func DestinationTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[DestinationTerraformNameToAPIName(key)] = value
+			apiKey := DestinationTerraformNameToAPIName(key)
+			// Microsoft Fabric SASL uses clientId, while other destination
+			// objects legitimately use the literal API key client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := attributes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -7393,6 +7402,16 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputDevnull.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "syslog":
+		m.OutputSyslog = &OutputSyslogModel{}
+		if err := m.OutputSyslog.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "splunk":
+		m.OutputSplunk = &OutputSplunkModel{}
+		if err := m.OutputSplunk.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "splunk_lb":
 		m.OutputSplunkLb = &OutputSplunkLbModel{}
 		if err := m.OutputSplunkLb.unmarshalPayload(raw); err != nil {
@@ -7406,6 +7425,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "wiz_hec":
 		m.OutputWizHec = &OutputWizHecModel{}
 		if err := m.OutputWizHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "tcpjson":
+		m.OutputTcpjson = &OutputTcpjsonModel{}
+		if err := m.OutputTcpjson.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "wavefront":
@@ -7423,6 +7447,16 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputFilesystem.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "s3":
+		m.OutputS3 = &OutputS3Model{}
+		if err := m.OutputS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "azure_blob":
+		m.OutputAzureBlob = &OutputAzureBlobModel{}
+		if err := m.OutputAzureBlob.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "azure_data_explorer":
 		m.OutputAzureDataExplorer = &OutputAzureDataExplorerModel{}
 		if err := m.OutputAzureDataExplorer.unmarshalPayload(raw); err != nil {
@@ -7431,6 +7465,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "azure_logs":
 		m.OutputAzureLogs = &OutputAzureLogsModel{}
 		if err := m.OutputAzureLogs.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "kinesis":
+		m.OutputKinesis = &OutputKinesisModel{}
+		if err := m.OutputKinesis.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "honeycomb":
@@ -7468,9 +7507,29 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputGoogleCloudObservability.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "google_pubsub":
+		m.OutputGooglePubsub = &OutputGooglePubsubModel{}
+		if err := m.OutputGooglePubsub.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "exabeam":
 		m.OutputExabeam = &OutputExabeamModel{}
 		if err := m.OutputExabeam.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "kafka":
+		m.OutputKafka = &OutputKafkaModel{}
+		if err := m.OutputKafka.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "confluent_cloud":
+		m.OutputConfluentCloud = &OutputConfluentCloudModel{}
+		if err := m.OutputConfluentCloud.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "msk":
+		m.OutputMsk = &OutputMskModel{}
+		if err := m.OutputMsk.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "elastic":
@@ -7533,6 +7592,16 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputSns.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "sqs":
+		m.OutputSqs = &OutputSqsModel{}
+		if err := m.OutputSqs.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "snmp":
+		m.OutputSnmp = &OutputSnmpModel{}
+		if err := m.OutputSnmp.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "sumo_logic":
 		m.OutputSumoLogic = &OutputSumoLogicModel{}
 		if err := m.OutputSumoLogic.unmarshalPayload(raw); err != nil {
@@ -7558,6 +7627,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputAmazonManagedPrometheus.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "prometheus":
+		m.OutputPrometheus = &OutputPrometheusModel{}
+		if err := m.OutputPrometheus.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "ring":
 		m.OutputRing = &OutputRingModel{}
 		if err := m.OutputRing.unmarshalPayload(raw); err != nil {
@@ -7576,6 +7650,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "dataset":
 		m.OutputDataset = &OutputDatasetModel{}
 		if err := m.OutputDataset.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cribl_tcp":
+		m.OutputCriblTcp = &OutputCriblTcpModel{}
+		if err := m.OutputCriblTcp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "cribl_http":
@@ -7601,6 +7680,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "dl_s3":
 		m.OutputDlS3 = &OutputDlS3Model{}
 		if err := m.OutputDlS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "security_lake":
+		m.OutputSecurityLake = &OutputSecurityLakeModel{}
+		if err := m.OutputSecurityLake.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "cribl_lake":
@@ -7631,6 +7715,11 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 	case "xsiam":
 		m.OutputXsiam = &OutputXsiamModel{}
 		if err := m.OutputXsiam.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "netflow":
+		m.OutputNetflow = &OutputNetflowModel{}
+		if err := m.OutputNetflow.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "dynatrace_http":
@@ -7713,9 +7802,6 @@ func (m *DestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	}
-	if matched, err := m.unmarshalDestinationOneOfByShape(raw); matched || err != nil {
-		return err
 	}
 	return nil
 }
@@ -75560,137 +75646,4 @@ func DestinationOneOfDiscriminator(input map[string]any) string {
 		return value
 	}
 	return ""
-}
-
-func (m *DestinationModel) unmarshalDestinationOneOfByShape(raw map[string]any) (bool, error) {
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "protocol", "facility", "severity", "appName", "messageFormat", "timestampFormat", "throttleRatePerSec", "octetCountFraming", "logFailedRequests", "description", "loadBalanced", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "connectionTimeout", "writeTimeout", "tls", "onBackpressure", "maxRecordSize", "udpDnsResolvePeriodSec", "enableIpSpoofing", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputSyslog = &OutputSyslogModel{}
-		if err := m.OutputSyslog.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "host", "port", "nestedFields", "throttleRatePerSec", "connectionTimeout", "writeTimeout", "tls", "enableMultiMetrics", "enableACK", "logFailedRequests", "maxS2Sversion", "onBackpressure", "authType", "description", "maxFailedHealthChecks", "compress", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "authToken", "textSecret"}) {
-		m.OutputSplunk = &OutputSplunkModel{}
-		if err := m.OutputSplunk.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "loadBalanced", "compression", "logFailedRequests", "throttleRatePerSec", "tls", "connectionTimeout", "writeTimeout", "tokenTTLMinutes", "sendHeader", "onBackpressure", "authType", "description", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "authToken", "textSecret"}) {
-		m.OutputTcpjson = &OutputTcpjsonModel{}
-		if err := m.OutputTcpjson.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "endpoint", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "awsAuthenticationMethod", "reuseConnections", "rejectUnauthorized", "bucket", "region", "destPath", "maxConcurrentFileParts", "verifyPermissions", "maxClosingFilesToBackpressure", "stagePath", "addIdToStagePath", "removeEmptyDirs", "partitionExpr", "format", "baseFileName", "fileNameSuffix", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "awsSecretKey", "objectACL", "storageClass", "serverSideEncryption", "kmsKeyId", "description", "awsApiKey", "awsSecret", "compress", "compressionLevel", "automaticSchema", "parquetSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "emptyDirCleanupSec", "directoryBatchSize", "deadletterPath", "maxRetryNum"}) {
-		m.OutputS3 = &OutputS3Model{}
-		if err := m.OutputS3.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "containerName", "createContainer", "destPath", "stagePath", "addIdToStagePath", "maxConcurrentFileParts", "removeEmptyDirs", "partitionExpr", "format", "baseFileName", "fileNameSuffix", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "authType", "storageClass", "description", "compress", "compressionLevel", "automaticSchema", "parquetSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "emptyDirCleanupSec", "directoryBatchSize", "deadletterPath", "maxRetryNum", "connectionString", "textSecret", "storageAccountName", "tenantId", "clientId", "azureCloud", "endpointSuffix", "clientTextSecret", "certificate"}) {
-		m.OutputAzureBlob = &OutputAzureBlobModel{}
-		if err := m.OutputAzureBlob.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "streamName", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "concurrency", "maxRecordSizeKB", "flushPeriodSec", "compression", "useListShards", "asNdjson", "onBackpressure", "description", "awsApiKey", "awsSecret", "maxEventsPerFlush", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputKinesis = &OutputKinesisModel{}
-		if err := m.OutputKinesis.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "topicName", "createTopic", "orderedDelivery", "region", "googleAuthMethod", "serviceAccountCredentials", "secret", "batchSize", "batchTimeout", "maxQueueSize", "maxRecordSizeKB", "flushPeriod", "maxInProgress", "onBackpressure", "description", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputGooglePubsub = &OutputGooglePubsubModel{}
-		if err := m.OutputGooglePubsub.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "tls", "onBackpressure", "description", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputKafka = &OutputKafkaModel{}
-		if err := m.OutputKafka.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "tls", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "onBackpressure", "description", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputConfluentCloud = &OutputConfluentCloudModel{}
-		if err := m.OutputConfluentCloud.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "brokers", "topic", "ack", "format", "compression", "maxRecordSizeKB", "flushEventCount", "flushPeriodSec", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "tls", "onBackpressure", "description", "awsApiKey", "awsSecret", "protobufLibraryId", "protobufEncodingId", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputMsk = &OutputMskModel{}
-		if err := m.OutputMsk.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "queueName", "queueType", "awsAccountId", "messageGroupId", "createQueue", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "maxQueueSize", "maxRecordSizeKB", "flushPeriodSec", "maxInProgress", "onBackpressure", "description", "awsApiKey", "awsSecret", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputSqs = &OutputSqsModel{}
-		if err := m.OutputSqs.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "hosts", "dnsResolvePeriodSec", "enableIpSpoofing", "description", "maxRecordSize"}) {
-		m.OutputSnmp = &OutputSnmpModel{}
-		if err := m.OutputSnmp.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "url", "metricRenameExpr", "sendMetadata", "usePrometheusHistogramBucketSuffix", "concurrency", "maxPayloadSizeKB", "maxPayloadEvents", "rejectUnauthorized", "timeoutSec", "flushPeriodSec", "extraHttpHeaders", "useRoundRobinDns", "failedRequestLoggingMode", "safeHeaders", "responseRetrySettings", "timeoutRetrySettings", "responseHonorRetryAfterHeader", "onBackpressure", "authType", "description", "metricsFlushPeriodSec", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls", "username", "password", "token", "credentialsSecret", "textSecret", "awsAuthenticationMethod", "awsSecret", "region", "awsService", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds"}) {
-		m.OutputPrometheus = &OutputPrometheusModel{}
-		if err := m.OutputPrometheus.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "loadBalanced", "compression", "logFailedRequests", "throttleRatePerSec", "tls", "connectionTimeout", "writeTimeout", "tokenTTLMinutes", "authTokens", "excludeFields", "onBackpressure", "description", "host", "port", "excludeSelf", "hosts", "dnsResolvePeriodSec", "loadBalanceStatsPeriodSec", "maxConcurrentSenders", "pqStrictOrdering", "pqRatePerSec", "pqMode", "pqMaxBufferSize", "pqMaxBackpressureSec", "pqMaxFileSize", "pqMaxSize", "pqPath", "pqCompress", "pqOnBackpressure", "pqMaxBufferSizeBytes", "pqControls"}) {
-		m.OutputCriblTcp = &OutputCriblTcpModel{}
-		if err := m.OutputCriblTcp.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "endpoint", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "awsAuthenticationMethod", "reuseConnections", "rejectUnauthorized", "bucket", "region", "maxConcurrentFileParts", "verifyPermissions", "maxClosingFilesToBackpressure", "stagePath", "addIdToStagePath", "removeEmptyDirs", "baseFileName", "maxFileSizeMB", "maxFileOpenTimeSec", "maxFileIdleTimeSec", "maxOpenFiles", "headerLine", "writeHighWaterMark", "onBackpressure", "deadletterEnabled", "onDiskFullBackpressure", "forceCloseOnShutdown", "retrySettings", "orphans", "awsSecretKey", "objectACL", "storageClass", "serverSideEncryption", "kmsKeyId", "accountId", "customSource", "automaticSchema", "parquetVersion", "parquetDataPageVersion", "parquetRowGroupLength", "parquetPageSize", "shouldLogInvalidRows", "keyValueMetadata", "enableStatistics", "enableWritePageIndex", "enablePageChecksum", "description", "awsApiKey", "awsSecret", "emptyDirCleanupSec", "directoryBatchSize", "parquetSchema", "deadletterPath", "maxRetryNum"}) {
-		m.OutputSecurityLake = &OutputSecurityLakeModel{}
-		if err := m.OutputSecurityLake.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if DestinationOneOfShapeMatches(raw, nil, []string{"id", "type", "pipeline", "systemFields", "environment", "streamtags", "hosts", "dnsResolvePeriodSec", "enableIpSpoofing", "description", "maxRecordSize"}) {
-		m.OutputNetflow = &OutputNetflowModel{}
-		if err := m.OutputNetflow.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	return false, nil
-}
-
-func DestinationOneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
-	for _, name := range required {
-		if _, ok := raw[name]; !ok {
-			return false
-		}
-	}
-	if len(required) > 0 {
-		return true
-	}
-	for _, name := range known {
-		if _, ok := raw[name]; ok {
-			return true
-		}
-	}
-	return false
 }

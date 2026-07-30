@@ -47506,6 +47506,7 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 		return
 	}
 	syncSourceLegacyItems(api, state)
+	syncSourceLikeActiveInput(api, state)
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
@@ -47576,12 +47577,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCollection.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCollection.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCollection.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.CriblSourceProvenance.IsNull() || state.InputCollection.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCollection.CriblSourceProvenance.IsNull() && !api.InputCollection.CriblSourceProvenance.IsUnknown() {
 				state.InputCollection.CriblSourceProvenance = api.InputCollection.CriblSourceProvenance
 			} else if state.InputCollection.CriblSourceProvenance.IsNull() || state.InputCollection.CriblSourceProvenance.IsUnknown() {
 				state.InputCollection.CriblSourceProvenance = types.ObjectNull(InputCollectionCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCollection.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCollection.CriblSourceProvenance = types.ObjectNull(InputCollectionCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.Connections.IsNull() || state.InputCollection.Connections.IsUnknown())) {
 			if !api.InputCollection.Connections.IsNull() && !api.InputCollection.Connections.IsUnknown() {
@@ -47590,6 +47597,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCollection.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCollectionConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCollection.Connections.IsNull() || state.InputCollection.Connections.IsUnknown() {
+			state.InputCollection.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCollectionConnectionsAttrTypes()})
+		} else if len(state.InputCollection.Connections.Elements()) == 0 {
+			state.InputCollection.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCollectionConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.Pq.IsNull() || state.InputCollection.Pq.IsUnknown())) {
 			if !api.InputCollection.Pq.IsNull() && !api.InputCollection.Pq.IsUnknown() {
 				state.InputCollection.Pq = api.InputCollection.Pq
@@ -47597,12 +47609,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCollection.Pq = types.ObjectNull(InputCollectionPqAttrTypes())
 			}
 		}
+		if len(state.InputCollection.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCollection.Pq = types.ObjectNull(InputCollectionPqAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.BreakerRulesets.IsNull() || state.InputCollection.BreakerRulesets.IsUnknown())) {
 			if !api.InputCollection.BreakerRulesets.IsNull() && !api.InputCollection.BreakerRulesets.IsUnknown() {
 				state.InputCollection.BreakerRulesets = api.InputCollection.BreakerRulesets
 			} else if state.InputCollection.BreakerRulesets.IsNull() || state.InputCollection.BreakerRulesets.IsUnknown() {
 				state.InputCollection.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputCollection.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputCollection.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.StaleChannelFlushMs.IsNull() || state.InputCollection.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputCollection.StaleChannelFlushMs.IsNull() && !api.InputCollection.StaleChannelFlushMs.IsUnknown() {
@@ -47618,6 +47636,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCollection.Preprocess = types.ObjectNull(InputCollectionPreprocessAttrTypes())
 			}
 		}
+		if len(state.InputCollection.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputCollection.Preprocess = types.ObjectNull(InputCollectionPreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.ThrottleRatePerSec.IsNull() || state.InputCollection.ThrottleRatePerSec.IsUnknown())) {
 			if !api.InputCollection.ThrottleRatePerSec.IsNull() && !api.InputCollection.ThrottleRatePerSec.IsUnknown() {
 				state.InputCollection.ThrottleRatePerSec = api.InputCollection.ThrottleRatePerSec
@@ -47631,6 +47652,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCollection.Metadata.IsNull() || state.InputCollection.Metadata.IsUnknown() {
 				state.InputCollection.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCollectionMetadataAttrTypes()})
 			}
+		}
+		if state.InputCollection.Metadata.IsNull() || state.InputCollection.Metadata.IsUnknown() {
+			state.InputCollection.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCollectionMetadataAttrTypes()})
+		} else if len(state.InputCollection.Metadata.Elements()) == 0 {
+			state.InputCollection.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCollectionMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.Output.IsNull() || state.InputCollection.Output.IsUnknown())) {
 			if !api.InputCollection.Output.IsNull() && !api.InputCollection.Output.IsUnknown() {
@@ -47700,12 +47726,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKafka.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKafka.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputKafka.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.CriblSourceProvenance.IsNull() || state.InputKafka.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputKafka.CriblSourceProvenance.IsNull() && !api.InputKafka.CriblSourceProvenance.IsUnknown() {
 				state.InputKafka.CriblSourceProvenance = api.InputKafka.CriblSourceProvenance
 			} else if state.InputKafka.CriblSourceProvenance.IsNull() || state.InputKafka.CriblSourceProvenance.IsUnknown() {
 				state.InputKafka.CriblSourceProvenance = types.ObjectNull(InputKafkaCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputKafka.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputKafka.CriblSourceProvenance = types.ObjectNull(InputKafkaCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Connections.IsNull() || state.InputKafka.Connections.IsUnknown())) {
 			if !api.InputKafka.Connections.IsNull() && !api.InputKafka.Connections.IsUnknown() {
@@ -47714,12 +47746,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKafka.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKafkaConnectionsAttrTypes()})
 			}
 		}
+		if state.InputKafka.Connections.IsNull() || state.InputKafka.Connections.IsUnknown() {
+			state.InputKafka.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKafkaConnectionsAttrTypes()})
+		} else if len(state.InputKafka.Connections.Elements()) == 0 {
+			state.InputKafka.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputKafkaConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Pq.IsNull() || state.InputKafka.Pq.IsUnknown())) {
 			if !api.InputKafka.Pq.IsNull() && !api.InputKafka.Pq.IsUnknown() {
 				state.InputKafka.Pq = api.InputKafka.Pq
 			} else if state.InputKafka.Pq.IsNull() || state.InputKafka.Pq.IsUnknown() {
 				state.InputKafka.Pq = types.ObjectNull(InputKafkaPqAttrTypes())
 			}
+		}
+		if len(state.InputKafka.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputKafka.Pq = types.ObjectNull(InputKafkaPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Brokers.IsNull() || state.InputKafka.Brokers.IsUnknown())) {
 			if !api.InputKafka.Brokers.IsNull() && !api.InputKafka.Brokers.IsUnknown() {
@@ -47728,12 +47768,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKafka.Brokers = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKafka.Brokers.ElementType(context.Background()); elementType == nil {
+			state.InputKafka.Brokers = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Topics.IsNull() || state.InputKafka.Topics.IsUnknown())) {
 			if !api.InputKafka.Topics.IsNull() && !api.InputKafka.Topics.IsUnknown() {
 				state.InputKafka.Topics = api.InputKafka.Topics
 			} else if state.InputKafka.Topics.IsNull() || state.InputKafka.Topics.IsUnknown() {
 				state.InputKafka.Topics = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputKafka.Topics.ElementType(context.Background()); elementType == nil {
+			state.InputKafka.Topics = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.GroupID.IsNull() || state.InputKafka.GroupID.IsUnknown())) {
 			if !api.InputKafka.GroupID.IsNull() && !api.InputKafka.GroupID.IsUnknown() {
@@ -47755,6 +47801,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputKafka.KafkaSchemaRegistry.IsNull() || state.InputKafka.KafkaSchemaRegistry.IsUnknown() {
 				state.InputKafka.KafkaSchemaRegistry = types.ObjectNull(InputKafkaKafkaSchemaRegistryAttrTypes())
 			}
+		}
+		if len(state.InputKafka.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
+			state.InputKafka.KafkaSchemaRegistry = types.ObjectNull(InputKafkaKafkaSchemaRegistryAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.ConnectionTimeout.IsNull() || state.InputKafka.ConnectionTimeout.IsUnknown())) {
 			if !api.InputKafka.ConnectionTimeout.IsNull() && !api.InputKafka.ConnectionTimeout.IsUnknown() {
@@ -47819,12 +47868,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKafka.Sasl = types.ObjectNull(InputKafkaSaslAttrTypes())
 			}
 		}
+		if len(state.InputKafka.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.InputKafka.Sasl = types.ObjectNull(InputKafkaSaslAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.TLS.IsNull() || state.InputKafka.TLS.IsUnknown())) {
 			if !api.InputKafka.TLS.IsNull() && !api.InputKafka.TLS.IsUnknown() {
 				state.InputKafka.TLS = api.InputKafka.TLS
 			} else if state.InputKafka.TLS.IsNull() || state.InputKafka.TLS.IsUnknown() {
 				state.InputKafka.TLS = types.ObjectNull(InputKafkaTLSAttrTypes())
 			}
+		}
+		if len(state.InputKafka.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputKafka.TLS = types.ObjectNull(InputKafkaTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.SessionTimeout.IsNull() || state.InputKafka.SessionTimeout.IsUnknown())) {
 			if !api.InputKafka.SessionTimeout.IsNull() && !api.InputKafka.SessionTimeout.IsUnknown() {
@@ -47888,6 +47943,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputKafka.Metadata.IsNull() || state.InputKafka.Metadata.IsUnknown() {
 				state.InputKafka.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()})
 			}
+		}
+		if state.InputKafka.Metadata.IsNull() || state.InputKafka.Metadata.IsUnknown() {
+			state.InputKafka.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()})
+		} else if len(state.InputKafka.Metadata.Elements()) == 0 {
+			state.InputKafka.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputKafkaMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Description.IsNull() || state.InputKafka.Description.IsUnknown())) {
 			if !api.InputKafka.Description.IsNull() && !api.InputKafka.Description.IsUnknown() {
@@ -47957,12 +48017,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMsk.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputMsk.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputMsk.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.CriblSourceProvenance.IsNull() || state.InputMsk.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputMsk.CriblSourceProvenance.IsNull() && !api.InputMsk.CriblSourceProvenance.IsUnknown() {
 				state.InputMsk.CriblSourceProvenance = api.InputMsk.CriblSourceProvenance
 			} else if state.InputMsk.CriblSourceProvenance.IsNull() || state.InputMsk.CriblSourceProvenance.IsUnknown() {
 				state.InputMsk.CriblSourceProvenance = types.ObjectNull(InputMskCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputMsk.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputMsk.CriblSourceProvenance = types.ObjectNull(InputMskCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Connections.IsNull() || state.InputMsk.Connections.IsUnknown())) {
 			if !api.InputMsk.Connections.IsNull() && !api.InputMsk.Connections.IsUnknown() {
@@ -47971,12 +48037,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMsk.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMskConnectionsAttrTypes()})
 			}
 		}
+		if state.InputMsk.Connections.IsNull() || state.InputMsk.Connections.IsUnknown() {
+			state.InputMsk.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMskConnectionsAttrTypes()})
+		} else if len(state.InputMsk.Connections.Elements()) == 0 {
+			state.InputMsk.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputMskConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Pq.IsNull() || state.InputMsk.Pq.IsUnknown())) {
 			if !api.InputMsk.Pq.IsNull() && !api.InputMsk.Pq.IsUnknown() {
 				state.InputMsk.Pq = api.InputMsk.Pq
 			} else if state.InputMsk.Pq.IsNull() || state.InputMsk.Pq.IsUnknown() {
 				state.InputMsk.Pq = types.ObjectNull(InputMskPqAttrTypes())
 			}
+		}
+		if len(state.InputMsk.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputMsk.Pq = types.ObjectNull(InputMskPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Brokers.IsNull() || state.InputMsk.Brokers.IsUnknown())) {
 			if !api.InputMsk.Brokers.IsNull() && !api.InputMsk.Brokers.IsUnknown() {
@@ -47985,12 +48059,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMsk.Brokers = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputMsk.Brokers.ElementType(context.Background()); elementType == nil {
+			state.InputMsk.Brokers = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Topics.IsNull() || state.InputMsk.Topics.IsUnknown())) {
 			if !api.InputMsk.Topics.IsNull() && !api.InputMsk.Topics.IsUnknown() {
 				state.InputMsk.Topics = api.InputMsk.Topics
 			} else if state.InputMsk.Topics.IsNull() || state.InputMsk.Topics.IsUnknown() {
 				state.InputMsk.Topics = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputMsk.Topics.ElementType(context.Background()); elementType == nil {
+			state.InputMsk.Topics = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.GroupID.IsNull() || state.InputMsk.GroupID.IsUnknown())) {
 			if !api.InputMsk.GroupID.IsNull() && !api.InputMsk.GroupID.IsUnknown() {
@@ -48034,12 +48114,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMsk.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMskMetadataAttrTypes()})
 			}
 		}
+		if state.InputMsk.Metadata.IsNull() || state.InputMsk.Metadata.IsUnknown() {
+			state.InputMsk.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMskMetadataAttrTypes()})
+		} else if len(state.InputMsk.Metadata.Elements()) == 0 {
+			state.InputMsk.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputMskMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.KafkaSchemaRegistry.IsNull() || state.InputMsk.KafkaSchemaRegistry.IsUnknown())) {
 			if !api.InputMsk.KafkaSchemaRegistry.IsNull() && !api.InputMsk.KafkaSchemaRegistry.IsUnknown() {
 				state.InputMsk.KafkaSchemaRegistry = api.InputMsk.KafkaSchemaRegistry
 			} else if state.InputMsk.KafkaSchemaRegistry.IsNull() || state.InputMsk.KafkaSchemaRegistry.IsUnknown() {
 				state.InputMsk.KafkaSchemaRegistry = types.ObjectNull(InputMskKafkaSchemaRegistryAttrTypes())
 			}
+		}
+		if len(state.InputMsk.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
+			state.InputMsk.KafkaSchemaRegistry = types.ObjectNull(InputMskKafkaSchemaRegistryAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.ConnectionTimeout.IsNull() || state.InputMsk.ConnectionTimeout.IsUnknown())) {
 			if !api.InputMsk.ConnectionTimeout.IsNull() && !api.InputMsk.ConnectionTimeout.IsUnknown() {
@@ -48174,6 +48262,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMsk.TLS = types.ObjectNull(InputMskTLSAttrTypes())
 			}
 		}
+		if len(state.InputMsk.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputMsk.TLS = types.ObjectNull(InputMskTLSAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.AutoCommitInterval.IsNull() || state.InputMsk.AutoCommitInterval.IsUnknown())) {
 			if !api.InputMsk.AutoCommitInterval.IsNull() && !api.InputMsk.AutoCommitInterval.IsUnknown() {
 				state.InputMsk.AutoCommitInterval = api.InputMsk.AutoCommitInterval
@@ -48291,12 +48382,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputHttp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.CriblSourceProvenance.IsNull() || state.InputHttp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputHttp.CriblSourceProvenance.IsNull() && !api.InputHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputHttp.CriblSourceProvenance = api.InputHttp.CriblSourceProvenance
 			} else if state.InputHttp.CriblSourceProvenance.IsNull() || state.InputHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputHttp.CriblSourceProvenance = types.ObjectNull(InputHttpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputHttp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputHttp.CriblSourceProvenance = types.ObjectNull(InputHttpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Connections.IsNull() || state.InputHttp.Connections.IsUnknown())) {
 			if !api.InputHttp.Connections.IsNull() && !api.InputHttp.Connections.IsUnknown() {
@@ -48305,12 +48402,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputHttpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputHttp.Connections.IsNull() || state.InputHttp.Connections.IsUnknown() {
+			state.InputHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputHttpConnectionsAttrTypes()})
+		} else if len(state.InputHttp.Connections.Elements()) == 0 {
+			state.InputHttp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Pq.IsNull() || state.InputHttp.Pq.IsUnknown())) {
 			if !api.InputHttp.Pq.IsNull() && !api.InputHttp.Pq.IsUnknown() {
 				state.InputHttp.Pq = api.InputHttp.Pq
 			} else if state.InputHttp.Pq.IsNull() || state.InputHttp.Pq.IsUnknown() {
 				state.InputHttp.Pq = types.ObjectNull(InputHttpPqAttrTypes())
 			}
+		}
+		if len(state.InputHttp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputHttp.Pq = types.ObjectNull(InputHttpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Host.IsNull() || state.InputHttp.Host.IsUnknown())) {
 			if !api.InputHttp.Host.IsNull() && !api.InputHttp.Host.IsUnknown() {
@@ -48333,12 +48438,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttp.AuthTokens = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttp.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputHttp.AuthTokens = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.TLS.IsNull() || state.InputHttp.TLS.IsUnknown())) {
 			if !api.InputHttp.TLS.IsNull() && !api.InputHttp.TLS.IsUnknown() {
 				state.InputHttp.TLS = api.InputHttp.TLS
 			} else if state.InputHttp.TLS.IsNull() || state.InputHttp.TLS.IsUnknown() {
 				state.InputHttp.TLS = types.ObjectNull(InputHttpTLSAttrTypes())
 			}
+		}
+		if len(state.InputHttp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputHttp.TLS = types.ObjectNull(InputHttpTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.MaxActiveReq.IsNull() || state.InputHttp.MaxActiveReq.IsUnknown())) {
 			if !api.InputHttp.MaxActiveReq.IsNull() && !api.InputHttp.MaxActiveReq.IsUnknown() {
@@ -48452,12 +48563,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputHttpMetadataAttrTypes()})
 			}
 		}
+		if state.InputHttp.Metadata.IsNull() || state.InputHttp.Metadata.IsUnknown() {
+			state.InputHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputHttpMetadataAttrTypes()})
+		} else if len(state.InputHttp.Metadata.Elements()) == 0 {
+			state.InputHttp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.AuthTokensExt.IsNull() || state.InputHttp.AuthTokensExt.IsUnknown())) {
 			if !api.InputHttp.AuthTokensExt.IsNull() && !api.InputHttp.AuthTokensExt.IsUnknown() {
 				state.InputHttp.AuthTokensExt = api.InputHttp.AuthTokensExt
 			} else if state.InputHttp.AuthTokensExt.IsNull() || state.InputHttp.AuthTokensExt.IsUnknown() {
 				state.InputHttp.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpAuthTokensExtAttrTypes()})
 			}
+		}
+		if state.InputHttp.AuthTokensExt.IsNull() || state.InputHttp.AuthTokensExt.IsUnknown() {
+			state.InputHttp.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpAuthTokensExtAttrTypes()})
+		} else if len(state.InputHttp.AuthTokensExt.Elements()) == 0 {
+			state.InputHttp.AuthTokensExt = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpAuthTokensExtAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Description.IsNull() || state.InputHttp.Description.IsUnknown())) {
 			if !api.InputHttp.Description.IsNull() && !api.InputHttp.Description.IsUnknown() {
@@ -48527,12 +48648,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunk.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSplunk.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSplunk.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.CriblSourceProvenance.IsNull() || state.InputSplunk.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSplunk.CriblSourceProvenance.IsNull() && !api.InputSplunk.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunk.CriblSourceProvenance = api.InputSplunk.CriblSourceProvenance
 			} else if state.InputSplunk.CriblSourceProvenance.IsNull() || state.InputSplunk.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunk.CriblSourceProvenance = types.ObjectNull(InputSplunkCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSplunk.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunk.CriblSourceProvenance = types.ObjectNull(InputSplunkCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.Connections.IsNull() || state.InputSplunk.Connections.IsUnknown())) {
 			if !api.InputSplunk.Connections.IsNull() && !api.InputSplunk.Connections.IsUnknown() {
@@ -48541,12 +48668,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunk.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSplunk.Connections.IsNull() || state.InputSplunk.Connections.IsUnknown() {
+			state.InputSplunk.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkConnectionsAttrTypes()})
+		} else if len(state.InputSplunk.Connections.Elements()) == 0 {
+			state.InputSplunk.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.Pq.IsNull() || state.InputSplunk.Pq.IsUnknown())) {
 			if !api.InputSplunk.Pq.IsNull() && !api.InputSplunk.Pq.IsUnknown() {
 				state.InputSplunk.Pq = api.InputSplunk.Pq
 			} else if state.InputSplunk.Pq.IsNull() || state.InputSplunk.Pq.IsUnknown() {
 				state.InputSplunk.Pq = types.ObjectNull(InputSplunkPqAttrTypes())
 			}
+		}
+		if len(state.InputSplunk.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunk.Pq = types.ObjectNull(InputSplunkPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.Host.IsNull() || state.InputSplunk.Host.IsUnknown())) {
 			if !api.InputSplunk.Host.IsNull() && !api.InputSplunk.Host.IsUnknown() {
@@ -48568,6 +48703,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSplunk.TLS.IsNull() || state.InputSplunk.TLS.IsUnknown() {
 				state.InputSplunk.TLS = types.ObjectNull(InputSplunkTLSAttrTypes())
 			}
+		}
+		if len(state.InputSplunk.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunk.TLS = types.ObjectNull(InputSplunkTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.IpWhitelistRegex.IsNull() || state.InputSplunk.IpWhitelistRegex.IsUnknown())) {
 			if !api.InputSplunk.IpWhitelistRegex.IsNull() && !api.InputSplunk.IpWhitelistRegex.IsUnknown() {
@@ -48618,12 +48756,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunk.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkMetadataAttrTypes()})
 			}
 		}
+		if state.InputSplunk.Metadata.IsNull() || state.InputSplunk.Metadata.IsUnknown() {
+			state.InputSplunk.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkMetadataAttrTypes()})
+		} else if len(state.InputSplunk.Metadata.Elements()) == 0 {
+			state.InputSplunk.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.BreakerRulesets.IsNull() || state.InputSplunk.BreakerRulesets.IsUnknown())) {
 			if !api.InputSplunk.BreakerRulesets.IsNull() && !api.InputSplunk.BreakerRulesets.IsUnknown() {
 				state.InputSplunk.BreakerRulesets = api.InputSplunk.BreakerRulesets
 			} else if state.InputSplunk.BreakerRulesets.IsNull() || state.InputSplunk.BreakerRulesets.IsUnknown() {
 				state.InputSplunk.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSplunk.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputSplunk.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.StaleChannelFlushMs.IsNull() || state.InputSplunk.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputSplunk.StaleChannelFlushMs.IsNull() && !api.InputSplunk.StaleChannelFlushMs.IsUnknown() {
@@ -48638,6 +48784,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSplunk.AuthTokens.IsNull() || state.InputSplunk.AuthTokens.IsUnknown() {
 				state.InputSplunk.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()})
 			}
+		}
+		if state.InputSplunk.AuthTokens.IsNull() || state.InputSplunk.AuthTokens.IsUnknown() {
+			state.InputSplunk.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()})
+		} else if len(state.InputSplunk.AuthTokens.Elements()) == 0 {
+			state.InputSplunk.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkAuthTokensAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.MaxS2Sversion.IsNull() || state.InputSplunk.MaxS2Sversion.IsUnknown())) {
 			if !api.InputSplunk.MaxS2Sversion.IsNull() && !api.InputSplunk.MaxS2Sversion.IsUnknown() {
@@ -48742,12 +48893,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkSearch.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSplunkSearch.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkSearch.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.CriblSourceProvenance.IsNull() || state.InputSplunkSearch.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSplunkSearch.CriblSourceProvenance.IsNull() && !api.InputSplunkSearch.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunkSearch.CriblSourceProvenance = api.InputSplunkSearch.CriblSourceProvenance
 			} else if state.InputSplunkSearch.CriblSourceProvenance.IsNull() || state.InputSplunkSearch.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunkSearch.CriblSourceProvenance = types.ObjectNull(InputSplunkSearchCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSplunkSearch.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkSearch.CriblSourceProvenance = types.ObjectNull(InputSplunkSearchCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.Connections.IsNull() || state.InputSplunkSearch.Connections.IsUnknown())) {
 			if !api.InputSplunkSearch.Connections.IsNull() && !api.InputSplunkSearch.Connections.IsUnknown() {
@@ -48756,12 +48913,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkSearch.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSplunkSearch.Connections.IsNull() || state.InputSplunkSearch.Connections.IsUnknown() {
+			state.InputSplunkSearch.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchConnectionsAttrTypes()})
+		} else if len(state.InputSplunkSearch.Connections.Elements()) == 0 {
+			state.InputSplunkSearch.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkSearchConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.Pq.IsNull() || state.InputSplunkSearch.Pq.IsUnknown())) {
 			if !api.InputSplunkSearch.Pq.IsNull() && !api.InputSplunkSearch.Pq.IsUnknown() {
 				state.InputSplunkSearch.Pq = api.InputSplunkSearch.Pq
 			} else if state.InputSplunkSearch.Pq.IsNull() || state.InputSplunkSearch.Pq.IsUnknown() {
 				state.InputSplunkSearch.Pq = types.ObjectNull(InputSplunkSearchPqAttrTypes())
 			}
+		}
+		if len(state.InputSplunkSearch.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkSearch.Pq = types.ObjectNull(InputSplunkSearchPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.SearchHead.IsNull() || state.InputSplunkSearch.SearchHead.IsUnknown())) {
 			if !api.InputSplunkSearch.SearchHead.IsNull() && !api.InputSplunkSearch.SearchHead.IsUnknown() {
@@ -48819,12 +48984,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkSearch.EndpointParams = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchEndpointParamsAttrTypes()})
 			}
 		}
+		if state.InputSplunkSearch.EndpointParams.IsNull() || state.InputSplunkSearch.EndpointParams.IsUnknown() {
+			state.InputSplunkSearch.EndpointParams = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchEndpointParamsAttrTypes()})
+		} else if len(state.InputSplunkSearch.EndpointParams.Elements()) == 0 {
+			state.InputSplunkSearch.EndpointParams = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkSearchEndpointParamsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.EndpointHeaders.IsNull() || state.InputSplunkSearch.EndpointHeaders.IsUnknown())) {
 			if !api.InputSplunkSearch.EndpointHeaders.IsNull() && !api.InputSplunkSearch.EndpointHeaders.IsUnknown() {
 				state.InputSplunkSearch.EndpointHeaders = api.InputSplunkSearch.EndpointHeaders
 			} else if state.InputSplunkSearch.EndpointHeaders.IsNull() || state.InputSplunkSearch.EndpointHeaders.IsUnknown() {
 				state.InputSplunkSearch.EndpointHeaders = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchEndpointHeadersAttrTypes()})
 			}
+		}
+		if state.InputSplunkSearch.EndpointHeaders.IsNull() || state.InputSplunkSearch.EndpointHeaders.IsUnknown() {
+			state.InputSplunkSearch.EndpointHeaders = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchEndpointHeadersAttrTypes()})
+		} else if len(state.InputSplunkSearch.EndpointHeaders.Elements()) == 0 {
+			state.InputSplunkSearch.EndpointHeaders = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkSearchEndpointHeadersAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.LogLevel.IsNull() || state.InputSplunkSearch.LogLevel.IsUnknown())) {
 			if !api.InputSplunkSearch.LogLevel.IsNull() && !api.InputSplunkSearch.LogLevel.IsUnknown() {
@@ -48903,6 +49078,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkSearch.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchMetadataAttrTypes()})
 			}
 		}
+		if state.InputSplunkSearch.Metadata.IsNull() || state.InputSplunkSearch.Metadata.IsUnknown() {
+			state.InputSplunkSearch.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkSearchMetadataAttrTypes()})
+		} else if len(state.InputSplunkSearch.Metadata.Elements()) == 0 {
+			state.InputSplunkSearch.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkSearchMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.RetryRules.IsNull() || state.InputSplunkSearch.RetryRules.IsUnknown())) {
 			if !api.InputSplunkSearch.RetryRules.IsNull() && !api.InputSplunkSearch.RetryRules.IsUnknown() {
 				state.InputSplunkSearch.RetryRules = api.InputSplunkSearch.RetryRules
@@ -48910,12 +49090,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkSearch.RetryRules = types.ObjectNull(InputSplunkSearchRetryRulesAttrTypes())
 			}
 		}
+		if len(state.InputSplunkSearch.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkSearch.RetryRules = types.ObjectNull(InputSplunkSearchRetryRulesAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.BreakerRulesets.IsNull() || state.InputSplunkSearch.BreakerRulesets.IsUnknown())) {
 			if !api.InputSplunkSearch.BreakerRulesets.IsNull() && !api.InputSplunkSearch.BreakerRulesets.IsUnknown() {
 				state.InputSplunkSearch.BreakerRulesets = api.InputSplunkSearch.BreakerRulesets
 			} else if state.InputSplunkSearch.BreakerRulesets.IsNull() || state.InputSplunkSearch.BreakerRulesets.IsUnknown() {
 				state.InputSplunkSearch.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSplunkSearch.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkSearch.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.StaleChannelFlushMs.IsNull() || state.InputSplunkSearch.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputSplunkSearch.StaleChannelFlushMs.IsNull() && !api.InputSplunkSearch.StaleChannelFlushMs.IsUnknown() {
@@ -49034,12 +49220,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSplunkHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.CriblSourceProvenance.IsNull() || state.InputSplunkHec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSplunkHec.CriblSourceProvenance.IsNull() && !api.InputSplunkHec.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunkHec.CriblSourceProvenance = api.InputSplunkHec.CriblSourceProvenance
 			} else if state.InputSplunkHec.CriblSourceProvenance.IsNull() || state.InputSplunkHec.CriblSourceProvenance.IsUnknown() {
 				state.InputSplunkHec.CriblSourceProvenance = types.ObjectNull(InputSplunkHecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSplunkHec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkHec.CriblSourceProvenance = types.ObjectNull(InputSplunkHecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.Connections.IsNull() || state.InputSplunkHec.Connections.IsUnknown())) {
 			if !api.InputSplunkHec.Connections.IsNull() && !api.InputSplunkHec.Connections.IsUnknown() {
@@ -49048,12 +49240,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSplunkHec.Connections.IsNull() || state.InputSplunkHec.Connections.IsUnknown() {
+			state.InputSplunkHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecConnectionsAttrTypes()})
+		} else if len(state.InputSplunkHec.Connections.Elements()) == 0 {
+			state.InputSplunkHec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkHecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.Pq.IsNull() || state.InputSplunkHec.Pq.IsUnknown())) {
 			if !api.InputSplunkHec.Pq.IsNull() && !api.InputSplunkHec.Pq.IsUnknown() {
 				state.InputSplunkHec.Pq = api.InputSplunkHec.Pq
 			} else if state.InputSplunkHec.Pq.IsNull() || state.InputSplunkHec.Pq.IsUnknown() {
 				state.InputSplunkHec.Pq = types.ObjectNull(InputSplunkHecPqAttrTypes())
 			}
+		}
+		if len(state.InputSplunkHec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkHec.Pq = types.ObjectNull(InputSplunkHecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.Host.IsNull() || state.InputSplunkHec.Host.IsUnknown())) {
 			if !api.InputSplunkHec.Host.IsNull() && !api.InputSplunkHec.Host.IsUnknown() {
@@ -49076,12 +49276,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputSplunkHec.AuthTokens.IsNull() || state.InputSplunkHec.AuthTokens.IsUnknown() {
+			state.InputSplunkHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecAuthTokensAttrTypes()})
+		} else if len(state.InputSplunkHec.AuthTokens.Elements()) == 0 {
+			state.InputSplunkHec.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkHecAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.TLS.IsNull() || state.InputSplunkHec.TLS.IsUnknown())) {
 			if !api.InputSplunkHec.TLS.IsNull() && !api.InputSplunkHec.TLS.IsUnknown() {
 				state.InputSplunkHec.TLS = api.InputSplunkHec.TLS
 			} else if state.InputSplunkHec.TLS.IsNull() || state.InputSplunkHec.TLS.IsUnknown() {
 				state.InputSplunkHec.TLS = types.ObjectNull(InputSplunkHecTLSAttrTypes())
 			}
+		}
+		if len(state.InputSplunkHec.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputSplunkHec.TLS = types.ObjectNull(InputSplunkHecTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.MaxActiveReq.IsNull() || state.InputSplunkHec.MaxActiveReq.IsUnknown())) {
 			if !api.InputSplunkHec.MaxActiveReq.IsNull() && !api.InputSplunkHec.MaxActiveReq.IsUnknown() {
@@ -49167,12 +49375,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecMetadataAttrTypes()})
 			}
 		}
+		if state.InputSplunkHec.Metadata.IsNull() || state.InputSplunkHec.Metadata.IsUnknown() {
+			state.InputSplunkHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSplunkHecMetadataAttrTypes()})
+		} else if len(state.InputSplunkHec.Metadata.Elements()) == 0 {
+			state.InputSplunkHec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSplunkHecMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.AllowedIndexes.IsNull() || state.InputSplunkHec.AllowedIndexes.IsUnknown())) {
 			if !api.InputSplunkHec.AllowedIndexes.IsNull() && !api.InputSplunkHec.AllowedIndexes.IsUnknown() {
 				state.InputSplunkHec.AllowedIndexes = api.InputSplunkHec.AllowedIndexes
 			} else if state.InputSplunkHec.AllowedIndexes.IsNull() || state.InputSplunkHec.AllowedIndexes.IsUnknown() {
 				state.InputSplunkHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSplunkHec.AllowedIndexes.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkHec.AllowedIndexes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.SplunkHecAcks.IsNull() || state.InputSplunkHec.SplunkHecAcks.IsUnknown())) {
 			if !api.InputSplunkHec.SplunkHecAcks.IsNull() && !api.InputSplunkHec.SplunkHecAcks.IsUnknown() {
@@ -49187,6 +49403,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSplunkHec.BreakerRulesets.IsNull() || state.InputSplunkHec.BreakerRulesets.IsUnknown() {
 				state.InputSplunkHec.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSplunkHec.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkHec.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.StaleChannelFlushMs.IsNull() || state.InputSplunkHec.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputSplunkHec.StaleChannelFlushMs.IsNull() && !api.InputSplunkHec.StaleChannelFlushMs.IsUnknown() {
@@ -49223,12 +49442,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSplunkHec.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.AccessControlAllowHeaders.IsNull() || state.InputSplunkHec.AccessControlAllowHeaders.IsUnknown())) {
 			if !api.InputSplunkHec.AccessControlAllowHeaders.IsNull() && !api.InputSplunkHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputSplunkHec.AccessControlAllowHeaders = api.InputSplunkHec.AccessControlAllowHeaders
 			} else if state.InputSplunkHec.AccessControlAllowHeaders.IsNull() || state.InputSplunkHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputSplunkHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSplunkHec.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputSplunkHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.EmitTokenMetrics.IsNull() || state.InputSplunkHec.EmitTokenMetrics.IsUnknown())) {
 			if !api.InputSplunkHec.EmitTokenMetrics.IsNull() && !api.InputSplunkHec.EmitTokenMetrics.IsUnknown() {
@@ -49305,12 +49530,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAzureBlob.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputAzureBlob.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputAzureBlob.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.CriblSourceProvenance.IsNull() || state.InputAzureBlob.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputAzureBlob.CriblSourceProvenance.IsNull() && !api.InputAzureBlob.CriblSourceProvenance.IsUnknown() {
 				state.InputAzureBlob.CriblSourceProvenance = api.InputAzureBlob.CriblSourceProvenance
 			} else if state.InputAzureBlob.CriblSourceProvenance.IsNull() || state.InputAzureBlob.CriblSourceProvenance.IsUnknown() {
 				state.InputAzureBlob.CriblSourceProvenance = types.ObjectNull(InputAzureBlobCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputAzureBlob.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputAzureBlob.CriblSourceProvenance = types.ObjectNull(InputAzureBlobCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.Connections.IsNull() || state.InputAzureBlob.Connections.IsUnknown())) {
 			if !api.InputAzureBlob.Connections.IsNull() && !api.InputAzureBlob.Connections.IsUnknown() {
@@ -49319,12 +49550,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAzureBlob.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAzureBlobConnectionsAttrTypes()})
 			}
 		}
+		if state.InputAzureBlob.Connections.IsNull() || state.InputAzureBlob.Connections.IsUnknown() {
+			state.InputAzureBlob.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAzureBlobConnectionsAttrTypes()})
+		} else if len(state.InputAzureBlob.Connections.Elements()) == 0 {
+			state.InputAzureBlob.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputAzureBlobConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.Pq.IsNull() || state.InputAzureBlob.Pq.IsUnknown())) {
 			if !api.InputAzureBlob.Pq.IsNull() && !api.InputAzureBlob.Pq.IsUnknown() {
 				state.InputAzureBlob.Pq = api.InputAzureBlob.Pq
 			} else if state.InputAzureBlob.Pq.IsNull() || state.InputAzureBlob.Pq.IsUnknown() {
 				state.InputAzureBlob.Pq = types.ObjectNull(InputAzureBlobPqAttrTypes())
 			}
+		}
+		if len(state.InputAzureBlob.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputAzureBlob.Pq = types.ObjectNull(InputAzureBlobPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.QueueName.IsNull() || state.InputAzureBlob.QueueName.IsUnknown())) {
 			if !api.InputAzureBlob.QueueName.IsNull() && !api.InputAzureBlob.QueueName.IsUnknown() {
@@ -49382,12 +49621,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAzureBlob.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()})
 			}
 		}
+		if state.InputAzureBlob.Metadata.IsNull() || state.InputAzureBlob.Metadata.IsUnknown() {
+			state.InputAzureBlob.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()})
+		} else if len(state.InputAzureBlob.Metadata.Elements()) == 0 {
+			state.InputAzureBlob.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputAzureBlobMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.BreakerRulesets.IsNull() || state.InputAzureBlob.BreakerRulesets.IsUnknown())) {
 			if !api.InputAzureBlob.BreakerRulesets.IsNull() && !api.InputAzureBlob.BreakerRulesets.IsUnknown() {
 				state.InputAzureBlob.BreakerRulesets = api.InputAzureBlob.BreakerRulesets
 			} else if state.InputAzureBlob.BreakerRulesets.IsNull() || state.InputAzureBlob.BreakerRulesets.IsUnknown() {
 				state.InputAzureBlob.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputAzureBlob.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputAzureBlob.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.StaleChannelFlushMs.IsNull() || state.InputAzureBlob.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputAzureBlob.StaleChannelFlushMs.IsNull() && !api.InputAzureBlob.StaleChannelFlushMs.IsUnknown() {
@@ -49487,6 +49734,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAzureBlob.Certificate = types.ObjectNull(InputAzureBlobCertificateAttrTypes())
 			}
 		}
+		if len(state.InputAzureBlob.Certificate.AttributeTypes(context.Background())) == 0 {
+			state.InputAzureBlob.Certificate = types.ObjectNull(InputAzureBlobCertificateAttrTypes())
+		}
 	}
 	if api.InputElastic != nil {
 		if state.InputElastic == nil {
@@ -49548,12 +49798,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputElastic.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputElastic.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputElastic.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.CriblSourceProvenance.IsNull() || state.InputElastic.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputElastic.CriblSourceProvenance.IsNull() && !api.InputElastic.CriblSourceProvenance.IsUnknown() {
 				state.InputElastic.CriblSourceProvenance = api.InputElastic.CriblSourceProvenance
 			} else if state.InputElastic.CriblSourceProvenance.IsNull() || state.InputElastic.CriblSourceProvenance.IsUnknown() {
 				state.InputElastic.CriblSourceProvenance = types.ObjectNull(InputElasticCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputElastic.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputElastic.CriblSourceProvenance = types.ObjectNull(InputElasticCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Connections.IsNull() || state.InputElastic.Connections.IsUnknown())) {
 			if !api.InputElastic.Connections.IsNull() && !api.InputElastic.Connections.IsUnknown() {
@@ -49562,12 +49818,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputElastic.Connections = types.ListNull(types.ObjectType{AttrTypes: InputElasticConnectionsAttrTypes()})
 			}
 		}
+		if state.InputElastic.Connections.IsNull() || state.InputElastic.Connections.IsUnknown() {
+			state.InputElastic.Connections = types.ListNull(types.ObjectType{AttrTypes: InputElasticConnectionsAttrTypes()})
+		} else if len(state.InputElastic.Connections.Elements()) == 0 {
+			state.InputElastic.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputElasticConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Pq.IsNull() || state.InputElastic.Pq.IsUnknown())) {
 			if !api.InputElastic.Pq.IsNull() && !api.InputElastic.Pq.IsUnknown() {
 				state.InputElastic.Pq = api.InputElastic.Pq
 			} else if state.InputElastic.Pq.IsNull() || state.InputElastic.Pq.IsUnknown() {
 				state.InputElastic.Pq = types.ObjectNull(InputElasticPqAttrTypes())
 			}
+		}
+		if len(state.InputElastic.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputElastic.Pq = types.ObjectNull(InputElasticPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Host.IsNull() || state.InputElastic.Host.IsUnknown())) {
 			if !api.InputElastic.Host.IsNull() && !api.InputElastic.Host.IsUnknown() {
@@ -49589,6 +49853,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputElastic.TLS.IsNull() || state.InputElastic.TLS.IsUnknown() {
 				state.InputElastic.TLS = types.ObjectNull(InputElasticTLSAttrTypes())
 			}
+		}
+		if len(state.InputElastic.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputElastic.TLS = types.ObjectNull(InputElasticTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.MaxActiveReq.IsNull() || state.InputElastic.MaxActiveReq.IsUnknown())) {
 			if !api.InputElastic.MaxActiveReq.IsNull() && !api.InputElastic.MaxActiveReq.IsUnknown() {
@@ -49695,6 +49962,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputElastic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: InputElasticExtraHttpHeadersAttrTypes()})
 			}
 		}
+		if state.InputElastic.ExtraHttpHeaders.IsNull() || state.InputElastic.ExtraHttpHeaders.IsUnknown() {
+			state.InputElastic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: InputElasticExtraHttpHeadersAttrTypes()})
+		} else if len(state.InputElastic.ExtraHttpHeaders.Elements()) == 0 {
+			state.InputElastic.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: InputElasticExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Metadata.IsNull() || state.InputElastic.Metadata.IsUnknown())) {
 			if !api.InputElastic.Metadata.IsNull() && !api.InputElastic.Metadata.IsUnknown() {
 				state.InputElastic.Metadata = api.InputElastic.Metadata
@@ -49702,12 +49974,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputElastic.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputElasticMetadataAttrTypes()})
 			}
 		}
+		if state.InputElastic.Metadata.IsNull() || state.InputElastic.Metadata.IsUnknown() {
+			state.InputElastic.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputElasticMetadataAttrTypes()})
+		} else if len(state.InputElastic.Metadata.Elements()) == 0 {
+			state.InputElastic.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputElasticMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.ProxyMode.IsNull() || state.InputElastic.ProxyMode.IsUnknown())) {
 			if !api.InputElastic.ProxyMode.IsNull() && !api.InputElastic.ProxyMode.IsUnknown() {
 				state.InputElastic.ProxyMode = api.InputElastic.ProxyMode
 			} else if state.InputElastic.ProxyMode.IsNull() || state.InputElastic.ProxyMode.IsUnknown() {
 				state.InputElastic.ProxyMode = types.ObjectNull(InputElasticProxyModeAttrTypes())
 			}
+		}
+		if len(state.InputElastic.ProxyMode.AttributeTypes(context.Background())) == 0 {
+			state.InputElastic.ProxyMode = types.ObjectNull(InputElasticProxyModeAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Description.IsNull() || state.InputElastic.Description.IsUnknown())) {
 			if !api.InputElastic.Description.IsNull() && !api.InputElastic.Description.IsUnknown() {
@@ -49743,6 +50023,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputElastic.AuthTokens.IsNull() || state.InputElastic.AuthTokens.IsUnknown() {
 				state.InputElastic.AuthTokens = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputElastic.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputElastic.AuthTokens = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.CustomAPIVersion.IsNull() || state.InputElastic.CustomAPIVersion.IsUnknown())) {
 			if !api.InputElastic.CustomAPIVersion.IsNull() && !api.InputElastic.CustomAPIVersion.IsUnknown() {
@@ -49812,12 +50095,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputConfluentCloud.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputConfluentCloud.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputConfluentCloud.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.CriblSourceProvenance.IsNull() || state.InputConfluentCloud.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputConfluentCloud.CriblSourceProvenance.IsNull() && !api.InputConfluentCloud.CriblSourceProvenance.IsUnknown() {
 				state.InputConfluentCloud.CriblSourceProvenance = api.InputConfluentCloud.CriblSourceProvenance
 			} else if state.InputConfluentCloud.CriblSourceProvenance.IsNull() || state.InputConfluentCloud.CriblSourceProvenance.IsUnknown() {
 				state.InputConfluentCloud.CriblSourceProvenance = types.ObjectNull(InputConfluentCloudCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputConfluentCloud.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputConfluentCloud.CriblSourceProvenance = types.ObjectNull(InputConfluentCloudCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Connections.IsNull() || state.InputConfluentCloud.Connections.IsUnknown())) {
 			if !api.InputConfluentCloud.Connections.IsNull() && !api.InputConfluentCloud.Connections.IsUnknown() {
@@ -49826,12 +50115,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputConfluentCloud.Connections = types.ListNull(types.ObjectType{AttrTypes: InputConfluentCloudConnectionsAttrTypes()})
 			}
 		}
+		if state.InputConfluentCloud.Connections.IsNull() || state.InputConfluentCloud.Connections.IsUnknown() {
+			state.InputConfluentCloud.Connections = types.ListNull(types.ObjectType{AttrTypes: InputConfluentCloudConnectionsAttrTypes()})
+		} else if len(state.InputConfluentCloud.Connections.Elements()) == 0 {
+			state.InputConfluentCloud.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputConfluentCloudConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Pq.IsNull() || state.InputConfluentCloud.Pq.IsUnknown())) {
 			if !api.InputConfluentCloud.Pq.IsNull() && !api.InputConfluentCloud.Pq.IsUnknown() {
 				state.InputConfluentCloud.Pq = api.InputConfluentCloud.Pq
 			} else if state.InputConfluentCloud.Pq.IsNull() || state.InputConfluentCloud.Pq.IsUnknown() {
 				state.InputConfluentCloud.Pq = types.ObjectNull(InputConfluentCloudPqAttrTypes())
 			}
+		}
+		if len(state.InputConfluentCloud.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputConfluentCloud.Pq = types.ObjectNull(InputConfluentCloudPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Brokers.IsNull() || state.InputConfluentCloud.Brokers.IsUnknown())) {
 			if !api.InputConfluentCloud.Brokers.IsNull() && !api.InputConfluentCloud.Brokers.IsUnknown() {
@@ -49840,6 +50137,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputConfluentCloud.Brokers = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputConfluentCloud.Brokers.ElementType(context.Background()); elementType == nil {
+			state.InputConfluentCloud.Brokers = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.TLS.IsNull() || state.InputConfluentCloud.TLS.IsUnknown())) {
 			if !api.InputConfluentCloud.TLS.IsNull() && !api.InputConfluentCloud.TLS.IsUnknown() {
 				state.InputConfluentCloud.TLS = api.InputConfluentCloud.TLS
@@ -49847,12 +50147,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputConfluentCloud.TLS = types.ObjectNull(InputConfluentCloudTLSAttrTypes())
 			}
 		}
+		if len(state.InputConfluentCloud.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputConfluentCloud.TLS = types.ObjectNull(InputConfluentCloudTLSAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Topics.IsNull() || state.InputConfluentCloud.Topics.IsUnknown())) {
 			if !api.InputConfluentCloud.Topics.IsNull() && !api.InputConfluentCloud.Topics.IsUnknown() {
 				state.InputConfluentCloud.Topics = api.InputConfluentCloud.Topics
 			} else if state.InputConfluentCloud.Topics.IsNull() || state.InputConfluentCloud.Topics.IsUnknown() {
 				state.InputConfluentCloud.Topics = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputConfluentCloud.Topics.ElementType(context.Background()); elementType == nil {
+			state.InputConfluentCloud.Topics = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.GroupID.IsNull() || state.InputConfluentCloud.GroupID.IsUnknown())) {
 			if !api.InputConfluentCloud.GroupID.IsNull() && !api.InputConfluentCloud.GroupID.IsUnknown() {
@@ -49874,6 +50180,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputConfluentCloud.KafkaSchemaRegistry.IsNull() || state.InputConfluentCloud.KafkaSchemaRegistry.IsUnknown() {
 				state.InputConfluentCloud.KafkaSchemaRegistry = types.ObjectNull(InputConfluentCloudKafkaSchemaRegistryAttrTypes())
 			}
+		}
+		if len(state.InputConfluentCloud.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
+			state.InputConfluentCloud.KafkaSchemaRegistry = types.ObjectNull(InputConfluentCloudKafkaSchemaRegistryAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.ConnectionTimeout.IsNull() || state.InputConfluentCloud.ConnectionTimeout.IsUnknown())) {
 			if !api.InputConfluentCloud.ConnectionTimeout.IsNull() && !api.InputConfluentCloud.ConnectionTimeout.IsUnknown() {
@@ -49938,6 +50247,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputConfluentCloud.Sasl = types.ObjectNull(InputConfluentCloudSaslAttrTypes())
 			}
 		}
+		if len(state.InputConfluentCloud.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.InputConfluentCloud.Sasl = types.ObjectNull(InputConfluentCloudSaslAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.SessionTimeout.IsNull() || state.InputConfluentCloud.SessionTimeout.IsUnknown())) {
 			if !api.InputConfluentCloud.SessionTimeout.IsNull() && !api.InputConfluentCloud.SessionTimeout.IsUnknown() {
 				state.InputConfluentCloud.SessionTimeout = api.InputConfluentCloud.SessionTimeout
@@ -50000,6 +50312,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputConfluentCloud.Metadata.IsNull() || state.InputConfluentCloud.Metadata.IsUnknown() {
 				state.InputConfluentCloud.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()})
 			}
+		}
+		if state.InputConfluentCloud.Metadata.IsNull() || state.InputConfluentCloud.Metadata.IsUnknown() {
+			state.InputConfluentCloud.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()})
+		} else if len(state.InputConfluentCloud.Metadata.Elements()) == 0 {
+			state.InputConfluentCloud.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputConfluentCloudMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Description.IsNull() || state.InputConfluentCloud.Description.IsUnknown())) {
 			if !api.InputConfluentCloud.Description.IsNull() && !api.InputConfluentCloud.Description.IsUnknown() {
@@ -50069,12 +50386,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGrafana.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputGrafana.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputGrafana.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.CriblSourceProvenance.IsNull() || state.InputGrafana.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputGrafana.CriblSourceProvenance.IsNull() && !api.InputGrafana.CriblSourceProvenance.IsUnknown() {
 				state.InputGrafana.CriblSourceProvenance = api.InputGrafana.CriblSourceProvenance
 			} else if state.InputGrafana.CriblSourceProvenance.IsNull() || state.InputGrafana.CriblSourceProvenance.IsUnknown() {
 				state.InputGrafana.CriblSourceProvenance = types.ObjectNull(InputGrafanaCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputGrafana.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputGrafana.CriblSourceProvenance = types.ObjectNull(InputGrafanaCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Connections.IsNull() || state.InputGrafana.Connections.IsUnknown())) {
 			if !api.InputGrafana.Connections.IsNull() && !api.InputGrafana.Connections.IsUnknown() {
@@ -50083,12 +50406,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGrafana.Connections = types.ListNull(types.ObjectType{AttrTypes: InputGrafanaConnectionsAttrTypes()})
 			}
 		}
+		if state.InputGrafana.Connections.IsNull() || state.InputGrafana.Connections.IsUnknown() {
+			state.InputGrafana.Connections = types.ListNull(types.ObjectType{AttrTypes: InputGrafanaConnectionsAttrTypes()})
+		} else if len(state.InputGrafana.Connections.Elements()) == 0 {
+			state.InputGrafana.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputGrafanaConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Pq.IsNull() || state.InputGrafana.Pq.IsUnknown())) {
 			if !api.InputGrafana.Pq.IsNull() && !api.InputGrafana.Pq.IsUnknown() {
 				state.InputGrafana.Pq = api.InputGrafana.Pq
 			} else if state.InputGrafana.Pq.IsNull() || state.InputGrafana.Pq.IsUnknown() {
 				state.InputGrafana.Pq = types.ObjectNull(InputGrafanaPqAttrTypes())
 			}
+		}
+		if len(state.InputGrafana.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputGrafana.Pq = types.ObjectNull(InputGrafanaPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Host.IsNull() || state.InputGrafana.Host.IsUnknown())) {
 			if !api.InputGrafana.Host.IsNull() && !api.InputGrafana.Host.IsUnknown() {
@@ -50110,6 +50441,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputGrafana.TLS.IsNull() || state.InputGrafana.TLS.IsUnknown() {
 				state.InputGrafana.TLS = types.ObjectNull(InputGrafanaTLSAttrTypes())
 			}
+		}
+		if len(state.InputGrafana.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputGrafana.TLS = types.ObjectNull(InputGrafanaTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.MaxActiveReq.IsNull() || state.InputGrafana.MaxActiveReq.IsUnknown())) {
 			if !api.InputGrafana.MaxActiveReq.IsNull() && !api.InputGrafana.MaxActiveReq.IsUnknown() {
@@ -50209,6 +50543,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGrafana.PrometheusAuth = types.ObjectNull(InputGrafanaPrometheusAuthAttrTypes())
 			}
 		}
+		if len(state.InputGrafana.PrometheusAuth.AttributeTypes(context.Background())) == 0 {
+			state.InputGrafana.PrometheusAuth = types.ObjectNull(InputGrafanaPrometheusAuthAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.LokiAuth.IsNull() || state.InputGrafana.LokiAuth.IsUnknown())) {
 			if !api.InputGrafana.LokiAuth.IsNull() && !api.InputGrafana.LokiAuth.IsUnknown() {
 				state.InputGrafana.LokiAuth = api.InputGrafana.LokiAuth
@@ -50216,12 +50553,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGrafana.LokiAuth = types.ObjectNull(InputGrafanaLokiAuthAttrTypes())
 			}
 		}
+		if len(state.InputGrafana.LokiAuth.AttributeTypes(context.Background())) == 0 {
+			state.InputGrafana.LokiAuth = types.ObjectNull(InputGrafanaLokiAuthAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Metadata.IsNull() || state.InputGrafana.Metadata.IsUnknown())) {
 			if !api.InputGrafana.Metadata.IsNull() && !api.InputGrafana.Metadata.IsUnknown() {
 				state.InputGrafana.Metadata = api.InputGrafana.Metadata
 			} else if state.InputGrafana.Metadata.IsNull() || state.InputGrafana.Metadata.IsUnknown() {
 				state.InputGrafana.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGrafanaMetadataAttrTypes()})
 			}
+		}
+		if state.InputGrafana.Metadata.IsNull() || state.InputGrafana.Metadata.IsUnknown() {
+			state.InputGrafana.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGrafanaMetadataAttrTypes()})
+		} else if len(state.InputGrafana.Metadata.Elements()) == 0 {
+			state.InputGrafana.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputGrafanaMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Description.IsNull() || state.InputGrafana.Description.IsUnknown())) {
 			if !api.InputGrafana.Description.IsNull() && !api.InputGrafana.Description.IsUnknown() {
@@ -50291,12 +50636,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputLoki.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputLoki.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputLoki.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.CriblSourceProvenance.IsNull() || state.InputLoki.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputLoki.CriblSourceProvenance.IsNull() && !api.InputLoki.CriblSourceProvenance.IsUnknown() {
 				state.InputLoki.CriblSourceProvenance = api.InputLoki.CriblSourceProvenance
 			} else if state.InputLoki.CriblSourceProvenance.IsNull() || state.InputLoki.CriblSourceProvenance.IsUnknown() {
 				state.InputLoki.CriblSourceProvenance = types.ObjectNull(InputLokiCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputLoki.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputLoki.CriblSourceProvenance = types.ObjectNull(InputLokiCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Connections.IsNull() || state.InputLoki.Connections.IsUnknown())) {
 			if !api.InputLoki.Connections.IsNull() && !api.InputLoki.Connections.IsUnknown() {
@@ -50305,12 +50656,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputLoki.Connections = types.ListNull(types.ObjectType{AttrTypes: InputLokiConnectionsAttrTypes()})
 			}
 		}
+		if state.InputLoki.Connections.IsNull() || state.InputLoki.Connections.IsUnknown() {
+			state.InputLoki.Connections = types.ListNull(types.ObjectType{AttrTypes: InputLokiConnectionsAttrTypes()})
+		} else if len(state.InputLoki.Connections.Elements()) == 0 {
+			state.InputLoki.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputLokiConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Pq.IsNull() || state.InputLoki.Pq.IsUnknown())) {
 			if !api.InputLoki.Pq.IsNull() && !api.InputLoki.Pq.IsUnknown() {
 				state.InputLoki.Pq = api.InputLoki.Pq
 			} else if state.InputLoki.Pq.IsNull() || state.InputLoki.Pq.IsUnknown() {
 				state.InputLoki.Pq = types.ObjectNull(InputLokiPqAttrTypes())
 			}
+		}
+		if len(state.InputLoki.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputLoki.Pq = types.ObjectNull(InputLokiPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Host.IsNull() || state.InputLoki.Host.IsUnknown())) {
 			if !api.InputLoki.Host.IsNull() && !api.InputLoki.Host.IsUnknown() {
@@ -50332,6 +50691,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputLoki.TLS.IsNull() || state.InputLoki.TLS.IsUnknown() {
 				state.InputLoki.TLS = types.ObjectNull(InputLokiTLSAttrTypes())
 			}
+		}
+		if len(state.InputLoki.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputLoki.TLS = types.ObjectNull(InputLokiTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.MaxActiveReq.IsNull() || state.InputLoki.MaxActiveReq.IsUnknown())) {
 			if !api.InputLoki.MaxActiveReq.IsNull() && !api.InputLoki.MaxActiveReq.IsUnknown() {
@@ -50430,6 +50792,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputLoki.Metadata.IsNull() || state.InputLoki.Metadata.IsUnknown() {
 				state.InputLoki.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputLokiMetadataAttrTypes()})
 			}
+		}
+		if state.InputLoki.Metadata.IsNull() || state.InputLoki.Metadata.IsUnknown() {
+			state.InputLoki.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputLokiMetadataAttrTypes()})
+		} else if len(state.InputLoki.Metadata.Elements()) == 0 {
+			state.InputLoki.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputLokiMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Description.IsNull() || state.InputLoki.Description.IsUnknown())) {
 			if !api.InputLoki.Description.IsNull() && !api.InputLoki.Description.IsUnknown() {
@@ -50534,12 +50901,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheusRw.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputPrometheusRw.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputPrometheusRw.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.CriblSourceProvenance.IsNull() || state.InputPrometheusRw.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputPrometheusRw.CriblSourceProvenance.IsNull() && !api.InputPrometheusRw.CriblSourceProvenance.IsUnknown() {
 				state.InputPrometheusRw.CriblSourceProvenance = api.InputPrometheusRw.CriblSourceProvenance
 			} else if state.InputPrometheusRw.CriblSourceProvenance.IsNull() || state.InputPrometheusRw.CriblSourceProvenance.IsUnknown() {
 				state.InputPrometheusRw.CriblSourceProvenance = types.ObjectNull(InputPrometheusRwCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputPrometheusRw.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputPrometheusRw.CriblSourceProvenance = types.ObjectNull(InputPrometheusRwCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Connections.IsNull() || state.InputPrometheusRw.Connections.IsUnknown())) {
 			if !api.InputPrometheusRw.Connections.IsNull() && !api.InputPrometheusRw.Connections.IsUnknown() {
@@ -50548,12 +50921,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheusRw.Connections = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusRwConnectionsAttrTypes()})
 			}
 		}
+		if state.InputPrometheusRw.Connections.IsNull() || state.InputPrometheusRw.Connections.IsUnknown() {
+			state.InputPrometheusRw.Connections = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusRwConnectionsAttrTypes()})
+		} else if len(state.InputPrometheusRw.Connections.Elements()) == 0 {
+			state.InputPrometheusRw.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusRwConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Pq.IsNull() || state.InputPrometheusRw.Pq.IsUnknown())) {
 			if !api.InputPrometheusRw.Pq.IsNull() && !api.InputPrometheusRw.Pq.IsUnknown() {
 				state.InputPrometheusRw.Pq = api.InputPrometheusRw.Pq
 			} else if state.InputPrometheusRw.Pq.IsNull() || state.InputPrometheusRw.Pq.IsUnknown() {
 				state.InputPrometheusRw.Pq = types.ObjectNull(InputPrometheusRwPqAttrTypes())
 			}
+		}
+		if len(state.InputPrometheusRw.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputPrometheusRw.Pq = types.ObjectNull(InputPrometheusRwPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Host.IsNull() || state.InputPrometheusRw.Host.IsUnknown())) {
 			if !api.InputPrometheusRw.Host.IsNull() && !api.InputPrometheusRw.Host.IsUnknown() {
@@ -50575,6 +50956,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheusRw.TLS.IsNull() || state.InputPrometheusRw.TLS.IsUnknown() {
 				state.InputPrometheusRw.TLS = types.ObjectNull(InputPrometheusRwTLSAttrTypes())
 			}
+		}
+		if len(state.InputPrometheusRw.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputPrometheusRw.TLS = types.ObjectNull(InputPrometheusRwTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.MaxActiveReq.IsNull() || state.InputPrometheusRw.MaxActiveReq.IsUnknown())) {
 			if !api.InputPrometheusRw.MaxActiveReq.IsNull() && !api.InputPrometheusRw.MaxActiveReq.IsUnknown() {
@@ -50673,6 +51057,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheusRw.Metadata.IsNull() || state.InputPrometheusRw.Metadata.IsUnknown() {
 				state.InputPrometheusRw.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusRwMetadataAttrTypes()})
 			}
+		}
+		if state.InputPrometheusRw.Metadata.IsNull() || state.InputPrometheusRw.Metadata.IsUnknown() {
+			state.InputPrometheusRw.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusRwMetadataAttrTypes()})
+		} else if len(state.InputPrometheusRw.Metadata.Elements()) == 0 {
+			state.InputPrometheusRw.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusRwMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Description.IsNull() || state.InputPrometheusRw.Description.IsUnknown())) {
 			if !api.InputPrometheusRw.Description.IsNull() && !api.InputPrometheusRw.Description.IsUnknown() {
@@ -50777,12 +51166,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheus.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputPrometheus.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputPrometheus.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.CriblSourceProvenance.IsNull() || state.InputPrometheus.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputPrometheus.CriblSourceProvenance.IsNull() && !api.InputPrometheus.CriblSourceProvenance.IsUnknown() {
 				state.InputPrometheus.CriblSourceProvenance = api.InputPrometheus.CriblSourceProvenance
 			} else if state.InputPrometheus.CriblSourceProvenance.IsNull() || state.InputPrometheus.CriblSourceProvenance.IsUnknown() {
 				state.InputPrometheus.CriblSourceProvenance = types.ObjectNull(InputPrometheusCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputPrometheus.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputPrometheus.CriblSourceProvenance = types.ObjectNull(InputPrometheusCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.Connections.IsNull() || state.InputPrometheus.Connections.IsUnknown())) {
 			if !api.InputPrometheus.Connections.IsNull() && !api.InputPrometheus.Connections.IsUnknown() {
@@ -50791,6 +51186,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheus.Connections = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()})
 			}
 		}
+		if state.InputPrometheus.Connections.IsNull() || state.InputPrometheus.Connections.IsUnknown() {
+			state.InputPrometheus.Connections = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()})
+		} else if len(state.InputPrometheus.Connections.Elements()) == 0 {
+			state.InputPrometheus.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.Pq.IsNull() || state.InputPrometheus.Pq.IsUnknown())) {
 			if !api.InputPrometheus.Pq.IsNull() && !api.InputPrometheus.Pq.IsUnknown() {
 				state.InputPrometheus.Pq = api.InputPrometheus.Pq
@@ -50798,12 +51198,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheus.Pq = types.ObjectNull(InputPrometheusPqAttrTypes())
 			}
 		}
+		if len(state.InputPrometheus.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputPrometheus.Pq = types.ObjectNull(InputPrometheusPqAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.DimensionList.IsNull() || state.InputPrometheus.DimensionList.IsUnknown())) {
 			if !api.InputPrometheus.DimensionList.IsNull() && !api.InputPrometheus.DimensionList.IsUnknown() {
 				state.InputPrometheus.DimensionList = api.InputPrometheus.DimensionList
 			} else if state.InputPrometheus.DimensionList.IsNull() || state.InputPrometheus.DimensionList.IsUnknown() {
 				state.InputPrometheus.DimensionList = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputPrometheus.DimensionList.ElementType(context.Background()); elementType == nil {
+			state.InputPrometheus.DimensionList = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.FieldPerMetric.IsNull() || state.InputPrometheus.FieldPerMetric.IsUnknown())) {
 			if !api.InputPrometheus.FieldPerMetric.IsNull() && !api.InputPrometheus.FieldPerMetric.IsUnknown() {
@@ -50889,6 +51295,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheus.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()})
 			}
 		}
+		if state.InputPrometheus.Metadata.IsNull() || state.InputPrometheus.Metadata.IsUnknown() {
+			state.InputPrometheus.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()})
+		} else if len(state.InputPrometheus.Metadata.Elements()) == 0 {
+			state.InputPrometheus.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.AuthType.IsNull() || state.InputPrometheus.AuthType.IsUnknown())) {
 			if !api.InputPrometheus.AuthType.IsNull() && !api.InputPrometheus.AuthType.IsUnknown() {
 				state.InputPrometheus.AuthType = api.InputPrometheus.AuthType
@@ -50910,6 +51321,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputPrometheus.TargetList = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputPrometheus.TargetList.ElementType(context.Background()); elementType == nil {
+			state.InputPrometheus.TargetList = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.RecordType.IsNull() || state.InputPrometheus.RecordType.IsUnknown())) {
 			if !api.InputPrometheus.RecordType.IsNull() && !api.InputPrometheus.RecordType.IsUnknown() {
 				state.InputPrometheus.RecordType = api.InputPrometheus.RecordType
@@ -50930,6 +51344,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheus.NameList.IsNull() || state.InputPrometheus.NameList.IsUnknown() {
 				state.InputPrometheus.NameList = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputPrometheus.NameList.ElementType(context.Background()); elementType == nil {
+			state.InputPrometheus.NameList = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.ScrapeProtocol.IsNull() || state.InputPrometheus.ScrapeProtocol.IsUnknown())) {
 			if !api.InputPrometheus.ScrapeProtocol.IsNull() && !api.InputPrometheus.ScrapeProtocol.IsUnknown() {
@@ -50979,6 +51396,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheus.SearchFilter.IsNull() || state.InputPrometheus.SearchFilter.IsUnknown() {
 				state.InputPrometheus.SearchFilter = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()})
 			}
+		}
+		if state.InputPrometheus.SearchFilter.IsNull() || state.InputPrometheus.SearchFilter.IsUnknown() {
+			state.InputPrometheus.SearchFilter = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()})
+		} else if len(state.InputPrometheus.SearchFilter.Elements()) == 0 {
+			state.InputPrometheus.SearchFilter = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusSearchFilterAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.AwsSecretKey.IsNull() || state.InputPrometheus.AwsSecretKey.IsUnknown())) {
 			if !api.InputPrometheus.AwsSecretKey.IsNull() && !api.InputPrometheus.AwsSecretKey.IsUnknown() {
@@ -51049,6 +51471,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheus.HttpDiscoveryHeaders.IsNull() || state.InputPrometheus.HttpDiscoveryHeaders.IsUnknown() {
 				state.InputPrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()})
 			}
+		}
+		if state.InputPrometheus.HttpDiscoveryHeaders.IsNull() || state.InputPrometheus.HttpDiscoveryHeaders.IsUnknown() {
+			state.InputPrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()})
+		} else if len(state.InputPrometheus.HttpDiscoveryHeaders.Elements()) == 0 {
+			state.InputPrometheus.HttpDiscoveryHeaders = types.ListValueMust(types.ObjectType{AttrTypes: InputPrometheusHttpDiscoveryHeadersAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown())) {
 			if !api.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsNull() && !api.InputPrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
@@ -51146,12 +51573,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputEdgePrometheus.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputEdgePrometheus.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.CriblSourceProvenance.IsNull() || state.InputEdgePrometheus.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputEdgePrometheus.CriblSourceProvenance.IsNull() && !api.InputEdgePrometheus.CriblSourceProvenance.IsUnknown() {
 				state.InputEdgePrometheus.CriblSourceProvenance = api.InputEdgePrometheus.CriblSourceProvenance
 			} else if state.InputEdgePrometheus.CriblSourceProvenance.IsNull() || state.InputEdgePrometheus.CriblSourceProvenance.IsUnknown() {
 				state.InputEdgePrometheus.CriblSourceProvenance = types.ObjectNull(InputEdgePrometheusCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputEdgePrometheus.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputEdgePrometheus.CriblSourceProvenance = types.ObjectNull(InputEdgePrometheusCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Connections.IsNull() || state.InputEdgePrometheus.Connections.IsUnknown())) {
 			if !api.InputEdgePrometheus.Connections.IsNull() && !api.InputEdgePrometheus.Connections.IsUnknown() {
@@ -51160,6 +51593,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()})
 			}
 		}
+		if state.InputEdgePrometheus.Connections.IsNull() || state.InputEdgePrometheus.Connections.IsUnknown() {
+			state.InputEdgePrometheus.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()})
+		} else if len(state.InputEdgePrometheus.Connections.Elements()) == 0 {
+			state.InputEdgePrometheus.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Pq.IsNull() || state.InputEdgePrometheus.Pq.IsUnknown())) {
 			if !api.InputEdgePrometheus.Pq.IsNull() && !api.InputEdgePrometheus.Pq.IsUnknown() {
 				state.InputEdgePrometheus.Pq = api.InputEdgePrometheus.Pq
@@ -51167,12 +51605,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.Pq = types.ObjectNull(InputEdgePrometheusPqAttrTypes())
 			}
 		}
+		if len(state.InputEdgePrometheus.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputEdgePrometheus.Pq = types.ObjectNull(InputEdgePrometheusPqAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.DimensionList.IsNull() || state.InputEdgePrometheus.DimensionList.IsUnknown())) {
 			if !api.InputEdgePrometheus.DimensionList.IsNull() && !api.InputEdgePrometheus.DimensionList.IsUnknown() {
 				state.InputEdgePrometheus.DimensionList = api.InputEdgePrometheus.DimensionList
 			} else if state.InputEdgePrometheus.DimensionList.IsNull() || state.InputEdgePrometheus.DimensionList.IsUnknown() {
 				state.InputEdgePrometheus.DimensionList = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputEdgePrometheus.DimensionList.ElementType(context.Background()); elementType == nil {
+			state.InputEdgePrometheus.DimensionList = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.FieldPerMetric.IsNull() || state.InputEdgePrometheus.FieldPerMetric.IsUnknown())) {
 			if !api.InputEdgePrometheus.FieldPerMetric.IsNull() && !api.InputEdgePrometheus.FieldPerMetric.IsUnknown() {
@@ -51209,12 +51653,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.Persistence = types.ObjectNull(InputEdgePrometheusPersistenceAttrTypes())
 			}
 		}
+		if len(state.InputEdgePrometheus.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputEdgePrometheus.Persistence = types.ObjectNull(InputEdgePrometheusPersistenceAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Metadata.IsNull() || state.InputEdgePrometheus.Metadata.IsUnknown())) {
 			if !api.InputEdgePrometheus.Metadata.IsNull() && !api.InputEdgePrometheus.Metadata.IsUnknown() {
 				state.InputEdgePrometheus.Metadata = api.InputEdgePrometheus.Metadata
 			} else if state.InputEdgePrometheus.Metadata.IsNull() || state.InputEdgePrometheus.Metadata.IsUnknown() {
 				state.InputEdgePrometheus.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()})
 			}
+		}
+		if state.InputEdgePrometheus.Metadata.IsNull() || state.InputEdgePrometheus.Metadata.IsUnknown() {
+			state.InputEdgePrometheus.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()})
+		} else if len(state.InputEdgePrometheus.Metadata.Elements()) == 0 {
+			state.InputEdgePrometheus.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.AuthType.IsNull() || state.InputEdgePrometheus.AuthType.IsUnknown())) {
 			if !api.InputEdgePrometheus.AuthType.IsNull() && !api.InputEdgePrometheus.AuthType.IsUnknown() {
@@ -51237,6 +51689,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.Targets = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()})
 			}
 		}
+		if state.InputEdgePrometheus.Targets.IsNull() || state.InputEdgePrometheus.Targets.IsUnknown() {
+			state.InputEdgePrometheus.Targets = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()})
+		} else if len(state.InputEdgePrometheus.Targets.Elements()) == 0 {
+			state.InputEdgePrometheus.Targets = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusTargetsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.RecordType.IsNull() || state.InputEdgePrometheus.RecordType.IsUnknown())) {
 			if !api.InputEdgePrometheus.RecordType.IsNull() && !api.InputEdgePrometheus.RecordType.IsUnknown() {
 				state.InputEdgePrometheus.RecordType = api.InputEdgePrometheus.RecordType
@@ -51257,6 +51714,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputEdgePrometheus.NameList.IsNull() || state.InputEdgePrometheus.NameList.IsUnknown() {
 				state.InputEdgePrometheus.NameList = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputEdgePrometheus.NameList.ElementType(context.Background()); elementType == nil {
+			state.InputEdgePrometheus.NameList = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.ScrapeProtocol.IsNull() || state.InputEdgePrometheus.ScrapeProtocol.IsUnknown())) {
 			if !api.InputEdgePrometheus.ScrapeProtocol.IsNull() && !api.InputEdgePrometheus.ScrapeProtocol.IsUnknown() {
@@ -51306,6 +51766,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputEdgePrometheus.SearchFilter.IsNull() || state.InputEdgePrometheus.SearchFilter.IsUnknown() {
 				state.InputEdgePrometheus.SearchFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()})
 			}
+		}
+		if state.InputEdgePrometheus.SearchFilter.IsNull() || state.InputEdgePrometheus.SearchFilter.IsUnknown() {
+			state.InputEdgePrometheus.SearchFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()})
+		} else if len(state.InputEdgePrometheus.SearchFilter.Elements()) == 0 {
+			state.InputEdgePrometheus.SearchFilter = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusSearchFilterAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.AwsSecretKey.IsNull() || state.InputEdgePrometheus.AwsSecretKey.IsUnknown())) {
 			if !api.InputEdgePrometheus.AwsSecretKey.IsNull() && !api.InputEdgePrometheus.AwsSecretKey.IsUnknown() {
@@ -51405,6 +51870,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEdgePrometheus.PodFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()})
 			}
 		}
+		if state.InputEdgePrometheus.PodFilter.IsNull() || state.InputEdgePrometheus.PodFilter.IsUnknown() {
+			state.InputEdgePrometheus.PodFilter = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()})
+		} else if len(state.InputEdgePrometheus.PodFilter.Elements()) == 0 {
+			state.InputEdgePrometheus.PodFilter = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusPodFilterAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.HttpDiscoveryURL.IsNull() || state.InputEdgePrometheus.HttpDiscoveryURL.IsUnknown())) {
 			if !api.InputEdgePrometheus.HttpDiscoveryURL.IsNull() && !api.InputEdgePrometheus.HttpDiscoveryURL.IsUnknown() {
 				state.InputEdgePrometheus.HttpDiscoveryURL = api.InputEdgePrometheus.HttpDiscoveryURL
@@ -51418,6 +51888,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputEdgePrometheus.HttpDiscoveryHeaders.IsNull() || state.InputEdgePrometheus.HttpDiscoveryHeaders.IsUnknown() {
 				state.InputEdgePrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()})
 			}
+		}
+		if state.InputEdgePrometheus.HttpDiscoveryHeaders.IsNull() || state.InputEdgePrometheus.HttpDiscoveryHeaders.IsUnknown() {
+			state.InputEdgePrometheus.HttpDiscoveryHeaders = types.ListNull(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()})
+		} else if len(state.InputEdgePrometheus.HttpDiscoveryHeaders.Elements()) == 0 {
+			state.InputEdgePrometheus.HttpDiscoveryHeaders = types.ListValueMust(types.ObjectType{AttrTypes: InputEdgePrometheusHttpDiscoveryHeadersAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsNull() || state.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown())) {
 			if !api.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsNull() && !api.InputEdgePrometheus.HttpDiscoveryRejectUnauthorized.IsUnknown() {
@@ -51515,12 +51990,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Mgmt.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOffice365Mgmt.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOffice365Mgmt.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.CriblSourceProvenance.IsNull() || state.InputOffice365Mgmt.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOffice365Mgmt.CriblSourceProvenance.IsNull() && !api.InputOffice365Mgmt.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365Mgmt.CriblSourceProvenance = api.InputOffice365Mgmt.CriblSourceProvenance
 			} else if state.InputOffice365Mgmt.CriblSourceProvenance.IsNull() || state.InputOffice365Mgmt.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365Mgmt.CriblSourceProvenance = types.ObjectNull(InputOffice365MgmtCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Mgmt.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Mgmt.CriblSourceProvenance = types.ObjectNull(InputOffice365MgmtCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.Connections.IsNull() || state.InputOffice365Mgmt.Connections.IsUnknown())) {
 			if !api.InputOffice365Mgmt.Connections.IsNull() && !api.InputOffice365Mgmt.Connections.IsUnknown() {
@@ -51529,12 +52010,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Mgmt.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOffice365Mgmt.Connections.IsNull() || state.InputOffice365Mgmt.Connections.IsUnknown() {
+			state.InputOffice365Mgmt.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtConnectionsAttrTypes()})
+		} else if len(state.InputOffice365Mgmt.Connections.Elements()) == 0 {
+			state.InputOffice365Mgmt.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365MgmtConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.Pq.IsNull() || state.InputOffice365Mgmt.Pq.IsUnknown())) {
 			if !api.InputOffice365Mgmt.Pq.IsNull() && !api.InputOffice365Mgmt.Pq.IsUnknown() {
 				state.InputOffice365Mgmt.Pq = api.InputOffice365Mgmt.Pq
 			} else if state.InputOffice365Mgmt.Pq.IsNull() || state.InputOffice365Mgmt.Pq.IsUnknown() {
 				state.InputOffice365Mgmt.Pq = types.ObjectNull(InputOffice365MgmtPqAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Mgmt.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Mgmt.Pq = types.ObjectNull(InputOffice365MgmtPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.PlanType.IsNull() || state.InputOffice365Mgmt.PlanType.IsUnknown())) {
 			if !api.InputOffice365Mgmt.PlanType.IsNull() && !api.InputOffice365Mgmt.PlanType.IsUnknown() {
@@ -51606,6 +52095,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Mgmt.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtMetadataAttrTypes()})
 			}
 		}
+		if state.InputOffice365Mgmt.Metadata.IsNull() || state.InputOffice365Mgmt.Metadata.IsUnknown() {
+			state.InputOffice365Mgmt.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtMetadataAttrTypes()})
+		} else if len(state.InputOffice365Mgmt.Metadata.Elements()) == 0 {
+			state.InputOffice365Mgmt.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365MgmtMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.PublisherIDentifier.IsNull() || state.InputOffice365Mgmt.PublisherIDentifier.IsUnknown())) {
 			if !api.InputOffice365Mgmt.PublisherIDentifier.IsNull() && !api.InputOffice365Mgmt.PublisherIDentifier.IsUnknown() {
 				state.InputOffice365Mgmt.PublisherIDentifier = api.InputOffice365Mgmt.PublisherIDentifier
@@ -51620,6 +52114,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Mgmt.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtContentConfigAttrTypes()})
 			}
 		}
+		if state.InputOffice365Mgmt.ContentConfig.IsNull() || state.InputOffice365Mgmt.ContentConfig.IsUnknown() {
+			state.InputOffice365Mgmt.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MgmtContentConfigAttrTypes()})
+		} else if len(state.InputOffice365Mgmt.ContentConfig.Elements()) == 0 {
+			state.InputOffice365Mgmt.ContentConfig = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365MgmtContentConfigAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.IngestionLag.IsNull() || state.InputOffice365Mgmt.IngestionLag.IsUnknown())) {
 			if !api.InputOffice365Mgmt.IngestionLag.IsNull() && !api.InputOffice365Mgmt.IngestionLag.IsUnknown() {
 				state.InputOffice365Mgmt.IngestionLag = api.InputOffice365Mgmt.IngestionLag
@@ -51633,6 +52132,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOffice365Mgmt.RetryRules.IsNull() || state.InputOffice365Mgmt.RetryRules.IsUnknown() {
 				state.InputOffice365Mgmt.RetryRules = types.ObjectNull(InputOffice365MgmtRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Mgmt.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Mgmt.RetryRules = types.ObjectNull(InputOffice365MgmtRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.AuthType.IsNull() || state.InputOffice365Mgmt.AuthType.IsUnknown())) {
 			if !api.InputOffice365Mgmt.AuthType.IsNull() && !api.InputOffice365Mgmt.AuthType.IsUnknown() {
@@ -51723,12 +52225,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Service.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOffice365Service.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOffice365Service.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.CriblSourceProvenance.IsNull() || state.InputOffice365Service.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOffice365Service.CriblSourceProvenance.IsNull() && !api.InputOffice365Service.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365Service.CriblSourceProvenance = api.InputOffice365Service.CriblSourceProvenance
 			} else if state.InputOffice365Service.CriblSourceProvenance.IsNull() || state.InputOffice365Service.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365Service.CriblSourceProvenance = types.ObjectNull(InputOffice365ServiceCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Service.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Service.CriblSourceProvenance = types.ObjectNull(InputOffice365ServiceCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.Connections.IsNull() || state.InputOffice365Service.Connections.IsUnknown())) {
 			if !api.InputOffice365Service.Connections.IsNull() && !api.InputOffice365Service.Connections.IsUnknown() {
@@ -51737,12 +52245,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Service.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOffice365Service.Connections.IsNull() || state.InputOffice365Service.Connections.IsUnknown() {
+			state.InputOffice365Service.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceConnectionsAttrTypes()})
+		} else if len(state.InputOffice365Service.Connections.Elements()) == 0 {
+			state.InputOffice365Service.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365ServiceConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.Pq.IsNull() || state.InputOffice365Service.Pq.IsUnknown())) {
 			if !api.InputOffice365Service.Pq.IsNull() && !api.InputOffice365Service.Pq.IsUnknown() {
 				state.InputOffice365Service.Pq = api.InputOffice365Service.Pq
 			} else if state.InputOffice365Service.Pq.IsNull() || state.InputOffice365Service.Pq.IsUnknown() {
 				state.InputOffice365Service.Pq = types.ObjectNull(InputOffice365ServicePqAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Service.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Service.Pq = types.ObjectNull(InputOffice365ServicePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.PlanType.IsNull() || state.InputOffice365Service.PlanType.IsUnknown())) {
 			if !api.InputOffice365Service.PlanType.IsNull() && !api.InputOffice365Service.PlanType.IsUnknown() {
@@ -51814,6 +52330,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Service.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceMetadataAttrTypes()})
 			}
 		}
+		if state.InputOffice365Service.Metadata.IsNull() || state.InputOffice365Service.Metadata.IsUnknown() {
+			state.InputOffice365Service.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceMetadataAttrTypes()})
+		} else if len(state.InputOffice365Service.Metadata.Elements()) == 0 {
+			state.InputOffice365Service.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365ServiceMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.ContentConfig.IsNull() || state.InputOffice365Service.ContentConfig.IsUnknown())) {
 			if !api.InputOffice365Service.ContentConfig.IsNull() && !api.InputOffice365Service.ContentConfig.IsUnknown() {
 				state.InputOffice365Service.ContentConfig = api.InputOffice365Service.ContentConfig
@@ -51821,12 +52342,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365Service.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceContentConfigAttrTypes()})
 			}
 		}
+		if state.InputOffice365Service.ContentConfig.IsNull() || state.InputOffice365Service.ContentConfig.IsUnknown() {
+			state.InputOffice365Service.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOffice365ServiceContentConfigAttrTypes()})
+		} else if len(state.InputOffice365Service.ContentConfig.Elements()) == 0 {
+			state.InputOffice365Service.ContentConfig = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365ServiceContentConfigAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.RetryRules.IsNull() || state.InputOffice365Service.RetryRules.IsUnknown())) {
 			if !api.InputOffice365Service.RetryRules.IsNull() && !api.InputOffice365Service.RetryRules.IsUnknown() {
 				state.InputOffice365Service.RetryRules = api.InputOffice365Service.RetryRules
 			} else if state.InputOffice365Service.RetryRules.IsNull() || state.InputOffice365Service.RetryRules.IsUnknown() {
 				state.InputOffice365Service.RetryRules = types.ObjectNull(InputOffice365ServiceRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOffice365Service.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365Service.RetryRules = types.ObjectNull(InputOffice365ServiceRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.AuthType.IsNull() || state.InputOffice365Service.AuthType.IsUnknown())) {
 			if !api.InputOffice365Service.AuthType.IsNull() && !api.InputOffice365Service.AuthType.IsUnknown() {
@@ -51917,12 +52446,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365MsgTrace.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOffice365MsgTrace.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOffice365MsgTrace.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.CriblSourceProvenance.IsNull() || state.InputOffice365MsgTrace.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.CriblSourceProvenance.IsNull() && !api.InputOffice365MsgTrace.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365MsgTrace.CriblSourceProvenance = api.InputOffice365MsgTrace.CriblSourceProvenance
 			} else if state.InputOffice365MsgTrace.CriblSourceProvenance.IsNull() || state.InputOffice365MsgTrace.CriblSourceProvenance.IsUnknown() {
 				state.InputOffice365MsgTrace.CriblSourceProvenance = types.ObjectNull(InputOffice365MsgTraceCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOffice365MsgTrace.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365MsgTrace.CriblSourceProvenance = types.ObjectNull(InputOffice365MsgTraceCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.Connections.IsNull() || state.InputOffice365MsgTrace.Connections.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.Connections.IsNull() && !api.InputOffice365MsgTrace.Connections.IsUnknown() {
@@ -51931,12 +52466,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365MsgTrace.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MsgTraceConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOffice365MsgTrace.Connections.IsNull() || state.InputOffice365MsgTrace.Connections.IsUnknown() {
+			state.InputOffice365MsgTrace.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MsgTraceConnectionsAttrTypes()})
+		} else if len(state.InputOffice365MsgTrace.Connections.Elements()) == 0 {
+			state.InputOffice365MsgTrace.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365MsgTraceConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.Pq.IsNull() || state.InputOffice365MsgTrace.Pq.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.Pq.IsNull() && !api.InputOffice365MsgTrace.Pq.IsUnknown() {
 				state.InputOffice365MsgTrace.Pq = api.InputOffice365MsgTrace.Pq
 			} else if state.InputOffice365MsgTrace.Pq.IsNull() || state.InputOffice365MsgTrace.Pq.IsUnknown() {
 				state.InputOffice365MsgTrace.Pq = types.ObjectNull(InputOffice365MsgTracePqAttrTypes())
 			}
+		}
+		if len(state.InputOffice365MsgTrace.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365MsgTrace.Pq = types.ObjectNull(InputOffice365MsgTracePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.URL.IsNull() || state.InputOffice365MsgTrace.URL.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.URL.IsNull() && !api.InputOffice365MsgTrace.URL.IsUnknown() {
@@ -52029,6 +52572,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365MsgTrace.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MsgTraceMetadataAttrTypes()})
 			}
 		}
+		if state.InputOffice365MsgTrace.Metadata.IsNull() || state.InputOffice365MsgTrace.Metadata.IsUnknown() {
+			state.InputOffice365MsgTrace.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOffice365MsgTraceMetadataAttrTypes()})
+		} else if len(state.InputOffice365MsgTrace.Metadata.Elements()) == 0 {
+			state.InputOffice365MsgTrace.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOffice365MsgTraceMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.RescheduleDroppedTasks.IsNull() || state.InputOffice365MsgTrace.RescheduleDroppedTasks.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.RescheduleDroppedTasks.IsNull() && !api.InputOffice365MsgTrace.RescheduleDroppedTasks.IsUnknown() {
 				state.InputOffice365MsgTrace.RescheduleDroppedTasks = api.InputOffice365MsgTrace.RescheduleDroppedTasks
@@ -52056,6 +52604,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOffice365MsgTrace.RetryRules.IsNull() || state.InputOffice365MsgTrace.RetryRules.IsUnknown() {
 				state.InputOffice365MsgTrace.RetryRules = types.ObjectNull(InputOffice365MsgTraceRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOffice365MsgTrace.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365MsgTrace.RetryRules = types.ObjectNull(InputOffice365MsgTraceRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.Description.IsNull() || state.InputOffice365MsgTrace.Description.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.Description.IsNull() && !api.InputOffice365MsgTrace.Description.IsUnknown() {
@@ -52134,6 +52685,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOffice365MsgTrace.CertOptions = types.ObjectNull(InputOffice365MsgTraceCertOptionsAttrTypes())
 			}
 		}
+		if len(state.InputOffice365MsgTrace.CertOptions.AttributeTypes(context.Background())) == 0 {
+			state.InputOffice365MsgTrace.CertOptions = types.ObjectNull(InputOffice365MsgTraceCertOptionsAttrTypes())
+		}
 	}
 	if api.InputMicrosoftGraph != nil {
 		if state.InputMicrosoftGraph == nil {
@@ -52195,12 +52749,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputMicrosoftGraph.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputMicrosoftGraph.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.CriblSourceProvenance.IsNull() || state.InputMicrosoftGraph.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputMicrosoftGraph.CriblSourceProvenance.IsNull() && !api.InputMicrosoftGraph.CriblSourceProvenance.IsUnknown() {
 				state.InputMicrosoftGraph.CriblSourceProvenance = api.InputMicrosoftGraph.CriblSourceProvenance
 			} else if state.InputMicrosoftGraph.CriblSourceProvenance.IsNull() || state.InputMicrosoftGraph.CriblSourceProvenance.IsUnknown() {
 				state.InputMicrosoftGraph.CriblSourceProvenance = types.ObjectNull(InputMicrosoftGraphCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputMicrosoftGraph.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputMicrosoftGraph.CriblSourceProvenance = types.ObjectNull(InputMicrosoftGraphCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.Connections.IsNull() || state.InputMicrosoftGraph.Connections.IsUnknown())) {
 			if !api.InputMicrosoftGraph.Connections.IsNull() && !api.InputMicrosoftGraph.Connections.IsUnknown() {
@@ -52209,12 +52769,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftGraphConnectionsAttrTypes()})
 			}
 		}
+		if state.InputMicrosoftGraph.Connections.IsNull() || state.InputMicrosoftGraph.Connections.IsUnknown() {
+			state.InputMicrosoftGraph.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftGraphConnectionsAttrTypes()})
+		} else if len(state.InputMicrosoftGraph.Connections.Elements()) == 0 {
+			state.InputMicrosoftGraph.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputMicrosoftGraphConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.Pq.IsNull() || state.InputMicrosoftGraph.Pq.IsUnknown())) {
 			if !api.InputMicrosoftGraph.Pq.IsNull() && !api.InputMicrosoftGraph.Pq.IsUnknown() {
 				state.InputMicrosoftGraph.Pq = api.InputMicrosoftGraph.Pq
 			} else if state.InputMicrosoftGraph.Pq.IsNull() || state.InputMicrosoftGraph.Pq.IsUnknown() {
 				state.InputMicrosoftGraph.Pq = types.ObjectNull(InputMicrosoftGraphPqAttrTypes())
 			}
+		}
+		if len(state.InputMicrosoftGraph.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputMicrosoftGraph.Pq = types.ObjectNull(InputMicrosoftGraphPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.URL.IsNull() || state.InputMicrosoftGraph.URL.IsUnknown())) {
 			if !api.InputMicrosoftGraph.URL.IsNull() && !api.InputMicrosoftGraph.URL.IsUnknown() {
@@ -52314,6 +52882,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftGraphMetadataAttrTypes()})
 			}
 		}
+		if state.InputMicrosoftGraph.Metadata.IsNull() || state.InputMicrosoftGraph.Metadata.IsUnknown() {
+			state.InputMicrosoftGraph.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMicrosoftGraphMetadataAttrTypes()})
+		} else if len(state.InputMicrosoftGraph.Metadata.Elements()) == 0 {
+			state.InputMicrosoftGraph.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputMicrosoftGraphMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.RescheduleDroppedTasks.IsNull() || state.InputMicrosoftGraph.RescheduleDroppedTasks.IsUnknown())) {
 			if !api.InputMicrosoftGraph.RescheduleDroppedTasks.IsNull() && !api.InputMicrosoftGraph.RescheduleDroppedTasks.IsUnknown() {
 				state.InputMicrosoftGraph.RescheduleDroppedTasks = api.InputMicrosoftGraph.RescheduleDroppedTasks
@@ -52342,12 +52915,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.RetryRules = types.ObjectNull(InputMicrosoftGraphRetryRulesAttrTypes())
 			}
 		}
+		if len(state.InputMicrosoftGraph.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputMicrosoftGraph.RetryRules = types.ObjectNull(InputMicrosoftGraphRetryRulesAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.BreakerRulesets.IsNull() || state.InputMicrosoftGraph.BreakerRulesets.IsUnknown())) {
 			if !api.InputMicrosoftGraph.BreakerRulesets.IsNull() && !api.InputMicrosoftGraph.BreakerRulesets.IsUnknown() {
 				state.InputMicrosoftGraph.BreakerRulesets = api.InputMicrosoftGraph.BreakerRulesets
 			} else if state.InputMicrosoftGraph.BreakerRulesets.IsNull() || state.InputMicrosoftGraph.BreakerRulesets.IsUnknown() {
 				state.InputMicrosoftGraph.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputMicrosoftGraph.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputMicrosoftGraph.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.StaleChannelFlushMs.IsNull() || state.InputMicrosoftGraph.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputMicrosoftGraph.StaleChannelFlushMs.IsNull() && !api.InputMicrosoftGraph.StaleChannelFlushMs.IsUnknown() {
@@ -52412,6 +52991,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMicrosoftGraph.CertOptions = types.ObjectNull(InputMicrosoftGraphCertOptionsAttrTypes())
 			}
 		}
+		if len(state.InputMicrosoftGraph.CertOptions.AttributeTypes(context.Background())) == 0 {
+			state.InputMicrosoftGraph.CertOptions = types.ObjectNull(InputMicrosoftGraphCertOptionsAttrTypes())
+		}
 	}
 	if api.InputEventhub != nil {
 		if state.InputEventhub == nil {
@@ -52473,12 +53055,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhub.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputEventhub.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputEventhub.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.CriblSourceProvenance.IsNull() || state.InputEventhub.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputEventhub.CriblSourceProvenance.IsNull() && !api.InputEventhub.CriblSourceProvenance.IsUnknown() {
 				state.InputEventhub.CriblSourceProvenance = api.InputEventhub.CriblSourceProvenance
 			} else if state.InputEventhub.CriblSourceProvenance.IsNull() || state.InputEventhub.CriblSourceProvenance.IsUnknown() {
 				state.InputEventhub.CriblSourceProvenance = types.ObjectNull(InputEventhubCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputEventhub.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhub.CriblSourceProvenance = types.ObjectNull(InputEventhubCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Connections.IsNull() || state.InputEventhub.Connections.IsUnknown())) {
 			if !api.InputEventhub.Connections.IsNull() && !api.InputEventhub.Connections.IsUnknown() {
@@ -52487,12 +53075,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhub.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEventhubConnectionsAttrTypes()})
 			}
 		}
+		if state.InputEventhub.Connections.IsNull() || state.InputEventhub.Connections.IsUnknown() {
+			state.InputEventhub.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEventhubConnectionsAttrTypes()})
+		} else if len(state.InputEventhub.Connections.Elements()) == 0 {
+			state.InputEventhub.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputEventhubConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Pq.IsNull() || state.InputEventhub.Pq.IsUnknown())) {
 			if !api.InputEventhub.Pq.IsNull() && !api.InputEventhub.Pq.IsUnknown() {
 				state.InputEventhub.Pq = api.InputEventhub.Pq
 			} else if state.InputEventhub.Pq.IsNull() || state.InputEventhub.Pq.IsUnknown() {
 				state.InputEventhub.Pq = types.ObjectNull(InputEventhubPqAttrTypes())
 			}
+		}
+		if len(state.InputEventhub.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhub.Pq = types.ObjectNull(InputEventhubPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Brokers.IsNull() || state.InputEventhub.Brokers.IsUnknown())) {
 			if !api.InputEventhub.Brokers.IsNull() && !api.InputEventhub.Brokers.IsUnknown() {
@@ -52501,12 +53097,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhub.Brokers = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputEventhub.Brokers.ElementType(context.Background()); elementType == nil {
+			state.InputEventhub.Brokers = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Topics.IsNull() || state.InputEventhub.Topics.IsUnknown())) {
 			if !api.InputEventhub.Topics.IsNull() && !api.InputEventhub.Topics.IsUnknown() {
 				state.InputEventhub.Topics = api.InputEventhub.Topics
 			} else if state.InputEventhub.Topics.IsNull() || state.InputEventhub.Topics.IsUnknown() {
 				state.InputEventhub.Topics = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputEventhub.Topics.ElementType(context.Background()); elementType == nil {
+			state.InputEventhub.Topics = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.GroupID.IsNull() || state.InputEventhub.GroupID.IsUnknown())) {
 			if !api.InputEventhub.GroupID.IsNull() && !api.InputEventhub.GroupID.IsUnknown() {
@@ -52585,12 +53187,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhub.Sasl = types.ObjectNull(InputEventhubSaslAttrTypes())
 			}
 		}
+		if len(state.InputEventhub.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhub.Sasl = types.ObjectNull(InputEventhubSaslAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.TLS.IsNull() || state.InputEventhub.TLS.IsUnknown())) {
 			if !api.InputEventhub.TLS.IsNull() && !api.InputEventhub.TLS.IsUnknown() {
 				state.InputEventhub.TLS = api.InputEventhub.TLS
 			} else if state.InputEventhub.TLS.IsNull() || state.InputEventhub.TLS.IsUnknown() {
 				state.InputEventhub.TLS = types.ObjectNull(InputEventhubTLSAttrTypes())
 			}
+		}
+		if len(state.InputEventhub.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhub.TLS = types.ObjectNull(InputEventhubTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.SessionTimeout.IsNull() || state.InputEventhub.SessionTimeout.IsUnknown())) {
 			if !api.InputEventhub.SessionTimeout.IsNull() && !api.InputEventhub.SessionTimeout.IsUnknown() {
@@ -52662,6 +53270,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhub.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()})
 			}
 		}
+		if state.InputEventhub.Metadata.IsNull() || state.InputEventhub.Metadata.IsUnknown() {
+			state.InputEventhub.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()})
+		} else if len(state.InputEventhub.Metadata.Elements()) == 0 {
+			state.InputEventhub.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputEventhubMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Description.IsNull() || state.InputEventhub.Description.IsUnknown())) {
 			if !api.InputEventhub.Description.IsNull() && !api.InputEventhub.Description.IsUnknown() {
 				state.InputEventhub.Description = api.InputEventhub.Description
@@ -52730,12 +53343,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhubAmqp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputEventhubAmqp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputEventhubAmqp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.CriblSourceProvenance.IsNull() || state.InputEventhubAmqp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputEventhubAmqp.CriblSourceProvenance.IsNull() && !api.InputEventhubAmqp.CriblSourceProvenance.IsUnknown() {
 				state.InputEventhubAmqp.CriblSourceProvenance = api.InputEventhubAmqp.CriblSourceProvenance
 			} else if state.InputEventhubAmqp.CriblSourceProvenance.IsNull() || state.InputEventhubAmqp.CriblSourceProvenance.IsUnknown() {
 				state.InputEventhubAmqp.CriblSourceProvenance = types.ObjectNull(InputEventhubAmqpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputEventhubAmqp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhubAmqp.CriblSourceProvenance = types.ObjectNull(InputEventhubAmqpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Connections.IsNull() || state.InputEventhubAmqp.Connections.IsUnknown())) {
 			if !api.InputEventhubAmqp.Connections.IsNull() && !api.InputEventhubAmqp.Connections.IsUnknown() {
@@ -52744,12 +53363,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhubAmqp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEventhubAmqpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputEventhubAmqp.Connections.IsNull() || state.InputEventhubAmqp.Connections.IsUnknown() {
+			state.InputEventhubAmqp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputEventhubAmqpConnectionsAttrTypes()})
+		} else if len(state.InputEventhubAmqp.Connections.Elements()) == 0 {
+			state.InputEventhubAmqp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputEventhubAmqpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Pq.IsNull() || state.InputEventhubAmqp.Pq.IsUnknown())) {
 			if !api.InputEventhubAmqp.Pq.IsNull() && !api.InputEventhubAmqp.Pq.IsUnknown() {
 				state.InputEventhubAmqp.Pq = api.InputEventhubAmqp.Pq
 			} else if state.InputEventhubAmqp.Pq.IsNull() || state.InputEventhubAmqp.Pq.IsUnknown() {
 				state.InputEventhubAmqp.Pq = types.ObjectNull(InputEventhubAmqpPqAttrTypes())
 			}
+		}
+		if len(state.InputEventhubAmqp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhubAmqp.Pq = types.ObjectNull(InputEventhubAmqpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.EventHubName.IsNull() || state.InputEventhubAmqp.EventHubName.IsUnknown())) {
 			if !api.InputEventhubAmqp.EventHubName.IsNull() && !api.InputEventhubAmqp.EventHubName.IsUnknown() {
@@ -52772,12 +53399,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhubAmqp.Auth = types.ObjectNull(InputEventhubAmqpAuthAttrTypes())
 			}
 		}
+		if len(state.InputEventhubAmqp.Auth.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhubAmqp.Auth = types.ObjectNull(InputEventhubAmqpAuthAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Checkpointing.IsNull() || state.InputEventhubAmqp.Checkpointing.IsUnknown())) {
 			if !api.InputEventhubAmqp.Checkpointing.IsNull() && !api.InputEventhubAmqp.Checkpointing.IsUnknown() {
 				state.InputEventhubAmqp.Checkpointing = api.InputEventhubAmqp.Checkpointing
 			} else if state.InputEventhubAmqp.Checkpointing.IsNull() || state.InputEventhubAmqp.Checkpointing.IsUnknown() {
 				state.InputEventhubAmqp.Checkpointing = types.ObjectNull(InputEventhubAmqpCheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputEventhubAmqp.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputEventhubAmqp.Checkpointing = types.ObjectNull(InputEventhubAmqpCheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.FromBeginning.IsNull() || state.InputEventhubAmqp.FromBeginning.IsUnknown())) {
 			if !api.InputEventhubAmqp.FromBeginning.IsNull() && !api.InputEventhubAmqp.FromBeginning.IsUnknown() {
@@ -52863,6 +53496,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputEventhubAmqp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()})
 			}
 		}
+		if state.InputEventhubAmqp.Metadata.IsNull() || state.InputEventhubAmqp.Metadata.IsUnknown() {
+			state.InputEventhubAmqp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()})
+		} else if len(state.InputEventhubAmqp.Metadata.Elements()) == 0 {
+			state.InputEventhubAmqp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputEventhubAmqpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Description.IsNull() || state.InputEventhubAmqp.Description.IsUnknown())) {
 			if !api.InputEventhubAmqp.Description.IsNull() && !api.InputEventhubAmqp.Description.IsUnknown() {
 				state.InputEventhubAmqp.Description = api.InputEventhubAmqp.Description
@@ -52931,12 +53569,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputExec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputExec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputExec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.CriblSourceProvenance.IsNull() || state.InputExec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputExec.CriblSourceProvenance.IsNull() && !api.InputExec.CriblSourceProvenance.IsUnknown() {
 				state.InputExec.CriblSourceProvenance = api.InputExec.CriblSourceProvenance
 			} else if state.InputExec.CriblSourceProvenance.IsNull() || state.InputExec.CriblSourceProvenance.IsUnknown() {
 				state.InputExec.CriblSourceProvenance = types.ObjectNull(InputExecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputExec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputExec.CriblSourceProvenance = types.ObjectNull(InputExecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.Connections.IsNull() || state.InputExec.Connections.IsUnknown())) {
 			if !api.InputExec.Connections.IsNull() && !api.InputExec.Connections.IsUnknown() {
@@ -52945,12 +53589,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputExec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputExecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputExec.Connections.IsNull() || state.InputExec.Connections.IsUnknown() {
+			state.InputExec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputExecConnectionsAttrTypes()})
+		} else if len(state.InputExec.Connections.Elements()) == 0 {
+			state.InputExec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputExecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.Pq.IsNull() || state.InputExec.Pq.IsUnknown())) {
 			if !api.InputExec.Pq.IsNull() && !api.InputExec.Pq.IsUnknown() {
 				state.InputExec.Pq = api.InputExec.Pq
 			} else if state.InputExec.Pq.IsNull() || state.InputExec.Pq.IsUnknown() {
 				state.InputExec.Pq = types.ObjectNull(InputExecPqAttrTypes())
 			}
+		}
+		if len(state.InputExec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputExec.Pq = types.ObjectNull(InputExecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.Command.IsNull() || state.InputExec.Command.IsUnknown())) {
 			if !api.InputExec.Command.IsNull() && !api.InputExec.Command.IsUnknown() {
@@ -52987,6 +53639,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputExec.BreakerRulesets = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputExec.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputExec.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.StaleChannelFlushMs.IsNull() || state.InputExec.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputExec.StaleChannelFlushMs.IsNull() && !api.InputExec.StaleChannelFlushMs.IsUnknown() {
 				state.InputExec.StaleChannelFlushMs = api.InputExec.StaleChannelFlushMs
@@ -53000,6 +53655,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputExec.Metadata.IsNull() || state.InputExec.Metadata.IsUnknown() {
 				state.InputExec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()})
 			}
+		}
+		if state.InputExec.Metadata.IsNull() || state.InputExec.Metadata.IsUnknown() {
+			state.InputExec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()})
+		} else if len(state.InputExec.Metadata.Elements()) == 0 {
+			state.InputExec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputExecMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.Description.IsNull() || state.InputExec.Description.IsUnknown())) {
 			if !api.InputExec.Description.IsNull() && !api.InputExec.Description.IsUnknown() {
@@ -53083,12 +53743,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFirehose.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputFirehose.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputFirehose.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.CriblSourceProvenance.IsNull() || state.InputFirehose.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputFirehose.CriblSourceProvenance.IsNull() && !api.InputFirehose.CriblSourceProvenance.IsUnknown() {
 				state.InputFirehose.CriblSourceProvenance = api.InputFirehose.CriblSourceProvenance
 			} else if state.InputFirehose.CriblSourceProvenance.IsNull() || state.InputFirehose.CriblSourceProvenance.IsUnknown() {
 				state.InputFirehose.CriblSourceProvenance = types.ObjectNull(InputFirehoseCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputFirehose.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputFirehose.CriblSourceProvenance = types.ObjectNull(InputFirehoseCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Connections.IsNull() || state.InputFirehose.Connections.IsUnknown())) {
 			if !api.InputFirehose.Connections.IsNull() && !api.InputFirehose.Connections.IsUnknown() {
@@ -53097,12 +53763,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFirehose.Connections = types.ListNull(types.ObjectType{AttrTypes: InputFirehoseConnectionsAttrTypes()})
 			}
 		}
+		if state.InputFirehose.Connections.IsNull() || state.InputFirehose.Connections.IsUnknown() {
+			state.InputFirehose.Connections = types.ListNull(types.ObjectType{AttrTypes: InputFirehoseConnectionsAttrTypes()})
+		} else if len(state.InputFirehose.Connections.Elements()) == 0 {
+			state.InputFirehose.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputFirehoseConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Pq.IsNull() || state.InputFirehose.Pq.IsUnknown())) {
 			if !api.InputFirehose.Pq.IsNull() && !api.InputFirehose.Pq.IsUnknown() {
 				state.InputFirehose.Pq = api.InputFirehose.Pq
 			} else if state.InputFirehose.Pq.IsNull() || state.InputFirehose.Pq.IsUnknown() {
 				state.InputFirehose.Pq = types.ObjectNull(InputFirehosePqAttrTypes())
 			}
+		}
+		if len(state.InputFirehose.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputFirehose.Pq = types.ObjectNull(InputFirehosePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Host.IsNull() || state.InputFirehose.Host.IsUnknown())) {
 			if !api.InputFirehose.Host.IsNull() && !api.InputFirehose.Host.IsUnknown() {
@@ -53125,12 +53799,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFirehose.AuthTokens = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputFirehose.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputFirehose.AuthTokens = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.TLS.IsNull() || state.InputFirehose.TLS.IsUnknown())) {
 			if !api.InputFirehose.TLS.IsNull() && !api.InputFirehose.TLS.IsUnknown() {
 				state.InputFirehose.TLS = api.InputFirehose.TLS
 			} else if state.InputFirehose.TLS.IsNull() || state.InputFirehose.TLS.IsUnknown() {
 				state.InputFirehose.TLS = types.ObjectNull(InputFirehoseTLSAttrTypes())
 			}
+		}
+		if len(state.InputFirehose.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputFirehose.TLS = types.ObjectNull(InputFirehoseTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.MaxActiveReq.IsNull() || state.InputFirehose.MaxActiveReq.IsUnknown())) {
 			if !api.InputFirehose.MaxActiveReq.IsNull() && !api.InputFirehose.MaxActiveReq.IsUnknown() {
@@ -53216,6 +53896,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFirehose.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputFirehoseMetadataAttrTypes()})
 			}
 		}
+		if state.InputFirehose.Metadata.IsNull() || state.InputFirehose.Metadata.IsUnknown() {
+			state.InputFirehose.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputFirehoseMetadataAttrTypes()})
+		} else if len(state.InputFirehose.Metadata.Elements()) == 0 {
+			state.InputFirehose.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputFirehoseMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Description.IsNull() || state.InputFirehose.Description.IsUnknown())) {
 			if !api.InputFirehose.Description.IsNull() && !api.InputFirehose.Description.IsUnknown() {
 				state.InputFirehose.Description = api.InputFirehose.Description
@@ -53284,12 +53969,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGooglePubsub.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputGooglePubsub.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputGooglePubsub.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.CriblSourceProvenance.IsNull() || state.InputGooglePubsub.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputGooglePubsub.CriblSourceProvenance.IsNull() && !api.InputGooglePubsub.CriblSourceProvenance.IsUnknown() {
 				state.InputGooglePubsub.CriblSourceProvenance = api.InputGooglePubsub.CriblSourceProvenance
 			} else if state.InputGooglePubsub.CriblSourceProvenance.IsNull() || state.InputGooglePubsub.CriblSourceProvenance.IsUnknown() {
 				state.InputGooglePubsub.CriblSourceProvenance = types.ObjectNull(InputGooglePubsubCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputGooglePubsub.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputGooglePubsub.CriblSourceProvenance = types.ObjectNull(InputGooglePubsubCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.Connections.IsNull() || state.InputGooglePubsub.Connections.IsUnknown())) {
 			if !api.InputGooglePubsub.Connections.IsNull() && !api.InputGooglePubsub.Connections.IsUnknown() {
@@ -53298,12 +53989,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGooglePubsub.Connections = types.ListNull(types.ObjectType{AttrTypes: InputGooglePubsubConnectionsAttrTypes()})
 			}
 		}
+		if state.InputGooglePubsub.Connections.IsNull() || state.InputGooglePubsub.Connections.IsUnknown() {
+			state.InputGooglePubsub.Connections = types.ListNull(types.ObjectType{AttrTypes: InputGooglePubsubConnectionsAttrTypes()})
+		} else if len(state.InputGooglePubsub.Connections.Elements()) == 0 {
+			state.InputGooglePubsub.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputGooglePubsubConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.Pq.IsNull() || state.InputGooglePubsub.Pq.IsUnknown())) {
 			if !api.InputGooglePubsub.Pq.IsNull() && !api.InputGooglePubsub.Pq.IsUnknown() {
 				state.InputGooglePubsub.Pq = api.InputGooglePubsub.Pq
 			} else if state.InputGooglePubsub.Pq.IsNull() || state.InputGooglePubsub.Pq.IsUnknown() {
 				state.InputGooglePubsub.Pq = types.ObjectNull(InputGooglePubsubPqAttrTypes())
 			}
+		}
+		if len(state.InputGooglePubsub.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputGooglePubsub.Pq = types.ObjectNull(InputGooglePubsubPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.TopicName.IsNull() || state.InputGooglePubsub.TopicName.IsUnknown())) {
 			if !api.InputGooglePubsub.TopicName.IsNull() && !api.InputGooglePubsub.TopicName.IsUnknown() {
@@ -53396,6 +54095,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGooglePubsub.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()})
 			}
 		}
+		if state.InputGooglePubsub.Metadata.IsNull() || state.InputGooglePubsub.Metadata.IsUnknown() {
+			state.InputGooglePubsub.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()})
+		} else if len(state.InputGooglePubsub.Metadata.Elements()) == 0 {
+			state.InputGooglePubsub.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputGooglePubsubMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.Description.IsNull() || state.InputGooglePubsub.Description.IsUnknown())) {
 			if !api.InputGooglePubsub.Description.IsNull() && !api.InputGooglePubsub.Description.IsUnknown() {
 				state.InputGooglePubsub.Description = api.InputGooglePubsub.Description
@@ -53471,12 +54175,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCribl.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCribl.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCribl.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.CriblSourceProvenance.IsNull() || state.InputCribl.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCribl.CriblSourceProvenance.IsNull() && !api.InputCribl.CriblSourceProvenance.IsUnknown() {
 				state.InputCribl.CriblSourceProvenance = api.InputCribl.CriblSourceProvenance
 			} else if state.InputCribl.CriblSourceProvenance.IsNull() || state.InputCribl.CriblSourceProvenance.IsUnknown() {
 				state.InputCribl.CriblSourceProvenance = types.ObjectNull(InputCriblCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCribl.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCribl.CriblSourceProvenance = types.ObjectNull(InputCriblCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Connections.IsNull() || state.InputCribl.Connections.IsUnknown())) {
 			if !api.InputCribl.Connections.IsNull() && !api.InputCribl.Connections.IsUnknown() {
@@ -53485,12 +54195,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCribl.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCribl.Connections.IsNull() || state.InputCribl.Connections.IsUnknown() {
+			state.InputCribl.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblConnectionsAttrTypes()})
+		} else if len(state.InputCribl.Connections.Elements()) == 0 {
+			state.InputCribl.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Pq.IsNull() || state.InputCribl.Pq.IsUnknown())) {
 			if !api.InputCribl.Pq.IsNull() && !api.InputCribl.Pq.IsUnknown() {
 				state.InputCribl.Pq = api.InputCribl.Pq
 			} else if state.InputCribl.Pq.IsNull() || state.InputCribl.Pq.IsUnknown() {
 				state.InputCribl.Pq = types.ObjectNull(InputCriblPqAttrTypes())
 			}
+		}
+		if len(state.InputCribl.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCribl.Pq = types.ObjectNull(InputCriblPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Filter.IsNull() || state.InputCribl.Filter.IsUnknown())) {
 			if !api.InputCribl.Filter.IsNull() && !api.InputCribl.Filter.IsUnknown() {
@@ -53505,6 +54223,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCribl.Metadata.IsNull() || state.InputCribl.Metadata.IsUnknown() {
 				state.InputCribl.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblMetadataAttrTypes()})
 			}
+		}
+		if state.InputCribl.Metadata.IsNull() || state.InputCribl.Metadata.IsUnknown() {
+			state.InputCribl.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblMetadataAttrTypes()})
+		} else if len(state.InputCribl.Metadata.Elements()) == 0 {
+			state.InputCribl.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Description.IsNull() || state.InputCribl.Description.IsUnknown())) {
 			if !api.InputCribl.Description.IsNull() && !api.InputCribl.Description.IsUnknown() {
@@ -53574,12 +54297,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblTcp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCriblTcp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCriblTcp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.CriblSourceProvenance.IsNull() || state.InputCriblTcp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCriblTcp.CriblSourceProvenance.IsNull() && !api.InputCriblTcp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblTcp.CriblSourceProvenance = api.InputCriblTcp.CriblSourceProvenance
 			} else if state.InputCriblTcp.CriblSourceProvenance.IsNull() || state.InputCriblTcp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblTcp.CriblSourceProvenance = types.ObjectNull(InputCriblTcpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCriblTcp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblTcp.CriblSourceProvenance = types.ObjectNull(InputCriblTcpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Connections.IsNull() || state.InputCriblTcp.Connections.IsUnknown())) {
 			if !api.InputCriblTcp.Connections.IsNull() && !api.InputCriblTcp.Connections.IsUnknown() {
@@ -53588,12 +54317,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblTcp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCriblTcp.Connections.IsNull() || state.InputCriblTcp.Connections.IsUnknown() {
+			state.InputCriblTcp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpConnectionsAttrTypes()})
+		} else if len(state.InputCriblTcp.Connections.Elements()) == 0 {
+			state.InputCriblTcp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblTcpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Pq.IsNull() || state.InputCriblTcp.Pq.IsUnknown())) {
 			if !api.InputCriblTcp.Pq.IsNull() && !api.InputCriblTcp.Pq.IsUnknown() {
 				state.InputCriblTcp.Pq = api.InputCriblTcp.Pq
 			} else if state.InputCriblTcp.Pq.IsNull() || state.InputCriblTcp.Pq.IsUnknown() {
 				state.InputCriblTcp.Pq = types.ObjectNull(InputCriblTcpPqAttrTypes())
 			}
+		}
+		if len(state.InputCriblTcp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblTcp.Pq = types.ObjectNull(InputCriblTcpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Host.IsNull() || state.InputCriblTcp.Host.IsUnknown())) {
 			if !api.InputCriblTcp.Host.IsNull() && !api.InputCriblTcp.Host.IsUnknown() {
@@ -53615,6 +54352,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCriblTcp.TLS.IsNull() || state.InputCriblTcp.TLS.IsUnknown() {
 				state.InputCriblTcp.TLS = types.ObjectNull(InputCriblTcpTLSAttrTypes())
 			}
+		}
+		if len(state.InputCriblTcp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblTcp.TLS = types.ObjectNull(InputCriblTcpTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.MaxActiveCxn.IsNull() || state.InputCriblTcp.MaxActiveCxn.IsUnknown())) {
 			if !api.InputCriblTcp.MaxActiveCxn.IsNull() && !api.InputCriblTcp.MaxActiveCxn.IsUnknown() {
@@ -53658,6 +54398,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblTcp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpMetadataAttrTypes()})
 			}
 		}
+		if state.InputCriblTcp.Metadata.IsNull() || state.InputCriblTcp.Metadata.IsUnknown() {
+			state.InputCriblTcp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpMetadataAttrTypes()})
+		} else if len(state.InputCriblTcp.Metadata.Elements()) == 0 {
+			state.InputCriblTcp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblTcpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.EnableLoadBalancing.IsNull() || state.InputCriblTcp.EnableLoadBalancing.IsUnknown())) {
 			if !api.InputCriblTcp.EnableLoadBalancing.IsNull() && !api.InputCriblTcp.EnableLoadBalancing.IsUnknown() {
 				state.InputCriblTcp.EnableLoadBalancing = api.InputCriblTcp.EnableLoadBalancing
@@ -53671,6 +54416,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCriblTcp.AuthTokens.IsNull() || state.InputCriblTcp.AuthTokens.IsUnknown() {
 				state.InputCriblTcp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpAuthTokensAttrTypes()})
 			}
+		}
+		if state.InputCriblTcp.AuthTokens.IsNull() || state.InputCriblTcp.AuthTokens.IsUnknown() {
+			state.InputCriblTcp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCriblTcpAuthTokensAttrTypes()})
+		} else if len(state.InputCriblTcp.AuthTokens.Elements()) == 0 {
+			state.InputCriblTcp.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblTcpAuthTokensAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Description.IsNull() || state.InputCriblTcp.Description.IsUnknown())) {
 			if !api.InputCriblTcp.Description.IsNull() && !api.InputCriblTcp.Description.IsUnknown() {
@@ -53740,12 +54490,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblHttp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCriblHttp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCriblHttp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.CriblSourceProvenance.IsNull() || state.InputCriblHttp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCriblHttp.CriblSourceProvenance.IsNull() && !api.InputCriblHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblHttp.CriblSourceProvenance = api.InputCriblHttp.CriblSourceProvenance
 			} else if state.InputCriblHttp.CriblSourceProvenance.IsNull() || state.InputCriblHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblHttp.CriblSourceProvenance = types.ObjectNull(InputCriblHttpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCriblHttp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblHttp.CriblSourceProvenance = types.ObjectNull(InputCriblHttpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Connections.IsNull() || state.InputCriblHttp.Connections.IsUnknown())) {
 			if !api.InputCriblHttp.Connections.IsNull() && !api.InputCriblHttp.Connections.IsUnknown() {
@@ -53754,12 +54510,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCriblHttp.Connections.IsNull() || state.InputCriblHttp.Connections.IsUnknown() {
+			state.InputCriblHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpConnectionsAttrTypes()})
+		} else if len(state.InputCriblHttp.Connections.Elements()) == 0 {
+			state.InputCriblHttp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblHttpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Pq.IsNull() || state.InputCriblHttp.Pq.IsUnknown())) {
 			if !api.InputCriblHttp.Pq.IsNull() && !api.InputCriblHttp.Pq.IsUnknown() {
 				state.InputCriblHttp.Pq = api.InputCriblHttp.Pq
 			} else if state.InputCriblHttp.Pq.IsNull() || state.InputCriblHttp.Pq.IsUnknown() {
 				state.InputCriblHttp.Pq = types.ObjectNull(InputCriblHttpPqAttrTypes())
 			}
+		}
+		if len(state.InputCriblHttp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblHttp.Pq = types.ObjectNull(InputCriblHttpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Host.IsNull() || state.InputCriblHttp.Host.IsUnknown())) {
 			if !api.InputCriblHttp.Host.IsNull() && !api.InputCriblHttp.Host.IsUnknown() {
@@ -53782,12 +54546,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblHttp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputCriblHttp.AuthTokens.IsNull() || state.InputCriblHttp.AuthTokens.IsUnknown() {
+			state.InputCriblHttp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpAuthTokensAttrTypes()})
+		} else if len(state.InputCriblHttp.AuthTokens.Elements()) == 0 {
+			state.InputCriblHttp.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblHttpAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.TLS.IsNull() || state.InputCriblHttp.TLS.IsUnknown())) {
 			if !api.InputCriblHttp.TLS.IsNull() && !api.InputCriblHttp.TLS.IsUnknown() {
 				state.InputCriblHttp.TLS = api.InputCriblHttp.TLS
 			} else if state.InputCriblHttp.TLS.IsNull() || state.InputCriblHttp.TLS.IsUnknown() {
 				state.InputCriblHttp.TLS = types.ObjectNull(InputCriblHttpTLSAttrTypes())
 			}
+		}
+		if len(state.InputCriblHttp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblHttp.TLS = types.ObjectNull(InputCriblHttpTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.MaxActiveReq.IsNull() || state.InputCriblHttp.MaxActiveReq.IsUnknown())) {
 			if !api.InputCriblHttp.MaxActiveReq.IsNull() && !api.InputCriblHttp.MaxActiveReq.IsUnknown() {
@@ -53873,6 +54645,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpMetadataAttrTypes()})
 			}
 		}
+		if state.InputCriblHttp.Metadata.IsNull() || state.InputCriblHttp.Metadata.IsUnknown() {
+			state.InputCriblHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblHttpMetadataAttrTypes()})
+		} else if len(state.InputCriblHttp.Metadata.Elements()) == 0 {
+			state.InputCriblHttp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblHttpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Description.IsNull() || state.InputCriblHttp.Description.IsUnknown())) {
 			if !api.InputCriblHttp.Description.IsNull() && !api.InputCriblHttp.Description.IsUnknown() {
 				state.InputCriblHttp.Description = api.InputCriblHttp.Description
@@ -53941,12 +54718,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblLakeHttp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCriblLakeHttp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCriblLakeHttp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.CriblSourceProvenance.IsNull() || state.InputCriblLakeHttp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCriblLakeHttp.CriblSourceProvenance.IsNull() && !api.InputCriblLakeHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblLakeHttp.CriblSourceProvenance = api.InputCriblLakeHttp.CriblSourceProvenance
 			} else if state.InputCriblLakeHttp.CriblSourceProvenance.IsNull() || state.InputCriblLakeHttp.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblLakeHttp.CriblSourceProvenance = types.ObjectNull(InputCriblLakeHttpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCriblLakeHttp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblLakeHttp.CriblSourceProvenance = types.ObjectNull(InputCriblLakeHttpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Connections.IsNull() || state.InputCriblLakeHttp.Connections.IsUnknown())) {
 			if !api.InputCriblLakeHttp.Connections.IsNull() && !api.InputCriblLakeHttp.Connections.IsUnknown() {
@@ -53955,12 +54738,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblLakeHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCriblLakeHttp.Connections.IsNull() || state.InputCriblLakeHttp.Connections.IsUnknown() {
+			state.InputCriblLakeHttp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpConnectionsAttrTypes()})
+		} else if len(state.InputCriblLakeHttp.Connections.Elements()) == 0 {
+			state.InputCriblLakeHttp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblLakeHttpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Pq.IsNull() || state.InputCriblLakeHttp.Pq.IsUnknown())) {
 			if !api.InputCriblLakeHttp.Pq.IsNull() && !api.InputCriblLakeHttp.Pq.IsUnknown() {
 				state.InputCriblLakeHttp.Pq = api.InputCriblLakeHttp.Pq
 			} else if state.InputCriblLakeHttp.Pq.IsNull() || state.InputCriblLakeHttp.Pq.IsUnknown() {
 				state.InputCriblLakeHttp.Pq = types.ObjectNull(InputCriblLakeHttpPqAttrTypes())
 			}
+		}
+		if len(state.InputCriblLakeHttp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblLakeHttp.Pq = types.ObjectNull(InputCriblLakeHttpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Host.IsNull() || state.InputCriblLakeHttp.Host.IsUnknown())) {
 			if !api.InputCriblLakeHttp.Host.IsNull() && !api.InputCriblLakeHttp.Host.IsUnknown() {
@@ -53983,12 +54774,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblLakeHttp.AuthTokens = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCriblLakeHttp.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputCriblLakeHttp.AuthTokens = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.TLS.IsNull() || state.InputCriblLakeHttp.TLS.IsUnknown())) {
 			if !api.InputCriblLakeHttp.TLS.IsNull() && !api.InputCriblLakeHttp.TLS.IsUnknown() {
 				state.InputCriblLakeHttp.TLS = api.InputCriblLakeHttp.TLS
 			} else if state.InputCriblLakeHttp.TLS.IsNull() || state.InputCriblLakeHttp.TLS.IsUnknown() {
 				state.InputCriblLakeHttp.TLS = types.ObjectNull(InputCriblLakeHttpTLSAttrTypes())
 			}
+		}
+		if len(state.InputCriblLakeHttp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblLakeHttp.TLS = types.ObjectNull(InputCriblLakeHttpTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.MaxActiveReq.IsNull() || state.InputCriblLakeHttp.MaxActiveReq.IsUnknown())) {
 			if !api.InputCriblLakeHttp.MaxActiveReq.IsNull() && !api.InputCriblLakeHttp.MaxActiveReq.IsUnknown() {
@@ -54102,12 +54899,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblLakeHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpMetadataAttrTypes()})
 			}
 		}
+		if state.InputCriblLakeHttp.Metadata.IsNull() || state.InputCriblLakeHttp.Metadata.IsUnknown() {
+			state.InputCriblLakeHttp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpMetadataAttrTypes()})
+		} else if len(state.InputCriblLakeHttp.Metadata.Elements()) == 0 {
+			state.InputCriblLakeHttp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblLakeHttpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.AuthTokensExt.IsNull() || state.InputCriblLakeHttp.AuthTokensExt.IsUnknown())) {
 			if !api.InputCriblLakeHttp.AuthTokensExt.IsNull() && !api.InputCriblLakeHttp.AuthTokensExt.IsUnknown() {
 				state.InputCriblLakeHttp.AuthTokensExt = api.InputCriblLakeHttp.AuthTokensExt
 			} else if state.InputCriblLakeHttp.AuthTokensExt.IsNull() || state.InputCriblLakeHttp.AuthTokensExt.IsUnknown() {
 				state.InputCriblLakeHttp.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtAttrTypes()})
 			}
+		}
+		if state.InputCriblLakeHttp.AuthTokensExt.IsNull() || state.InputCriblLakeHttp.AuthTokensExt.IsUnknown() {
+			state.InputCriblLakeHttp.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtAttrTypes()})
+		} else if len(state.InputCriblLakeHttp.AuthTokensExt.Elements()) == 0 {
+			state.InputCriblLakeHttp.AuthTokensExt = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblLakeHttpAuthTokensExtAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Description.IsNull() || state.InputCriblLakeHttp.Description.IsUnknown())) {
 			if !api.InputCriblLakeHttp.Description.IsNull() && !api.InputCriblLakeHttp.Description.IsUnknown() {
@@ -54177,12 +54984,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputTcpjson.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputTcpjson.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputTcpjson.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.CriblSourceProvenance.IsNull() || state.InputTcpjson.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputTcpjson.CriblSourceProvenance.IsNull() && !api.InputTcpjson.CriblSourceProvenance.IsUnknown() {
 				state.InputTcpjson.CriblSourceProvenance = api.InputTcpjson.CriblSourceProvenance
 			} else if state.InputTcpjson.CriblSourceProvenance.IsNull() || state.InputTcpjson.CriblSourceProvenance.IsUnknown() {
 				state.InputTcpjson.CriblSourceProvenance = types.ObjectNull(InputTcpjsonCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputTcpjson.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputTcpjson.CriblSourceProvenance = types.ObjectNull(InputTcpjsonCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.Connections.IsNull() || state.InputTcpjson.Connections.IsUnknown())) {
 			if !api.InputTcpjson.Connections.IsNull() && !api.InputTcpjson.Connections.IsUnknown() {
@@ -54191,12 +55004,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputTcpjson.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTcpjsonConnectionsAttrTypes()})
 			}
 		}
+		if state.InputTcpjson.Connections.IsNull() || state.InputTcpjson.Connections.IsUnknown() {
+			state.InputTcpjson.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTcpjsonConnectionsAttrTypes()})
+		} else if len(state.InputTcpjson.Connections.Elements()) == 0 {
+			state.InputTcpjson.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputTcpjsonConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.Pq.IsNull() || state.InputTcpjson.Pq.IsUnknown())) {
 			if !api.InputTcpjson.Pq.IsNull() && !api.InputTcpjson.Pq.IsUnknown() {
 				state.InputTcpjson.Pq = api.InputTcpjson.Pq
 			} else if state.InputTcpjson.Pq.IsNull() || state.InputTcpjson.Pq.IsUnknown() {
 				state.InputTcpjson.Pq = types.ObjectNull(InputTcpjsonPqAttrTypes())
 			}
+		}
+		if len(state.InputTcpjson.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputTcpjson.Pq = types.ObjectNull(InputTcpjsonPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.Host.IsNull() || state.InputTcpjson.Host.IsUnknown())) {
 			if !api.InputTcpjson.Host.IsNull() && !api.InputTcpjson.Host.IsUnknown() {
@@ -54218,6 +55039,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputTcpjson.TLS.IsNull() || state.InputTcpjson.TLS.IsUnknown() {
 				state.InputTcpjson.TLS = types.ObjectNull(InputTcpjsonTLSAttrTypes())
 			}
+		}
+		if len(state.InputTcpjson.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputTcpjson.TLS = types.ObjectNull(InputTcpjsonTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.IpWhitelistRegex.IsNull() || state.InputTcpjson.IpWhitelistRegex.IsUnknown())) {
 			if !api.InputTcpjson.IpWhitelistRegex.IsNull() && !api.InputTcpjson.IpWhitelistRegex.IsUnknown() {
@@ -54267,6 +55091,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputTcpjson.Metadata.IsNull() || state.InputTcpjson.Metadata.IsUnknown() {
 				state.InputTcpjson.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTcpjsonMetadataAttrTypes()})
 			}
+		}
+		if state.InputTcpjson.Metadata.IsNull() || state.InputTcpjson.Metadata.IsUnknown() {
+			state.InputTcpjson.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTcpjsonMetadataAttrTypes()})
+		} else if len(state.InputTcpjson.Metadata.Elements()) == 0 {
+			state.InputTcpjson.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputTcpjsonMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.EnableLoadBalancing.IsNull() || state.InputTcpjson.EnableLoadBalancing.IsUnknown())) {
 			if !api.InputTcpjson.EnableLoadBalancing.IsNull() && !api.InputTcpjson.EnableLoadBalancing.IsUnknown() {
@@ -54364,12 +55193,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemMetrics.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSystemMetrics.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSystemMetrics.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.CriblSourceProvenance.IsNull() || state.InputSystemMetrics.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSystemMetrics.CriblSourceProvenance.IsNull() && !api.InputSystemMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputSystemMetrics.CriblSourceProvenance = api.InputSystemMetrics.CriblSourceProvenance
 			} else if state.InputSystemMetrics.CriblSourceProvenance.IsNull() || state.InputSystemMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputSystemMetrics.CriblSourceProvenance = types.ObjectNull(InputSystemMetricsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSystemMetrics.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.CriblSourceProvenance = types.ObjectNull(InputSystemMetricsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Connections.IsNull() || state.InputSystemMetrics.Connections.IsUnknown())) {
 			if !api.InputSystemMetrics.Connections.IsNull() && !api.InputSystemMetrics.Connections.IsUnknown() {
@@ -54378,12 +55213,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSystemMetricsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSystemMetrics.Connections.IsNull() || state.InputSystemMetrics.Connections.IsUnknown() {
+			state.InputSystemMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSystemMetricsConnectionsAttrTypes()})
+		} else if len(state.InputSystemMetrics.Connections.Elements()) == 0 {
+			state.InputSystemMetrics.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSystemMetricsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Pq.IsNull() || state.InputSystemMetrics.Pq.IsUnknown())) {
 			if !api.InputSystemMetrics.Pq.IsNull() && !api.InputSystemMetrics.Pq.IsUnknown() {
 				state.InputSystemMetrics.Pq = api.InputSystemMetrics.Pq
 			} else if state.InputSystemMetrics.Pq.IsNull() || state.InputSystemMetrics.Pq.IsUnknown() {
 				state.InputSystemMetrics.Pq = types.ObjectNull(InputSystemMetricsPqAttrTypes())
 			}
+		}
+		if len(state.InputSystemMetrics.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Pq = types.ObjectNull(InputSystemMetricsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Interval.IsNull() || state.InputSystemMetrics.Interval.IsUnknown())) {
 			if !api.InputSystemMetrics.Interval.IsNull() && !api.InputSystemMetrics.Interval.IsUnknown() {
@@ -54399,12 +55242,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemMetrics.Host = types.ObjectNull(InputSystemMetricsHostAttrTypes())
 			}
 		}
+		if len(state.InputSystemMetrics.Host.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Host = types.ObjectNull(InputSystemMetricsHostAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Process.IsNull() || state.InputSystemMetrics.Process.IsUnknown())) {
 			if !api.InputSystemMetrics.Process.IsNull() && !api.InputSystemMetrics.Process.IsUnknown() {
 				state.InputSystemMetrics.Process = api.InputSystemMetrics.Process
 			} else if state.InputSystemMetrics.Process.IsNull() || state.InputSystemMetrics.Process.IsUnknown() {
 				state.InputSystemMetrics.Process = types.ObjectNull(InputSystemMetricsProcessAttrTypes())
 			}
+		}
+		if len(state.InputSystemMetrics.Process.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Process = types.ObjectNull(InputSystemMetricsProcessAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Container.IsNull() || state.InputSystemMetrics.Container.IsUnknown())) {
 			if !api.InputSystemMetrics.Container.IsNull() && !api.InputSystemMetrics.Container.IsUnknown() {
@@ -54413,12 +55262,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemMetrics.Container = types.ObjectNull(InputSystemMetricsContainerAttrTypes())
 			}
 		}
+		if len(state.InputSystemMetrics.Container.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Container = types.ObjectNull(InputSystemMetricsContainerAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Gpu.IsNull() || state.InputSystemMetrics.Gpu.IsUnknown())) {
 			if !api.InputSystemMetrics.Gpu.IsNull() && !api.InputSystemMetrics.Gpu.IsUnknown() {
 				state.InputSystemMetrics.Gpu = api.InputSystemMetrics.Gpu
 			} else if state.InputSystemMetrics.Gpu.IsNull() || state.InputSystemMetrics.Gpu.IsUnknown() {
 				state.InputSystemMetrics.Gpu = types.ObjectNull(InputSystemMetricsGpuAttrTypes())
 			}
+		}
+		if len(state.InputSystemMetrics.Gpu.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Gpu = types.ObjectNull(InputSystemMetricsGpuAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Metadata.IsNull() || state.InputSystemMetrics.Metadata.IsUnknown())) {
 			if !api.InputSystemMetrics.Metadata.IsNull() && !api.InputSystemMetrics.Metadata.IsUnknown() {
@@ -54427,12 +55282,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSystemMetricsMetadataAttrTypes()})
 			}
 		}
+		if state.InputSystemMetrics.Metadata.IsNull() || state.InputSystemMetrics.Metadata.IsUnknown() {
+			state.InputSystemMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSystemMetricsMetadataAttrTypes()})
+		} else if len(state.InputSystemMetrics.Metadata.Elements()) == 0 {
+			state.InputSystemMetrics.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSystemMetricsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Persistence.IsNull() || state.InputSystemMetrics.Persistence.IsUnknown())) {
 			if !api.InputSystemMetrics.Persistence.IsNull() && !api.InputSystemMetrics.Persistence.IsUnknown() {
 				state.InputSystemMetrics.Persistence = api.InputSystemMetrics.Persistence
 			} else if state.InputSystemMetrics.Persistence.IsNull() || state.InputSystemMetrics.Persistence.IsUnknown() {
 				state.InputSystemMetrics.Persistence = types.ObjectNull(InputSystemMetricsPersistenceAttrTypes())
 			}
+		}
+		if len(state.InputSystemMetrics.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemMetrics.Persistence = types.ObjectNull(InputSystemMetricsPersistenceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Description.IsNull() || state.InputSystemMetrics.Description.IsUnknown())) {
 			if !api.InputSystemMetrics.Description.IsNull() && !api.InputSystemMetrics.Description.IsUnknown() {
@@ -54502,12 +55365,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemState.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSystemState.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSystemState.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.CriblSourceProvenance.IsNull() || state.InputSystemState.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSystemState.CriblSourceProvenance.IsNull() && !api.InputSystemState.CriblSourceProvenance.IsUnknown() {
 				state.InputSystemState.CriblSourceProvenance = api.InputSystemState.CriblSourceProvenance
 			} else if state.InputSystemState.CriblSourceProvenance.IsNull() || state.InputSystemState.CriblSourceProvenance.IsUnknown() {
 				state.InputSystemState.CriblSourceProvenance = types.ObjectNull(InputSystemStateCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSystemState.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemState.CriblSourceProvenance = types.ObjectNull(InputSystemStateCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Connections.IsNull() || state.InputSystemState.Connections.IsUnknown())) {
 			if !api.InputSystemState.Connections.IsNull() && !api.InputSystemState.Connections.IsUnknown() {
@@ -54516,12 +55385,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemState.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSystemStateConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSystemState.Connections.IsNull() || state.InputSystemState.Connections.IsUnknown() {
+			state.InputSystemState.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSystemStateConnectionsAttrTypes()})
+		} else if len(state.InputSystemState.Connections.Elements()) == 0 {
+			state.InputSystemState.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSystemStateConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Pq.IsNull() || state.InputSystemState.Pq.IsUnknown())) {
 			if !api.InputSystemState.Pq.IsNull() && !api.InputSystemState.Pq.IsUnknown() {
 				state.InputSystemState.Pq = api.InputSystemState.Pq
 			} else if state.InputSystemState.Pq.IsNull() || state.InputSystemState.Pq.IsUnknown() {
 				state.InputSystemState.Pq = types.ObjectNull(InputSystemStatePqAttrTypes())
 			}
+		}
+		if len(state.InputSystemState.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemState.Pq = types.ObjectNull(InputSystemStatePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Interval.IsNull() || state.InputSystemState.Interval.IsUnknown())) {
 			if !api.InputSystemState.Interval.IsNull() && !api.InputSystemState.Interval.IsUnknown() {
@@ -54537,6 +55414,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemState.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSystemStateMetadataAttrTypes()})
 			}
 		}
+		if state.InputSystemState.Metadata.IsNull() || state.InputSystemState.Metadata.IsUnknown() {
+			state.InputSystemState.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSystemStateMetadataAttrTypes()})
+		} else if len(state.InputSystemState.Metadata.Elements()) == 0 {
+			state.InputSystemState.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSystemStateMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Collectors.IsNull() || state.InputSystemState.Collectors.IsUnknown())) {
 			if !api.InputSystemState.Collectors.IsNull() && !api.InputSystemState.Collectors.IsUnknown() {
 				state.InputSystemState.Collectors = api.InputSystemState.Collectors
@@ -54544,12 +55426,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSystemState.Collectors = types.ObjectNull(InputSystemStateCollectorsAttrTypes())
 			}
 		}
+		if len(state.InputSystemState.Collectors.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemState.Collectors = types.ObjectNull(InputSystemStateCollectorsAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Persistence.IsNull() || state.InputSystemState.Persistence.IsUnknown())) {
 			if !api.InputSystemState.Persistence.IsNull() && !api.InputSystemState.Persistence.IsUnknown() {
 				state.InputSystemState.Persistence = api.InputSystemState.Persistence
 			} else if state.InputSystemState.Persistence.IsNull() || state.InputSystemState.Persistence.IsUnknown() {
 				state.InputSystemState.Persistence = types.ObjectNull(InputSystemStatePersistenceAttrTypes())
 			}
+		}
+		if len(state.InputSystemState.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputSystemState.Persistence = types.ObjectNull(InputSystemStatePersistenceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.DisableNativeModule.IsNull() || state.InputSystemState.DisableNativeModule.IsUnknown())) {
 			if !api.InputSystemState.DisableNativeModule.IsNull() && !api.InputSystemState.DisableNativeModule.IsUnknown() {
@@ -54633,12 +55521,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeMetrics.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKubeMetrics.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputKubeMetrics.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.CriblSourceProvenance.IsNull() || state.InputKubeMetrics.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputKubeMetrics.CriblSourceProvenance.IsNull() && !api.InputKubeMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeMetrics.CriblSourceProvenance = api.InputKubeMetrics.CriblSourceProvenance
 			} else if state.InputKubeMetrics.CriblSourceProvenance.IsNull() || state.InputKubeMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeMetrics.CriblSourceProvenance = types.ObjectNull(InputKubeMetricsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputKubeMetrics.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeMetrics.CriblSourceProvenance = types.ObjectNull(InputKubeMetricsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Connections.IsNull() || state.InputKubeMetrics.Connections.IsUnknown())) {
 			if !api.InputKubeMetrics.Connections.IsNull() && !api.InputKubeMetrics.Connections.IsUnknown() {
@@ -54647,12 +55541,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputKubeMetrics.Connections.IsNull() || state.InputKubeMetrics.Connections.IsUnknown() {
+			state.InputKubeMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsConnectionsAttrTypes()})
+		} else if len(state.InputKubeMetrics.Connections.Elements()) == 0 {
+			state.InputKubeMetrics.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeMetricsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Pq.IsNull() || state.InputKubeMetrics.Pq.IsUnknown())) {
 			if !api.InputKubeMetrics.Pq.IsNull() && !api.InputKubeMetrics.Pq.IsUnknown() {
 				state.InputKubeMetrics.Pq = api.InputKubeMetrics.Pq
 			} else if state.InputKubeMetrics.Pq.IsNull() || state.InputKubeMetrics.Pq.IsUnknown() {
 				state.InputKubeMetrics.Pq = types.ObjectNull(InputKubeMetricsPqAttrTypes())
 			}
+		}
+		if len(state.InputKubeMetrics.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeMetrics.Pq = types.ObjectNull(InputKubeMetricsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Interval.IsNull() || state.InputKubeMetrics.Interval.IsUnknown())) {
 			if !api.InputKubeMetrics.Interval.IsNull() && !api.InputKubeMetrics.Interval.IsUnknown() {
@@ -54682,6 +55584,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeMetrics.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsRulesAttrTypes()})
 			}
 		}
+		if state.InputKubeMetrics.Rules.IsNull() || state.InputKubeMetrics.Rules.IsUnknown() {
+			state.InputKubeMetrics.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsRulesAttrTypes()})
+		} else if len(state.InputKubeMetrics.Rules.Elements()) == 0 {
+			state.InputKubeMetrics.Rules = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeMetricsRulesAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Metadata.IsNull() || state.InputKubeMetrics.Metadata.IsUnknown())) {
 			if !api.InputKubeMetrics.Metadata.IsNull() && !api.InputKubeMetrics.Metadata.IsUnknown() {
 				state.InputKubeMetrics.Metadata = api.InputKubeMetrics.Metadata
@@ -54689,12 +55596,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsMetadataAttrTypes()})
 			}
 		}
+		if state.InputKubeMetrics.Metadata.IsNull() || state.InputKubeMetrics.Metadata.IsUnknown() {
+			state.InputKubeMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeMetricsMetadataAttrTypes()})
+		} else if len(state.InputKubeMetrics.Metadata.Elements()) == 0 {
+			state.InputKubeMetrics.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeMetricsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Persistence.IsNull() || state.InputKubeMetrics.Persistence.IsUnknown())) {
 			if !api.InputKubeMetrics.Persistence.IsNull() && !api.InputKubeMetrics.Persistence.IsUnknown() {
 				state.InputKubeMetrics.Persistence = api.InputKubeMetrics.Persistence
 			} else if state.InputKubeMetrics.Persistence.IsNull() || state.InputKubeMetrics.Persistence.IsUnknown() {
 				state.InputKubeMetrics.Persistence = types.ObjectNull(InputKubeMetricsPersistenceAttrTypes())
 			}
+		}
+		if len(state.InputKubeMetrics.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeMetrics.Persistence = types.ObjectNull(InputKubeMetricsPersistenceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Description.IsNull() || state.InputKubeMetrics.Description.IsUnknown())) {
 			if !api.InputKubeMetrics.Description.IsNull() && !api.InputKubeMetrics.Description.IsUnknown() {
@@ -54764,12 +55679,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeLogs.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKubeLogs.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputKubeLogs.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.CriblSourceProvenance.IsNull() || state.InputKubeLogs.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputKubeLogs.CriblSourceProvenance.IsNull() && !api.InputKubeLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeLogs.CriblSourceProvenance = api.InputKubeLogs.CriblSourceProvenance
 			} else if state.InputKubeLogs.CriblSourceProvenance.IsNull() || state.InputKubeLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeLogs.CriblSourceProvenance = types.ObjectNull(InputKubeLogsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputKubeLogs.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeLogs.CriblSourceProvenance = types.ObjectNull(InputKubeLogsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Connections.IsNull() || state.InputKubeLogs.Connections.IsUnknown())) {
 			if !api.InputKubeLogs.Connections.IsNull() && !api.InputKubeLogs.Connections.IsUnknown() {
@@ -54778,12 +55699,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputKubeLogs.Connections.IsNull() || state.InputKubeLogs.Connections.IsUnknown() {
+			state.InputKubeLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsConnectionsAttrTypes()})
+		} else if len(state.InputKubeLogs.Connections.Elements()) == 0 {
+			state.InputKubeLogs.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeLogsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Pq.IsNull() || state.InputKubeLogs.Pq.IsUnknown())) {
 			if !api.InputKubeLogs.Pq.IsNull() && !api.InputKubeLogs.Pq.IsUnknown() {
 				state.InputKubeLogs.Pq = api.InputKubeLogs.Pq
 			} else if state.InputKubeLogs.Pq.IsNull() || state.InputKubeLogs.Pq.IsUnknown() {
 				state.InputKubeLogs.Pq = types.ObjectNull(InputKubeLogsPqAttrTypes())
 			}
+		}
+		if len(state.InputKubeLogs.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeLogs.Pq = types.ObjectNull(InputKubeLogsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Interval.IsNull() || state.InputKubeLogs.Interval.IsUnknown())) {
 			if !api.InputKubeLogs.Interval.IsNull() && !api.InputKubeLogs.Interval.IsUnknown() {
@@ -54798,6 +55727,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputKubeLogs.Rules.IsNull() || state.InputKubeLogs.Rules.IsUnknown() {
 				state.InputKubeLogs.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()})
 			}
+		}
+		if state.InputKubeLogs.Rules.IsNull() || state.InputKubeLogs.Rules.IsUnknown() {
+			state.InputKubeLogs.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()})
+		} else if len(state.InputKubeLogs.Rules.Elements()) == 0 {
+			state.InputKubeLogs.Rules = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeLogsRulesAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Timestamps.IsNull() || state.InputKubeLogs.Timestamps.IsUnknown())) {
 			if !api.InputKubeLogs.Timestamps.IsNull() && !api.InputKubeLogs.Timestamps.IsUnknown() {
@@ -54820,6 +55754,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()})
 			}
 		}
+		if state.InputKubeLogs.Metadata.IsNull() || state.InputKubeLogs.Metadata.IsUnknown() {
+			state.InputKubeLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()})
+		} else if len(state.InputKubeLogs.Metadata.Elements()) == 0 {
+			state.InputKubeLogs.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeLogsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Persistence.IsNull() || state.InputKubeLogs.Persistence.IsUnknown())) {
 			if !api.InputKubeLogs.Persistence.IsNull() && !api.InputKubeLogs.Persistence.IsUnknown() {
 				state.InputKubeLogs.Persistence = api.InputKubeLogs.Persistence
@@ -54827,12 +55766,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeLogs.Persistence = types.ObjectNull(InputKubeLogsPersistenceAttrTypes())
 			}
 		}
+		if len(state.InputKubeLogs.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeLogs.Persistence = types.ObjectNull(InputKubeLogsPersistenceAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.BreakerRulesets.IsNull() || state.InputKubeLogs.BreakerRulesets.IsUnknown())) {
 			if !api.InputKubeLogs.BreakerRulesets.IsNull() && !api.InputKubeLogs.BreakerRulesets.IsUnknown() {
 				state.InputKubeLogs.BreakerRulesets = api.InputKubeLogs.BreakerRulesets
 			} else if state.InputKubeLogs.BreakerRulesets.IsNull() || state.InputKubeLogs.BreakerRulesets.IsUnknown() {
 				state.InputKubeLogs.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputKubeLogs.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputKubeLogs.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.StaleChannelFlushMs.IsNull() || state.InputKubeLogs.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputKubeLogs.StaleChannelFlushMs.IsNull() && !api.InputKubeLogs.StaleChannelFlushMs.IsUnknown() {
@@ -54916,12 +55861,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeEvents.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKubeEvents.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputKubeEvents.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.CriblSourceProvenance.IsNull() || state.InputKubeEvents.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputKubeEvents.CriblSourceProvenance.IsNull() && !api.InputKubeEvents.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeEvents.CriblSourceProvenance = api.InputKubeEvents.CriblSourceProvenance
 			} else if state.InputKubeEvents.CriblSourceProvenance.IsNull() || state.InputKubeEvents.CriblSourceProvenance.IsUnknown() {
 				state.InputKubeEvents.CriblSourceProvenance = types.ObjectNull(InputKubeEventsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputKubeEvents.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeEvents.CriblSourceProvenance = types.ObjectNull(InputKubeEventsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Connections.IsNull() || state.InputKubeEvents.Connections.IsUnknown())) {
 			if !api.InputKubeEvents.Connections.IsNull() && !api.InputKubeEvents.Connections.IsUnknown() {
@@ -54930,12 +55881,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeEvents.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputKubeEvents.Connections.IsNull() || state.InputKubeEvents.Connections.IsUnknown() {
+			state.InputKubeEvents.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsConnectionsAttrTypes()})
+		} else if len(state.InputKubeEvents.Connections.Elements()) == 0 {
+			state.InputKubeEvents.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeEventsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Pq.IsNull() || state.InputKubeEvents.Pq.IsUnknown())) {
 			if !api.InputKubeEvents.Pq.IsNull() && !api.InputKubeEvents.Pq.IsUnknown() {
 				state.InputKubeEvents.Pq = api.InputKubeEvents.Pq
 			} else if state.InputKubeEvents.Pq.IsNull() || state.InputKubeEvents.Pq.IsUnknown() {
 				state.InputKubeEvents.Pq = types.ObjectNull(InputKubeEventsPqAttrTypes())
 			}
+		}
+		if len(state.InputKubeEvents.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputKubeEvents.Pq = types.ObjectNull(InputKubeEventsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Rules.IsNull() || state.InputKubeEvents.Rules.IsUnknown())) {
 			if !api.InputKubeEvents.Rules.IsNull() && !api.InputKubeEvents.Rules.IsUnknown() {
@@ -54944,12 +55903,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKubeEvents.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsRulesAttrTypes()})
 			}
 		}
+		if state.InputKubeEvents.Rules.IsNull() || state.InputKubeEvents.Rules.IsUnknown() {
+			state.InputKubeEvents.Rules = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsRulesAttrTypes()})
+		} else if len(state.InputKubeEvents.Rules.Elements()) == 0 {
+			state.InputKubeEvents.Rules = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeEventsRulesAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Metadata.IsNull() || state.InputKubeEvents.Metadata.IsUnknown())) {
 			if !api.InputKubeEvents.Metadata.IsNull() && !api.InputKubeEvents.Metadata.IsUnknown() {
 				state.InputKubeEvents.Metadata = api.InputKubeEvents.Metadata
 			} else if state.InputKubeEvents.Metadata.IsNull() || state.InputKubeEvents.Metadata.IsUnknown() {
 				state.InputKubeEvents.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsMetadataAttrTypes()})
 			}
+		}
+		if state.InputKubeEvents.Metadata.IsNull() || state.InputKubeEvents.Metadata.IsUnknown() {
+			state.InputKubeEvents.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKubeEventsMetadataAttrTypes()})
+		} else if len(state.InputKubeEvents.Metadata.Elements()) == 0 {
+			state.InputKubeEvents.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputKubeEventsMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Description.IsNull() || state.InputKubeEvents.Description.IsUnknown())) {
 			if !api.InputKubeEvents.Description.IsNull() && !api.InputKubeEvents.Description.IsUnknown() {
@@ -55019,12 +55988,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWindowsMetrics.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWindowsMetrics.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputWindowsMetrics.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.CriblSourceProvenance.IsNull() || state.InputWindowsMetrics.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputWindowsMetrics.CriblSourceProvenance.IsNull() && !api.InputWindowsMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputWindowsMetrics.CriblSourceProvenance = api.InputWindowsMetrics.CriblSourceProvenance
 			} else if state.InputWindowsMetrics.CriblSourceProvenance.IsNull() || state.InputWindowsMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputWindowsMetrics.CriblSourceProvenance = types.ObjectNull(InputWindowsMetricsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputWindowsMetrics.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.CriblSourceProvenance = types.ObjectNull(InputWindowsMetricsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Connections.IsNull() || state.InputWindowsMetrics.Connections.IsUnknown())) {
 			if !api.InputWindowsMetrics.Connections.IsNull() && !api.InputWindowsMetrics.Connections.IsUnknown() {
@@ -55033,12 +56008,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWindowsMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWindowsMetricsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputWindowsMetrics.Connections.IsNull() || state.InputWindowsMetrics.Connections.IsUnknown() {
+			state.InputWindowsMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWindowsMetricsConnectionsAttrTypes()})
+		} else if len(state.InputWindowsMetrics.Connections.Elements()) == 0 {
+			state.InputWindowsMetrics.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputWindowsMetricsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Pq.IsNull() || state.InputWindowsMetrics.Pq.IsUnknown())) {
 			if !api.InputWindowsMetrics.Pq.IsNull() && !api.InputWindowsMetrics.Pq.IsUnknown() {
 				state.InputWindowsMetrics.Pq = api.InputWindowsMetrics.Pq
 			} else if state.InputWindowsMetrics.Pq.IsNull() || state.InputWindowsMetrics.Pq.IsUnknown() {
 				state.InputWindowsMetrics.Pq = types.ObjectNull(InputWindowsMetricsPqAttrTypes())
 			}
+		}
+		if len(state.InputWindowsMetrics.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.Pq = types.ObjectNull(InputWindowsMetricsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Interval.IsNull() || state.InputWindowsMetrics.Interval.IsUnknown())) {
 			if !api.InputWindowsMetrics.Interval.IsNull() && !api.InputWindowsMetrics.Interval.IsUnknown() {
@@ -55054,12 +56037,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWindowsMetrics.Host = types.ObjectNull(InputWindowsMetricsHostAttrTypes())
 			}
 		}
+		if len(state.InputWindowsMetrics.Host.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.Host = types.ObjectNull(InputWindowsMetricsHostAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Process.IsNull() || state.InputWindowsMetrics.Process.IsUnknown())) {
 			if !api.InputWindowsMetrics.Process.IsNull() && !api.InputWindowsMetrics.Process.IsUnknown() {
 				state.InputWindowsMetrics.Process = api.InputWindowsMetrics.Process
 			} else if state.InputWindowsMetrics.Process.IsNull() || state.InputWindowsMetrics.Process.IsUnknown() {
 				state.InputWindowsMetrics.Process = types.ObjectNull(InputWindowsMetricsProcessAttrTypes())
 			}
+		}
+		if len(state.InputWindowsMetrics.Process.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.Process = types.ObjectNull(InputWindowsMetricsProcessAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Gpu.IsNull() || state.InputWindowsMetrics.Gpu.IsUnknown())) {
 			if !api.InputWindowsMetrics.Gpu.IsNull() && !api.InputWindowsMetrics.Gpu.IsUnknown() {
@@ -55068,6 +56057,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWindowsMetrics.Gpu = types.ObjectNull(InputWindowsMetricsGpuAttrTypes())
 			}
 		}
+		if len(state.InputWindowsMetrics.Gpu.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.Gpu = types.ObjectNull(InputWindowsMetricsGpuAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Metadata.IsNull() || state.InputWindowsMetrics.Metadata.IsUnknown())) {
 			if !api.InputWindowsMetrics.Metadata.IsNull() && !api.InputWindowsMetrics.Metadata.IsUnknown() {
 				state.InputWindowsMetrics.Metadata = api.InputWindowsMetrics.Metadata
@@ -55075,12 +56067,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWindowsMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWindowsMetricsMetadataAttrTypes()})
 			}
 		}
+		if state.InputWindowsMetrics.Metadata.IsNull() || state.InputWindowsMetrics.Metadata.IsUnknown() {
+			state.InputWindowsMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWindowsMetricsMetadataAttrTypes()})
+		} else if len(state.InputWindowsMetrics.Metadata.Elements()) == 0 {
+			state.InputWindowsMetrics.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputWindowsMetricsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Persistence.IsNull() || state.InputWindowsMetrics.Persistence.IsUnknown())) {
 			if !api.InputWindowsMetrics.Persistence.IsNull() && !api.InputWindowsMetrics.Persistence.IsUnknown() {
 				state.InputWindowsMetrics.Persistence = api.InputWindowsMetrics.Persistence
 			} else if state.InputWindowsMetrics.Persistence.IsNull() || state.InputWindowsMetrics.Persistence.IsUnknown() {
 				state.InputWindowsMetrics.Persistence = types.ObjectNull(InputWindowsMetricsPersistenceAttrTypes())
 			}
+		}
+		if len(state.InputWindowsMetrics.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputWindowsMetrics.Persistence = types.ObjectNull(InputWindowsMetricsPersistenceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.DisableNativeModule.IsNull() || state.InputWindowsMetrics.DisableNativeModule.IsUnknown())) {
 			if !api.InputWindowsMetrics.DisableNativeModule.IsNull() && !api.InputWindowsMetrics.DisableNativeModule.IsUnknown() {
@@ -55157,12 +56157,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCrowdstrike.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCrowdstrike.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.CriblSourceProvenance.IsNull() || state.InputCrowdstrike.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCrowdstrike.CriblSourceProvenance.IsNull() && !api.InputCrowdstrike.CriblSourceProvenance.IsUnknown() {
 				state.InputCrowdstrike.CriblSourceProvenance = api.InputCrowdstrike.CriblSourceProvenance
 			} else if state.InputCrowdstrike.CriblSourceProvenance.IsNull() || state.InputCrowdstrike.CriblSourceProvenance.IsUnknown() {
 				state.InputCrowdstrike.CriblSourceProvenance = types.ObjectNull(InputCrowdstrikeCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCrowdstrike.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCrowdstrike.CriblSourceProvenance = types.ObjectNull(InputCrowdstrikeCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Connections.IsNull() || state.InputCrowdstrike.Connections.IsUnknown())) {
 			if !api.InputCrowdstrike.Connections.IsNull() && !api.InputCrowdstrike.Connections.IsUnknown() {
@@ -55171,12 +56177,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCrowdstrike.Connections.IsNull() || state.InputCrowdstrike.Connections.IsUnknown() {
+			state.InputCrowdstrike.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()})
+		} else if len(state.InputCrowdstrike.Connections.Elements()) == 0 {
+			state.InputCrowdstrike.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Pq.IsNull() || state.InputCrowdstrike.Pq.IsUnknown())) {
 			if !api.InputCrowdstrike.Pq.IsNull() && !api.InputCrowdstrike.Pq.IsUnknown() {
 				state.InputCrowdstrike.Pq = api.InputCrowdstrike.Pq
 			} else if state.InputCrowdstrike.Pq.IsNull() || state.InputCrowdstrike.Pq.IsUnknown() {
 				state.InputCrowdstrike.Pq = types.ObjectNull(InputCrowdstrikePqAttrTypes())
 			}
+		}
+		if len(state.InputCrowdstrike.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCrowdstrike.Pq = types.ObjectNull(InputCrowdstrikePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.QueueName.IsNull() || state.InputCrowdstrike.QueueName.IsUnknown())) {
 			if !api.InputCrowdstrike.QueueName.IsNull() && !api.InputCrowdstrike.QueueName.IsUnknown() {
@@ -55247,6 +56261,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCrowdstrike.BreakerRulesets.IsNull() || state.InputCrowdstrike.BreakerRulesets.IsUnknown() {
 				state.InputCrowdstrike.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputCrowdstrike.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputCrowdstrike.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.StaleChannelFlushMs.IsNull() || state.InputCrowdstrike.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputCrowdstrike.StaleChannelFlushMs.IsNull() && !api.InputCrowdstrike.StaleChannelFlushMs.IsUnknown() {
@@ -55353,6 +56370,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.Preprocess = types.ObjectNull(InputCrowdstrikePreprocessAttrTypes())
 			}
 		}
+		if len(state.InputCrowdstrike.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputCrowdstrike.Preprocess = types.ObjectNull(InputCrowdstrikePreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Metadata.IsNull() || state.InputCrowdstrike.Metadata.IsUnknown())) {
 			if !api.InputCrowdstrike.Metadata.IsNull() && !api.InputCrowdstrike.Metadata.IsUnknown() {
 				state.InputCrowdstrike.Metadata = api.InputCrowdstrike.Metadata
@@ -55360,12 +56380,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCrowdstrike.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()})
 			}
 		}
+		if state.InputCrowdstrike.Metadata.IsNull() || state.InputCrowdstrike.Metadata.IsUnknown() {
+			state.InputCrowdstrike.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()})
+		} else if len(state.InputCrowdstrike.Metadata.Elements()) == 0 {
+			state.InputCrowdstrike.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Checkpointing.IsNull() || state.InputCrowdstrike.Checkpointing.IsUnknown())) {
 			if !api.InputCrowdstrike.Checkpointing.IsNull() && !api.InputCrowdstrike.Checkpointing.IsUnknown() {
 				state.InputCrowdstrike.Checkpointing = api.InputCrowdstrike.Checkpointing
 			} else if state.InputCrowdstrike.Checkpointing.IsNull() || state.InputCrowdstrike.Checkpointing.IsUnknown() {
 				state.InputCrowdstrike.Checkpointing = types.ObjectNull(InputCrowdstrikeCheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputCrowdstrike.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputCrowdstrike.Checkpointing = types.ObjectNull(InputCrowdstrikeCheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.PollTimeout.IsNull() || state.InputCrowdstrike.PollTimeout.IsUnknown())) {
 			if !api.InputCrowdstrike.PollTimeout.IsNull() && !api.InputCrowdstrike.PollTimeout.IsUnknown() {
@@ -55526,12 +56554,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputDatadogAgent.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputDatadogAgent.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.CriblSourceProvenance.IsNull() || state.InputDatadogAgent.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputDatadogAgent.CriblSourceProvenance.IsNull() && !api.InputDatadogAgent.CriblSourceProvenance.IsUnknown() {
 				state.InputDatadogAgent.CriblSourceProvenance = api.InputDatadogAgent.CriblSourceProvenance
 			} else if state.InputDatadogAgent.CriblSourceProvenance.IsNull() || state.InputDatadogAgent.CriblSourceProvenance.IsUnknown() {
 				state.InputDatadogAgent.CriblSourceProvenance = types.ObjectNull(InputDatadogAgentCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputDatadogAgent.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputDatadogAgent.CriblSourceProvenance = types.ObjectNull(InputDatadogAgentCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Connections.IsNull() || state.InputDatadogAgent.Connections.IsUnknown())) {
 			if !api.InputDatadogAgent.Connections.IsNull() && !api.InputDatadogAgent.Connections.IsUnknown() {
@@ -55540,12 +56574,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.Connections = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentConnectionsAttrTypes()})
 			}
 		}
+		if state.InputDatadogAgent.Connections.IsNull() || state.InputDatadogAgent.Connections.IsUnknown() {
+			state.InputDatadogAgent.Connections = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentConnectionsAttrTypes()})
+		} else if len(state.InputDatadogAgent.Connections.Elements()) == 0 {
+			state.InputDatadogAgent.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputDatadogAgentConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Pq.IsNull() || state.InputDatadogAgent.Pq.IsUnknown())) {
 			if !api.InputDatadogAgent.Pq.IsNull() && !api.InputDatadogAgent.Pq.IsUnknown() {
 				state.InputDatadogAgent.Pq = api.InputDatadogAgent.Pq
 			} else if state.InputDatadogAgent.Pq.IsNull() || state.InputDatadogAgent.Pq.IsUnknown() {
 				state.InputDatadogAgent.Pq = types.ObjectNull(InputDatadogAgentPqAttrTypes())
 			}
+		}
+		if len(state.InputDatadogAgent.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputDatadogAgent.Pq = types.ObjectNull(InputDatadogAgentPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Host.IsNull() || state.InputDatadogAgent.Host.IsUnknown())) {
 			if !api.InputDatadogAgent.Host.IsNull() && !api.InputDatadogAgent.Host.IsUnknown() {
@@ -55567,6 +56609,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputDatadogAgent.TLS.IsNull() || state.InputDatadogAgent.TLS.IsUnknown() {
 				state.InputDatadogAgent.TLS = types.ObjectNull(InputDatadogAgentTLSAttrTypes())
 			}
+		}
+		if len(state.InputDatadogAgent.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputDatadogAgent.TLS = types.ObjectNull(InputDatadogAgentTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.MaxActiveReq.IsNull() || state.InputDatadogAgent.MaxActiveReq.IsUnknown())) {
 			if !api.InputDatadogAgent.MaxActiveReq.IsNull() && !api.InputDatadogAgent.MaxActiveReq.IsUnknown() {
@@ -55666,6 +56711,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.SamplingRules = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()})
 			}
 		}
+		if state.InputDatadogAgent.SamplingRules.IsNull() || state.InputDatadogAgent.SamplingRules.IsUnknown() {
+			state.InputDatadogAgent.SamplingRules = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()})
+		} else if len(state.InputDatadogAgent.SamplingRules.Elements()) == 0 {
+			state.InputDatadogAgent.SamplingRules = types.ListValueMust(types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Metadata.IsNull() || state.InputDatadogAgent.Metadata.IsUnknown())) {
 			if !api.InputDatadogAgent.Metadata.IsNull() && !api.InputDatadogAgent.Metadata.IsUnknown() {
 				state.InputDatadogAgent.Metadata = api.InputDatadogAgent.Metadata
@@ -55673,12 +56723,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()})
 			}
 		}
+		if state.InputDatadogAgent.Metadata.IsNull() || state.InputDatadogAgent.Metadata.IsUnknown() {
+			state.InputDatadogAgent.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()})
+		} else if len(state.InputDatadogAgent.Metadata.Elements()) == 0 {
+			state.InputDatadogAgent.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.ProxyMode.IsNull() || state.InputDatadogAgent.ProxyMode.IsUnknown())) {
 			if !api.InputDatadogAgent.ProxyMode.IsNull() && !api.InputDatadogAgent.ProxyMode.IsUnknown() {
 				state.InputDatadogAgent.ProxyMode = api.InputDatadogAgent.ProxyMode
 			} else if state.InputDatadogAgent.ProxyMode.IsNull() || state.InputDatadogAgent.ProxyMode.IsUnknown() {
 				state.InputDatadogAgent.ProxyMode = types.ObjectNull(InputDatadogAgentProxyModeAttrTypes())
 			}
+		}
+		if len(state.InputDatadogAgent.ProxyMode.AttributeTypes(context.Background())) == 0 {
+			state.InputDatadogAgent.ProxyMode = types.ObjectNull(InputDatadogAgentProxyModeAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Description.IsNull() || state.InputDatadogAgent.Description.IsUnknown())) {
 			if !api.InputDatadogAgent.Description.IsNull() && !api.InputDatadogAgent.Description.IsUnknown() {
@@ -55748,12 +56806,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatagen.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputDatagen.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputDatagen.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.CriblSourceProvenance.IsNull() || state.InputDatagen.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputDatagen.CriblSourceProvenance.IsNull() && !api.InputDatagen.CriblSourceProvenance.IsUnknown() {
 				state.InputDatagen.CriblSourceProvenance = api.InputDatagen.CriblSourceProvenance
 			} else if state.InputDatagen.CriblSourceProvenance.IsNull() || state.InputDatagen.CriblSourceProvenance.IsUnknown() {
 				state.InputDatagen.CriblSourceProvenance = types.ObjectNull(InputDatagenCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputDatagen.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputDatagen.CriblSourceProvenance = types.ObjectNull(InputDatagenCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Connections.IsNull() || state.InputDatagen.Connections.IsUnknown())) {
 			if !api.InputDatagen.Connections.IsNull() && !api.InputDatagen.Connections.IsUnknown() {
@@ -55762,12 +56826,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatagen.Connections = types.ListNull(types.ObjectType{AttrTypes: InputDatagenConnectionsAttrTypes()})
 			}
 		}
+		if state.InputDatagen.Connections.IsNull() || state.InputDatagen.Connections.IsUnknown() {
+			state.InputDatagen.Connections = types.ListNull(types.ObjectType{AttrTypes: InputDatagenConnectionsAttrTypes()})
+		} else if len(state.InputDatagen.Connections.Elements()) == 0 {
+			state.InputDatagen.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputDatagenConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Pq.IsNull() || state.InputDatagen.Pq.IsUnknown())) {
 			if !api.InputDatagen.Pq.IsNull() && !api.InputDatagen.Pq.IsUnknown() {
 				state.InputDatagen.Pq = api.InputDatagen.Pq
 			} else if state.InputDatagen.Pq.IsNull() || state.InputDatagen.Pq.IsUnknown() {
 				state.InputDatagen.Pq = types.ObjectNull(InputDatagenPqAttrTypes())
 			}
+		}
+		if len(state.InputDatagen.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputDatagen.Pq = types.ObjectNull(InputDatagenPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Samples.IsNull() || state.InputDatagen.Samples.IsUnknown())) {
 			if !api.InputDatagen.Samples.IsNull() && !api.InputDatagen.Samples.IsUnknown() {
@@ -55776,12 +56848,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatagen.Samples = types.ListNull(types.ObjectType{AttrTypes: InputDatagenSamplesAttrTypes()})
 			}
 		}
+		if state.InputDatagen.Samples.IsNull() || state.InputDatagen.Samples.IsUnknown() {
+			state.InputDatagen.Samples = types.ListNull(types.ObjectType{AttrTypes: InputDatagenSamplesAttrTypes()})
+		} else if len(state.InputDatagen.Samples.Elements()) == 0 {
+			state.InputDatagen.Samples = types.ListValueMust(types.ObjectType{AttrTypes: InputDatagenSamplesAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Metadata.IsNull() || state.InputDatagen.Metadata.IsUnknown())) {
 			if !api.InputDatagen.Metadata.IsNull() && !api.InputDatagen.Metadata.IsUnknown() {
 				state.InputDatagen.Metadata = api.InputDatagen.Metadata
 			} else if state.InputDatagen.Metadata.IsNull() || state.InputDatagen.Metadata.IsUnknown() {
 				state.InputDatagen.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputDatagenMetadataAttrTypes()})
 			}
+		}
+		if state.InputDatagen.Metadata.IsNull() || state.InputDatagen.Metadata.IsUnknown() {
+			state.InputDatagen.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputDatagenMetadataAttrTypes()})
+		} else if len(state.InputDatagen.Metadata.Elements()) == 0 {
+			state.InputDatagen.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputDatagenMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Description.IsNull() || state.InputDatagen.Description.IsUnknown())) {
 			if !api.InputDatagen.Description.IsNull() && !api.InputDatagen.Description.IsUnknown() {
@@ -55851,12 +56933,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttpRaw.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.CriblSourceProvenance.IsNull() || state.InputHttpRaw.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputHttpRaw.CriblSourceProvenance.IsNull() && !api.InputHttpRaw.CriblSourceProvenance.IsUnknown() {
 				state.InputHttpRaw.CriblSourceProvenance = api.InputHttpRaw.CriblSourceProvenance
 			} else if state.InputHttpRaw.CriblSourceProvenance.IsNull() || state.InputHttpRaw.CriblSourceProvenance.IsUnknown() {
 				state.InputHttpRaw.CriblSourceProvenance = types.ObjectNull(InputHttpRawCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputHttpRaw.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputHttpRaw.CriblSourceProvenance = types.ObjectNull(InputHttpRawCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Connections.IsNull() || state.InputHttpRaw.Connections.IsUnknown())) {
 			if !api.InputHttpRaw.Connections.IsNull() && !api.InputHttpRaw.Connections.IsUnknown() {
@@ -55865,12 +56953,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.Connections = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()})
 			}
 		}
+		if state.InputHttpRaw.Connections.IsNull() || state.InputHttpRaw.Connections.IsUnknown() {
+			state.InputHttpRaw.Connections = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()})
+		} else if len(state.InputHttpRaw.Connections.Elements()) == 0 {
+			state.InputHttpRaw.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Pq.IsNull() || state.InputHttpRaw.Pq.IsUnknown())) {
 			if !api.InputHttpRaw.Pq.IsNull() && !api.InputHttpRaw.Pq.IsUnknown() {
 				state.InputHttpRaw.Pq = api.InputHttpRaw.Pq
 			} else if state.InputHttpRaw.Pq.IsNull() || state.InputHttpRaw.Pq.IsUnknown() {
 				state.InputHttpRaw.Pq = types.ObjectNull(InputHttpRawPqAttrTypes())
 			}
+		}
+		if len(state.InputHttpRaw.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputHttpRaw.Pq = types.ObjectNull(InputHttpRawPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Host.IsNull() || state.InputHttpRaw.Host.IsUnknown())) {
 			if !api.InputHttpRaw.Host.IsNull() && !api.InputHttpRaw.Host.IsUnknown() {
@@ -55893,12 +56989,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.AuthTokens = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttpRaw.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AuthTokens = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.TLS.IsNull() || state.InputHttpRaw.TLS.IsUnknown())) {
 			if !api.InputHttpRaw.TLS.IsNull() && !api.InputHttpRaw.TLS.IsUnknown() {
 				state.InputHttpRaw.TLS = api.InputHttpRaw.TLS
 			} else if state.InputHttpRaw.TLS.IsNull() || state.InputHttpRaw.TLS.IsUnknown() {
 				state.InputHttpRaw.TLS = types.ObjectNull(InputHttpRawTLSAttrTypes())
 			}
+		}
+		if len(state.InputHttpRaw.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputHttpRaw.TLS = types.ObjectNull(InputHttpRawTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.MaxActiveReq.IsNull() || state.InputHttpRaw.MaxActiveReq.IsUnknown())) {
 			if !api.InputHttpRaw.MaxActiveReq.IsNull() && !api.InputHttpRaw.MaxActiveReq.IsUnknown() {
@@ -55984,6 +57086,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.BreakerRulesets = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttpRaw.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.StaleChannelFlushMs.IsNull() || state.InputHttpRaw.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputHttpRaw.StaleChannelFlushMs.IsNull() && !api.InputHttpRaw.StaleChannelFlushMs.IsUnknown() {
 				state.InputHttpRaw.StaleChannelFlushMs = api.InputHttpRaw.StaleChannelFlushMs
@@ -55998,12 +57103,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()})
 			}
 		}
+		if state.InputHttpRaw.Metadata.IsNull() || state.InputHttpRaw.Metadata.IsUnknown() {
+			state.InputHttpRaw.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()})
+		} else if len(state.InputHttpRaw.Metadata.Elements()) == 0 {
+			state.InputHttpRaw.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AllowedPaths.IsNull() || state.InputHttpRaw.AllowedPaths.IsUnknown())) {
 			if !api.InputHttpRaw.AllowedPaths.IsNull() && !api.InputHttpRaw.AllowedPaths.IsUnknown() {
 				state.InputHttpRaw.AllowedPaths = api.InputHttpRaw.AllowedPaths
 			} else if state.InputHttpRaw.AllowedPaths.IsNull() || state.InputHttpRaw.AllowedPaths.IsUnknown() {
 				state.InputHttpRaw.AllowedPaths = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputHttpRaw.AllowedPaths.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AllowedPaths = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AllowedMethods.IsNull() || state.InputHttpRaw.AllowedMethods.IsUnknown())) {
 			if !api.InputHttpRaw.AllowedMethods.IsNull() && !api.InputHttpRaw.AllowedMethods.IsUnknown() {
@@ -56012,12 +57125,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.AllowedMethods = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputHttpRaw.AllowedMethods.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AllowedMethods = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AuthTokensExt.IsNull() || state.InputHttpRaw.AuthTokensExt.IsUnknown())) {
 			if !api.InputHttpRaw.AuthTokensExt.IsNull() && !api.InputHttpRaw.AuthTokensExt.IsUnknown() {
 				state.InputHttpRaw.AuthTokensExt = api.InputHttpRaw.AuthTokensExt
 			} else if state.InputHttpRaw.AuthTokensExt.IsNull() || state.InputHttpRaw.AuthTokensExt.IsUnknown() {
 				state.InputHttpRaw.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()})
 			}
+		}
+		if state.InputHttpRaw.AuthTokensExt.IsNull() || state.InputHttpRaw.AuthTokensExt.IsUnknown() {
+			state.InputHttpRaw.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()})
+		} else if len(state.InputHttpRaw.AuthTokensExt.Elements()) == 0 {
+			state.InputHttpRaw.AuthTokensExt = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Description.IsNull() || state.InputHttpRaw.Description.IsUnknown())) {
 			if !api.InputHttpRaw.Description.IsNull() && !api.InputHttpRaw.Description.IsUnknown() {
@@ -56087,12 +57208,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKinesis.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputKinesis.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputKinesis.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.CriblSourceProvenance.IsNull() || state.InputKinesis.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputKinesis.CriblSourceProvenance.IsNull() && !api.InputKinesis.CriblSourceProvenance.IsUnknown() {
 				state.InputKinesis.CriblSourceProvenance = api.InputKinesis.CriblSourceProvenance
 			} else if state.InputKinesis.CriblSourceProvenance.IsNull() || state.InputKinesis.CriblSourceProvenance.IsUnknown() {
 				state.InputKinesis.CriblSourceProvenance = types.ObjectNull(InputKinesisCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputKinesis.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputKinesis.CriblSourceProvenance = types.ObjectNull(InputKinesisCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.Connections.IsNull() || state.InputKinesis.Connections.IsUnknown())) {
 			if !api.InputKinesis.Connections.IsNull() && !api.InputKinesis.Connections.IsUnknown() {
@@ -56101,12 +57228,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKinesis.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKinesisConnectionsAttrTypes()})
 			}
 		}
+		if state.InputKinesis.Connections.IsNull() || state.InputKinesis.Connections.IsUnknown() {
+			state.InputKinesis.Connections = types.ListNull(types.ObjectType{AttrTypes: InputKinesisConnectionsAttrTypes()})
+		} else if len(state.InputKinesis.Connections.Elements()) == 0 {
+			state.InputKinesis.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputKinesisConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.Pq.IsNull() || state.InputKinesis.Pq.IsUnknown())) {
 			if !api.InputKinesis.Pq.IsNull() && !api.InputKinesis.Pq.IsUnknown() {
 				state.InputKinesis.Pq = api.InputKinesis.Pq
 			} else if state.InputKinesis.Pq.IsNull() || state.InputKinesis.Pq.IsUnknown() {
 				state.InputKinesis.Pq = types.ObjectNull(InputKinesisPqAttrTypes())
 			}
+		}
+		if len(state.InputKinesis.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputKinesis.Pq = types.ObjectNull(InputKinesisPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.StreamName.IsNull() || state.InputKinesis.StreamName.IsUnknown())) {
 			if !api.InputKinesis.StreamName.IsNull() && !api.InputKinesis.StreamName.IsUnknown() {
@@ -56255,6 +57390,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputKinesis.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()})
 			}
 		}
+		if state.InputKinesis.Metadata.IsNull() || state.InputKinesis.Metadata.IsUnknown() {
+			state.InputKinesis.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()})
+		} else if len(state.InputKinesis.Metadata.Elements()) == 0 {
+			state.InputKinesis.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputKinesisMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.Description.IsNull() || state.InputKinesis.Description.IsUnknown())) {
 			if !api.InputKinesis.Description.IsNull() && !api.InputKinesis.Description.IsUnknown() {
 				state.InputKinesis.Description = api.InputKinesis.Description
@@ -56337,12 +57477,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblmetrics.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCriblmetrics.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCriblmetrics.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.CriblSourceProvenance.IsNull() || state.InputCriblmetrics.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCriblmetrics.CriblSourceProvenance.IsNull() && !api.InputCriblmetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblmetrics.CriblSourceProvenance = api.InputCriblmetrics.CriblSourceProvenance
 			} else if state.InputCriblmetrics.CriblSourceProvenance.IsNull() || state.InputCriblmetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputCriblmetrics.CriblSourceProvenance = types.ObjectNull(InputCriblmetricsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCriblmetrics.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblmetrics.CriblSourceProvenance = types.ObjectNull(InputCriblmetricsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Connections.IsNull() || state.InputCriblmetrics.Connections.IsUnknown())) {
 			if !api.InputCriblmetrics.Connections.IsNull() && !api.InputCriblmetrics.Connections.IsUnknown() {
@@ -56351,12 +57497,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblmetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblmetricsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCriblmetrics.Connections.IsNull() || state.InputCriblmetrics.Connections.IsUnknown() {
+			state.InputCriblmetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCriblmetricsConnectionsAttrTypes()})
+		} else if len(state.InputCriblmetrics.Connections.Elements()) == 0 {
+			state.InputCriblmetrics.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblmetricsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Pq.IsNull() || state.InputCriblmetrics.Pq.IsUnknown())) {
 			if !api.InputCriblmetrics.Pq.IsNull() && !api.InputCriblmetrics.Pq.IsUnknown() {
 				state.InputCriblmetrics.Pq = api.InputCriblmetrics.Pq
 			} else if state.InputCriblmetrics.Pq.IsNull() || state.InputCriblmetrics.Pq.IsUnknown() {
 				state.InputCriblmetrics.Pq = types.ObjectNull(InputCriblmetricsPqAttrTypes())
 			}
+		}
+		if len(state.InputCriblmetrics.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCriblmetrics.Pq = types.ObjectNull(InputCriblmetricsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Prefix.IsNull() || state.InputCriblmetrics.Prefix.IsUnknown())) {
 			if !api.InputCriblmetrics.Prefix.IsNull() && !api.InputCriblmetrics.Prefix.IsUnknown() {
@@ -56378,6 +57532,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCriblmetrics.Metadata.IsNull() || state.InputCriblmetrics.Metadata.IsUnknown() {
 				state.InputCriblmetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblmetricsMetadataAttrTypes()})
 			}
+		}
+		if state.InputCriblmetrics.Metadata.IsNull() || state.InputCriblmetrics.Metadata.IsUnknown() {
+			state.InputCriblmetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCriblmetricsMetadataAttrTypes()})
+		} else if len(state.InputCriblmetrics.Metadata.Elements()) == 0 {
+			state.InputCriblmetrics.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCriblmetricsMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Description.IsNull() || state.InputCriblmetrics.Description.IsUnknown())) {
 			if !api.InputCriblmetrics.Description.IsNull() && !api.InputCriblmetrics.Description.IsUnknown() {
@@ -56447,12 +57606,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMetrics.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputMetrics.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputMetrics.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.CriblSourceProvenance.IsNull() || state.InputMetrics.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputMetrics.CriblSourceProvenance.IsNull() && !api.InputMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputMetrics.CriblSourceProvenance = api.InputMetrics.CriblSourceProvenance
 			} else if state.InputMetrics.CriblSourceProvenance.IsNull() || state.InputMetrics.CriblSourceProvenance.IsUnknown() {
 				state.InputMetrics.CriblSourceProvenance = types.ObjectNull(InputMetricsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputMetrics.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputMetrics.CriblSourceProvenance = types.ObjectNull(InputMetricsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Connections.IsNull() || state.InputMetrics.Connections.IsUnknown())) {
 			if !api.InputMetrics.Connections.IsNull() && !api.InputMetrics.Connections.IsUnknown() {
@@ -56461,12 +57626,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMetricsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputMetrics.Connections.IsNull() || state.InputMetrics.Connections.IsUnknown() {
+			state.InputMetrics.Connections = types.ListNull(types.ObjectType{AttrTypes: InputMetricsConnectionsAttrTypes()})
+		} else if len(state.InputMetrics.Connections.Elements()) == 0 {
+			state.InputMetrics.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputMetricsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Pq.IsNull() || state.InputMetrics.Pq.IsUnknown())) {
 			if !api.InputMetrics.Pq.IsNull() && !api.InputMetrics.Pq.IsUnknown() {
 				state.InputMetrics.Pq = api.InputMetrics.Pq
 			} else if state.InputMetrics.Pq.IsNull() || state.InputMetrics.Pq.IsUnknown() {
 				state.InputMetrics.Pq = types.ObjectNull(InputMetricsPqAttrTypes())
 			}
+		}
+		if len(state.InputMetrics.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputMetrics.Pq = types.ObjectNull(InputMetricsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Host.IsNull() || state.InputMetrics.Host.IsUnknown())) {
 			if !api.InputMetrics.Host.IsNull() && !api.InputMetrics.Host.IsUnknown() {
@@ -56517,12 +57690,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputMetrics.TLS = types.ObjectNull(InputMetricsTLSAttrTypes())
 			}
 		}
+		if len(state.InputMetrics.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputMetrics.TLS = types.ObjectNull(InputMetricsTLSAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Metadata.IsNull() || state.InputMetrics.Metadata.IsUnknown())) {
 			if !api.InputMetrics.Metadata.IsNull() && !api.InputMetrics.Metadata.IsUnknown() {
 				state.InputMetrics.Metadata = api.InputMetrics.Metadata
 			} else if state.InputMetrics.Metadata.IsNull() || state.InputMetrics.Metadata.IsUnknown() {
 				state.InputMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMetricsMetadataAttrTypes()})
 			}
+		}
+		if state.InputMetrics.Metadata.IsNull() || state.InputMetrics.Metadata.IsUnknown() {
+			state.InputMetrics.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputMetricsMetadataAttrTypes()})
+		} else if len(state.InputMetrics.Metadata.Elements()) == 0 {
+			state.InputMetrics.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputMetricsMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.UdpSocketRxBufSize.IsNull() || state.InputMetrics.UdpSocketRxBufSize.IsUnknown())) {
 			if !api.InputMetrics.UdpSocketRxBufSize.IsNull() && !api.InputMetrics.UdpSocketRxBufSize.IsUnknown() {
@@ -56599,12 +57780,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputS3.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputS3.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.CriblSourceProvenance.IsNull() || state.InputS3.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputS3.CriblSourceProvenance.IsNull() && !api.InputS3.CriblSourceProvenance.IsUnknown() {
 				state.InputS3.CriblSourceProvenance = api.InputS3.CriblSourceProvenance
 			} else if state.InputS3.CriblSourceProvenance.IsNull() || state.InputS3.CriblSourceProvenance.IsUnknown() {
 				state.InputS3.CriblSourceProvenance = types.ObjectNull(InputS3CriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputS3.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputS3.CriblSourceProvenance = types.ObjectNull(InputS3CriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.Connections.IsNull() || state.InputS3.Connections.IsUnknown())) {
 			if !api.InputS3.Connections.IsNull() && !api.InputS3.Connections.IsUnknown() {
@@ -56613,12 +57800,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3.Connections = types.ListNull(types.ObjectType{AttrTypes: InputS3ConnectionsAttrTypes()})
 			}
 		}
+		if state.InputS3.Connections.IsNull() || state.InputS3.Connections.IsUnknown() {
+			state.InputS3.Connections = types.ListNull(types.ObjectType{AttrTypes: InputS3ConnectionsAttrTypes()})
+		} else if len(state.InputS3.Connections.Elements()) == 0 {
+			state.InputS3.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputS3ConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.Pq.IsNull() || state.InputS3.Pq.IsUnknown())) {
 			if !api.InputS3.Pq.IsNull() && !api.InputS3.Pq.IsUnknown() {
 				state.InputS3.Pq = api.InputS3.Pq
 			} else if state.InputS3.Pq.IsNull() || state.InputS3.Pq.IsUnknown() {
 				state.InputS3.Pq = types.ObjectNull(InputS3PqAttrTypes())
 			}
+		}
+		if len(state.InputS3.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputS3.Pq = types.ObjectNull(InputS3PqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.QueueName.IsNull() || state.InputS3.QueueName.IsUnknown())) {
 			if !api.InputS3.QueueName.IsNull() && !api.InputS3.QueueName.IsUnknown() {
@@ -56689,6 +57884,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputS3.BreakerRulesets.IsNull() || state.InputS3.BreakerRulesets.IsUnknown() {
 				state.InputS3.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputS3.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputS3.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.StaleChannelFlushMs.IsNull() || state.InputS3.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputS3.StaleChannelFlushMs.IsNull() && !api.InputS3.StaleChannelFlushMs.IsUnknown() {
@@ -56795,12 +57993,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3.Preprocess = types.ObjectNull(InputS3PreprocessAttrTypes())
 			}
 		}
+		if len(state.InputS3.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputS3.Preprocess = types.ObjectNull(InputS3PreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.Metadata.IsNull() || state.InputS3.Metadata.IsUnknown())) {
 			if !api.InputS3.Metadata.IsNull() && !api.InputS3.Metadata.IsUnknown() {
 				state.InputS3.Metadata = api.InputS3.Metadata
 			} else if state.InputS3.Metadata.IsNull() || state.InputS3.Metadata.IsUnknown() {
 				state.InputS3.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputS3MetadataAttrTypes()})
 			}
+		}
+		if state.InputS3.Metadata.IsNull() || state.InputS3.Metadata.IsUnknown() {
+			state.InputS3.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputS3MetadataAttrTypes()})
+		} else if len(state.InputS3.Metadata.Elements()) == 0 {
+			state.InputS3.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputS3MetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.ParquetChunkSizeMB.IsNull() || state.InputS3.ParquetChunkSizeMB.IsUnknown())) {
 			if !api.InputS3.ParquetChunkSizeMB.IsNull() && !api.InputS3.ParquetChunkSizeMB.IsUnknown() {
@@ -56822,6 +58028,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputS3.Checkpointing.IsNull() || state.InputS3.Checkpointing.IsUnknown() {
 				state.InputS3.Checkpointing = types.ObjectNull(InputS3CheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputS3.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputS3.Checkpointing = types.ObjectNull(InputS3CheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.PollTimeout.IsNull() || state.InputS3.PollTimeout.IsUnknown())) {
 			if !api.InputS3.PollTimeout.IsNull() && !api.InputS3.PollTimeout.IsUnknown() {
@@ -56982,12 +58191,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3Inventory.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputS3Inventory.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputS3Inventory.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.CriblSourceProvenance.IsNull() || state.InputS3Inventory.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputS3Inventory.CriblSourceProvenance.IsNull() && !api.InputS3Inventory.CriblSourceProvenance.IsUnknown() {
 				state.InputS3Inventory.CriblSourceProvenance = api.InputS3Inventory.CriblSourceProvenance
 			} else if state.InputS3Inventory.CriblSourceProvenance.IsNull() || state.InputS3Inventory.CriblSourceProvenance.IsUnknown() {
 				state.InputS3Inventory.CriblSourceProvenance = types.ObjectNull(InputS3InventoryCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputS3Inventory.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputS3Inventory.CriblSourceProvenance = types.ObjectNull(InputS3InventoryCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Connections.IsNull() || state.InputS3Inventory.Connections.IsUnknown())) {
 			if !api.InputS3Inventory.Connections.IsNull() && !api.InputS3Inventory.Connections.IsUnknown() {
@@ -56996,12 +58211,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3Inventory.Connections = types.ListNull(types.ObjectType{AttrTypes: InputS3InventoryConnectionsAttrTypes()})
 			}
 		}
+		if state.InputS3Inventory.Connections.IsNull() || state.InputS3Inventory.Connections.IsUnknown() {
+			state.InputS3Inventory.Connections = types.ListNull(types.ObjectType{AttrTypes: InputS3InventoryConnectionsAttrTypes()})
+		} else if len(state.InputS3Inventory.Connections.Elements()) == 0 {
+			state.InputS3Inventory.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputS3InventoryConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Pq.IsNull() || state.InputS3Inventory.Pq.IsUnknown())) {
 			if !api.InputS3Inventory.Pq.IsNull() && !api.InputS3Inventory.Pq.IsUnknown() {
 				state.InputS3Inventory.Pq = api.InputS3Inventory.Pq
 			} else if state.InputS3Inventory.Pq.IsNull() || state.InputS3Inventory.Pq.IsUnknown() {
 				state.InputS3Inventory.Pq = types.ObjectNull(InputS3InventoryPqAttrTypes())
 			}
+		}
+		if len(state.InputS3Inventory.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputS3Inventory.Pq = types.ObjectNull(InputS3InventoryPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.QueueName.IsNull() || state.InputS3Inventory.QueueName.IsUnknown())) {
 			if !api.InputS3Inventory.QueueName.IsNull() && !api.InputS3Inventory.QueueName.IsUnknown() {
@@ -57072,6 +58295,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputS3Inventory.BreakerRulesets.IsNull() || state.InputS3Inventory.BreakerRulesets.IsUnknown() {
 				state.InputS3Inventory.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputS3Inventory.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputS3Inventory.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.StaleChannelFlushMs.IsNull() || state.InputS3Inventory.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputS3Inventory.StaleChannelFlushMs.IsNull() && !api.InputS3Inventory.StaleChannelFlushMs.IsUnknown() {
@@ -57178,12 +58404,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputS3Inventory.Preprocess = types.ObjectNull(InputS3InventoryPreprocessAttrTypes())
 			}
 		}
+		if len(state.InputS3Inventory.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputS3Inventory.Preprocess = types.ObjectNull(InputS3InventoryPreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Metadata.IsNull() || state.InputS3Inventory.Metadata.IsUnknown())) {
 			if !api.InputS3Inventory.Metadata.IsNull() && !api.InputS3Inventory.Metadata.IsUnknown() {
 				state.InputS3Inventory.Metadata = api.InputS3Inventory.Metadata
 			} else if state.InputS3Inventory.Metadata.IsNull() || state.InputS3Inventory.Metadata.IsUnknown() {
 				state.InputS3Inventory.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputS3InventoryMetadataAttrTypes()})
 			}
+		}
+		if state.InputS3Inventory.Metadata.IsNull() || state.InputS3Inventory.Metadata.IsUnknown() {
+			state.InputS3Inventory.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputS3InventoryMetadataAttrTypes()})
+		} else if len(state.InputS3Inventory.Metadata.Elements()) == 0 {
+			state.InputS3Inventory.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputS3InventoryMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.ParquetChunkSizeMB.IsNull() || state.InputS3Inventory.ParquetChunkSizeMB.IsUnknown())) {
 			if !api.InputS3Inventory.ParquetChunkSizeMB.IsNull() && !api.InputS3Inventory.ParquetChunkSizeMB.IsUnknown() {
@@ -57205,6 +58439,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputS3Inventory.Checkpointing.IsNull() || state.InputS3Inventory.Checkpointing.IsUnknown() {
 				state.InputS3Inventory.Checkpointing = types.ObjectNull(InputS3InventoryCheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputS3Inventory.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputS3Inventory.Checkpointing = types.ObjectNull(InputS3InventoryCheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.PollTimeout.IsNull() || state.InputS3Inventory.PollTimeout.IsUnknown())) {
 			if !api.InputS3Inventory.PollTimeout.IsNull() && !api.InputS3Inventory.PollTimeout.IsUnknown() {
@@ -57379,12 +58616,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSnmp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSnmp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSnmp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.CriblSourceProvenance.IsNull() || state.InputSnmp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSnmp.CriblSourceProvenance.IsNull() && !api.InputSnmp.CriblSourceProvenance.IsUnknown() {
 				state.InputSnmp.CriblSourceProvenance = api.InputSnmp.CriblSourceProvenance
 			} else if state.InputSnmp.CriblSourceProvenance.IsNull() || state.InputSnmp.CriblSourceProvenance.IsUnknown() {
 				state.InputSnmp.CriblSourceProvenance = types.ObjectNull(InputSnmpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSnmp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSnmp.CriblSourceProvenance = types.ObjectNull(InputSnmpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.Connections.IsNull() || state.InputSnmp.Connections.IsUnknown())) {
 			if !api.InputSnmp.Connections.IsNull() && !api.InputSnmp.Connections.IsUnknown() {
@@ -57393,12 +58636,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSnmp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSnmpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSnmp.Connections.IsNull() || state.InputSnmp.Connections.IsUnknown() {
+			state.InputSnmp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSnmpConnectionsAttrTypes()})
+		} else if len(state.InputSnmp.Connections.Elements()) == 0 {
+			state.InputSnmp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSnmpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.Pq.IsNull() || state.InputSnmp.Pq.IsUnknown())) {
 			if !api.InputSnmp.Pq.IsNull() && !api.InputSnmp.Pq.IsUnknown() {
 				state.InputSnmp.Pq = api.InputSnmp.Pq
 			} else if state.InputSnmp.Pq.IsNull() || state.InputSnmp.Pq.IsUnknown() {
 				state.InputSnmp.Pq = types.ObjectNull(InputSnmpPqAttrTypes())
 			}
+		}
+		if len(state.InputSnmp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSnmp.Pq = types.ObjectNull(InputSnmpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.Host.IsNull() || state.InputSnmp.Host.IsUnknown())) {
 			if !api.InputSnmp.Host.IsNull() && !api.InputSnmp.Host.IsUnknown() {
@@ -57421,6 +58672,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSnmp.SnmpV3Auth = types.ObjectNull(InputSnmpSnmpV3AuthAttrTypes())
 			}
 		}
+		if len(state.InputSnmp.SnmpV3Auth.AttributeTypes(context.Background())) == 0 {
+			state.InputSnmp.SnmpV3Auth = types.ObjectNull(InputSnmpSnmpV3AuthAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.MaxBufferSize.IsNull() || state.InputSnmp.MaxBufferSize.IsUnknown())) {
 			if !api.InputSnmp.MaxBufferSize.IsNull() && !api.InputSnmp.MaxBufferSize.IsUnknown() {
 				state.InputSnmp.MaxBufferSize = api.InputSnmp.MaxBufferSize
@@ -57441,6 +58695,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSnmp.Metadata.IsNull() || state.InputSnmp.Metadata.IsUnknown() {
 				state.InputSnmp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSnmpMetadataAttrTypes()})
 			}
+		}
+		if state.InputSnmp.Metadata.IsNull() || state.InputSnmp.Metadata.IsUnknown() {
+			state.InputSnmp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSnmpMetadataAttrTypes()})
+		} else if len(state.InputSnmp.Metadata.Elements()) == 0 {
+			state.InputSnmp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSnmpMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.UdpSocketRxBufSize.IsNull() || state.InputSnmp.UdpSocketRxBufSize.IsUnknown())) {
 			if !api.InputSnmp.UdpSocketRxBufSize.IsNull() && !api.InputSnmp.UdpSocketRxBufSize.IsUnknown() {
@@ -57531,12 +58790,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenTelemetry.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOpenTelemetry.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOpenTelemetry.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.CriblSourceProvenance.IsNull() || state.InputOpenTelemetry.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOpenTelemetry.CriblSourceProvenance.IsNull() && !api.InputOpenTelemetry.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenTelemetry.CriblSourceProvenance = api.InputOpenTelemetry.CriblSourceProvenance
 			} else if state.InputOpenTelemetry.CriblSourceProvenance.IsNull() || state.InputOpenTelemetry.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenTelemetry.CriblSourceProvenance = types.ObjectNull(InputOpenTelemetryCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOpenTelemetry.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenTelemetry.CriblSourceProvenance = types.ObjectNull(InputOpenTelemetryCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Connections.IsNull() || state.InputOpenTelemetry.Connections.IsUnknown())) {
 			if !api.InputOpenTelemetry.Connections.IsNull() && !api.InputOpenTelemetry.Connections.IsUnknown() {
@@ -57545,12 +58810,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenTelemetry.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOpenTelemetry.Connections.IsNull() || state.InputOpenTelemetry.Connections.IsUnknown() {
+			state.InputOpenTelemetry.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()})
+		} else if len(state.InputOpenTelemetry.Connections.Elements()) == 0 {
+			state.InputOpenTelemetry.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenTelemetryConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Pq.IsNull() || state.InputOpenTelemetry.Pq.IsUnknown())) {
 			if !api.InputOpenTelemetry.Pq.IsNull() && !api.InputOpenTelemetry.Pq.IsUnknown() {
 				state.InputOpenTelemetry.Pq = api.InputOpenTelemetry.Pq
 			} else if state.InputOpenTelemetry.Pq.IsNull() || state.InputOpenTelemetry.Pq.IsUnknown() {
 				state.InputOpenTelemetry.Pq = types.ObjectNull(InputOpenTelemetryPqAttrTypes())
 			}
+		}
+		if len(state.InputOpenTelemetry.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenTelemetry.Pq = types.ObjectNull(InputOpenTelemetryPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Host.IsNull() || state.InputOpenTelemetry.Host.IsUnknown())) {
 			if !api.InputOpenTelemetry.Host.IsNull() && !api.InputOpenTelemetry.Host.IsUnknown() {
@@ -57572,6 +58845,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOpenTelemetry.TLS.IsNull() || state.InputOpenTelemetry.TLS.IsUnknown() {
 				state.InputOpenTelemetry.TLS = types.ObjectNull(InputOpenTelemetryTLSAttrTypes())
 			}
+		}
+		if len(state.InputOpenTelemetry.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenTelemetry.TLS = types.ObjectNull(InputOpenTelemetryTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.MaxActiveReq.IsNull() || state.InputOpenTelemetry.MaxActiveReq.IsUnknown())) {
 			if !api.InputOpenTelemetry.MaxActiveReq.IsNull() && !api.InputOpenTelemetry.MaxActiveReq.IsUnknown() {
@@ -57671,12 +58947,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenTelemetry.AuthMethodsExt = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()})
 			}
 		}
+		if state.InputOpenTelemetry.AuthMethodsExt.IsNull() || state.InputOpenTelemetry.AuthMethodsExt.IsUnknown() {
+			state.InputOpenTelemetry.AuthMethodsExt = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()})
+		} else if len(state.InputOpenTelemetry.AuthMethodsExt.Elements()) == 0 {
+			state.InputOpenTelemetry.AuthMethodsExt = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenTelemetryAuthMethodsExtAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Metadata.IsNull() || state.InputOpenTelemetry.Metadata.IsUnknown())) {
 			if !api.InputOpenTelemetry.Metadata.IsNull() && !api.InputOpenTelemetry.Metadata.IsUnknown() {
 				state.InputOpenTelemetry.Metadata = api.InputOpenTelemetry.Metadata
 			} else if state.InputOpenTelemetry.Metadata.IsNull() || state.InputOpenTelemetry.Metadata.IsUnknown() {
 				state.InputOpenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()})
 			}
+		}
+		if state.InputOpenTelemetry.Metadata.IsNull() || state.InputOpenTelemetry.Metadata.IsUnknown() {
+			state.InputOpenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()})
+		} else if len(state.InputOpenTelemetry.Metadata.Elements()) == 0 {
+			state.InputOpenTelemetry.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenTelemetryMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.MaxActiveCxn.IsNull() || state.InputOpenTelemetry.MaxActiveCxn.IsUnknown())) {
 			if !api.InputOpenTelemetry.MaxActiveCxn.IsNull() && !api.InputOpenTelemetry.MaxActiveCxn.IsUnknown() {
@@ -57795,12 +59081,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputModelDrivenTelemetry.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputModelDrivenTelemetry.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputModelDrivenTelemetry.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.CriblSourceProvenance.IsNull() || state.InputModelDrivenTelemetry.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.CriblSourceProvenance.IsNull() && !api.InputModelDrivenTelemetry.CriblSourceProvenance.IsUnknown() {
 				state.InputModelDrivenTelemetry.CriblSourceProvenance = api.InputModelDrivenTelemetry.CriblSourceProvenance
 			} else if state.InputModelDrivenTelemetry.CriblSourceProvenance.IsNull() || state.InputModelDrivenTelemetry.CriblSourceProvenance.IsUnknown() {
 				state.InputModelDrivenTelemetry.CriblSourceProvenance = types.ObjectNull(InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputModelDrivenTelemetry.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputModelDrivenTelemetry.CriblSourceProvenance = types.ObjectNull(InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Connections.IsNull() || state.InputModelDrivenTelemetry.Connections.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.Connections.IsNull() && !api.InputModelDrivenTelemetry.Connections.IsUnknown() {
@@ -57809,12 +59101,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputModelDrivenTelemetry.Connections = types.ListNull(types.ObjectType{AttrTypes: InputModelDrivenTelemetryConnectionsAttrTypes()})
 			}
 		}
+		if state.InputModelDrivenTelemetry.Connections.IsNull() || state.InputModelDrivenTelemetry.Connections.IsUnknown() {
+			state.InputModelDrivenTelemetry.Connections = types.ListNull(types.ObjectType{AttrTypes: InputModelDrivenTelemetryConnectionsAttrTypes()})
+		} else if len(state.InputModelDrivenTelemetry.Connections.Elements()) == 0 {
+			state.InputModelDrivenTelemetry.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputModelDrivenTelemetryConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Pq.IsNull() || state.InputModelDrivenTelemetry.Pq.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.Pq.IsNull() && !api.InputModelDrivenTelemetry.Pq.IsUnknown() {
 				state.InputModelDrivenTelemetry.Pq = api.InputModelDrivenTelemetry.Pq
 			} else if state.InputModelDrivenTelemetry.Pq.IsNull() || state.InputModelDrivenTelemetry.Pq.IsUnknown() {
 				state.InputModelDrivenTelemetry.Pq = types.ObjectNull(InputModelDrivenTelemetryPqAttrTypes())
 			}
+		}
+		if len(state.InputModelDrivenTelemetry.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputModelDrivenTelemetry.Pq = types.ObjectNull(InputModelDrivenTelemetryPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Host.IsNull() || state.InputModelDrivenTelemetry.Host.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.Host.IsNull() && !api.InputModelDrivenTelemetry.Host.IsUnknown() {
@@ -57837,12 +59137,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputModelDrivenTelemetry.TLS = types.ObjectNull(InputModelDrivenTelemetryTLSAttrTypes())
 			}
 		}
+		if len(state.InputModelDrivenTelemetry.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputModelDrivenTelemetry.TLS = types.ObjectNull(InputModelDrivenTelemetryTLSAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Metadata.IsNull() || state.InputModelDrivenTelemetry.Metadata.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.Metadata.IsNull() && !api.InputModelDrivenTelemetry.Metadata.IsUnknown() {
 				state.InputModelDrivenTelemetry.Metadata = api.InputModelDrivenTelemetry.Metadata
 			} else if state.InputModelDrivenTelemetry.Metadata.IsNull() || state.InputModelDrivenTelemetry.Metadata.IsUnknown() {
 				state.InputModelDrivenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputModelDrivenTelemetryMetadataAttrTypes()})
 			}
+		}
+		if state.InputModelDrivenTelemetry.Metadata.IsNull() || state.InputModelDrivenTelemetry.Metadata.IsUnknown() {
+			state.InputModelDrivenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputModelDrivenTelemetryMetadataAttrTypes()})
+		} else if len(state.InputModelDrivenTelemetry.Metadata.Elements()) == 0 {
+			state.InputModelDrivenTelemetry.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputModelDrivenTelemetryMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.MaxActiveCxn.IsNull() || state.InputModelDrivenTelemetry.MaxActiveCxn.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.MaxActiveCxn.IsNull() && !api.InputModelDrivenTelemetry.MaxActiveCxn.IsUnknown() {
@@ -57926,12 +59234,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSqs.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSqs.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSqs.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.CriblSourceProvenance.IsNull() || state.InputSqs.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSqs.CriblSourceProvenance.IsNull() && !api.InputSqs.CriblSourceProvenance.IsUnknown() {
 				state.InputSqs.CriblSourceProvenance = api.InputSqs.CriblSourceProvenance
 			} else if state.InputSqs.CriblSourceProvenance.IsNull() || state.InputSqs.CriblSourceProvenance.IsUnknown() {
 				state.InputSqs.CriblSourceProvenance = types.ObjectNull(InputSqsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSqs.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSqs.CriblSourceProvenance = types.ObjectNull(InputSqsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.Connections.IsNull() || state.InputSqs.Connections.IsUnknown())) {
 			if !api.InputSqs.Connections.IsNull() && !api.InputSqs.Connections.IsUnknown() {
@@ -57940,12 +59254,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSqs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSqsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSqs.Connections.IsNull() || state.InputSqs.Connections.IsUnknown() {
+			state.InputSqs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSqsConnectionsAttrTypes()})
+		} else if len(state.InputSqs.Connections.Elements()) == 0 {
+			state.InputSqs.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSqsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.Pq.IsNull() || state.InputSqs.Pq.IsUnknown())) {
 			if !api.InputSqs.Pq.IsNull() && !api.InputSqs.Pq.IsUnknown() {
 				state.InputSqs.Pq = api.InputSqs.Pq
 			} else if state.InputSqs.Pq.IsNull() || state.InputSqs.Pq.IsUnknown() {
 				state.InputSqs.Pq = types.ObjectNull(InputSqsPqAttrTypes())
 			}
+		}
+		if len(state.InputSqs.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSqs.Pq = types.ObjectNull(InputSqsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.QueueName.IsNull() || state.InputSqs.QueueName.IsUnknown())) {
 			if !api.InputSqs.QueueName.IsNull() && !api.InputSqs.QueueName.IsUnknown() {
@@ -58066,6 +59388,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSqs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSqsMetadataAttrTypes()})
 			}
 		}
+		if state.InputSqs.Metadata.IsNull() || state.InputSqs.Metadata.IsUnknown() {
+			state.InputSqs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSqsMetadataAttrTypes()})
+		} else if len(state.InputSqs.Metadata.Elements()) == 0 {
+			state.InputSqs.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSqsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.PollTimeout.IsNull() || state.InputSqs.PollTimeout.IsUnknown())) {
 			if !api.InputSqs.PollTimeout.IsNull() && !api.InputSqs.PollTimeout.IsUnknown() {
 				state.InputSqs.PollTimeout = api.InputSqs.PollTimeout
@@ -58162,12 +59489,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSyslog.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSyslog.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSyslog.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.CriblSourceProvenance.IsNull() || state.InputSyslog.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSyslog.CriblSourceProvenance.IsNull() && !api.InputSyslog.CriblSourceProvenance.IsUnknown() {
 				state.InputSyslog.CriblSourceProvenance = api.InputSyslog.CriblSourceProvenance
 			} else if state.InputSyslog.CriblSourceProvenance.IsNull() || state.InputSyslog.CriblSourceProvenance.IsUnknown() {
 				state.InputSyslog.CriblSourceProvenance = types.ObjectNull(InputSyslogCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSyslog.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSyslog.CriblSourceProvenance = types.ObjectNull(InputSyslogCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Connections.IsNull() || state.InputSyslog.Connections.IsUnknown())) {
 			if !api.InputSyslog.Connections.IsNull() && !api.InputSyslog.Connections.IsUnknown() {
@@ -58176,12 +59509,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSyslog.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSyslogConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSyslog.Connections.IsNull() || state.InputSyslog.Connections.IsUnknown() {
+			state.InputSyslog.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSyslogConnectionsAttrTypes()})
+		} else if len(state.InputSyslog.Connections.Elements()) == 0 {
+			state.InputSyslog.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSyslogConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Pq.IsNull() || state.InputSyslog.Pq.IsUnknown())) {
 			if !api.InputSyslog.Pq.IsNull() && !api.InputSyslog.Pq.IsUnknown() {
 				state.InputSyslog.Pq = api.InputSyslog.Pq
 			} else if state.InputSyslog.Pq.IsNull() || state.InputSyslog.Pq.IsUnknown() {
 				state.InputSyslog.Pq = types.ObjectNull(InputSyslogPqAttrTypes())
 			}
+		}
+		if len(state.InputSyslog.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSyslog.Pq = types.ObjectNull(InputSyslogPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Host.IsNull() || state.InputSyslog.Host.IsUnknown())) {
 			if !api.InputSyslog.Host.IsNull() && !api.InputSyslog.Host.IsUnknown() {
@@ -58246,6 +59587,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSyslog.KeepFieldsList = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSyslog.KeepFieldsList.ElementType(context.Background()); elementType == nil {
+			state.InputSyslog.KeepFieldsList = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.OctetCounting.IsNull() || state.InputSyslog.OctetCounting.IsUnknown())) {
 			if !api.InputSyslog.OctetCounting.IsNull() && !api.InputSyslog.OctetCounting.IsUnknown() {
 				state.InputSyslog.OctetCounting = api.InputSyslog.OctetCounting
@@ -58309,12 +59653,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSyslog.TLS = types.ObjectNull(InputSyslogTLSAttrTypes())
 			}
 		}
+		if len(state.InputSyslog.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputSyslog.TLS = types.ObjectNull(InputSyslogTLSAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Metadata.IsNull() || state.InputSyslog.Metadata.IsUnknown())) {
 			if !api.InputSyslog.Metadata.IsNull() && !api.InputSyslog.Metadata.IsUnknown() {
 				state.InputSyslog.Metadata = api.InputSyslog.Metadata
 			} else if state.InputSyslog.Metadata.IsNull() || state.InputSyslog.Metadata.IsUnknown() {
 				state.InputSyslog.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSyslogMetadataAttrTypes()})
 			}
+		}
+		if state.InputSyslog.Metadata.IsNull() || state.InputSyslog.Metadata.IsUnknown() {
+			state.InputSyslog.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSyslogMetadataAttrTypes()})
+		} else if len(state.InputSyslog.Metadata.Elements()) == 0 {
+			state.InputSyslog.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSyslogMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.UdpSocketRxBufSize.IsNull() || state.InputSyslog.UdpSocketRxBufSize.IsUnknown())) {
 			if !api.InputSyslog.UdpSocketRxBufSize.IsNull() && !api.InputSyslog.UdpSocketRxBufSize.IsUnknown() {
@@ -58405,12 +59757,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFile.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputFile.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputFile.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.CriblSourceProvenance.IsNull() || state.InputFile.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputFile.CriblSourceProvenance.IsNull() && !api.InputFile.CriblSourceProvenance.IsUnknown() {
 				state.InputFile.CriblSourceProvenance = api.InputFile.CriblSourceProvenance
 			} else if state.InputFile.CriblSourceProvenance.IsNull() || state.InputFile.CriblSourceProvenance.IsUnknown() {
 				state.InputFile.CriblSourceProvenance = types.ObjectNull(InputFileCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputFile.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputFile.CriblSourceProvenance = types.ObjectNull(InputFileCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.Connections.IsNull() || state.InputFile.Connections.IsUnknown())) {
 			if !api.InputFile.Connections.IsNull() && !api.InputFile.Connections.IsUnknown() {
@@ -58419,12 +59777,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFile.Connections = types.ListNull(types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()})
 			}
 		}
+		if state.InputFile.Connections.IsNull() || state.InputFile.Connections.IsUnknown() {
+			state.InputFile.Connections = types.ListNull(types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()})
+		} else if len(state.InputFile.Connections.Elements()) == 0 {
+			state.InputFile.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputFileConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.Pq.IsNull() || state.InputFile.Pq.IsUnknown())) {
 			if !api.InputFile.Pq.IsNull() && !api.InputFile.Pq.IsUnknown() {
 				state.InputFile.Pq = api.InputFile.Pq
 			} else if state.InputFile.Pq.IsNull() || state.InputFile.Pq.IsUnknown() {
 				state.InputFile.Pq = types.ObjectNull(InputFilePqAttrTypes())
 			}
+		}
+		if len(state.InputFile.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputFile.Pq = types.ObjectNull(InputFilePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.Mode.IsNull() || state.InputFile.Mode.IsUnknown())) {
 			if !api.InputFile.Mode.IsNull() && !api.InputFile.Mode.IsUnknown() {
@@ -58446,6 +59812,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputFile.Filenames.IsNull() || state.InputFile.Filenames.IsUnknown() {
 				state.InputFile.Filenames = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputFile.Filenames.ElementType(context.Background()); elementType == nil {
+			state.InputFile.Filenames = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.FilterArchivedFiles.IsNull() || state.InputFile.FilterArchivedFiles.IsUnknown())) {
 			if !api.InputFile.FilterArchivedFiles.IsNull() && !api.InputFile.FilterArchivedFiles.IsUnknown() {
@@ -58510,12 +59879,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFile.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()})
 			}
 		}
+		if state.InputFile.Metadata.IsNull() || state.InputFile.Metadata.IsUnknown() {
+			state.InputFile.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()})
+		} else if len(state.InputFile.Metadata.Elements()) == 0 {
+			state.InputFile.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputFileMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.BreakerRulesets.IsNull() || state.InputFile.BreakerRulesets.IsUnknown())) {
 			if !api.InputFile.BreakerRulesets.IsNull() && !api.InputFile.BreakerRulesets.IsUnknown() {
 				state.InputFile.BreakerRulesets = api.InputFile.BreakerRulesets
 			} else if state.InputFile.BreakerRulesets.IsNull() || state.InputFile.BreakerRulesets.IsUnknown() {
 				state.InputFile.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputFile.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputFile.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.DisableStaleChannelFlush.IsNull() || state.InputFile.DisableStaleChannelFlush.IsUnknown())) {
 			if !api.InputFile.DisableStaleChannelFlush.IsNull() && !api.InputFile.DisableStaleChannelFlush.IsUnknown() {
@@ -58648,12 +60025,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputTcp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputTcp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputTcp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.CriblSourceProvenance.IsNull() || state.InputTcp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputTcp.CriblSourceProvenance.IsNull() && !api.InputTcp.CriblSourceProvenance.IsUnknown() {
 				state.InputTcp.CriblSourceProvenance = api.InputTcp.CriblSourceProvenance
 			} else if state.InputTcp.CriblSourceProvenance.IsNull() || state.InputTcp.CriblSourceProvenance.IsUnknown() {
 				state.InputTcp.CriblSourceProvenance = types.ObjectNull(InputTcpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputTcp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputTcp.CriblSourceProvenance = types.ObjectNull(InputTcpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Connections.IsNull() || state.InputTcp.Connections.IsUnknown())) {
 			if !api.InputTcp.Connections.IsNull() && !api.InputTcp.Connections.IsUnknown() {
@@ -58662,12 +60045,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputTcp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTcpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputTcp.Connections.IsNull() || state.InputTcp.Connections.IsUnknown() {
+			state.InputTcp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputTcpConnectionsAttrTypes()})
+		} else if len(state.InputTcp.Connections.Elements()) == 0 {
+			state.InputTcp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputTcpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Pq.IsNull() || state.InputTcp.Pq.IsUnknown())) {
 			if !api.InputTcp.Pq.IsNull() && !api.InputTcp.Pq.IsUnknown() {
 				state.InputTcp.Pq = api.InputTcp.Pq
 			} else if state.InputTcp.Pq.IsNull() || state.InputTcp.Pq.IsUnknown() {
 				state.InputTcp.Pq = types.ObjectNull(InputTcpPqAttrTypes())
 			}
+		}
+		if len(state.InputTcp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputTcp.Pq = types.ObjectNull(InputTcpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Host.IsNull() || state.InputTcp.Host.IsUnknown())) {
 			if !api.InputTcp.Host.IsNull() && !api.InputTcp.Host.IsUnknown() {
@@ -58689,6 +60080,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputTcp.TLS.IsNull() || state.InputTcp.TLS.IsUnknown() {
 				state.InputTcp.TLS = types.ObjectNull(InputTcpTLSAttrTypes())
 			}
+		}
+		if len(state.InputTcp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputTcp.TLS = types.ObjectNull(InputTcpTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.IpWhitelistRegex.IsNull() || state.InputTcp.IpWhitelistRegex.IsUnknown())) {
 			if !api.InputTcp.IpWhitelistRegex.IsNull() && !api.InputTcp.IpWhitelistRegex.IsUnknown() {
@@ -58739,12 +60133,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputTcp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTcpMetadataAttrTypes()})
 			}
 		}
+		if state.InputTcp.Metadata.IsNull() || state.InputTcp.Metadata.IsUnknown() {
+			state.InputTcp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputTcpMetadataAttrTypes()})
+		} else if len(state.InputTcp.Metadata.Elements()) == 0 {
+			state.InputTcp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputTcpMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.BreakerRulesets.IsNull() || state.InputTcp.BreakerRulesets.IsUnknown())) {
 			if !api.InputTcp.BreakerRulesets.IsNull() && !api.InputTcp.BreakerRulesets.IsUnknown() {
 				state.InputTcp.BreakerRulesets = api.InputTcp.BreakerRulesets
 			} else if state.InputTcp.BreakerRulesets.IsNull() || state.InputTcp.BreakerRulesets.IsUnknown() {
 				state.InputTcp.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputTcp.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputTcp.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.StaleChannelFlushMs.IsNull() || state.InputTcp.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputTcp.StaleChannelFlushMs.IsNull() && !api.InputTcp.StaleChannelFlushMs.IsUnknown() {
@@ -58766,6 +60168,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputTcp.Preprocess.IsNull() || state.InputTcp.Preprocess.IsUnknown() {
 				state.InputTcp.Preprocess = types.ObjectNull(InputTcpPreprocessAttrTypes())
 			}
+		}
+		if len(state.InputTcp.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputTcp.Preprocess = types.ObjectNull(InputTcpPreprocessAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Description.IsNull() || state.InputTcp.Description.IsUnknown())) {
 			if !api.InputTcp.Description.IsNull() && !api.InputTcp.Description.IsUnknown() {
@@ -58856,12 +60261,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppscope.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputAppscope.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputAppscope.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.CriblSourceProvenance.IsNull() || state.InputAppscope.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputAppscope.CriblSourceProvenance.IsNull() && !api.InputAppscope.CriblSourceProvenance.IsUnknown() {
 				state.InputAppscope.CriblSourceProvenance = api.InputAppscope.CriblSourceProvenance
 			} else if state.InputAppscope.CriblSourceProvenance.IsNull() || state.InputAppscope.CriblSourceProvenance.IsUnknown() {
 				state.InputAppscope.CriblSourceProvenance = types.ObjectNull(InputAppscopeCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputAppscope.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputAppscope.CriblSourceProvenance = types.ObjectNull(InputAppscopeCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.Connections.IsNull() || state.InputAppscope.Connections.IsUnknown())) {
 			if !api.InputAppscope.Connections.IsNull() && !api.InputAppscope.Connections.IsUnknown() {
@@ -58870,12 +60281,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppscope.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAppscopeConnectionsAttrTypes()})
 			}
 		}
+		if state.InputAppscope.Connections.IsNull() || state.InputAppscope.Connections.IsUnknown() {
+			state.InputAppscope.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAppscopeConnectionsAttrTypes()})
+		} else if len(state.InputAppscope.Connections.Elements()) == 0 {
+			state.InputAppscope.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputAppscopeConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.Pq.IsNull() || state.InputAppscope.Pq.IsUnknown())) {
 			if !api.InputAppscope.Pq.IsNull() && !api.InputAppscope.Pq.IsUnknown() {
 				state.InputAppscope.Pq = api.InputAppscope.Pq
 			} else if state.InputAppscope.Pq.IsNull() || state.InputAppscope.Pq.IsUnknown() {
 				state.InputAppscope.Pq = types.ObjectNull(InputAppscopePqAttrTypes())
 			}
+		}
+		if len(state.InputAppscope.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputAppscope.Pq = types.ObjectNull(InputAppscopePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.IpWhitelistRegex.IsNull() || state.InputAppscope.IpWhitelistRegex.IsUnknown())) {
 			if !api.InputAppscope.IpWhitelistRegex.IsNull() && !api.InputAppscope.IpWhitelistRegex.IsUnknown() {
@@ -58926,12 +60345,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppscope.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAppscopeMetadataAttrTypes()})
 			}
 		}
+		if state.InputAppscope.Metadata.IsNull() || state.InputAppscope.Metadata.IsUnknown() {
+			state.InputAppscope.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAppscopeMetadataAttrTypes()})
+		} else if len(state.InputAppscope.Metadata.Elements()) == 0 {
+			state.InputAppscope.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputAppscopeMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.BreakerRulesets.IsNull() || state.InputAppscope.BreakerRulesets.IsUnknown())) {
 			if !api.InputAppscope.BreakerRulesets.IsNull() && !api.InputAppscope.BreakerRulesets.IsUnknown() {
 				state.InputAppscope.BreakerRulesets = api.InputAppscope.BreakerRulesets
 			} else if state.InputAppscope.BreakerRulesets.IsNull() || state.InputAppscope.BreakerRulesets.IsUnknown() {
 				state.InputAppscope.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputAppscope.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputAppscope.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.StaleChannelFlushMs.IsNull() || state.InputAppscope.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputAppscope.StaleChannelFlushMs.IsNull() && !api.InputAppscope.StaleChannelFlushMs.IsUnknown() {
@@ -58954,12 +60381,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppscope.Filter = types.ObjectNull(InputAppscopeFilterAttrTypes())
 			}
 		}
+		if len(state.InputAppscope.Filter.AttributeTypes(context.Background())) == 0 {
+			state.InputAppscope.Filter = types.ObjectNull(InputAppscopeFilterAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.Persistence.IsNull() || state.InputAppscope.Persistence.IsUnknown())) {
 			if !api.InputAppscope.Persistence.IsNull() && !api.InputAppscope.Persistence.IsUnknown() {
 				state.InputAppscope.Persistence = api.InputAppscope.Persistence
 			} else if state.InputAppscope.Persistence.IsNull() || state.InputAppscope.Persistence.IsUnknown() {
 				state.InputAppscope.Persistence = types.ObjectNull(InputAppscopePersistenceAttrTypes())
 			}
+		}
+		if len(state.InputAppscope.Persistence.AttributeTypes(context.Background())) == 0 {
+			state.InputAppscope.Persistence = types.ObjectNull(InputAppscopePersistenceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.AuthType.IsNull() || state.InputAppscope.AuthType.IsUnknown())) {
 			if !api.InputAppscope.AuthType.IsNull() && !api.InputAppscope.AuthType.IsUnknown() {
@@ -58995,6 +60428,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputAppscope.TLS.IsNull() || state.InputAppscope.TLS.IsUnknown() {
 				state.InputAppscope.TLS = types.ObjectNull(InputAppscopeTLSAttrTypes())
 			}
+		}
+		if len(state.InputAppscope.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputAppscope.TLS = types.ObjectNull(InputAppscopeTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.UnixSocketPath.IsNull() || state.InputAppscope.UnixSocketPath.IsUnknown())) {
 			if !api.InputAppscope.UnixSocketPath.IsNull() && !api.InputAppscope.UnixSocketPath.IsUnknown() {
@@ -59085,12 +60521,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWef.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWef.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputWef.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.CriblSourceProvenance.IsNull() || state.InputWef.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputWef.CriblSourceProvenance.IsNull() && !api.InputWef.CriblSourceProvenance.IsUnknown() {
 				state.InputWef.CriblSourceProvenance = api.InputWef.CriblSourceProvenance
 			} else if state.InputWef.CriblSourceProvenance.IsNull() || state.InputWef.CriblSourceProvenance.IsUnknown() {
 				state.InputWef.CriblSourceProvenance = types.ObjectNull(InputWefCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputWef.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputWef.CriblSourceProvenance = types.ObjectNull(InputWefCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Connections.IsNull() || state.InputWef.Connections.IsUnknown())) {
 			if !api.InputWef.Connections.IsNull() && !api.InputWef.Connections.IsUnknown() {
@@ -59099,12 +60541,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWef.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWefConnectionsAttrTypes()})
 			}
 		}
+		if state.InputWef.Connections.IsNull() || state.InputWef.Connections.IsUnknown() {
+			state.InputWef.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWefConnectionsAttrTypes()})
+		} else if len(state.InputWef.Connections.Elements()) == 0 {
+			state.InputWef.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputWefConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Pq.IsNull() || state.InputWef.Pq.IsUnknown())) {
 			if !api.InputWef.Pq.IsNull() && !api.InputWef.Pq.IsUnknown() {
 				state.InputWef.Pq = api.InputWef.Pq
 			} else if state.InputWef.Pq.IsNull() || state.InputWef.Pq.IsUnknown() {
 				state.InputWef.Pq = types.ObjectNull(InputWefPqAttrTypes())
 			}
+		}
+		if len(state.InputWef.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputWef.Pq = types.ObjectNull(InputWefPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Host.IsNull() || state.InputWef.Host.IsUnknown())) {
 			if !api.InputWef.Host.IsNull() && !api.InputWef.Host.IsUnknown() {
@@ -59133,6 +60583,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputWef.TLS.IsNull() || state.InputWef.TLS.IsUnknown() {
 				state.InputWef.TLS = types.ObjectNull(InputWefTLSAttrTypes())
 			}
+		}
+		if len(state.InputWef.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputWef.TLS = types.ObjectNull(InputWefTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.MaxActiveReq.IsNull() || state.InputWef.MaxActiveReq.IsUnknown())) {
 			if !api.InputWef.MaxActiveReq.IsNull() && !api.InputWef.MaxActiveReq.IsUnknown() {
@@ -59232,12 +60685,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWef.Subscriptions = types.ListNull(types.ObjectType{AttrTypes: InputWefSubscriptionsAttrTypes()})
 			}
 		}
+		if state.InputWef.Subscriptions.IsNull() || state.InputWef.Subscriptions.IsUnknown() {
+			state.InputWef.Subscriptions = types.ListNull(types.ObjectType{AttrTypes: InputWefSubscriptionsAttrTypes()})
+		} else if len(state.InputWef.Subscriptions.Elements()) == 0 {
+			state.InputWef.Subscriptions = types.ListValueMust(types.ObjectType{AttrTypes: InputWefSubscriptionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Metadata.IsNull() || state.InputWef.Metadata.IsUnknown())) {
 			if !api.InputWef.Metadata.IsNull() && !api.InputWef.Metadata.IsUnknown() {
 				state.InputWef.Metadata = api.InputWef.Metadata
 			} else if state.InputWef.Metadata.IsNull() || state.InputWef.Metadata.IsUnknown() {
 				state.InputWef.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWefMetadataAttrTypes()})
 			}
+		}
+		if state.InputWef.Metadata.IsNull() || state.InputWef.Metadata.IsUnknown() {
+			state.InputWef.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWefMetadataAttrTypes()})
+		} else if len(state.InputWef.Metadata.Elements()) == 0 {
+			state.InputWef.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputWefMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Description.IsNull() || state.InputWef.Description.IsUnknown())) {
 			if !api.InputWef.Description.IsNull() && !api.InputWef.Description.IsUnknown() {
@@ -59314,12 +60777,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWinEventLogs.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWinEventLogs.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputWinEventLogs.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.CriblSourceProvenance.IsNull() || state.InputWinEventLogs.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputWinEventLogs.CriblSourceProvenance.IsNull() && !api.InputWinEventLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputWinEventLogs.CriblSourceProvenance = api.InputWinEventLogs.CriblSourceProvenance
 			} else if state.InputWinEventLogs.CriblSourceProvenance.IsNull() || state.InputWinEventLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputWinEventLogs.CriblSourceProvenance = types.ObjectNull(InputWinEventLogsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputWinEventLogs.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputWinEventLogs.CriblSourceProvenance = types.ObjectNull(InputWinEventLogsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.Connections.IsNull() || state.InputWinEventLogs.Connections.IsUnknown())) {
 			if !api.InputWinEventLogs.Connections.IsNull() && !api.InputWinEventLogs.Connections.IsUnknown() {
@@ -59328,6 +60797,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWinEventLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputWinEventLogs.Connections.IsNull() || state.InputWinEventLogs.Connections.IsUnknown() {
+			state.InputWinEventLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()})
+		} else if len(state.InputWinEventLogs.Connections.Elements()) == 0 {
+			state.InputWinEventLogs.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.Pq.IsNull() || state.InputWinEventLogs.Pq.IsUnknown())) {
 			if !api.InputWinEventLogs.Pq.IsNull() && !api.InputWinEventLogs.Pq.IsUnknown() {
 				state.InputWinEventLogs.Pq = api.InputWinEventLogs.Pq
@@ -59335,12 +60809,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWinEventLogs.Pq = types.ObjectNull(InputWinEventLogsPqAttrTypes())
 			}
 		}
+		if len(state.InputWinEventLogs.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputWinEventLogs.Pq = types.ObjectNull(InputWinEventLogsPqAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.LogNames.IsNull() || state.InputWinEventLogs.LogNames.IsUnknown())) {
 			if !api.InputWinEventLogs.LogNames.IsNull() && !api.InputWinEventLogs.LogNames.IsUnknown() {
 				state.InputWinEventLogs.LogNames = api.InputWinEventLogs.LogNames
 			} else if state.InputWinEventLogs.LogNames.IsNull() || state.InputWinEventLogs.LogNames.IsUnknown() {
 				state.InputWinEventLogs.LogNames = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputWinEventLogs.LogNames.ElementType(context.Background()); elementType == nil {
+			state.InputWinEventLogs.LogNames = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.SuppressMissingLogErrors.IsNull() || state.InputWinEventLogs.SuppressMissingLogErrors.IsUnknown())) {
 			if !api.InputWinEventLogs.SuppressMissingLogErrors.IsNull() && !api.InputWinEventLogs.SuppressMissingLogErrors.IsUnknown() {
@@ -59390,6 +60870,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputWinEventLogs.Metadata.IsNull() || state.InputWinEventLogs.Metadata.IsUnknown() {
 				state.InputWinEventLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()})
 			}
+		}
+		if state.InputWinEventLogs.Metadata.IsNull() || state.InputWinEventLogs.Metadata.IsUnknown() {
+			state.InputWinEventLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()})
+		} else if len(state.InputWinEventLogs.Metadata.Elements()) == 0 {
+			state.InputWinEventLogs.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.MaxEventBytes.IsNull() || state.InputWinEventLogs.MaxEventBytes.IsUnknown())) {
 			if !api.InputWinEventLogs.MaxEventBytes.IsNull() && !api.InputWinEventLogs.MaxEventBytes.IsUnknown() {
@@ -59480,12 +60965,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppleUnifiedLogs.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputAppleUnifiedLogs.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputAppleUnifiedLogs.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.CriblSourceProvenance.IsNull() || state.InputAppleUnifiedLogs.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.CriblSourceProvenance.IsNull() && !api.InputAppleUnifiedLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputAppleUnifiedLogs.CriblSourceProvenance = api.InputAppleUnifiedLogs.CriblSourceProvenance
 			} else if state.InputAppleUnifiedLogs.CriblSourceProvenance.IsNull() || state.InputAppleUnifiedLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputAppleUnifiedLogs.CriblSourceProvenance = types.ObjectNull(InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputAppleUnifiedLogs.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputAppleUnifiedLogs.CriblSourceProvenance = types.ObjectNull(InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Connections.IsNull() || state.InputAppleUnifiedLogs.Connections.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.Connections.IsNull() && !api.InputAppleUnifiedLogs.Connections.IsUnknown() {
@@ -59494,12 +60985,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAppleUnifiedLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAppleUnifiedLogsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputAppleUnifiedLogs.Connections.IsNull() || state.InputAppleUnifiedLogs.Connections.IsUnknown() {
+			state.InputAppleUnifiedLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAppleUnifiedLogsConnectionsAttrTypes()})
+		} else if len(state.InputAppleUnifiedLogs.Connections.Elements()) == 0 {
+			state.InputAppleUnifiedLogs.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputAppleUnifiedLogsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Pq.IsNull() || state.InputAppleUnifiedLogs.Pq.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.Pq.IsNull() && !api.InputAppleUnifiedLogs.Pq.IsUnknown() {
 				state.InputAppleUnifiedLogs.Pq = api.InputAppleUnifiedLogs.Pq
 			} else if state.InputAppleUnifiedLogs.Pq.IsNull() || state.InputAppleUnifiedLogs.Pq.IsUnknown() {
 				state.InputAppleUnifiedLogs.Pq = types.ObjectNull(InputAppleUnifiedLogsPqAttrTypes())
 			}
+		}
+		if len(state.InputAppleUnifiedLogs.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputAppleUnifiedLogs.Pq = types.ObjectNull(InputAppleUnifiedLogsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Predicate.IsNull() || state.InputAppleUnifiedLogs.Predicate.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.Predicate.IsNull() && !api.InputAppleUnifiedLogs.Predicate.IsUnknown() {
@@ -59521,6 +61020,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputAppleUnifiedLogs.Metadata.IsNull() || state.InputAppleUnifiedLogs.Metadata.IsUnknown() {
 				state.InputAppleUnifiedLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAppleUnifiedLogsMetadataAttrTypes()})
 			}
+		}
+		if state.InputAppleUnifiedLogs.Metadata.IsNull() || state.InputAppleUnifiedLogs.Metadata.IsUnknown() {
+			state.InputAppleUnifiedLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAppleUnifiedLogsMetadataAttrTypes()})
+		} else if len(state.InputAppleUnifiedLogs.Metadata.Elements()) == 0 {
+			state.InputAppleUnifiedLogs.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputAppleUnifiedLogsMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Description.IsNull() || state.InputAppleUnifiedLogs.Description.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.Description.IsNull() && !api.InputAppleUnifiedLogs.Description.IsUnknown() {
@@ -59590,12 +61094,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputRawUdp.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputRawUdp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputRawUdp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.CriblSourceProvenance.IsNull() || state.InputRawUdp.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputRawUdp.CriblSourceProvenance.IsNull() && !api.InputRawUdp.CriblSourceProvenance.IsUnknown() {
 				state.InputRawUdp.CriblSourceProvenance = api.InputRawUdp.CriblSourceProvenance
 			} else if state.InputRawUdp.CriblSourceProvenance.IsNull() || state.InputRawUdp.CriblSourceProvenance.IsUnknown() {
 				state.InputRawUdp.CriblSourceProvenance = types.ObjectNull(InputRawUdpCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputRawUdp.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputRawUdp.CriblSourceProvenance = types.ObjectNull(InputRawUdpCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Connections.IsNull() || state.InputRawUdp.Connections.IsUnknown())) {
 			if !api.InputRawUdp.Connections.IsNull() && !api.InputRawUdp.Connections.IsUnknown() {
@@ -59604,12 +61114,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputRawUdp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputRawUdpConnectionsAttrTypes()})
 			}
 		}
+		if state.InputRawUdp.Connections.IsNull() || state.InputRawUdp.Connections.IsUnknown() {
+			state.InputRawUdp.Connections = types.ListNull(types.ObjectType{AttrTypes: InputRawUdpConnectionsAttrTypes()})
+		} else if len(state.InputRawUdp.Connections.Elements()) == 0 {
+			state.InputRawUdp.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputRawUdpConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Pq.IsNull() || state.InputRawUdp.Pq.IsUnknown())) {
 			if !api.InputRawUdp.Pq.IsNull() && !api.InputRawUdp.Pq.IsUnknown() {
 				state.InputRawUdp.Pq = api.InputRawUdp.Pq
 			} else if state.InputRawUdp.Pq.IsNull() || state.InputRawUdp.Pq.IsUnknown() {
 				state.InputRawUdp.Pq = types.ObjectNull(InputRawUdpPqAttrTypes())
 			}
+		}
+		if len(state.InputRawUdp.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputRawUdp.Pq = types.ObjectNull(InputRawUdpPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Host.IsNull() || state.InputRawUdp.Host.IsUnknown())) {
 			if !api.InputRawUdp.Host.IsNull() && !api.InputRawUdp.Host.IsUnknown() {
@@ -59666,6 +61184,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputRawUdp.Metadata.IsNull() || state.InputRawUdp.Metadata.IsUnknown() {
 				state.InputRawUdp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()})
 			}
+		}
+		if state.InputRawUdp.Metadata.IsNull() || state.InputRawUdp.Metadata.IsUnknown() {
+			state.InputRawUdp.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()})
+		} else if len(state.InputRawUdp.Metadata.Elements()) == 0 {
+			state.InputRawUdp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputRawUdpMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Description.IsNull() || state.InputRawUdp.Description.IsUnknown())) {
 			if !api.InputRawUdp.Description.IsNull() && !api.InputRawUdp.Description.IsUnknown() {
@@ -59735,12 +61258,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputJournalFiles.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputJournalFiles.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputJournalFiles.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.CriblSourceProvenance.IsNull() || state.InputJournalFiles.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputJournalFiles.CriblSourceProvenance.IsNull() && !api.InputJournalFiles.CriblSourceProvenance.IsUnknown() {
 				state.InputJournalFiles.CriblSourceProvenance = api.InputJournalFiles.CriblSourceProvenance
 			} else if state.InputJournalFiles.CriblSourceProvenance.IsNull() || state.InputJournalFiles.CriblSourceProvenance.IsUnknown() {
 				state.InputJournalFiles.CriblSourceProvenance = types.ObjectNull(InputJournalFilesCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputJournalFiles.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputJournalFiles.CriblSourceProvenance = types.ObjectNull(InputJournalFilesCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Connections.IsNull() || state.InputJournalFiles.Connections.IsUnknown())) {
 			if !api.InputJournalFiles.Connections.IsNull() && !api.InputJournalFiles.Connections.IsUnknown() {
@@ -59749,12 +61278,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputJournalFiles.Connections = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesConnectionsAttrTypes()})
 			}
 		}
+		if state.InputJournalFiles.Connections.IsNull() || state.InputJournalFiles.Connections.IsUnknown() {
+			state.InputJournalFiles.Connections = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesConnectionsAttrTypes()})
+		} else if len(state.InputJournalFiles.Connections.Elements()) == 0 {
+			state.InputJournalFiles.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputJournalFilesConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Pq.IsNull() || state.InputJournalFiles.Pq.IsUnknown())) {
 			if !api.InputJournalFiles.Pq.IsNull() && !api.InputJournalFiles.Pq.IsUnknown() {
 				state.InputJournalFiles.Pq = api.InputJournalFiles.Pq
 			} else if state.InputJournalFiles.Pq.IsNull() || state.InputJournalFiles.Pq.IsUnknown() {
 				state.InputJournalFiles.Pq = types.ObjectNull(InputJournalFilesPqAttrTypes())
 			}
+		}
+		if len(state.InputJournalFiles.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputJournalFiles.Pq = types.ObjectNull(InputJournalFilesPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Path.IsNull() || state.InputJournalFiles.Path.IsUnknown())) {
 			if !api.InputJournalFiles.Path.IsNull() && !api.InputJournalFiles.Path.IsUnknown() {
@@ -59777,12 +61314,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputJournalFiles.Journals = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputJournalFiles.Journals.ElementType(context.Background()); elementType == nil {
+			state.InputJournalFiles.Journals = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Rules.IsNull() || state.InputJournalFiles.Rules.IsUnknown())) {
 			if !api.InputJournalFiles.Rules.IsNull() && !api.InputJournalFiles.Rules.IsUnknown() {
 				state.InputJournalFiles.Rules = api.InputJournalFiles.Rules
 			} else if state.InputJournalFiles.Rules.IsNull() || state.InputJournalFiles.Rules.IsUnknown() {
 				state.InputJournalFiles.Rules = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesRulesAttrTypes()})
 			}
+		}
+		if state.InputJournalFiles.Rules.IsNull() || state.InputJournalFiles.Rules.IsUnknown() {
+			state.InputJournalFiles.Rules = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesRulesAttrTypes()})
+		} else if len(state.InputJournalFiles.Rules.Elements()) == 0 {
+			state.InputJournalFiles.Rules = types.ListValueMust(types.ObjectType{AttrTypes: InputJournalFilesRulesAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.CurrentBoot.IsNull() || state.InputJournalFiles.CurrentBoot.IsUnknown())) {
 			if !api.InputJournalFiles.CurrentBoot.IsNull() && !api.InputJournalFiles.CurrentBoot.IsUnknown() {
@@ -59811,6 +61356,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputJournalFiles.Metadata.IsNull() || state.InputJournalFiles.Metadata.IsUnknown() {
 				state.InputJournalFiles.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()})
 			}
+		}
+		if state.InputJournalFiles.Metadata.IsNull() || state.InputJournalFiles.Metadata.IsUnknown() {
+			state.InputJournalFiles.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()})
+		} else if len(state.InputJournalFiles.Metadata.Elements()) == 0 {
+			state.InputJournalFiles.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputJournalFilesMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Description.IsNull() || state.InputJournalFiles.Description.IsUnknown())) {
 			if !api.InputJournalFiles.Description.IsNull() && !api.InputJournalFiles.Description.IsUnknown() {
@@ -59880,12 +61430,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWiz.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWiz.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputWiz.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.CriblSourceProvenance.IsNull() || state.InputWiz.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputWiz.CriblSourceProvenance.IsNull() && !api.InputWiz.CriblSourceProvenance.IsUnknown() {
 				state.InputWiz.CriblSourceProvenance = api.InputWiz.CriblSourceProvenance
 			} else if state.InputWiz.CriblSourceProvenance.IsNull() || state.InputWiz.CriblSourceProvenance.IsUnknown() {
 				state.InputWiz.CriblSourceProvenance = types.ObjectNull(InputWizCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputWiz.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputWiz.CriblSourceProvenance = types.ObjectNull(InputWizCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.Connections.IsNull() || state.InputWiz.Connections.IsUnknown())) {
 			if !api.InputWiz.Connections.IsNull() && !api.InputWiz.Connections.IsUnknown() {
@@ -59894,12 +61450,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWiz.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWizConnectionsAttrTypes()})
 			}
 		}
+		if state.InputWiz.Connections.IsNull() || state.InputWiz.Connections.IsUnknown() {
+			state.InputWiz.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWizConnectionsAttrTypes()})
+		} else if len(state.InputWiz.Connections.Elements()) == 0 {
+			state.InputWiz.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputWizConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.Pq.IsNull() || state.InputWiz.Pq.IsUnknown())) {
 			if !api.InputWiz.Pq.IsNull() && !api.InputWiz.Pq.IsUnknown() {
 				state.InputWiz.Pq = api.InputWiz.Pq
 			} else if state.InputWiz.Pq.IsNull() || state.InputWiz.Pq.IsUnknown() {
 				state.InputWiz.Pq = types.ObjectNull(InputWizPqAttrTypes())
 			}
+		}
+		if len(state.InputWiz.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputWiz.Pq = types.ObjectNull(InputWizPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.Endpoint.IsNull() || state.InputWiz.Endpoint.IsUnknown())) {
 			if !api.InputWiz.Endpoint.IsNull() && !api.InputWiz.Endpoint.IsUnknown() {
@@ -59935,6 +61499,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputWiz.ContentConfig.IsNull() || state.InputWiz.ContentConfig.IsUnknown() {
 				state.InputWiz.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputWizContentConfigAttrTypes()})
 			}
+		}
+		if state.InputWiz.ContentConfig.IsNull() || state.InputWiz.ContentConfig.IsUnknown() {
+			state.InputWiz.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputWizContentConfigAttrTypes()})
+		} else if len(state.InputWiz.ContentConfig.Elements()) == 0 {
+			state.InputWiz.ContentConfig = types.ListValueMust(types.ObjectType{AttrTypes: InputWizContentConfigAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.RequestTimeout.IsNull() || state.InputWiz.RequestTimeout.IsUnknown())) {
 			if !api.InputWiz.RequestTimeout.IsNull() && !api.InputWiz.RequestTimeout.IsUnknown() {
@@ -59978,12 +61547,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWiz.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWizMetadataAttrTypes()})
 			}
 		}
+		if state.InputWiz.Metadata.IsNull() || state.InputWiz.Metadata.IsUnknown() {
+			state.InputWiz.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWizMetadataAttrTypes()})
+		} else if len(state.InputWiz.Metadata.Elements()) == 0 {
+			state.InputWiz.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputWizMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.BreakerRulesets.IsNull() || state.InputWiz.BreakerRulesets.IsUnknown())) {
 			if !api.InputWiz.BreakerRulesets.IsNull() && !api.InputWiz.BreakerRulesets.IsUnknown() {
 				state.InputWiz.BreakerRulesets = api.InputWiz.BreakerRulesets
 			} else if state.InputWiz.BreakerRulesets.IsNull() || state.InputWiz.BreakerRulesets.IsUnknown() {
 				state.InputWiz.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputWiz.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputWiz.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.StaleChannelFlushMs.IsNull() || state.InputWiz.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputWiz.StaleChannelFlushMs.IsNull() && !api.InputWiz.StaleChannelFlushMs.IsUnknown() {
@@ -59998,6 +61575,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputWiz.RetryRules.IsNull() || state.InputWiz.RetryRules.IsUnknown() {
 				state.InputWiz.RetryRules = types.ObjectNull(InputWizRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputWiz.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputWiz.RetryRules = types.ObjectNull(InputWizRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.AuthType.IsNull() || state.InputWiz.AuthType.IsUnknown())) {
 			if !api.InputWiz.AuthType.IsNull() && !api.InputWiz.AuthType.IsUnknown() {
@@ -60088,12 +61668,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenai.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOpenai.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOpenai.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.CriblSourceProvenance.IsNull() || state.InputOpenai.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOpenai.CriblSourceProvenance.IsNull() && !api.InputOpenai.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenai.CriblSourceProvenance = api.InputOpenai.CriblSourceProvenance
 			} else if state.InputOpenai.CriblSourceProvenance.IsNull() || state.InputOpenai.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenai.CriblSourceProvenance = types.ObjectNull(InputOpenaiCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOpenai.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenai.CriblSourceProvenance = types.ObjectNull(InputOpenaiCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.Connections.IsNull() || state.InputOpenai.Connections.IsUnknown())) {
 			if !api.InputOpenai.Connections.IsNull() && !api.InputOpenai.Connections.IsUnknown() {
@@ -60102,12 +61688,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenai.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOpenai.Connections.IsNull() || state.InputOpenai.Connections.IsUnknown() {
+			state.InputOpenai.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiConnectionsAttrTypes()})
+		} else if len(state.InputOpenai.Connections.Elements()) == 0 {
+			state.InputOpenai.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenaiConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.Pq.IsNull() || state.InputOpenai.Pq.IsUnknown())) {
 			if !api.InputOpenai.Pq.IsNull() && !api.InputOpenai.Pq.IsUnknown() {
 				state.InputOpenai.Pq = api.InputOpenai.Pq
 			} else if state.InputOpenai.Pq.IsNull() || state.InputOpenai.Pq.IsUnknown() {
 				state.InputOpenai.Pq = types.ObjectNull(InputOpenaiPqAttrTypes())
 			}
+		}
+		if len(state.InputOpenai.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenai.Pq = types.ObjectNull(InputOpenaiPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.OpenaiOrganization.IsNull() || state.InputOpenai.OpenaiOrganization.IsUnknown())) {
 			if !api.InputOpenai.OpenaiOrganization.IsNull() && !api.InputOpenai.OpenaiOrganization.IsUnknown() {
@@ -60129,6 +61723,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOpenai.ContentConfig.IsNull() || state.InputOpenai.ContentConfig.IsUnknown() {
 				state.InputOpenai.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiContentConfigAttrTypes()})
 			}
+		}
+		if state.InputOpenai.ContentConfig.IsNull() || state.InputOpenai.ContentConfig.IsUnknown() {
+			state.InputOpenai.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiContentConfigAttrTypes()})
+		} else if len(state.InputOpenai.ContentConfig.Elements()) == 0 {
+			state.InputOpenai.ContentConfig = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenaiContentConfigAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.RequestTimeout.IsNull() || state.InputOpenai.RequestTimeout.IsUnknown())) {
 			if !api.InputOpenai.RequestTimeout.IsNull() && !api.InputOpenai.RequestTimeout.IsUnknown() {
@@ -60186,12 +61785,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenai.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiMetadataAttrTypes()})
 			}
 		}
+		if state.InputOpenai.Metadata.IsNull() || state.InputOpenai.Metadata.IsUnknown() {
+			state.InputOpenai.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiMetadataAttrTypes()})
+		} else if len(state.InputOpenai.Metadata.Elements()) == 0 {
+			state.InputOpenai.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenaiMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.RetryRules.IsNull() || state.InputOpenai.RetryRules.IsUnknown())) {
 			if !api.InputOpenai.RetryRules.IsNull() && !api.InputOpenai.RetryRules.IsUnknown() {
 				state.InputOpenai.RetryRules = api.InputOpenai.RetryRules
 			} else if state.InputOpenai.RetryRules.IsNull() || state.InputOpenai.RetryRules.IsUnknown() {
 				state.InputOpenai.RetryRules = types.ObjectNull(InputOpenaiRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOpenai.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenai.RetryRules = types.ObjectNull(InputOpenaiRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.Description.IsNull() || state.InputOpenai.Description.IsUnknown())) {
 			if !api.InputOpenai.Description.IsNull() && !api.InputOpenai.Description.IsUnknown() {
@@ -60261,12 +61868,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWizWebhook.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputWizWebhook.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.CriblSourceProvenance.IsNull() || state.InputWizWebhook.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputWizWebhook.CriblSourceProvenance.IsNull() && !api.InputWizWebhook.CriblSourceProvenance.IsUnknown() {
 				state.InputWizWebhook.CriblSourceProvenance = api.InputWizWebhook.CriblSourceProvenance
 			} else if state.InputWizWebhook.CriblSourceProvenance.IsNull() || state.InputWizWebhook.CriblSourceProvenance.IsUnknown() {
 				state.InputWizWebhook.CriblSourceProvenance = types.ObjectNull(InputWizWebhookCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputWizWebhook.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputWizWebhook.CriblSourceProvenance = types.ObjectNull(InputWizWebhookCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Connections.IsNull() || state.InputWizWebhook.Connections.IsUnknown())) {
 			if !api.InputWizWebhook.Connections.IsNull() && !api.InputWizWebhook.Connections.IsUnknown() {
@@ -60275,12 +61888,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookConnectionsAttrTypes()})
 			}
 		}
+		if state.InputWizWebhook.Connections.IsNull() || state.InputWizWebhook.Connections.IsUnknown() {
+			state.InputWizWebhook.Connections = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookConnectionsAttrTypes()})
+		} else if len(state.InputWizWebhook.Connections.Elements()) == 0 {
+			state.InputWizWebhook.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputWizWebhookConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Pq.IsNull() || state.InputWizWebhook.Pq.IsUnknown())) {
 			if !api.InputWizWebhook.Pq.IsNull() && !api.InputWizWebhook.Pq.IsUnknown() {
 				state.InputWizWebhook.Pq = api.InputWizWebhook.Pq
 			} else if state.InputWizWebhook.Pq.IsNull() || state.InputWizWebhook.Pq.IsUnknown() {
 				state.InputWizWebhook.Pq = types.ObjectNull(InputWizWebhookPqAttrTypes())
 			}
+		}
+		if len(state.InputWizWebhook.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputWizWebhook.Pq = types.ObjectNull(InputWizWebhookPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Host.IsNull() || state.InputWizWebhook.Host.IsUnknown())) {
 			if !api.InputWizWebhook.Host.IsNull() && !api.InputWizWebhook.Host.IsUnknown() {
@@ -60303,12 +61924,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.AuthTokens = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWizWebhook.AuthTokens.ElementType(context.Background()); elementType == nil {
+			state.InputWizWebhook.AuthTokens = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.TLS.IsNull() || state.InputWizWebhook.TLS.IsUnknown())) {
 			if !api.InputWizWebhook.TLS.IsNull() && !api.InputWizWebhook.TLS.IsUnknown() {
 				state.InputWizWebhook.TLS = api.InputWizWebhook.TLS
 			} else if state.InputWizWebhook.TLS.IsNull() || state.InputWizWebhook.TLS.IsUnknown() {
 				state.InputWizWebhook.TLS = types.ObjectNull(InputWizWebhookTLSAttrTypes())
 			}
+		}
+		if len(state.InputWizWebhook.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputWizWebhook.TLS = types.ObjectNull(InputWizWebhookTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.MaxActiveReq.IsNull() || state.InputWizWebhook.MaxActiveReq.IsUnknown())) {
 			if !api.InputWizWebhook.MaxActiveReq.IsNull() && !api.InputWizWebhook.MaxActiveReq.IsUnknown() {
@@ -60394,6 +62021,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.BreakerRulesets = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWizWebhook.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputWizWebhook.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.StaleChannelFlushMs.IsNull() || state.InputWizWebhook.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputWizWebhook.StaleChannelFlushMs.IsNull() && !api.InputWizWebhook.StaleChannelFlushMs.IsUnknown() {
 				state.InputWizWebhook.StaleChannelFlushMs = api.InputWizWebhook.StaleChannelFlushMs
@@ -60408,12 +62038,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookMetadataAttrTypes()})
 			}
 		}
+		if state.InputWizWebhook.Metadata.IsNull() || state.InputWizWebhook.Metadata.IsUnknown() {
+			state.InputWizWebhook.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookMetadataAttrTypes()})
+		} else if len(state.InputWizWebhook.Metadata.Elements()) == 0 {
+			state.InputWizWebhook.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputWizWebhookMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.AllowedPaths.IsNull() || state.InputWizWebhook.AllowedPaths.IsUnknown())) {
 			if !api.InputWizWebhook.AllowedPaths.IsNull() && !api.InputWizWebhook.AllowedPaths.IsUnknown() {
 				state.InputWizWebhook.AllowedPaths = api.InputWizWebhook.AllowedPaths
 			} else if state.InputWizWebhook.AllowedPaths.IsNull() || state.InputWizWebhook.AllowedPaths.IsUnknown() {
 				state.InputWizWebhook.AllowedPaths = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputWizWebhook.AllowedPaths.ElementType(context.Background()); elementType == nil {
+			state.InputWizWebhook.AllowedPaths = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.AllowedMethods.IsNull() || state.InputWizWebhook.AllowedMethods.IsUnknown())) {
 			if !api.InputWizWebhook.AllowedMethods.IsNull() && !api.InputWizWebhook.AllowedMethods.IsUnknown() {
@@ -60422,12 +62060,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWizWebhook.AllowedMethods = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputWizWebhook.AllowedMethods.ElementType(context.Background()); elementType == nil {
+			state.InputWizWebhook.AllowedMethods = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.AuthTokensExt.IsNull() || state.InputWizWebhook.AuthTokensExt.IsUnknown())) {
 			if !api.InputWizWebhook.AuthTokensExt.IsNull() && !api.InputWizWebhook.AuthTokensExt.IsUnknown() {
 				state.InputWizWebhook.AuthTokensExt = api.InputWizWebhook.AuthTokensExt
 			} else if state.InputWizWebhook.AuthTokensExt.IsNull() || state.InputWizWebhook.AuthTokensExt.IsUnknown() {
 				state.InputWizWebhook.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtAttrTypes()})
 			}
+		}
+		if state.InputWizWebhook.AuthTokensExt.IsNull() || state.InputWizWebhook.AuthTokensExt.IsUnknown() {
+			state.InputWizWebhook.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtAttrTypes()})
+		} else if len(state.InputWizWebhook.AuthTokensExt.Elements()) == 0 {
+			state.InputWizWebhook.AuthTokensExt = types.ListValueMust(types.ObjectType{AttrTypes: InputWizWebhookAuthTokensExtAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Description.IsNull() || state.InputWizWebhook.Description.IsUnknown())) {
 			if !api.InputWizWebhook.Description.IsNull() && !api.InputWizWebhook.Description.IsUnknown() {
@@ -60497,12 +62143,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputNetflow.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputNetflow.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputNetflow.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.CriblSourceProvenance.IsNull() || state.InputNetflow.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputNetflow.CriblSourceProvenance.IsNull() && !api.InputNetflow.CriblSourceProvenance.IsUnknown() {
 				state.InputNetflow.CriblSourceProvenance = api.InputNetflow.CriblSourceProvenance
 			} else if state.InputNetflow.CriblSourceProvenance.IsNull() || state.InputNetflow.CriblSourceProvenance.IsUnknown() {
 				state.InputNetflow.CriblSourceProvenance = types.ObjectNull(InputNetflowCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputNetflow.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputNetflow.CriblSourceProvenance = types.ObjectNull(InputNetflowCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Connections.IsNull() || state.InputNetflow.Connections.IsUnknown())) {
 			if !api.InputNetflow.Connections.IsNull() && !api.InputNetflow.Connections.IsUnknown() {
@@ -60511,12 +62163,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputNetflow.Connections = types.ListNull(types.ObjectType{AttrTypes: InputNetflowConnectionsAttrTypes()})
 			}
 		}
+		if state.InputNetflow.Connections.IsNull() || state.InputNetflow.Connections.IsUnknown() {
+			state.InputNetflow.Connections = types.ListNull(types.ObjectType{AttrTypes: InputNetflowConnectionsAttrTypes()})
+		} else if len(state.InputNetflow.Connections.Elements()) == 0 {
+			state.InputNetflow.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputNetflowConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Pq.IsNull() || state.InputNetflow.Pq.IsUnknown())) {
 			if !api.InputNetflow.Pq.IsNull() && !api.InputNetflow.Pq.IsUnknown() {
 				state.InputNetflow.Pq = api.InputNetflow.Pq
 			} else if state.InputNetflow.Pq.IsNull() || state.InputNetflow.Pq.IsUnknown() {
 				state.InputNetflow.Pq = types.ObjectNull(InputNetflowPqAttrTypes())
 			}
+		}
+		if len(state.InputNetflow.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputNetflow.Pq = types.ObjectNull(InputNetflowPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Host.IsNull() || state.InputNetflow.Host.IsUnknown())) {
 			if !api.InputNetflow.Host.IsNull() && !api.InputNetflow.Host.IsUnknown() {
@@ -60595,6 +62255,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputNetflow.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputNetflowMetadataAttrTypes()})
 			}
 		}
+		if state.InputNetflow.Metadata.IsNull() || state.InputNetflow.Metadata.IsUnknown() {
+			state.InputNetflow.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputNetflowMetadataAttrTypes()})
+		} else if len(state.InputNetflow.Metadata.Elements()) == 0 {
+			state.InputNetflow.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputNetflowMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Description.IsNull() || state.InputNetflow.Description.IsUnknown())) {
 			if !api.InputNetflow.Description.IsNull() && !api.InputNetflow.Description.IsUnknown() {
 				state.InputNetflow.Description = api.InputNetflow.Description
@@ -60663,12 +62328,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSecurityLake.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSecurityLake.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.CriblSourceProvenance.IsNull() || state.InputSecurityLake.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSecurityLake.CriblSourceProvenance.IsNull() && !api.InputSecurityLake.CriblSourceProvenance.IsUnknown() {
 				state.InputSecurityLake.CriblSourceProvenance = api.InputSecurityLake.CriblSourceProvenance
 			} else if state.InputSecurityLake.CriblSourceProvenance.IsNull() || state.InputSecurityLake.CriblSourceProvenance.IsUnknown() {
 				state.InputSecurityLake.CriblSourceProvenance = types.ObjectNull(InputSecurityLakeCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSecurityLake.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSecurityLake.CriblSourceProvenance = types.ObjectNull(InputSecurityLakeCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Connections.IsNull() || state.InputSecurityLake.Connections.IsUnknown())) {
 			if !api.InputSecurityLake.Connections.IsNull() && !api.InputSecurityLake.Connections.IsUnknown() {
@@ -60677,12 +62348,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSecurityLakeConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSecurityLake.Connections.IsNull() || state.InputSecurityLake.Connections.IsUnknown() {
+			state.InputSecurityLake.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSecurityLakeConnectionsAttrTypes()})
+		} else if len(state.InputSecurityLake.Connections.Elements()) == 0 {
+			state.InputSecurityLake.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSecurityLakeConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Pq.IsNull() || state.InputSecurityLake.Pq.IsUnknown())) {
 			if !api.InputSecurityLake.Pq.IsNull() && !api.InputSecurityLake.Pq.IsUnknown() {
 				state.InputSecurityLake.Pq = api.InputSecurityLake.Pq
 			} else if state.InputSecurityLake.Pq.IsNull() || state.InputSecurityLake.Pq.IsUnknown() {
 				state.InputSecurityLake.Pq = types.ObjectNull(InputSecurityLakePqAttrTypes())
 			}
+		}
+		if len(state.InputSecurityLake.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSecurityLake.Pq = types.ObjectNull(InputSecurityLakePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.QueueName.IsNull() || state.InputSecurityLake.QueueName.IsUnknown())) {
 			if !api.InputSecurityLake.QueueName.IsNull() && !api.InputSecurityLake.QueueName.IsUnknown() {
@@ -60753,6 +62432,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSecurityLake.BreakerRulesets.IsNull() || state.InputSecurityLake.BreakerRulesets.IsUnknown() {
 				state.InputSecurityLake.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSecurityLake.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputSecurityLake.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.StaleChannelFlushMs.IsNull() || state.InputSecurityLake.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputSecurityLake.StaleChannelFlushMs.IsNull() && !api.InputSecurityLake.StaleChannelFlushMs.IsUnknown() {
@@ -60859,12 +62541,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSecurityLake.Preprocess = types.ObjectNull(InputSecurityLakePreprocessAttrTypes())
 			}
 		}
+		if len(state.InputSecurityLake.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputSecurityLake.Preprocess = types.ObjectNull(InputSecurityLakePreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Metadata.IsNull() || state.InputSecurityLake.Metadata.IsUnknown())) {
 			if !api.InputSecurityLake.Metadata.IsNull() && !api.InputSecurityLake.Metadata.IsUnknown() {
 				state.InputSecurityLake.Metadata = api.InputSecurityLake.Metadata
 			} else if state.InputSecurityLake.Metadata.IsNull() || state.InputSecurityLake.Metadata.IsUnknown() {
 				state.InputSecurityLake.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSecurityLakeMetadataAttrTypes()})
 			}
+		}
+		if state.InputSecurityLake.Metadata.IsNull() || state.InputSecurityLake.Metadata.IsUnknown() {
+			state.InputSecurityLake.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSecurityLakeMetadataAttrTypes()})
+		} else if len(state.InputSecurityLake.Metadata.Elements()) == 0 {
+			state.InputSecurityLake.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSecurityLakeMetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.ParquetChunkSizeMB.IsNull() || state.InputSecurityLake.ParquetChunkSizeMB.IsUnknown())) {
 			if !api.InputSecurityLake.ParquetChunkSizeMB.IsNull() && !api.InputSecurityLake.ParquetChunkSizeMB.IsUnknown() {
@@ -60886,6 +62576,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputSecurityLake.Checkpointing.IsNull() || state.InputSecurityLake.Checkpointing.IsUnknown() {
 				state.InputSecurityLake.Checkpointing = types.ObjectNull(InputSecurityLakeCheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputSecurityLake.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputSecurityLake.Checkpointing = types.ObjectNull(InputSecurityLakeCheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.PollTimeout.IsNull() || state.InputSecurityLake.PollTimeout.IsUnknown())) {
 			if !api.InputSecurityLake.PollTimeout.IsNull() && !api.InputSecurityLake.PollTimeout.IsUnknown() {
@@ -61046,12 +62739,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputBedrockS3.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputBedrockS3.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputBedrockS3.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.CriblSourceProvenance.IsNull() || state.InputBedrockS3.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputBedrockS3.CriblSourceProvenance.IsNull() && !api.InputBedrockS3.CriblSourceProvenance.IsUnknown() {
 				state.InputBedrockS3.CriblSourceProvenance = api.InputBedrockS3.CriblSourceProvenance
 			} else if state.InputBedrockS3.CriblSourceProvenance.IsNull() || state.InputBedrockS3.CriblSourceProvenance.IsUnknown() {
 				state.InputBedrockS3.CriblSourceProvenance = types.ObjectNull(InputBedrockS3CriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputBedrockS3.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputBedrockS3.CriblSourceProvenance = types.ObjectNull(InputBedrockS3CriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Connections.IsNull() || state.InputBedrockS3.Connections.IsUnknown())) {
 			if !api.InputBedrockS3.Connections.IsNull() && !api.InputBedrockS3.Connections.IsUnknown() {
@@ -61060,12 +62759,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputBedrockS3.Connections = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()})
 			}
 		}
+		if state.InputBedrockS3.Connections.IsNull() || state.InputBedrockS3.Connections.IsUnknown() {
+			state.InputBedrockS3.Connections = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()})
+		} else if len(state.InputBedrockS3.Connections.Elements()) == 0 {
+			state.InputBedrockS3.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Pq.IsNull() || state.InputBedrockS3.Pq.IsUnknown())) {
 			if !api.InputBedrockS3.Pq.IsNull() && !api.InputBedrockS3.Pq.IsUnknown() {
 				state.InputBedrockS3.Pq = api.InputBedrockS3.Pq
 			} else if state.InputBedrockS3.Pq.IsNull() || state.InputBedrockS3.Pq.IsUnknown() {
 				state.InputBedrockS3.Pq = types.ObjectNull(InputBedrockS3PqAttrTypes())
 			}
+		}
+		if len(state.InputBedrockS3.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputBedrockS3.Pq = types.ObjectNull(InputBedrockS3PqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.QueueName.IsNull() || state.InputBedrockS3.QueueName.IsUnknown())) {
 			if !api.InputBedrockS3.QueueName.IsNull() && !api.InputBedrockS3.QueueName.IsUnknown() {
@@ -61136,6 +62843,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputBedrockS3.BreakerRulesets.IsNull() || state.InputBedrockS3.BreakerRulesets.IsUnknown() {
 				state.InputBedrockS3.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputBedrockS3.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputBedrockS3.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.StaleChannelFlushMs.IsNull() || state.InputBedrockS3.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputBedrockS3.StaleChannelFlushMs.IsNull() && !api.InputBedrockS3.StaleChannelFlushMs.IsUnknown() {
@@ -61242,12 +62952,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputBedrockS3.Preprocess = types.ObjectNull(InputBedrockS3PreprocessAttrTypes())
 			}
 		}
+		if len(state.InputBedrockS3.Preprocess.AttributeTypes(context.Background())) == 0 {
+			state.InputBedrockS3.Preprocess = types.ObjectNull(InputBedrockS3PreprocessAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Metadata.IsNull() || state.InputBedrockS3.Metadata.IsUnknown())) {
 			if !api.InputBedrockS3.Metadata.IsNull() && !api.InputBedrockS3.Metadata.IsUnknown() {
 				state.InputBedrockS3.Metadata = api.InputBedrockS3.Metadata
 			} else if state.InputBedrockS3.Metadata.IsNull() || state.InputBedrockS3.Metadata.IsUnknown() {
 				state.InputBedrockS3.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()})
 			}
+		}
+		if state.InputBedrockS3.Metadata.IsNull() || state.InputBedrockS3.Metadata.IsUnknown() {
+			state.InputBedrockS3.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()})
+		} else if len(state.InputBedrockS3.Metadata.Elements()) == 0 {
+			state.InputBedrockS3.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.ParquetChunkSizeMB.IsNull() || state.InputBedrockS3.ParquetChunkSizeMB.IsUnknown())) {
 			if !api.InputBedrockS3.ParquetChunkSizeMB.IsNull() && !api.InputBedrockS3.ParquetChunkSizeMB.IsUnknown() {
@@ -61269,6 +62987,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputBedrockS3.Checkpointing.IsNull() || state.InputBedrockS3.Checkpointing.IsUnknown() {
 				state.InputBedrockS3.Checkpointing = types.ObjectNull(InputBedrockS3CheckpointingAttrTypes())
 			}
+		}
+		if len(state.InputBedrockS3.Checkpointing.AttributeTypes(context.Background())) == 0 {
+			state.InputBedrockS3.Checkpointing = types.ObjectNull(InputBedrockS3CheckpointingAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.PollTimeout.IsNull() || state.InputBedrockS3.PollTimeout.IsUnknown())) {
 			if !api.InputBedrockS3.PollTimeout.IsNull() && !api.InputBedrockS3.PollTimeout.IsUnknown() {
@@ -61429,12 +63150,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputServicenowTable.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputServicenowTable.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputServicenowTable.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.CriblSourceProvenance.IsNull() || state.InputServicenowTable.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputServicenowTable.CriblSourceProvenance.IsNull() && !api.InputServicenowTable.CriblSourceProvenance.IsUnknown() {
 				state.InputServicenowTable.CriblSourceProvenance = api.InputServicenowTable.CriblSourceProvenance
 			} else if state.InputServicenowTable.CriblSourceProvenance.IsNull() || state.InputServicenowTable.CriblSourceProvenance.IsUnknown() {
 				state.InputServicenowTable.CriblSourceProvenance = types.ObjectNull(InputServicenowTableCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputServicenowTable.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputServicenowTable.CriblSourceProvenance = types.ObjectNull(InputServicenowTableCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Connections.IsNull() || state.InputServicenowTable.Connections.IsUnknown())) {
 			if !api.InputServicenowTable.Connections.IsNull() && !api.InputServicenowTable.Connections.IsUnknown() {
@@ -61443,12 +63170,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputServicenowTable.Connections = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableConnectionsAttrTypes()})
 			}
 		}
+		if state.InputServicenowTable.Connections.IsNull() || state.InputServicenowTable.Connections.IsUnknown() {
+			state.InputServicenowTable.Connections = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableConnectionsAttrTypes()})
+		} else if len(state.InputServicenowTable.Connections.Elements()) == 0 {
+			state.InputServicenowTable.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputServicenowTableConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Pq.IsNull() || state.InputServicenowTable.Pq.IsUnknown())) {
 			if !api.InputServicenowTable.Pq.IsNull() && !api.InputServicenowTable.Pq.IsUnknown() {
 				state.InputServicenowTable.Pq = api.InputServicenowTable.Pq
 			} else if state.InputServicenowTable.Pq.IsNull() || state.InputServicenowTable.Pq.IsUnknown() {
 				state.InputServicenowTable.Pq = types.ObjectNull(InputServicenowTablePqAttrTypes())
 			}
+		}
+		if len(state.InputServicenowTable.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputServicenowTable.Pq = types.ObjectNull(InputServicenowTablePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Instance.IsNull() || state.InputServicenowTable.Instance.IsUnknown())) {
 			if !api.InputServicenowTable.Instance.IsNull() && !api.InputServicenowTable.Instance.IsUnknown() {
@@ -61470,6 +63205,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputServicenowTable.Fields.IsNull() || state.InputServicenowTable.Fields.IsUnknown() {
 				state.InputServicenowTable.Fields = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputServicenowTable.Fields.ElementType(context.Background()); elementType == nil {
+			state.InputServicenowTable.Fields = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.OrderByField.IsNull() || state.InputServicenowTable.OrderByField.IsUnknown())) {
 			if !api.InputServicenowTable.OrderByField.IsNull() && !api.InputServicenowTable.OrderByField.IsUnknown() {
@@ -61611,12 +63349,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputServicenowTable.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableMetadataAttrTypes()})
 			}
 		}
+		if state.InputServicenowTable.Metadata.IsNull() || state.InputServicenowTable.Metadata.IsUnknown() {
+			state.InputServicenowTable.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableMetadataAttrTypes()})
+		} else if len(state.InputServicenowTable.Metadata.Elements()) == 0 {
+			state.InputServicenowTable.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputServicenowTableMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.RetryRules.IsNull() || state.InputServicenowTable.RetryRules.IsUnknown())) {
 			if !api.InputServicenowTable.RetryRules.IsNull() && !api.InputServicenowTable.RetryRules.IsUnknown() {
 				state.InputServicenowTable.RetryRules = api.InputServicenowTable.RetryRules
 			} else if state.InputServicenowTable.RetryRules.IsNull() || state.InputServicenowTable.RetryRules.IsUnknown() {
 				state.InputServicenowTable.RetryRules = types.ObjectNull(InputServicenowTableRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputServicenowTable.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputServicenowTable.RetryRules = types.ObjectNull(InputServicenowTableRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Description.IsNull() || state.InputServicenowTable.Description.IsUnknown())) {
 			if !api.InputServicenowTable.Description.IsNull() && !api.InputServicenowTable.Description.IsUnknown() {
@@ -61667,12 +63413,22 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputServicenowTable.OauthParams = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableOauthParamsAttrTypes()})
 			}
 		}
+		if state.InputServicenowTable.OauthParams.IsNull() || state.InputServicenowTable.OauthParams.IsUnknown() {
+			state.InputServicenowTable.OauthParams = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableOauthParamsAttrTypes()})
+		} else if len(state.InputServicenowTable.OauthParams.Elements()) == 0 {
+			state.InputServicenowTable.OauthParams = types.ListValueMust(types.ObjectType{AttrTypes: InputServicenowTableOauthParamsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.OauthHeaders.IsNull() || state.InputServicenowTable.OauthHeaders.IsUnknown())) {
 			if !api.InputServicenowTable.OauthHeaders.IsNull() && !api.InputServicenowTable.OauthHeaders.IsUnknown() {
 				state.InputServicenowTable.OauthHeaders = api.InputServicenowTable.OauthHeaders
 			} else if state.InputServicenowTable.OauthHeaders.IsNull() || state.InputServicenowTable.OauthHeaders.IsUnknown() {
 				state.InputServicenowTable.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableOauthHeadersAttrTypes()})
 			}
+		}
+		if state.InputServicenowTable.OauthHeaders.IsNull() || state.InputServicenowTable.OauthHeaders.IsUnknown() {
+			state.InputServicenowTable.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: InputServicenowTableOauthHeadersAttrTypes()})
+		} else if len(state.InputServicenowTable.OauthHeaders.Elements()) == 0 {
+			state.InputServicenowTable.OauthHeaders = types.ListValueMust(types.ObjectType{AttrTypes: InputServicenowTableOauthHeadersAttrTypes()}, nil)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.ClientID.IsNull() || state.InputServicenowTable.ClientID.IsUnknown())) {
 			if !api.InputServicenowTable.ClientID.IsNull() && !api.InputServicenowTable.ClientID.IsUnknown() {
@@ -61770,12 +63526,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputZscalerHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputZscalerHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.CriblSourceProvenance.IsNull() || state.InputZscalerHec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputZscalerHec.CriblSourceProvenance.IsNull() && !api.InputZscalerHec.CriblSourceProvenance.IsUnknown() {
 				state.InputZscalerHec.CriblSourceProvenance = api.InputZscalerHec.CriblSourceProvenance
 			} else if state.InputZscalerHec.CriblSourceProvenance.IsNull() || state.InputZscalerHec.CriblSourceProvenance.IsUnknown() {
 				state.InputZscalerHec.CriblSourceProvenance = types.ObjectNull(InputZscalerHecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputZscalerHec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputZscalerHec.CriblSourceProvenance = types.ObjectNull(InputZscalerHecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Connections.IsNull() || state.InputZscalerHec.Connections.IsUnknown())) {
 			if !api.InputZscalerHec.Connections.IsNull() && !api.InputZscalerHec.Connections.IsUnknown() {
@@ -61784,12 +63546,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputZscalerHec.Connections.IsNull() || state.InputZscalerHec.Connections.IsUnknown() {
+			state.InputZscalerHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecConnectionsAttrTypes()})
+		} else if len(state.InputZscalerHec.Connections.Elements()) == 0 {
+			state.InputZscalerHec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputZscalerHecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Pq.IsNull() || state.InputZscalerHec.Pq.IsUnknown())) {
 			if !api.InputZscalerHec.Pq.IsNull() && !api.InputZscalerHec.Pq.IsUnknown() {
 				state.InputZscalerHec.Pq = api.InputZscalerHec.Pq
 			} else if state.InputZscalerHec.Pq.IsNull() || state.InputZscalerHec.Pq.IsUnknown() {
 				state.InputZscalerHec.Pq = types.ObjectNull(InputZscalerHecPqAttrTypes())
 			}
+		}
+		if len(state.InputZscalerHec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputZscalerHec.Pq = types.ObjectNull(InputZscalerHecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Host.IsNull() || state.InputZscalerHec.Host.IsUnknown())) {
 			if !api.InputZscalerHec.Host.IsNull() && !api.InputZscalerHec.Host.IsUnknown() {
@@ -61812,12 +63582,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputZscalerHec.AuthTokens.IsNull() || state.InputZscalerHec.AuthTokens.IsUnknown() {
+			state.InputZscalerHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecAuthTokensAttrTypes()})
+		} else if len(state.InputZscalerHec.AuthTokens.Elements()) == 0 {
+			state.InputZscalerHec.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputZscalerHecAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.TLS.IsNull() || state.InputZscalerHec.TLS.IsUnknown())) {
 			if !api.InputZscalerHec.TLS.IsNull() && !api.InputZscalerHec.TLS.IsUnknown() {
 				state.InputZscalerHec.TLS = api.InputZscalerHec.TLS
 			} else if state.InputZscalerHec.TLS.IsNull() || state.InputZscalerHec.TLS.IsUnknown() {
 				state.InputZscalerHec.TLS = types.ObjectNull(InputZscalerHecTLSAttrTypes())
 			}
+		}
+		if len(state.InputZscalerHec.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputZscalerHec.TLS = types.ObjectNull(InputZscalerHecTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.MaxActiveReq.IsNull() || state.InputZscalerHec.MaxActiveReq.IsUnknown())) {
 			if !api.InputZscalerHec.MaxActiveReq.IsNull() && !api.InputZscalerHec.MaxActiveReq.IsUnknown() {
@@ -61903,12 +63681,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecMetadataAttrTypes()})
 			}
 		}
+		if state.InputZscalerHec.Metadata.IsNull() || state.InputZscalerHec.Metadata.IsUnknown() {
+			state.InputZscalerHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputZscalerHecMetadataAttrTypes()})
+		} else if len(state.InputZscalerHec.Metadata.Elements()) == 0 {
+			state.InputZscalerHec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputZscalerHecMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.AllowedIndexes.IsNull() || state.InputZscalerHec.AllowedIndexes.IsUnknown())) {
 			if !api.InputZscalerHec.AllowedIndexes.IsNull() && !api.InputZscalerHec.AllowedIndexes.IsUnknown() {
 				state.InputZscalerHec.AllowedIndexes = api.InputZscalerHec.AllowedIndexes
 			} else if state.InputZscalerHec.AllowedIndexes.IsNull() || state.InputZscalerHec.AllowedIndexes.IsUnknown() {
 				state.InputZscalerHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputZscalerHec.AllowedIndexes.ElementType(context.Background()); elementType == nil {
+			state.InputZscalerHec.AllowedIndexes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.AccessControlAllowOrigin.IsNull() || state.InputZscalerHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputZscalerHec.AccessControlAllowOrigin.IsNull() && !api.InputZscalerHec.AccessControlAllowOrigin.IsUnknown() {
@@ -61917,12 +63703,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputZscalerHec.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputZscalerHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.AccessControlAllowHeaders.IsNull() || state.InputZscalerHec.AccessControlAllowHeaders.IsUnknown())) {
 			if !api.InputZscalerHec.AccessControlAllowHeaders.IsNull() && !api.InputZscalerHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputZscalerHec.AccessControlAllowHeaders = api.InputZscalerHec.AccessControlAllowHeaders
 			} else if state.InputZscalerHec.AccessControlAllowHeaders.IsNull() || state.InputZscalerHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputZscalerHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputZscalerHec.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputZscalerHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.EmitTokenMetrics.IsNull() || state.InputZscalerHec.EmitTokenMetrics.IsUnknown())) {
 			if !api.InputZscalerHec.EmitTokenMetrics.IsNull() && !api.InputZscalerHec.EmitTokenMetrics.IsUnknown() {
@@ -62006,12 +63798,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCloudflareHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputCloudflareHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.CriblSourceProvenance.IsNull() || state.InputCloudflareHec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputCloudflareHec.CriblSourceProvenance.IsNull() && !api.InputCloudflareHec.CriblSourceProvenance.IsUnknown() {
 				state.InputCloudflareHec.CriblSourceProvenance = api.InputCloudflareHec.CriblSourceProvenance
 			} else if state.InputCloudflareHec.CriblSourceProvenance.IsNull() || state.InputCloudflareHec.CriblSourceProvenance.IsUnknown() {
 				state.InputCloudflareHec.CriblSourceProvenance = types.ObjectNull(InputCloudflareHecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputCloudflareHec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputCloudflareHec.CriblSourceProvenance = types.ObjectNull(InputCloudflareHecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Connections.IsNull() || state.InputCloudflareHec.Connections.IsUnknown())) {
 			if !api.InputCloudflareHec.Connections.IsNull() && !api.InputCloudflareHec.Connections.IsUnknown() {
@@ -62020,12 +63818,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputCloudflareHec.Connections.IsNull() || state.InputCloudflareHec.Connections.IsUnknown() {
+			state.InputCloudflareHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecConnectionsAttrTypes()})
+		} else if len(state.InputCloudflareHec.Connections.Elements()) == 0 {
+			state.InputCloudflareHec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputCloudflareHecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Pq.IsNull() || state.InputCloudflareHec.Pq.IsUnknown())) {
 			if !api.InputCloudflareHec.Pq.IsNull() && !api.InputCloudflareHec.Pq.IsUnknown() {
 				state.InputCloudflareHec.Pq = api.InputCloudflareHec.Pq
 			} else if state.InputCloudflareHec.Pq.IsNull() || state.InputCloudflareHec.Pq.IsUnknown() {
 				state.InputCloudflareHec.Pq = types.ObjectNull(InputCloudflareHecPqAttrTypes())
 			}
+		}
+		if len(state.InputCloudflareHec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputCloudflareHec.Pq = types.ObjectNull(InputCloudflareHecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Host.IsNull() || state.InputCloudflareHec.Host.IsUnknown())) {
 			if !api.InputCloudflareHec.Host.IsNull() && !api.InputCloudflareHec.Host.IsUnknown() {
@@ -62048,12 +63854,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputCloudflareHec.AuthTokens.IsNull() || state.InputCloudflareHec.AuthTokens.IsUnknown() {
+			state.InputCloudflareHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecAuthTokensAttrTypes()})
+		} else if len(state.InputCloudflareHec.AuthTokens.Elements()) == 0 {
+			state.InputCloudflareHec.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputCloudflareHecAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.TLS.IsNull() || state.InputCloudflareHec.TLS.IsUnknown())) {
 			if !api.InputCloudflareHec.TLS.IsNull() && !api.InputCloudflareHec.TLS.IsUnknown() {
 				state.InputCloudflareHec.TLS = api.InputCloudflareHec.TLS
 			} else if state.InputCloudflareHec.TLS.IsNull() || state.InputCloudflareHec.TLS.IsUnknown() {
 				state.InputCloudflareHec.TLS = types.ObjectNull(InputCloudflareHecTLSAttrTypes())
 			}
+		}
+		if len(state.InputCloudflareHec.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputCloudflareHec.TLS = types.ObjectNull(InputCloudflareHecTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.MaxActiveReq.IsNull() || state.InputCloudflareHec.MaxActiveReq.IsUnknown())) {
 			if !api.InputCloudflareHec.MaxActiveReq.IsNull() && !api.InputCloudflareHec.MaxActiveReq.IsUnknown() {
@@ -62139,12 +63953,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecMetadataAttrTypes()})
 			}
 		}
+		if state.InputCloudflareHec.Metadata.IsNull() || state.InputCloudflareHec.Metadata.IsUnknown() {
+			state.InputCloudflareHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputCloudflareHecMetadataAttrTypes()})
+		} else if len(state.InputCloudflareHec.Metadata.Elements()) == 0 {
+			state.InputCloudflareHec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputCloudflareHecMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.AllowedIndexes.IsNull() || state.InputCloudflareHec.AllowedIndexes.IsUnknown())) {
 			if !api.InputCloudflareHec.AllowedIndexes.IsNull() && !api.InputCloudflareHec.AllowedIndexes.IsUnknown() {
 				state.InputCloudflareHec.AllowedIndexes = api.InputCloudflareHec.AllowedIndexes
 			} else if state.InputCloudflareHec.AllowedIndexes.IsNull() || state.InputCloudflareHec.AllowedIndexes.IsUnknown() {
 				state.InputCloudflareHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputCloudflareHec.AllowedIndexes.ElementType(context.Background()); elementType == nil {
+			state.InputCloudflareHec.AllowedIndexes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.AccessControlAllowOrigin.IsNull() || state.InputCloudflareHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputCloudflareHec.AccessControlAllowOrigin.IsNull() && !api.InputCloudflareHec.AccessControlAllowOrigin.IsUnknown() {
@@ -62153,12 +63975,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCloudflareHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputCloudflareHec.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputCloudflareHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.AccessControlAllowHeaders.IsNull() || state.InputCloudflareHec.AccessControlAllowHeaders.IsUnknown())) {
 			if !api.InputCloudflareHec.AccessControlAllowHeaders.IsNull() && !api.InputCloudflareHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputCloudflareHec.AccessControlAllowHeaders = api.InputCloudflareHec.AccessControlAllowHeaders
 			} else if state.InputCloudflareHec.AccessControlAllowHeaders.IsNull() || state.InputCloudflareHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputCloudflareHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputCloudflareHec.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputCloudflareHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.EmitTokenMetrics.IsNull() || state.InputCloudflareHec.EmitTokenMetrics.IsUnknown())) {
 			if !api.InputCloudflareHec.EmitTokenMetrics.IsNull() && !api.InputCloudflareHec.EmitTokenMetrics.IsUnknown() {
@@ -62173,6 +64001,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCloudflareHec.BreakerRulesets.IsNull() || state.InputCloudflareHec.BreakerRulesets.IsUnknown() {
 				state.InputCloudflareHec.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputCloudflareHec.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputCloudflareHec.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.StaleChannelFlushMs.IsNull() || state.InputCloudflareHec.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputCloudflareHec.StaleChannelFlushMs.IsNull() && !api.InputCloudflareHec.StaleChannelFlushMs.IsUnknown() {
@@ -62249,12 +64080,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSysdigHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputSysdigHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.CriblSourceProvenance.IsNull() || state.InputSysdigHec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputSysdigHec.CriblSourceProvenance.IsNull() && !api.InputSysdigHec.CriblSourceProvenance.IsUnknown() {
 				state.InputSysdigHec.CriblSourceProvenance = api.InputSysdigHec.CriblSourceProvenance
 			} else if state.InputSysdigHec.CriblSourceProvenance.IsNull() || state.InputSysdigHec.CriblSourceProvenance.IsUnknown() {
 				state.InputSysdigHec.CriblSourceProvenance = types.ObjectNull(InputSysdigHecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputSysdigHec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputSysdigHec.CriblSourceProvenance = types.ObjectNull(InputSysdigHecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Connections.IsNull() || state.InputSysdigHec.Connections.IsUnknown())) {
 			if !api.InputSysdigHec.Connections.IsNull() && !api.InputSysdigHec.Connections.IsUnknown() {
@@ -62263,12 +64100,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputSysdigHec.Connections.IsNull() || state.InputSysdigHec.Connections.IsUnknown() {
+			state.InputSysdigHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()})
+		} else if len(state.InputSysdigHec.Connections.Elements()) == 0 {
+			state.InputSysdigHec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Pq.IsNull() || state.InputSysdigHec.Pq.IsUnknown())) {
 			if !api.InputSysdigHec.Pq.IsNull() && !api.InputSysdigHec.Pq.IsUnknown() {
 				state.InputSysdigHec.Pq = api.InputSysdigHec.Pq
 			} else if state.InputSysdigHec.Pq.IsNull() || state.InputSysdigHec.Pq.IsUnknown() {
 				state.InputSysdigHec.Pq = types.ObjectNull(InputSysdigHecPqAttrTypes())
 			}
+		}
+		if len(state.InputSysdigHec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputSysdigHec.Pq = types.ObjectNull(InputSysdigHecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Host.IsNull() || state.InputSysdigHec.Host.IsUnknown())) {
 			if !api.InputSysdigHec.Host.IsNull() && !api.InputSysdigHec.Host.IsUnknown() {
@@ -62291,12 +64136,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputSysdigHec.AuthTokens.IsNull() || state.InputSysdigHec.AuthTokens.IsUnknown() {
+			state.InputSysdigHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()})
+		} else if len(state.InputSysdigHec.AuthTokens.Elements()) == 0 {
+			state.InputSysdigHec.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.TLS.IsNull() || state.InputSysdigHec.TLS.IsUnknown())) {
 			if !api.InputSysdigHec.TLS.IsNull() && !api.InputSysdigHec.TLS.IsUnknown() {
 				state.InputSysdigHec.TLS = api.InputSysdigHec.TLS
 			} else if state.InputSysdigHec.TLS.IsNull() || state.InputSysdigHec.TLS.IsUnknown() {
 				state.InputSysdigHec.TLS = types.ObjectNull(InputSysdigHecTLSAttrTypes())
 			}
+		}
+		if len(state.InputSysdigHec.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputSysdigHec.TLS = types.ObjectNull(InputSysdigHecTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.MaxActiveReq.IsNull() || state.InputSysdigHec.MaxActiveReq.IsUnknown())) {
 			if !api.InputSysdigHec.MaxActiveReq.IsNull() && !api.InputSysdigHec.MaxActiveReq.IsUnknown() {
@@ -62382,12 +64235,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()})
 			}
 		}
+		if state.InputSysdigHec.Metadata.IsNull() || state.InputSysdigHec.Metadata.IsUnknown() {
+			state.InputSysdigHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()})
+		} else if len(state.InputSysdigHec.Metadata.Elements()) == 0 {
+			state.InputSysdigHec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AllowedIndexes.IsNull() || state.InputSysdigHec.AllowedIndexes.IsUnknown())) {
 			if !api.InputSysdigHec.AllowedIndexes.IsNull() && !api.InputSysdigHec.AllowedIndexes.IsUnknown() {
 				state.InputSysdigHec.AllowedIndexes = api.InputSysdigHec.AllowedIndexes
 			} else if state.InputSysdigHec.AllowedIndexes.IsNull() || state.InputSysdigHec.AllowedIndexes.IsUnknown() {
 				state.InputSysdigHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSysdigHec.AllowedIndexes.ElementType(context.Background()); elementType == nil {
+			state.InputSysdigHec.AllowedIndexes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AccessControlAllowOrigin.IsNull() || state.InputSysdigHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputSysdigHec.AccessControlAllowOrigin.IsNull() && !api.InputSysdigHec.AccessControlAllowOrigin.IsUnknown() {
@@ -62396,12 +64257,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputSysdigHec.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputSysdigHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.AccessControlAllowHeaders.IsNull() || state.InputSysdigHec.AccessControlAllowHeaders.IsUnknown())) {
 			if !api.InputSysdigHec.AccessControlAllowHeaders.IsNull() && !api.InputSysdigHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputSysdigHec.AccessControlAllowHeaders = api.InputSysdigHec.AccessControlAllowHeaders
 			} else if state.InputSysdigHec.AccessControlAllowHeaders.IsNull() || state.InputSysdigHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputSysdigHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputSysdigHec.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputSysdigHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.EmitTokenMetrics.IsNull() || state.InputSysdigHec.EmitTokenMetrics.IsUnknown())) {
 			if !api.InputSysdigHec.EmitTokenMetrics.IsNull() && !api.InputSysdigHec.EmitTokenMetrics.IsUnknown() {
@@ -62478,12 +64345,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputUpwindHec.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputUpwindHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputUpwindHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.CriblSourceProvenance.IsNull() || state.InputUpwindHec.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputUpwindHec.CriblSourceProvenance.IsNull() && !api.InputUpwindHec.CriblSourceProvenance.IsUnknown() {
 				state.InputUpwindHec.CriblSourceProvenance = api.InputUpwindHec.CriblSourceProvenance
 			} else if state.InputUpwindHec.CriblSourceProvenance.IsNull() || state.InputUpwindHec.CriblSourceProvenance.IsUnknown() {
 				state.InputUpwindHec.CriblSourceProvenance = types.ObjectNull(InputUpwindHecCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputUpwindHec.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputUpwindHec.CriblSourceProvenance = types.ObjectNull(InputUpwindHecCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Connections.IsNull() || state.InputUpwindHec.Connections.IsUnknown())) {
 			if !api.InputUpwindHec.Connections.IsNull() && !api.InputUpwindHec.Connections.IsUnknown() {
@@ -62492,12 +64365,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputUpwindHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()})
 			}
 		}
+		if state.InputUpwindHec.Connections.IsNull() || state.InputUpwindHec.Connections.IsUnknown() {
+			state.InputUpwindHec.Connections = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()})
+		} else if len(state.InputUpwindHec.Connections.Elements()) == 0 {
+			state.InputUpwindHec.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Pq.IsNull() || state.InputUpwindHec.Pq.IsUnknown())) {
 			if !api.InputUpwindHec.Pq.IsNull() && !api.InputUpwindHec.Pq.IsUnknown() {
 				state.InputUpwindHec.Pq = api.InputUpwindHec.Pq
 			} else if state.InputUpwindHec.Pq.IsNull() || state.InputUpwindHec.Pq.IsUnknown() {
 				state.InputUpwindHec.Pq = types.ObjectNull(InputUpwindHecPqAttrTypes())
 			}
+		}
+		if len(state.InputUpwindHec.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputUpwindHec.Pq = types.ObjectNull(InputUpwindHecPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Host.IsNull() || state.InputUpwindHec.Host.IsUnknown())) {
 			if !api.InputUpwindHec.Host.IsNull() && !api.InputUpwindHec.Host.IsUnknown() {
@@ -62520,12 +64401,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputUpwindHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()})
 			}
 		}
+		if state.InputUpwindHec.AuthTokens.IsNull() || state.InputUpwindHec.AuthTokens.IsUnknown() {
+			state.InputUpwindHec.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()})
+		} else if len(state.InputUpwindHec.AuthTokens.Elements()) == 0 {
+			state.InputUpwindHec.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.TLS.IsNull() || state.InputUpwindHec.TLS.IsUnknown())) {
 			if !api.InputUpwindHec.TLS.IsNull() && !api.InputUpwindHec.TLS.IsUnknown() {
 				state.InputUpwindHec.TLS = api.InputUpwindHec.TLS
 			} else if state.InputUpwindHec.TLS.IsNull() || state.InputUpwindHec.TLS.IsUnknown() {
 				state.InputUpwindHec.TLS = types.ObjectNull(InputUpwindHecTLSAttrTypes())
 			}
+		}
+		if len(state.InputUpwindHec.TLS.AttributeTypes(context.Background())) == 0 {
+			state.InputUpwindHec.TLS = types.ObjectNull(InputUpwindHecTLSAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.MaxActiveReq.IsNull() || state.InputUpwindHec.MaxActiveReq.IsUnknown())) {
 			if !api.InputUpwindHec.MaxActiveReq.IsNull() && !api.InputUpwindHec.MaxActiveReq.IsUnknown() {
@@ -62611,12 +64500,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputUpwindHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()})
 			}
 		}
+		if state.InputUpwindHec.Metadata.IsNull() || state.InputUpwindHec.Metadata.IsUnknown() {
+			state.InputUpwindHec.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()})
+		} else if len(state.InputUpwindHec.Metadata.Elements()) == 0 {
+			state.InputUpwindHec.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AllowedIndexes.IsNull() || state.InputUpwindHec.AllowedIndexes.IsUnknown())) {
 			if !api.InputUpwindHec.AllowedIndexes.IsNull() && !api.InputUpwindHec.AllowedIndexes.IsUnknown() {
 				state.InputUpwindHec.AllowedIndexes = api.InputUpwindHec.AllowedIndexes
 			} else if state.InputUpwindHec.AllowedIndexes.IsNull() || state.InputUpwindHec.AllowedIndexes.IsUnknown() {
 				state.InputUpwindHec.AllowedIndexes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputUpwindHec.AllowedIndexes.ElementType(context.Background()); elementType == nil {
+			state.InputUpwindHec.AllowedIndexes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AccessControlAllowOrigin.IsNull() || state.InputUpwindHec.AccessControlAllowOrigin.IsUnknown())) {
 			if !api.InputUpwindHec.AccessControlAllowOrigin.IsNull() && !api.InputUpwindHec.AccessControlAllowOrigin.IsUnknown() {
@@ -62625,12 +64522,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputUpwindHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputUpwindHec.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputUpwindHec.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.AccessControlAllowHeaders.IsNull() || state.InputUpwindHec.AccessControlAllowHeaders.IsUnknown())) {
 			if !api.InputUpwindHec.AccessControlAllowHeaders.IsNull() && !api.InputUpwindHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputUpwindHec.AccessControlAllowHeaders = api.InputUpwindHec.AccessControlAllowHeaders
 			} else if state.InputUpwindHec.AccessControlAllowHeaders.IsNull() || state.InputUpwindHec.AccessControlAllowHeaders.IsUnknown() {
 				state.InputUpwindHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputUpwindHec.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputUpwindHec.AccessControlAllowHeaders = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.EmitTokenMetrics.IsNull() || state.InputUpwindHec.EmitTokenMetrics.IsUnknown())) {
 			if !api.InputUpwindHec.EmitTokenMetrics.IsNull() && !api.InputUpwindHec.EmitTokenMetrics.IsUnknown() {
@@ -62707,12 +64610,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenaiComplianceLogs.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOpenaiComplianceLogs.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOpenaiComplianceLogs.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.CriblSourceProvenance.IsNull() || state.InputOpenaiComplianceLogs.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.CriblSourceProvenance.IsNull() && !api.InputOpenaiComplianceLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenaiComplianceLogs.CriblSourceProvenance = api.InputOpenaiComplianceLogs.CriblSourceProvenance
 			} else if state.InputOpenaiComplianceLogs.CriblSourceProvenance.IsNull() || state.InputOpenaiComplianceLogs.CriblSourceProvenance.IsUnknown() {
 				state.InputOpenaiComplianceLogs.CriblSourceProvenance = types.ObjectNull(InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOpenaiComplianceLogs.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenaiComplianceLogs.CriblSourceProvenance = types.ObjectNull(InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.Connections.IsNull() || state.InputOpenaiComplianceLogs.Connections.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.Connections.IsNull() && !api.InputOpenaiComplianceLogs.Connections.IsUnknown() {
@@ -62721,12 +64630,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenaiComplianceLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOpenaiComplianceLogs.Connections.IsNull() || state.InputOpenaiComplianceLogs.Connections.IsUnknown() {
+			state.InputOpenaiComplianceLogs.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsConnectionsAttrTypes()})
+		} else if len(state.InputOpenaiComplianceLogs.Connections.Elements()) == 0 {
+			state.InputOpenaiComplianceLogs.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.Pq.IsNull() || state.InputOpenaiComplianceLogs.Pq.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.Pq.IsNull() && !api.InputOpenaiComplianceLogs.Pq.IsUnknown() {
 				state.InputOpenaiComplianceLogs.Pq = api.InputOpenaiComplianceLogs.Pq
 			} else if state.InputOpenaiComplianceLogs.Pq.IsNull() || state.InputOpenaiComplianceLogs.Pq.IsUnknown() {
 				state.InputOpenaiComplianceLogs.Pq = types.ObjectNull(InputOpenaiComplianceLogsPqAttrTypes())
 			}
+		}
+		if len(state.InputOpenaiComplianceLogs.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenaiComplianceLogs.Pq = types.ObjectNull(InputOpenaiComplianceLogsPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.APIKey.IsNull() || state.InputOpenaiComplianceLogs.APIKey.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.APIKey.IsNull() && !api.InputOpenaiComplianceLogs.APIKey.IsUnknown() {
@@ -62840,12 +64757,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenaiComplianceLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsMetadataAttrTypes()})
 			}
 		}
+		if state.InputOpenaiComplianceLogs.Metadata.IsNull() || state.InputOpenaiComplianceLogs.Metadata.IsUnknown() {
+			state.InputOpenaiComplianceLogs.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsMetadataAttrTypes()})
+		} else if len(state.InputOpenaiComplianceLogs.Metadata.Elements()) == 0 {
+			state.InputOpenaiComplianceLogs.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOpenaiComplianceLogsMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.BreakerRulesets.IsNull() || state.InputOpenaiComplianceLogs.BreakerRulesets.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.BreakerRulesets.IsNull() && !api.InputOpenaiComplianceLogs.BreakerRulesets.IsUnknown() {
 				state.InputOpenaiComplianceLogs.BreakerRulesets = api.InputOpenaiComplianceLogs.BreakerRulesets
 			} else if state.InputOpenaiComplianceLogs.BreakerRulesets.IsNull() || state.InputOpenaiComplianceLogs.BreakerRulesets.IsUnknown() {
 				state.InputOpenaiComplianceLogs.BreakerRulesets = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputOpenaiComplianceLogs.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputOpenaiComplianceLogs.BreakerRulesets = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.StaleChannelFlushMs.IsNull() || state.InputOpenaiComplianceLogs.StaleChannelFlushMs.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.StaleChannelFlushMs.IsNull() && !api.InputOpenaiComplianceLogs.StaleChannelFlushMs.IsUnknown() {
@@ -62860,6 +64785,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOpenaiComplianceLogs.RetryRules.IsNull() || state.InputOpenaiComplianceLogs.RetryRules.IsUnknown() {
 				state.InputOpenaiComplianceLogs.RetryRules = types.ObjectNull(InputOpenaiComplianceLogsRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOpenaiComplianceLogs.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOpenaiComplianceLogs.RetryRules = types.ObjectNull(InputOpenaiComplianceLogsRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.Description.IsNull() || state.InputOpenaiComplianceLogs.Description.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.Description.IsNull() && !api.InputOpenaiComplianceLogs.Description.IsUnknown() {
@@ -62882,6 +64810,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOpenaiComplianceLogs.WorkspaceEventTypes = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOpenaiComplianceLogs.WorkspaceEventTypes.ElementType(context.Background()); elementType == nil {
+			state.InputOpenaiComplianceLogs.WorkspaceEventTypes = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.OrganizationID.IsNull() || state.InputOpenaiComplianceLogs.OrganizationID.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.OrganizationID.IsNull() && !api.InputOpenaiComplianceLogs.OrganizationID.IsUnknown() {
 				state.InputOpenaiComplianceLogs.OrganizationID = api.InputOpenaiComplianceLogs.OrganizationID
@@ -62895,6 +64826,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOpenaiComplianceLogs.OrganizationEventTypes.IsNull() || state.InputOpenaiComplianceLogs.OrganizationEventTypes.IsUnknown() {
 				state.InputOpenaiComplianceLogs.OrganizationEventTypes = types.ListNull(types.StringType)
 			}
+		}
+		if elementType := state.InputOpenaiComplianceLogs.OrganizationEventTypes.ElementType(context.Background()); elementType == nil {
+			state.InputOpenaiComplianceLogs.OrganizationEventTypes = types.ListNull(types.StringType)
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.StateUpdateExpression.IsNull() || state.InputOpenaiComplianceLogs.StateUpdateExpression.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.StateUpdateExpression.IsNull() && !api.InputOpenaiComplianceLogs.StateUpdateExpression.IsUnknown() {
@@ -62978,12 +64912,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputAnthropicCompliance.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputAnthropicCompliance.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.CriblSourceProvenance.IsNull() || state.InputAnthropicCompliance.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputAnthropicCompliance.CriblSourceProvenance.IsNull() && !api.InputAnthropicCompliance.CriblSourceProvenance.IsUnknown() {
 				state.InputAnthropicCompliance.CriblSourceProvenance = api.InputAnthropicCompliance.CriblSourceProvenance
 			} else if state.InputAnthropicCompliance.CriblSourceProvenance.IsNull() || state.InputAnthropicCompliance.CriblSourceProvenance.IsUnknown() {
 				state.InputAnthropicCompliance.CriblSourceProvenance = types.ObjectNull(InputAnthropicComplianceCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.CriblSourceProvenance = types.ObjectNull(InputAnthropicComplianceCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Connections.IsNull() || state.InputAnthropicCompliance.Connections.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Connections.IsNull() && !api.InputAnthropicCompliance.Connections.IsUnknown() {
@@ -62992,12 +64932,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceConnectionsAttrTypes()})
 			}
 		}
+		if state.InputAnthropicCompliance.Connections.IsNull() || state.InputAnthropicCompliance.Connections.IsUnknown() {
+			state.InputAnthropicCompliance.Connections = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceConnectionsAttrTypes()})
+		} else if len(state.InputAnthropicCompliance.Connections.Elements()) == 0 {
+			state.InputAnthropicCompliance.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputAnthropicComplianceConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Pq.IsNull() || state.InputAnthropicCompliance.Pq.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Pq.IsNull() && !api.InputAnthropicCompliance.Pq.IsUnknown() {
 				state.InputAnthropicCompliance.Pq = api.InputAnthropicCompliance.Pq
 			} else if state.InputAnthropicCompliance.Pq.IsNull() || state.InputAnthropicCompliance.Pq.IsUnknown() {
 				state.InputAnthropicCompliance.Pq = types.ObjectNull(InputAnthropicCompliancePqAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Pq = types.ObjectNull(InputAnthropicCompliancePqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.APIKey.IsNull() || state.InputAnthropicCompliance.APIKey.IsUnknown())) {
 			if !api.InputAnthropicCompliance.APIKey.IsNull() && !api.InputAnthropicCompliance.APIKey.IsUnknown() {
@@ -63020,12 +64968,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Activities = types.ObjectNull(InputAnthropicComplianceActivitiesAttrTypes())
 			}
 		}
+		if len(state.InputAnthropicCompliance.Activities.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Activities = types.ObjectNull(InputAnthropicComplianceActivitiesAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Chats.IsNull() || state.InputAnthropicCompliance.Chats.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Chats.IsNull() && !api.InputAnthropicCompliance.Chats.IsUnknown() {
 				state.InputAnthropicCompliance.Chats = api.InputAnthropicCompliance.Chats
 			} else if state.InputAnthropicCompliance.Chats.IsNull() || state.InputAnthropicCompliance.Chats.IsUnknown() {
 				state.InputAnthropicCompliance.Chats = types.ObjectNull(InputAnthropicComplianceChatsAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.Chats.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Chats = types.ObjectNull(InputAnthropicComplianceChatsAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Projects.IsNull() || state.InputAnthropicCompliance.Projects.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Projects.IsNull() && !api.InputAnthropicCompliance.Projects.IsUnknown() {
@@ -63034,12 +64988,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Projects = types.ObjectNull(InputAnthropicComplianceProjectsAttrTypes())
 			}
 		}
+		if len(state.InputAnthropicCompliance.Projects.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Projects = types.ObjectNull(InputAnthropicComplianceProjectsAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.ChatMessages.IsNull() || state.InputAnthropicCompliance.ChatMessages.IsUnknown())) {
 			if !api.InputAnthropicCompliance.ChatMessages.IsNull() && !api.InputAnthropicCompliance.ChatMessages.IsUnknown() {
 				state.InputAnthropicCompliance.ChatMessages = api.InputAnthropicCompliance.ChatMessages
 			} else if state.InputAnthropicCompliance.ChatMessages.IsNull() || state.InputAnthropicCompliance.ChatMessages.IsUnknown() {
 				state.InputAnthropicCompliance.ChatMessages = types.ObjectNull(InputAnthropicComplianceChatMessagesAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.ChatMessages.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.ChatMessages = types.ObjectNull(InputAnthropicComplianceChatMessagesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.ProjectDetails.IsNull() || state.InputAnthropicCompliance.ProjectDetails.IsUnknown())) {
 			if !api.InputAnthropicCompliance.ProjectDetails.IsNull() && !api.InputAnthropicCompliance.ProjectDetails.IsUnknown() {
@@ -63048,12 +65008,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.ProjectDetails = types.ObjectNull(InputAnthropicComplianceProjectDetailsAttrTypes())
 			}
 		}
+		if len(state.InputAnthropicCompliance.ProjectDetails.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.ProjectDetails = types.ObjectNull(InputAnthropicComplianceProjectDetailsAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Groups.IsNull() || state.InputAnthropicCompliance.Groups.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Groups.IsNull() && !api.InputAnthropicCompliance.Groups.IsUnknown() {
 				state.InputAnthropicCompliance.Groups = api.InputAnthropicCompliance.Groups
 			} else if state.InputAnthropicCompliance.Groups.IsNull() || state.InputAnthropicCompliance.Groups.IsUnknown() {
 				state.InputAnthropicCompliance.Groups = types.ObjectNull(InputAnthropicComplianceGroupsAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.Groups.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Groups = types.ObjectNull(InputAnthropicComplianceGroupsAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Organizations.IsNull() || state.InputAnthropicCompliance.Organizations.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Organizations.IsNull() && !api.InputAnthropicCompliance.Organizations.IsUnknown() {
@@ -63062,6 +65028,9 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Organizations = types.ObjectNull(InputAnthropicComplianceOrganizationsAttrTypes())
 			}
 		}
+		if len(state.InputAnthropicCompliance.Organizations.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.Organizations = types.ObjectNull(InputAnthropicComplianceOrganizationsAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.OrgUsers.IsNull() || state.InputAnthropicCompliance.OrgUsers.IsUnknown())) {
 			if !api.InputAnthropicCompliance.OrgUsers.IsNull() && !api.InputAnthropicCompliance.OrgUsers.IsUnknown() {
 				state.InputAnthropicCompliance.OrgUsers = api.InputAnthropicCompliance.OrgUsers
@@ -63069,12 +65038,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.OrgUsers = types.ObjectNull(InputAnthropicComplianceOrgUsersAttrTypes())
 			}
 		}
+		if len(state.InputAnthropicCompliance.OrgUsers.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.OrgUsers = types.ObjectNull(InputAnthropicComplianceOrgUsersAttrTypes())
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.OrgRoles.IsNull() || state.InputAnthropicCompliance.OrgRoles.IsUnknown())) {
 			if !api.InputAnthropicCompliance.OrgRoles.IsNull() && !api.InputAnthropicCompliance.OrgRoles.IsUnknown() {
 				state.InputAnthropicCompliance.OrgRoles = api.InputAnthropicCompliance.OrgRoles
 			} else if state.InputAnthropicCompliance.OrgRoles.IsNull() || state.InputAnthropicCompliance.OrgRoles.IsUnknown() {
 				state.InputAnthropicCompliance.OrgRoles = types.ObjectNull(InputAnthropicComplianceOrgRolesAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.OrgRoles.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.OrgRoles = types.ObjectNull(InputAnthropicComplianceOrgRolesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.RequestTimeout.IsNull() || state.InputAnthropicCompliance.RequestTimeout.IsUnknown())) {
 			if !api.InputAnthropicCompliance.RequestTimeout.IsNull() && !api.InputAnthropicCompliance.RequestTimeout.IsUnknown() {
@@ -63118,12 +65093,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceMetadataAttrTypes()})
 			}
 		}
+		if state.InputAnthropicCompliance.Metadata.IsNull() || state.InputAnthropicCompliance.Metadata.IsUnknown() {
+			state.InputAnthropicCompliance.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceMetadataAttrTypes()})
+		} else if len(state.InputAnthropicCompliance.Metadata.Elements()) == 0 {
+			state.InputAnthropicCompliance.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputAnthropicComplianceMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.RetryRules.IsNull() || state.InputAnthropicCompliance.RetryRules.IsUnknown())) {
 			if !api.InputAnthropicCompliance.RetryRules.IsNull() && !api.InputAnthropicCompliance.RetryRules.IsUnknown() {
 				state.InputAnthropicCompliance.RetryRules = api.InputAnthropicCompliance.RetryRules
 			} else if state.InputAnthropicCompliance.RetryRules.IsNull() || state.InputAnthropicCompliance.RetryRules.IsUnknown() {
 				state.InputAnthropicCompliance.RetryRules = types.ObjectNull(InputAnthropicComplianceRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputAnthropicCompliance.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputAnthropicCompliance.RetryRules = types.ObjectNull(InputAnthropicComplianceRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Description.IsNull() || state.InputAnthropicCompliance.Description.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Description.IsNull() && !api.InputAnthropicCompliance.Description.IsUnknown() {
@@ -63193,12 +65176,18 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOkta.Streamtags = types.ListNull(types.StringType)
 			}
 		}
+		if elementType := state.InputOkta.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.InputOkta.Streamtags = types.ListNull(types.StringType)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.CriblSourceProvenance.IsNull() || state.InputOkta.CriblSourceProvenance.IsUnknown())) {
 			if !api.InputOkta.CriblSourceProvenance.IsNull() && !api.InputOkta.CriblSourceProvenance.IsUnknown() {
 				state.InputOkta.CriblSourceProvenance = api.InputOkta.CriblSourceProvenance
 			} else if state.InputOkta.CriblSourceProvenance.IsNull() || state.InputOkta.CriblSourceProvenance.IsUnknown() {
 				state.InputOkta.CriblSourceProvenance = types.ObjectNull(InputOktaCriblSourceProvenanceAttrTypes())
 			}
+		}
+		if len(state.InputOkta.CriblSourceProvenance.AttributeTypes(context.Background())) == 0 {
+			state.InputOkta.CriblSourceProvenance = types.ObjectNull(InputOktaCriblSourceProvenanceAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.Connections.IsNull() || state.InputOkta.Connections.IsUnknown())) {
 			if !api.InputOkta.Connections.IsNull() && !api.InputOkta.Connections.IsUnknown() {
@@ -63207,12 +65196,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOkta.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOktaConnectionsAttrTypes()})
 			}
 		}
+		if state.InputOkta.Connections.IsNull() || state.InputOkta.Connections.IsUnknown() {
+			state.InputOkta.Connections = types.ListNull(types.ObjectType{AttrTypes: InputOktaConnectionsAttrTypes()})
+		} else if len(state.InputOkta.Connections.Elements()) == 0 {
+			state.InputOkta.Connections = types.ListValueMust(types.ObjectType{AttrTypes: InputOktaConnectionsAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.Pq.IsNull() || state.InputOkta.Pq.IsUnknown())) {
 			if !api.InputOkta.Pq.IsNull() && !api.InputOkta.Pq.IsUnknown() {
 				state.InputOkta.Pq = api.InputOkta.Pq
 			} else if state.InputOkta.Pq.IsNull() || state.InputOkta.Pq.IsUnknown() {
 				state.InputOkta.Pq = types.ObjectNull(InputOktaPqAttrTypes())
 			}
+		}
+		if len(state.InputOkta.Pq.AttributeTypes(context.Background())) == 0 {
+			state.InputOkta.Pq = types.ObjectNull(InputOktaPqAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.OktaDomain.IsNull() || state.InputOkta.OktaDomain.IsUnknown())) {
 			if !api.InputOkta.OktaDomain.IsNull() && !api.InputOkta.OktaDomain.IsUnknown() {
@@ -63305,12 +65302,20 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOkta.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOktaMetadataAttrTypes()})
 			}
 		}
+		if state.InputOkta.Metadata.IsNull() || state.InputOkta.Metadata.IsUnknown() {
+			state.InputOkta.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputOktaMetadataAttrTypes()})
+		} else if len(state.InputOkta.Metadata.Elements()) == 0 {
+			state.InputOkta.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: InputOktaMetadataAttrTypes()}, nil)
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.RetryRules.IsNull() || state.InputOkta.RetryRules.IsUnknown())) {
 			if !api.InputOkta.RetryRules.IsNull() && !api.InputOkta.RetryRules.IsUnknown() {
 				state.InputOkta.RetryRules = api.InputOkta.RetryRules
 			} else if state.InputOkta.RetryRules.IsNull() || state.InputOkta.RetryRules.IsUnknown() {
 				state.InputOkta.RetryRules = types.ObjectNull(InputOktaRetryRulesAttrTypes())
 			}
+		}
+		if len(state.InputOkta.RetryRules.AttributeTypes(context.Background())) == 0 {
+			state.InputOkta.RetryRules = types.ObjectNull(InputOktaRetryRulesAttrTypes())
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.Description.IsNull() || state.InputOkta.Description.IsUnknown())) {
 			if !api.InputOkta.Description.IsNull() && !api.InputOkta.Description.IsUnknown() {

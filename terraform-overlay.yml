@@ -128,6 +128,14 @@ actions:
         type: number
         description: Maximum time in seconds allowed to download a Parquet chunk.
         x-terraform-optional-computed: true
+  - target: "$.components.schemas.InputCollectorRest.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      clientSecretParamValue:
+        type: string
+        description: OAuth client secret value added using the configured client secret parameter name.
+        x-terraform-optional-computed: true
+        x-terraform-sensitive: true
+        x-terraform-prefer-state: true
   - target: "$.components.schemas"
     update:
       InputCollectorFilesystem:

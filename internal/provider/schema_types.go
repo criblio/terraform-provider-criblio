@@ -96,7 +96,8 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SchemaTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -104,7 +105,8 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SchemaTerraformNameToAPIName(key)] = value
+			apiKey := SchemaTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

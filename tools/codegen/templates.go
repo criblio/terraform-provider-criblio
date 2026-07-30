@@ -152,7 +152,8 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 {{- if hasObjectAsJSON . }}
 		attributeTypes := typed.AttributeTypes(context.Background())
 {{- end }}
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 {{- if hasObjectAsJSON . }}
 			var value any
 			var err error
@@ -170,7 +171,26 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[{{ .StructName }}TerraformNameToAPIName(key)] = value
+			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			// Prometheus search filters use capitalized Name and Values. Other
+			// source metadata and header objects use the ordinary name key.
+			if key == "name" {
+				if _, searchFilter := attributes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+{{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+			// Microsoft Fabric SASL uses clientId, while other destination
+			// objects legitimately use the literal API key client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := attributes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+{{- end }}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -490,6 +510,13 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			if key == "name" {
+				if _, searchFilter := typed.AttrTypes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+{{- end }}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -841,12 +868,13 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		}
 {{- end }}
 {{- end }}
-	}
 {{- if noDiscriminatorVariants . }}
-	if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
-		return err
-	}
+	default:
+		if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
+			return err
+		}
 {{- end }}
+	}
 {{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	m.Routes = normalizeRouteClonePlaceholders(m.Routes)
@@ -1881,6 +1909,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
 	sync{{ .StructName }}LegacyItems(api, state)
+	syncSourceLikeActiveInput(api, state)
 {{- end }}
 {{- range .Fields }}
 {{- if and (or (eq $.StructName "LookupFile") (eq $.StructName "PackLookups")) (eq .TerraformName "content") }}
@@ -2050,6 +2079,27 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- end }}
 {{- end }}
+{{- end }}
+{{- if nestedObjectList . }}
+		if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		} else if len(state.{{ $variant.GoName }}.{{ .GoName }}.Elements()) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+		}
+{{- else if eq .Type "array" }}
+		if elementType := state.{{ $variant.GoName }}.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
+			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
+		}
+{{- else if nestedObjectMap . }}
+		if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		} else if len(state.{{ $variant.GoName }}.{{ .GoName }}.Elements()) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.MapValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+		}
+{{- else if nestedObject . }}
+		if len(state.{{ $variant.GoName }}.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
+		}
 {{- end }}
 {{- end }}
 	}
@@ -3172,7 +3222,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportStateId:     apiHTTPID,
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
-						"description",
+						"apihttp.description",
 					},
 				},
 			},

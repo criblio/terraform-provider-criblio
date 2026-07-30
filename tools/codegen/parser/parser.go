@@ -746,7 +746,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		),
 		ReadOnly:  boolAnnotation(property, "readOnly"),
 		WriteOnly: boolAnnotation(property, "writeOnly"),
-		Enum:      enumValues(property),
+		Enum:      enumValues(schemaForType),
 		ValidateEnum: boolAnnotation(
 			property,
 			"x-terraform-enum-validator",

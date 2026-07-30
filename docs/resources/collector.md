@@ -1365,6 +1365,7 @@ Optional:
 - `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
 - `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
+- `client_secret_param_value` (String, Sensitive) OAuth client secret value added using the configured client secret parameter name.
 
 <a id="nestedatt--input_collector_rest--collector--conf--auth_request_params"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.auth_request_params`

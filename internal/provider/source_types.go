@@ -12313,7 +12313,8 @@ func SourceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SourceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -12321,7 +12322,15 @@ func SourceTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SourceTerraformNameToAPIName(key)] = value
+			apiKey := SourceTerraformNameToAPIName(key)
+			// Prometheus search filters use capitalized Name and Values. Other
+			// source metadata and header objects use the ordinary name key.
+			if key == "name" {
+				if _, searchFilter := attributes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -12485,6 +12494,11 @@ func SourceAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := SourceTerraformNameToAPIName(key)
+			if key == "name" {
+				if _, searchFilter := typed.AttrTypes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -13215,9 +13229,24 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputCollection.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "kafka":
+		m.InputKafka = &InputKafkaModel{}
+		if err := m.InputKafka.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "msk":
+		m.InputMsk = &InputMskModel{}
+		if err := m.InputMsk.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "http":
 		m.InputHttp = &InputHttpModel{}
 		if err := m.InputHttp.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "splunk":
+		m.InputSplunk = &InputSplunkModel{}
+		if err := m.InputSplunk.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "splunk_search":
@@ -13230,9 +13259,19 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputSplunkHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "azure_blob":
+		m.InputAzureBlob = &InputAzureBlobModel{}
+		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "elastic":
 		m.InputElastic = &InputElasticModel{}
 		if err := m.InputElastic.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "confluent_cloud":
+		m.InputConfluentCloud = &InputConfluentCloudModel{}
+		if err := m.InputConfluentCloud.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "grafana":
@@ -13248,6 +13287,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	case "prometheus_rw":
 		m.InputPrometheusRw = &InputPrometheusRwModel{}
 		if err := m.InputPrometheusRw.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "prometheus":
+		m.InputPrometheus = &InputPrometheusModel{}
+		if err := m.InputPrometheus.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "edge_prometheus":
@@ -13295,9 +13339,19 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputFirehose.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "google_pubsub":
+		m.InputGooglePubsub = &InputGooglePubsubModel{}
+		if err := m.InputGooglePubsub.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "cribl":
 		m.InputCribl = &InputCriblModel{}
 		if err := m.InputCribl.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "cribl_tcp":
+		m.InputCriblTcp = &InputCriblTcpModel{}
+		if err := m.InputCriblTcp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "cribl_http":
@@ -13308,6 +13362,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	case "cribl_lake_http":
 		m.InputCriblLakeHttp = &InputCriblLakeHttpModel{}
 		if err := m.InputCriblLakeHttp.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "tcpjson":
+		m.InputTcpjson = &InputTcpjsonModel{}
+		if err := m.InputTcpjson.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "system_metrics":
@@ -13360,6 +13419,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputHttpRaw.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "kinesis":
+		m.InputKinesis = &InputKinesisModel{}
+		if err := m.InputKinesis.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "criblmetrics":
 		m.InputCriblmetrics = &InputCriblmetricsModel{}
 		if err := m.InputCriblmetrics.unmarshalPayload(raw); err != nil {
@@ -13370,9 +13434,19 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputMetrics.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "s3":
+		m.InputS3 = &InputS3Model{}
+		if err := m.InputS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "s3_inventory":
 		m.InputS3Inventory = &InputS3InventoryModel{}
 		if err := m.InputS3Inventory.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "snmp":
+		m.InputSnmp = &InputSnmpModel{}
+		if err := m.InputSnmp.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "open_telemetry":
@@ -13383,6 +13457,16 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	case "model_driven_telemetry":
 		m.InputModelDrivenTelemetry = &InputModelDrivenTelemetryModel{}
 		if err := m.InputModelDrivenTelemetry.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sqs":
+		m.InputSqs = &InputSqsModel{}
+		if err := m.InputSqs.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "syslog":
+		m.InputSyslog = &InputSyslogModel{}
+		if err := m.InputSyslog.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "file":
@@ -13440,6 +13524,16 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputWizWebhook.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "netflow":
+		m.InputNetflow = &InputNetflowModel{}
+		if err := m.InputNetflow.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "security_lake":
+		m.InputSecurityLake = &InputSecurityLakeModel{}
+		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "bedrock_s3":
 		m.InputBedrockS3 = &InputBedrockS3Model{}
 		if err := m.InputBedrockS3.unmarshalPayload(raw); err != nil {
@@ -13485,9 +13579,6 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputOkta.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	}
-	if matched, err := m.unmarshalSourceOneOfByShape(raw); matched || err != nil {
-		return err
 	}
 	return nil
 }
@@ -54435,137 +54526,4 @@ func SourceOneOfDiscriminator(input map[string]any) string {
 		return value
 	}
 	return ""
-}
-
-func (m *SourceModel) unmarshalSourceOneOfByShape(raw map[string]any) (bool, error) {
-	if SourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "topics", "groupId", "fromBeginning", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "tls", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "metadata", "description"}) {
-		m.InputKafka = &InputKafkaModel{}
-		if err := m.InputKafka.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics", "awsAuthenticationMethod", "region"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "topics", "groupId", "fromBeginning", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "metadata", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "tls", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "description", "awsApiKey", "awsSecret"}) {
-		m.InputMsk = &InputMskModel{}
-		if err := m.InputMsk.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "ipWhitelistRegex", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "breakerRulesets", "staleChannelFlushMs", "authTokens", "maxS2Sversion", "description", "useFwdTimezone", "dropControlFields", "extractMetrics", "compress"}) {
-		m.InputSplunk = &InputSplunkModel{}
-		if err := m.InputSplunk.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "visibilityTimeout", "numReceivers", "maxMessages", "servicePeriodSecs", "skipOnError", "metadata", "breakerRulesets", "staleChannelFlushMs", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "authType", "description", "connectionString", "textSecret", "storageAccountName", "tenantId", "clientId", "azureCloud", "endpointSuffix", "clientTextSecret", "certificate"}) {
-		m.InputAzureBlob = &InputAzureBlobModel{}
-		if err := m.InputAzureBlob.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "brokers", "topics"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "brokers", "tls", "topics", "groupId", "fromBeginning", "kafkaSchemaRegistry", "connectionTimeout", "requestTimeout", "maxRetries", "maxBackOff", "initialBackoff", "backoffRate", "authenticationTimeout", "reauthenticationThreshold", "sasl", "sessionTimeout", "rebalanceTimeout", "heartbeatInterval", "autoCommitInterval", "autoCommitThreshold", "maxBytesPerPartition", "maxBytes", "maxSocketErrors", "metadata", "description"}) {
-		m.InputConfluentCloud = &InputConfluentCloudModel{}
-		if err := m.InputConfluentCloud.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "interval", "logLevel"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "dimensionList", "fieldPerMetric", "discoveryType", "interval", "logLevel", "rejectUnauthorized", "timeout", "keepAliveTime", "jobTimeout", "maxMissedKeepAlives", "ttl", "ignoreGroupJobsLimit", "metadata", "authType", "description", "targetList", "recordType", "scrapePort", "nameList", "scrapeProtocol", "scrapePath", "awsAuthenticationMethod", "awsApiKey", "awsSecret", "usePublicIp", "searchFilter", "awsSecretKey", "region", "endpoint", "reuseConnections", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "httpDiscoveryUrl", "httpDiscoveryHeaders", "httpDiscoveryRejectUnauthorized", "maxResponseBodySize", "username", "password", "credentialsSecret"}) {
-		m.InputPrometheus = &InputPrometheusModel{}
-		if err := m.InputPrometheus.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "topicName", "subscriptionName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "topicName", "subscriptionName", "monitorSubscription", "createTopic", "createSubscription", "region", "googleAuthMethod", "serviceAccountCredentials", "secret", "maxBacklog", "concurrency", "requestTimeout", "metadata", "description", "orderedDelivery"}) {
-		m.InputGooglePubsub = &InputGooglePubsubModel{}
-		if err := m.InputGooglePubsub.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "enableLoadBalancing", "authTokens", "description"}) {
-		m.InputCriblTcp = &InputCriblTcpModel{}
-		if err := m.InputCriblTcp.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "tls", "ipWhitelistRegex", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "enableProxyHeader", "metadata", "enableLoadBalancing", "authType", "description", "authToken", "textSecret"}) {
-		m.InputTcpjson = &InputTcpjsonModel{}
-		if err := m.InputTcpjson.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "streamName", "region"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "streamName", "serviceInterval", "shardExpr", "shardIteratorType", "payloadFormat", "getRecordsLimit", "getRecordsLimitTotal", "loadBalancingAlgorithm", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "verifyKPLCheckSums", "avoidDuplicates", "metadata", "description", "awsApiKey", "awsSecret"}) {
-		m.InputKinesis = &InputKinesisModel{}
-		if err := m.InputKinesis.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "awsAccountId", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "breakerRulesets", "staleChannelFlushMs", "maxMessages", "visibilityTimeout", "numReceivers", "socketTimeout", "skipOnError", "includeSqsMetadata", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "enableSQSAssumeRole", "sharedCredentials", "sharedAssumeRoleArn", "preprocess", "metadata", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "checkpointing", "pollTimeout", "encoding", "tagAfterProcessing", "description", "awsApiKey", "awsSecret", "SQSAssumeRoleArn", "SQSAssumeRoleExternalId", "SQSDurationSeconds", "SQSAwsAuthenticationMethod", "SQSAwsSecret", "SQSAwsSecretKey", "processedTagKey", "processedTagValue"}) {
-		m.InputS3 = &InputS3Model{}
-		if err := m.InputS3.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "snmpV3Auth", "maxBufferSize", "ipWhitelistRegex", "metadata", "udpSocketRxBufSize", "varbindsWithTypes", "bestEffortParsing", "description"}) {
-		m.InputSnmp = &InputSnmpModel{}
-		if err := m.InputSnmp.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "queueName", "queueType"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "queueType", "awsAccountId", "createQueue", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "maxMessages", "visibilityTimeout", "metadata", "pollTimeout", "description", "awsApiKey", "awsSecret", "numReceivers"}) {
-		m.InputSqs = &InputSqsModel{}
-		if err := m.InputSqs.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "udpPort", "tcpPort", "maxBufferSize", "ipWhitelistRegex", "timestampTimezone", "singleMsgUdpPackets", "enableProxyHeader", "keepFieldsList", "octetCounting", "inferFraming", "strictlyInferOctetCounting", "allowNonStandardAppName", "maxActiveCxn", "socketIdleTimeout", "socketEndingMaxWait", "socketMaxLifespan", "tls", "metadata", "udpSocketRxBufSize", "enableLoadBalancing", "description", "enableEnhancedProxyHeaderParsing"}) {
-		m.InputSyslog = &InputSyslogModel{}
-		if err := m.InputSyslog.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "host", "port"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "host", "port", "enablePassThrough", "ipAllowlistRegex", "ipDenylistRegex", "udpSocketRxBufSize", "templateCacheMinutes", "v5Enabled", "v9Enabled", "ipfixEnabled", "metadata", "description"}) {
-		m.InputNetflow = &InputNetflowModel{}
-		if err := m.InputNetflow.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	if SourceOneOfShapeMatches(raw, []string{"type", "queueName"}, []string{"id", "type", "disabled", "pipeline", "sendToRoutes", "environment", "pqEnabled", "streamtags", "criblSourceProvenance", "connections", "pq", "queueName", "fileFilter", "awsAccountId", "awsAuthenticationMethod", "awsSecretKey", "region", "endpoint", "reuseConnections", "rejectUnauthorized", "breakerRulesets", "staleChannelFlushMs", "maxMessages", "visibilityTimeout", "numReceivers", "socketTimeout", "skipOnError", "includeSqsMetadata", "enableAssumeRole", "assumeRoleArn", "assumeRoleExternalId", "durationSeconds", "enableSQSAssumeRole", "sharedCredentials", "sharedAssumeRoleArn", "preprocess", "metadata", "parquetChunkSizeMB", "parquetChunkDownloadTimeout", "checkpointing", "pollTimeout", "encoding", "description", "awsApiKey", "awsSecret", "SQSAssumeRoleArn", "SQSAssumeRoleExternalId", "SQSDurationSeconds", "SQSAwsAuthenticationMethod", "SQSAwsSecret", "SQSAwsSecretKey", "tagAfterProcessing", "processedTagKey", "processedTagValue"}) {
-		m.InputSecurityLake = &InputSecurityLakeModel{}
-		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
-			return true, err
-		}
-		return true, nil
-	}
-	return false, nil
-}
-
-func SourceOneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
-	for _, name := range required {
-		if _, ok := raw[name]; !ok {
-			return false
-		}
-	}
-	if len(required) > 0 {
-		return true
-	}
-	for _, name := range known {
-		if _, ok := raw[name]; ok {
-			return true
-		}
-	}
-	return false
 }

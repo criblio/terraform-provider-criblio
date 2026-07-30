@@ -274,7 +274,8 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, typesContent, "InUse []types.String")
 	assertContains(t, typesContent, "func (m CertificateModel) MarshalJSON()")
 	assertContains(t, typesContent, "func CertificateTerraformNameToAPIName(name string) string")
-	assertContains(t, typesContent, "output[CertificateTerraformNameToAPIName(key)] = value")
+	assertContains(t, typesContent, "apiKey := CertificateTerraformNameToAPIName(key)")
+	assertContains(t, typesContent, "output[apiKey] = value")
 	assertContains(t, typesContent, "func CertificateAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)")
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.InUse)")
 
@@ -388,6 +389,8 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
 	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
+	assertContains(t, searchDatasetProviderTest, `ImportStateVerifyIgnore: []string{
+						"apihttp.description",`)
 	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
 
 	searchDatasetProviderTest = renderTemplate(t, "test", parser.ResourceDef{

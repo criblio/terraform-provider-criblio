@@ -550,7 +550,8 @@ func GroupSystemSettingsTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := GroupSystemSettingsTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -558,7 +559,8 @@ func GroupSystemSettingsTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[GroupSystemSettingsTerraformNameToAPIName(key)] = value
+			apiKey := GroupSystemSettingsTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

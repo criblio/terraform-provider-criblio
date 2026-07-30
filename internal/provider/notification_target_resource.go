@@ -547,6 +547,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 				state.WebhookTarget.SystemFields = api.WebhookTarget.SystemFields
 			}
 		}
+		if elementType := state.WebhookTarget.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.WebhookTarget.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.WebhookTarget.URL.IsNull() && !api.WebhookTarget.URL.IsUnknown() {
 			state.WebhookTarget.URL = api.WebhookTarget.URL
 		} else if state.WebhookTarget.URL.IsNull() || state.WebhookTarget.URL.IsUnknown() {
@@ -602,6 +605,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 				state.PagerDutyTarget.SystemFields = api.PagerDutyTarget.SystemFields
 			}
 		}
+		if elementType := state.PagerDutyTarget.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.PagerDutyTarget.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.PagerDutyTarget.RoutingKey.IsNull() && !api.PagerDutyTarget.RoutingKey.IsUnknown() {
 			state.PagerDutyTarget.RoutingKey = api.PagerDutyTarget.RoutingKey
 		} else if state.PagerDutyTarget.RoutingKey.IsNull() || state.PagerDutyTarget.RoutingKey.IsUnknown() {
@@ -647,6 +653,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 				state.SlackTarget.SystemFields = api.SlackTarget.SystemFields
 			}
 		}
+		if elementType := state.SlackTarget.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.SlackTarget.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.SlackTarget.URL.IsNull() && !api.SlackTarget.URL.IsUnknown() {
 			state.SlackTarget.URL = api.SlackTarget.URL
 		} else if state.SlackTarget.URL.IsNull() || state.SlackTarget.URL.IsUnknown() {
@@ -671,6 +680,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 			if !api.SnsTarget.SystemFields.IsNull() && !api.SnsTarget.SystemFields.IsUnknown() {
 				state.SnsTarget.SystemFields = api.SnsTarget.SystemFields
 			}
+		}
+		if elementType := state.SnsTarget.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.SnsTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.SnsTarget.AwsAuthenticationMethod.IsNull() && !api.SnsTarget.AwsAuthenticationMethod.IsUnknown() {
 			state.SnsTarget.AwsAuthenticationMethod = api.SnsTarget.AwsAuthenticationMethod
@@ -710,6 +722,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		if !api.SnsTarget.Allowlist.IsNull() && !api.SnsTarget.Allowlist.IsUnknown() {
 			state.SnsTarget.Allowlist = api.SnsTarget.Allowlist
 		} else if state.SnsTarget.Allowlist.IsNull() || state.SnsTarget.Allowlist.IsUnknown() {
+			state.SnsTarget.Allowlist = types.ListNull(types.StringType)
+		}
+		if elementType := state.SnsTarget.Allowlist.ElementType(context.Background()); elementType == nil {
 			state.SnsTarget.Allowlist = types.ListNull(types.StringType)
 		}
 		if !api.SnsTarget.DestinationType.IsNull() && !api.SnsTarget.DestinationType.IsUnknown() {
@@ -757,6 +772,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 				state.SmtpTarget.SystemFields = api.SmtpTarget.SystemFields
 			}
 		}
+		if elementType := state.SmtpTarget.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.SmtpTarget.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.SmtpTarget.Host.IsNull() && !api.SmtpTarget.Host.IsUnknown() {
 			state.SmtpTarget.Host = api.SmtpTarget.Host
 		} else if state.SmtpTarget.Host.IsNull() || state.SmtpTarget.Host.IsUnknown() {
@@ -790,6 +808,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		if !api.SmtpTarget.TLS.IsNull() && !api.SmtpTarget.TLS.IsUnknown() {
 			state.SmtpTarget.TLS = api.SmtpTarget.TLS
 		} else if state.SmtpTarget.TLS.IsNull() || state.SmtpTarget.TLS.IsUnknown() {
+			state.SmtpTarget.TLS = types.ObjectNull(SmtpTargetTLSAttrTypes())
+		}
+		if len(state.SmtpTarget.TLS.AttributeTypes(context.Background())) == 0 {
 			state.SmtpTarget.TLS = types.ObjectNull(SmtpTargetTLSAttrTypes())
 		}
 	}

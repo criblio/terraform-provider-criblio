@@ -877,6 +877,11 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 											},
 										},
 									},
+									"client_secret_param_value": schema.StringAttribute{
+										Computed:    true,
+										Sensitive:   true,
+										Description: `OAuth client secret value added using the configured client secret parameter name.`,
+									},
 								},
 							},
 						},

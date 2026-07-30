@@ -358,8 +358,7 @@ components:
             - enabledEndpoints
           properties:
             type:
-              type: string
-              const: api_http
+              $ref: "#/components/schemas/ApiHttpDatasetType"
             enabledEndpoints:
               type: array
               items:
@@ -380,6 +379,10 @@ components:
           x-terraform-name: provider_id
         type:
           type: string
+    ApiHttpDatasetType:
+      type: string
+      enum:
+        - api_http
 `))
 	if err != nil {
 		t.Fatalf("Parse returned error: %v", err)

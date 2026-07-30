@@ -4,8 +4,45 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func TestCollectorMarshalJSONIncludesRestOAuthClientSecret(t *testing.T) {
+	confValues := make(map[string]attr.Value, len(InputCollectorRestCollectorConfAttrTypes()))
+	for name, typ := range InputCollectorRestCollectorConfAttrTypes() {
+		value, err := CollectorTerraformNullValue(typ)
+		if err != nil {
+			t.Fatalf("null value for %s: %v", name, err)
+		}
+		confValues[name] = value
+	}
+	confValues["authentication"] = types.StringValue("oauth")
+	confValues["client_secret_param_name"] = types.StringValue("client_secret")
+	confValues["client_secret_param_value"] = types.StringValue("vault-sourced-secret")
+	collector := types.ObjectValueMust(InputCollectorRestCollectorAttrTypes(), map[string]attr.Value{
+		"type": types.StringValue("rest"),
+		"conf": types.ObjectValueMust(InputCollectorRestCollectorConfAttrTypes(), confValues),
+	})
+	model := CollectorModel{InputCollectorRest: &InputCollectorRestModel{
+		ID:        types.StringValue("salesforce"),
+		Collector: collector,
+	}}
+
+	data, err := json.Marshal(model)
+	if err != nil {
+		t.Fatalf("json.Marshal returned error: %v", err)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(data, &body); err != nil {
+		t.Fatalf("json.Unmarshal returned error: %v", err)
+	}
+	collectorBody := body["collector"].(map[string]any)
+	confBody := collectorBody["conf"].(map[string]any)
+	if got := confBody["clientSecretParamValue"]; got != "vault-sourced-secret" {
+		t.Fatalf("clientSecretParamValue = %#v, want Vault-sourced value; body=%s", got, data)
+	}
+}
 
 func TestCollectorMarshalJSONIncludesSavedJobType(t *testing.T) {
 	model := CollectorModel{
