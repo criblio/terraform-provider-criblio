@@ -75,10 +75,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("amazon_security_lake"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("amazon_security_lake"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("amazon_security_lake"),
 						},
@@ -102,12 +103,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -260,10 +255,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_aws"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_aws"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_aws"),
 						},
@@ -301,12 +297,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -459,10 +449,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_azure"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_azure"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_azure"),
 						},
@@ -500,12 +491,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -658,10 +643,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_azure_data_explorer"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_azure_data_explorer"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_azure_data_explorer"),
 						},
@@ -720,12 +706,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -878,10 +858,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_elasticsearch"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_elasticsearch"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_elasticsearch"),
 						},
@@ -917,12 +898,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -1075,10 +1050,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_gcp"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_gcp"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_gcp"),
 						},
@@ -1124,12 +1100,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -1282,10 +1252,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_google_workspace"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_google_workspace"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_google_workspace"),
 						},
@@ -1294,6 +1265,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Google Workspace Reports API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1315,12 +1287,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -1473,10 +1439,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_http"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_http"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_http"),
 						},
@@ -1485,6 +1452,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `HTTP API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1506,12 +1474,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -1664,10 +1626,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_log_analytics"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_log_analytics"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_log_analytics"),
 						},
@@ -1708,12 +1671,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -1866,10 +1823,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_msgraph"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_msgraph"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_msgraph"),
 						},
@@ -1878,6 +1836,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Microsoft Graph endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1899,12 +1858,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -2057,10 +2010,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_okta"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_okta"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_okta"),
 						},
@@ -2069,6 +2023,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Okta API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -2090,12 +2045,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -2248,10 +2197,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_opensearch"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_opensearch"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_opensearch"),
 						},
@@ -2287,12 +2237,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -2445,10 +2389,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_tailscale"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_tailscale"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_tailscale"),
 						},
@@ -2457,6 +2402,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Tailscale API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -2478,12 +2424,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -2636,10 +2576,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("api_zoom"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("api_zoom"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("api_zoom"),
 						},
@@ -2648,6 +2589,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Zoom API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -2669,12 +2611,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -2827,10 +2763,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("azure_blob"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("azure_blob"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("azure_blob"),
 						},
@@ -2854,12 +2791,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3012,10 +2943,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("clickhouse"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("clickhouse"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("clickhouse"),
 						},
@@ -3057,12 +2989,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3215,10 +3141,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_edge"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_edge"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_edge"),
 						},
@@ -3233,12 +3160,14 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `The Cribl Edge Fleets to query. Use <code>*</code> to query all Fleets.`,
 						ElementType: types.StringType,
 					},
 					"partitioning_scheme": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 					},
 					"path": schema.StringAttribute{
 						Required:    false,
@@ -3265,12 +3194,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3417,10 +3340,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_lake"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_lake"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_lake"),
 						},
@@ -3444,12 +3368,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3602,18 +3520,20 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_leader"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_leader"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_leader"),
 						},
 					},
 					"extra_paths": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Additional path entries searched beyond the primary path.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"filter": schema.StringAttribute{
@@ -3662,12 +3582,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3814,10 +3728,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_local"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_local"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_local"),
 						},
@@ -3841,12 +3756,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -3999,10 +3908,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_meta"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_meta"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_meta"),
 						},
@@ -4011,6 +3921,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Member Datasets that make up this composite Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -4032,12 +3943,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -4190,10 +4095,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("cribl_search"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("cribl_search"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_search"),
 						},
@@ -4217,12 +4123,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -4369,16 +4269,126 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
 					},
+					"stale_channel_flush_ms": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Time, in milliseconds, after which an inactive ingest channel is flushed.`,
+					},
+					"retention_period": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Dataset retention period, in days.`,
+					},
+					"expected_relative_time_range": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Expected relative time range for events stored in the Dataset.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Earliest expected event time, expressed as a relative duration.`,
+							},
+							"latest": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Latest expected event time, expressed as a relative duration.`,
+							},
+						},
+					},
+					"engine": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Identifier for the Lakehouse engine linked to the Dataset.`,
+					},
+					"event_storage_schema_version": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Event storage schema version used by the Dataset.`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether searches skip filtering events by event time.`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Storage classes that apply to the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"partitioning_scheme": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Partitioning scheme used by the Dataset.`,
+					},
+					"auto_detect_region": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether to automatically detect the storage region.`,
+					},
+					"engine_deleted": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether the linked Lakehouse engine no longer exists.`,
+					},
+					"favorites": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Users who marked the Dataset as a favorite, and when.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"time": schema.Int64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Timestamp (in Unix time) when the favorite was recorded.`,
+								},
+								"user_id": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The <code>id</code> of the user who set the Dataset as a favorite.`,
+								},
+							},
+						},
+					},
+					"favorite_count": schema.Int64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Number of users who marked the Dataset as a favorite.`,
+					},
+					"is_favorited": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Whether the requesting user marked the Dataset as a favorite.`,
+					},
 				},
 			},
 			"gcs_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("gcs"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("gcs"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("gcs"),
 						},
@@ -4409,9 +4419,10 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 									Description: `Filter expression evaluated against each object path under the bucket.`,
 								},
 								"partitioning_scheme": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 								},
 								"region": schema.StringAttribute{
 									Required:    false,
@@ -4429,9 +4440,10 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Description: `Filter expression that is evaluated against each object path to determine inclusion.`,
 					},
 					"partitioning_scheme": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -4471,12 +4483,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -4623,10 +4629,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("prometheus"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("prometheus"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("prometheus"),
 						},
@@ -4668,12 +4675,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -4826,10 +4827,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("s3"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("s3"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("s3"),
 						},
@@ -4853,12 +4855,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -5155,10 +5151,11 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Default:  stringdefault.StaticString("snowflake"),
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Default:     stringdefault.StaticString("snowflake"),
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("snowflake"),
 						},
@@ -5218,12 +5215,6 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Required:    false,
@@ -5492,7 +5483,87 @@ func isSearchDatasetImportState(state *SearchDatasetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.DatasetAmazonSecurityLake != nil {
+		return false
+	}
+	if state.DatasetAPIAws != nil {
+		return false
+	}
+	if state.DatasetAPIAzure != nil {
+		return false
+	}
+	if state.DatasetAPIAzureDataExplorer != nil {
+		return false
+	}
+	if state.DatasetAPIElasticsearch != nil {
+		return false
+	}
+	if state.DatasetAPIGcp != nil {
+		return false
+	}
+	if state.DatasetAPIGoogleWorkspace != nil {
+		return false
+	}
+	if state.DatasetAPIHttp != nil {
+		return false
+	}
+	if state.DatasetAPILogAnalytics != nil {
+		return false
+	}
+	if state.DatasetAPIMsgraph != nil {
+		return false
+	}
+	if state.DatasetAPIOkta != nil {
+		return false
+	}
+	if state.DatasetAPIOpensearch != nil {
+		return false
+	}
+	if state.DatasetAPITailscale != nil {
+		return false
+	}
+	if state.DatasetAPIZoom != nil {
+		return false
+	}
+	if state.DatasetAzureBlob != nil {
+		return false
+	}
+	if state.DatasetClickhouse != nil {
+		return false
+	}
+	if state.DatasetCriblEdge != nil {
+		return false
+	}
+	if state.DatasetCriblLake != nil {
+		return false
+	}
+	if state.DatasetCriblLeader != nil {
+		return false
+	}
+	if state.DatasetCriblLocal != nil {
+		return false
+	}
+	if state.DatasetCriblMeta != nil {
+		return false
+	}
+	if state.DatasetCriblSearch != nil {
+		return false
+	}
+	if state.DatasetGcs != nil {
+		return false
+	}
+	if state.DatasetPrometheus != nil {
+		return false
+	}
+	if state.DatasetS3 != nil {
+		return false
+	}
+	if state.DatasetSnowflake != nil {
+		return false
+	}
+	return true
 }
 
 func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetModel, preserveInputs bool, fillMissingInputs bool) {
@@ -5533,9 +5604,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAmazonSecurityLake.BreakerRulesets.IsNull() || state.DatasetAmazonSecurityLake.BreakerRulesets.IsUnknown() {
 			state.DatasetAmazonSecurityLake.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAmazonSecurityLake.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAmazonSecurityLake.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAmazonSecurityLake.CacheConnectionInfo.IsNull() && !api.DatasetAmazonSecurityLake.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAmazonSecurityLake.CacheConnectionInfo = api.DatasetAmazonSecurityLake.CacheConnectionInfo
 		} else if state.DatasetAmazonSecurityLake.CacheConnectionInfo.IsNull() || state.DatasetAmazonSecurityLake.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAmazonSecurityLake.CacheConnectionInfo = types.ObjectNull(DatasetAmazonSecurityLakeCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAmazonSecurityLake.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAmazonSecurityLake.CacheConnectionInfo = types.ObjectNull(DatasetAmazonSecurityLakeCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAmazonSecurityLake.Description.IsNull() && !api.DatasetAmazonSecurityLake.Description.IsUnknown() {
@@ -5561,6 +5638,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAmazonSecurityLake.Metadata.IsNull() && !api.DatasetAmazonSecurityLake.Metadata.IsUnknown() {
 			state.DatasetAmazonSecurityLake.Metadata = api.DatasetAmazonSecurityLake.Metadata
 		} else if state.DatasetAmazonSecurityLake.Metadata.IsNull() || state.DatasetAmazonSecurityLake.Metadata.IsUnknown() {
+			state.DatasetAmazonSecurityLake.Metadata = types.ObjectNull(DatasetAmazonSecurityLakeMetadataAttrTypes())
+		}
+		if len(state.DatasetAmazonSecurityLake.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAmazonSecurityLake.Metadata = types.ObjectNull(DatasetAmazonSecurityLakeMetadataAttrTypes())
 		}
 		if !api.DatasetAmazonSecurityLake.ProviderID.IsNull() && !api.DatasetAmazonSecurityLake.ProviderID.IsUnknown() {
@@ -5598,9 +5678,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAws.EnabledEndpoints.IsNull() || state.DatasetAPIAws.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIAws.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIAws.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIAws.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIAws.Regions.IsNull() && !api.DatasetAPIAws.Regions.IsUnknown() {
 			state.DatasetAPIAws.Regions = api.DatasetAPIAws.Regions
 		} else if state.DatasetAPIAws.Regions.IsNull() || state.DatasetAPIAws.Regions.IsUnknown() {
+			state.DatasetAPIAws.Regions = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetAPIAws.Regions.ElementType(context.Background()); elementType == nil {
 			state.DatasetAPIAws.Regions = types.ListNull(types.StringType)
 		}
 		if !api.DatasetAPIAws.BreakerRulesets.IsNull() && !api.DatasetAPIAws.BreakerRulesets.IsUnknown() {
@@ -5608,9 +5694,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAws.BreakerRulesets.IsNull() || state.DatasetAPIAws.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIAws.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIAws.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIAws.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIAws.CacheConnectionInfo.IsNull() && !api.DatasetAPIAws.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIAws.CacheConnectionInfo = api.DatasetAPIAws.CacheConnectionInfo
 		} else if state.DatasetAPIAws.CacheConnectionInfo.IsNull() || state.DatasetAPIAws.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIAws.CacheConnectionInfo = types.ObjectNull(DatasetApiAwsCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIAws.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAws.CacheConnectionInfo = types.ObjectNull(DatasetApiAwsCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIAws.Description.IsNull() && !api.DatasetAPIAws.Description.IsUnknown() {
@@ -5636,6 +5728,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIAws.Metadata.IsNull() && !api.DatasetAPIAws.Metadata.IsUnknown() {
 			state.DatasetAPIAws.Metadata = api.DatasetAPIAws.Metadata
 		} else if state.DatasetAPIAws.Metadata.IsNull() || state.DatasetAPIAws.Metadata.IsUnknown() {
+			state.DatasetAPIAws.Metadata = types.ObjectNull(DatasetApiAwsMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIAws.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAws.Metadata = types.ObjectNull(DatasetApiAwsMetadataAttrTypes())
 		}
 		if !api.DatasetAPIAws.ProviderID.IsNull() && !api.DatasetAPIAws.ProviderID.IsUnknown() {
@@ -5673,9 +5768,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAzure.EnabledEndpoints.IsNull() || state.DatasetAPIAzure.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIAzure.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIAzure.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIAzure.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIAzure.SubscriptionIDs.IsNull() && !api.DatasetAPIAzure.SubscriptionIDs.IsUnknown() {
 			state.DatasetAPIAzure.SubscriptionIDs = api.DatasetAPIAzure.SubscriptionIDs
 		} else if state.DatasetAPIAzure.SubscriptionIDs.IsNull() || state.DatasetAPIAzure.SubscriptionIDs.IsUnknown() {
+			state.DatasetAPIAzure.SubscriptionIDs = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetAPIAzure.SubscriptionIDs.ElementType(context.Background()); elementType == nil {
 			state.DatasetAPIAzure.SubscriptionIDs = types.ListNull(types.StringType)
 		}
 		if !api.DatasetAPIAzure.BreakerRulesets.IsNull() && !api.DatasetAPIAzure.BreakerRulesets.IsUnknown() {
@@ -5683,9 +5784,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAzure.BreakerRulesets.IsNull() || state.DatasetAPIAzure.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIAzure.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIAzure.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIAzure.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIAzure.CacheConnectionInfo.IsNull() && !api.DatasetAPIAzure.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIAzure.CacheConnectionInfo = api.DatasetAPIAzure.CacheConnectionInfo
 		} else if state.DatasetAPIAzure.CacheConnectionInfo.IsNull() || state.DatasetAPIAzure.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIAzure.CacheConnectionInfo = types.ObjectNull(DatasetApiAzureCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIAzure.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAzure.CacheConnectionInfo = types.ObjectNull(DatasetApiAzureCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIAzure.Description.IsNull() && !api.DatasetAPIAzure.Description.IsUnknown() {
@@ -5711,6 +5818,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIAzure.Metadata.IsNull() && !api.DatasetAPIAzure.Metadata.IsUnknown() {
 			state.DatasetAPIAzure.Metadata = api.DatasetAPIAzure.Metadata
 		} else if state.DatasetAPIAzure.Metadata.IsNull() || state.DatasetAPIAzure.Metadata.IsUnknown() {
+			state.DatasetAPIAzure.Metadata = types.ObjectNull(DatasetApiAzureMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIAzure.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAzure.Metadata = types.ObjectNull(DatasetApiAzureMetadataAttrTypes())
 		}
 		if !api.DatasetAPIAzure.ProviderID.IsNull() && !api.DatasetAPIAzure.ProviderID.IsUnknown() {
@@ -5778,9 +5888,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAzureDataExplorer.BreakerRulesets.IsNull() || state.DatasetAPIAzureDataExplorer.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIAzureDataExplorer.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIAzureDataExplorer.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIAzureDataExplorer.CacheConnectionInfo.IsNull() && !api.DatasetAPIAzureDataExplorer.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.CacheConnectionInfo = api.DatasetAPIAzureDataExplorer.CacheConnectionInfo
 		} else if state.DatasetAPIAzureDataExplorer.CacheConnectionInfo.IsNull() || state.DatasetAPIAzureDataExplorer.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.CacheConnectionInfo = types.ObjectNull(DatasetApiAzureDataExplorerCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIAzureDataExplorer.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAzureDataExplorer.CacheConnectionInfo = types.ObjectNull(DatasetApiAzureDataExplorerCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIAzureDataExplorer.Description.IsNull() && !api.DatasetAPIAzureDataExplorer.Description.IsUnknown() {
@@ -5806,6 +5922,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIAzureDataExplorer.Metadata.IsNull() && !api.DatasetAPIAzureDataExplorer.Metadata.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.Metadata = api.DatasetAPIAzureDataExplorer.Metadata
 		} else if state.DatasetAPIAzureDataExplorer.Metadata.IsNull() || state.DatasetAPIAzureDataExplorer.Metadata.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.Metadata = types.ObjectNull(DatasetApiAzureDataExplorerMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIAzureDataExplorer.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIAzureDataExplorer.Metadata = types.ObjectNull(DatasetApiAzureDataExplorerMetadataAttrTypes())
 		}
 		if !api.DatasetAPIAzureDataExplorer.ProviderID.IsNull() && !api.DatasetAPIAzureDataExplorer.ProviderID.IsUnknown() {
@@ -5853,9 +5972,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIElasticsearch.BreakerRulesets.IsNull() || state.DatasetAPIElasticsearch.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIElasticsearch.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIElasticsearch.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIElasticsearch.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIElasticsearch.CacheConnectionInfo.IsNull() && !api.DatasetAPIElasticsearch.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIElasticsearch.CacheConnectionInfo = api.DatasetAPIElasticsearch.CacheConnectionInfo
 		} else if state.DatasetAPIElasticsearch.CacheConnectionInfo.IsNull() || state.DatasetAPIElasticsearch.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIElasticsearch.CacheConnectionInfo = types.ObjectNull(DatasetApiElasticsearchCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIElasticsearch.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIElasticsearch.CacheConnectionInfo = types.ObjectNull(DatasetApiElasticsearchCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIElasticsearch.Description.IsNull() && !api.DatasetAPIElasticsearch.Description.IsUnknown() {
@@ -5881,6 +6006,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIElasticsearch.Metadata.IsNull() && !api.DatasetAPIElasticsearch.Metadata.IsUnknown() {
 			state.DatasetAPIElasticsearch.Metadata = api.DatasetAPIElasticsearch.Metadata
 		} else if state.DatasetAPIElasticsearch.Metadata.IsNull() || state.DatasetAPIElasticsearch.Metadata.IsUnknown() {
+			state.DatasetAPIElasticsearch.Metadata = types.ObjectNull(DatasetApiElasticsearchMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIElasticsearch.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIElasticsearch.Metadata = types.ObjectNull(DatasetApiElasticsearchMetadataAttrTypes())
 		}
 		if !api.DatasetAPIElasticsearch.ProviderID.IsNull() && !api.DatasetAPIElasticsearch.ProviderID.IsUnknown() {
@@ -5918,14 +6046,25 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGcp.EndpointConfigs.IsNull() || state.DatasetAPIGcp.EndpointConfigs.IsUnknown() {
 			state.DatasetAPIGcp.EndpointConfigs = types.ListNull(types.ObjectType{AttrTypes: DatasetApiGcpEndpointConfigsAttrTypes()})
 		}
+		if state.DatasetAPIGcp.EndpointConfigs.IsNull() || state.DatasetAPIGcp.EndpointConfigs.IsUnknown() {
+			state.DatasetAPIGcp.EndpointConfigs = types.ListNull(types.ObjectType{AttrTypes: DatasetApiGcpEndpointConfigsAttrTypes()})
+		} else if len(state.DatasetAPIGcp.EndpointConfigs.Elements()) == 0 {
+			state.DatasetAPIGcp.EndpointConfigs = types.ListValueMust(types.ObjectType{AttrTypes: DatasetApiGcpEndpointConfigsAttrTypes()}, nil)
+		}
 		if !api.DatasetAPIGcp.BreakerRulesets.IsNull() && !api.DatasetAPIGcp.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIGcp.BreakerRulesets = api.DatasetAPIGcp.BreakerRulesets
 		} else if state.DatasetAPIGcp.BreakerRulesets.IsNull() || state.DatasetAPIGcp.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIGcp.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIGcp.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIGcp.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIGcp.CacheConnectionInfo.IsNull() && !api.DatasetAPIGcp.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIGcp.CacheConnectionInfo = api.DatasetAPIGcp.CacheConnectionInfo
 		} else if state.DatasetAPIGcp.CacheConnectionInfo.IsNull() || state.DatasetAPIGcp.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIGcp.CacheConnectionInfo = types.ObjectNull(DatasetApiGcpCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIGcp.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIGcp.CacheConnectionInfo = types.ObjectNull(DatasetApiGcpCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIGcp.Description.IsNull() && !api.DatasetAPIGcp.Description.IsUnknown() {
@@ -5951,6 +6090,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIGcp.Metadata.IsNull() && !api.DatasetAPIGcp.Metadata.IsUnknown() {
 			state.DatasetAPIGcp.Metadata = api.DatasetAPIGcp.Metadata
 		} else if state.DatasetAPIGcp.Metadata.IsNull() || state.DatasetAPIGcp.Metadata.IsUnknown() {
+			state.DatasetAPIGcp.Metadata = types.ObjectNull(DatasetApiGcpMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIGcp.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIGcp.Metadata = types.ObjectNull(DatasetApiGcpMetadataAttrTypes())
 		}
 		if !api.DatasetAPIGcp.ProviderID.IsNull() && !api.DatasetAPIGcp.ProviderID.IsUnknown() {
@@ -5988,14 +6130,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGoogleWorkspace.EnabledEndpoints.IsNull() || state.DatasetAPIGoogleWorkspace.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIGoogleWorkspace.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIGoogleWorkspace.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIGoogleWorkspace.BreakerRulesets.IsNull() && !api.DatasetAPIGoogleWorkspace.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.BreakerRulesets = api.DatasetAPIGoogleWorkspace.BreakerRulesets
 		} else if state.DatasetAPIGoogleWorkspace.BreakerRulesets.IsNull() || state.DatasetAPIGoogleWorkspace.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIGoogleWorkspace.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIGoogleWorkspace.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIGoogleWorkspace.CacheConnectionInfo.IsNull() && !api.DatasetAPIGoogleWorkspace.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.CacheConnectionInfo = api.DatasetAPIGoogleWorkspace.CacheConnectionInfo
 		} else if state.DatasetAPIGoogleWorkspace.CacheConnectionInfo.IsNull() || state.DatasetAPIGoogleWorkspace.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.CacheConnectionInfo = types.ObjectNull(DatasetApiGoogleWorkspaceCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIGoogleWorkspace.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIGoogleWorkspace.CacheConnectionInfo = types.ObjectNull(DatasetApiGoogleWorkspaceCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIGoogleWorkspace.Description.IsNull() && !api.DatasetAPIGoogleWorkspace.Description.IsUnknown() {
@@ -6021,6 +6172,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIGoogleWorkspace.Metadata.IsNull() && !api.DatasetAPIGoogleWorkspace.Metadata.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.Metadata = api.DatasetAPIGoogleWorkspace.Metadata
 		} else if state.DatasetAPIGoogleWorkspace.Metadata.IsNull() || state.DatasetAPIGoogleWorkspace.Metadata.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.Metadata = types.ObjectNull(DatasetApiGoogleWorkspaceMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIGoogleWorkspace.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIGoogleWorkspace.Metadata = types.ObjectNull(DatasetApiGoogleWorkspaceMetadataAttrTypes())
 		}
 		if !api.DatasetAPIGoogleWorkspace.ProviderID.IsNull() && !api.DatasetAPIGoogleWorkspace.ProviderID.IsUnknown() {
@@ -6058,14 +6212,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIHttp.EnabledEndpoints.IsNull() || state.DatasetAPIHttp.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIHttp.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIHttp.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIHttp.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIHttp.BreakerRulesets.IsNull() && !api.DatasetAPIHttp.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIHttp.BreakerRulesets = api.DatasetAPIHttp.BreakerRulesets
 		} else if state.DatasetAPIHttp.BreakerRulesets.IsNull() || state.DatasetAPIHttp.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIHttp.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIHttp.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIHttp.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIHttp.CacheConnectionInfo.IsNull() && !api.DatasetAPIHttp.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIHttp.CacheConnectionInfo = api.DatasetAPIHttp.CacheConnectionInfo
 		} else if state.DatasetAPIHttp.CacheConnectionInfo.IsNull() || state.DatasetAPIHttp.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIHttp.CacheConnectionInfo = types.ObjectNull(DatasetApiHttpCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIHttp.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIHttp.CacheConnectionInfo = types.ObjectNull(DatasetApiHttpCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIHttp.Description.IsNull() && !api.DatasetAPIHttp.Description.IsUnknown() {
@@ -6091,6 +6254,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIHttp.Metadata.IsNull() && !api.DatasetAPIHttp.Metadata.IsUnknown() {
 			state.DatasetAPIHttp.Metadata = api.DatasetAPIHttp.Metadata
 		} else if state.DatasetAPIHttp.Metadata.IsNull() || state.DatasetAPIHttp.Metadata.IsUnknown() {
+			state.DatasetAPIHttp.Metadata = types.ObjectNull(DatasetApiHttpMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIHttp.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIHttp.Metadata = types.ObjectNull(DatasetApiHttpMetadataAttrTypes())
 		}
 		if !api.DatasetAPIHttp.ProviderID.IsNull() && !api.DatasetAPIHttp.ProviderID.IsUnknown() {
@@ -6143,9 +6309,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPILogAnalytics.BreakerRulesets.IsNull() || state.DatasetAPILogAnalytics.BreakerRulesets.IsUnknown() {
 			state.DatasetAPILogAnalytics.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPILogAnalytics.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPILogAnalytics.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPILogAnalytics.CacheConnectionInfo.IsNull() && !api.DatasetAPILogAnalytics.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPILogAnalytics.CacheConnectionInfo = api.DatasetAPILogAnalytics.CacheConnectionInfo
 		} else if state.DatasetAPILogAnalytics.CacheConnectionInfo.IsNull() || state.DatasetAPILogAnalytics.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPILogAnalytics.CacheConnectionInfo = types.ObjectNull(DatasetApiLogAnalyticsCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPILogAnalytics.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPILogAnalytics.CacheConnectionInfo = types.ObjectNull(DatasetApiLogAnalyticsCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPILogAnalytics.Description.IsNull() && !api.DatasetAPILogAnalytics.Description.IsUnknown() {
@@ -6171,6 +6343,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPILogAnalytics.Metadata.IsNull() && !api.DatasetAPILogAnalytics.Metadata.IsUnknown() {
 			state.DatasetAPILogAnalytics.Metadata = api.DatasetAPILogAnalytics.Metadata
 		} else if state.DatasetAPILogAnalytics.Metadata.IsNull() || state.DatasetAPILogAnalytics.Metadata.IsUnknown() {
+			state.DatasetAPILogAnalytics.Metadata = types.ObjectNull(DatasetApiLogAnalyticsMetadataAttrTypes())
+		}
+		if len(state.DatasetAPILogAnalytics.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPILogAnalytics.Metadata = types.ObjectNull(DatasetApiLogAnalyticsMetadataAttrTypes())
 		}
 		if !api.DatasetAPILogAnalytics.ProviderID.IsNull() && !api.DatasetAPILogAnalytics.ProviderID.IsUnknown() {
@@ -6208,14 +6383,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIMsgraph.EnabledEndpoints.IsNull() || state.DatasetAPIMsgraph.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIMsgraph.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIMsgraph.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIMsgraph.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIMsgraph.BreakerRulesets.IsNull() && !api.DatasetAPIMsgraph.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIMsgraph.BreakerRulesets = api.DatasetAPIMsgraph.BreakerRulesets
 		} else if state.DatasetAPIMsgraph.BreakerRulesets.IsNull() || state.DatasetAPIMsgraph.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIMsgraph.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIMsgraph.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIMsgraph.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIMsgraph.CacheConnectionInfo.IsNull() && !api.DatasetAPIMsgraph.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIMsgraph.CacheConnectionInfo = api.DatasetAPIMsgraph.CacheConnectionInfo
 		} else if state.DatasetAPIMsgraph.CacheConnectionInfo.IsNull() || state.DatasetAPIMsgraph.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIMsgraph.CacheConnectionInfo = types.ObjectNull(DatasetApiMsgraphCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIMsgraph.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIMsgraph.CacheConnectionInfo = types.ObjectNull(DatasetApiMsgraphCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIMsgraph.Description.IsNull() && !api.DatasetAPIMsgraph.Description.IsUnknown() {
@@ -6241,6 +6425,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIMsgraph.Metadata.IsNull() && !api.DatasetAPIMsgraph.Metadata.IsUnknown() {
 			state.DatasetAPIMsgraph.Metadata = api.DatasetAPIMsgraph.Metadata
 		} else if state.DatasetAPIMsgraph.Metadata.IsNull() || state.DatasetAPIMsgraph.Metadata.IsUnknown() {
+			state.DatasetAPIMsgraph.Metadata = types.ObjectNull(DatasetApiMsgraphMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIMsgraph.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIMsgraph.Metadata = types.ObjectNull(DatasetApiMsgraphMetadataAttrTypes())
 		}
 		if !api.DatasetAPIMsgraph.ProviderID.IsNull() && !api.DatasetAPIMsgraph.ProviderID.IsUnknown() {
@@ -6278,14 +6465,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIOkta.EnabledEndpoints.IsNull() || state.DatasetAPIOkta.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIOkta.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIOkta.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIOkta.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIOkta.BreakerRulesets.IsNull() && !api.DatasetAPIOkta.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIOkta.BreakerRulesets = api.DatasetAPIOkta.BreakerRulesets
 		} else if state.DatasetAPIOkta.BreakerRulesets.IsNull() || state.DatasetAPIOkta.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIOkta.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIOkta.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIOkta.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIOkta.CacheConnectionInfo.IsNull() && !api.DatasetAPIOkta.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIOkta.CacheConnectionInfo = api.DatasetAPIOkta.CacheConnectionInfo
 		} else if state.DatasetAPIOkta.CacheConnectionInfo.IsNull() || state.DatasetAPIOkta.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIOkta.CacheConnectionInfo = types.ObjectNull(DatasetApiOktaCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIOkta.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIOkta.CacheConnectionInfo = types.ObjectNull(DatasetApiOktaCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIOkta.Description.IsNull() && !api.DatasetAPIOkta.Description.IsUnknown() {
@@ -6311,6 +6507,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIOkta.Metadata.IsNull() && !api.DatasetAPIOkta.Metadata.IsUnknown() {
 			state.DatasetAPIOkta.Metadata = api.DatasetAPIOkta.Metadata
 		} else if state.DatasetAPIOkta.Metadata.IsNull() || state.DatasetAPIOkta.Metadata.IsUnknown() {
+			state.DatasetAPIOkta.Metadata = types.ObjectNull(DatasetApiOktaMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIOkta.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIOkta.Metadata = types.ObjectNull(DatasetApiOktaMetadataAttrTypes())
 		}
 		if !api.DatasetAPIOkta.ProviderID.IsNull() && !api.DatasetAPIOkta.ProviderID.IsUnknown() {
@@ -6358,9 +6557,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIOpensearch.BreakerRulesets.IsNull() || state.DatasetAPIOpensearch.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIOpensearch.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIOpensearch.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIOpensearch.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIOpensearch.CacheConnectionInfo.IsNull() && !api.DatasetAPIOpensearch.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIOpensearch.CacheConnectionInfo = api.DatasetAPIOpensearch.CacheConnectionInfo
 		} else if state.DatasetAPIOpensearch.CacheConnectionInfo.IsNull() || state.DatasetAPIOpensearch.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIOpensearch.CacheConnectionInfo = types.ObjectNull(DatasetApiOpensearchCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIOpensearch.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIOpensearch.CacheConnectionInfo = types.ObjectNull(DatasetApiOpensearchCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIOpensearch.Description.IsNull() && !api.DatasetAPIOpensearch.Description.IsUnknown() {
@@ -6386,6 +6591,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIOpensearch.Metadata.IsNull() && !api.DatasetAPIOpensearch.Metadata.IsUnknown() {
 			state.DatasetAPIOpensearch.Metadata = api.DatasetAPIOpensearch.Metadata
 		} else if state.DatasetAPIOpensearch.Metadata.IsNull() || state.DatasetAPIOpensearch.Metadata.IsUnknown() {
+			state.DatasetAPIOpensearch.Metadata = types.ObjectNull(DatasetApiOpensearchMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIOpensearch.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIOpensearch.Metadata = types.ObjectNull(DatasetApiOpensearchMetadataAttrTypes())
 		}
 		if !api.DatasetAPIOpensearch.ProviderID.IsNull() && !api.DatasetAPIOpensearch.ProviderID.IsUnknown() {
@@ -6423,14 +6631,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPITailscale.EnabledEndpoints.IsNull() || state.DatasetAPITailscale.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPITailscale.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPITailscale.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPITailscale.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPITailscale.BreakerRulesets.IsNull() && !api.DatasetAPITailscale.BreakerRulesets.IsUnknown() {
 			state.DatasetAPITailscale.BreakerRulesets = api.DatasetAPITailscale.BreakerRulesets
 		} else if state.DatasetAPITailscale.BreakerRulesets.IsNull() || state.DatasetAPITailscale.BreakerRulesets.IsUnknown() {
 			state.DatasetAPITailscale.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPITailscale.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPITailscale.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPITailscale.CacheConnectionInfo.IsNull() && !api.DatasetAPITailscale.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPITailscale.CacheConnectionInfo = api.DatasetAPITailscale.CacheConnectionInfo
 		} else if state.DatasetAPITailscale.CacheConnectionInfo.IsNull() || state.DatasetAPITailscale.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPITailscale.CacheConnectionInfo = types.ObjectNull(DatasetApiTailscaleCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPITailscale.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPITailscale.CacheConnectionInfo = types.ObjectNull(DatasetApiTailscaleCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPITailscale.Description.IsNull() && !api.DatasetAPITailscale.Description.IsUnknown() {
@@ -6456,6 +6673,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPITailscale.Metadata.IsNull() && !api.DatasetAPITailscale.Metadata.IsUnknown() {
 			state.DatasetAPITailscale.Metadata = api.DatasetAPITailscale.Metadata
 		} else if state.DatasetAPITailscale.Metadata.IsNull() || state.DatasetAPITailscale.Metadata.IsUnknown() {
+			state.DatasetAPITailscale.Metadata = types.ObjectNull(DatasetApiTailscaleMetadataAttrTypes())
+		}
+		if len(state.DatasetAPITailscale.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPITailscale.Metadata = types.ObjectNull(DatasetApiTailscaleMetadataAttrTypes())
 		}
 		if !api.DatasetAPITailscale.ProviderID.IsNull() && !api.DatasetAPITailscale.ProviderID.IsUnknown() {
@@ -6493,14 +6713,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIZoom.EnabledEndpoints.IsNull() || state.DatasetAPIZoom.EnabledEndpoints.IsUnknown() {
 			state.DatasetAPIZoom.EnabledEndpoints = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIZoom.EnabledEndpoints.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIZoom.EnabledEndpoints = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIZoom.BreakerRulesets.IsNull() && !api.DatasetAPIZoom.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIZoom.BreakerRulesets = api.DatasetAPIZoom.BreakerRulesets
 		} else if state.DatasetAPIZoom.BreakerRulesets.IsNull() || state.DatasetAPIZoom.BreakerRulesets.IsUnknown() {
 			state.DatasetAPIZoom.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAPIZoom.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAPIZoom.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAPIZoom.CacheConnectionInfo.IsNull() && !api.DatasetAPIZoom.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAPIZoom.CacheConnectionInfo = api.DatasetAPIZoom.CacheConnectionInfo
 		} else if state.DatasetAPIZoom.CacheConnectionInfo.IsNull() || state.DatasetAPIZoom.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAPIZoom.CacheConnectionInfo = types.ObjectNull(DatasetApiZoomCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAPIZoom.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIZoom.CacheConnectionInfo = types.ObjectNull(DatasetApiZoomCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAPIZoom.Description.IsNull() && !api.DatasetAPIZoom.Description.IsUnknown() {
@@ -6526,6 +6755,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAPIZoom.Metadata.IsNull() && !api.DatasetAPIZoom.Metadata.IsUnknown() {
 			state.DatasetAPIZoom.Metadata = api.DatasetAPIZoom.Metadata
 		} else if state.DatasetAPIZoom.Metadata.IsNull() || state.DatasetAPIZoom.Metadata.IsUnknown() {
+			state.DatasetAPIZoom.Metadata = types.ObjectNull(DatasetApiZoomMetadataAttrTypes())
+		}
+		if len(state.DatasetAPIZoom.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAPIZoom.Metadata = types.ObjectNull(DatasetApiZoomMetadataAttrTypes())
 		}
 		if !api.DatasetAPIZoom.ProviderID.IsNull() && !api.DatasetAPIZoom.ProviderID.IsUnknown() {
@@ -6563,9 +6795,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAzureBlob.BreakerRulesets.IsNull() || state.DatasetAzureBlob.BreakerRulesets.IsUnknown() {
 			state.DatasetAzureBlob.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetAzureBlob.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetAzureBlob.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetAzureBlob.CacheConnectionInfo.IsNull() && !api.DatasetAzureBlob.CacheConnectionInfo.IsUnknown() {
 			state.DatasetAzureBlob.CacheConnectionInfo = api.DatasetAzureBlob.CacheConnectionInfo
 		} else if state.DatasetAzureBlob.CacheConnectionInfo.IsNull() || state.DatasetAzureBlob.CacheConnectionInfo.IsUnknown() {
+			state.DatasetAzureBlob.CacheConnectionInfo = types.ObjectNull(DatasetAzureBlobCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetAzureBlob.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAzureBlob.CacheConnectionInfo = types.ObjectNull(DatasetAzureBlobCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetAzureBlob.Description.IsNull() && !api.DatasetAzureBlob.Description.IsUnknown() {
@@ -6591,6 +6829,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetAzureBlob.Metadata.IsNull() && !api.DatasetAzureBlob.Metadata.IsUnknown() {
 			state.DatasetAzureBlob.Metadata = api.DatasetAzureBlob.Metadata
 		} else if state.DatasetAzureBlob.Metadata.IsNull() || state.DatasetAzureBlob.Metadata.IsUnknown() {
+			state.DatasetAzureBlob.Metadata = types.ObjectNull(DatasetAzureBlobMetadataAttrTypes())
+		}
+		if len(state.DatasetAzureBlob.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetAzureBlob.Metadata = types.ObjectNull(DatasetAzureBlobMetadataAttrTypes())
 		}
 		if !api.DatasetAzureBlob.ProviderID.IsNull() && !api.DatasetAzureBlob.ProviderID.IsUnknown() {
@@ -6643,9 +6884,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetClickhouse.BreakerRulesets.IsNull() || state.DatasetClickhouse.BreakerRulesets.IsUnknown() {
 			state.DatasetClickhouse.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetClickhouse.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetClickhouse.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetClickhouse.CacheConnectionInfo.IsNull() && !api.DatasetClickhouse.CacheConnectionInfo.IsUnknown() {
 			state.DatasetClickhouse.CacheConnectionInfo = api.DatasetClickhouse.CacheConnectionInfo
 		} else if state.DatasetClickhouse.CacheConnectionInfo.IsNull() || state.DatasetClickhouse.CacheConnectionInfo.IsUnknown() {
+			state.DatasetClickhouse.CacheConnectionInfo = types.ObjectNull(DatasetClickhouseCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetClickhouse.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetClickhouse.CacheConnectionInfo = types.ObjectNull(DatasetClickhouseCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetClickhouse.Description.IsNull() && !api.DatasetClickhouse.Description.IsUnknown() {
@@ -6671,6 +6918,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetClickhouse.Metadata.IsNull() && !api.DatasetClickhouse.Metadata.IsUnknown() {
 			state.DatasetClickhouse.Metadata = api.DatasetClickhouse.Metadata
 		} else if state.DatasetClickhouse.Metadata.IsNull() || state.DatasetClickhouse.Metadata.IsUnknown() {
+			state.DatasetClickhouse.Metadata = types.ObjectNull(DatasetClickhouseMetadataAttrTypes())
+		}
+		if len(state.DatasetClickhouse.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetClickhouse.Metadata = types.ObjectNull(DatasetClickhouseMetadataAttrTypes())
 		}
 		if !api.DatasetClickhouse.ProviderID.IsNull() && !api.DatasetClickhouse.ProviderID.IsUnknown() {
@@ -6713,6 +6963,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblEdge.Fleets.IsNull() || state.DatasetCriblEdge.Fleets.IsUnknown() {
 			state.DatasetCriblEdge.Fleets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblEdge.Fleets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblEdge.Fleets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblEdge.PartitioningScheme.IsNull() && !api.DatasetCriblEdge.PartitioningScheme.IsUnknown() {
 			state.DatasetCriblEdge.PartitioningScheme = api.DatasetCriblEdge.PartitioningScheme
 		} else if state.DatasetCriblEdge.PartitioningScheme.IsNull() || state.DatasetCriblEdge.PartitioningScheme.IsUnknown() {
@@ -6728,9 +6981,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblEdge.BreakerRulesets.IsNull() || state.DatasetCriblEdge.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblEdge.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblEdge.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblEdge.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblEdge.CacheConnectionInfo.IsNull() && !api.DatasetCriblEdge.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblEdge.CacheConnectionInfo = api.DatasetCriblEdge.CacheConnectionInfo
 		} else if state.DatasetCriblEdge.CacheConnectionInfo.IsNull() || state.DatasetCriblEdge.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblEdge.CacheConnectionInfo = types.ObjectNull(DatasetCriblEdgeCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblEdge.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblEdge.CacheConnectionInfo = types.ObjectNull(DatasetCriblEdgeCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblEdge.Description.IsNull() && !api.DatasetCriblEdge.Description.IsUnknown() {
@@ -6751,6 +7010,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetCriblEdge.Metadata.IsNull() && !api.DatasetCriblEdge.Metadata.IsUnknown() {
 			state.DatasetCriblEdge.Metadata = api.DatasetCriblEdge.Metadata
 		} else if state.DatasetCriblEdge.Metadata.IsNull() || state.DatasetCriblEdge.Metadata.IsUnknown() {
+			state.DatasetCriblEdge.Metadata = types.ObjectNull(DatasetCriblEdgeMetadataAttrTypes())
+		}
+		if len(state.DatasetCriblEdge.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblEdge.Metadata = types.ObjectNull(DatasetCriblEdgeMetadataAttrTypes())
 		}
 		if !api.DatasetCriblEdge.ProviderID.IsNull() && !api.DatasetCriblEdge.ProviderID.IsUnknown() {
@@ -6788,9 +7050,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLake.BreakerRulesets.IsNull() || state.DatasetCriblLake.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblLake.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblLake.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblLake.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblLake.CacheConnectionInfo.IsNull() && !api.DatasetCriblLake.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblLake.CacheConnectionInfo = api.DatasetCriblLake.CacheConnectionInfo
 		} else if state.DatasetCriblLake.CacheConnectionInfo.IsNull() || state.DatasetCriblLake.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblLake.CacheConnectionInfo = types.ObjectNull(DatasetCriblLakeCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblLake.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLake.CacheConnectionInfo = types.ObjectNull(DatasetCriblLakeCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblLake.Description.IsNull() && !api.DatasetCriblLake.Description.IsUnknown() {
@@ -6816,6 +7084,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetCriblLake.Metadata.IsNull() && !api.DatasetCriblLake.Metadata.IsUnknown() {
 			state.DatasetCriblLake.Metadata = api.DatasetCriblLake.Metadata
 		} else if state.DatasetCriblLake.Metadata.IsNull() || state.DatasetCriblLake.Metadata.IsUnknown() {
+			state.DatasetCriblLake.Metadata = types.ObjectNull(DatasetCriblLakeMetadataAttrTypes())
+		}
+		if len(state.DatasetCriblLake.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLake.Metadata = types.ObjectNull(DatasetCriblLakeMetadataAttrTypes())
 		}
 		if !api.DatasetCriblLake.ProviderID.IsNull() && !api.DatasetCriblLake.ProviderID.IsUnknown() {
@@ -6853,6 +7124,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLeader.ExtraPaths.IsNull() || state.DatasetCriblLeader.ExtraPaths.IsUnknown() {
 			state.DatasetCriblLeader.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblLeaderExtraPathsAttrTypes()})
 		}
+		if state.DatasetCriblLeader.ExtraPaths.IsNull() || state.DatasetCriblLeader.ExtraPaths.IsUnknown() {
+			state.DatasetCriblLeader.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblLeaderExtraPathsAttrTypes()})
+		} else if len(state.DatasetCriblLeader.ExtraPaths.Elements()) == 0 {
+			state.DatasetCriblLeader.ExtraPaths = types.ListValueMust(types.ObjectType{AttrTypes: DatasetCriblLeaderExtraPathsAttrTypes()}, nil)
+		}
 		if !api.DatasetCriblLeader.Filter.IsNull() && !api.DatasetCriblLeader.Filter.IsUnknown() {
 			state.DatasetCriblLeader.Filter = api.DatasetCriblLeader.Filter
 		} else if state.DatasetCriblLeader.Filter.IsNull() || state.DatasetCriblLeader.Filter.IsUnknown() {
@@ -6868,9 +7144,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLeader.BreakerRulesets.IsNull() || state.DatasetCriblLeader.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblLeader.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblLeader.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblLeader.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblLeader.CacheConnectionInfo.IsNull() && !api.DatasetCriblLeader.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblLeader.CacheConnectionInfo = api.DatasetCriblLeader.CacheConnectionInfo
 		} else if state.DatasetCriblLeader.CacheConnectionInfo.IsNull() || state.DatasetCriblLeader.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblLeader.CacheConnectionInfo = types.ObjectNull(DatasetCriblLeaderCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblLeader.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLeader.CacheConnectionInfo = types.ObjectNull(DatasetCriblLeaderCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblLeader.Description.IsNull() && !api.DatasetCriblLeader.Description.IsUnknown() {
@@ -6891,6 +7173,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetCriblLeader.Metadata.IsNull() && !api.DatasetCriblLeader.Metadata.IsUnknown() {
 			state.DatasetCriblLeader.Metadata = api.DatasetCriblLeader.Metadata
 		} else if state.DatasetCriblLeader.Metadata.IsNull() || state.DatasetCriblLeader.Metadata.IsUnknown() {
+			state.DatasetCriblLeader.Metadata = types.ObjectNull(DatasetCriblLeaderMetadataAttrTypes())
+		}
+		if len(state.DatasetCriblLeader.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLeader.Metadata = types.ObjectNull(DatasetCriblLeaderMetadataAttrTypes())
 		}
 		if !api.DatasetCriblLeader.ProviderID.IsNull() && !api.DatasetCriblLeader.ProviderID.IsUnknown() {
@@ -6928,9 +7213,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLocal.BreakerRulesets.IsNull() || state.DatasetCriblLocal.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblLocal.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblLocal.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblLocal.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblLocal.CacheConnectionInfo.IsNull() && !api.DatasetCriblLocal.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblLocal.CacheConnectionInfo = api.DatasetCriblLocal.CacheConnectionInfo
 		} else if state.DatasetCriblLocal.CacheConnectionInfo.IsNull() || state.DatasetCriblLocal.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblLocal.CacheConnectionInfo = types.ObjectNull(DatasetCriblLocalCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblLocal.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLocal.CacheConnectionInfo = types.ObjectNull(DatasetCriblLocalCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblLocal.Description.IsNull() && !api.DatasetCriblLocal.Description.IsUnknown() {
@@ -6956,6 +7247,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetCriblLocal.Metadata.IsNull() && !api.DatasetCriblLocal.Metadata.IsUnknown() {
 			state.DatasetCriblLocal.Metadata = api.DatasetCriblLocal.Metadata
 		} else if state.DatasetCriblLocal.Metadata.IsNull() || state.DatasetCriblLocal.Metadata.IsUnknown() {
+			state.DatasetCriblLocal.Metadata = types.ObjectNull(DatasetCriblLocalMetadataAttrTypes())
+		}
+		if len(state.DatasetCriblLocal.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblLocal.Metadata = types.ObjectNull(DatasetCriblLocalMetadataAttrTypes())
 		}
 		if !api.DatasetCriblLocal.ProviderID.IsNull() && !api.DatasetCriblLocal.ProviderID.IsUnknown() {
@@ -6993,14 +7287,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblMeta.Datasets.IsNull() || state.DatasetCriblMeta.Datasets.IsUnknown() {
 			state.DatasetCriblMeta.Datasets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblMeta.Datasets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblMeta.Datasets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblMeta.BreakerRulesets.IsNull() && !api.DatasetCriblMeta.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblMeta.BreakerRulesets = api.DatasetCriblMeta.BreakerRulesets
 		} else if state.DatasetCriblMeta.BreakerRulesets.IsNull() || state.DatasetCriblMeta.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblMeta.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblMeta.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblMeta.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblMeta.CacheConnectionInfo.IsNull() && !api.DatasetCriblMeta.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblMeta.CacheConnectionInfo = api.DatasetCriblMeta.CacheConnectionInfo
 		} else if state.DatasetCriblMeta.CacheConnectionInfo.IsNull() || state.DatasetCriblMeta.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblMeta.CacheConnectionInfo = types.ObjectNull(DatasetCriblMetaCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblMeta.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblMeta.CacheConnectionInfo = types.ObjectNull(DatasetCriblMetaCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblMeta.Description.IsNull() && !api.DatasetCriblMeta.Description.IsUnknown() {
@@ -7026,6 +7329,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetCriblMeta.Metadata.IsNull() && !api.DatasetCriblMeta.Metadata.IsUnknown() {
 			state.DatasetCriblMeta.Metadata = api.DatasetCriblMeta.Metadata
 		} else if state.DatasetCriblMeta.Metadata.IsNull() || state.DatasetCriblMeta.Metadata.IsUnknown() {
+			state.DatasetCriblMeta.Metadata = types.ObjectNull(DatasetCriblMetaMetadataAttrTypes())
+		}
+		if len(state.DatasetCriblMeta.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblMeta.Metadata = types.ObjectNull(DatasetCriblMetaMetadataAttrTypes())
 		}
 		if !api.DatasetCriblMeta.ProviderID.IsNull() && !api.DatasetCriblMeta.ProviderID.IsUnknown() {
@@ -7063,9 +7369,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblSearch.BreakerRulesets.IsNull() || state.DatasetCriblSearch.BreakerRulesets.IsUnknown() {
 			state.DatasetCriblSearch.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetCriblSearch.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblSearch.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetCriblSearch.CacheConnectionInfo.IsNull() && !api.DatasetCriblSearch.CacheConnectionInfo.IsUnknown() {
 			state.DatasetCriblSearch.CacheConnectionInfo = api.DatasetCriblSearch.CacheConnectionInfo
 		} else if state.DatasetCriblSearch.CacheConnectionInfo.IsNull() || state.DatasetCriblSearch.CacheConnectionInfo.IsUnknown() {
+			state.DatasetCriblSearch.CacheConnectionInfo = types.ObjectNull(DatasetCriblSearchCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetCriblSearch.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetCriblSearch.CacheConnectionInfo = types.ObjectNull(DatasetCriblSearchCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetCriblSearch.Description.IsNull() && !api.DatasetCriblSearch.Description.IsUnknown() {
@@ -7093,6 +7405,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblSearch.Metadata.IsNull() || state.DatasetCriblSearch.Metadata.IsUnknown() {
 			state.DatasetCriblSearch.Metadata = types.ObjectNull(DatasetCriblSearchMetadataAttrTypes())
 		}
+		if len(state.DatasetCriblSearch.Metadata.AttributeTypes(context.Background())) == 0 {
+			state.DatasetCriblSearch.Metadata = types.ObjectNull(DatasetCriblSearchMetadataAttrTypes())
+		}
 		if !api.DatasetCriblSearch.ProviderID.IsNull() && !api.DatasetCriblSearch.ProviderID.IsUnknown() {
 			state.DatasetCriblSearch.ProviderID = api.DatasetCriblSearch.ProviderID
 		} else if state.DatasetCriblSearch.ProviderID.IsNull() || state.DatasetCriblSearch.ProviderID.IsUnknown() {
@@ -7113,6 +7428,82 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblSearch.ViewName.IsNull() || state.DatasetCriblSearch.ViewName.IsUnknown() {
 			state.DatasetCriblSearch.ViewName = types.StringNull()
 		}
+		if !api.DatasetCriblSearch.StaleChannelFlushMs.IsNull() && !api.DatasetCriblSearch.StaleChannelFlushMs.IsUnknown() {
+			state.DatasetCriblSearch.StaleChannelFlushMs = api.DatasetCriblSearch.StaleChannelFlushMs
+		} else if state.DatasetCriblSearch.StaleChannelFlushMs.IsNull() || state.DatasetCriblSearch.StaleChannelFlushMs.IsUnknown() {
+			state.DatasetCriblSearch.StaleChannelFlushMs = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.RetentionPeriod.IsNull() && !api.DatasetCriblSearch.RetentionPeriod.IsUnknown() {
+			state.DatasetCriblSearch.RetentionPeriod = api.DatasetCriblSearch.RetentionPeriod
+		} else if state.DatasetCriblSearch.RetentionPeriod.IsNull() || state.DatasetCriblSearch.RetentionPeriod.IsUnknown() {
+			state.DatasetCriblSearch.RetentionPeriod = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.ExpectedRelativeTimeRange.IsNull() && !api.DatasetCriblSearch.ExpectedRelativeTimeRange.IsUnknown() {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = api.DatasetCriblSearch.ExpectedRelativeTimeRange
+		} else if state.DatasetCriblSearch.ExpectedRelativeTimeRange.IsNull() || state.DatasetCriblSearch.ExpectedRelativeTimeRange.IsUnknown() {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = types.ObjectNull(DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes())
+		}
+		if len(state.DatasetCriblSearch.ExpectedRelativeTimeRange.AttributeTypes(context.Background())) == 0 {
+			state.DatasetCriblSearch.ExpectedRelativeTimeRange = types.ObjectNull(DatasetCriblSearchExpectedRelativeTimeRangeAttrTypes())
+		}
+		if !api.DatasetCriblSearch.Engine.IsNull() && !api.DatasetCriblSearch.Engine.IsUnknown() {
+			state.DatasetCriblSearch.Engine = api.DatasetCriblSearch.Engine
+		} else if state.DatasetCriblSearch.Engine.IsNull() || state.DatasetCriblSearch.Engine.IsUnknown() {
+			state.DatasetCriblSearch.Engine = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.EventStorageSchemaVersion.IsNull() && !api.DatasetCriblSearch.EventStorageSchemaVersion.IsUnknown() {
+			state.DatasetCriblSearch.EventStorageSchemaVersion = api.DatasetCriblSearch.EventStorageSchemaVersion
+		} else if state.DatasetCriblSearch.EventStorageSchemaVersion.IsNull() || state.DatasetCriblSearch.EventStorageSchemaVersion.IsUnknown() {
+			state.DatasetCriblSearch.EventStorageSchemaVersion = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.SkipEventTimeFilter.IsNull() && !api.DatasetCriblSearch.SkipEventTimeFilter.IsUnknown() {
+			state.DatasetCriblSearch.SkipEventTimeFilter = api.DatasetCriblSearch.SkipEventTimeFilter
+		} else if state.DatasetCriblSearch.SkipEventTimeFilter.IsNull() || state.DatasetCriblSearch.SkipEventTimeFilter.IsUnknown() {
+			state.DatasetCriblSearch.SkipEventTimeFilter = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.StorageClasses.IsNull() && !api.DatasetCriblSearch.StorageClasses.IsUnknown() {
+			state.DatasetCriblSearch.StorageClasses = api.DatasetCriblSearch.StorageClasses
+		} else if state.DatasetCriblSearch.StorageClasses.IsNull() || state.DatasetCriblSearch.StorageClasses.IsUnknown() {
+			state.DatasetCriblSearch.StorageClasses = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetCriblSearch.StorageClasses.ElementType(context.Background()); elementType == nil {
+			state.DatasetCriblSearch.StorageClasses = types.ListNull(types.StringType)
+		}
+		if !api.DatasetCriblSearch.PartitioningScheme.IsNull() && !api.DatasetCriblSearch.PartitioningScheme.IsUnknown() {
+			state.DatasetCriblSearch.PartitioningScheme = api.DatasetCriblSearch.PartitioningScheme
+		} else if state.DatasetCriblSearch.PartitioningScheme.IsNull() || state.DatasetCriblSearch.PartitioningScheme.IsUnknown() {
+			state.DatasetCriblSearch.PartitioningScheme = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.AutoDetectRegion.IsNull() && !api.DatasetCriblSearch.AutoDetectRegion.IsUnknown() {
+			state.DatasetCriblSearch.AutoDetectRegion = api.DatasetCriblSearch.AutoDetectRegion
+		} else if state.DatasetCriblSearch.AutoDetectRegion.IsNull() || state.DatasetCriblSearch.AutoDetectRegion.IsUnknown() {
+			state.DatasetCriblSearch.AutoDetectRegion = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.EngineDeleted.IsNull() && !api.DatasetCriblSearch.EngineDeleted.IsUnknown() {
+			state.DatasetCriblSearch.EngineDeleted = api.DatasetCriblSearch.EngineDeleted
+		} else if state.DatasetCriblSearch.EngineDeleted.IsNull() || state.DatasetCriblSearch.EngineDeleted.IsUnknown() {
+			state.DatasetCriblSearch.EngineDeleted = types.BoolNull()
+		}
+		if !api.DatasetCriblSearch.Favorites.IsNull() && !api.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = api.DatasetCriblSearch.Favorites
+		} else if state.DatasetCriblSearch.Favorites.IsNull() || state.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()})
+		}
+		if state.DatasetCriblSearch.Favorites.IsNull() || state.DatasetCriblSearch.Favorites.IsUnknown() {
+			state.DatasetCriblSearch.Favorites = types.ListNull(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()})
+		} else if len(state.DatasetCriblSearch.Favorites.Elements()) == 0 {
+			state.DatasetCriblSearch.Favorites = types.ListValueMust(types.ObjectType{AttrTypes: DatasetCriblSearchFavoritesAttrTypes()}, nil)
+		}
+		if !api.DatasetCriblSearch.FavoriteCount.IsNull() && !api.DatasetCriblSearch.FavoriteCount.IsUnknown() {
+			state.DatasetCriblSearch.FavoriteCount = api.DatasetCriblSearch.FavoriteCount
+		} else if state.DatasetCriblSearch.FavoriteCount.IsNull() || state.DatasetCriblSearch.FavoriteCount.IsUnknown() {
+			state.DatasetCriblSearch.FavoriteCount = types.Int64Null()
+		}
+		if !api.DatasetCriblSearch.IsFavorited.IsNull() && !api.DatasetCriblSearch.IsFavorited.IsUnknown() {
+			state.DatasetCriblSearch.IsFavorited = api.DatasetCriblSearch.IsFavorited
+		} else if state.DatasetCriblSearch.IsFavorited.IsNull() || state.DatasetCriblSearch.IsFavorited.IsUnknown() {
+			state.DatasetCriblSearch.IsFavorited = types.BoolNull()
+		}
 	}
 	if api.DatasetGcs != nil {
 		if state.DatasetGcs == nil {
@@ -7132,6 +7523,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetGcs.ExtraPaths = api.DatasetGcs.ExtraPaths
 		} else if state.DatasetGcs.ExtraPaths.IsNull() || state.DatasetGcs.ExtraPaths.IsUnknown() {
 			state.DatasetGcs.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetGcsExtraPathsAttrTypes()})
+		}
+		if state.DatasetGcs.ExtraPaths.IsNull() || state.DatasetGcs.ExtraPaths.IsUnknown() {
+			state.DatasetGcs.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetGcsExtraPathsAttrTypes()})
+		} else if len(state.DatasetGcs.ExtraPaths.Elements()) == 0 {
+			state.DatasetGcs.ExtraPaths = types.ListValueMust(types.ObjectType{AttrTypes: DatasetGcsExtraPathsAttrTypes()}, nil)
 		}
 		if !api.DatasetGcs.Filter.IsNull() && !api.DatasetGcs.Filter.IsUnknown() {
 			state.DatasetGcs.Filter = api.DatasetGcs.Filter
@@ -7158,14 +7554,23 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetGcs.StorageClasses.IsNull() || state.DatasetGcs.StorageClasses.IsUnknown() {
 			state.DatasetGcs.StorageClasses = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetGcs.StorageClasses.ElementType(context.Background()); elementType == nil {
+			state.DatasetGcs.StorageClasses = types.ListNull(types.StringType)
+		}
 		if !api.DatasetGcs.BreakerRulesets.IsNull() && !api.DatasetGcs.BreakerRulesets.IsUnknown() {
 			state.DatasetGcs.BreakerRulesets = api.DatasetGcs.BreakerRulesets
 		} else if state.DatasetGcs.BreakerRulesets.IsNull() || state.DatasetGcs.BreakerRulesets.IsUnknown() {
 			state.DatasetGcs.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetGcs.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetGcs.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetGcs.CacheConnectionInfo.IsNull() && !api.DatasetGcs.CacheConnectionInfo.IsUnknown() {
 			state.DatasetGcs.CacheConnectionInfo = api.DatasetGcs.CacheConnectionInfo
 		} else if state.DatasetGcs.CacheConnectionInfo.IsNull() || state.DatasetGcs.CacheConnectionInfo.IsUnknown() {
+			state.DatasetGcs.CacheConnectionInfo = types.ObjectNull(DatasetGcsCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetGcs.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetGcs.CacheConnectionInfo = types.ObjectNull(DatasetGcsCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetGcs.Description.IsNull() && !api.DatasetGcs.Description.IsUnknown() {
@@ -7186,6 +7591,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetGcs.Metadata.IsNull() && !api.DatasetGcs.Metadata.IsUnknown() {
 			state.DatasetGcs.Metadata = api.DatasetGcs.Metadata
 		} else if state.DatasetGcs.Metadata.IsNull() || state.DatasetGcs.Metadata.IsUnknown() {
+			state.DatasetGcs.Metadata = types.ObjectNull(DatasetGcsMetadataAttrTypes())
+		}
+		if len(state.DatasetGcs.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetGcs.Metadata = types.ObjectNull(DatasetGcsMetadataAttrTypes())
 		}
 		if !api.DatasetGcs.ProviderID.IsNull() && !api.DatasetGcs.ProviderID.IsUnknown() {
@@ -7238,9 +7646,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetPrometheus.BreakerRulesets.IsNull() || state.DatasetPrometheus.BreakerRulesets.IsUnknown() {
 			state.DatasetPrometheus.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetPrometheus.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetPrometheus.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetPrometheus.CacheConnectionInfo.IsNull() && !api.DatasetPrometheus.CacheConnectionInfo.IsUnknown() {
 			state.DatasetPrometheus.CacheConnectionInfo = api.DatasetPrometheus.CacheConnectionInfo
 		} else if state.DatasetPrometheus.CacheConnectionInfo.IsNull() || state.DatasetPrometheus.CacheConnectionInfo.IsUnknown() {
+			state.DatasetPrometheus.CacheConnectionInfo = types.ObjectNull(DatasetPrometheusCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetPrometheus.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetPrometheus.CacheConnectionInfo = types.ObjectNull(DatasetPrometheusCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetPrometheus.Description.IsNull() && !api.DatasetPrometheus.Description.IsUnknown() {
@@ -7266,6 +7680,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetPrometheus.Metadata.IsNull() && !api.DatasetPrometheus.Metadata.IsUnknown() {
 			state.DatasetPrometheus.Metadata = api.DatasetPrometheus.Metadata
 		} else if state.DatasetPrometheus.Metadata.IsNull() || state.DatasetPrometheus.Metadata.IsUnknown() {
+			state.DatasetPrometheus.Metadata = types.ObjectNull(DatasetPrometheusMetadataAttrTypes())
+		}
+		if len(state.DatasetPrometheus.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetPrometheus.Metadata = types.ObjectNull(DatasetPrometheusMetadataAttrTypes())
 		}
 		if !api.DatasetPrometheus.ProviderID.IsNull() && !api.DatasetPrometheus.ProviderID.IsUnknown() {
@@ -7303,9 +7720,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetS3.BreakerRulesets.IsNull() || state.DatasetS3.BreakerRulesets.IsUnknown() {
 			state.DatasetS3.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetS3.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetS3.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetS3.CacheConnectionInfo.IsNull() && !api.DatasetS3.CacheConnectionInfo.IsUnknown() {
 			state.DatasetS3.CacheConnectionInfo = api.DatasetS3.CacheConnectionInfo
 		} else if state.DatasetS3.CacheConnectionInfo.IsNull() || state.DatasetS3.CacheConnectionInfo.IsUnknown() {
+			state.DatasetS3.CacheConnectionInfo = types.ObjectNull(DatasetS3CacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetS3.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetS3.CacheConnectionInfo = types.ObjectNull(DatasetS3CacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetS3.Description.IsNull() && !api.DatasetS3.Description.IsUnknown() {
@@ -7331,6 +7754,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetS3.Metadata.IsNull() && !api.DatasetS3.Metadata.IsUnknown() {
 			state.DatasetS3.Metadata = api.DatasetS3.Metadata
 		} else if state.DatasetS3.Metadata.IsNull() || state.DatasetS3.Metadata.IsUnknown() {
+			state.DatasetS3.Metadata = types.ObjectNull(DatasetS3MetadataAttrTypes())
+		}
+		if len(state.DatasetS3.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetS3.Metadata = types.ObjectNull(DatasetS3MetadataAttrTypes())
 		}
 		if !api.DatasetS3.ProviderID.IsNull() && !api.DatasetS3.ProviderID.IsUnknown() {
@@ -7368,6 +7794,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetS3.ExtraPaths.IsNull() || state.DatasetS3.ExtraPaths.IsUnknown() {
 			state.DatasetS3.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3ExtraPathsAttrTypes()})
 		}
+		if state.DatasetS3.ExtraPaths.IsNull() || state.DatasetS3.ExtraPaths.IsUnknown() {
+			state.DatasetS3.ExtraPaths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3ExtraPathsAttrTypes()})
+		} else if len(state.DatasetS3.ExtraPaths.Elements()) == 0 {
+			state.DatasetS3.ExtraPaths = types.ListValueMust(types.ObjectType{AttrTypes: DatasetS3ExtraPathsAttrTypes()}, nil)
+		}
 		if !api.DatasetS3.Path.IsNull() && !api.DatasetS3.Path.IsUnknown() {
 			state.DatasetS3.Path = api.DatasetS3.Path
 		} else if state.DatasetS3.Path.IsNull() || state.DatasetS3.Path.IsUnknown() {
@@ -7377,6 +7808,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetS3.Paths = api.DatasetS3.Paths
 		} else if state.DatasetS3.Paths.IsNull() || state.DatasetS3.Paths.IsUnknown() {
 			state.DatasetS3.Paths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()})
+		}
+		if state.DatasetS3.Paths.IsNull() || state.DatasetS3.Paths.IsUnknown() {
+			state.DatasetS3.Paths = types.ListNull(types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()})
+		} else if len(state.DatasetS3.Paths.Elements()) == 0 {
+			state.DatasetS3.Paths = types.ListValueMust(types.ObjectType{AttrTypes: DatasetS3PathsAttrTypes()}, nil)
 		}
 		if !api.DatasetS3.Region.IsNull() && !api.DatasetS3.Region.IsUnknown() {
 			state.DatasetS3.Region = api.DatasetS3.Region
@@ -7391,6 +7827,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetS3.StorageClasses.IsNull() && !api.DatasetS3.StorageClasses.IsUnknown() {
 			state.DatasetS3.StorageClasses = api.DatasetS3.StorageClasses
 		} else if state.DatasetS3.StorageClasses.IsNull() || state.DatasetS3.StorageClasses.IsUnknown() {
+			state.DatasetS3.StorageClasses = types.ListNull(types.StringType)
+		}
+		if elementType := state.DatasetS3.StorageClasses.ElementType(context.Background()); elementType == nil {
 			state.DatasetS3.StorageClasses = types.ListNull(types.StringType)
 		}
 	}
@@ -7438,9 +7877,15 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetSnowflake.BreakerRulesets.IsNull() || state.DatasetSnowflake.BreakerRulesets.IsUnknown() {
 			state.DatasetSnowflake.BreakerRulesets = types.ListNull(types.StringType)
 		}
+		if elementType := state.DatasetSnowflake.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.DatasetSnowflake.BreakerRulesets = types.ListNull(types.StringType)
+		}
 		if !api.DatasetSnowflake.CacheConnectionInfo.IsNull() && !api.DatasetSnowflake.CacheConnectionInfo.IsUnknown() {
 			state.DatasetSnowflake.CacheConnectionInfo = api.DatasetSnowflake.CacheConnectionInfo
 		} else if state.DatasetSnowflake.CacheConnectionInfo.IsNull() || state.DatasetSnowflake.CacheConnectionInfo.IsUnknown() {
+			state.DatasetSnowflake.CacheConnectionInfo = types.ObjectNull(DatasetSnowflakeCacheConnectionInfoAttrTypes())
+		}
+		if len(state.DatasetSnowflake.CacheConnectionInfo.AttributeTypes(context.Background())) == 0 {
 			state.DatasetSnowflake.CacheConnectionInfo = types.ObjectNull(DatasetSnowflakeCacheConnectionInfoAttrTypes())
 		}
 		if !api.DatasetSnowflake.Description.IsNull() && !api.DatasetSnowflake.Description.IsUnknown() {
@@ -7466,6 +7911,9 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		if !api.DatasetSnowflake.Metadata.IsNull() && !api.DatasetSnowflake.Metadata.IsUnknown() {
 			state.DatasetSnowflake.Metadata = api.DatasetSnowflake.Metadata
 		} else if state.DatasetSnowflake.Metadata.IsNull() || state.DatasetSnowflake.Metadata.IsUnknown() {
+			state.DatasetSnowflake.Metadata = types.ObjectNull(DatasetSnowflakeMetadataAttrTypes())
+		}
+		if len(state.DatasetSnowflake.Metadata.AttributeTypes(context.Background())) == 0 {
 			state.DatasetSnowflake.Metadata = types.ObjectNull(DatasetSnowflakeMetadataAttrTypes())
 		}
 		if !api.DatasetSnowflake.ProviderID.IsNull() && !api.DatasetSnowflake.ProviderID.IsUnknown() {

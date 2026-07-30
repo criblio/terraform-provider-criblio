@@ -43,6 +43,7 @@ type PackDestinationModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -70,6 +71,7 @@ type PackDestinationModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -85,6 +87,7 @@ type PackDestinationModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -93,6 +96,7 @@ type PackDestinationModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -102,6 +106,7 @@ type PackDestinationModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationResourceModel struct {
@@ -131,6 +136,7 @@ type PackDestinationResourceModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -158,6 +164,7 @@ type PackDestinationResourceModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -173,6 +180,7 @@ type PackDestinationResourceModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -181,6 +189,7 @@ type PackDestinationResourceModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -190,6 +199,7 @@ type PackDestinationResourceModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationDataSourceModel struct {
@@ -219,6 +229,7 @@ type PackDestinationDataSourceModel struct {
 	OutputKinesis                  *OutputKinesisModel                  `tfsdk:"output_kinesis" json:"OutputKinesis,omitempty"`
 	OutputHoneycomb                *OutputHoneycombModel                `tfsdk:"output_honeycomb" json:"OutputHoneycomb,omitempty"`
 	OutputAzureEventhub            *OutputAzureEventhubModel            `tfsdk:"output_azure_eventhub" json:"OutputAzureEventhub,omitempty"`
+	OutputGoogleBigquery           *OutputGoogleBigqueryModel           `tfsdk:"output_google_bigquery" json:"OutputGoogleBigquery,omitempty"`
 	OutputGoogleChronicle          *OutputGoogleChronicleModel          `tfsdk:"output_google_chronicle" json:"OutputGoogleChronicle,omitempty"`
 	OutputGoogleCloudStorage       *OutputGoogleCloudStorageModel       `tfsdk:"output_google_cloud_storage" json:"OutputGoogleCloudStorage,omitempty"`
 	OutputGoogleCloudLogging       *OutputGoogleCloudLoggingModel       `tfsdk:"output_google_cloud_logging" json:"OutputGoogleCloudLogging,omitempty"`
@@ -246,6 +257,7 @@ type PackDestinationDataSourceModel struct {
 	OutputDatadog                  *OutputDatadogModel                  `tfsdk:"output_datadog" json:"OutputDatadog,omitempty"`
 	OutputGrafanaCloud             *OutputGrafanaCloudModel             `tfsdk:"output_grafana_cloud" json:"OutputGrafanaCloud,omitempty"`
 	OutputLoki                     *OutputLokiModel                     `tfsdk:"output_loki" json:"OutputLoki,omitempty"`
+	OutputAmazonManagedPrometheus  *OutputAmazonManagedPrometheusModel  `tfsdk:"output_amazon_managed_prometheus" json:"OutputAmazonManagedPrometheus,omitempty"`
 	OutputPrometheus               *OutputPrometheusModel               `tfsdk:"output_prometheus" json:"OutputPrometheus,omitempty"`
 	OutputRing                     *OutputRingModel                     `tfsdk:"output_ring" json:"OutputRing,omitempty"`
 	OutputOpenTelemetry            *OutputOpenTelemetryModel            `tfsdk:"output_open_telemetry" json:"OutputOpenTelemetry,omitempty"`
@@ -261,6 +273,7 @@ type PackDestinationDataSourceModel struct {
 	OutputCriblLake                *OutputCriblLakeModel                `tfsdk:"output_cribl_lake" json:"OutputCriblLake,omitempty"`
 	OutputDiskSpool                *OutputDiskSpoolModel                `tfsdk:"output_disk_spool" json:"OutputDiskSpool,omitempty"`
 	OutputClickHouse               *OutputClickHouseModel               `tfsdk:"output_click_house" json:"OutputClickHouse,omitempty"`
+	OutputCustomerMetricsStorage   *OutputCustomerMetricsStorageModel   `tfsdk:"output_customer_metrics_storage" json:"OutputCustomerMetricsStorage,omitempty"`
 	OutputLocalSearchStorage       *OutputLocalSearchStorageModel       `tfsdk:"output_local_search_storage" json:"OutputLocalSearchStorage,omitempty"`
 	OutputXsiam                    *OutputXsiamModel                    `tfsdk:"output_xsiam" json:"OutputXsiam,omitempty"`
 	OutputNetflow                  *OutputNetflowModel                  `tfsdk:"output_netflow" json:"OutputNetflow,omitempty"`
@@ -269,6 +282,7 @@ type PackDestinationDataSourceModel struct {
 	OutputSentinelOneAiSiem        *OutputSentinelOneAiSiemModel        `tfsdk:"output_sentinel_one_ai_siem" json:"OutputSentinelOneAiSiem,omitempty"`
 	OutputChronicle                *OutputChronicleModel                `tfsdk:"output_chronicle" json:"OutputChronicle,omitempty"`
 	OutputDatabricks               *OutputDatabricksModel               `tfsdk:"output_databricks" json:"OutputDatabricks,omitempty"`
+	OutputSnowflakeStreaming       *OutputSnowflakeStreamingModel       `tfsdk:"output_snowflake_streaming" json:"OutputSnowflakeStreaming,omitempty"`
 	OutputMicrosoftFabric          *OutputMicrosoftFabricModel          `tfsdk:"output_microsoft_fabric" json:"OutputMicrosoftFabric,omitempty"`
 	OutputCloudflareR2             *OutputCloudflareR2Model             `tfsdk:"output_cloudflare_r2" json:"OutputCloudflareR2,omitempty"`
 	OutputNutanixObjects           *OutputNutanixObjectsModel           `tfsdk:"output_nutanix_objects" json:"OutputNutanixObjects,omitempty"`
@@ -278,6 +292,7 @@ type PackDestinationDataSourceModel struct {
 	OutputCloudianS3               *OutputCloudianS3Model               `tfsdk:"output_cloudian_s3" json:"OutputCloudianS3,omitempty"`
 	OutputScalityS3                *OutputScalityS3Model                `tfsdk:"output_scality_s3" json:"OutputScalityS3,omitempty"`
 	OutputAlibabaCloudS3           *OutputAlibabaCloudS3Model           `tfsdk:"output_alibaba_cloud_s3" json:"OutputAlibabaCloudS3,omitempty"`
+	OutputIbmCloudS3               *OutputIbmCloudS3Model               `tfsdk:"output_ibm_cloud_s3" json:"OutputIbmCloudS3,omitempty"`
 }
 
 type PackDestinationAPIModel struct {
@@ -327,7 +342,8 @@ func PackDestinationTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := PackDestinationTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -335,7 +351,15 @@ func PackDestinationTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[PackDestinationTerraformNameToAPIName(key)] = value
+			apiKey := PackDestinationTerraformNameToAPIName(key)
+			// Microsoft Fabric SASL uses clientId, while other destination
+			// objects legitimately use the literal API key client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := attributes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -350,6 +374,44 @@ func PackDestinationTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "bootstrap_server":
+		return prefix + "bootstrap_server"
+	case "client_id":
+		return prefix + "client_id"
+	case "data_center":
+		return prefix + "data_center"
+	case "dcr_id":
+		return prefix + "dcrID"
+	case "enable_ack":
+		return prefix + "enableACK"
+	case "endpoint_urlconfiguration":
+		return prefix + "endpointURLConfiguration"
+	case "manual_apikey":
+		return prefix + "manualAPIKey"
+	case "max_file_size_mb":
+		return prefix + "maxFileSizeMB"
+	case "max_payload_size_kb":
+		return prefix + "maxPayloadSizeKB"
+	case "max_record_size_kb":
+		return prefix + "maxRecordSizeKB"
+	case "object_acl":
+		return prefix + "objectACL"
+	case "schema_registry_url":
+		return prefix + "schemaRegistryURL"
+	case "token_ttlminutes":
+		return prefix + "tokenTTLMinutes"
+	case "total_memory_limit_kb":
+		return prefix + "totalMemoryLimitKB"
+	case "use_v2_api":
+		return prefix + "useV2API"
+	case "wiz_connector_id":
+		return prefix + "wiz_connector_id"
+	case "wiz_environment":
+		return prefix + "wiz_environment"
+	case "wiz_sourcetype":
+		return prefix + "wiz_sourcetype"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -445,6 +507,13 @@ func PackDestinationAPIValueToTerraformValue(value any, typ attr.Type) (attr.Val
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := PackDestinationTerraformNameToAPIName(key)
+			// Keep the Microsoft Fabric SASL client ID mapping symmetric with
+			// TerraformValueToJSON. Other destination objects use client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := typed.AttrTypes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -680,6 +749,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputAzureEventhub != nil {
 		value, err := m.OutputAzureEventhub.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputGoogleBigquery != nil {
+		value, err := m.OutputGoogleBigquery.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -930,6 +1008,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputAmazonManagedPrometheus != nil {
+		value, err := m.OutputAmazonManagedPrometheus.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputPrometheus != nil {
 		value, err := m.OutputPrometheus.terraformPayload()
 		if err != nil {
@@ -1065,6 +1152,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.OutputCustomerMetricsStorage != nil {
+		value, err := m.OutputCustomerMetricsStorage.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.OutputLocalSearchStorage != nil {
 		value, err := m.OutputLocalSearchStorage.terraformPayload()
 		if err != nil {
@@ -1130,6 +1226,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputDatabricks != nil {
 		value, err := m.OutputDatabricks.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputSnowflakeStreaming != nil {
+		value, err := m.OutputSnowflakeStreaming.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1211,6 +1316,15 @@ func (m PackDestinationModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.OutputAlibabaCloudS3 != nil {
 		value, err := m.OutputAlibabaCloudS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.OutputIbmCloudS3 != nil {
+		value, err := m.OutputIbmCloudS3.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1361,6 +1475,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputAzureEventhub.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "google_bigquery":
+		m.OutputGoogleBigquery = &OutputGoogleBigqueryModel{}
+		if err := m.OutputGoogleBigquery.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "google_chronicle":
 		m.OutputGoogleChronicle = &OutputGoogleChronicleModel{}
 		if err := m.OutputGoogleChronicle.unmarshalPayload(raw); err != nil {
@@ -1496,6 +1615,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputLoki.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "amazon_managed_prometheus":
+		m.OutputAmazonManagedPrometheus = &OutputAmazonManagedPrometheusModel{}
+		if err := m.OutputAmazonManagedPrometheus.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "prometheus":
 		m.OutputPrometheus = &OutputPrometheusModel{}
 		if err := m.OutputPrometheus.unmarshalPayload(raw); err != nil {
@@ -1571,6 +1695,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 		if err := m.OutputClickHouse.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "customer_metrics_storage":
+		m.OutputCustomerMetricsStorage = &OutputCustomerMetricsStorageModel{}
+		if err := m.OutputCustomerMetricsStorage.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "local_search_storage":
 		m.OutputLocalSearchStorage = &OutputLocalSearchStorageModel{}
 		if err := m.OutputLocalSearchStorage.unmarshalPayload(raw); err != nil {
@@ -1609,6 +1738,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "databricks":
 		m.OutputDatabricks = &OutputDatabricksModel{}
 		if err := m.OutputDatabricks.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "snowflake_streaming":
+		m.OutputSnowflakeStreaming = &OutputSnowflakeStreamingModel{}
+		if err := m.OutputSnowflakeStreaming.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "microsoft_fabric":
@@ -1654,6 +1788,11 @@ func (m *PackDestinationModel) UnmarshalJSON(data []byte) error {
 	case "alibaba_cloud_s3":
 		m.OutputAlibabaCloudS3 = &OutputAlibabaCloudS3Model{}
 		if err := m.OutputAlibabaCloudS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "ibm_cloud_s3":
+		m.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
+		if err := m.OutputIbmCloudS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}

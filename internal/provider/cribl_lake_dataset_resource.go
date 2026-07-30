@@ -287,7 +287,9 @@ func isCriblLakeDatasetImportState(state *CriblLakeDatasetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	return true
 }
 
 func applyCriblLakeDatasetAPIToState(api *CriblLakeDatasetModel, state *CriblLakeDatasetModel, preserveInputs bool, fillMissingInputs bool) {

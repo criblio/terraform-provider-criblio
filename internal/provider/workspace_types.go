@@ -98,7 +98,8 @@ func WorkspaceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := WorkspaceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -106,7 +107,8 @@ func WorkspaceTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[WorkspaceTerraformNameToAPIName(key)] = value
+			apiKey := WorkspaceTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -121,6 +123,10 @@ func WorkspaceTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "leader_fqdn":
+		return prefix + "leaderFQDN"
 	}
 	var output strings.Builder
 	upperNext := false

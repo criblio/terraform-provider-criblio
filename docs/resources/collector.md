@@ -462,11 +462,12 @@ resource "criblio_collector" "my_collector" {
             value = "value1"
           }
         ]
-        authentication           = "basic"
-        capture_headers          = true
-        client_secret_param_name = "client_secret"
-        collect_body             = "{\"filter\":\"status=active\"}"
-        collect_method           = "get"
+        authentication            = "oauth"
+        capture_headers           = true
+        client_secret_param_name  = "client_secret"
+        client_secret_param_value = "test_client_secret"
+        collect_body              = "{\"filter\":\"status=active\"}"
+        collect_method            = "get"
         collect_request_headers = [
           {
             name  = "Accept"
@@ -1365,6 +1366,7 @@ Optional:
 - `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
 - `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
+- `client_secret_param_value` (String, Sensitive) OAuth client secret value added using the configured client secret parameter name.
 
 <a id="nestedatt--input_collector_rest--collector--conf--auth_request_params"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.auth_request_params`
@@ -1674,6 +1676,8 @@ Optional:
 
 - `type` (String)
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
+- `destructive` (Boolean) Delete files after they are collected.
+- `encoding` (String) Character encoding used to parse collected data.
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf`
@@ -1688,6 +1692,11 @@ Optional:
 - `recurse` (Boolean)
 - `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--extractors))
 - `max_batch_size` (Integer)
+- `include_metadata` (Boolean) Include Azure Blob metadata in collected events.
+- `include_tags` (Boolean) Include Azure Blob tags in collected events.
+- `disable_time_filter` (Boolean) Disable Collector event time filtering when a date range is specified.
+- `parquet_chunk_size_mb` (Number) Maximum file size in MB for each Parquet chunk.
+- `parquet_chunk_download_timeout` (Number) Maximum time in seconds allowed to download a Parquet chunk.
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf.extractors`

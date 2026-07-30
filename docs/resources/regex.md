@@ -29,15 +29,15 @@ resource "criblio_regex" "my_regex" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
-- `regex` (String)
+- `id` (String) Unique identifier for the Regex Library entry.
+- `regex` (String) Regular expression pattern.
 
 ### Optional
 
-- `description` (String)
-- `lib` (String)
+- `description` (String) Brief description of the Regex Library entry.
+- `lib` (String) Library classification for the Regex Library entry.
 - `sample_data` (String) Optionally, paste in sample data to match against this regex
-- `tags` (String)
+- `tags` (String) Comma-separated list of tags for the Regex Library entry.
 
 ## Import
 

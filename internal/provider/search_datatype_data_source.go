@@ -203,7 +203,8 @@ func (d *SearchDatatypeDataSource) Schema(_ context.Context, _ datasource.Schema
 						Description: `Default timezone applied when parsed timestamps do not include a timezone offset.`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Timestamp extraction mode. Set to <code>auto</code> to scan for a timestamp automatically using <code>scanDepth</code>.`,
 					},
 					"scan_depth": schema.Int64Attribute{
 						Computed:    true,

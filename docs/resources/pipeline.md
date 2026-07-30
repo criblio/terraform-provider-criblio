@@ -30,21 +30,21 @@ resource "criblio_pipeline" "my_pipeline" {
 
 ### Required
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
+- `conf` (Attributes) Configuration for the Pipeline, including functions and settings. (see [below for nested schema](#nestedatt--conf))
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier for the Pipeline.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
 
 Optional:
 
-- `async_func_timeout` (Integer) Time (in ms) to wait for an async function to complete processing of a data item
-- `output` (String) The output destination for events processed by this Pipeline
-- `description` (String)
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--conf--groups))
+- `async_func_timeout` (Integer) Timeout (in milliseconds) for asynchronous Pipeline functions.
+- `output` (String) The output destination for events processed by this Pipeline.
+- `description` (String) Brief description of the Pipeline.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `functions` (Attributes List) List of Functions to pass data through the Pipeline. (see [below for nested schema](#nestedatt--conf--functions))
+- `groups` (Attributes Map) Named groups of Pipeline functions for organizational display in the UI. (see [below for nested schema](#nestedatt--conf--groups))
 
 <a id="nestedatt--conf--functions"></a>
 ### Nested Schema for `conf.functions`

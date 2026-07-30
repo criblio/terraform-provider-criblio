@@ -11,9 +11,27 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
+
+func TestPackTagsAllowsPartialConfiguration(t *testing.T) {
+	var response resource.SchemaResponse
+	(&PackResource{}).Schema(context.Background(), resource.SchemaRequest{}, &response)
+	if response.Diagnostics.HasError() {
+		t.Fatalf("pack schema diagnostics: %v", response.Diagnostics)
+	}
+
+	tags := response.Schema.Attributes["tags"].(schema.SingleNestedAttribute)
+	for _, name := range []string{"data_type", "domain", "streamtags", "technology"} {
+		attribute := tags.Attributes[name].(schema.ListAttribute)
+		if attribute.Required || !attribute.Optional || !attribute.Computed {
+			t.Errorf("tags.%s must be optional and computed: %#v", name, attribute)
+		}
+	}
+}
 
 func TestTagsAPIMapUsesEmptyArrays(t *testing.T) {
 	tags, err := tagsAPIMap(context.Background(), packRequestBodyTagsObjectFromAPI(&packTagsAPI{}))

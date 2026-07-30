@@ -1343,6 +1343,13 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 											},
 										},
 									},
+									"client_secret_param_value": schema.StringAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Sensitive:   true,
+										Description: `OAuth client secret value added using the configured client secret parameter name.`,
+									},
 								},
 							},
 						},
@@ -2109,7 +2116,49 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
+									"include_metadata": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Include Azure Blob metadata in collected events.`,
+									},
+									"include_tags": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Include Azure Blob tags in collected events.`,
+									},
+									"disable_time_filter": schema.BoolAttribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disable Collector event time filtering when a date range is specified.`,
+									},
+									"parquet_chunk_size_mb": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum file size in MB for each Parquet chunk.`,
+									},
+									"parquet_chunk_download_timeout": schema.Float64Attribute{
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Maximum time in seconds allowed to download a Parquet chunk.`,
+									},
 								},
+							},
+							"destructive": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Delete files after they are collected.`,
+							},
+							"encoding": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Character encoding used to parse collected data.`,
 							},
 						},
 					},
@@ -4317,7 +4366,39 @@ func isCollectorImportState(state *CollectorModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.InputCollectorSplunk != nil {
+		return false
+	}
+	if state.InputCollectorRest != nil {
+		return false
+	}
+	if state.InputCollectorS3 != nil {
+		return false
+	}
+	if state.InputCollectorAzureBlob != nil {
+		return false
+	}
+	if state.InputCollectorCriblLake != nil {
+		return false
+	}
+	if state.InputCollectorDatabase != nil {
+		return false
+	}
+	if state.InputCollectorGCS != nil {
+		return false
+	}
+	if state.InputCollectorHealthCheck != nil {
+		return false
+	}
+	if state.InputCollectorScript != nil {
+		return false
+	}
+	if state.InputCollectorFilesystem != nil {
+		return false
+	}
+	return true
 }
 
 func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preserveInputs bool, fillMissingInputs bool) {
@@ -4388,6 +4469,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorSplunk.RemoveFields.IsNull() || state.InputCollectorSplunk.RemoveFields.IsUnknown() {
 			state.InputCollectorSplunk.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorSplunk.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorSplunk.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorSplunk.ResumeOnBoot.IsNull() && !api.InputCollectorSplunk.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorSplunk.ResumeOnBoot = api.InputCollectorSplunk.ResumeOnBoot
 		} else if state.InputCollectorSplunk.ResumeOnBoot.IsNull() || state.InputCollectorSplunk.ResumeOnBoot.IsUnknown() {
@@ -4408,9 +4492,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorSplunk.Schedule.IsNull() || state.InputCollectorSplunk.Schedule.IsUnknown() {
 			state.InputCollectorSplunk.Schedule = types.ObjectNull(InputCollectorSplunkScheduleAttrTypes())
 		}
+		if len(state.InputCollectorSplunk.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorSplunk.Schedule = types.ObjectNull(InputCollectorSplunkScheduleAttrTypes())
+		}
 		if !api.InputCollectorSplunk.Streamtags.IsNull() && !api.InputCollectorSplunk.Streamtags.IsUnknown() {
 			state.InputCollectorSplunk.Streamtags = api.InputCollectorSplunk.Streamtags
 		} else if state.InputCollectorSplunk.Streamtags.IsNull() || state.InputCollectorSplunk.Streamtags.IsUnknown() {
+			state.InputCollectorSplunk.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorSplunk.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorSplunk.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorSplunk.WorkerAffinity.IsNull() && !api.InputCollectorSplunk.WorkerAffinity.IsUnknown() {
@@ -4423,9 +4513,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorSplunk.Input.IsNull() || state.InputCollectorSplunk.Input.IsUnknown() {
 			state.InputCollectorSplunk.Input = types.ObjectNull(InputCollectorSplunkInputAttrTypes())
 		}
+		if len(state.InputCollectorSplunk.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorSplunk.Input = types.ObjectNull(InputCollectorSplunkInputAttrTypes())
+		}
 		if !api.InputCollectorSplunk.Collector.IsNull() && !api.InputCollectorSplunk.Collector.IsUnknown() {
 			state.InputCollectorSplunk.Collector = api.InputCollectorSplunk.Collector
 		} else if state.InputCollectorSplunk.Collector.IsNull() || state.InputCollectorSplunk.Collector.IsUnknown() {
+			state.InputCollectorSplunk.Collector = types.ObjectNull(InputCollectorSplunkCollectorAttrTypes())
+		}
+		if len(state.InputCollectorSplunk.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorSplunk.Collector = types.ObjectNull(InputCollectorSplunkCollectorAttrTypes())
 		}
 	}
@@ -4453,6 +4549,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorRest.RemoveFields.IsNull() || state.InputCollectorRest.RemoveFields.IsUnknown() {
 			state.InputCollectorRest.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorRest.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorRest.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorRest.ResumeOnBoot.IsNull() && !api.InputCollectorRest.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorRest.ResumeOnBoot = api.InputCollectorRest.ResumeOnBoot
 		} else if state.InputCollectorRest.ResumeOnBoot.IsNull() || state.InputCollectorRest.ResumeOnBoot.IsUnknown() {
@@ -4473,9 +4572,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorRest.Schedule.IsNull() || state.InputCollectorRest.Schedule.IsUnknown() {
 			state.InputCollectorRest.Schedule = types.ObjectNull(InputCollectorRestScheduleAttrTypes())
 		}
+		if len(state.InputCollectorRest.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorRest.Schedule = types.ObjectNull(InputCollectorRestScheduleAttrTypes())
+		}
 		if !api.InputCollectorRest.Streamtags.IsNull() && !api.InputCollectorRest.Streamtags.IsUnknown() {
 			state.InputCollectorRest.Streamtags = api.InputCollectorRest.Streamtags
 		} else if state.InputCollectorRest.Streamtags.IsNull() || state.InputCollectorRest.Streamtags.IsUnknown() {
+			state.InputCollectorRest.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorRest.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorRest.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorRest.WorkerAffinity.IsNull() && !api.InputCollectorRest.WorkerAffinity.IsUnknown() {
@@ -4488,9 +4593,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorRest.Input.IsNull() || state.InputCollectorRest.Input.IsUnknown() {
 			state.InputCollectorRest.Input = types.ObjectNull(InputCollectorRestInputAttrTypes())
 		}
+		if len(state.InputCollectorRest.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorRest.Input = types.ObjectNull(InputCollectorRestInputAttrTypes())
+		}
 		if !api.InputCollectorRest.Collector.IsNull() && !api.InputCollectorRest.Collector.IsUnknown() {
 			state.InputCollectorRest.Collector = api.InputCollectorRest.Collector
 		} else if state.InputCollectorRest.Collector.IsNull() || state.InputCollectorRest.Collector.IsUnknown() {
+			state.InputCollectorRest.Collector = types.ObjectNull(InputCollectorRestCollectorAttrTypes())
+		}
+		if len(state.InputCollectorRest.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorRest.Collector = types.ObjectNull(InputCollectorRestCollectorAttrTypes())
 		}
 	}
@@ -4518,6 +4629,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorS3.RemoveFields.IsNull() || state.InputCollectorS3.RemoveFields.IsUnknown() {
 			state.InputCollectorS3.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorS3.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorS3.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorS3.ResumeOnBoot.IsNull() && !api.InputCollectorS3.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorS3.ResumeOnBoot = api.InputCollectorS3.ResumeOnBoot
 		} else if state.InputCollectorS3.ResumeOnBoot.IsNull() || state.InputCollectorS3.ResumeOnBoot.IsUnknown() {
@@ -4538,9 +4652,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorS3.Schedule.IsNull() || state.InputCollectorS3.Schedule.IsUnknown() {
 			state.InputCollectorS3.Schedule = types.ObjectNull(InputCollectorS3ScheduleAttrTypes())
 		}
+		if len(state.InputCollectorS3.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorS3.Schedule = types.ObjectNull(InputCollectorS3ScheduleAttrTypes())
+		}
 		if !api.InputCollectorS3.Streamtags.IsNull() && !api.InputCollectorS3.Streamtags.IsUnknown() {
 			state.InputCollectorS3.Streamtags = api.InputCollectorS3.Streamtags
 		} else if state.InputCollectorS3.Streamtags.IsNull() || state.InputCollectorS3.Streamtags.IsUnknown() {
+			state.InputCollectorS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorS3.WorkerAffinity.IsNull() && !api.InputCollectorS3.WorkerAffinity.IsUnknown() {
@@ -4553,9 +4673,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorS3.Input.IsNull() || state.InputCollectorS3.Input.IsUnknown() {
 			state.InputCollectorS3.Input = types.ObjectNull(InputCollectorS3InputAttrTypes())
 		}
+		if len(state.InputCollectorS3.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorS3.Input = types.ObjectNull(InputCollectorS3InputAttrTypes())
+		}
 		if !api.InputCollectorS3.Collector.IsNull() && !api.InputCollectorS3.Collector.IsUnknown() {
 			state.InputCollectorS3.Collector = api.InputCollectorS3.Collector
 		} else if state.InputCollectorS3.Collector.IsNull() || state.InputCollectorS3.Collector.IsUnknown() {
+			state.InputCollectorS3.Collector = types.ObjectNull(InputCollectorS3CollectorAttrTypes())
+		}
+		if len(state.InputCollectorS3.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorS3.Collector = types.ObjectNull(InputCollectorS3CollectorAttrTypes())
 		}
 	}
@@ -4583,6 +4709,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorAzureBlob.RemoveFields.IsNull() || state.InputCollectorAzureBlob.RemoveFields.IsUnknown() {
 			state.InputCollectorAzureBlob.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorAzureBlob.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorAzureBlob.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorAzureBlob.ResumeOnBoot.IsNull() && !api.InputCollectorAzureBlob.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorAzureBlob.ResumeOnBoot = api.InputCollectorAzureBlob.ResumeOnBoot
 		} else if state.InputCollectorAzureBlob.ResumeOnBoot.IsNull() || state.InputCollectorAzureBlob.ResumeOnBoot.IsUnknown() {
@@ -4603,9 +4732,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorAzureBlob.Schedule.IsNull() || state.InputCollectorAzureBlob.Schedule.IsUnknown() {
 			state.InputCollectorAzureBlob.Schedule = types.ObjectNull(InputCollectorAzureBlobScheduleAttrTypes())
 		}
+		if len(state.InputCollectorAzureBlob.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorAzureBlob.Schedule = types.ObjectNull(InputCollectorAzureBlobScheduleAttrTypes())
+		}
 		if !api.InputCollectorAzureBlob.Streamtags.IsNull() && !api.InputCollectorAzureBlob.Streamtags.IsUnknown() {
 			state.InputCollectorAzureBlob.Streamtags = api.InputCollectorAzureBlob.Streamtags
 		} else if state.InputCollectorAzureBlob.Streamtags.IsNull() || state.InputCollectorAzureBlob.Streamtags.IsUnknown() {
+			state.InputCollectorAzureBlob.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorAzureBlob.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorAzureBlob.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorAzureBlob.WorkerAffinity.IsNull() && !api.InputCollectorAzureBlob.WorkerAffinity.IsUnknown() {
@@ -4618,9 +4753,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorAzureBlob.Input.IsNull() || state.InputCollectorAzureBlob.Input.IsUnknown() {
 			state.InputCollectorAzureBlob.Input = types.ObjectNull(InputCollectorAzureBlobInputAttrTypes())
 		}
+		if len(state.InputCollectorAzureBlob.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorAzureBlob.Input = types.ObjectNull(InputCollectorAzureBlobInputAttrTypes())
+		}
 		if !api.InputCollectorAzureBlob.Collector.IsNull() && !api.InputCollectorAzureBlob.Collector.IsUnknown() {
 			state.InputCollectorAzureBlob.Collector = api.InputCollectorAzureBlob.Collector
 		} else if state.InputCollectorAzureBlob.Collector.IsNull() || state.InputCollectorAzureBlob.Collector.IsUnknown() {
+			state.InputCollectorAzureBlob.Collector = types.ObjectNull(InputCollectorAzureBlobCollectorAttrTypes())
+		}
+		if len(state.InputCollectorAzureBlob.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorAzureBlob.Collector = types.ObjectNull(InputCollectorAzureBlobCollectorAttrTypes())
 		}
 	}
@@ -4648,6 +4789,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorCriblLake.RemoveFields.IsNull() || state.InputCollectorCriblLake.RemoveFields.IsUnknown() {
 			state.InputCollectorCriblLake.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorCriblLake.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorCriblLake.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorCriblLake.ResumeOnBoot.IsNull() && !api.InputCollectorCriblLake.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorCriblLake.ResumeOnBoot = api.InputCollectorCriblLake.ResumeOnBoot
 		} else if state.InputCollectorCriblLake.ResumeOnBoot.IsNull() || state.InputCollectorCriblLake.ResumeOnBoot.IsUnknown() {
@@ -4668,9 +4812,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorCriblLake.Schedule.IsNull() || state.InputCollectorCriblLake.Schedule.IsUnknown() {
 			state.InputCollectorCriblLake.Schedule = types.ObjectNull(InputCollectorCriblLakeScheduleAttrTypes())
 		}
+		if len(state.InputCollectorCriblLake.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorCriblLake.Schedule = types.ObjectNull(InputCollectorCriblLakeScheduleAttrTypes())
+		}
 		if !api.InputCollectorCriblLake.Streamtags.IsNull() && !api.InputCollectorCriblLake.Streamtags.IsUnknown() {
 			state.InputCollectorCriblLake.Streamtags = api.InputCollectorCriblLake.Streamtags
 		} else if state.InputCollectorCriblLake.Streamtags.IsNull() || state.InputCollectorCriblLake.Streamtags.IsUnknown() {
+			state.InputCollectorCriblLake.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorCriblLake.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorCriblLake.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorCriblLake.WorkerAffinity.IsNull() && !api.InputCollectorCriblLake.WorkerAffinity.IsUnknown() {
@@ -4683,9 +4833,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorCriblLake.Input.IsNull() || state.InputCollectorCriblLake.Input.IsUnknown() {
 			state.InputCollectorCriblLake.Input = types.ObjectNull(InputCollectorCriblLakeInputAttrTypes())
 		}
+		if len(state.InputCollectorCriblLake.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorCriblLake.Input = types.ObjectNull(InputCollectorCriblLakeInputAttrTypes())
+		}
 		if !api.InputCollectorCriblLake.Collector.IsNull() && !api.InputCollectorCriblLake.Collector.IsUnknown() {
 			state.InputCollectorCriblLake.Collector = api.InputCollectorCriblLake.Collector
 		} else if state.InputCollectorCriblLake.Collector.IsNull() || state.InputCollectorCriblLake.Collector.IsUnknown() {
+			state.InputCollectorCriblLake.Collector = types.ObjectNull(InputCollectorCriblLakeCollectorAttrTypes())
+		}
+		if len(state.InputCollectorCriblLake.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorCriblLake.Collector = types.ObjectNull(InputCollectorCriblLakeCollectorAttrTypes())
 		}
 	}
@@ -4713,6 +4869,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorDatabase.RemoveFields.IsNull() || state.InputCollectorDatabase.RemoveFields.IsUnknown() {
 			state.InputCollectorDatabase.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorDatabase.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorDatabase.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorDatabase.ResumeOnBoot.IsNull() && !api.InputCollectorDatabase.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorDatabase.ResumeOnBoot = api.InputCollectorDatabase.ResumeOnBoot
 		} else if state.InputCollectorDatabase.ResumeOnBoot.IsNull() || state.InputCollectorDatabase.ResumeOnBoot.IsUnknown() {
@@ -4733,9 +4892,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorDatabase.Schedule.IsNull() || state.InputCollectorDatabase.Schedule.IsUnknown() {
 			state.InputCollectorDatabase.Schedule = types.ObjectNull(InputCollectorDatabaseScheduleAttrTypes())
 		}
+		if len(state.InputCollectorDatabase.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorDatabase.Schedule = types.ObjectNull(InputCollectorDatabaseScheduleAttrTypes())
+		}
 		if !api.InputCollectorDatabase.Streamtags.IsNull() && !api.InputCollectorDatabase.Streamtags.IsUnknown() {
 			state.InputCollectorDatabase.Streamtags = api.InputCollectorDatabase.Streamtags
 		} else if state.InputCollectorDatabase.Streamtags.IsNull() || state.InputCollectorDatabase.Streamtags.IsUnknown() {
+			state.InputCollectorDatabase.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorDatabase.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorDatabase.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorDatabase.WorkerAffinity.IsNull() && !api.InputCollectorDatabase.WorkerAffinity.IsUnknown() {
@@ -4748,9 +4913,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorDatabase.Input.IsNull() || state.InputCollectorDatabase.Input.IsUnknown() {
 			state.InputCollectorDatabase.Input = types.ObjectNull(InputCollectorDatabaseInputAttrTypes())
 		}
+		if len(state.InputCollectorDatabase.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorDatabase.Input = types.ObjectNull(InputCollectorDatabaseInputAttrTypes())
+		}
 		if !api.InputCollectorDatabase.Collector.IsNull() && !api.InputCollectorDatabase.Collector.IsUnknown() {
 			state.InputCollectorDatabase.Collector = api.InputCollectorDatabase.Collector
 		} else if state.InputCollectorDatabase.Collector.IsNull() || state.InputCollectorDatabase.Collector.IsUnknown() {
+			state.InputCollectorDatabase.Collector = types.ObjectNull(InputCollectorDatabaseCollectorAttrTypes())
+		}
+		if len(state.InputCollectorDatabase.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorDatabase.Collector = types.ObjectNull(InputCollectorDatabaseCollectorAttrTypes())
 		}
 	}
@@ -4778,6 +4949,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorGCS.RemoveFields.IsNull() || state.InputCollectorGCS.RemoveFields.IsUnknown() {
 			state.InputCollectorGCS.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorGCS.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorGCS.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorGCS.ResumeOnBoot.IsNull() && !api.InputCollectorGCS.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorGCS.ResumeOnBoot = api.InputCollectorGCS.ResumeOnBoot
 		} else if state.InputCollectorGCS.ResumeOnBoot.IsNull() || state.InputCollectorGCS.ResumeOnBoot.IsUnknown() {
@@ -4798,9 +4972,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorGCS.Schedule.IsNull() || state.InputCollectorGCS.Schedule.IsUnknown() {
 			state.InputCollectorGCS.Schedule = types.ObjectNull(InputCollectorGCSScheduleAttrTypes())
 		}
+		if len(state.InputCollectorGCS.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorGCS.Schedule = types.ObjectNull(InputCollectorGCSScheduleAttrTypes())
+		}
 		if !api.InputCollectorGCS.Streamtags.IsNull() && !api.InputCollectorGCS.Streamtags.IsUnknown() {
 			state.InputCollectorGCS.Streamtags = api.InputCollectorGCS.Streamtags
 		} else if state.InputCollectorGCS.Streamtags.IsNull() || state.InputCollectorGCS.Streamtags.IsUnknown() {
+			state.InputCollectorGCS.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorGCS.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorGCS.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorGCS.WorkerAffinity.IsNull() && !api.InputCollectorGCS.WorkerAffinity.IsUnknown() {
@@ -4813,9 +4993,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorGCS.Input.IsNull() || state.InputCollectorGCS.Input.IsUnknown() {
 			state.InputCollectorGCS.Input = types.ObjectNull(InputCollectorGCSInputAttrTypes())
 		}
+		if len(state.InputCollectorGCS.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorGCS.Input = types.ObjectNull(InputCollectorGCSInputAttrTypes())
+		}
 		if !api.InputCollectorGCS.Collector.IsNull() && !api.InputCollectorGCS.Collector.IsUnknown() {
 			state.InputCollectorGCS.Collector = api.InputCollectorGCS.Collector
 		} else if state.InputCollectorGCS.Collector.IsNull() || state.InputCollectorGCS.Collector.IsUnknown() {
+			state.InputCollectorGCS.Collector = types.ObjectNull(InputCollectorGCSCollectorAttrTypes())
+		}
+		if len(state.InputCollectorGCS.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorGCS.Collector = types.ObjectNull(InputCollectorGCSCollectorAttrTypes())
 		}
 	}
@@ -4843,6 +5029,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorHealthCheck.RemoveFields.IsNull() || state.InputCollectorHealthCheck.RemoveFields.IsUnknown() {
 			state.InputCollectorHealthCheck.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorHealthCheck.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorHealthCheck.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorHealthCheck.ResumeOnBoot.IsNull() && !api.InputCollectorHealthCheck.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorHealthCheck.ResumeOnBoot = api.InputCollectorHealthCheck.ResumeOnBoot
 		} else if state.InputCollectorHealthCheck.ResumeOnBoot.IsNull() || state.InputCollectorHealthCheck.ResumeOnBoot.IsUnknown() {
@@ -4863,9 +5052,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorHealthCheck.Schedule.IsNull() || state.InputCollectorHealthCheck.Schedule.IsUnknown() {
 			state.InputCollectorHealthCheck.Schedule = types.ObjectNull(InputCollectorHealthCheckScheduleAttrTypes())
 		}
+		if len(state.InputCollectorHealthCheck.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorHealthCheck.Schedule = types.ObjectNull(InputCollectorHealthCheckScheduleAttrTypes())
+		}
 		if !api.InputCollectorHealthCheck.Streamtags.IsNull() && !api.InputCollectorHealthCheck.Streamtags.IsUnknown() {
 			state.InputCollectorHealthCheck.Streamtags = api.InputCollectorHealthCheck.Streamtags
 		} else if state.InputCollectorHealthCheck.Streamtags.IsNull() || state.InputCollectorHealthCheck.Streamtags.IsUnknown() {
+			state.InputCollectorHealthCheck.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorHealthCheck.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorHealthCheck.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorHealthCheck.WorkerAffinity.IsNull() && !api.InputCollectorHealthCheck.WorkerAffinity.IsUnknown() {
@@ -4878,9 +5073,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorHealthCheck.Input.IsNull() || state.InputCollectorHealthCheck.Input.IsUnknown() {
 			state.InputCollectorHealthCheck.Input = types.ObjectNull(InputCollectorHealthCheckInputAttrTypes())
 		}
+		if len(state.InputCollectorHealthCheck.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorHealthCheck.Input = types.ObjectNull(InputCollectorHealthCheckInputAttrTypes())
+		}
 		if !api.InputCollectorHealthCheck.Collector.IsNull() && !api.InputCollectorHealthCheck.Collector.IsUnknown() {
 			state.InputCollectorHealthCheck.Collector = api.InputCollectorHealthCheck.Collector
 		} else if state.InputCollectorHealthCheck.Collector.IsNull() || state.InputCollectorHealthCheck.Collector.IsUnknown() {
+			state.InputCollectorHealthCheck.Collector = types.ObjectNull(InputCollectorHealthCheckCollectorAttrTypes())
+		}
+		if len(state.InputCollectorHealthCheck.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorHealthCheck.Collector = types.ObjectNull(InputCollectorHealthCheckCollectorAttrTypes())
 		}
 	}
@@ -4908,6 +5109,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorScript.RemoveFields.IsNull() || state.InputCollectorScript.RemoveFields.IsUnknown() {
 			state.InputCollectorScript.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorScript.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorScript.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorScript.ResumeOnBoot.IsNull() && !api.InputCollectorScript.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorScript.ResumeOnBoot = api.InputCollectorScript.ResumeOnBoot
 		} else if state.InputCollectorScript.ResumeOnBoot.IsNull() || state.InputCollectorScript.ResumeOnBoot.IsUnknown() {
@@ -4928,9 +5132,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorScript.Schedule.IsNull() || state.InputCollectorScript.Schedule.IsUnknown() {
 			state.InputCollectorScript.Schedule = types.ObjectNull(InputCollectorScriptScheduleAttrTypes())
 		}
+		if len(state.InputCollectorScript.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorScript.Schedule = types.ObjectNull(InputCollectorScriptScheduleAttrTypes())
+		}
 		if !api.InputCollectorScript.Streamtags.IsNull() && !api.InputCollectorScript.Streamtags.IsUnknown() {
 			state.InputCollectorScript.Streamtags = api.InputCollectorScript.Streamtags
 		} else if state.InputCollectorScript.Streamtags.IsNull() || state.InputCollectorScript.Streamtags.IsUnknown() {
+			state.InputCollectorScript.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorScript.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorScript.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorScript.WorkerAffinity.IsNull() && !api.InputCollectorScript.WorkerAffinity.IsUnknown() {
@@ -4943,9 +5153,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorScript.Input.IsNull() || state.InputCollectorScript.Input.IsUnknown() {
 			state.InputCollectorScript.Input = types.ObjectNull(InputCollectorScriptInputAttrTypes())
 		}
+		if len(state.InputCollectorScript.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorScript.Input = types.ObjectNull(InputCollectorScriptInputAttrTypes())
+		}
 		if !api.InputCollectorScript.Collector.IsNull() && !api.InputCollectorScript.Collector.IsUnknown() {
 			state.InputCollectorScript.Collector = api.InputCollectorScript.Collector
 		} else if state.InputCollectorScript.Collector.IsNull() || state.InputCollectorScript.Collector.IsUnknown() {
+			state.InputCollectorScript.Collector = types.ObjectNull(InputCollectorScriptCollectorAttrTypes())
+		}
+		if len(state.InputCollectorScript.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorScript.Collector = types.ObjectNull(InputCollectorScriptCollectorAttrTypes())
 		}
 	}
@@ -4973,6 +5189,9 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorFilesystem.RemoveFields.IsNull() || state.InputCollectorFilesystem.RemoveFields.IsUnknown() {
 			state.InputCollectorFilesystem.RemoveFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.InputCollectorFilesystem.RemoveFields.ElementType(context.Background()); elementType == nil {
+			state.InputCollectorFilesystem.RemoveFields = types.ListNull(types.StringType)
+		}
 		if !api.InputCollectorFilesystem.ResumeOnBoot.IsNull() && !api.InputCollectorFilesystem.ResumeOnBoot.IsUnknown() {
 			state.InputCollectorFilesystem.ResumeOnBoot = api.InputCollectorFilesystem.ResumeOnBoot
 		} else if state.InputCollectorFilesystem.ResumeOnBoot.IsNull() || state.InputCollectorFilesystem.ResumeOnBoot.IsUnknown() {
@@ -4993,9 +5212,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorFilesystem.Schedule.IsNull() || state.InputCollectorFilesystem.Schedule.IsUnknown() {
 			state.InputCollectorFilesystem.Schedule = types.ObjectNull(InputCollectorFilesystemScheduleAttrTypes())
 		}
+		if len(state.InputCollectorFilesystem.Schedule.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorFilesystem.Schedule = types.ObjectNull(InputCollectorFilesystemScheduleAttrTypes())
+		}
 		if !api.InputCollectorFilesystem.Streamtags.IsNull() && !api.InputCollectorFilesystem.Streamtags.IsUnknown() {
 			state.InputCollectorFilesystem.Streamtags = api.InputCollectorFilesystem.Streamtags
 		} else if state.InputCollectorFilesystem.Streamtags.IsNull() || state.InputCollectorFilesystem.Streamtags.IsUnknown() {
+			state.InputCollectorFilesystem.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.InputCollectorFilesystem.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.InputCollectorFilesystem.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.InputCollectorFilesystem.WorkerAffinity.IsNull() && !api.InputCollectorFilesystem.WorkerAffinity.IsUnknown() {
@@ -5008,9 +5233,15 @@ func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preser
 		} else if state.InputCollectorFilesystem.Input.IsNull() || state.InputCollectorFilesystem.Input.IsUnknown() {
 			state.InputCollectorFilesystem.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
 		}
+		if len(state.InputCollectorFilesystem.Input.AttributeTypes(context.Background())) == 0 {
+			state.InputCollectorFilesystem.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
+		}
 		if !api.InputCollectorFilesystem.Collector.IsNull() && !api.InputCollectorFilesystem.Collector.IsUnknown() {
 			state.InputCollectorFilesystem.Collector = api.InputCollectorFilesystem.Collector
 		} else if state.InputCollectorFilesystem.Collector.IsNull() || state.InputCollectorFilesystem.Collector.IsUnknown() {
+			state.InputCollectorFilesystem.Collector = types.ObjectNull(InputCollectorFilesystemCollectorAttrTypes())
+		}
+		if len(state.InputCollectorFilesystem.Collector.AttributeTypes(context.Background())) == 0 {
 			state.InputCollectorFilesystem.Collector = types.ObjectNull(InputCollectorFilesystemCollectorAttrTypes())
 		}
 	}

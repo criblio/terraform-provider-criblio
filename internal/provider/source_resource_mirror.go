@@ -202,6 +202,28 @@ func syncPackSourceLegacyItems(api *PackSourceModel, state *PackSourceModel) {
 	}
 }
 
+// syncSourceLikeActiveInput clears pointer-shaped null oneOf variants that the
+// framework can decode as non-nil zero-value structs. Leaving those structs in
+// state exposes untyped zero attr.Values and causes framework conversion errors.
+func syncSourceLikeActiveInput[T any](api, state *T) {
+	if api == nil || state == nil {
+		return
+	}
+	apiValue := reflect.ValueOf(api).Elem()
+	stateValue := reflect.ValueOf(state).Elem()
+	for i := 0; i < apiValue.NumField(); i++ {
+		fieldInfo := apiValue.Type().Field(i)
+		if !isSourceInputField(fieldInfo.Name) {
+			continue
+		}
+		apiField := apiValue.Field(i)
+		stateField := stateValue.Field(i)
+		if apiField.Kind() == reflect.Pointer && apiField.IsNil() && stateField.CanSet() {
+			stateField.Set(reflect.Zero(stateField.Type()))
+		}
+	}
+}
+
 func sourceLegacyItemsFromModel(model SourceModel) types.List {
 	raw, err := legacySourcePayloadMap(model)
 	if err != nil {

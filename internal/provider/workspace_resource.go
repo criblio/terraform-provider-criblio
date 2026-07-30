@@ -233,7 +233,18 @@ func isWorkspaceImportState(state *WorkspaceModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Alias.IsNull() && !state.Alias.IsUnknown() {
+		return false
+	}
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyWorkspaceAPIToState(api *WorkspaceModel, state *WorkspaceModel, preserveInputs bool, fillMissingInputs bool) {

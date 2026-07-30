@@ -50,9 +50,10 @@ func (r *LookupFileResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Description: `File content.`,
 			},
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the Lookup.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -64,23 +65,26 @@ func (r *LookupFileResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
 			"mode": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
 			"pending_task": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Details of the pending background task for this Lookup, if one is in progress.`,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Required:    false,
@@ -92,26 +96,27 @@ func (r *LookupFileResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required:    false,
 						Optional:    false,
 						Computed:    true,
-						Description: `Task type`,
+						Description: `Type of the pending task.`,
 					},
 					"error": schema.StringAttribute{
 						Required:    false,
 						Optional:    false,
 						Computed:    true,
-						Description: `Error message if task has failed`,
+						Description: `Error message if the task has failed.`,
 					},
 				},
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Comma-separated list of tags for categorizing the Lookup.`,
 			},
 			"version": schema.StringAttribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Unique string generated for each modification of this lookup`,
+				Description: `Unique string generated for each modification of the Lookup.`,
 			},
 		},
 	}
@@ -249,7 +254,21 @@ func isLookupFileImportState(state *LookupFileModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Content.IsNull() && !state.Content.IsUnknown() {
+		return false
+	}
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Mode.IsNull() && !state.Mode.IsUnknown() {
+		return false
+	}
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyLookupFileAPIToState(api *LookupFileModel, state *LookupFileModel, preserveInputs bool, fillMissingInputs bool) {

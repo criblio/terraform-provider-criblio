@@ -314,6 +314,9 @@ func populateGeneratedModel(model reflect.Value, values map[string]json.RawMessa
 		}
 		jsonName := model.Type().Field(i).Tag.Get("json")
 		jsonName = strings.Split(jsonName, ",")[0]
+		if jsonName == "" {
+			jsonName = lowerCamelName(model.Type().Field(i).Tag.Get("tfsdk"))
+		}
 		if jsonName == "" || jsonName == "-" {
 			continue
 		}
@@ -326,6 +329,21 @@ func populateGeneratedModel(model reflect.Value, values map[string]json.RawMessa
 		}
 	}
 	return nil
+}
+
+func lowerCamelName(name string) string {
+	parts := strings.Split(name, "_")
+	if len(parts) == 0 {
+		return ""
+	}
+	result := parts[0]
+	for _, part := range parts[1:] {
+		if part == "" {
+			continue
+		}
+		result += strings.ToUpper(part[:1]) + part[1:]
+	}
+	return result
 }
 
 func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {

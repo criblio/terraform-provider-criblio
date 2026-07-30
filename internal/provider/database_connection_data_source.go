@@ -36,52 +36,220 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 		MarkdownDescription: "DatabaseConnection Data Source",
 		Attributes: map[string]schema.Attribute{
 			"auth_type": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Authentication method for the Database Connection. Determines how credentials are provided.`,
 			},
 			"config_obj": schema.StringAttribute{
-				Computed:  true,
-				Sensitive: true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: `JSON configuration object for advanced SQL Server connection settings.`,
 			},
 			"connection_string": schema.StringAttribute{
-				Computed:  true,
-				Sensitive: true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: `Database connection string with embedded credentials or server information.`,
 			},
-			"connection_timeout": schema.Float64Attribute{
-				Computed: true,
+			"connection_timeout": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
 			},
 			"creds_secrets": schema.StringAttribute{
-				Computed:  true,
-				Sensitive: true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
 			},
 			"database_type": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Type of database engine for the connection.`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Database Connection.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Database Connection.`,
+			},
+			"items": schema.ListNestedAttribute{
+				Computed:    true,
+				Description: `Database Connections returned in the response envelope.`,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"auth_type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Authentication method for the Database Connection. Determines how credentials are provided.`,
+						},
+						"config_obj": schema.StringAttribute{
+							Computed:    true,
+							Sensitive:   true,
+							Description: `JSON configuration object for advanced SQL Server connection settings.`,
+						},
+						"connection_string": schema.StringAttribute{
+							Computed:    true,
+							Sensitive:   true,
+							Description: `Database connection string with embedded credentials or server information.`,
+						},
+						"connection_timeout": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
+						},
+						"creds_secrets": schema.StringAttribute{
+							Computed:    true,
+							Sensitive:   true,
+							Description: `Name of the stored credentials secret containing username and password. Used with Oracle connections.`,
+						},
+						"database_type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Type of database engine for the connection.`,
+						},
+						"description": schema.StringAttribute{
+							Computed:    true,
+							Description: `Brief description of the Database Connection.`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique identifier for the Database Connection.`,
+						},
+						"password": schema.StringAttribute{
+							Computed:    true,
+							Sensitive:   true,
+							Description: `Database password for authentication. Used with Oracle connections.`,
+						},
+						"request_timeout": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+						},
+						"tags": schema.StringAttribute{
+							Computed:    true,
+							Description: `Comma-separated list of tags for categorizing and filtering Database Connections.`,
+						},
+						"text_secret": schema.StringAttribute{
+							Computed:    true,
+							Sensitive:   true,
+							Description: `Name of the stored text secret containing the connection string.`,
+						},
+						"tls": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ca_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Path to the Certificate Authority (CA) certificate file in PEM format.`,
+								},
+								"cert_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Path to the client certificate file in PEM format.`,
+								},
+								"certificate_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of a certificate stored in Cribl.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, TLS is disabled for the connection.`,
+								},
+								"max_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum TLS version to allow for the connection.`,
+								},
+								"min_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Minimum TLS version to allow for the connection.`,
+								},
+								"passphrase": schema.StringAttribute{
+									Computed:    true,
+									Description: `Passphrase for the private key.`,
+								},
+								"priv_key_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Path to the private key file in PEM format.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, reject connections to servers with unverified TLS certificates.`,
+								},
+								"servername": schema.StringAttribute{
+									Computed:    true,
+									Description: `Server name for TLS Server Name Indication (SNI) extension.`,
+								},
+							},
+						},
+						"user": schema.StringAttribute{
+							Computed:    true,
+							Description: `Database username for authentication. Used with Oracle connections.`,
+						},
+					},
+				},
 			},
 			"password": schema.StringAttribute{
-				Computed:  true,
-				Sensitive: true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: `Database password for authentication. Used with Oracle connections.`,
 			},
-			"request_timeout": schema.Float64Attribute{
-				Computed: true,
+			"request_timeout": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Comma-separated list of tags for categorizing and filtering Database Connections.`,
 			},
 			"text_secret": schema.StringAttribute{
-				Computed:  true,
-				Sensitive: true,
+				Computed:    true,
+				Sensitive:   true,
+				Description: `Name of the stored text secret containing the connection string.`,
+			},
+			"tls": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"ca_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Path to the Certificate Authority (CA) certificate file in PEM format.`,
+					},
+					"cert_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Path to the client certificate file in PEM format.`,
+					},
+					"certificate_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of a certificate stored in Cribl.`,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, TLS is disabled for the connection.`,
+					},
+					"max_version": schema.StringAttribute{
+						Computed:    true,
+						Description: `Maximum TLS version to allow for the connection.`,
+					},
+					"min_version": schema.StringAttribute{
+						Computed:    true,
+						Description: `Minimum TLS version to allow for the connection.`,
+					},
+					"passphrase": schema.StringAttribute{
+						Computed:    true,
+						Description: `Passphrase for the private key.`,
+					},
+					"priv_key_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Path to the private key file in PEM format.`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, reject connections to servers with unverified TLS certificates.`,
+					},
+					"servername": schema.StringAttribute{
+						Computed:    true,
+						Description: `Server name for TLS Server Name Indication (SNI) extension.`,
+					},
+				},
 			},
 			"user": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Database username for authentication. Used with Oracle connections.`,
 			},
 		},
 	}

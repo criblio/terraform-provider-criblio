@@ -25,14 +25,14 @@ resource "criblio_grok" "my_grok" {
 
 ### Required
 
-- `content` (String)
+- `content` (String) Grok pattern definitions in the file.
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier for the Grok file.
 
 ### Read-Only
 
-- `size` (Number)
-- `tags` (String)
+- `size` (Integer) File size in bytes.
+- `tags` (String) Tags for filtering and grouping Grok files.
 
 ## Import
 

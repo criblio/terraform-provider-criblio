@@ -29,12 +29,12 @@ resource "criblio_commit" "my_commit" {
 
 ### Required
 
-- `message` (String)
+- `message` (String) Commit message to use for the new Git commit.
 
 ### Optional
 
-- `effective` (Boolean)
-- `files` (List of String)
+- `effective` (Boolean) If <code>true</code>, apply the commit to the group's effective configuration. Requires a group context.
+- `files` (List of String) Array of file paths to include in the commit, relative to the configuration root. If omitted, all pending changes are committed.
 - `group` (String) Worker Group to commit changes for.
 
 ## Import

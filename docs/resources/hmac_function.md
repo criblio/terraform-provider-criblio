@@ -32,16 +32,16 @@ resource "criblio_hmac_function" "my_hmac_function" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `header_expression` (String)
-- `header_name` (String)
-- `id` (String)
-- `lib` (String)
-- `string_builders` (List of String)
+- `header_expression` (String) JavaScript expression evaluated to produce the HMAC signature header value. References the <code>signatureString</code> variable constructed from <code>stringBuilders</code>.
+- `header_name` (String) Name of the HTTP header that will contain the HMAC signature value.
+- `id` (String) Unique identifier for the HMAC Function.
+- `lib` (String) Library that contains the HMAC Function.
+- `string_builders` (List of String) List of JavaScript expressions evaluated and concatenated to form the HMAC signature string. Each expression can access <code>method</code>, <code>urlObj</code>, <code>headers</code>, and <code>body</code> variables.
 
 ### Optional
 
-- `description` (String)
-- `string_delim` (String)
+- `description` (String) Brief description of the HMAC Function.
+- `string_delim` (String) Delimiter used to join the HMAC signature strings before evaluation. Accepts any JavaScript expression. Leave empty to join without a separator.
 
 ## Import
 

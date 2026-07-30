@@ -510,7 +510,24 @@ func isNotificationTargetImportState(state *NotificationTargetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.WebhookTarget != nil {
+		return false
+	}
+	if state.PagerDutyTarget != nil {
+		return false
+	}
+	if state.SlackTarget != nil {
+		return false
+	}
+	if state.SnsTarget != nil {
+		return false
+	}
+	if state.SmtpTarget != nil {
+		return false
+	}
+	return true
 }
 
 func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *NotificationTargetModel, preserveInputs bool, fillMissingInputs bool) {
@@ -542,9 +559,12 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.WebhookTarget.Type.IsNull() || state.WebhookTarget.Type.IsUnknown() {
 			state.WebhookTarget.Type = types.StringNull()
 		}
-		if !api.WebhookTarget.SystemFields.IsNull() && !api.WebhookTarget.SystemFields.IsUnknown() {
-			state.WebhookTarget.SystemFields = api.WebhookTarget.SystemFields
-		} else if state.WebhookTarget.SystemFields.IsNull() || state.WebhookTarget.SystemFields.IsUnknown() {
+		if !preserveInputs || (fillMissingInputs && (state.WebhookTarget.SystemFields.IsNull() || state.WebhookTarget.SystemFields.IsUnknown())) {
+			if !api.WebhookTarget.SystemFields.IsNull() && !api.WebhookTarget.SystemFields.IsUnknown() {
+				state.WebhookTarget.SystemFields = api.WebhookTarget.SystemFields
+			}
+		}
+		if elementType := state.WebhookTarget.SystemFields.ElementType(context.Background()); elementType == nil {
 			state.WebhookTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.WebhookTarget.URL.IsNull() && !api.WebhookTarget.URL.IsUnknown() {
@@ -597,9 +617,12 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.PagerDutyTarget.Type.IsNull() || state.PagerDutyTarget.Type.IsUnknown() {
 			state.PagerDutyTarget.Type = types.StringNull()
 		}
-		if !api.PagerDutyTarget.SystemFields.IsNull() && !api.PagerDutyTarget.SystemFields.IsUnknown() {
-			state.PagerDutyTarget.SystemFields = api.PagerDutyTarget.SystemFields
-		} else if state.PagerDutyTarget.SystemFields.IsNull() || state.PagerDutyTarget.SystemFields.IsUnknown() {
+		if !preserveInputs || (fillMissingInputs && (state.PagerDutyTarget.SystemFields.IsNull() || state.PagerDutyTarget.SystemFields.IsUnknown())) {
+			if !api.PagerDutyTarget.SystemFields.IsNull() && !api.PagerDutyTarget.SystemFields.IsUnknown() {
+				state.PagerDutyTarget.SystemFields = api.PagerDutyTarget.SystemFields
+			}
+		}
+		if elementType := state.PagerDutyTarget.SystemFields.ElementType(context.Background()); elementType == nil {
 			state.PagerDutyTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.PagerDutyTarget.RoutingKey.IsNull() && !api.PagerDutyTarget.RoutingKey.IsUnknown() {
@@ -642,9 +665,12 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SlackTarget.Type.IsNull() || state.SlackTarget.Type.IsUnknown() {
 			state.SlackTarget.Type = types.StringNull()
 		}
-		if !api.SlackTarget.SystemFields.IsNull() && !api.SlackTarget.SystemFields.IsUnknown() {
-			state.SlackTarget.SystemFields = api.SlackTarget.SystemFields
-		} else if state.SlackTarget.SystemFields.IsNull() || state.SlackTarget.SystemFields.IsUnknown() {
+		if !preserveInputs || (fillMissingInputs && (state.SlackTarget.SystemFields.IsNull() || state.SlackTarget.SystemFields.IsUnknown())) {
+			if !api.SlackTarget.SystemFields.IsNull() && !api.SlackTarget.SystemFields.IsUnknown() {
+				state.SlackTarget.SystemFields = api.SlackTarget.SystemFields
+			}
+		}
+		if elementType := state.SlackTarget.SystemFields.ElementType(context.Background()); elementType == nil {
 			state.SlackTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.SlackTarget.URL.IsNull() && !api.SlackTarget.URL.IsUnknown() {
@@ -667,9 +693,12 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SnsTarget.Type.IsNull() || state.SnsTarget.Type.IsUnknown() {
 			state.SnsTarget.Type = types.StringNull()
 		}
-		if !api.SnsTarget.SystemFields.IsNull() && !api.SnsTarget.SystemFields.IsUnknown() {
-			state.SnsTarget.SystemFields = api.SnsTarget.SystemFields
-		} else if state.SnsTarget.SystemFields.IsNull() || state.SnsTarget.SystemFields.IsUnknown() {
+		if !preserveInputs || (fillMissingInputs && (state.SnsTarget.SystemFields.IsNull() || state.SnsTarget.SystemFields.IsUnknown())) {
+			if !api.SnsTarget.SystemFields.IsNull() && !api.SnsTarget.SystemFields.IsUnknown() {
+				state.SnsTarget.SystemFields = api.SnsTarget.SystemFields
+			}
+		}
+		if elementType := state.SnsTarget.SystemFields.ElementType(context.Background()); elementType == nil {
 			state.SnsTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.SnsTarget.AwsAuthenticationMethod.IsNull() && !api.SnsTarget.AwsAuthenticationMethod.IsUnknown() {
@@ -712,6 +741,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SnsTarget.Allowlist.IsNull() || state.SnsTarget.Allowlist.IsUnknown() {
 			state.SnsTarget.Allowlist = types.ListNull(types.StringType)
 		}
+		if elementType := state.SnsTarget.Allowlist.ElementType(context.Background()); elementType == nil {
+			state.SnsTarget.Allowlist = types.ListNull(types.StringType)
+		}
 		if !api.SnsTarget.DestinationType.IsNull() && !api.SnsTarget.DestinationType.IsUnknown() {
 			state.SnsTarget.DestinationType = api.SnsTarget.DestinationType
 		} else if state.SnsTarget.DestinationType.IsNull() || state.SnsTarget.DestinationType.IsUnknown() {
@@ -752,9 +784,12 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		} else if state.SmtpTarget.Type.IsNull() || state.SmtpTarget.Type.IsUnknown() {
 			state.SmtpTarget.Type = types.StringNull()
 		}
-		if !api.SmtpTarget.SystemFields.IsNull() && !api.SmtpTarget.SystemFields.IsUnknown() {
-			state.SmtpTarget.SystemFields = api.SmtpTarget.SystemFields
-		} else if state.SmtpTarget.SystemFields.IsNull() || state.SmtpTarget.SystemFields.IsUnknown() {
+		if !preserveInputs || (fillMissingInputs && (state.SmtpTarget.SystemFields.IsNull() || state.SmtpTarget.SystemFields.IsUnknown())) {
+			if !api.SmtpTarget.SystemFields.IsNull() && !api.SmtpTarget.SystemFields.IsUnknown() {
+				state.SmtpTarget.SystemFields = api.SmtpTarget.SystemFields
+			}
+		}
+		if elementType := state.SmtpTarget.SystemFields.ElementType(context.Background()); elementType == nil {
 			state.SmtpTarget.SystemFields = types.ListNull(types.StringType)
 		}
 		if !api.SmtpTarget.Host.IsNull() && !api.SmtpTarget.Host.IsUnknown() {
@@ -790,6 +825,9 @@ func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *Noti
 		if !api.SmtpTarget.TLS.IsNull() && !api.SmtpTarget.TLS.IsUnknown() {
 			state.SmtpTarget.TLS = api.SmtpTarget.TLS
 		} else if state.SmtpTarget.TLS.IsNull() || state.SmtpTarget.TLS.IsUnknown() {
+			state.SmtpTarget.TLS = types.ObjectNull(SmtpTargetTLSAttrTypes())
+		}
+		if len(state.SmtpTarget.TLS.AttributeTypes(context.Background())) == 0 {
 			state.SmtpTarget.TLS = types.ObjectNull(SmtpTargetTLSAttrTypes())
 		}
 	}

@@ -475,7 +475,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 				Description: `If <code>true</code>, job results are restricted to the owner.`,
 			},
 			"is_system": schema.BoolAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `If <code>true</code>, the Saved Search is a system-created, system-managed query, such as a scheduled job that generates metadata.`,
 			},
 			"latest": schema.StringAttribute{
 				Computed:    true,
@@ -513,6 +514,10 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If <code>true</code>, the schedule is active and the Dashboard queries run automatically at the specified <code>cronSchedule</code>.`,
+					},
+					"jitter_percent": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Percentage of the scheduling interval to use as a random jitter window. Spreads scheduled search execution times to reduce load spikes. Valid range is 0-50. Set to 0 to disable jitter. If not set, uses the global scheduled search jitter configuration.`,
 					},
 					"keep_last_n": schema.Int64Attribute{
 						Computed:    true,

@@ -28,14 +28,14 @@ resource "criblio_parser_lib_entry" "my_parser_lib_entry" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
-- `type` (String)
+- `id` (String) Unique identifier for the Parser.
+- `type` (String) Parser or formatter type to use
 
 ### Optional
 
-- `description` (String)
-- `lib` (String)
-- `tags` (String) Optionally, add tags that you can use for filtering
+- `description` (String) Brief description of the Parser.
+- `lib` (String) Library that provides the Parser. Use <code>custom</code> for user-defined Parsers.
+- `tags` (String) Optionally, add tags that you can use for filtering.
 
 ## Import
 

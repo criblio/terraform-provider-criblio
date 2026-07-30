@@ -570,7 +570,8 @@ func (d *SearchDashboardsDataSource) Schema(_ context.Context, _ datasource.Sche
 														NestedObject: schema.NestedAttributeObject{
 															Attributes: map[string]schema.Attribute{
 																"id": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `The <code>id</code> of the Notification target.`,
 																},
 															},
 														},
@@ -627,7 +628,8 @@ func (d *SearchDashboardsDataSource) Schema(_ context.Context, _ datasource.Sche
 														NestedObject: schema.NestedAttributeObject{
 															Attributes: map[string]schema.Attribute{
 																"name": schema.StringAttribute{
-																	Computed: true,
+																	Computed:    true,
+																	Description: `Name of the metadata field.`,
 																},
 																"value": schema.StringAttribute{
 																	Computed:    true,

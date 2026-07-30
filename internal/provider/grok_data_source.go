@@ -36,20 +36,24 @@ func (d *GrokDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, r
 		MarkdownDescription: "Grok Data Source",
 		Attributes: map[string]schema.Attribute{
 			"content": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Grok pattern definitions in the file.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Grok file.`,
 			},
-			"size": schema.Float64Attribute{
-				Computed: true,
+			"size": schema.Int64Attribute{
+				Computed:    true,
+				Description: `File size in bytes.`,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Tags for filtering and grouping Grok files.`,
 			},
 		},
 	}

@@ -90,7 +90,8 @@ func ParserLibEntryTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := ParserLibEntryTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -98,7 +99,8 @@ func ParserLibEntryTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[ParserLibEntryTerraformNameToAPIName(key)] = value
+			apiKey := ParserLibEntryTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

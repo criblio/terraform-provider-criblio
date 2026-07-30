@@ -82,9 +82,12 @@ type SourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -156,9 +159,12 @@ type SourceResourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -230,9 +236,12 @@ type SourceDataSourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -307,9 +316,12 @@ func SourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
 		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
 		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_bedrock_s3":             types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
 		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
 		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
 		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_sysdig_hec":             types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
+		"input_upwind_hec":             types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
 		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
 		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
 		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
@@ -362,6 +374,7 @@ type InputCollectionPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -374,6 +387,7 @@ type InputCollectionPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -387,6 +401,7 @@ func InputCollectionPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -474,6 +489,7 @@ type InputKafkaPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -486,6 +502,7 @@ type InputKafkaPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -499,6 +516,7 @@ func InputKafkaPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -831,6 +849,7 @@ type InputMskPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -843,6 +862,7 @@ type InputMskPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -856,6 +876,7 @@ func InputMskPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1095,6 +1116,7 @@ type InputHttpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1107,6 +1129,7 @@ type InputHttpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1120,6 +1143,7 @@ func InputHttpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1268,6 +1292,7 @@ type InputSplunkPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1280,6 +1305,7 @@ type InputSplunkPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1293,6 +1319,7 @@ func InputSplunkPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1421,6 +1448,7 @@ type InputSplunkSearchPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1433,6 +1461,7 @@ type InputSplunkSearchPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1446,6 +1475,7 @@ func InputSplunkSearchPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1582,6 +1612,7 @@ type InputSplunkHecPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1594,6 +1625,7 @@ type InputSplunkHecPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1607,6 +1639,7 @@ func InputSplunkHecPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1767,6 +1800,7 @@ type InputAzureBlobPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1779,6 +1813,7 @@ type InputAzureBlobPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1792,6 +1827,7 @@ func InputAzureBlobPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -1873,6 +1909,7 @@ type InputElasticPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -1885,6 +1922,7 @@ type InputElasticPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -1898,6 +1936,7 @@ func InputElasticPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -2064,6 +2103,7 @@ type InputConfluentCloudPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -2076,6 +2116,7 @@ type InputConfluentCloudPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -2089,6 +2130,7 @@ func InputConfluentCloudPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -2421,6 +2463,7 @@ type InputGrafanaPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -2433,6 +2476,7 @@ type InputGrafanaPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -2446,6 +2490,7 @@ func InputGrafanaPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -2615,6 +2660,7 @@ type InputLokiPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -2627,6 +2673,7 @@ type InputLokiPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -2640,6 +2687,7 @@ func InputLokiPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -2751,6 +2799,7 @@ type InputPrometheusRwPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -2763,6 +2812,7 @@ type InputPrometheusRwPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -2776,6 +2826,7 @@ func InputPrometheusRwPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -2887,6 +2938,7 @@ type InputPrometheusPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -2899,6 +2951,7 @@ type InputPrometheusPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -2912,6 +2965,7 @@ func InputPrometheusPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3013,6 +3067,7 @@ type InputEdgePrometheusPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3025,6 +3080,7 @@ type InputEdgePrometheusPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3038,6 +3094,7 @@ func InputEdgePrometheusPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3205,6 +3262,7 @@ type InputOffice365MgmtPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3217,6 +3275,7 @@ type InputOffice365MgmtPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3230,6 +3289,7 @@ func InputOffice365MgmtPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3358,6 +3418,7 @@ type InputOffice365ServicePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3370,6 +3431,7 @@ type InputOffice365ServicePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3383,6 +3445,7 @@ func InputOffice365ServicePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3511,6 +3574,7 @@ type InputOffice365MsgTracePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3523,6 +3587,7 @@ type InputOffice365MsgTracePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3536,6 +3601,7 @@ func InputOffice365MsgTracePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3661,6 +3727,7 @@ type InputMicrosoftGraphPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3673,6 +3740,7 @@ type InputMicrosoftGraphPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3686,6 +3754,7 @@ func InputMicrosoftGraphPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3811,6 +3880,7 @@ type InputEventhubPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3823,6 +3893,7 @@ type InputEventhubPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -3836,6 +3907,7 @@ func InputEventhubPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -3982,6 +4054,7 @@ type InputEventhubAmqpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -3994,6 +4067,7 @@ type InputEventhubAmqpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4007,6 +4081,7 @@ func InputEventhubAmqpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4204,6 +4279,7 @@ type InputExecPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4216,6 +4292,7 @@ type InputExecPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4229,6 +4306,7 @@ func InputExecPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4296,6 +4374,7 @@ type InputFirehosePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4308,6 +4387,7 @@ type InputFirehosePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4321,6 +4401,7 @@ func InputFirehosePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4432,6 +4513,7 @@ type InputGooglePubsubPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4444,6 +4526,7 @@ type InputGooglePubsubPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4457,6 +4540,7 @@ func InputGooglePubsubPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4524,6 +4608,7 @@ type InputCriblPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4536,6 +4621,7 @@ type InputCriblPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4549,6 +4635,7 @@ func InputCriblPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4616,6 +4703,7 @@ type InputCriblTcpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4628,6 +4716,7 @@ type InputCriblTcpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4641,6 +4730,7 @@ func InputCriblTcpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4772,6 +4862,7 @@ type InputCriblHttpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4784,6 +4875,7 @@ type InputCriblHttpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4797,6 +4889,7 @@ func InputCriblHttpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -4928,6 +5021,7 @@ type InputCriblLakeHttpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -4940,6 +5034,7 @@ type InputCriblLakeHttpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -4953,6 +5048,7 @@ func InputCriblLakeHttpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -5144,6 +5240,7 @@ type InputTcpjsonPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -5156,6 +5253,7 @@ type InputTcpjsonPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -5169,6 +5267,7 @@ func InputTcpjsonPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -5280,6 +5379,7 @@ type InputSystemMetricsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -5292,6 +5392,7 @@ type InputSystemMetricsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -5305,6 +5406,7 @@ func InputSystemMetricsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -5659,6 +5761,7 @@ type InputSystemStatePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -5671,6 +5774,7 @@ type InputSystemStatePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -5684,6 +5788,7 @@ func InputSystemStatePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -5978,6 +6083,7 @@ type InputKubeMetricsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -5990,6 +6096,7 @@ type InputKubeMetricsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6003,6 +6110,7 @@ func InputKubeMetricsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6116,6 +6224,7 @@ type InputKubeLogsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6128,6 +6237,7 @@ type InputKubeLogsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6141,6 +6251,7 @@ func InputKubeLogsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6251,6 +6362,7 @@ type InputKubeEventsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6263,6 +6375,7 @@ type InputKubeEventsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6276,6 +6389,7 @@ func InputKubeEventsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6360,6 +6474,7 @@ type InputWindowsMetricsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6372,6 +6487,7 @@ type InputWindowsMetricsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6385,6 +6501,7 @@ func InputWindowsMetricsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6684,6 +6801,7 @@ type InputCrowdstrikePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6696,6 +6814,7 @@ type InputCrowdstrikePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6709,6 +6828,7 @@ func InputCrowdstrikePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6813,6 +6933,7 @@ type InputDatadogAgentPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6825,6 +6946,7 @@ type InputDatadogAgentPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6838,6 +6960,7 @@ func InputDatadogAgentPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -6883,6 +7006,26 @@ func InputDatadogAgentTLSAttrTypes() map[string]attr.Type {
 		"ca_path":             types.StringType,
 		"min_version":         types.StringType,
 		"max_version":         types.StringType,
+	}
+}
+
+type InputDatadogAgentSamplingRulesModel struct {
+	Service     types.String  `tfsdk:"service" json:"service,omitempty"`
+	Environment types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	Rate        types.Float64 `tfsdk:"rate" json:"rate,omitempty"`
+}
+
+type InputDatadogAgentSamplingRulesAPIModel struct {
+	Service     *string  `json:"service,omitempty"`
+	Environment *string  `json:"environment,omitempty"`
+	Rate        *float64 `json:"rate,omitempty"`
+}
+
+func InputDatadogAgentSamplingRulesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"service":     types.StringType,
+		"environment": types.StringType,
+		"rate":        types.Float64Type,
 	}
 }
 
@@ -6966,6 +7109,7 @@ type InputDatagenPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -6978,6 +7122,7 @@ type InputDatagenPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -6991,6 +7136,7 @@ func InputDatagenPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7075,6 +7221,7 @@ type InputHttpRawPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7087,6 +7234,7 @@ type InputHttpRawPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7100,6 +7248,7 @@ func InputHttpRawPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7248,6 +7397,7 @@ type InputKinesisPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7260,6 +7410,7 @@ type InputKinesisPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7273,6 +7424,7 @@ func InputKinesisPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7340,6 +7492,7 @@ type InputCriblmetricsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7352,6 +7505,7 @@ type InputCriblmetricsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7365,6 +7519,7 @@ func InputCriblmetricsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7432,6 +7587,7 @@ type InputMetricsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7444,6 +7600,7 @@ type InputMetricsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7457,6 +7614,7 @@ func InputMetricsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7568,6 +7726,7 @@ type InputS3PqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7580,6 +7739,7 @@ type InputS3PqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7593,6 +7753,7 @@ func InputS3PqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7697,6 +7858,7 @@ type InputS3InventoryPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7709,6 +7871,7 @@ type InputS3InventoryPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7722,6 +7885,7 @@ func InputS3InventoryPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7826,6 +7990,7 @@ type InputSnmpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7838,6 +8003,7 @@ type InputSnmpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7851,6 +8017,7 @@ func InputSnmpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -7964,6 +8131,7 @@ type InputOpenTelemetryPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -7976,6 +8144,7 @@ type InputOpenTelemetryPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -7989,6 +8158,7 @@ func InputOpenTelemetryPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8155,6 +8325,7 @@ type InputModelDrivenTelemetryPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8167,6 +8338,7 @@ type InputModelDrivenTelemetryPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8180,6 +8352,7 @@ func InputModelDrivenTelemetryPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8291,6 +8464,7 @@ type InputSqsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8303,6 +8477,7 @@ type InputSqsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8316,6 +8491,7 @@ func InputSqsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8383,6 +8559,7 @@ type InputSyslogPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8395,6 +8572,7 @@ type InputSyslogPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8408,6 +8586,7 @@ func InputSyslogPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8519,6 +8698,7 @@ type InputFilePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8531,6 +8711,7 @@ type InputFilePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8544,6 +8725,7 @@ func InputFilePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8611,6 +8793,7 @@ type InputTcpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8623,6 +8806,7 @@ type InputTcpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8636,6 +8820,7 @@ func InputTcpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8767,6 +8952,7 @@ type InputAppscopePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8779,6 +8965,7 @@ type InputAppscopePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8792,6 +8979,7 @@ func InputAppscopePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -8969,6 +9157,7 @@ type InputWefPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -8981,6 +9170,7 @@ type InputWefPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -8994,6 +9184,7 @@ func InputWefPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9198,6 +9389,7 @@ type InputWinEventLogsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9210,6 +9402,7 @@ type InputWinEventLogsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9223,6 +9416,7 @@ func InputWinEventLogsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9290,6 +9484,7 @@ type InputAppleUnifiedLogsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9302,6 +9497,7 @@ type InputAppleUnifiedLogsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9315,6 +9511,7 @@ func InputAppleUnifiedLogsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9382,6 +9579,7 @@ type InputRawUdpPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9394,6 +9592,7 @@ type InputRawUdpPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9407,6 +9606,7 @@ func InputRawUdpPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9474,6 +9674,7 @@ type InputJournalFilesPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9486,6 +9687,7 @@ type InputJournalFilesPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9499,6 +9701,7 @@ func InputJournalFilesPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9583,6 +9786,7 @@ type InputWizPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9595,6 +9799,7 @@ type InputWizPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9608,6 +9813,7 @@ func InputWizPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -9763,6 +9969,7 @@ type InputOpenaiPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -9775,6 +9982,7 @@ type InputOpenaiPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -9788,6 +9996,7 @@ func InputOpenaiPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10001,6 +10210,7 @@ type InputWizWebhookPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10013,6 +10223,7 @@ type InputWizWebhookPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10026,6 +10237,7 @@ func InputWizWebhookPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10174,6 +10386,7 @@ type InputNetflowPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10186,6 +10399,7 @@ type InputNetflowPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10199,6 +10413,7 @@ func InputNetflowPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10266,6 +10481,7 @@ type InputSecurityLakePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10278,6 +10494,7 @@ type InputSecurityLakePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10291,6 +10508,7 @@ func InputSecurityLakePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10349,6 +10567,138 @@ func InputSecurityLakeCheckpointingAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputBedrockS3CriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+}
+
+type InputBedrockS3CriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+}
+
+func InputBedrockS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+	}
+}
+
+type InputBedrockS3ConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputBedrockS3ConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputBedrockS3ConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputBedrockS3PqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputBedrockS3PqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputBedrockS3PqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputBedrockS3PreprocessModel struct {
+	Disabled types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Command  types.String `tfsdk:"command" json:"command,omitempty"`
+	Args     types.List   `tfsdk:"args" json:"args,omitempty"`
+}
+
+type InputBedrockS3PreprocessAPIModel struct {
+	Disabled *bool    `json:"disabled,omitempty"`
+	Command  *string  `json:"command,omitempty"`
+	Args     []string `json:"args,omitempty"`
+}
+
+func InputBedrockS3PreprocessAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled": types.BoolType,
+		"command":  types.StringType,
+		"args":     types.ListType{ElemType: types.StringType},
+	}
+}
+
+type InputBedrockS3MetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputBedrockS3MetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputBedrockS3MetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputBedrockS3CheckpointingModel struct {
+	Enabled types.Bool    `tfsdk:"enabled" json:"enabled,omitempty"`
+	Retries types.Float64 `tfsdk:"retries" json:"retries,omitempty"`
+}
+
+type InputBedrockS3CheckpointingAPIModel struct {
+	Enabled *bool    `json:"enabled,omitempty"`
+	Retries *float64 `json:"retries,omitempty"`
+}
+
+func InputBedrockS3CheckpointingAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled": types.BoolType,
+		"retries": types.Float64Type,
+	}
+}
+
 type InputServicenowTableCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
@@ -10395,6 +10745,7 @@ type InputServicenowTablePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10407,6 +10758,7 @@ type InputServicenowTablePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10420,6 +10772,7 @@ func InputServicenowTablePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10556,6 +10909,7 @@ type InputZscalerHecPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10568,6 +10922,7 @@ type InputZscalerHecPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10581,6 +10936,7 @@ func InputZscalerHecPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10741,6 +11097,7 @@ type InputCloudflareHecPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10753,6 +11110,7 @@ type InputCloudflareHecPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10766,6 +11124,7 @@ func InputCloudflareHecPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -10880,6 +11239,382 @@ func InputCloudflareHecMetadataAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputSysdigHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+}
+
+type InputSysdigHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+}
+
+func InputSysdigHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+	}
+}
+
+type InputSysdigHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputSysdigHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputSysdigHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputSysdigHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputSysdigHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputSysdigHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputSysdigHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputSysdigHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputSysdigHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputSysdigHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputSysdigHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputSysdigHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputSysdigHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputSysdigHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputSysdigHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"ca_path":             types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputSysdigHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputSysdigHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputSysdigHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputUpwindHecCriblSourceProvenanceModel struct {
+	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
+	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
+	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+}
+
+type InputUpwindHecCriblSourceProvenanceAPIModel struct {
+	Origin         *string `json:"origin,omitempty"`
+	DestinationArn *string `json:"destinationArn,omitempty"`
+	SourceArn      *string `json:"sourceArn,omitempty"`
+}
+
+func InputUpwindHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"origin":          types.StringType,
+		"destination_arn": types.StringType,
+		"source_arn":      types.StringType,
+	}
+}
+
+type InputUpwindHecConnectionsModel struct {
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputUpwindHecConnectionsAPIModel struct {
+	Pipeline *string `json:"pipeline,omitempty"`
+	Output   *string `json:"output,omitempty"`
+}
+
+func InputUpwindHecConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"pipeline": types.StringType,
+		"output":   types.StringType,
+	}
+}
+
+type InputUpwindHecPqModel struct {
+	Mode               types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	MaxBufferSizeBytes types.String  `tfsdk:"max_buffer_size_bytes" json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      types.Float64 `tfsdk:"max_buffer_size" json:"maxBufferSize,omitempty"`
+	CommitFrequency    types.Float64 `tfsdk:"commit_frequency" json:"commitFrequency,omitempty"`
+	MaxFileSize        types.String  `tfsdk:"max_file_size" json:"maxFileSize,omitempty"`
+	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
+	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
+	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
+	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
+}
+
+type InputUpwindHecPqAPIModel struct {
+	Mode               *string           `json:"mode,omitempty"`
+	MaxBufferSizeBytes *string           `json:"maxBufferSizeBytes,omitempty"`
+	MaxBufferSize      *float64          `json:"maxBufferSize,omitempty"`
+	CommitFrequency    *float64          `json:"commitFrequency,omitempty"`
+	MaxFileSize        *string           `json:"maxFileSize,omitempty"`
+	MaxSize            *string           `json:"maxSize,omitempty"`
+	Path               *string           `json:"path,omitempty"`
+	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
+	PqControls         map[string]string `json:"pqControls,omitempty"`
+}
+
+func InputUpwindHecPqAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"mode":                  types.StringType,
+		"max_buffer_size_bytes": types.StringType,
+		"max_buffer_size":       types.Float64Type,
+		"commit_frequency":      types.Float64Type,
+		"max_file_size":         types.StringType,
+		"max_size":              types.StringType,
+		"path":                  types.StringType,
+		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
+		"pq_controls":           types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputUpwindHecAuthTokensModel struct {
+	AuthType              types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	TokenSecret           types.String `tfsdk:"token_secret" json:"tokenSecret,omitempty"`
+	Token                 types.String `tfsdk:"token" json:"token,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	Description           types.String `tfsdk:"description" json:"description,omitempty"`
+	AllowedIndexesAtToken types.List   `tfsdk:"allowed_indexes_at_token" json:"allowedIndexesAtToken,omitempty"`
+	Metadata              types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
+}
+
+type InputUpwindHecAuthTokensAPIModel struct {
+	AuthType              *string  `json:"authType,omitempty"`
+	TokenSecret           *string  `json:"tokenSecret,omitempty"`
+	Token                 *string  `json:"token,omitempty"`
+	Enabled               *bool    `json:"enabled,omitempty"`
+	Description           *string  `json:"description,omitempty"`
+	AllowedIndexesAtToken []string `json:"allowedIndexesAtToken,omitempty"`
+	Metadata              any      `json:"metadata,omitempty"`
+}
+
+func InputUpwindHecAuthTokensAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":                types.StringType,
+		"token_secret":             types.StringType,
+		"token":                    types.StringType,
+		"enabled":                  types.BoolType,
+		"description":              types.StringType,
+		"allowed_indexes_at_token": types.ListType{ElemType: types.StringType},
+		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecAuthTokensMetadataAttrTypes()}},
+	}
+}
+
+type InputUpwindHecAuthTokensMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputUpwindHecAuthTokensMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputUpwindHecAuthTokensMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputUpwindHecTLSModel struct {
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	RequestCert        types.Bool   `tfsdk:"request_cert" json:"requestCert,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    types.String `tfsdk:"common_name_regex" json:"commonNameRegex,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+}
+
+type InputUpwindHecTLSAPIModel struct {
+	Disabled           *bool   `json:"disabled,omitempty"`
+	RequestCert        *bool   `json:"requestCert,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	CommonNameRegex    *string `json:"commonNameRegex,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CaPath             *string `json:"caPath,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+}
+
+func InputUpwindHecTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled":            types.BoolType,
+		"request_cert":        types.BoolType,
+		"reject_unauthorized": types.BoolType,
+		"common_name_regex":   types.StringType,
+		"certificate_name":    types.StringType,
+		"priv_key_path":       types.StringType,
+		"passphrase":          types.StringType,
+		"cert_path":           types.StringType,
+		"ca_path":             types.StringType,
+		"min_version":         types.StringType,
+		"max_version":         types.StringType,
+	}
+}
+
+type InputUpwindHecMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputUpwindHecMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputUpwindHecMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
 type InputOpenaiComplianceLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
@@ -10926,6 +11661,7 @@ type InputOpenaiComplianceLogsPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -10938,6 +11674,7 @@ type InputOpenaiComplianceLogsPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -10951,6 +11688,7 @@ func InputOpenaiComplianceLogsPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -11053,6 +11791,7 @@ type InputAnthropicCompliancePqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -11065,6 +11804,7 @@ type InputAnthropicCompliancePqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -11078,51 +11818,278 @@ func InputAnthropicCompliancePqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
 
-type InputAnthropicComplianceContentConfigModel struct {
-	ContentType           types.String `tfsdk:"content_type" json:"contentType,omitempty"`
-	ContentDescription    types.String `tfsdk:"content_description" json:"contentDescription,omitempty"`
+type InputAnthropicComplianceActivitiesModel struct {
 	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
-	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
-	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
-	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
-	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
 	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
 	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
 	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
 	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
 }
 
-type InputAnthropicComplianceContentConfigAPIModel struct {
-	ContentType           *string           `json:"contentType,omitempty"`
-	ContentDescription    *string           `json:"contentDescription,omitempty"`
+type InputAnthropicComplianceActivitiesAPIModel struct {
 	Enabled               *bool             `json:"enabled,omitempty"`
-	StateTracking         *bool             `json:"stateTracking,omitempty"`
-	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
-	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
-	ManageState           map[string]string `json:"manageState,omitempty"`
 	CronSchedule          *string           `json:"cronSchedule,omitempty"`
 	Earliest              *string           `json:"earliest,omitempty"`
 	Latest                *string           `json:"latest,omitempty"`
 	JobTimeout            *string           `json:"jobTimeout,omitempty"`
+	StateTracking         *bool             `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
+	ManageState           map[string]string `json:"manageState,omitempty"`
 }
 
-func InputAnthropicComplianceContentConfigAttrTypes() map[string]attr.Type {
+func InputAnthropicComplianceActivitiesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"content_type":            types.StringType,
-		"content_description":     types.StringType,
 		"enabled":                 types.BoolType,
-		"state_tracking":          types.BoolType,
-		"state_update_expression": types.StringType,
-		"state_merge_expression":  types.StringType,
-		"manage_state":            types.MapType{ElemType: types.StringType},
 		"cron_schedule":           types.StringType,
 		"earliest":                types.StringType,
 		"latest":                  types.StringType,
 		"job_timeout":             types.StringType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicComplianceChatsModel struct {
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
+	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+type InputAnthropicComplianceChatsAPIModel struct {
+	Enabled               *bool             `json:"enabled,omitempty"`
+	CronSchedule          *string           `json:"cronSchedule,omitempty"`
+	Earliest              *string           `json:"earliest,omitempty"`
+	Latest                *string           `json:"latest,omitempty"`
+	JobTimeout            *string           `json:"jobTimeout,omitempty"`
+	StateTracking         *bool             `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
+	ManageState           map[string]string `json:"manageState,omitempty"`
+}
+
+func InputAnthropicComplianceChatsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":                 types.BoolType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"job_timeout":             types.StringType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicComplianceProjectsModel struct {
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
+	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+type InputAnthropicComplianceProjectsAPIModel struct {
+	Enabled               *bool             `json:"enabled,omitempty"`
+	CronSchedule          *string           `json:"cronSchedule,omitempty"`
+	Earliest              *string           `json:"earliest,omitempty"`
+	Latest                *string           `json:"latest,omitempty"`
+	JobTimeout            *string           `json:"jobTimeout,omitempty"`
+	StateTracking         *bool             `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
+	ManageState           map[string]string `json:"manageState,omitempty"`
+}
+
+func InputAnthropicComplianceProjectsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":                 types.BoolType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"job_timeout":             types.StringType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicComplianceChatMessagesModel struct {
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
+	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+type InputAnthropicComplianceChatMessagesAPIModel struct {
+	Enabled               *bool             `json:"enabled,omitempty"`
+	CronSchedule          *string           `json:"cronSchedule,omitempty"`
+	Earliest              *string           `json:"earliest,omitempty"`
+	Latest                *string           `json:"latest,omitempty"`
+	JobTimeout            *string           `json:"jobTimeout,omitempty"`
+	StateTracking         *bool             `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
+	ManageState           map[string]string `json:"manageState,omitempty"`
+}
+
+func InputAnthropicComplianceChatMessagesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":                 types.BoolType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"job_timeout":             types.StringType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicComplianceProjectDetailsModel struct {
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule          types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	Earliest              types.String `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                types.String `tfsdk:"latest" json:"latest,omitempty"`
+	JobTimeout            types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	StateTracking         types.Bool   `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	ManageState           types.Map    `tfsdk:"manage_state" json:"manageState,omitempty"`
+}
+
+type InputAnthropicComplianceProjectDetailsAPIModel struct {
+	Enabled               *bool             `json:"enabled,omitempty"`
+	CronSchedule          *string           `json:"cronSchedule,omitempty"`
+	Earliest              *string           `json:"earliest,omitempty"`
+	Latest                *string           `json:"latest,omitempty"`
+	JobTimeout            *string           `json:"jobTimeout,omitempty"`
+	StateTracking         *bool             `json:"stateTracking,omitempty"`
+	StateUpdateExpression *string           `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string           `json:"stateMergeExpression,omitempty"`
+	ManageState           map[string]string `json:"manageState,omitempty"`
+}
+
+func InputAnthropicComplianceProjectDetailsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":                 types.BoolType,
+		"cron_schedule":           types.StringType,
+		"earliest":                types.StringType,
+		"latest":                  types.StringType,
+		"job_timeout":             types.StringType,
+		"state_tracking":          types.BoolType,
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
+	}
+}
+
+type InputAnthropicComplianceGroupsModel struct {
+	Enabled      types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	JobTimeout   types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+}
+
+type InputAnthropicComplianceGroupsAPIModel struct {
+	Enabled      *bool   `json:"enabled,omitempty"`
+	CronSchedule *string `json:"cronSchedule,omitempty"`
+	JobTimeout   *string `json:"jobTimeout,omitempty"`
+}
+
+func InputAnthropicComplianceGroupsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":       types.BoolType,
+		"cron_schedule": types.StringType,
+		"job_timeout":   types.StringType,
+	}
+}
+
+type InputAnthropicComplianceOrganizationsModel struct {
+	Enabled      types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	JobTimeout   types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+}
+
+type InputAnthropicComplianceOrganizationsAPIModel struct {
+	Enabled      *bool   `json:"enabled,omitempty"`
+	CronSchedule *string `json:"cronSchedule,omitempty"`
+	JobTimeout   *string `json:"jobTimeout,omitempty"`
+}
+
+func InputAnthropicComplianceOrganizationsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":       types.BoolType,
+		"cron_schedule": types.StringType,
+		"job_timeout":   types.StringType,
+	}
+}
+
+type InputAnthropicComplianceOrgUsersModel struct {
+	Enabled      types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	JobTimeout   types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+}
+
+type InputAnthropicComplianceOrgUsersAPIModel struct {
+	Enabled      *bool   `json:"enabled,omitempty"`
+	CronSchedule *string `json:"cronSchedule,omitempty"`
+	JobTimeout   *string `json:"jobTimeout,omitempty"`
+}
+
+func InputAnthropicComplianceOrgUsersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":       types.BoolType,
+		"cron_schedule": types.StringType,
+		"job_timeout":   types.StringType,
+	}
+}
+
+type InputAnthropicComplianceOrgRolesModel struct {
+	Enabled      types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	JobTimeout   types.String `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+}
+
+type InputAnthropicComplianceOrgRolesAPIModel struct {
+	Enabled      *bool   `json:"enabled,omitempty"`
+	CronSchedule *string `json:"cronSchedule,omitempty"`
+	JobTimeout   *string `json:"jobTimeout,omitempty"`
+}
+
+func InputAnthropicComplianceOrgRolesAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":       types.BoolType,
+		"cron_schedule": types.StringType,
+		"job_timeout":   types.StringType,
 	}
 }
 
@@ -11224,6 +12191,7 @@ type InputOktaPqModel struct {
 	MaxSize            types.String  `tfsdk:"max_size" json:"maxSize,omitempty"`
 	Path               types.String  `tfsdk:"path" json:"path,omitempty"`
 	Compress           types.String  `tfsdk:"compress" json:"compress,omitempty"`
+	OnBackpressure     types.String  `tfsdk:"on_backpressure" json:"onBackpressure,omitempty"`
 	PqControls         types.Map     `tfsdk:"pq_controls" json:"pqControls,omitempty"`
 }
 
@@ -11236,6 +12204,7 @@ type InputOktaPqAPIModel struct {
 	MaxSize            *string           `json:"maxSize,omitempty"`
 	Path               *string           `json:"path,omitempty"`
 	Compress           *string           `json:"compress,omitempty"`
+	OnBackpressure     *string           `json:"onBackpressure,omitempty"`
 	PqControls         map[string]string `json:"pqControls,omitempty"`
 }
 
@@ -11249,6 +12218,7 @@ func InputOktaPqAttrTypes() map[string]attr.Type {
 		"max_size":              types.StringType,
 		"path":                  types.StringType,
 		"compress":              types.StringType,
+		"on_backpressure":       types.StringType,
 		"pq_controls":           types.MapType{ElemType: types.StringType},
 	}
 }
@@ -11343,7 +12313,8 @@ func SourceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SourceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -11351,7 +12322,15 @@ func SourceTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SourceTerraformNameToAPIName(key)] = value
+			apiKey := SourceTerraformNameToAPIName(key)
+			// Prometheus search filters use capitalized Name and Values. Other
+			// source metadata and header objects use the ordinary name key.
+			if key == "name" {
+				if _, searchFilter := attributes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -11366,6 +12345,60 @@ func SourceTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "chat_messages":
+		return prefix + "chat_messages"
+	case "cribl_api":
+		return prefix + "criblAPI"
+	case "custom_apiversion":
+		return prefix + "customAPIVersion"
+	case "elastic_api":
+		return prefix + "elasticAPI"
+	case "enable_sqsassume_role":
+		return prefix + "enableSQSAssumeRole"
+	case "hec_api":
+		return prefix + "hecAPI"
+	case "loki_api":
+		return prefix + "lokiAPI"
+	case "max_manifest_size_kb":
+		return prefix + "maxManifestSizeKB"
+	case "name":
+		return prefix + "Name"
+	case "org_roles":
+		return prefix + "org_roles"
+	case "org_users":
+		return prefix + "org_users"
+	case "parquet_chunk_size_mb":
+		return prefix + "parquetChunkSizeMB"
+	case "project_details":
+		return prefix + "project_details"
+	case "prometheus_api":
+		return prefix + "prometheusAPI"
+	case "schema_registry_url":
+		return prefix + "schemaRegistryURL"
+	case "splunk_hec_api":
+		return prefix + "splunkHecAPI"
+	case "sqsassume_role_arn":
+		return prefix + "SQSAssumeRoleArn"
+	case "sqsassume_role_external_id":
+		return prefix + "SQSAssumeRoleExternalId"
+	case "sqsaws_authentication_method":
+		return prefix + "SQSAwsAuthenticationMethod"
+	case "sqsaws_secret":
+		return prefix + "SQSAwsSecret"
+	case "sqsaws_secret_key":
+		return prefix + "SQSAwsSecretKey"
+	case "sqsduration_seconds":
+		return prefix + "SQSDurationSeconds"
+	case "transport_url":
+		return prefix + "transportURL"
+	case "use_custom_oauth_params_or_headers":
+		return prefix + "useCustomOAuthParamsOrHeaders"
+	case "values":
+		return prefix + "Values"
+	case "verify_kplcheck_sums":
+		return prefix + "verifyKPLCheckSums"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -11461,6 +12494,11 @@ func SourceAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := SourceTerraformNameToAPIName(key)
+			if key == "name" {
+				if _, searchFilter := typed.AttrTypes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -12081,6 +13119,15 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputBedrockS3 != nil {
+		value, err := m.InputBedrockS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputServicenowTable != nil {
 		value, err := m.InputServicenowTable.terraformPayload()
 		if err != nil {
@@ -12101,6 +13148,24 @@ func (m SourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputCloudflareHec != nil {
 		value, err := m.InputCloudflareHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSysdigHec != nil {
+		value, err := m.InputSysdigHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputUpwindHec != nil {
+		value, err := m.InputUpwindHec.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -12469,6 +13534,11 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "bedrock_s3":
+		m.InputBedrockS3 = &InputBedrockS3Model{}
+		if err := m.InputBedrockS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "servicenow_table":
 		m.InputServicenowTable = &InputServicenowTableModel{}
 		if err := m.InputServicenowTable.unmarshalPayload(raw); err != nil {
@@ -12482,6 +13552,16 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	case "cloudflare_hec":
 		m.InputCloudflareHec = &InputCloudflareHecModel{}
 		if err := m.InputCloudflareHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sysdig_hec":
+		m.InputSysdigHec = &InputSysdigHecModel{}
+		if err := m.InputSysdigHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "upwind_hec":
+		m.InputUpwindHec = &InputUpwindHecModel{}
+		if err := m.InputUpwindHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "openai_compliance_logs":
@@ -24485,6 +25565,8 @@ type InputMicrosoftGraphModel struct {
 	MaxTaskReschedule      types.Float64 `tfsdk:"max_task_reschedule" json:"maxTaskReschedule,omitempty"`
 	LogLevel               types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
 	RetryRules             types.Object  `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	BreakerRulesets        types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs    types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	Description            types.String  `tfsdk:"description" json:"description,omitempty"`
 	ClientSecret           types.String  `tfsdk:"client_secret" json:"clientSecret,omitempty"`
 	TenantID               types.String  `tfsdk:"tenant_id" json:"tenantId,omitempty"`
@@ -24526,6 +25608,8 @@ func InputMicrosoftGraphModelAttrTypes() map[string]attr.Type {
 		"max_task_reschedule":      types.Float64Type,
 		"log_level":                types.StringType,
 		"retry_rules":              types.ObjectType{AttrTypes: InputMicrosoftGraphRetryRulesAttrTypes()},
+		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":   types.Float64Type,
 		"description":              types.StringType,
 		"client_secret":            types.StringType,
 		"tenant_id":                types.StringType,
@@ -24741,6 +25825,20 @@ func (m InputMicrosoftGraphModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert retry_rules to API value: %v", err)
 		}
 		output["retryRules"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -25062,6 +26160,24 @@ func (m *InputMicrosoftGraphModel) unmarshalPayload(input map[string]any) error 
 		m.RetryRules = value.(types.Object)
 	} else {
 		m.RetryRules = types.ObjectNull(InputMicrosoftGraphRetryRulesAttrTypes())
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -32107,98 +33223,114 @@ func (m *InputWindowsMetricsModel) unmarshalPayload(input map[string]any) error 
 }
 
 type InputCrowdstrikeModel struct {
-	ID                      types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                    types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled                types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline                types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes            types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment             types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled               types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags              types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance   types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections             types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                      types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	QueueName               types.String  `tfsdk:"queue_name" json:"queueName,omitempty"`
-	FileFilter              types.String  `tfsdk:"file_filter" json:"fileFilter,omitempty"`
-	AwsAccountID            types.String  `tfsdk:"aws_account_id" json:"awsAccountId,omitempty"`
-	AwsAuthenticationMethod types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
-	AwsSecretKey            types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
-	Region                  types.String  `tfsdk:"region" json:"region,omitempty"`
-	Endpoint                types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
-	ReuseConnections        types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
-	RejectUnauthorized      types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
-	BreakerRulesets         types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs     types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	MaxMessages             types.Float64 `tfsdk:"max_messages" json:"maxMessages,omitempty"`
-	VisibilityTimeout       types.Float64 `tfsdk:"visibility_timeout" json:"visibilityTimeout,omitempty"`
-	NumReceivers            types.Float64 `tfsdk:"num_receivers" json:"numReceivers,omitempty"`
-	SocketTimeout           types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
-	SkipOnError             types.Bool    `tfsdk:"skip_on_error" json:"skipOnError,omitempty"`
-	IncludeSqsMetadata      types.Bool    `tfsdk:"include_sqs_metadata" json:"includeSqsMetadata,omitempty"`
-	EnableAssumeRole        types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
-	AssumeRoleArn           types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
-	AssumeRoleExternalID    types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
-	DurationSeconds         types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
-	EnableSQSAssumeRole     types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
-	Preprocess              types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
-	Metadata                types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	Checkpointing           types.Object  `tfsdk:"checkpointing" json:"checkpointing,omitempty"`
-	PollTimeout             types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
-	Encoding                types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
-	Description             types.String  `tfsdk:"description" json:"description,omitempty"`
-	AwsAPIKey               types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
-	AwsSecret               types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
-	TagAfterProcessing      types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
-	ProcessedTagKey         types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
-	ProcessedTagValue       types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+	ID                         types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                       types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                   types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                   types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes               types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                  types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                 types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance      types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                         types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	QueueName                  types.String  `tfsdk:"queue_name" json:"queueName,omitempty"`
+	FileFilter                 types.String  `tfsdk:"file_filter" json:"fileFilter,omitempty"`
+	AwsAccountID               types.String  `tfsdk:"aws_account_id" json:"awsAccountId,omitempty"`
+	AwsAuthenticationMethod    types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey               types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                     types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                   types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections           types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized         types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	BreakerRulesets            types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs        types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	MaxMessages                types.Float64 `tfsdk:"max_messages" json:"maxMessages,omitempty"`
+	VisibilityTimeout          types.Float64 `tfsdk:"visibility_timeout" json:"visibilityTimeout,omitempty"`
+	NumReceivers               types.Float64 `tfsdk:"num_receivers" json:"numReceivers,omitempty"`
+	SocketTimeout              types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	SkipOnError                types.Bool    `tfsdk:"skip_on_error" json:"skipOnError,omitempty"`
+	IncludeSqsMetadata         types.Bool    `tfsdk:"include_sqs_metadata" json:"includeSqsMetadata,omitempty"`
+	EnableAssumeRole           types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn              types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID       types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds            types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	EnableSQSAssumeRole        types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
+	SharedCredentials          types.Bool    `tfsdk:"shared_credentials" json:"sharedCredentials,omitempty"`
+	SharedAssumeRoleArn        types.Bool    `tfsdk:"shared_assume_role_arn" json:"sharedAssumeRoleArn,omitempty"`
+	Preprocess                 types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	Metadata                   types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Checkpointing              types.Object  `tfsdk:"checkpointing" json:"checkpointing,omitempty"`
+	PollTimeout                types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
+	Encoding                   types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
+	Description                types.String  `tfsdk:"description" json:"description,omitempty"`
+	AwsAPIKey                  types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                  types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	SQSAssumeRoleArn           types.String  `tfsdk:"sqsassume_role_arn" json:"SQSAssumeRoleArn,omitempty"`
+	SQSAssumeRoleExternalID    types.String  `tfsdk:"sqsassume_role_external_id" json:"SQSAssumeRoleExternalId,omitempty"`
+	SQSDurationSeconds         types.Float64 `tfsdk:"sqsduration_seconds" json:"SQSDurationSeconds,omitempty"`
+	SQSAwsAuthenticationMethod types.String  `tfsdk:"sqsaws_authentication_method" json:"SQSAwsAuthenticationMethod,omitempty"`
+	SQSAwsSecret               types.String  `tfsdk:"sqsaws_secret" json:"SQSAwsSecret,omitempty"`
+	SQSAwsSecretKey            types.String  `tfsdk:"sqsaws_secret_key" json:"SQSAwsSecretKey,omitempty"`
+	TagAfterProcessing         types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
+	ProcessedTagKey            types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
+	ProcessedTagValue          types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
 }
 
 func InputCrowdstrikeModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                        types.StringType,
-		"type":                      types.StringType,
-		"disabled":                  types.BoolType,
-		"pipeline":                  types.StringType,
-		"send_to_routes":            types.BoolType,
-		"environment":               types.StringType,
-		"pq_enabled":                types.BoolType,
-		"streamtags":                types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance":   types.ObjectType{AttrTypes: InputCrowdstrikeCriblSourceProvenanceAttrTypes()},
-		"connections":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()}},
-		"pq":                        types.ObjectType{AttrTypes: InputCrowdstrikePqAttrTypes()},
-		"queue_name":                types.StringType,
-		"file_filter":               types.StringType,
-		"aws_account_id":            types.StringType,
-		"aws_authentication_method": types.StringType,
-		"aws_secret_key":            types.StringType,
-		"region":                    types.StringType,
-		"endpoint":                  types.StringType,
-		"reuse_connections":         types.BoolType,
-		"reject_unauthorized":       types.BoolType,
-		"breaker_rulesets":          types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms":    types.Float64Type,
-		"max_messages":              types.Float64Type,
-		"visibility_timeout":        types.Float64Type,
-		"num_receivers":             types.Float64Type,
-		"socket_timeout":            types.Float64Type,
-		"skip_on_error":             types.BoolType,
-		"include_sqs_metadata":      types.BoolType,
-		"enable_assume_role":        types.BoolType,
-		"assume_role_arn":           types.StringType,
-		"assume_role_external_id":   types.StringType,
-		"duration_seconds":          types.Float64Type,
-		"enable_sqsassume_role":     types.BoolType,
-		"preprocess":                types.ObjectType{AttrTypes: InputCrowdstrikePreprocessAttrTypes()},
-		"metadata":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()}},
-		"checkpointing":             types.ObjectType{AttrTypes: InputCrowdstrikeCheckpointingAttrTypes()},
-		"poll_timeout":              types.Float64Type,
-		"encoding":                  types.StringType,
-		"description":               types.StringType,
-		"aws_api_key":               types.StringType,
-		"aws_secret":                types.StringType,
-		"tag_after_processing":      types.StringType,
-		"processed_tag_key":         types.StringType,
-		"processed_tag_value":       types.StringType,
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputCrowdstrikeCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputCrowdstrikePqAttrTypes()},
+		"queue_name":                   types.StringType,
+		"file_filter":                  types.StringType,
+		"aws_account_id":               types.StringType,
+		"aws_authentication_method":    types.StringType,
+		"aws_secret_key":               types.StringType,
+		"region":                       types.StringType,
+		"endpoint":                     types.StringType,
+		"reuse_connections":            types.BoolType,
+		"reject_unauthorized":          types.BoolType,
+		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":       types.Float64Type,
+		"max_messages":                 types.Float64Type,
+		"visibility_timeout":           types.Float64Type,
+		"num_receivers":                types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"skip_on_error":                types.BoolType,
+		"include_sqs_metadata":         types.BoolType,
+		"enable_assume_role":           types.BoolType,
+		"assume_role_arn":              types.StringType,
+		"assume_role_external_id":      types.StringType,
+		"duration_seconds":             types.Float64Type,
+		"enable_sqsassume_role":        types.BoolType,
+		"shared_credentials":           types.BoolType,
+		"shared_assume_role_arn":       types.BoolType,
+		"preprocess":                   types.ObjectType{AttrTypes: InputCrowdstrikePreprocessAttrTypes()},
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCrowdstrikeMetadataAttrTypes()}},
+		"checkpointing":                types.ObjectType{AttrTypes: InputCrowdstrikeCheckpointingAttrTypes()},
+		"poll_timeout":                 types.Float64Type,
+		"encoding":                     types.StringType,
+		"description":                  types.StringType,
+		"aws_api_key":                  types.StringType,
+		"aws_secret":                   types.StringType,
+		"sqsassume_role_arn":           types.StringType,
+		"sqsassume_role_external_id":   types.StringType,
+		"sqsduration_seconds":          types.Float64Type,
+		"sqsaws_authentication_method": types.StringType,
+		"sqsaws_secret":                types.StringType,
+		"sqsaws_secret_key":            types.StringType,
+		"tag_after_processing":         types.StringType,
+		"processed_tag_key":            types.StringType,
+		"processed_tag_value":          types.StringType,
 	}
 }
 
@@ -32435,6 +33567,20 @@ func (m InputCrowdstrikeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["enableSQSAssumeRole"] = value
 	}
+	if !m.SharedCredentials.IsNull() && !m.SharedCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_credentials to API value: %v", err)
+		}
+		output["sharedCredentials"] = value
+	}
+	if !m.SharedAssumeRoleArn.IsNull() && !m.SharedAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_assume_role_arn to API value: %v", err)
+		}
+		output["sharedAssumeRoleArn"] = value
+	}
 	if !m.Preprocess.IsNull() && !m.Preprocess.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Preprocess)
 		if err != nil {
@@ -32490,6 +33636,48 @@ func (m InputCrowdstrikeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
 		}
 		output["awsSecret"] = value
+	}
+	if !m.SQSAssumeRoleArn.IsNull() && !m.SQSAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_arn to API value: %v", err)
+		}
+		output["SQSAssumeRoleArn"] = value
+	}
+	if !m.SQSAssumeRoleExternalID.IsNull() && !m.SQSAssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_external_id to API value: %v", err)
+		}
+		output["SQSAssumeRoleExternalId"] = value
+	}
+	if !m.SQSDurationSeconds.IsNull() && !m.SQSDurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSDurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsduration_seconds to API value: %v", err)
+		}
+		output["SQSDurationSeconds"] = value
+	}
+	if !m.SQSAwsAuthenticationMethod.IsNull() && !m.SQSAwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_authentication_method to API value: %v", err)
+		}
+		output["SQSAwsAuthenticationMethod"] = value
+	}
+	if !m.SQSAwsSecret.IsNull() && !m.SQSAwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret to API value: %v", err)
+		}
+		output["SQSAwsSecret"] = value
+	}
+	if !m.SQSAwsSecretKey.IsNull() && !m.SQSAwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret_key to API value: %v", err)
+		}
+		output["SQSAwsSecretKey"] = value
 	}
 	if !m.TagAfterProcessing.IsNull() && !m.TagAfterProcessing.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.TagAfterProcessing)
@@ -32813,6 +34001,24 @@ func (m *InputCrowdstrikeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.EnableSQSAssumeRole = types.BoolNull()
 	}
+	if item, ok := input["sharedCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedCredentials from API value: %v", err)
+		}
+		m.SharedCredentials = value.(types.Bool)
+	} else {
+		m.SharedCredentials = types.BoolNull()
+	}
+	if item, ok := input["sharedAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedAssumeRoleArn from API value: %v", err)
+		}
+		m.SharedAssumeRoleArn = value.(types.Bool)
+	} else {
+		m.SharedAssumeRoleArn = types.BoolNull()
+	}
 	if item, ok := input["preprocess"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCrowdstrikePreprocessAttrTypes()})
 		if err != nil {
@@ -32885,6 +34091,60 @@ func (m *InputCrowdstrikeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.AwsSecret = types.StringNull()
 	}
+	if item, ok := input["SQSAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleArn from API value: %v", err)
+		}
+		m.SQSAssumeRoleArn = value.(types.String)
+	} else {
+		m.SQSAssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleExternalId from API value: %v", err)
+		}
+		m.SQSAssumeRoleExternalID = value.(types.String)
+	} else {
+		m.SQSAssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["SQSDurationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert SQSDurationSeconds from API value: %v", err)
+		}
+		m.SQSDurationSeconds = value.(types.Float64)
+	} else {
+		m.SQSDurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["SQSAwsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsAuthenticationMethod from API value: %v", err)
+		}
+		m.SQSAwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.SQSAwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecret from API value: %v", err)
+		}
+		m.SQSAwsSecret = value.(types.String)
+	} else {
+		m.SQSAwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecretKey from API value: %v", err)
+		}
+		m.SQSAwsSecretKey = value.(types.String)
+	} else {
+		m.SQSAwsSecretKey = types.StringNull()
+	}
 	if item, ok := input["tagAfterProcessing"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -32942,6 +34202,8 @@ type InputDatadogAgentModel struct {
 	IpAllowlistRegex      types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
 	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
 	ExtractMetrics        types.Bool    `tfsdk:"extract_metrics" json:"extractMetrics,omitempty"`
+	SamplingRate          types.Float64 `tfsdk:"sampling_rate" json:"samplingRate,omitempty"`
+	SamplingRules         types.List    `tfsdk:"sampling_rules" json:"samplingRules,omitempty"`
 	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProxyMode             types.Object  `tfsdk:"proxy_mode" json:"proxyMode,omitempty"`
 	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
@@ -32975,6 +34237,8 @@ func InputDatadogAgentModelAttrTypes() map[string]attr.Type {
 		"ip_allowlist_regex":       types.StringType,
 		"ip_denylist_regex":        types.StringType,
 		"extract_metrics":          types.BoolType,
+		"sampling_rate":            types.Float64Type,
+		"sampling_rules":           types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()}},
 		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()}},
 		"proxy_mode":               types.ObjectType{AttrTypes: InputDatadogAgentProxyModeAttrTypes()},
 		"description":              types.StringType,
@@ -33164,6 +34428,20 @@ func (m InputDatadogAgentModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert extract_metrics to API value: %v", err)
 		}
 		output["extractMetrics"] = value
+	}
+	if !m.SamplingRate.IsNull() && !m.SamplingRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SamplingRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert sampling_rate to API value: %v", err)
+		}
+		output["samplingRate"] = value
+	}
+	if !m.SamplingRules.IsNull() && !m.SamplingRules.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SamplingRules)
+		if err != nil {
+			return nil, fmt.Errorf("convert sampling_rules to API value: %v", err)
+		}
+		output["samplingRules"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Metadata)
@@ -33423,6 +34701,24 @@ func (m *InputDatadogAgentModel) unmarshalPayload(input map[string]any) error {
 		m.ExtractMetrics = value.(types.Bool)
 	} else {
 		m.ExtractMetrics = types.BoolNull()
+	}
+	if item, ok := input["samplingRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert samplingRate from API value: %v", err)
+		}
+		m.SamplingRate = value.(types.Float64)
+	} else {
+		m.SamplingRate = types.Float64Null()
+	}
+	if item, ok := input["samplingRules"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert samplingRules from API value: %v", err)
+		}
+		m.SamplingRules = value.(types.List)
+	} else {
+		m.SamplingRules = types.ListNull(types.ObjectType{AttrTypes: InputDatadogAgentSamplingRulesAttrTypes()})
 	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputDatadogAgentMetadataAttrTypes()}})
@@ -35697,6 +36993,8 @@ type InputS3Model struct {
 	AssumeRoleExternalID        types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
 	DurationSeconds             types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
 	EnableSQSAssumeRole         types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
+	SharedCredentials           types.Bool    `tfsdk:"shared_credentials" json:"sharedCredentials,omitempty"`
+	SharedAssumeRoleArn         types.Bool    `tfsdk:"shared_assume_role_arn" json:"sharedAssumeRoleArn,omitempty"`
 	Preprocess                  types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
 	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
@@ -35708,6 +37006,12 @@ type InputS3Model struct {
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	SQSAssumeRoleArn            types.String  `tfsdk:"sqsassume_role_arn" json:"SQSAssumeRoleArn,omitempty"`
+	SQSAssumeRoleExternalID     types.String  `tfsdk:"sqsassume_role_external_id" json:"SQSAssumeRoleExternalId,omitempty"`
+	SQSDurationSeconds          types.Float64 `tfsdk:"sqsduration_seconds" json:"SQSDurationSeconds,omitempty"`
+	SQSAwsAuthenticationMethod  types.String  `tfsdk:"sqsaws_authentication_method" json:"SQSAwsAuthenticationMethod,omitempty"`
+	SQSAwsSecret                types.String  `tfsdk:"sqsaws_secret" json:"SQSAwsSecret,omitempty"`
+	SQSAwsSecretKey             types.String  `tfsdk:"sqsaws_secret_key" json:"SQSAwsSecretKey,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
 }
@@ -35747,6 +37051,8 @@ func InputS3ModelAttrTypes() map[string]attr.Type {
 		"assume_role_external_id":        types.StringType,
 		"duration_seconds":               types.Float64Type,
 		"enable_sqsassume_role":          types.BoolType,
+		"shared_credentials":             types.BoolType,
+		"shared_assume_role_arn":         types.BoolType,
 		"preprocess":                     types.ObjectType{AttrTypes: InputS3PreprocessAttrTypes()},
 		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3MetadataAttrTypes()}},
 		"parquet_chunk_size_mb":          types.Float64Type,
@@ -35758,6 +37064,12 @@ func InputS3ModelAttrTypes() map[string]attr.Type {
 		"description":                    types.StringType,
 		"aws_api_key":                    types.StringType,
 		"aws_secret":                     types.StringType,
+		"sqsassume_role_arn":             types.StringType,
+		"sqsassume_role_external_id":     types.StringType,
+		"sqsduration_seconds":            types.Float64Type,
+		"sqsaws_authentication_method":   types.StringType,
+		"sqsaws_secret":                  types.StringType,
+		"sqsaws_secret_key":              types.StringType,
 		"processed_tag_key":              types.StringType,
 		"processed_tag_value":            types.StringType,
 	}
@@ -35996,6 +37308,20 @@ func (m InputS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["enableSQSAssumeRole"] = value
 	}
+	if !m.SharedCredentials.IsNull() && !m.SharedCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_credentials to API value: %v", err)
+		}
+		output["sharedCredentials"] = value
+	}
+	if !m.SharedAssumeRoleArn.IsNull() && !m.SharedAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_assume_role_arn to API value: %v", err)
+		}
+		output["sharedAssumeRoleArn"] = value
+	}
 	if !m.Preprocess.IsNull() && !m.Preprocess.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Preprocess)
 		if err != nil {
@@ -36072,6 +37398,48 @@ func (m InputS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
 		}
 		output["awsSecret"] = value
+	}
+	if !m.SQSAssumeRoleArn.IsNull() && !m.SQSAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_arn to API value: %v", err)
+		}
+		output["SQSAssumeRoleArn"] = value
+	}
+	if !m.SQSAssumeRoleExternalID.IsNull() && !m.SQSAssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_external_id to API value: %v", err)
+		}
+		output["SQSAssumeRoleExternalId"] = value
+	}
+	if !m.SQSDurationSeconds.IsNull() && !m.SQSDurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSDurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsduration_seconds to API value: %v", err)
+		}
+		output["SQSDurationSeconds"] = value
+	}
+	if !m.SQSAwsAuthenticationMethod.IsNull() && !m.SQSAwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_authentication_method to API value: %v", err)
+		}
+		output["SQSAwsAuthenticationMethod"] = value
+	}
+	if !m.SQSAwsSecret.IsNull() && !m.SQSAwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret to API value: %v", err)
+		}
+		output["SQSAwsSecret"] = value
+	}
+	if !m.SQSAwsSecretKey.IsNull() && !m.SQSAwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret_key to API value: %v", err)
+		}
+		output["SQSAwsSecretKey"] = value
 	}
 	if !m.ProcessedTagKey.IsNull() && !m.ProcessedTagKey.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ProcessedTagKey)
@@ -36388,6 +37756,24 @@ func (m *InputS3Model) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.EnableSQSAssumeRole = types.BoolNull()
 	}
+	if item, ok := input["sharedCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedCredentials from API value: %v", err)
+		}
+		m.SharedCredentials = value.(types.Bool)
+	} else {
+		m.SharedCredentials = types.BoolNull()
+	}
+	if item, ok := input["sharedAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedAssumeRoleArn from API value: %v", err)
+		}
+		m.SharedAssumeRoleArn = value.(types.Bool)
+	} else {
+		m.SharedAssumeRoleArn = types.BoolNull()
+	}
 	if item, ok := input["preprocess"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputS3PreprocessAttrTypes()})
 		if err != nil {
@@ -36487,6 +37873,60 @@ func (m *InputS3Model) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.AwsSecret = types.StringNull()
 	}
+	if item, ok := input["SQSAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleArn from API value: %v", err)
+		}
+		m.SQSAssumeRoleArn = value.(types.String)
+	} else {
+		m.SQSAssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleExternalId from API value: %v", err)
+		}
+		m.SQSAssumeRoleExternalID = value.(types.String)
+	} else {
+		m.SQSAssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["SQSDurationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert SQSDurationSeconds from API value: %v", err)
+		}
+		m.SQSDurationSeconds = value.(types.Float64)
+	} else {
+		m.SQSDurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["SQSAwsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsAuthenticationMethod from API value: %v", err)
+		}
+		m.SQSAwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.SQSAwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecret from API value: %v", err)
+		}
+		m.SQSAwsSecret = value.(types.String)
+	} else {
+		m.SQSAwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecretKey from API value: %v", err)
+		}
+		m.SQSAwsSecretKey = value.(types.String)
+	} else {
+		m.SQSAwsSecretKey = types.StringNull()
+	}
 	if item, ok := input["processedTagKey"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -36542,6 +37982,8 @@ type InputS3InventoryModel struct {
 	AssumeRoleExternalID        types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
 	DurationSeconds             types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
 	EnableSQSAssumeRole         types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
+	SharedCredentials           types.Bool    `tfsdk:"shared_credentials" json:"sharedCredentials,omitempty"`
+	SharedAssumeRoleArn         types.Bool    `tfsdk:"shared_assume_role_arn" json:"sharedAssumeRoleArn,omitempty"`
 	Preprocess                  types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
 	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
@@ -36554,6 +37996,12 @@ type InputS3InventoryModel struct {
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	SQSAssumeRoleArn            types.String  `tfsdk:"sqsassume_role_arn" json:"SQSAssumeRoleArn,omitempty"`
+	SQSAssumeRoleExternalID     types.String  `tfsdk:"sqsassume_role_external_id" json:"SQSAssumeRoleExternalId,omitempty"`
+	SQSDurationSeconds          types.Float64 `tfsdk:"sqsduration_seconds" json:"SQSDurationSeconds,omitempty"`
+	SQSAwsAuthenticationMethod  types.String  `tfsdk:"sqsaws_authentication_method" json:"SQSAwsAuthenticationMethod,omitempty"`
+	SQSAwsSecret                types.String  `tfsdk:"sqsaws_secret" json:"SQSAwsSecret,omitempty"`
+	SQSAwsSecretKey             types.String  `tfsdk:"sqsaws_secret_key" json:"SQSAwsSecretKey,omitempty"`
 	TagAfterProcessing          types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
@@ -36594,6 +38042,8 @@ func InputS3InventoryModelAttrTypes() map[string]attr.Type {
 		"assume_role_external_id":        types.StringType,
 		"duration_seconds":               types.Float64Type,
 		"enable_sqsassume_role":          types.BoolType,
+		"shared_credentials":             types.BoolType,
+		"shared_assume_role_arn":         types.BoolType,
 		"preprocess":                     types.ObjectType{AttrTypes: InputS3InventoryPreprocessAttrTypes()},
 		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputS3InventoryMetadataAttrTypes()}},
 		"parquet_chunk_size_mb":          types.Float64Type,
@@ -36606,6 +38056,12 @@ func InputS3InventoryModelAttrTypes() map[string]attr.Type {
 		"description":                    types.StringType,
 		"aws_api_key":                    types.StringType,
 		"aws_secret":                     types.StringType,
+		"sqsassume_role_arn":             types.StringType,
+		"sqsassume_role_external_id":     types.StringType,
+		"sqsduration_seconds":            types.Float64Type,
+		"sqsaws_authentication_method":   types.StringType,
+		"sqsaws_secret":                  types.StringType,
+		"sqsaws_secret_key":              types.StringType,
 		"tag_after_processing":           types.StringType,
 		"processed_tag_key":              types.StringType,
 		"processed_tag_value":            types.StringType,
@@ -36845,6 +38301,20 @@ func (m InputS3InventoryModel) terraformPayload() (map[string]any, error) {
 		}
 		output["enableSQSAssumeRole"] = value
 	}
+	if !m.SharedCredentials.IsNull() && !m.SharedCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_credentials to API value: %v", err)
+		}
+		output["sharedCredentials"] = value
+	}
+	if !m.SharedAssumeRoleArn.IsNull() && !m.SharedAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_assume_role_arn to API value: %v", err)
+		}
+		output["sharedAssumeRoleArn"] = value
+	}
 	if !m.Preprocess.IsNull() && !m.Preprocess.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Preprocess)
 		if err != nil {
@@ -36928,6 +38398,48 @@ func (m InputS3InventoryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
 		}
 		output["awsSecret"] = value
+	}
+	if !m.SQSAssumeRoleArn.IsNull() && !m.SQSAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_arn to API value: %v", err)
+		}
+		output["SQSAssumeRoleArn"] = value
+	}
+	if !m.SQSAssumeRoleExternalID.IsNull() && !m.SQSAssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_external_id to API value: %v", err)
+		}
+		output["SQSAssumeRoleExternalId"] = value
+	}
+	if !m.SQSDurationSeconds.IsNull() && !m.SQSDurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSDurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsduration_seconds to API value: %v", err)
+		}
+		output["SQSDurationSeconds"] = value
+	}
+	if !m.SQSAwsAuthenticationMethod.IsNull() && !m.SQSAwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_authentication_method to API value: %v", err)
+		}
+		output["SQSAwsAuthenticationMethod"] = value
+	}
+	if !m.SQSAwsSecret.IsNull() && !m.SQSAwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret to API value: %v", err)
+		}
+		output["SQSAwsSecret"] = value
+	}
+	if !m.SQSAwsSecretKey.IsNull() && !m.SQSAwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret_key to API value: %v", err)
+		}
+		output["SQSAwsSecretKey"] = value
 	}
 	if !m.TagAfterProcessing.IsNull() && !m.TagAfterProcessing.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.TagAfterProcessing)
@@ -37251,6 +38763,24 @@ func (m *InputS3InventoryModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.EnableSQSAssumeRole = types.BoolNull()
 	}
+	if item, ok := input["sharedCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedCredentials from API value: %v", err)
+		}
+		m.SharedCredentials = value.(types.Bool)
+	} else {
+		m.SharedCredentials = types.BoolNull()
+	}
+	if item, ok := input["sharedAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedAssumeRoleArn from API value: %v", err)
+		}
+		m.SharedAssumeRoleArn = value.(types.Bool)
+	} else {
+		m.SharedAssumeRoleArn = types.BoolNull()
+	}
 	if item, ok := input["preprocess"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputS3InventoryPreprocessAttrTypes()})
 		if err != nil {
@@ -37358,6 +38888,60 @@ func (m *InputS3InventoryModel) unmarshalPayload(input map[string]any) error {
 		m.AwsSecret = value.(types.String)
 	} else {
 		m.AwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleArn from API value: %v", err)
+		}
+		m.SQSAssumeRoleArn = value.(types.String)
+	} else {
+		m.SQSAssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleExternalId from API value: %v", err)
+		}
+		m.SQSAssumeRoleExternalID = value.(types.String)
+	} else {
+		m.SQSAssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["SQSDurationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert SQSDurationSeconds from API value: %v", err)
+		}
+		m.SQSDurationSeconds = value.(types.Float64)
+	} else {
+		m.SQSDurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["SQSAwsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsAuthenticationMethod from API value: %v", err)
+		}
+		m.SQSAwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.SQSAwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecret from API value: %v", err)
+		}
+		m.SQSAwsSecret = value.(types.String)
+	} else {
+		m.SQSAwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecretKey from API value: %v", err)
+		}
+		m.SQSAwsSecretKey = value.(types.String)
+	} else {
+		m.SQSAwsSecretKey = types.StringNull()
 	}
 	if item, ok := input["tagAfterProcessing"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -42403,54 +43987,56 @@ func (m *InputWefModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputWinEventLogsModel struct {
-	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	LogNames              types.List    `tfsdk:"log_names" json:"logNames,omitempty"`
-	ReadMode              types.String  `tfsdk:"read_mode" json:"readMode,omitempty"`
-	EventFormat           types.String  `tfsdk:"event_format" json:"eventFormat,omitempty"`
-	DisableNativeModule   types.Bool    `tfsdk:"disable_native_module" json:"disableNativeModule,omitempty"`
-	Interval              types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
-	BatchSize             types.Float64 `tfsdk:"batch_size" json:"batchSize,omitempty"`
-	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	MaxEventBytes         types.Float64 `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
-	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
-	DisableJSONRendering  types.Bool    `tfsdk:"disable_json_rendering" json:"disableJsonRendering,omitempty"`
-	DisableXmlRendering   types.Bool    `tfsdk:"disable_xml_rendering" json:"disableXmlRendering,omitempty"`
+	ID                       types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                     types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                 types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                 types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes             types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment              types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags               types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance    types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections              types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                       types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	LogNames                 types.List    `tfsdk:"log_names" json:"logNames,omitempty"`
+	SuppressMissingLogErrors types.Bool    `tfsdk:"suppress_missing_log_errors" json:"suppressMissingLogErrors,omitempty"`
+	ReadMode                 types.String  `tfsdk:"read_mode" json:"readMode,omitempty"`
+	EventFormat              types.String  `tfsdk:"event_format" json:"eventFormat,omitempty"`
+	DisableNativeModule      types.Bool    `tfsdk:"disable_native_module" json:"disableNativeModule,omitempty"`
+	Interval                 types.Float64 `tfsdk:"interval" json:"interval,omitempty"`
+	BatchSize                types.Float64 `tfsdk:"batch_size" json:"batchSize,omitempty"`
+	Metadata                 types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	MaxEventBytes            types.Int64   `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
+	Description              types.String  `tfsdk:"description" json:"description,omitempty"`
+	DisableJSONRendering     types.Bool    `tfsdk:"disable_json_rendering" json:"disableJsonRendering,omitempty"`
+	DisableXmlRendering      types.Bool    `tfsdk:"disable_xml_rendering" json:"disableXmlRendering,omitempty"`
 }
 
 func InputWinEventLogsModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                      types.StringType,
-		"type":                    types.StringType,
-		"disabled":                types.BoolType,
-		"pipeline":                types.StringType,
-		"send_to_routes":          types.BoolType,
-		"environment":             types.StringType,
-		"pq_enabled":              types.BoolType,
-		"streamtags":              types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance": types.ObjectType{AttrTypes: InputWinEventLogsCriblSourceProvenanceAttrTypes()},
-		"connections":             types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()}},
-		"pq":                      types.ObjectType{AttrTypes: InputWinEventLogsPqAttrTypes()},
-		"log_names":               types.ListType{ElemType: types.StringType},
-		"read_mode":               types.StringType,
-		"event_format":            types.StringType,
-		"disable_native_module":   types.BoolType,
-		"interval":                types.Float64Type,
-		"batch_size":              types.Float64Type,
-		"metadata":                types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()}},
-		"max_event_bytes":         types.Float64Type,
-		"description":             types.StringType,
-		"disable_json_rendering":  types.BoolType,
-		"disable_xml_rendering":   types.BoolType,
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"disabled":                    types.BoolType,
+		"pipeline":                    types.StringType,
+		"send_to_routes":              types.BoolType,
+		"environment":                 types.StringType,
+		"pq_enabled":                  types.BoolType,
+		"streamtags":                  types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":     types.ObjectType{AttrTypes: InputWinEventLogsCriblSourceProvenanceAttrTypes()},
+		"connections":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsConnectionsAttrTypes()}},
+		"pq":                          types.ObjectType{AttrTypes: InputWinEventLogsPqAttrTypes()},
+		"log_names":                   types.ListType{ElemType: types.StringType},
+		"suppress_missing_log_errors": types.BoolType,
+		"read_mode":                   types.StringType,
+		"event_format":                types.StringType,
+		"disable_native_module":       types.BoolType,
+		"interval":                    types.Float64Type,
+		"batch_size":                  types.Float64Type,
+		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()}},
+		"max_event_bytes":             types.Int64Type,
+		"description":                 types.StringType,
+		"disable_json_rendering":      types.BoolType,
+		"disable_xml_rendering":       types.BoolType,
 	}
 }
 
@@ -42539,6 +44125,13 @@ func (m InputWinEventLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert log_names to API value: %v", err)
 		}
 		output["logNames"] = value
+	}
+	if !m.SuppressMissingLogErrors.IsNull() && !m.SuppressMissingLogErrors.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SuppressMissingLogErrors)
+		if err != nil {
+			return nil, fmt.Errorf("convert suppress_missing_log_errors to API value: %v", err)
+		}
+		output["suppressMissingLogErrors"] = value
 	}
 	if !m.ReadMode.IsNull() && !m.ReadMode.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ReadMode)
@@ -42722,6 +44315,15 @@ func (m *InputWinEventLogsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.LogNames = types.ListNull(types.StringType)
 	}
+	if item, ok := input["suppressMissingLogErrors"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert suppressMissingLogErrors from API value: %v", err)
+		}
+		m.SuppressMissingLogErrors = value.(types.Bool)
+	} else {
+		m.SuppressMissingLogErrors = types.BoolNull()
+	}
 	if item, ok := input["readMode"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -42777,13 +44379,13 @@ func (m *InputWinEventLogsModel) unmarshalPayload(input map[string]any) error {
 		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputWinEventLogsMetadataAttrTypes()})
 	}
 	if item, ok := input["maxEventBytes"]; ok {
-		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
 		if err != nil {
 			return fmt.Errorf("convert maxEventBytes from API value: %v", err)
 		}
-		m.MaxEventBytes = value.(types.Float64)
+		m.MaxEventBytes = value.(types.Int64)
 	} else {
-		m.MaxEventBytes = types.Float64Null()
+		m.MaxEventBytes = types.Int64Null()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -45920,6 +47522,8 @@ type InputSecurityLakeModel struct {
 	AssumeRoleExternalID        types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
 	DurationSeconds             types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
 	EnableSQSAssumeRole         types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
+	SharedCredentials           types.Bool    `tfsdk:"shared_credentials" json:"sharedCredentials,omitempty"`
+	SharedAssumeRoleArn         types.Bool    `tfsdk:"shared_assume_role_arn" json:"sharedAssumeRoleArn,omitempty"`
 	Preprocess                  types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
 	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
@@ -45930,6 +47534,12 @@ type InputSecurityLakeModel struct {
 	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
 	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
 	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	SQSAssumeRoleArn            types.String  `tfsdk:"sqsassume_role_arn" json:"SQSAssumeRoleArn,omitempty"`
+	SQSAssumeRoleExternalID     types.String  `tfsdk:"sqsassume_role_external_id" json:"SQSAssumeRoleExternalId,omitempty"`
+	SQSDurationSeconds          types.Float64 `tfsdk:"sqsduration_seconds" json:"SQSDurationSeconds,omitempty"`
+	SQSAwsAuthenticationMethod  types.String  `tfsdk:"sqsaws_authentication_method" json:"SQSAwsAuthenticationMethod,omitempty"`
+	SQSAwsSecret                types.String  `tfsdk:"sqsaws_secret" json:"SQSAwsSecret,omitempty"`
+	SQSAwsSecretKey             types.String  `tfsdk:"sqsaws_secret_key" json:"SQSAwsSecretKey,omitempty"`
 	TagAfterProcessing          types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
 	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
 	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
@@ -45970,6 +47580,8 @@ func InputSecurityLakeModelAttrTypes() map[string]attr.Type {
 		"assume_role_external_id":        types.StringType,
 		"duration_seconds":               types.Float64Type,
 		"enable_sqsassume_role":          types.BoolType,
+		"shared_credentials":             types.BoolType,
+		"shared_assume_role_arn":         types.BoolType,
 		"preprocess":                     types.ObjectType{AttrTypes: InputSecurityLakePreprocessAttrTypes()},
 		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputSecurityLakeMetadataAttrTypes()}},
 		"parquet_chunk_size_mb":          types.Float64Type,
@@ -45980,6 +47592,12 @@ func InputSecurityLakeModelAttrTypes() map[string]attr.Type {
 		"description":                    types.StringType,
 		"aws_api_key":                    types.StringType,
 		"aws_secret":                     types.StringType,
+		"sqsassume_role_arn":             types.StringType,
+		"sqsassume_role_external_id":     types.StringType,
+		"sqsduration_seconds":            types.Float64Type,
+		"sqsaws_authentication_method":   types.StringType,
+		"sqsaws_secret":                  types.StringType,
+		"sqsaws_secret_key":              types.StringType,
 		"tag_after_processing":           types.StringType,
 		"processed_tag_key":              types.StringType,
 		"processed_tag_value":            types.StringType,
@@ -46219,6 +47837,20 @@ func (m InputSecurityLakeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["enableSQSAssumeRole"] = value
 	}
+	if !m.SharedCredentials.IsNull() && !m.SharedCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_credentials to API value: %v", err)
+		}
+		output["sharedCredentials"] = value
+	}
+	if !m.SharedAssumeRoleArn.IsNull() && !m.SharedAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_assume_role_arn to API value: %v", err)
+		}
+		output["sharedAssumeRoleArn"] = value
+	}
 	if !m.Preprocess.IsNull() && !m.Preprocess.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Preprocess)
 		if err != nil {
@@ -46288,6 +47920,48 @@ func (m InputSecurityLakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
 		}
 		output["awsSecret"] = value
+	}
+	if !m.SQSAssumeRoleArn.IsNull() && !m.SQSAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_arn to API value: %v", err)
+		}
+		output["SQSAssumeRoleArn"] = value
+	}
+	if !m.SQSAssumeRoleExternalID.IsNull() && !m.SQSAssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_external_id to API value: %v", err)
+		}
+		output["SQSAssumeRoleExternalId"] = value
+	}
+	if !m.SQSDurationSeconds.IsNull() && !m.SQSDurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSDurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsduration_seconds to API value: %v", err)
+		}
+		output["SQSDurationSeconds"] = value
+	}
+	if !m.SQSAwsAuthenticationMethod.IsNull() && !m.SQSAwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_authentication_method to API value: %v", err)
+		}
+		output["SQSAwsAuthenticationMethod"] = value
+	}
+	if !m.SQSAwsSecret.IsNull() && !m.SQSAwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret to API value: %v", err)
+		}
+		output["SQSAwsSecret"] = value
+	}
+	if !m.SQSAwsSecretKey.IsNull() && !m.SQSAwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret_key to API value: %v", err)
+		}
+		output["SQSAwsSecretKey"] = value
 	}
 	if !m.TagAfterProcessing.IsNull() && !m.TagAfterProcessing.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.TagAfterProcessing)
@@ -46611,6 +48285,24 @@ func (m *InputSecurityLakeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.EnableSQSAssumeRole = types.BoolNull()
 	}
+	if item, ok := input["sharedCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedCredentials from API value: %v", err)
+		}
+		m.SharedCredentials = value.(types.Bool)
+	} else {
+		m.SharedCredentials = types.BoolNull()
+	}
+	if item, ok := input["sharedAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedAssumeRoleArn from API value: %v", err)
+		}
+		m.SharedAssumeRoleArn = value.(types.Bool)
+	} else {
+		m.SharedAssumeRoleArn = types.BoolNull()
+	}
 	if item, ok := input["preprocess"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSecurityLakePreprocessAttrTypes()})
 		if err != nil {
@@ -46700,6 +48392,1049 @@ func (m *InputSecurityLakeModel) unmarshalPayload(input map[string]any) error {
 		m.AwsSecret = value.(types.String)
 	} else {
 		m.AwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleArn from API value: %v", err)
+		}
+		m.SQSAssumeRoleArn = value.(types.String)
+	} else {
+		m.SQSAssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleExternalId from API value: %v", err)
+		}
+		m.SQSAssumeRoleExternalID = value.(types.String)
+	} else {
+		m.SQSAssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["SQSDurationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert SQSDurationSeconds from API value: %v", err)
+		}
+		m.SQSDurationSeconds = value.(types.Float64)
+	} else {
+		m.SQSDurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["SQSAwsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsAuthenticationMethod from API value: %v", err)
+		}
+		m.SQSAwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.SQSAwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecret from API value: %v", err)
+		}
+		m.SQSAwsSecret = value.(types.String)
+	} else {
+		m.SQSAwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecretKey from API value: %v", err)
+		}
+		m.SQSAwsSecretKey = value.(types.String)
+	} else {
+		m.SQSAwsSecretKey = types.StringNull()
+	}
+	if item, ok := input["tagAfterProcessing"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert tagAfterProcessing from API value: %v", err)
+		}
+		m.TagAfterProcessing = value.(types.String)
+	} else {
+		m.TagAfterProcessing = types.StringNull()
+	}
+	if item, ok := input["processedTagKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert processedTagKey from API value: %v", err)
+		}
+		m.ProcessedTagKey = value.(types.String)
+	} else {
+		m.ProcessedTagKey = types.StringNull()
+	}
+	if item, ok := input["processedTagValue"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert processedTagValue from API value: %v", err)
+		}
+		m.ProcessedTagValue = value.(types.String)
+	} else {
+		m.ProcessedTagValue = types.StringNull()
+	}
+	return nil
+}
+
+type InputBedrockS3Model struct {
+	ID                          types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                        types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                    types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                    types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                 types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                   types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                  types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance       types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                 types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                          types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	QueueName                   types.String  `tfsdk:"queue_name" json:"queueName,omitempty"`
+	FileFilter                  types.String  `tfsdk:"file_filter" json:"fileFilter,omitempty"`
+	AwsAccountID                types.String  `tfsdk:"aws_account_id" json:"awsAccountId,omitempty"`
+	AwsAuthenticationMethod     types.String  `tfsdk:"aws_authentication_method" json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey                types.String  `tfsdk:"aws_secret_key" json:"awsSecretKey,omitempty"`
+	Region                      types.String  `tfsdk:"region" json:"region,omitempty"`
+	Endpoint                    types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
+	ReuseConnections            types.Bool    `tfsdk:"reuse_connections" json:"reuseConnections,omitempty"`
+	RejectUnauthorized          types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	BreakerRulesets             types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs         types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	MaxMessages                 types.Float64 `tfsdk:"max_messages" json:"maxMessages,omitempty"`
+	VisibilityTimeout           types.Float64 `tfsdk:"visibility_timeout" json:"visibilityTimeout,omitempty"`
+	NumReceivers                types.Float64 `tfsdk:"num_receivers" json:"numReceivers,omitempty"`
+	SocketTimeout               types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	SkipOnError                 types.Bool    `tfsdk:"skip_on_error" json:"skipOnError,omitempty"`
+	IncludeSqsMetadata          types.Bool    `tfsdk:"include_sqs_metadata" json:"includeSqsMetadata,omitempty"`
+	EnableAssumeRole            types.Bool    `tfsdk:"enable_assume_role" json:"enableAssumeRole,omitempty"`
+	AssumeRoleArn               types.String  `tfsdk:"assume_role_arn" json:"assumeRoleArn,omitempty"`
+	AssumeRoleExternalID        types.String  `tfsdk:"assume_role_external_id" json:"assumeRoleExternalId,omitempty"`
+	DurationSeconds             types.Float64 `tfsdk:"duration_seconds" json:"durationSeconds,omitempty"`
+	EnableSQSAssumeRole         types.Bool    `tfsdk:"enable_sqsassume_role" json:"enableSQSAssumeRole,omitempty"`
+	SharedCredentials           types.Bool    `tfsdk:"shared_credentials" json:"sharedCredentials,omitempty"`
+	SharedAssumeRoleArn         types.Bool    `tfsdk:"shared_assume_role_arn" json:"sharedAssumeRoleArn,omitempty"`
+	Preprocess                  types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	Metadata                    types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
+	Checkpointing               types.Object  `tfsdk:"checkpointing" json:"checkpointing,omitempty"`
+	PollTimeout                 types.Float64 `tfsdk:"poll_timeout" json:"pollTimeout,omitempty"`
+	Encoding                    types.String  `tfsdk:"encoding" json:"encoding,omitempty"`
+	Description                 types.String  `tfsdk:"description" json:"description,omitempty"`
+	AwsAPIKey                   types.String  `tfsdk:"aws_api_key" json:"awsApiKey,omitempty"`
+	AwsSecret                   types.String  `tfsdk:"aws_secret" json:"awsSecret,omitempty"`
+	SQSAssumeRoleArn            types.String  `tfsdk:"sqsassume_role_arn" json:"SQSAssumeRoleArn,omitempty"`
+	SQSAssumeRoleExternalID     types.String  `tfsdk:"sqsassume_role_external_id" json:"SQSAssumeRoleExternalId,omitempty"`
+	SQSDurationSeconds          types.Float64 `tfsdk:"sqsduration_seconds" json:"SQSDurationSeconds,omitempty"`
+	SQSAwsAuthenticationMethod  types.String  `tfsdk:"sqsaws_authentication_method" json:"SQSAwsAuthenticationMethod,omitempty"`
+	SQSAwsSecret                types.String  `tfsdk:"sqsaws_secret" json:"SQSAwsSecret,omitempty"`
+	SQSAwsSecretKey             types.String  `tfsdk:"sqsaws_secret_key" json:"SQSAwsSecretKey,omitempty"`
+	TagAfterProcessing          types.String  `tfsdk:"tag_after_processing" json:"tagAfterProcessing,omitempty"`
+	ProcessedTagKey             types.String  `tfsdk:"processed_tag_key" json:"processedTagKey,omitempty"`
+	ProcessedTagValue           types.String  `tfsdk:"processed_tag_value" json:"processedTagValue,omitempty"`
+}
+
+func InputBedrockS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                             types.StringType,
+		"type":                           types.StringType,
+		"disabled":                       types.BoolType,
+		"pipeline":                       types.StringType,
+		"send_to_routes":                 types.BoolType,
+		"environment":                    types.StringType,
+		"pq_enabled":                     types.BoolType,
+		"streamtags":                     types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":        types.ObjectType{AttrTypes: InputBedrockS3CriblSourceProvenanceAttrTypes()},
+		"connections":                    types.ListType{ElemType: types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()}},
+		"pq":                             types.ObjectType{AttrTypes: InputBedrockS3PqAttrTypes()},
+		"queue_name":                     types.StringType,
+		"file_filter":                    types.StringType,
+		"aws_account_id":                 types.StringType,
+		"aws_authentication_method":      types.StringType,
+		"aws_secret_key":                 types.StringType,
+		"region":                         types.StringType,
+		"endpoint":                       types.StringType,
+		"reuse_connections":              types.BoolType,
+		"reject_unauthorized":            types.BoolType,
+		"breaker_rulesets":               types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":         types.Float64Type,
+		"max_messages":                   types.Float64Type,
+		"visibility_timeout":             types.Float64Type,
+		"num_receivers":                  types.Float64Type,
+		"socket_timeout":                 types.Float64Type,
+		"skip_on_error":                  types.BoolType,
+		"include_sqs_metadata":           types.BoolType,
+		"enable_assume_role":             types.BoolType,
+		"assume_role_arn":                types.StringType,
+		"assume_role_external_id":        types.StringType,
+		"duration_seconds":               types.Float64Type,
+		"enable_sqsassume_role":          types.BoolType,
+		"shared_credentials":             types.BoolType,
+		"shared_assume_role_arn":         types.BoolType,
+		"preprocess":                     types.ObjectType{AttrTypes: InputBedrockS3PreprocessAttrTypes()},
+		"metadata":                       types.ListType{ElemType: types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()}},
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
+		"checkpointing":                  types.ObjectType{AttrTypes: InputBedrockS3CheckpointingAttrTypes()},
+		"poll_timeout":                   types.Float64Type,
+		"encoding":                       types.StringType,
+		"description":                    types.StringType,
+		"aws_api_key":                    types.StringType,
+		"aws_secret":                     types.StringType,
+		"sqsassume_role_arn":             types.StringType,
+		"sqsassume_role_external_id":     types.StringType,
+		"sqsduration_seconds":            types.Float64Type,
+		"sqsaws_authentication_method":   types.StringType,
+		"sqsaws_secret":                  types.StringType,
+		"sqsaws_secret_key":              types.StringType,
+		"tag_after_processing":           types.StringType,
+		"processed_tag_key":              types.StringType,
+		"processed_tag_value":            types.StringType,
+	}
+}
+
+func (m InputBedrockS3Model) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.QueueName.IsNull() && !m.QueueName.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.QueueName)
+		if err != nil {
+			return nil, fmt.Errorf("convert queue_name to API value: %v", err)
+		}
+		output["queueName"] = value
+	}
+	if !m.FileFilter.IsNull() && !m.FileFilter.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.FileFilter)
+		if err != nil {
+			return nil, fmt.Errorf("convert file_filter to API value: %v", err)
+		}
+		output["fileFilter"] = value
+	}
+	if !m.AwsAccountID.IsNull() && !m.AwsAccountID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AwsAccountID)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_account_id to API value: %v", err)
+		}
+		output["awsAccountId"] = value
+	}
+	if !m.AwsAuthenticationMethod.IsNull() && !m.AwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_authentication_method to API value: %v", err)
+		}
+		output["awsAuthenticationMethod"] = value
+	}
+	if !m.AwsSecretKey.IsNull() && !m.AwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_secret_key to API value: %v", err)
+		}
+		output["awsSecretKey"] = value
+	}
+	if !m.Region.IsNull() && !m.Region.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Region)
+		if err != nil {
+			return nil, fmt.Errorf("convert region to API value: %v", err)
+		}
+		output["region"] = value
+	}
+	if !m.Endpoint.IsNull() && !m.Endpoint.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Endpoint)
+		if err != nil {
+			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
+		}
+		output["endpoint"] = value
+	}
+	if !m.ReuseConnections.IsNull() && !m.ReuseConnections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ReuseConnections)
+		if err != nil {
+			return nil, fmt.Errorf("convert reuse_connections to API value: %v", err)
+		}
+		output["reuseConnections"] = value
+	}
+	if !m.RejectUnauthorized.IsNull() && !m.RejectUnauthorized.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RejectUnauthorized)
+		if err != nil {
+			return nil, fmt.Errorf("convert reject_unauthorized to API value: %v", err)
+		}
+		output["rejectUnauthorized"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
+	}
+	if !m.MaxMessages.IsNull() && !m.MaxMessages.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxMessages)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_messages to API value: %v", err)
+		}
+		output["maxMessages"] = value
+	}
+	if !m.VisibilityTimeout.IsNull() && !m.VisibilityTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.VisibilityTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert visibility_timeout to API value: %v", err)
+		}
+		output["visibilityTimeout"] = value
+	}
+	if !m.NumReceivers.IsNull() && !m.NumReceivers.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.NumReceivers)
+		if err != nil {
+			return nil, fmt.Errorf("convert num_receivers to API value: %v", err)
+		}
+		output["numReceivers"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.SkipOnError.IsNull() && !m.SkipOnError.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SkipOnError)
+		if err != nil {
+			return nil, fmt.Errorf("convert skip_on_error to API value: %v", err)
+		}
+		output["skipOnError"] = value
+	}
+	if !m.IncludeSqsMetadata.IsNull() && !m.IncludeSqsMetadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IncludeSqsMetadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert include_sqs_metadata to API value: %v", err)
+		}
+		output["includeSqsMetadata"] = value
+	}
+	if !m.EnableAssumeRole.IsNull() && !m.EnableAssumeRole.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableAssumeRole)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_assume_role to API value: %v", err)
+		}
+		output["enableAssumeRole"] = value
+	}
+	if !m.AssumeRoleArn.IsNull() && !m.AssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert assume_role_arn to API value: %v", err)
+		}
+		output["assumeRoleArn"] = value
+	}
+	if !m.AssumeRoleExternalID.IsNull() && !m.AssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert assume_role_external_id to API value: %v", err)
+		}
+		output["assumeRoleExternalId"] = value
+	}
+	if !m.DurationSeconds.IsNull() && !m.DurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.DurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert duration_seconds to API value: %v", err)
+		}
+		output["durationSeconds"] = value
+	}
+	if !m.EnableSQSAssumeRole.IsNull() && !m.EnableSQSAssumeRole.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableSQSAssumeRole)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_sqsassume_role to API value: %v", err)
+		}
+		output["enableSQSAssumeRole"] = value
+	}
+	if !m.SharedCredentials.IsNull() && !m.SharedCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_credentials to API value: %v", err)
+		}
+		output["sharedCredentials"] = value
+	}
+	if !m.SharedAssumeRoleArn.IsNull() && !m.SharedAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SharedAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert shared_assume_role_arn to API value: %v", err)
+		}
+		output["sharedAssumeRoleArn"] = value
+	}
+	if !m.Preprocess.IsNull() && !m.Preprocess.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Preprocess)
+		if err != nil {
+			return nil, fmt.Errorf("convert preprocess to API value: %v", err)
+		}
+		output["preprocess"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.ParquetChunkSizeMB.IsNull() && !m.ParquetChunkSizeMB.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ParquetChunkSizeMB)
+		if err != nil {
+			return nil, fmt.Errorf("convert parquet_chunk_size_mb to API value: %v", err)
+		}
+		output["parquetChunkSizeMB"] = value
+	}
+	if !m.ParquetChunkDownloadTimeout.IsNull() && !m.ParquetChunkDownloadTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ParquetChunkDownloadTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert parquet_chunk_download_timeout to API value: %v", err)
+		}
+		output["parquetChunkDownloadTimeout"] = value
+	}
+	if !m.Checkpointing.IsNull() && !m.Checkpointing.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Checkpointing)
+		if err != nil {
+			return nil, fmt.Errorf("convert checkpointing to API value: %v", err)
+		}
+		output["checkpointing"] = value
+	}
+	if !m.PollTimeout.IsNull() && !m.PollTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PollTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert poll_timeout to API value: %v", err)
+		}
+		output["pollTimeout"] = value
+	}
+	if !m.Encoding.IsNull() && !m.Encoding.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Encoding)
+		if err != nil {
+			return nil, fmt.Errorf("convert encoding to API value: %v", err)
+		}
+		output["encoding"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.AwsAPIKey.IsNull() && !m.AwsAPIKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AwsAPIKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_api_key to API value: %v", err)
+		}
+		output["awsApiKey"] = value
+	}
+	if !m.AwsSecret.IsNull() && !m.AwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
+		}
+		output["awsSecret"] = value
+	}
+	if !m.SQSAssumeRoleArn.IsNull() && !m.SQSAssumeRoleArn.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleArn)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_arn to API value: %v", err)
+		}
+		output["SQSAssumeRoleArn"] = value
+	}
+	if !m.SQSAssumeRoleExternalID.IsNull() && !m.SQSAssumeRoleExternalID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAssumeRoleExternalID)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsassume_role_external_id to API value: %v", err)
+		}
+		output["SQSAssumeRoleExternalId"] = value
+	}
+	if !m.SQSDurationSeconds.IsNull() && !m.SQSDurationSeconds.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSDurationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsduration_seconds to API value: %v", err)
+		}
+		output["SQSDurationSeconds"] = value
+	}
+	if !m.SQSAwsAuthenticationMethod.IsNull() && !m.SQSAwsAuthenticationMethod.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsAuthenticationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_authentication_method to API value: %v", err)
+		}
+		output["SQSAwsAuthenticationMethod"] = value
+	}
+	if !m.SQSAwsSecret.IsNull() && !m.SQSAwsSecret.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecret)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret to API value: %v", err)
+		}
+		output["SQSAwsSecret"] = value
+	}
+	if !m.SQSAwsSecretKey.IsNull() && !m.SQSAwsSecretKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SQSAwsSecretKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert sqsaws_secret_key to API value: %v", err)
+		}
+		output["SQSAwsSecretKey"] = value
+	}
+	if !m.TagAfterProcessing.IsNull() && !m.TagAfterProcessing.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TagAfterProcessing)
+		if err != nil {
+			return nil, fmt.Errorf("convert tag_after_processing to API value: %v", err)
+		}
+		output["tagAfterProcessing"] = value
+	}
+	if !m.ProcessedTagKey.IsNull() && !m.ProcessedTagKey.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ProcessedTagKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert processed_tag_key to API value: %v", err)
+		}
+		output["processedTagKey"] = value
+	}
+	if !m.ProcessedTagValue.IsNull() && !m.ProcessedTagValue.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ProcessedTagValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert processed_tag_value to API value: %v", err)
+		}
+		output["processedTagValue"] = value
+	}
+	return output, nil
+}
+
+func (m *InputBedrockS3Model) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBedrockS3CriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputBedrockS3CriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3ConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBedrockS3PqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputBedrockS3PqAttrTypes())
+	}
+	if item, ok := input["queueName"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert queueName from API value: %v", err)
+		}
+		m.QueueName = value.(types.String)
+	} else {
+		m.QueueName = types.StringNull()
+	}
+	if item, ok := input["fileFilter"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert fileFilter from API value: %v", err)
+		}
+		m.FileFilter = value.(types.String)
+	} else {
+		m.FileFilter = types.StringNull()
+	}
+	if item, ok := input["awsAccountId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsAccountId from API value: %v", err)
+		}
+		m.AwsAccountID = value.(types.String)
+	} else {
+		m.AwsAccountID = types.StringNull()
+	}
+	if item, ok := input["awsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsAuthenticationMethod from API value: %v", err)
+		}
+		m.AwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.AwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["awsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsSecretKey from API value: %v", err)
+		}
+		m.AwsSecretKey = value.(types.String)
+	} else {
+		m.AwsSecretKey = types.StringNull()
+	}
+	if item, ok := input["region"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert region from API value: %v", err)
+		}
+		m.Region = value.(types.String)
+	} else {
+		m.Region = types.StringNull()
+	}
+	if item, ok := input["endpoint"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert endpoint from API value: %v", err)
+		}
+		m.Endpoint = value.(types.String)
+	} else {
+		m.Endpoint = types.StringNull()
+	}
+	if item, ok := input["reuseConnections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert reuseConnections from API value: %v", err)
+		}
+		m.ReuseConnections = value.(types.Bool)
+	} else {
+		m.ReuseConnections = types.BoolNull()
+	}
+	if item, ok := input["rejectUnauthorized"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert rejectUnauthorized from API value: %v", err)
+		}
+		m.RejectUnauthorized = value.(types.Bool)
+	} else {
+		m.RejectUnauthorized = types.BoolNull()
+	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["maxMessages"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxMessages from API value: %v", err)
+		}
+		m.MaxMessages = value.(types.Float64)
+	} else {
+		m.MaxMessages = types.Float64Null()
+	}
+	if item, ok := input["visibilityTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert visibilityTimeout from API value: %v", err)
+		}
+		m.VisibilityTimeout = value.(types.Float64)
+	} else {
+		m.VisibilityTimeout = types.Float64Null()
+	}
+	if item, ok := input["numReceivers"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert numReceivers from API value: %v", err)
+		}
+		m.NumReceivers = value.(types.Float64)
+	} else {
+		m.NumReceivers = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["skipOnError"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert skipOnError from API value: %v", err)
+		}
+		m.SkipOnError = value.(types.Bool)
+	} else {
+		m.SkipOnError = types.BoolNull()
+	}
+	if item, ok := input["includeSqsMetadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert includeSqsMetadata from API value: %v", err)
+		}
+		m.IncludeSqsMetadata = value.(types.Bool)
+	} else {
+		m.IncludeSqsMetadata = types.BoolNull()
+	}
+	if item, ok := input["enableAssumeRole"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableAssumeRole from API value: %v", err)
+		}
+		m.EnableAssumeRole = value.(types.Bool)
+	} else {
+		m.EnableAssumeRole = types.BoolNull()
+	}
+	if item, ok := input["assumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert assumeRoleArn from API value: %v", err)
+		}
+		m.AssumeRoleArn = value.(types.String)
+	} else {
+		m.AssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["assumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert assumeRoleExternalId from API value: %v", err)
+		}
+		m.AssumeRoleExternalID = value.(types.String)
+	} else {
+		m.AssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["durationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert durationSeconds from API value: %v", err)
+		}
+		m.DurationSeconds = value.(types.Float64)
+	} else {
+		m.DurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["enableSQSAssumeRole"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableSQSAssumeRole from API value: %v", err)
+		}
+		m.EnableSQSAssumeRole = value.(types.Bool)
+	} else {
+		m.EnableSQSAssumeRole = types.BoolNull()
+	}
+	if item, ok := input["sharedCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedCredentials from API value: %v", err)
+		}
+		m.SharedCredentials = value.(types.Bool)
+	} else {
+		m.SharedCredentials = types.BoolNull()
+	}
+	if item, ok := input["sharedAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sharedAssumeRoleArn from API value: %v", err)
+		}
+		m.SharedAssumeRoleArn = value.(types.Bool)
+	} else {
+		m.SharedAssumeRoleArn = types.BoolNull()
+	}
+	if item, ok := input["preprocess"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBedrockS3PreprocessAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert preprocess from API value: %v", err)
+		}
+		m.Preprocess = value.(types.Object)
+	} else {
+		m.Preprocess = types.ObjectNull(InputBedrockS3PreprocessAttrTypes())
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputBedrockS3MetadataAttrTypes()})
+	}
+	if item, ok := input["parquetChunkSizeMB"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert parquetChunkSizeMB from API value: %v", err)
+		}
+		m.ParquetChunkSizeMB = value.(types.Float64)
+	} else {
+		m.ParquetChunkSizeMB = types.Float64Null()
+	}
+	if item, ok := input["parquetChunkDownloadTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert parquetChunkDownloadTimeout from API value: %v", err)
+		}
+		m.ParquetChunkDownloadTimeout = value.(types.Float64)
+	} else {
+		m.ParquetChunkDownloadTimeout = types.Float64Null()
+	}
+	if item, ok := input["checkpointing"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputBedrockS3CheckpointingAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert checkpointing from API value: %v", err)
+		}
+		m.Checkpointing = value.(types.Object)
+	} else {
+		m.Checkpointing = types.ObjectNull(InputBedrockS3CheckpointingAttrTypes())
+	}
+	if item, ok := input["pollTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert pollTimeout from API value: %v", err)
+		}
+		m.PollTimeout = value.(types.Float64)
+	} else {
+		m.PollTimeout = types.Float64Null()
+	}
+	if item, ok := input["encoding"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert encoding from API value: %v", err)
+		}
+		m.Encoding = value.(types.String)
+	} else {
+		m.Encoding = types.StringNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	if item, ok := input["awsApiKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsApiKey from API value: %v", err)
+		}
+		m.AwsAPIKey = value.(types.String)
+	} else {
+		m.AwsAPIKey = types.StringNull()
+	}
+	if item, ok := input["awsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert awsSecret from API value: %v", err)
+		}
+		m.AwsSecret = value.(types.String)
+	} else {
+		m.AwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleArn"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleArn from API value: %v", err)
+		}
+		m.SQSAssumeRoleArn = value.(types.String)
+	} else {
+		m.SQSAssumeRoleArn = types.StringNull()
+	}
+	if item, ok := input["SQSAssumeRoleExternalId"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAssumeRoleExternalId from API value: %v", err)
+		}
+		m.SQSAssumeRoleExternalID = value.(types.String)
+	} else {
+		m.SQSAssumeRoleExternalID = types.StringNull()
+	}
+	if item, ok := input["SQSDurationSeconds"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert SQSDurationSeconds from API value: %v", err)
+		}
+		m.SQSDurationSeconds = value.(types.Float64)
+	} else {
+		m.SQSDurationSeconds = types.Float64Null()
+	}
+	if item, ok := input["SQSAwsAuthenticationMethod"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsAuthenticationMethod from API value: %v", err)
+		}
+		m.SQSAwsAuthenticationMethod = value.(types.String)
+	} else {
+		m.SQSAwsAuthenticationMethod = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecret"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecret from API value: %v", err)
+		}
+		m.SQSAwsSecret = value.(types.String)
+	} else {
+		m.SQSAwsSecret = types.StringNull()
+	}
+	if item, ok := input["SQSAwsSecretKey"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert SQSAwsSecretKey from API value: %v", err)
+		}
+		m.SQSAwsSecretKey = value.(types.String)
+	} else {
+		m.SQSAwsSecretKey = types.StringNull()
 	}
 	if item, ok := input["tagAfterProcessing"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -47641,10 +50376,10 @@ type InputZscalerHecModel struct {
 	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
-	HecAcks                   types.Bool    `tfsdk:"hec_acks" json:"hecAcks,omitempty"`
 	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
 	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
 	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	HecAcks                   types.Bool    `tfsdk:"hec_acks" json:"hecAcks,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -47678,10 +50413,10 @@ func InputZscalerHecModelAttrTypes() map[string]attr.Type {
 		"hec_api":                      types.StringType,
 		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputZscalerHecMetadataAttrTypes()}},
 		"allowed_indexes":              types.ListType{ElemType: types.StringType},
-		"hec_acks":                     types.BoolType,
 		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
 		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
 		"emit_token_metrics":           types.BoolType,
+		"hec_acks":                     types.BoolType,
 		"description":                  types.StringType,
 	}
 }
@@ -47884,13 +50619,6 @@ func (m InputZscalerHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["allowedIndexes"] = value
 	}
-	if !m.HecAcks.IsNull() && !m.HecAcks.IsUnknown() {
-		value, err := SourceTerraformValueToJSON(m.HecAcks)
-		if err != nil {
-			return nil, fmt.Errorf("convert hec_acks to API value: %v", err)
-		}
-		output["hecAcks"] = value
-	}
 	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
 		if err != nil {
@@ -47911,6 +50639,13 @@ func (m InputZscalerHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
 		}
 		output["emitTokenMetrics"] = value
+	}
+	if !m.HecAcks.IsNull() && !m.HecAcks.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAcks)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_acks to API value: %v", err)
+		}
+		output["hecAcks"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -48175,15 +50910,6 @@ func (m *InputZscalerHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.AllowedIndexes = types.ListNull(types.StringType)
 	}
-	if item, ok := input["hecAcks"]; ok {
-		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
-		if err != nil {
-			return fmt.Errorf("convert hecAcks from API value: %v", err)
-		}
-		m.HecAcks = value.(types.Bool)
-	} else {
-		m.HecAcks = types.BoolNull()
-	}
 	if item, ok := input["accessControlAllowOrigin"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
 		if err != nil {
@@ -48210,6 +50936,15 @@ func (m *InputZscalerHecModel) unmarshalPayload(input map[string]any) error {
 		m.EmitTokenMetrics = value.(types.Bool)
 	} else {
 		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["hecAcks"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert hecAcks from API value: %v", err)
+		}
+		m.HecAcks = value.(types.Bool)
+	} else {
+		m.HecAcks = types.BoolNull()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -48252,11 +50987,11 @@ type InputCloudflareHecModel struct {
 	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
 	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
-	BreakerRulesets           types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs       types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
 	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
 	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	BreakerRulesets           types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs       types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
@@ -48290,11 +51025,11 @@ func InputCloudflareHecModelAttrTypes() map[string]attr.Type {
 		"hec_api":                      types.StringType,
 		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCloudflareHecMetadataAttrTypes()}},
 		"allowed_indexes":              types.ListType{ElemType: types.StringType},
-		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms":       types.Float64Type,
 		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
 		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
 		"emit_token_metrics":           types.BoolType,
+		"breaker_rulesets":             types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":       types.Float64Type,
 		"description":                  types.StringType,
 	}
 }
@@ -48497,20 +51232,6 @@ func (m InputCloudflareHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["allowedIndexes"] = value
 	}
-	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
-		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
-		if err != nil {
-			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
-		}
-		output["breakerRulesets"] = value
-	}
-	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
-		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
-		if err != nil {
-			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
-		}
-		output["staleChannelFlushMs"] = value
-	}
 	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
 		if err != nil {
@@ -48531,6 +51252,20 @@ func (m InputCloudflareHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
 		}
 		output["emitTokenMetrics"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -48795,6 +51530,33 @@ func (m *InputCloudflareHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.AllowedIndexes = types.ListNull(types.StringType)
 	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
 	if item, ok := input["breakerRulesets"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
 		if err != nil {
@@ -48812,6 +51574,1165 @@ func (m *InputCloudflareHecModel) unmarshalPayload(input map[string]any) error {
 		m.StaleChannelFlushMs = value.(types.Float64)
 	} else {
 		m.StaleChannelFlushMs = types.Float64Null()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputSysdigHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputSysdigHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputSysdigHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputSysdigHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputSysdigHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputSysdigHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	return output, nil
+}
+
+func (m *InputSysdigHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSysdigHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputSysdigHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSysdigHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputSysdigHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputSysdigHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputSysdigHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputSysdigHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["emitTokenMetrics"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert emitTokenMetrics from API value: %v", err)
+		}
+		m.EmitTokenMetrics = value.(types.Bool)
+	} else {
+		m.EmitTokenMetrics = types.BoolNull()
+	}
+	if item, ok := input["description"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert description from API value: %v", err)
+		}
+		m.Description = value.(types.String)
+	} else {
+		m.Description = types.StringNull()
+	}
+	return nil
+}
+
+type InputUpwindHecModel struct {
+	ID                        types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                  types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes              types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment               types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                 types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance     types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections               types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                        types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                      types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                      types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                       types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq              types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout          types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	IpAllowlistRegex          types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex           types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	HecAPI                    types.String  `tfsdk:"hec_api" json:"hecAPI,omitempty"`
+	Metadata                  types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedIndexes            types.List    `tfsdk:"allowed_indexes" json:"allowedIndexes,omitempty"`
+	AccessControlAllowOrigin  types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	EmitTokenMetrics          types.Bool    `tfsdk:"emit_token_metrics" json:"emitTokenMetrics,omitempty"`
+	Description               types.String  `tfsdk:"description" json:"description,omitempty"`
+}
+
+func InputUpwindHecModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                           types.StringType,
+		"type":                         types.StringType,
+		"disabled":                     types.BoolType,
+		"pipeline":                     types.StringType,
+		"send_to_routes":               types.BoolType,
+		"environment":                  types.StringType,
+		"pq_enabled":                   types.BoolType,
+		"streamtags":                   types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":      types.ObjectType{AttrTypes: InputUpwindHecCriblSourceProvenanceAttrTypes()},
+		"connections":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()}},
+		"pq":                           types.ObjectType{AttrTypes: InputUpwindHecPqAttrTypes()},
+		"host":                         types.StringType,
+		"port":                         types.Float64Type,
+		"auth_tokens":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()}},
+		"tls":                          types.ObjectType{AttrTypes: InputUpwindHecTLSAttrTypes()},
+		"max_active_req":               types.Float64Type,
+		"max_requests_per_socket":      types.Int64Type,
+		"enable_proxy_header":          types.BoolType,
+		"capture_headers":              types.BoolType,
+		"activity_log_sample_rate":     types.Float64Type,
+		"request_timeout":              types.Float64Type,
+		"socket_timeout":               types.Float64Type,
+		"keep_alive_timeout":           types.Float64Type,
+		"ip_allowlist_regex":           types.StringType,
+		"ip_denylist_regex":            types.StringType,
+		"hec_api":                      types.StringType,
+		"metadata":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()}},
+		"allowed_indexes":              types.ListType{ElemType: types.StringType},
+		"access_control_allow_origin":  types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers": types.ListType{ElemType: types.StringType},
+		"emit_token_metrics":           types.BoolType,
+		"description":                  types.StringType,
+	}
+}
+
+func (m InputUpwindHecModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Type.IsNull() && !m.Type.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
+	}
+	if !m.Disabled.IsNull() && !m.Disabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Disabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert disabled to API value: %v", err)
+		}
+		output["disabled"] = value
+	}
+	if !m.Pipeline.IsNull() && !m.Pipeline.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pipeline)
+		if err != nil {
+			return nil, fmt.Errorf("convert pipeline to API value: %v", err)
+		}
+		output["pipeline"] = value
+	}
+	if !m.SendToRoutes.IsNull() && !m.SendToRoutes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SendToRoutes)
+		if err != nil {
+			return nil, fmt.Errorf("convert send_to_routes to API value: %v", err)
+		}
+		output["sendToRoutes"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.PqEnabled.IsNull() && !m.PqEnabled.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.PqEnabled)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq_enabled to API value: %v", err)
+		}
+		output["pqEnabled"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.CriblSourceProvenance.IsNull() && !m.CriblSourceProvenance.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CriblSourceProvenance)
+		if err != nil {
+			return nil, fmt.Errorf("convert cribl_source_provenance to API value: %v", err)
+		}
+		output["criblSourceProvenance"] = value
+	}
+	if !m.Connections.IsNull() && !m.Connections.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Connections)
+		if err != nil {
+			return nil, fmt.Errorf("convert connections to API value: %v", err)
+		}
+		output["connections"] = value
+	}
+	if !m.Pq.IsNull() && !m.Pq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Pq)
+		if err != nil {
+			return nil, fmt.Errorf("convert pq to API value: %v", err)
+		}
+		output["pq"] = value
+	}
+	if !m.Host.IsNull() && !m.Host.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Host)
+		if err != nil {
+			return nil, fmt.Errorf("convert host to API value: %v", err)
+		}
+		output["host"] = value
+	}
+	if !m.Port.IsNull() && !m.Port.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Port)
+		if err != nil {
+			return nil, fmt.Errorf("convert port to API value: %v", err)
+		}
+		output["port"] = value
+	}
+	if !m.AuthTokens.IsNull() && !m.AuthTokens.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AuthTokens)
+		if err != nil {
+			return nil, fmt.Errorf("convert auth_tokens to API value: %v", err)
+		}
+		output["authTokens"] = value
+	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
+	if !m.MaxActiveReq.IsNull() && !m.MaxActiveReq.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxActiveReq)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_active_req to API value: %v", err)
+		}
+		output["maxActiveReq"] = value
+	}
+	if !m.MaxRequestsPerSocket.IsNull() && !m.MaxRequestsPerSocket.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.MaxRequestsPerSocket)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
+		}
+		output["maxRequestsPerSocket"] = value
+	}
+	if !m.EnableProxyHeader.IsNull() && !m.EnableProxyHeader.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EnableProxyHeader)
+		if err != nil {
+			return nil, fmt.Errorf("convert enable_proxy_header to API value: %v", err)
+		}
+		output["enableProxyHeader"] = value
+	}
+	if !m.CaptureHeaders.IsNull() && !m.CaptureHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
+		}
+		output["captureHeaders"] = value
+	}
+	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
+		if err != nil {
+			return nil, fmt.Errorf("convert activity_log_sample_rate to API value: %v", err)
+		}
+		output["activityLogSampleRate"] = value
+	}
+	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
+		}
+		output["requestTimeout"] = value
+	}
+	if !m.SocketTimeout.IsNull() && !m.SocketTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.SocketTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert socket_timeout to API value: %v", err)
+		}
+		output["socketTimeout"] = value
+	}
+	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
+		if err != nil {
+			return nil, fmt.Errorf("convert keep_alive_timeout to API value: %v", err)
+		}
+		output["keepAliveTimeout"] = value
+	}
+	if !m.IpAllowlistRegex.IsNull() && !m.IpAllowlistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpAllowlistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_allowlist_regex to API value: %v", err)
+		}
+		output["ipAllowlistRegex"] = value
+	}
+	if !m.IpDenylistRegex.IsNull() && !m.IpDenylistRegex.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.IpDenylistRegex)
+		if err != nil {
+			return nil, fmt.Errorf("convert ip_denylist_regex to API value: %v", err)
+		}
+		output["ipDenylistRegex"] = value
+	}
+	if !m.HecAPI.IsNull() && !m.HecAPI.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.HecAPI)
+		if err != nil {
+			return nil, fmt.Errorf("convert hec_api to API value: %v", err)
+		}
+		output["hecAPI"] = value
+	}
+	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("convert metadata to API value: %v", err)
+		}
+		output["metadata"] = value
+	}
+	if !m.AllowedIndexes.IsNull() && !m.AllowedIndexes.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AllowedIndexes)
+		if err != nil {
+			return nil, fmt.Errorf("convert allowed_indexes to API value: %v", err)
+		}
+		output["allowedIndexes"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.EmitTokenMetrics.IsNull() && !m.EmitTokenMetrics.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.EmitTokenMetrics)
+		if err != nil {
+			return nil, fmt.Errorf("convert emit_token_metrics to API value: %v", err)
+		}
+		output["emitTokenMetrics"] = value
+	}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	return output, nil
+}
+
+func (m *InputUpwindHecModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["type"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert type from API value: %v", err)
+		}
+		m.Type = value.(types.String)
+	} else {
+		m.Type = types.StringNull()
+	}
+	if item, ok := input["disabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert disabled from API value: %v", err)
+		}
+		m.Disabled = value.(types.Bool)
+	} else {
+		m.Disabled = types.BoolNull()
+	}
+	if item, ok := input["pipeline"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert pipeline from API value: %v", err)
+		}
+		m.Pipeline = value.(types.String)
+	} else {
+		m.Pipeline = types.StringNull()
+	}
+	if item, ok := input["sendToRoutes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert sendToRoutes from API value: %v", err)
+		}
+		m.SendToRoutes = value.(types.Bool)
+	} else {
+		m.SendToRoutes = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["pqEnabled"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert pqEnabled from API value: %v", err)
+		}
+		m.PqEnabled = value.(types.Bool)
+	} else {
+		m.PqEnabled = types.BoolNull()
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["criblSourceProvenance"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputUpwindHecCriblSourceProvenanceAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert criblSourceProvenance from API value: %v", err)
+		}
+		m.CriblSourceProvenance = value.(types.Object)
+	} else {
+		m.CriblSourceProvenance = types.ObjectNull(InputUpwindHecCriblSourceProvenanceAttrTypes())
+	}
+	if item, ok := input["connections"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert connections from API value: %v", err)
+		}
+		m.Connections = value.(types.List)
+	} else {
+		m.Connections = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecConnectionsAttrTypes()})
+	}
+	if item, ok := input["pq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputUpwindHecPqAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert pq from API value: %v", err)
+		}
+		m.Pq = value.(types.Object)
+	} else {
+		m.Pq = types.ObjectNull(InputUpwindHecPqAttrTypes())
+	}
+	if item, ok := input["host"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert host from API value: %v", err)
+		}
+		m.Host = value.(types.String)
+	} else {
+		m.Host = types.StringNull()
+	}
+	if item, ok := input["port"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert port from API value: %v", err)
+		}
+		m.Port = value.(types.Float64)
+	} else {
+		m.Port = types.Float64Null()
+	}
+	if item, ok := input["authTokens"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert authTokens from API value: %v", err)
+		}
+		m.AuthTokens = value.(types.List)
+	} else {
+		m.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecAuthTokensAttrTypes()})
+	}
+	if item, ok := input["tls"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputUpwindHecTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(InputUpwindHecTLSAttrTypes())
+	}
+	if item, ok := input["maxActiveReq"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxActiveReq from API value: %v", err)
+		}
+		m.MaxActiveReq = value.(types.Float64)
+	} else {
+		m.MaxActiveReq = types.Float64Null()
+	}
+	if item, ok := input["maxRequestsPerSocket"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Int64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxRequestsPerSocket from API value: %v", err)
+		}
+		m.MaxRequestsPerSocket = value.(types.Int64)
+	} else {
+		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["enableProxyHeader"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert enableProxyHeader from API value: %v", err)
+		}
+		m.EnableProxyHeader = value.(types.Bool)
+	} else {
+		m.EnableProxyHeader = types.BoolNull()
+	}
+	if item, ok := input["captureHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeaders from API value: %v", err)
+		}
+		m.CaptureHeaders = value.(types.Bool)
+	} else {
+		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["activityLogSampleRate"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert activityLogSampleRate from API value: %v", err)
+		}
+		m.ActivityLogSampleRate = value.(types.Float64)
+	} else {
+		m.ActivityLogSampleRate = types.Float64Null()
+	}
+	if item, ok := input["requestTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert requestTimeout from API value: %v", err)
+		}
+		m.RequestTimeout = value.(types.Float64)
+	} else {
+		m.RequestTimeout = types.Float64Null()
+	}
+	if item, ok := input["socketTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert socketTimeout from API value: %v", err)
+		}
+		m.SocketTimeout = value.(types.Float64)
+	} else {
+		m.SocketTimeout = types.Float64Null()
+	}
+	if item, ok := input["keepAliveTimeout"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert keepAliveTimeout from API value: %v", err)
+		}
+		m.KeepAliveTimeout = value.(types.Float64)
+	} else {
+		m.KeepAliveTimeout = types.Float64Null()
+	}
+	if item, ok := input["ipAllowlistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipAllowlistRegex from API value: %v", err)
+		}
+		m.IpAllowlistRegex = value.(types.String)
+	} else {
+		m.IpAllowlistRegex = types.StringNull()
+	}
+	if item, ok := input["ipDenylistRegex"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ipDenylistRegex from API value: %v", err)
+		}
+		m.IpDenylistRegex = value.(types.String)
+	} else {
+		m.IpDenylistRegex = types.StringNull()
+	}
+	if item, ok := input["hecAPI"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert hecAPI from API value: %v", err)
+		}
+		m.HecAPI = value.(types.String)
+	} else {
+		m.HecAPI = types.StringNull()
+	}
+	if item, ok := input["metadata"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert metadata from API value: %v", err)
+		}
+		m.Metadata = value.(types.List)
+	} else {
+		m.Metadata = types.ListNull(types.ObjectType{AttrTypes: InputUpwindHecMetadataAttrTypes()})
+	}
+	if item, ok := input["allowedIndexes"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert allowedIndexes from API value: %v", err)
+		}
+		m.AllowedIndexes = value.(types.List)
+	} else {
+		m.AllowedIndexes = types.ListNull(types.StringType)
 	}
 	if item, ok := input["accessControlAllowOrigin"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
@@ -49567,7 +53488,15 @@ type InputAnthropicComplianceModel struct {
 	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
 	APIKey                types.String  `tfsdk:"api_key" json:"apiKey,omitempty"`
 	TextSecret            types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
-	ContentConfig         types.List    `tfsdk:"content_config" json:"contentConfig,omitempty"`
+	Activities            types.Object  `tfsdk:"activities" json:"activities,omitempty"`
+	Chats                 types.Object  `tfsdk:"chats" json:"chats,omitempty"`
+	Projects              types.Object  `tfsdk:"projects" json:"projects,omitempty"`
+	ChatMessages          types.Object  `tfsdk:"chat_messages" json:"chat_messages,omitempty"`
+	ProjectDetails        types.Object  `tfsdk:"project_details" json:"project_details,omitempty"`
+	Groups                types.Object  `tfsdk:"groups" json:"groups,omitempty"`
+	Organizations         types.Object  `tfsdk:"organizations" json:"organizations,omitempty"`
+	OrgUsers              types.Object  `tfsdk:"org_users" json:"org_users,omitempty"`
+	OrgRoles              types.Object  `tfsdk:"org_roles" json:"org_roles,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
 	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
@@ -49593,7 +53522,15 @@ func InputAnthropicComplianceModelAttrTypes() map[string]attr.Type {
 		"pq":                      types.ObjectType{AttrTypes: InputAnthropicCompliancePqAttrTypes()},
 		"api_key":                 types.StringType,
 		"text_secret":             types.StringType,
-		"content_config":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicComplianceContentConfigAttrTypes()}},
+		"activities":              types.ObjectType{AttrTypes: InputAnthropicComplianceActivitiesAttrTypes()},
+		"chats":                   types.ObjectType{AttrTypes: InputAnthropicComplianceChatsAttrTypes()},
+		"projects":                types.ObjectType{AttrTypes: InputAnthropicComplianceProjectsAttrTypes()},
+		"chat_messages":           types.ObjectType{AttrTypes: InputAnthropicComplianceChatMessagesAttrTypes()},
+		"project_details":         types.ObjectType{AttrTypes: InputAnthropicComplianceProjectDetailsAttrTypes()},
+		"groups":                  types.ObjectType{AttrTypes: InputAnthropicComplianceGroupsAttrTypes()},
+		"organizations":           types.ObjectType{AttrTypes: InputAnthropicComplianceOrganizationsAttrTypes()},
+		"org_users":               types.ObjectType{AttrTypes: InputAnthropicComplianceOrgUsersAttrTypes()},
+		"org_roles":               types.ObjectType{AttrTypes: InputAnthropicComplianceOrgRolesAttrTypes()},
 		"request_timeout":         types.Float64Type,
 		"keep_alive_time":         types.Float64Type,
 		"max_missed_keep_alives":  types.Float64Type,
@@ -49698,12 +53635,68 @@ func (m InputAnthropicComplianceModel) terraformPayload() (map[string]any, error
 		}
 		output["textSecret"] = value
 	}
-	if !m.ContentConfig.IsNull() && !m.ContentConfig.IsUnknown() {
-		value, err := SourceTerraformValueToJSON(m.ContentConfig)
+	if !m.Activities.IsNull() && !m.Activities.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Activities)
 		if err != nil {
-			return nil, fmt.Errorf("convert content_config to API value: %v", err)
+			return nil, fmt.Errorf("convert activities to API value: %v", err)
 		}
-		output["contentConfig"] = value
+		output["activities"] = value
+	}
+	if !m.Chats.IsNull() && !m.Chats.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Chats)
+		if err != nil {
+			return nil, fmt.Errorf("convert chats to API value: %v", err)
+		}
+		output["chats"] = value
+	}
+	if !m.Projects.IsNull() && !m.Projects.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Projects)
+		if err != nil {
+			return nil, fmt.Errorf("convert projects to API value: %v", err)
+		}
+		output["projects"] = value
+	}
+	if !m.ChatMessages.IsNull() && !m.ChatMessages.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ChatMessages)
+		if err != nil {
+			return nil, fmt.Errorf("convert chat_messages to API value: %v", err)
+		}
+		output["chat_messages"] = value
+	}
+	if !m.ProjectDetails.IsNull() && !m.ProjectDetails.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ProjectDetails)
+		if err != nil {
+			return nil, fmt.Errorf("convert project_details to API value: %v", err)
+		}
+		output["project_details"] = value
+	}
+	if !m.Groups.IsNull() && !m.Groups.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Groups)
+		if err != nil {
+			return nil, fmt.Errorf("convert groups to API value: %v", err)
+		}
+		output["groups"] = value
+	}
+	if !m.Organizations.IsNull() && !m.Organizations.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.Organizations)
+		if err != nil {
+			return nil, fmt.Errorf("convert organizations to API value: %v", err)
+		}
+		output["organizations"] = value
+	}
+	if !m.OrgUsers.IsNull() && !m.OrgUsers.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.OrgUsers)
+		if err != nil {
+			return nil, fmt.Errorf("convert org_users to API value: %v", err)
+		}
+		output["org_users"] = value
+	}
+	if !m.OrgRoles.IsNull() && !m.OrgRoles.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.OrgRoles)
+		if err != nil {
+			return nil, fmt.Errorf("convert org_roles to API value: %v", err)
+		}
+		output["org_roles"] = value
 	}
 	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
@@ -49882,14 +53875,86 @@ func (m *InputAnthropicComplianceModel) unmarshalPayload(input map[string]any) e
 	} else {
 		m.TextSecret = types.StringNull()
 	}
-	if item, ok := input["contentConfig"]; ok {
-		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: InputAnthropicComplianceContentConfigAttrTypes()}})
+	if item, ok := input["activities"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceActivitiesAttrTypes()})
 		if err != nil {
-			return fmt.Errorf("convert contentConfig from API value: %v", err)
+			return fmt.Errorf("convert activities from API value: %v", err)
 		}
-		m.ContentConfig = value.(types.List)
+		m.Activities = value.(types.Object)
 	} else {
-		m.ContentConfig = types.ListNull(types.ObjectType{AttrTypes: InputAnthropicComplianceContentConfigAttrTypes()})
+		m.Activities = types.ObjectNull(InputAnthropicComplianceActivitiesAttrTypes())
+	}
+	if item, ok := input["chats"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceChatsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert chats from API value: %v", err)
+		}
+		m.Chats = value.(types.Object)
+	} else {
+		m.Chats = types.ObjectNull(InputAnthropicComplianceChatsAttrTypes())
+	}
+	if item, ok := input["projects"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceProjectsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert projects from API value: %v", err)
+		}
+		m.Projects = value.(types.Object)
+	} else {
+		m.Projects = types.ObjectNull(InputAnthropicComplianceProjectsAttrTypes())
+	}
+	if item, ok := input["chat_messages"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceChatMessagesAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert chat_messages from API value: %v", err)
+		}
+		m.ChatMessages = value.(types.Object)
+	} else {
+		m.ChatMessages = types.ObjectNull(InputAnthropicComplianceChatMessagesAttrTypes())
+	}
+	if item, ok := input["project_details"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceProjectDetailsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert project_details from API value: %v", err)
+		}
+		m.ProjectDetails = value.(types.Object)
+	} else {
+		m.ProjectDetails = types.ObjectNull(InputAnthropicComplianceProjectDetailsAttrTypes())
+	}
+	if item, ok := input["groups"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceGroupsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert groups from API value: %v", err)
+		}
+		m.Groups = value.(types.Object)
+	} else {
+		m.Groups = types.ObjectNull(InputAnthropicComplianceGroupsAttrTypes())
+	}
+	if item, ok := input["organizations"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceOrganizationsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert organizations from API value: %v", err)
+		}
+		m.Organizations = value.(types.Object)
+	} else {
+		m.Organizations = types.ObjectNull(InputAnthropicComplianceOrganizationsAttrTypes())
+	}
+	if item, ok := input["org_users"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceOrgUsersAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert org_users from API value: %v", err)
+		}
+		m.OrgUsers = value.(types.Object)
+	} else {
+		m.OrgUsers = types.ObjectNull(InputAnthropicComplianceOrgUsersAttrTypes())
+	}
+	if item, ok := input["org_roles"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputAnthropicComplianceOrgRolesAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert org_roles from API value: %v", err)
+		}
+		m.OrgRoles = value.(types.Object)
+	} else {
+		m.OrgRoles = types.ObjectNull(InputAnthropicComplianceOrgRolesAttrTypes())
 	}
 	if item, ok := input["requestTimeout"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)

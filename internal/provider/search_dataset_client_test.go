@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -59,4 +60,51 @@ func TestSearchDatasetV2PathsConvertToAPIPayload(t *testing.T) {
 			"region":             "us-east-1",
 		}},
 	}, payload)
+}
+
+func TestSearchDatasetLakehousePayloadUsesCriblSearchVariant(t *testing.T) {
+	const response = `{
+		"breakerRulesets":["Cribl Search"],
+		"staleChannelFlushMs":10000,
+		"metadata":{"enableAcceleration":false,"latestRunInfo":{}},
+		"retentionPeriod":3650,
+		"expectedRelativeTimeRange":{"latest":"1d"},
+		"skipEventTimeFilter":false,
+		"storageClasses":[],
+		"partitioningScheme":"none",
+		"searchVersion":"v1",
+		"filter":"true",
+		"autoDetectRegion":true,
+		"provider":"lakehouse",
+		"engine":"tf_testing",
+		"eventStorageSchemaVersion":1,
+		"id":"test_engine_dataset",
+		"engineDeleted":false,
+		"favorites":[],
+		"favoriteCount":0,
+		"isFavorited":false
+	}`
+
+	var model SearchDatasetModel
+	require.NoError(t, json.Unmarshal([]byte(response), &model))
+	require.NotNil(t, model.DatasetCriblSearch)
+	require.Equal(t, "test_engine_dataset", model.DatasetCriblSearch.ID.ValueString())
+	require.Equal(t, "lakehouse", model.DatasetCriblSearch.ProviderID.ValueString())
+	require.Equal(t, "tf_testing", model.DatasetCriblSearch.Engine.ValueString())
+	require.Equal(t, int64(3650), model.DatasetCriblSearch.RetentionPeriod.ValueInt64())
+
+	payload, err := model.DatasetCriblSearch.terraformPayload()
+	require.NoError(t, err)
+	require.Equal(t, "lakehouse", payload["provider"])
+	require.Equal(t, "tf_testing", payload["engine"])
+	require.Equal(t, int64(10000), payload["staleChannelFlushMs"])
+	require.Equal(t, int64(3650), payload["retentionPeriod"])
+	require.Equal(t, int64(1), payload["eventStorageSchemaVersion"])
+	require.Equal(t, map[string]any{"latest": "1d"}, payload["expectedRelativeTimeRange"])
+	require.Equal(t, false, payload["skipEventTimeFilter"])
+	require.Equal(t, []any{}, payload["storageClasses"])
+	require.Equal(t, "none", payload["partitioningScheme"])
+	require.Equal(t, "v1", payload["searchVersion"])
+	require.Equal(t, "true", payload["filter"])
+	require.Equal(t, true, payload["autoDetectRegion"])
 }

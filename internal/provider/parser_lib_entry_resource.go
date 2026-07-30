@@ -44,9 +44,10 @@ func (r *ParserLibEntryResource) Schema(_ context.Context, _ resource.SchemaRequ
 		MarkdownDescription: "ParserLibEntry Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the Parser.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -58,18 +59,20 @@ func (r *ParserLibEntryResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Parser.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Library that provides the Parser. Use <code>custom</code> for user-defined Parsers.`,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
@@ -78,12 +81,13 @@ func (r *ParserLibEntryResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Optionally, add tags that you can use for filtering`,
+				Description: `Optionally, add tags that you can use for filtering.`,
 			},
 			"type": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Parser or formatter type to use`,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},

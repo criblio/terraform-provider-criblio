@@ -862,9 +862,10 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"id": schema.StringAttribute{
-														Required: true,
-														Optional: false,
-														Computed: false,
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The <code>id</code> of the Notification target.`,
 													},
 												},
 											},
@@ -945,9 +946,10 @@ func (r *SearchDashboardResource) Schema(_ context.Context, _ resource.SchemaReq
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Required: true,
-														Optional: false,
-														Computed: false,
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `Name of the metadata field.`,
 													},
 													"value": schema.StringAttribute{
 														Required:    true,

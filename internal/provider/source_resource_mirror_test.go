@@ -44,6 +44,23 @@ func TestSourceRequestModelWithHoistedIdentity(t *testing.T) {
 	}
 }
 
+func TestSyncSourceLikeActiveInputClearsZeroValueInactiveVariant(t *testing.T) {
+	api := SourceModel{InputCloudflareHec: &InputCloudflareHecModel{}}
+	state := SourceModel{
+		InputCloudflareHec: &InputCloudflareHecModel{},
+		InputSplunk:        &InputSplunkModel{},
+	}
+
+	syncSourceLikeActiveInput(&api, &state)
+
+	if state.InputSplunk != nil {
+		t.Fatal("expected inactive input_splunk variant to be cleared")
+	}
+	if state.InputCloudflareHec == nil {
+		t.Fatal("expected active input_cloudflare_hec variant to be preserved")
+	}
+}
+
 func sourceTestStringList(values ...string) types.List {
 	elements := make([]attr.Value, 0, len(values))
 	for _, value := range values {

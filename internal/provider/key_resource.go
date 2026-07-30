@@ -44,24 +44,28 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 		MarkdownDescription: "Key Resource",
 		Attributes: map[string]schema.Attribute{
 			"algorithm": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: true,
+				Required:    false,
+				Optional:    true,
+				Computed:    true,
+				Description: `Encryption algorithm`,
 			},
 			"created": schema.Float64Attribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Creation time`,
 			},
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Description`,
 			},
 			"expires": schema.Float64Attribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Expiration time`,
 			},
 			"group": schema.StringAttribute{
 				Required:    false,
@@ -79,9 +83,10 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Key ID`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
@@ -100,14 +105,16 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Description: `API-assigned key ID returned by Cribl.`,
 			},
 			"keyclass": schema.Float64Attribute{
-				Required: false,
-				Optional: true,
-				Computed: true,
+				Required:    false,
+				Optional:    true,
+				Computed:    true,
+				Description: `Key class`,
 			},
 			"kms": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: true,
+				Required:    false,
+				Optional:    true,
+				Computed:    true,
+				Description: `KMS for this key`,
 			},
 			"use_iv": schema.BoolAttribute{
 				Required:    false,
@@ -257,7 +264,18 @@ func isKeyImportState(state *KeyModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Expires.IsNull() && !state.Expires.IsUnknown() {
+		return false
+	}
+	if !state.UseIV.IsNull() && !state.UseIV.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fillMissingInputs bool) {

@@ -83,9 +83,12 @@ type PackSourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -158,9 +161,12 @@ type PackSourceResourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -233,9 +239,12 @@ type PackSourceDataSourceModel struct {
 	InputWizWebhook           *InputWizWebhookModel           `tfsdk:"input_wiz_webhook" json:"InputWizWebhook,omitempty"`
 	InputNetflow              *InputNetflowModel              `tfsdk:"input_netflow" json:"InputNetflow,omitempty"`
 	InputSecurityLake         *InputSecurityLakeModel         `tfsdk:"input_security_lake" json:"InputSecurityLake,omitempty"`
+	InputBedrockS3            *InputBedrockS3Model            `tfsdk:"input_bedrock_s3" json:"InputBedrockS3,omitempty"`
 	InputServicenowTable      *InputServicenowTableModel      `tfsdk:"input_servicenow_table" json:"InputServicenowTable,omitempty"`
 	InputZscalerHec           *InputZscalerHecModel           `tfsdk:"input_zscaler_hec" json:"InputZscalerHec,omitempty"`
 	InputCloudflareHec        *InputCloudflareHecModel        `tfsdk:"input_cloudflare_hec" json:"InputCloudflareHec,omitempty"`
+	InputSysdigHec            *InputSysdigHecModel            `tfsdk:"input_sysdig_hec" json:"InputSysdigHec,omitempty"`
+	InputUpwindHec            *InputUpwindHecModel            `tfsdk:"input_upwind_hec" json:"InputUpwindHec,omitempty"`
 	InputOpenaiComplianceLogs *InputOpenaiComplianceLogsModel `tfsdk:"input_openai_compliance_logs" json:"InputOpenaiComplianceLogs,omitempty"`
 	InputAnthropicCompliance  *InputAnthropicComplianceModel  `tfsdk:"input_anthropic_compliance" json:"InputAnthropicCompliance,omitempty"`
 	InputOkta                 *InputOktaModel                 `tfsdk:"input_okta" json:"InputOkta,omitempty"`
@@ -311,9 +320,12 @@ func PackSourceLegacyItemsAttrTypes() map[string]attr.Type {
 		"input_wiz_webhook":            types.ObjectType{AttrTypes: InputWizWebhookModelAttrTypes()},
 		"input_netflow":                types.ObjectType{AttrTypes: InputNetflowModelAttrTypes()},
 		"input_security_lake":          types.ObjectType{AttrTypes: InputSecurityLakeModelAttrTypes()},
+		"input_bedrock_s3":             types.ObjectType{AttrTypes: InputBedrockS3ModelAttrTypes()},
 		"input_servicenow_table":       types.ObjectType{AttrTypes: InputServicenowTableModelAttrTypes()},
 		"input_zscaler_hec":            types.ObjectType{AttrTypes: InputZscalerHecModelAttrTypes()},
 		"input_cloudflare_hec":         types.ObjectType{AttrTypes: InputCloudflareHecModelAttrTypes()},
+		"input_sysdig_hec":             types.ObjectType{AttrTypes: InputSysdigHecModelAttrTypes()},
+		"input_upwind_hec":             types.ObjectType{AttrTypes: InputUpwindHecModelAttrTypes()},
 		"input_openai_compliance_logs": types.ObjectType{AttrTypes: InputOpenaiComplianceLogsModelAttrTypes()},
 		"input_anthropic_compliance":   types.ObjectType{AttrTypes: InputAnthropicComplianceModelAttrTypes()},
 		"input_okta":                   types.ObjectType{AttrTypes: InputOktaModelAttrTypes()},
@@ -358,7 +370,8 @@ func PackSourceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := PackSourceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -366,7 +379,15 @@ func PackSourceTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[PackSourceTerraformNameToAPIName(key)] = value
+			apiKey := PackSourceTerraformNameToAPIName(key)
+			// Prometheus search filters use capitalized Name and Values. Other
+			// source metadata and header objects use the ordinary name key.
+			if key == "name" {
+				if _, searchFilter := attributes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -381,6 +402,60 @@ func PackSourceTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "chat_messages":
+		return prefix + "chat_messages"
+	case "cribl_api":
+		return prefix + "criblAPI"
+	case "custom_apiversion":
+		return prefix + "customAPIVersion"
+	case "elastic_api":
+		return prefix + "elasticAPI"
+	case "enable_sqsassume_role":
+		return prefix + "enableSQSAssumeRole"
+	case "hec_api":
+		return prefix + "hecAPI"
+	case "loki_api":
+		return prefix + "lokiAPI"
+	case "max_manifest_size_kb":
+		return prefix + "maxManifestSizeKB"
+	case "name":
+		return prefix + "Name"
+	case "org_roles":
+		return prefix + "org_roles"
+	case "org_users":
+		return prefix + "org_users"
+	case "parquet_chunk_size_mb":
+		return prefix + "parquetChunkSizeMB"
+	case "project_details":
+		return prefix + "project_details"
+	case "prometheus_api":
+		return prefix + "prometheusAPI"
+	case "schema_registry_url":
+		return prefix + "schemaRegistryURL"
+	case "splunk_hec_api":
+		return prefix + "splunkHecAPI"
+	case "sqsassume_role_arn":
+		return prefix + "SQSAssumeRoleArn"
+	case "sqsassume_role_external_id":
+		return prefix + "SQSAssumeRoleExternalId"
+	case "sqsaws_authentication_method":
+		return prefix + "SQSAwsAuthenticationMethod"
+	case "sqsaws_secret":
+		return prefix + "SQSAwsSecret"
+	case "sqsaws_secret_key":
+		return prefix + "SQSAwsSecretKey"
+	case "sqsduration_seconds":
+		return prefix + "SQSDurationSeconds"
+	case "transport_url":
+		return prefix + "transportURL"
+	case "use_custom_oauth_params_or_headers":
+		return prefix + "useCustomOAuthParamsOrHeaders"
+	case "values":
+		return prefix + "Values"
+	case "verify_kplcheck_sums":
+		return prefix + "verifyKPLCheckSums"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -476,6 +551,11 @@ func PackSourceAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, e
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := PackSourceTerraformNameToAPIName(key)
+			if key == "name" {
+				if _, searchFilter := typed.AttrTypes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -1096,6 +1176,15 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputBedrockS3 != nil {
+		value, err := m.InputBedrockS3.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	if m.InputServicenowTable != nil {
 		value, err := m.InputServicenowTable.terraformPayload()
 		if err != nil {
@@ -1116,6 +1205,24 @@ func (m PackSourceModel) MarshalJSON() ([]byte, error) {
 	}
 	if m.InputCloudflareHec != nil {
 		value, err := m.InputCloudflareHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputSysdigHec != nil {
+		value, err := m.InputSysdigHec.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
+	if m.InputUpwindHec != nil {
+		value, err := m.InputUpwindHec.terraformPayload()
 		if err != nil {
 			return nil, err
 		}
@@ -1489,6 +1596,11 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputSecurityLake.unmarshalPayload(raw); err != nil {
 			return err
 		}
+	case "bedrock_s3":
+		m.InputBedrockS3 = &InputBedrockS3Model{}
+		if err := m.InputBedrockS3.unmarshalPayload(raw); err != nil {
+			return err
+		}
 	case "servicenow_table":
 		m.InputServicenowTable = &InputServicenowTableModel{}
 		if err := m.InputServicenowTable.unmarshalPayload(raw); err != nil {
@@ -1502,6 +1614,16 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	case "cloudflare_hec":
 		m.InputCloudflareHec = &InputCloudflareHecModel{}
 		if err := m.InputCloudflareHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "sysdig_hec":
+		m.InputSysdigHec = &InputSysdigHecModel{}
+		if err := m.InputSysdigHec.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "upwind_hec":
+		m.InputUpwindHec = &InputUpwindHecModel{}
+		if err := m.InputUpwindHec.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	case "openai_compliance_logs":

@@ -98,5 +98,6 @@ func notificationTargetImportStateVerifyIgnore() []string {
 		"sns_target.aws_api_key",
 		"sns_target.aws_secret_key",
 		"sns_target.phone_number",
+		"sns_target.system_fields",
 	}
 }

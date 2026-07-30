@@ -55,7 +55,7 @@ resource "criblio_pack_destination" "my_packdest" {
 
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 
 ### Optional
 
@@ -79,6 +79,7 @@ resource "criblio_pack_destination" "my_packdest" {
 - `output_kinesis` (Attributes) (see [below for nested schema](#nestedatt--output_kinesis))
 - `output_honeycomb` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb))
 - `output_azure_eventhub` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub))
+- `output_google_bigquery` (Attributes) (see [below for nested schema](#nestedatt--output_google_bigquery))
 - `output_google_chronicle` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle))
 - `output_google_cloud_storage` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage))
 - `output_google_cloud_logging` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_logging))
@@ -106,6 +107,7 @@ resource "criblio_pack_destination" "my_packdest" {
 - `output_datadog` (Attributes) (see [below for nested schema](#nestedatt--output_datadog))
 - `output_grafana_cloud` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud))
 - `output_loki` (Attributes) (see [below for nested schema](#nestedatt--output_loki))
+- `output_amazon_managed_prometheus` (Attributes) (see [below for nested schema](#nestedatt--output_amazon_managed_prometheus))
 - `output_prometheus` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus))
 - `output_ring` (Attributes) (see [below for nested schema](#nestedatt--output_ring))
 - `output_open_telemetry` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry))
@@ -121,6 +123,7 @@ resource "criblio_pack_destination" "my_packdest" {
 - `output_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake))
 - `output_disk_spool` (Attributes) (see [below for nested schema](#nestedatt--output_disk_spool))
 - `output_click_house` (Attributes) (see [below for nested schema](#nestedatt--output_click_house))
+- `output_customer_metrics_storage` (Attributes) (see [below for nested schema](#nestedatt--output_customer_metrics_storage))
 - `output_local_search_storage` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage))
 - `output_xsiam` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam))
 - `output_netflow` (Attributes) (see [below for nested schema](#nestedatt--output_netflow))
@@ -129,6 +132,7 @@ resource "criblio_pack_destination" "my_packdest" {
 - `output_sentinel_one_ai_siem` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem))
 - `output_chronicle` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle))
 - `output_databricks` (Attributes) (see [below for nested schema](#nestedatt--output_databricks))
+- `output_snowflake_streaming` (Attributes) (see [below for nested schema](#nestedatt--output_snowflake_streaming))
 - `output_microsoft_fabric` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric))
 - `output_cloudflare_r2` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2))
 - `output_nutanix_objects` (Attributes) (see [below for nested schema](#nestedatt--output_nutanix_objects))
@@ -138,6 +142,7 @@ resource "criblio_pack_destination" "my_packdest" {
 - `output_cloudian_s3` (Attributes) (see [below for nested schema](#nestedatt--output_cloudian_s3))
 - `output_scality_s3` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3))
 - `output_alibaba_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_alibaba_cloud_s3))
+- `output_ibm_cloud_s3` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3))
 
 <a id="nestedatt--output_default"></a>
 ### Nested Schema for `output_default`
@@ -145,11 +150,11 @@ resource "criblio_pack_destination" "my_packdest" {
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `default_id` (String) ID of the default output. This will be used whenever a nonexistent/deleted output is referenced.
 
 <a id="nestedatt--output_webhook"></a>
@@ -158,11 +163,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `method` (String)
 - `format` (String) How to format events before sending out
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
@@ -187,7 +192,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--tls))
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `custom_source_expression` (String) Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
 - `custom_drop_when_null` (Boolean) Whether to drop events when the source expression evaluates to null
 - `custom_event_delimiter` (String) Delimiter string to insert between individual events. Defaults to newline character.
@@ -207,9 +212,9 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `pq_controls` (Map of String) Persistent queue controls.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `text_secret` (String) Select or create a stored text secret
@@ -221,9 +226,13 @@ Optional:
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_webhook--oauth_params))
 - `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_webhook--oauth_headers))
+- `refresh_token_field` (String) Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.
+- `rotate_refresh_token` (Boolean) @{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.
+- `refresh_url` (String) Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.
+- `refresh_request_params` (Attributes List) Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret. (see [below for nested schema](#nestedatt--output_webhook--refresh_request_params))
 - `url` (String) URL of a webhook endpoint to send events to, such as http://localhost:10200
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_webhook--urls))
+- `urls` (Attributes List) Webhook URLs (see [below for nested schema](#nestedatt--output_webhook--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 
@@ -233,11 +242,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)
@@ -256,14 +265,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `auth_type` (String)
+- `auth_type` (String) Discriminator value.
 - `login_url` (String) URL for OAuth
 - `secret` (String, Sensitive) Secret parameter value to pass in request body
+- `refresh_token_field` (String) Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.
+- `rotate_refresh_token` (Boolean) @{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.
+- `refresh_url` (String) Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.
+- `refresh_request_params` (Attributes List) Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret. (see [below for nested schema](#nestedatt--output_sentinel--refresh_request_params))
 - `client_id` (String) JavaScript expression to compute the Client ID for the Azure application. Can be a constant.
 - `scope` (String) Scope to pass in the OAuth request
 - `endpoint_urlconfiguration` (String) Enter the data collection endpoint URL or the individual ID
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `format` (String)
 - `custom_source_expression` (String) Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
 - `custom_drop_when_null` (Boolean) Whether to drop events when the source expression evaluates to null
@@ -284,7 +297,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
 - `dce_endpoint` (String) Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`
@@ -296,11 +309,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 
 <a id="nestedatt--output_syslog"></a>
 ### Nested Schema for `output_syslog`
@@ -312,7 +325,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String) The network protocol to use for sending out syslog messages
 - `facility` (Integer) Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user.
 - `severity` (Integer) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice.
@@ -322,7 +335,7 @@ Optional:
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `octet_count_framing` (Boolean) Prefix messages with the byte count of the message. If disabled, no prefix will be set, and the message will be appended with a \n.
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `load_balanced` (Boolean) For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs.  If this setting is disabled, consider enabling round-robin DNS.
 - `host` (String) The hostname of the receiver
 - `port` (Number) The port to connect to on the provided host
@@ -349,7 +362,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_splunk"></a>
 ### Nested Schema for `output_splunk`
@@ -361,7 +374,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `host` (String) The hostname of the receiver
 - `port` (Number) The port to connect to on the provided host
 - `nested_fields` (String)
@@ -375,7 +388,7 @@ Optional:
 - `max_s2_sversion` (String)
 - `on_backpressure` (String)
 - `auth_type` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `max_failed_health_checks` (Number) Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
 - `compress` (String)
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -389,7 +402,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `auth_token` (String, Sensitive) Shared secret token to use when establishing a connection to a Splunk indexer.
 - `text_secret` (String) Select or create a stored text secret
 
@@ -399,11 +412,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `max_concurrent_senders` (Number) Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
@@ -420,7 +433,7 @@ Optional:
 - `indexer_discovery` (Boolean) Automatically discover indexers in indexer clustering environment.
 - `sender_unhealthy_time_allowance` (Number) How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.
 - `auth_type` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `max_failed_health_checks` (Number) Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
 - `compress` (String)
 - `indexer_discovery_configs` (Attributes) List of configurations to set up indexer discovery in Splunk Indexer clustering environment. (see [below for nested schema](#nestedatt--output_splunk_lb--indexer_discovery_configs))
@@ -437,7 +450,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `auth_token` (String, Sensitive) Shared secret token to use when establishing a connection to a Splunk indexer.
 - `text_secret` (String) Select or create a stored text secret
 
@@ -447,14 +460,12 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
-- `next_queue` (String) In the Splunk app, define which Splunk processing queue to send the events after HEC processing.
-- `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--tls))
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -473,12 +484,14 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_splunk_hec--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `next_queue` (String) In the Splunk app, define which Splunk processing queue to send the events after HEC processing.
+- `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `url` (String) URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_splunk_hec--urls))
+- `urls` (Attributes List) Splunk HEC Endpoints (see [below for nested schema](#nestedatt--output_splunk_hec--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `token` (String, Sensitive) Splunk HEC authentication token
@@ -494,7 +507,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_wiz_hec"></a>
 ### Nested Schema for `output_wiz_hec`
@@ -502,13 +515,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `next_queue` (String) In the Splunk app, define which Splunk processing queue to send the events after HEC processing.
-- `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--tls))
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -526,12 +537,14 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_wiz_hec--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `on_backpressure` (String)
 - `wiz_connector_id` (String) The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.
-- `wiz_environment` (String) Your Wiz deployment environment.
-- `data_center` (String) Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.
-- `wiz_sourcetype` (String)
-- `description` (String)
+- `wiz_environment` (String) Your Wiz deployment environment
+- `data_center` (String) Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.
+- `wiz_sourcetype` (String) Wiz Defend Source type
+- `on_backpressure` (String)
+- `description` (String) Optional description for this configuration.
+- `token` (String, Sensitive) Wiz Defend Auth token
+- `text_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -543,9 +556,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
-- `token` (String, Sensitive) Wiz Defend Auth token
-- `text_secret` (String) Select or create a stored text secret
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_tcpjson"></a>
 ### Nested Schema for `output_tcpjson`
@@ -557,7 +568,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) Use load-balanced destinations
 - `compression` (String)
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
@@ -569,7 +580,7 @@ Optional:
 - `send_header` (Boolean) Upon connection, send a header-like record containing the auth token and other metadata.This record will not contain an actual event – only subsequent records will.
 - `on_backpressure` (String)
 - `auth_type` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `host` (String) The hostname of the receiver
 - `port` (Number) The port to connect to on the provided host
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
@@ -588,7 +599,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `auth_token` (String, Sensitive) Optional authentication token to include as part of the connection header
 - `text_secret` (String) Select or create a stored text secret
 
@@ -598,11 +609,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `auth_type` (String)
 - `domain` (String) WaveFront domain name, e.g. "longboard"
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -622,7 +633,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `token` (String, Sensitive) WaveFront API authentication token (see [here](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token))
 - `text_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -636,7 +647,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_signalfx"></a>
 ### Nested Schema for `output_signalfx`
@@ -644,11 +655,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `auth_type` (String)
 - `realm` (String) SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions).
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -668,7 +679,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `token` (String, Sensitive) SignalFx API access token (see [here](https://docs.signalfx.com/en/latest/admin-guide/tokens.html#working-with-access-tokens))
 - `text_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -682,7 +693,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_filesystem"></a>
 ### Nested Schema for `output_filesystem`
@@ -690,11 +701,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `dest_path` (String) Final destination for the output files
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
@@ -715,7 +726,7 @@ Optional:
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_filesystem--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_filesystem--orphans))
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `compress` (String)
 - `compression_level` (String)
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
@@ -744,7 +755,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -783,7 +794,7 @@ Optional:
 - `storage_class` (String)
 - `server_side_encryption` (String)
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
@@ -814,7 +825,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `container_name` (String) The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
 - `create_container` (Boolean) Create the configured container in Azure Blob Storage if it does not already exist
 - `dest_path` (String) Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}`.
@@ -839,8 +850,8 @@ Optional:
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--orphans))
 - `auth_type` (String)
-- `storage_class` (String)
-- `description` (String)
+- `storage_class` (String) Blob access tier
+- `description` (String) Optional description for this configuration.
 - `compress` (String)
 - `compression_level` (String)
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
@@ -874,22 +885,22 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `cluster_url` (String) The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`.
 - `database` (String) Name of the database containing the table where data will be ingested
 - `table` (String) Name of the table to ingest data into
 - `validate_database_settings` (Boolean) When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.
-- `ingest_mode` (String)
+- `ingest_mode` (String) Ingestion mode
 - `oauth_endpoint` (String)
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
 - `client_id` (String) client_id to pass in the OAuth request parameter
 - `scope` (String) Scope to pass in the OAuth request parameter
 - `oauth_type` (String) The type of OAuth 2.0 client credentials grant flow to use
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `client_secret` (String, Sensitive) The client secret that you generated for your app in the Azure portal
 - `text_secret` (String) Select or create a stored text secret
 - `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--certificate))
@@ -960,7 +971,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_azure_logs"></a>
 ### Nested Schema for `output_azure_logs`
@@ -968,11 +979,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `log_type` (String) The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.
 - `resource_id` (String) Optional Resource ID of the Azure resource to associate the data with. Can be overridden by the __resourceId event field. This ID populates the _ResourceId property, allowing the data to be included in resource-centric queries. If the ID is neither specified nor overridden, resource-centric queries will omit the data.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -994,7 +1005,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
 - `auth_type` (String) Enter workspace ID and workspace key directly, or select a stored secret
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -1006,7 +1017,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
 - `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
 - `keypair_secret` (String) Select or create a stored secret that references your access key and secret key
@@ -1021,10 +1032,10 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `stream_name` (String) Kinesis stream name to send events to.
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `region` (String) Region where the Kinesis stream is located
 - `endpoint` (String) Kinesis stream service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Kinesis stream-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -1040,8 +1051,8 @@ Optional:
 - `use_list_shards` (Boolean) Provides higher stream rate limits, improving delivery speed and reliability by minimizing throttling. See the [ListShards API](https://docs.aws.amazon.com/kinesis/latest/APIReference/API_ListShards.html) documentation for details.
 - `as_ndjson` (Boolean) Batch events into a single record as NDJSON
 - `on_backpressure` (String)
-- `description` (String)
-- `aws_api_key` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_api_key` (String) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `max_events_per_flush` (Number) Maximum number of records to send in a single request
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -1055,7 +1066,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_honeycomb"></a>
 ### Nested Schema for `output_honeycomb`
@@ -1063,11 +1074,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `dataset` (String) Name of the dataset to send events to – e.g., observability
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -1087,7 +1098,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
 - `auth_type` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -1099,7 +1110,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `team` (String) Team API key where the dataset belongs
 - `text_secret` (String) Select or create a stored text secret
 
@@ -1109,11 +1120,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
 - `topic` (String) The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.
 - `ack` (Integer)
@@ -1132,7 +1143,7 @@ Optional:
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--sasl))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--tls))
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -1144,7 +1155,44 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
+
+<a id="nestedatt--output_google_bigquery"></a>
+### Nested Schema for `output_google_bigquery`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String) Connector type identifier.
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `project_id` (String) Google Cloud project ID that contains the BigQuery dataset
+- `dataset_id` (String) BigQuery dataset ID
+- `table_id` (String) BigQuery table ID
+- `timestamp_column` (String) Column name to write event time (`_time`) as a BigQuery TIMESTAMP. Used for time partitioning
+- `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), or Secret to select or create a stored secret that references Google service account credentials
+- `secret` (String, Sensitive) Select or create a stored text secret
+- `flush_period` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached)
+- `max_queue_size` (Number) Maximum number of queued batches before blocking
+- `max_record_size_kb` (Number) Maximum size (KB) of a single append request. BigQuery limit is 10 MB
+- `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied
+- `max_send_retries` (Number) Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.
+- `on_backpressure` (String)
+- `description` (String) Optional description for this configuration.
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_google_chronicle"></a>
 ### Nested Schema for `output_google_chronicle`
@@ -1152,17 +1200,17 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `api_version` (String)
-- `authentication_method` (String)
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `api_version` (String) API version
+- `authentication_method` (String) Authentication method
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_google_chronicle--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `log_format_type` (String)
+- `log_format_type` (String) Send events as
 - `region` (String) Regional endpoint to send events to
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -1179,7 +1227,7 @@ Optional:
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `extra_log_types` (Attributes List) Custom log types. If the value "Custom" is selected in the setting "Default log type" above, the first custom log type in this table will be automatically selected as default log type. (see [below for nested schema](#nestedatt--output_google_chronicle--extra_log_types))
 - `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType.
 - `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
@@ -1202,7 +1250,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_google_cloud_storage"></a>
 ### Nested Schema for `output_google_cloud_storage`
@@ -1210,15 +1258,15 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `bucket` (String) Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: `myBucket-${C.vars.myVar}`.
 - `region` (String) Region where the bucket is located
 - `endpoint` (String) Google Cloud Storage service endpoint
-- `aws_authentication_method` (String)
+- `aws_authentication_method` (String) Authentication method
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
 - `dest_path` (String) Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
@@ -1244,7 +1292,7 @@ Optional:
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage--orphans))
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `compress` (String)
 - `compression_level` (String)
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
@@ -1272,14 +1320,14 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `log_location_type` (String)
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `log_location_type` (String) Log location type
 - `log_name_expression` (String) JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
-- `sanitize_log_names` (Boolean)
+- `sanitize_log_names` (Boolean) Validate and correct log name
 - `payload_format` (String) Format to use when sending payload. Defaults to Text.
 - `log_labels` (Attributes List) Labels to apply to the log entry (see [below for nested schema](#nestedatt--output_google_cloud_logging--log_labels))
 - `resource_type_expression` (String) JavaScript expression to compute the value of the managed resource type field. Must evaluate to one of the valid values [here](https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types). Defaults to "global".
@@ -1326,7 +1374,7 @@ Optional:
 - `trace_sampled_expression` (String) A JavaScript expression that evaluates to the the sampling decision of the span associated with the log entry. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `log_location_expression` (String) JavaScript expression to compute the value of the folder ID with which log entries should be associated. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
 - `payload_expression` (String) JavaScript expression to compute the value of the payload. Must evaluate to a JavaScript object value. If an invalid value is encountered it will result in the default value instead. Defaults to the entire event.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -1340,7 +1388,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_google_cloud_observability"></a>
 ### Nested Schema for `output_google_cloud_observability`
@@ -1348,13 +1396,13 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `protocol` (String)
-- `otlp_version` (String)
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `protocol` (String) Discriminator value.
+- `otlp_version` (String) Discriminator value.
 - `endpoint` (String) Fixed Google Cloud Observability gRPC endpoint. All three signals share this transport; the OTLP service path determines whether the call lands on traces, metrics, or logs.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_google_cloud_observability--metadata))
@@ -1370,7 +1418,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_observability--tls))
 - `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `secret` (String, Sensitive) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -1383,7 +1431,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_google_pubsub"></a>
 ### Nested Schema for `output_google_pubsub`
@@ -1395,7 +1443,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `topic_name` (String) ID of the topic to send events to.
 - `create_topic` (Boolean) If enabled, create topic if it does not exist.
 - `ordered_delivery` (Boolean) If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.
@@ -1410,7 +1458,7 @@ Optional:
 - `flush_period` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached)
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -1422,7 +1470,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_exabeam"></a>
 ### Nested Schema for `output_exabeam`
@@ -1430,11 +1478,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `bucket` (String) Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: `myBucket-${C.vars.myVar}`.
 - `region` (String) Region where the bucket is located
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
@@ -1459,10 +1507,10 @@ Optional:
 
 - `site_name` (String) Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.
 - `site_id` (String) Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.
-- `timezone_offset` (String)
+- `timezone_offset` (String) Timezone offset
 - `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String, Sensitive) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
@@ -1478,7 +1526,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.
 - `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
 - `ack` (Integer)
@@ -1499,7 +1547,7 @@ Optional:
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--sasl))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--tls))
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
 - `protobuf_encoding_id` (String) Select the type of object you want the Protobuf definitions to use for event encoding
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -1513,7 +1561,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_confluent_cloud"></a>
 ### Nested Schema for `output_confluent_cloud`
@@ -1525,7 +1573,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--tls))
 - `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
@@ -1546,7 +1594,7 @@ Optional:
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `sasl` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--sasl))
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
 - `protobuf_encoding_id` (String) Select the type of object you want the Protobuf definitions to use for event encoding
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -1560,7 +1608,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_msk"></a>
 ### Nested Schema for `output_msk`
@@ -1572,7 +1620,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.
 - `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
 - `ack` (Integer)
@@ -1591,7 +1639,7 @@ Optional:
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `region` (String) Region where the MSK cluster is located
 - `endpoint` (String) MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -1602,8 +1650,8 @@ Optional:
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
 - `on_backpressure` (String)
-- `description` (String)
-- `aws_api_key` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_api_key` (String) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
 - `protobuf_encoding_id` (String) Select the type of object you want the Protobuf definitions to use for event encoding
@@ -1618,7 +1666,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_elastic"></a>
 ### Nested Schema for `output_elastic`
@@ -1626,11 +1674,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `index` (String) Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 - `doc_type` (String) Document type to use for events. Can be overwritten by an event's __type field.
@@ -1649,7 +1697,7 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_elastic--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `extra_params` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--extra_params))
+- `extra_params` (Attributes List) Extra parameters (see [below for nested schema](#nestedatt--output_elastic--extra_params))
 - `auth` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--auth))
 - `elastic_version` (String) Optional Elasticsearch version, used to format events. If not specified, will auto-discover version.
 - `elastic_pipeline` (String) Optional Elasticsearch destination pipeline
@@ -1657,11 +1705,11 @@ Optional:
 - `write_action` (String) Action to use when writing events. Must be set to `Create` when writing to a data stream.
 - `retry_partial_errors` (Boolean) Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `url` (String) The Cloud ID or URL to an Elastic cluster to send events to. Example: http://elastic:9200/_bulk
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--urls))
+- `urls` (Attributes List) Bulk API URLs (see [below for nested schema](#nestedatt--output_elastic--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -1675,7 +1723,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_elastic_cloud"></a>
 ### Nested Schema for `output_elastic_cloud`
@@ -1683,11 +1731,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) Enter Cloud ID of the Elastic Cloud environment to send events to
 - `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -1710,7 +1758,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -1722,7 +1770,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_newrelic"></a>
 ### Nested Schema for `output_newrelic`
@@ -1730,11 +1778,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `region` (String)
 - `log_type` (String) Name of the logtype to send with events, e.g.: observability, access_log. The event's 'sourcetype' field (if set) will override this value.
 - `message_field` (String) Name of field to send as log message value. If not present, event will be serialized and sent as JSON.
@@ -1758,7 +1806,7 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `custom_url` (String)
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -1771,7 +1819,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `api_key` (String, Sensitive) New Relic API key. Can be overridden using __newRelic_apiKey field.
 - `text_secret` (String) Select or create a stored text secret
 
@@ -1781,11 +1829,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `region` (String)
 - `account_id` (String) New Relic account ID
 - `event_type` (String) Default New Relic eventType to use when event type is not present. For more information, see the [New Relic eventType documentation](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).
@@ -1807,7 +1855,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
 - `auth_type` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `custom_url` (String)
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -1820,7 +1868,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `api_key` (String, Sensitive) New Relic API key. Can be overridden using __newRelic_apiKey field.
 - `text_secret` (String) Select or create a stored text secret
 
@@ -1830,11 +1878,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write
 - `use_v2_api` (Boolean) The v2 API can be enabled with InfluxDB versions 1.8 and later.
 - `timestamp_precision` (String) Sets the precision for the supplied Unix time values. Defaults to milliseconds.
@@ -1858,7 +1906,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
 - `auth_type` (String) InfluxDB authentication type
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `database` (String) Database to write to.
 - `bucket` (String) Bucket to write to.
 - `org` (String) Organization ID for this bucket.
@@ -1873,9 +1921,9 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `pq_controls` (Map of String) Persistent queue controls.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `text_secret` (String) Select or create a stored text secret
@@ -1886,15 +1934,15 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `log_group_name` (String) CloudWatch log group to associate events with
 - `log_stream_name` (String) Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `region` (String) Region where the CloudWatchLogs is located
 - `endpoint` (String) CloudWatchLogs service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to CloudWatchLogs-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -1907,8 +1955,8 @@ Optional:
 - `max_record_size_kb` (Number) Maximum size (KB) of each individual record before compression. For non compressible data 1MB is the max recommended size
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
 - `on_backpressure` (String)
-- `description` (String)
-- `aws_api_key` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_api_key` (String) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -1921,7 +1969,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_minio"></a>
 ### Nested Schema for `output_minio`
@@ -1929,11 +1977,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -1967,7 +2015,7 @@ Optional:
 - `object_acl` (String)
 - `storage_class` (String)
 - `server_side_encryption` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
@@ -1994,18 +2042,18 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String)
 - `host` (String) The hostname of the destination.
 - `port` (Number) Destination port.
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
@@ -2021,7 +2069,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_statsd_ext"></a>
 ### Nested Schema for `output_statsd_ext`
@@ -2029,18 +2077,18 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String)
 - `host` (String) The hostname of the destination.
 - `port` (Number) Destination port.
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
@@ -2056,7 +2104,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_graphite"></a>
 ### Nested Schema for `output_graphite`
@@ -2064,18 +2112,18 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String)
 - `host` (String) The hostname of the destination.
 - `port` (Number) Destination port.
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
@@ -2091,7 +2139,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_router"></a>
 ### Nested Schema for `output_router`
@@ -2099,13 +2147,13 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `rules` (Attributes List) Event routing rules (see [below for nested schema](#nestedatt--output_router--rules))
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 
 <a id="nestedatt--output_sns"></a>
 ### Nested Schema for `output_sns`
@@ -2113,16 +2161,16 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`
 - `message_group_id` (String) Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `max_retries` (Number) Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `region` (String) Region where the SNS is located
 - `endpoint` (String) SNS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SNS-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -2132,8 +2180,8 @@ Optional:
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
 - `on_backpressure` (String)
-- `description` (String)
-- `aws_api_key` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_api_key` (String) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2146,7 +2194,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_sqs"></a>
 ### Nested Schema for `output_sqs`
@@ -2158,14 +2206,14 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `queue_type` (String) The queue type used (or created). Defaults to Standard.
 - `aws_account_id` (String) SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.
 - `message_group_id` (String) This parameter applies only to FIFO queues. The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner. Use event field __messageGroupId to override this value.
 - `create_queue` (Boolean) Create queue if it does not exist.
 - `aws_authentication_method` (String)
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `region` (String) AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `endpoint` (String) SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -2179,8 +2227,8 @@ Optional:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied.
 - `on_backpressure` (String)
-- `description` (String)
-- `aws_api_key` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_api_key` (String) Access key
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2193,7 +2241,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_snmp"></a>
 ### Nested Schema for `output_snmp`
@@ -2205,10 +2253,12 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `hosts` (Attributes List) One or more SNMP destinations to forward traps to (see [below for nested schema](#nestedatt--output_snmp--hosts))
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.
-- `description` (String)
+- `enable_ip_spoofing` (Boolean) Send SNMP Trap traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
+- `description` (String) Optional description for this configuration.
+- `max_record_size` (Number) MTU in bytes. The actual maximum SNMP Trap payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). Payloads exceeding this limit will be dropped.
 
 <a id="nestedatt--output_sumo_logic"></a>
 ### Nested Schema for `output_sumo_logic`
@@ -2216,11 +2266,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) Sumo Logic HTTP collector URL to which events should be sent
 - `custom_source` (String) Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
 - `custom_category` (String) Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
@@ -2243,7 +2293,7 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -2255,7 +2305,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_datadog"></a>
 ### Nested Schema for `output_datadog`
@@ -2263,11 +2313,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `content_type` (String) The content type to use when sending logs
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
 - `source` (String) Name of the source to send with logs. When you send logs as JSON objects, the event's 'source' field (if set) will override this value.
@@ -2298,7 +2348,7 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `custom_url` (String)
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2311,7 +2361,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `api_key` (String, Sensitive) Organization's API key in Datadog
 - `text_secret` (String) Select or create a stored text secret
 
@@ -2321,11 +2371,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
 - `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
@@ -2350,7 +2400,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `compress` (Boolean) Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2363,7 +2413,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_loki"></a>
 ### Nested Schema for `output_loki`
@@ -2371,11 +2421,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) The endpoint to send logs to
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
 - `message_format` (String)
@@ -2399,7 +2449,7 @@ Optional:
 - `enable_dynamic_headers` (Boolean) Add per-event HTTP headers from the __headers field to outgoing requests. Events with different headers are batched and sent separately.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `compress` (Boolean) Compress the payload body before sending
 - `token` (String, Sensitive) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `text_secret` (String) Select or create a stored text secret
@@ -2417,7 +2467,61 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
+
+<a id="nestedatt--output_amazon_managed_prometheus"></a>
+### Nested Schema for `output_amazon_managed_prometheus`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String) Connector type identifier.
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `url` (String) The Amazon Managed Service for Prometheus remote_write endpoint
+- `aws_authentication_method` (String)
+- `aws_secret_key` (String, Sensitive) Secret key
+- `region` (String) Region where the AMSP is located
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access AMSP
+- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
+- `assume_role_external_id` (String) External ID to use when assuming role
+- `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
+- `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
+- `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests
+- `use_prometheus_histogram_bucket_suffix` (Boolean) Serialize histogram bucket series as `<metric>_bucket` to match Prometheus histogram naming convention
+- `concurrency` (Number) Maximum number of ongoing requests before blocking
+- `max_payload_size_kb` (Number) Maximum uncompressed size, in KB, of the request body. The 1 MB cap is intentional and protects against data that compresses poorly, since oversized requests fail with a non-retryable 413.
+- `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `extra_http_headers` (Attributes List) Headers to add to all events. SigV4-managed headers and the Prometheus remote-write protocol version header are generated by this Destination and cannot be configured here. (see [below for nested schema](#nestedatt--output_amazon_managed_prometheus--extra_http_headers))
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_amazon_managed_prometheus--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_amazon_managed_prometheus--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `on_backpressure` (String)
+- `description` (String) Optional description for this configuration.
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
+- `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_prometheus"></a>
 ### Nested Schema for `output_prometheus`
@@ -2429,7 +2533,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) The endpoint to send metrics to
 - `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
 - `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests
@@ -2450,8 +2554,8 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `auth_type` (String)
-- `description` (String)
+- `auth_type` (String) Remote Write authentication type
+- `description` (String) Optional description for this configuration.
 - `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2464,12 +2568,20 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `pq_controls` (Map of String) Persistent queue controls.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `text_secret` (String) Select or create a stored text secret
+- `aws_authentication_method` (String)
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
+- `region` (String) AWS region used to sign Remote Write requests
+- `aws_service` (String) ID used to sign Remote Write requests (for example, `aps` for Amazon Managed Service for Prometheus)
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Prometheus
+- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
+- `assume_role_external_id` (String) External ID to use when assuming role
+- `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
 
 <a id="nestedatt--output_ring"></a>
 ### Nested Schema for `output_ring`
@@ -2477,11 +2589,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `format` (String) Format of the output data.
 - `partition_expr` (String) JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.
 - `max_data_size` (String) Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
@@ -2489,7 +2601,7 @@ Optional:
 - `compress` (String)
 - `dest_path` (String) Path to use to write metrics. Defaults to $CRIBL_HOME/state/<id>
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 
 <a id="nestedatt--output_open_telemetry"></a>
 ### Nested Schema for `output_open_telemetry`
@@ -2497,17 +2609,17 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String)
 - `endpoint` (String) The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used.
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
 - `compress` (String)
 - `http_compress` (String)
-- `auth_type` (String)
+- `auth_type` (String) Authentication type
 - `http_traces_endpoint_override` (String) If you want to send traces to the default `{endpoint}/v1/traces` endpoint, leave this field empty; otherwise, specify the desired endpoint
 - `http_metrics_endpoint_override` (String) If you want to send metrics to the default `{endpoint}/v1/metrics` endpoint, leave this field empty; otherwise, specify the desired endpoint
 - `http_logs_endpoint_override` (String) If you want to send logs to the default `{endpoint}/v1/logs` endpoint, leave this field empty; otherwise, specify the desired endpoint
@@ -2523,9 +2635,9 @@ Optional:
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `on_backpressure` (String)
-- `description` (String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `description` (String) Optional description for this configuration.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `text_secret` (String) Select or create a stored text secret
@@ -2558,7 +2670,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_service_now"></a>
 ### Nested Schema for `output_service_now`
@@ -2566,14 +2678,14 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `endpoint` (String) The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `token_secret` (String) Select or create a stored text secret
-- `auth_token_name` (String)
+- `auth_token_name` (String) Auth token name
 - `otlp_version` (String)
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `protocol` (String)
@@ -2593,7 +2705,7 @@ Optional:
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -2615,7 +2727,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_dataset"></a>
 ### Nested Schema for `output_dataset`
@@ -2623,11 +2735,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `message_field` (String) Name of the event field that contains the message or attributes to send. If not specified, all of the event's non-internal fields will be sent as attributes.
 - `exclude_fields` (List of String) Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.
 - `server_host_field` (String) Name of the event field that contains the `serverHost` identifier. If not specified, defaults to `cribl_<outputId>`.
@@ -2653,7 +2765,7 @@ Optional:
 - `on_backpressure` (String)
 - `auth_type` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `custom_url` (String)
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2666,7 +2778,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `api_key` (String, Sensitive) A 'Log Write Access' API key for the DataSet account
 - `text_secret` (String) Select or create a stored text secret
 
@@ -2680,7 +2792,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) Use load-balanced destinations
 - `compression` (String)
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
@@ -2692,7 +2804,7 @@ Optional:
 - `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should also be installed in Cribl TCP Source in Cribl.Cloud. (see [below for nested schema](#nestedatt--output_cribl_tcp--auth_tokens))
 - `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `host` (String) The hostname of the receiver
 - `port` (Number) The port to connect to on the provided host
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
@@ -2711,7 +2823,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_cribl_http"></a>
 ### Nested Schema for `output_cribl_http`
@@ -2719,11 +2831,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--tls))
 - `token_ttlminutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
@@ -2746,11 +2858,11 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should also be installed in Cribl HTTP Source in Cribl.Cloud. (see [below for nested schema](#nestedatt--output_cribl_http--auth_tokens))
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_http--urls))
+- `urls` (Attributes List) Cribl Worker endpoints (see [below for nested schema](#nestedatt--output_cribl_http--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -2764,7 +2876,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_cribl_search_engine"></a>
 ### Nested Schema for `output_cribl_search_engine`
@@ -2772,11 +2884,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--tls))
 - `token_ttlminutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
@@ -2800,10 +2912,10 @@ Optional:
 - `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should also be installed in Cribl Search Source in Cribl.Cloud. (see [below for nested schema](#nestedatt--output_cribl_search_engine--auth_tokens))
 - `on_backpressure` (String)
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_search_engine--urls))
+- `urls` (Attributes List) Cribl Worker endpoints (see [below for nested schema](#nestedatt--output_cribl_search_engine--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -2817,7 +2929,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_humio_hec"></a>
 ### Nested Schema for `output_humio_hec`
@@ -2825,11 +2937,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -2850,7 +2962,7 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `token` (String, Sensitive) CrowdStrike Falcon LogScale authentication token
 - `text_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -2864,7 +2976,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem`
@@ -2872,11 +2984,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) URL provided from a CrowdStrike data connector. 
 Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -2898,8 +3010,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `description` (String)
-- `token` (String, Sensitive)
+- `description` (String) Optional description for this configuration.
+- `token` (String, Sensitive) Next-Gen SIEM authentication token
 - `text_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
@@ -2912,7 +3024,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_dl_s3"></a>
 ### Nested Schema for `output_dl_s3`
@@ -2920,11 +3032,11 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -2963,7 +3075,7 @@ Optional:
 - `server_side_encryption` (String)
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
 - `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
@@ -2994,7 +3106,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `endpoint` (String) Amazon Security Lake service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Amazon Security Lake-compatible endpoint.
 - `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -3024,7 +3136,7 @@ Optional:
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake--orphans))
-- `aws_secret_key` (String, Sensitive)
+- `aws_secret_key` (String, Sensitive) Secret key
 - `object_acl` (String)
 - `storage_class` (String)
 - `server_side_encryption` (String)
@@ -3041,7 +3153,7 @@ Optional:
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
@@ -3056,23 +3168,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `endpoint` (String) S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.
-- `enable_assume_role` (Boolean) Use Assume Role credentials to access S3
-- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
-- `assume_role_external_id` (String) External ID to use when assuming role
-- `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
-- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
-- `region` (String) Region where the S3 bucket is located
-- `dest_path` (String) Lake dataset to send the data to.
-- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
-- `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
@@ -3090,15 +3190,26 @@ Optional:
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake--orphans))
-- `aws_secret_key` (String, Sensitive) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
-- `object_acl` (String)
-- `storage_class` (String)
-- `server_side_encryption` (String)
-- `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
-- `aws_authentication_method` (String)
+- `storage_location_id` (String) Storage location that contains the target Lake dataset.
+- `dest_path` (String) Lake dataset to send the data to.
 - `format` (String)
-- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
-- `description` (String)
+- `dynamic_dataset` (Boolean)
+- `max_closing_files_to_backpressure` (Number)
+- `max_concurrent_file_parts` (Number)
+- `description` (String) Optional description for this configuration.
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
+- `parquet_schema` (String) To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
+- `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
+- `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_cribl_lake--key_value_metadata))
+- `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
+- `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
+- `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
@@ -3110,17 +3221,17 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
 - `max_data_size` (String) Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.
 - `max_data_time` (String) Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.
 - `compress` (String)
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 
 <a id="nestedatt--output_click_house"></a>
 ### Nested Schema for `output_click_house`
@@ -3128,17 +3239,17 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
 - `auth_type` (String)
-- `database` (String)
+- `database` (String) ClickHouse database
 - `table_name` (String) Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
-- `format` (String) Data format to use when sending data to ClickHouse. Defaults to JSON Compact.
-- `mapping_type` (String) How event fields are mapped to ClickHouse columns
+- `format` (String)
+- `mapping_type` (String)
 - `async_inserts` (Boolean) Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--tls))
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -3160,15 +3271,15 @@ Optional:
 - `workload` (String) Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
 - `on_backpressure` (String)
-- `description` (String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `description` (String) Optional description for this configuration.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `sql_username` (String) Username for certificate authentication
 - `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.
 - `exclude_mapping_fields` (List of String) Fields to exclude from sending to ClickHouse
 - `describe_table` (String) Retrieves the table schema from ClickHouse and populates the Column Mapping table
-- `column_mappings` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--column_mappings))
+- `column_mappings` (Attributes List) Column Mapping (see [below for nested schema](#nestedatt--output_click_house--column_mappings))
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -3180,7 +3291,67 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
+
+<a id="nestedatt--output_customer_metrics_storage"></a>
+### Nested Schema for `output_customer_metrics_storage`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String) Connector type identifier.
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
+- `auth_type` (String)
+- `database` (String) ClickHouse database
+- `table_name` (String) Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
+- `format` (String)
+- `mapping_type` (String)
+- `async_inserts` (Boolean) Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_customer_metrics_storage--tls))
+- `concurrency` (Number) Maximum number of ongoing requests before blocking
+- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
+- `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
+- `compress` (Boolean) Compress the payload body before sending
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_customer_metrics_storage--extra_http_headers))
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_customer_metrics_storage--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_customer_metrics_storage--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `workload` (String) Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.
+- `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
+- `on_backpressure` (String)
+- `description` (String) Optional description for this configuration.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
+- `credentials_secret` (String) Select or create a secret that references your credentials
+- `sql_username` (String) Username for certificate authentication
+- `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.
+- `exclude_mapping_fields` (List of String) Fields to exclude from sending to ClickHouse
+- `describe_table` (String) Retrieves the table schema from ClickHouse and populates the Column Mapping table
+- `column_mappings` (Attributes List) Column Mapping (see [below for nested schema](#nestedatt--output_customer_metrics_storage--column_mappings))
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_local_search_storage"></a>
 ### Nested Schema for `output_local_search_storage`
@@ -3188,14 +3359,14 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `url` (String) URL of the database instance. Example: http://localhost:8123/
 - `auth_type` (String)
-- `database` (String)
+- `database` (String) Database
 - `table_name` (String) Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
 - `format` (String) Data format to use when sending data. Defaults to JSON Compact.
 - `mapping_type` (String) How event fields are mapped to columns.
@@ -3221,15 +3392,15 @@ Optional:
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
 - `on_backpressure` (String)
 - `stats_destination` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination))
-- `description` (String)
-- `username` (String)
-- `password` (String, Sensitive)
+- `description` (String) Optional description for this configuration.
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `sql_username` (String) Username for certificate authentication
 - `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.
 - `exclude_mapping_fields` (List of String) Fields to exclude from sending
 - `describe_table` (String) Retrieves the table schema and populates the Column Mapping table
-- `column_mappings` (Attributes List) (see [below for nested schema](#nestedatt--output_local_search_storage--column_mappings))
+- `column_mappings` (Attributes List) Column Mapping (see [below for nested schema](#nestedatt--output_local_search_storage--column_mappings))
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -3241,7 +3412,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_xsiam"></a>
 ### Nested Schema for `output_xsiam`
@@ -3249,11 +3420,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -3274,11 +3445,11 @@ Optional:
 - `throttle_rate_req_per_sec` (Integer) Maximum number of requests to limit to per second
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `url` (String) XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_xsiam--urls))
+- `urls` (Attributes List) XSIAM Endpoints (see [below for nested schema](#nestedatt--output_xsiam--urls))
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `token` (String, Sensitive) XSIAM authentication token
@@ -3294,7 +3465,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_netflow"></a>
 ### Nested Schema for `output_netflow`
@@ -3306,11 +3477,11 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `hosts` (Attributes List) One or more NetFlow Destinations to forward events to (see [below for nested schema](#nestedatt--output_netflow--hosts))
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.
 - `enable_ip_spoofing` (Boolean) Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `max_record_size` (Number) MTU in bytes. The actual maximum NetFlow payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). For example, with the default MTU of 1500, the max payload is 1472 bytes for IPv4. Payloads exceeding this limit will be dropped.
 
 <a id="nestedatt--output_dynatrace_http"></a>
@@ -3319,11 +3490,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `method` (String)
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -3343,12 +3514,12 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `on_backpressure` (String)
-- `auth_type` (String)
+- `auth_type` (String) Authentication type
 - `format` (String) How to format events before sending. Defaults to JSON. Plaintext is not currently supported.
-- `endpoint` (String)
-- `telemetry_type` (String)
+- `endpoint` (String) Endpoint
+- `telemetry_type` (String) Telemetry type
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -3360,7 +3531,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 - `token` (String, Sensitive) Bearer token to include in the authorization header
 - `text_secret` (String) Select or create a stored text secret
 - `environment_id` (String) ID of the environment to send to
@@ -3373,11 +3544,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `protocol` (String) Select a transport option for Dynatrace
 - `endpoint` (String) The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
 - `otlp_version` (String)
@@ -3399,9 +3570,9 @@ Optional:
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `endpoint_type` (String) Select the type of Dynatrace endpoint configured
 - `token_secret` (String) Select or create a stored text secret
-- `auth_token_name` (String)
+- `auth_token_name` (String) Api-Token name
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -3422,7 +3593,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_sentinel_one_ai_siem"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem`
@@ -3430,13 +3601,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.
-- `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
@@ -3453,8 +3622,10 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.
+- `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).
 - `on_backpressure` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `token` (String, Sensitive) In the SentinelOne Console select Policy & Settings then select the Singularity AI SIEM section, API Keys will be at the bottom. Under Log Access Keys select a Write token and copy it here
 - `text_secret` (String) Select or create a stored text secret
 - `base_url` (String) Base URL of the endpoint used to send events to, such as https://<Your-S1-Tenant>.sentinelone.net. Must begin with http:// or https://, can include a port number, and no trailing slashes. Matches pattern: ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$.
@@ -3483,7 +3654,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_chronicle"></a>
 ### Nested Schema for `output_chronicle`
@@ -3491,13 +3662,13 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `api_version` (String)
-- `authentication_method` (String)
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `api_version` (String) API version
+- `authentication_method` (String) Authentication method
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_chronicle--response_retry_settings))
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle--timeout_retry_settings))
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
@@ -3517,7 +3688,7 @@ Optional:
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
 - `on_backpressure` (String)
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `ingestion_method` (String)
+- `ingestion_method` (String) Chronicle API ingestion method
 - `namespace` (String) User-configured environment namespace to identify the data domain the logs originated from. This namespace is used as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.
 - `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType.
 - `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
@@ -3525,7 +3696,7 @@ Optional:
 - `gcp_instance` (String) The Google Cloud Platform (GCP) instance to send events to. This is the Chronicle customer uuid.
 - `custom_labels` (Attributes List) Custom labels to be added to every event (see [below for nested schema](#nestedatt--output_chronicle--custom_labels))
 - `endpoint` (String) Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `service_account_credentials_secret` (String) Select or create a stored text secret
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
@@ -3539,7 +3710,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_databricks"></a>
 ### Nested Schema for `output_databricks`
@@ -3547,11 +3718,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `dest_path` (String) Optional path to prepend to files before uploading.
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
@@ -3581,7 +3752,7 @@ Optional:
 - `events_volume_name` (String) Name of the Unity Catalog volume where event data is written.
 - `client_text_secret` (String) OAuth client secret for Unity Catalog authentication
 - `timeout_sec` (Integer) Amount of time, in seconds, to wait for a request to complete before canceling it.
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `compress` (String)
 - `compression_level` (String)
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
@@ -3600,17 +3771,68 @@ Optional:
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 
+<a id="nestedatt--output_snowflake_streaming"></a>
+### Nested Schema for `output_snowflake_streaming`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String) Connector type identifier.
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `account_identifier` (String) Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT)
+- `user` (String) Snowflake user with key-pair authentication configured
+- `pem` (Attributes) Private key (see [below for nested schema](#nestedatt--output_snowflake_streaming--pem))
+- `database` (String) Target database
+- `schema` (String) Target schema
+- `table` (String) Target table
+- `url` (String) Override endpoint URL (for PrivateLink or custom deployments). Defaults to https://<accountIdentifier>.snowflakecomputing.com:443
+- `role` (String) Snowflake role to assume for this connection
+- `keep_alive` (Boolean) Keep connections open between requests. Disable only if experiencing connection pooling issues.
+- `concurrency` (Number) Maximum number of ongoing requests before blocking
+- `max_payload_size_kb` (Number) Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.
+- `max_payload_events` (Number) Maximum number of events per request. Default is 0 (unlimited, size-gated only).
+- `compress` (Boolean) Compress the payload body using zstd compression before sending.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_snowflake_streaming--extra_http_headers))
+- `failed_request_logging_mode` (String)
+- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `control_request_timeout_sec` (Number) Timeout in seconds for token exchange, channel open/close, and hostname discovery. Defaults to 30 seconds.
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_snowflake_streaming--response_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_snowflake_streaming--timeout_retry_settings))
+- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+- `on_backpressure` (String)
+- `description` (String) Optional description for this configuration.
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+- `pq_mode` (String)
+- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+- `pq_compress` (String)
+- `pq_on_backpressure` (String)
+- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
+- `pq_controls` (Map of String) Persistent queue controls.
+
 <a id="nestedatt--output_microsoft_fabric"></a>
 ### Nested Schema for `output_microsoft_fabric`
 
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `topic` (String) Topic name from Fabric Eventstream's endpoint
 - `ack` (Integer)
 - `format` (String)
@@ -3629,7 +3851,7 @@ Optional:
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric--tls))
 - `on_backpressure` (String)
 - `bootstrap_server` (String) Bootstrap server from Fabric Eventstream's endpoint
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_mode` (String)
@@ -3641,7 +3863,7 @@ Optional:
 - `pq_compress` (String)
 - `pq_on_backpressure` (String)
 - `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.
-- `pq_controls` (Map of String)
+- `pq_controls` (Map of String) Persistent queue controls.
 
 <a id="nestedatt--output_cloudflare_r2"></a>
 ### Nested Schema for `output_cloudflare_r2`
@@ -3649,12 +3871,12 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `bucket` (String) Name of the destination R2 bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
@@ -3685,7 +3907,7 @@ Optional:
 - `endpoint` (String) Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)
 - `storage_class` (String)
 - `server_side_encryption` (String)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -3711,11 +3933,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -3745,7 +3967,7 @@ Optional:
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_nutanix_objects--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_nutanix_objects--orphans))
 - `endpoint` (String) Nutanix Objects S3-compatible endpoint URL (example: https://objects.nutanix.local)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -3771,11 +3993,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -3804,7 +4026,7 @@ Optional:
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_storj_s3--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_storj_s3--orphans))
 - `endpoint` (String) Storj S3-compatible gateway endpoint URL (example: https://gateway.storjshare.io)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -3830,11 +4052,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -3863,7 +4085,7 @@ Optional:
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_alphasoc_s3--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_alphasoc_s3--orphans))
 - `endpoint` (String) AlphaSOC S3-compatible endpoint URL (example: https://s3.alphasoc.net)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -3889,11 +4111,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -3924,7 +4146,7 @@ Optional:
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_dell_s3--orphans))
 - `object_acl` (String)
 - `endpoint` (String) Dell PowerScale OneFS S3-compatible endpoint URL (example: https://powerscale.example.com:9021)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -3950,11 +4172,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `endpoint` (String) Cloudian HyperStore S3-compatible endpoint URL (example: https://s3.hyperstore.example.com)
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -3988,7 +4210,7 @@ Optional:
 - `storage_class` (String)
 - `server_side_encryption` (String)
 - `kms_key_id` (String) ID or ARN of the KMS customer-managed key to use for encryption
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -4014,11 +4236,11 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
 - `aws_authentication_method` (String)
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -4048,7 +4270,7 @@ Optional:
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3--retry_settings))
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_scality_s3--orphans))
 - `endpoint` (String) Scality RING S3-compatible endpoint URL (example: https://s3.scality.example.com)
-- `description` (String)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -4074,12 +4296,12 @@ Optional:
 Optional:
 
 - `id` (String) Unique ID for this output
-- `type` (String)
+- `type` (String) Connector type identifier.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `aws_authentication_method` (String)
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `aws_authentication_method` (String) Authentication method.
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `bucket` (String) Name of the destination Alibaba OSS bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
@@ -4108,7 +4330,11 @@ Optional:
 - `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_alibaba_cloud_s3--orphans))
 - `object_acl` (String)
 - `endpoint` (String) Alibaba OSS S3-compatible endpoint URL. Examples: public `https://s3.oss-{region}.aliyuncs.com`, internal `https://s3.oss-{region}-internal.aliyuncs.com`
-- `description` (String)
+- `enable_assume_role` (Boolean) Use Assume Role credentials to access Alibaba OSS
+- `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
+- `assume_role_arn` (String) ARN of the RAM role to assume. Format: acs:ram::<account-id>:role/<role-name>. Example: acs:ram::123456789:role/OSSAccessRole
+- `assume_role_external_id` (String) External ID for the assumed role (optional, for security when configured in the role trust policy)
+- `description` (String) Optional description for this configuration.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `compress` (String)
 - `compression_level` (String)
@@ -4128,13 +4354,72 @@ Optional:
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 
+<a id="nestedatt--output_ibm_cloud_s3"></a>
+### Nested Schema for `output_ibm_cloud_s3`
+
+Optional:
+
+- `id` (String) Unique ID for this output
+- `type` (String) Connector type identifier.
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `streamtags` (List of String) Metadata tags used for categorization and filtering.
+- `endpoint` (String) IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)
+- `aws_authentication_method` (String)
+- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
+- `bucket` (String) Name of the destination IBM Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `dest_path` (String) Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`
+- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
+- `max_closing_files_to_backpressure` (Number) Maximum number of files that can be waiting for upload before backpressure is applied
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
+- `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
+- `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
+- `format` (String)
+- `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
+- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
+- `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
+- `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
+- `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
+- `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
+- `header_line` (String) If set, this line will be written to the beginning of each output file
+- `write_high_water_mark` (Number) Buffer size used to write to a file
+- `on_backpressure` (String)
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
+- `on_disk_full_backpressure` (String)
+- `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
+- `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3--retry_settings))
+- `orphans` (Attributes) (see [below for nested schema](#nestedatt--output_ibm_cloud_s3--orphans))
+- `description` (String) Optional description for this configuration.
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
+- `compress` (String)
+- `compression_level` (String)
+- `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
+- `parquet_schema` (String) To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
+- `parquet_version` (String)
+- `parquet_data_page_version` (String)
+- `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows.
+- `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
+- `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_ibm_cloud_s3--key_value_metadata))
+- `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
+- `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
+- `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
+- `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
+- `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
+- `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
+
 <a id="nestedatt--output_webhook--extra_http_headers"></a>
 ### Nested Schema for `output_webhook.extra_http_headers`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_webhook--response_retry_settings"></a>
 ### Nested Schema for `output_webhook.response_retry_settings`
@@ -4151,7 +4436,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4161,7 +4446,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
@@ -4187,6 +4472,14 @@ Optional:
 - `name` (String) OAuth header name
 - `value` (String) OAuth header value
 
+<a id="nestedatt--output_webhook--refresh_request_params"></a>
+### Nested Schema for `output_webhook.refresh_request_params`
+
+Optional:
+
+- `name` (String) Name
+- `value` (String) Value
+
 <a id="nestedatt--output_webhook--urls"></a>
 ### Nested Schema for `output_webhook.urls`
 
@@ -4200,8 +4493,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_sentinel--response_retry_settings"></a>
 ### Nested Schema for `output_sentinel.response_retry_settings`
@@ -4218,10 +4511,18 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_sentinel--refresh_request_params"></a>
+### Nested Schema for `output_sentinel.refresh_request_params`
+
+Optional:
+
+- `name` (String) Name
+- `value` (String) Value
 
 <a id="nestedatt--output_syslog--hosts"></a>
 ### Nested Schema for `output_syslog.hosts`
@@ -4239,7 +4540,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4256,7 +4557,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4273,7 +4574,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4324,7 +4625,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
@@ -4339,8 +4640,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_splunk_hec--response_retry_settings"></a>
 ### Nested Schema for `output_splunk_hec.response_retry_settings`
@@ -4357,7 +4658,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4375,7 +4676,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
@@ -4390,8 +4691,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_wiz_hec--response_retry_settings"></a>
 ### Nested Schema for `output_wiz_hec.response_retry_settings`
@@ -4408,7 +4709,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4418,7 +4719,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4446,8 +4747,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_wavefront--response_retry_settings"></a>
 ### Nested Schema for `output_wavefront.response_retry_settings`
@@ -4464,7 +4765,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4474,8 +4775,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_signalfx--response_retry_settings"></a>
 ### Nested Schema for `output_signalfx.response_retry_settings`
@@ -4492,7 +4793,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4521,8 +4822,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_s3--retry_settings"></a>
 ### Nested Schema for `output_s3.retry_settings`
@@ -4548,8 +4849,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_blob--retry_settings"></a>
 ### Nested Schema for `output_azure_blob.retry_settings`
@@ -4575,8 +4876,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_blob--certificate"></a>
 ### Nested Schema for `output_azure_blob.certificate`
@@ -4597,8 +4898,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_data_explorer--retry_settings"></a>
 ### Nested Schema for `output_azure_data_explorer.retry_settings`
@@ -4624,23 +4925,23 @@ Optional:
 
 Optional:
 
-- `prefix` (String)
-- `value` (String)
+- `prefix` (String) Prefix (optional)
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_data_explorer--ingest_if_not_exists"></a>
 ### Nested Schema for `output_azure_data_explorer.ingest_if_not_exists`
 
 Optional:
 
-- `value` (String)
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_data_explorer--additional_properties"></a>
 ### Nested Schema for `output_azure_data_explorer.additional_properties`
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_azure_data_explorer--response_retry_settings"></a>
 ### Nested Schema for `output_azure_data_explorer.response_retry_settings`
@@ -4657,7 +4958,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4667,8 +4968,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_azure_logs--response_retry_settings"></a>
 ### Nested Schema for `output_azure_logs.response_retry_settings`
@@ -4685,7 +4986,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4695,8 +4996,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_honeycomb--response_retry_settings"></a>
 ### Nested Schema for `output_honeycomb.response_retry_settings`
@@ -4713,7 +5014,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4723,7 +5024,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `auth_type` (String)
 - `password` (String, Sensitive) Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace
 - `text_secret` (String) Select or create a stored text secret
@@ -4746,7 +5047,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 <a id="nestedatt--output_google_chronicle--response_retry_settings"></a>
@@ -4764,7 +5065,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -4774,24 +5075,24 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_google_chronicle--extra_log_types"></a>
 ### Nested Schema for `output_google_chronicle.extra_log_types`
 
 Optional:
 
-- `log_type` (String)
-- `description` (String)
+- `log_type` (String) Log Type
+- `description` (String) Description
 
 <a id="nestedatt--output_google_chronicle--custom_labels"></a>
 ### Nested Schema for `output_google_chronicle.custom_labels`
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_google_cloud_storage--retry_settings"></a>
 ### Nested Schema for `output_google_cloud_storage.retry_settings`
@@ -4817,8 +5118,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_google_cloud_logging--log_labels"></a>
 ### Nested Schema for `output_google_cloud_logging.log_labels`
@@ -4841,15 +5142,15 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_google_cloud_observability--tls"></a>
 ### Nested Schema for `output_google_cloud_observability.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `certificate_name` (String) The name of the predefined certificate
@@ -4884,7 +5185,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
@@ -4899,7 +5200,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
 - `token_url` (String) URL of the token endpoint to use for OAuth authentication
 - `client_id` (String) Client ID to use for OAuth authentication
@@ -4915,15 +5216,15 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Parameter Name
+- `value` (String) Parameter Value
 
 <a id="nestedatt--output_kafka--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_kafka.kafka_schema_registry.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4940,9 +5241,9 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
+- `disabled` (Boolean) Disabled
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `mechanism` (String)
@@ -4962,23 +5263,23 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Parameter Name
+- `value` (String) Parameter Value
 
 <a id="nestedatt--output_kafka--sasl--sasl_extensions"></a>
 ### Nested Schema for `output_kafka.sasl.sasl_extensions`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_kafka--tls"></a>
 ### Nested Schema for `output_kafka.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -4995,7 +5296,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5012,7 +5313,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
@@ -5027,7 +5328,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
 - `token_url` (String) URL of the token endpoint to use for OAuth authentication
 - `client_id` (String) Client ID to use for OAuth authentication
@@ -5043,15 +5344,15 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Parameter Name
+- `value` (String) Parameter Value
 
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_confluent_cloud.kafka_schema_registry.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5068,9 +5369,9 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
+- `disabled` (Boolean) Disabled
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `mechanism` (String)
@@ -5090,23 +5391,23 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Parameter Name
+- `value` (String) Parameter Value
 
 <a id="nestedatt--output_confluent_cloud--sasl--sasl_extensions"></a>
 ### Nested Schema for `output_confluent_cloud.sasl.sasl_extensions`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_msk--kafka_schema_registry"></a>
 ### Nested Schema for `output_msk.kafka_schema_registry`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
@@ -5121,7 +5422,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `oauth_enabled` (Boolean) Authenticate with the schema registry using OAuth instead of basic HTTP authentication
 - `token_url` (String) URL of the token endpoint to use for OAuth authentication
 - `client_id` (String) Client ID to use for OAuth authentication
@@ -5137,15 +5438,15 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Parameter Name
+- `value` (String) Parameter Value
 
 <a id="nestedatt--output_msk--kafka_schema_registry--tls"></a>
 ### Nested Schema for `output_msk.kafka_schema_registry.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5162,7 +5463,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5179,8 +5480,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_elastic--response_retry_settings"></a>
 ### Nested Schema for `output_elastic.response_retry_settings`
@@ -5197,7 +5498,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5207,17 +5508,17 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_elastic--auth"></a>
 ### Nested Schema for `output_elastic.auth`
 
 Optional:
 
-- `disabled` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
+- `disabled` (Boolean) Authentication Disabled
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `manual_apikey` (String) Enter API key directly
@@ -5236,25 +5537,25 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_elastic_cloud--extra_params"></a>
 ### Nested Schema for `output_elastic_cloud.extra_params`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_elastic_cloud--auth"></a>
 ### Nested Schema for `output_elastic_cloud.auth`
 
 Optional:
 
-- `disabled` (Boolean)
-- `username` (String)
-- `password` (String, Sensitive)
+- `disabled` (Boolean) Authentication Disabled
+- `username` (String) Username
+- `password` (String, Sensitive) Password
 - `auth_type` (String)
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `manual_apikey` (String) Enter API key directly
@@ -5275,7 +5576,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5285,7 +5586,7 @@ Optional:
 
 Optional:
 
-- `name` (String)
+- `name` (String) Name of the metadata field.
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 <a id="nestedatt--output_newrelic--extra_http_headers"></a>
@@ -5293,8 +5594,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_newrelic--response_retry_settings"></a>
 ### Nested Schema for `output_newrelic.response_retry_settings`
@@ -5311,7 +5612,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5321,8 +5622,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_newrelic_events--response_retry_settings"></a>
 ### Nested Schema for `output_newrelic_events.response_retry_settings`
@@ -5339,7 +5640,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5349,8 +5650,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_influxdb--response_retry_settings"></a>
 ### Nested Schema for `output_influxdb.response_retry_settings`
@@ -5367,7 +5668,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5396,8 +5697,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_router--rules"></a>
 ### Nested Schema for `output_router.rules`
@@ -5422,8 +5723,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_sumo_logic--response_retry_settings"></a>
 ### Nested Schema for `output_sumo_logic.response_retry_settings`
@@ -5440,7 +5741,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5450,8 +5751,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_datadog--response_retry_settings"></a>
 ### Nested Schema for `output_datadog.response_retry_settings`
@@ -5468,7 +5769,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5478,8 +5779,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Name
+- `value` (String) Value
 
 <a id="nestedatt--output_grafana_cloud--prometheus_auth"></a>
 ### Nested Schema for `output_grafana_cloud.prometheus_auth`
@@ -5510,8 +5811,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_grafana_cloud--response_retry_settings"></a>
 ### Nested Schema for `output_grafana_cloud.response_retry_settings`
@@ -5528,7 +5829,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5538,16 +5839,16 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Name
+- `value` (String) Value
 
 <a id="nestedatt--output_loki--extra_http_headers"></a>
 ### Nested Schema for `output_loki.extra_http_headers`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_loki--response_retry_settings"></a>
 ### Nested Schema for `output_loki.response_retry_settings`
@@ -5564,7 +5865,35 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_amazon_managed_prometheus--extra_http_headers"></a>
+### Nested Schema for `output_amazon_managed_prometheus.extra_http_headers`
+
+Optional:
+
+- `name` (String) Field Name
+- `value` (String) Field Value
+
+<a id="nestedatt--output_amazon_managed_prometheus--response_retry_settings"></a>
+### Nested Schema for `output_amazon_managed_prometheus.response_retry_settings`
+
+Optional:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_amazon_managed_prometheus--timeout_retry_settings"></a>
+### Nested Schema for `output_amazon_managed_prometheus.timeout_retry_settings`
+
+Optional:
+
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5574,8 +5903,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_prometheus--response_retry_settings"></a>
 ### Nested Schema for `output_prometheus.response_retry_settings`
@@ -5592,7 +5921,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5602,8 +5931,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_open_telemetry--oauth_params"></a>
 ### Nested Schema for `output_open_telemetry.oauth_params`
@@ -5626,8 +5955,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_open_telemetry--response_retry_settings"></a>
 ### Nested Schema for `output_open_telemetry.response_retry_settings`
@@ -5644,7 +5973,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5654,7 +5983,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `certificate_name` (String) The name of the predefined certificate
@@ -5670,16 +5999,16 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_service_now--extra_http_headers"></a>
 ### Nested Schema for `output_service_now.extra_http_headers`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_service_now--response_retry_settings"></a>
 ### Nested Schema for `output_service_now.response_retry_settings`
@@ -5696,7 +6025,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5706,7 +6035,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `certificate_name` (String) The name of the predefined certificate
@@ -5732,7 +6061,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5742,15 +6071,15 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_cribl_tcp--tls"></a>
 ### Nested Schema for `output_cribl_tcp.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5768,7 +6097,7 @@ Optional:
 Optional:
 
 - `token_secret` (String) Select or create a stored text secret
-- `enabled` (Boolean)
+- `enabled` (Boolean) Enable token
 - `description` (String) Optional token description
 
 <a id="nestedatt--output_cribl_tcp--hosts"></a>
@@ -5787,7 +6116,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5804,8 +6133,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_cribl_http--response_retry_settings"></a>
 ### Nested Schema for `output_cribl_http.response_retry_settings`
@@ -5822,7 +6151,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5833,8 +6162,8 @@ Optional:
 Optional:
 
 - `token_secret` (String) Select or create a stored text secret
-- `enabled` (Boolean)
-- `description` (String)
+- `enabled` (Boolean) Enable token
+- `description` (String) Description
 
 <a id="nestedatt--output_cribl_http--urls"></a>
 ### Nested Schema for `output_cribl_http.urls`
@@ -5849,7 +6178,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -5866,8 +6195,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_cribl_search_engine--response_retry_settings"></a>
 ### Nested Schema for `output_cribl_search_engine.response_retry_settings`
@@ -5884,7 +6213,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5895,8 +6224,8 @@ Optional:
 Optional:
 
 - `token_secret` (String) Select or create a stored text secret
-- `enabled` (Boolean)
-- `description` (String)
+- `enabled` (Boolean) Enable token
+- `description` (String) Description
 
 <a id="nestedatt--output_cribl_search_engine--urls"></a>
 ### Nested Schema for `output_cribl_search_engine.urls`
@@ -5911,8 +6240,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_humio_hec--response_retry_settings"></a>
 ### Nested Schema for `output_humio_hec.response_retry_settings`
@@ -5929,7 +6258,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5939,8 +6268,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem--response_retry_settings"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.response_retry_settings`
@@ -5957,7 +6286,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -5986,8 +6315,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_security_lake--retry_settings"></a>
 ### Nested Schema for `output_security_lake.retry_settings`
@@ -6013,8 +6342,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_cribl_lake--retry_settings"></a>
 ### Nested Schema for `output_cribl_lake.retry_settings`
@@ -6035,12 +6364,20 @@ Optional:
 - `disabled` (Boolean) Periodically scan the staging directory for files not tracked by any Worker manifest to recover them
 - `period_min` (Number) Minimum interval between reconciliation runs
 
+<a id="nestedatt--output_cribl_lake--key_value_metadata"></a>
+### Nested Schema for `output_cribl_lake.key_value_metadata`
+
+Optional:
+
+- `key` (String) Key
+- `value` (String) Value
+
 <a id="nestedatt--output_click_house--tls"></a>
 ### Nested Schema for `output_click_house.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
@@ -6055,8 +6392,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_click_house--response_retry_settings"></a>
 ### Nested Schema for `output_click_house.response_retry_settings`
@@ -6073,7 +6410,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6087,12 +6424,64 @@ Optional:
 - `column_type` (String) Type of the column in the ClickHouse database
 - `column_value_expression` (String) JavaScript expression to compute value to be inserted into ClickHouse table
 
+<a id="nestedatt--output_customer_metrics_storage--tls"></a>
+### Nested Schema for `output_customer_metrics_storage.tls`
+
+Optional:
+
+- `disabled` (Boolean) Disabled
+- `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
+- `certificate_name` (String) The name of the predefined certificate
+- `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
+- `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
+- `passphrase` (String, Sensitive) Passphrase to use to decrypt private key
+- `min_version` (String)
+- `max_version` (String)
+
+<a id="nestedatt--output_customer_metrics_storage--extra_http_headers"></a>
+### Nested Schema for `output_customer_metrics_storage.extra_http_headers`
+
+Optional:
+
+- `name` (String) Field Name
+- `value` (String) Field Value
+
+<a id="nestedatt--output_customer_metrics_storage--response_retry_settings"></a>
+### Nested Schema for `output_customer_metrics_storage.response_retry_settings`
+
+Optional:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_customer_metrics_storage--timeout_retry_settings"></a>
+### Nested Schema for `output_customer_metrics_storage.timeout_retry_settings`
+
+Optional:
+
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_customer_metrics_storage--column_mappings"></a>
+### Nested Schema for `output_customer_metrics_storage.column_mappings`
+
+Optional:
+
+- `column_name` (String) Name of the column in ClickHouse that will store field value
+- `column_type` (String) Type of the column in the ClickHouse database
+- `column_value_expression` (String) JavaScript expression to compute value to be inserted into ClickHouse table
+
 <a id="nestedatt--output_local_search_storage--tls"></a>
 ### Nested Schema for `output_local_search_storage.tls`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 - `certificate_name` (String) The name of the predefined certificate
 - `ca_path` (String) Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
@@ -6107,8 +6496,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_local_search_storage--response_retry_settings"></a>
 ### Nested Schema for `output_local_search_storage.response_retry_settings`
@@ -6125,7 +6514,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6159,8 +6548,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_xsiam--response_retry_settings"></a>
 ### Nested Schema for `output_xsiam.response_retry_settings`
@@ -6177,7 +6566,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6202,8 +6591,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_dynatrace_http--response_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_http.response_retry_settings`
@@ -6220,7 +6609,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6230,16 +6619,16 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_dynatrace_otlp--extra_http_headers"></a>
 ### Nested Schema for `output_dynatrace_otlp.extra_http_headers`
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_dynatrace_otlp--response_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_otlp.response_retry_settings`
@@ -6256,7 +6645,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6266,8 +6655,8 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_sentinel_one_ai_siem--response_retry_settings"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem.response_retry_settings`
@@ -6284,7 +6673,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6304,7 +6693,7 @@ Optional:
 
 Optional:
 
-- `timeout_retry` (Boolean)
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
@@ -6314,16 +6703,16 @@ Optional:
 
 Optional:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field Name
+- `value` (String) Field Value
 
 <a id="nestedatt--output_chronicle--custom_labels"></a>
 ### Nested Schema for `output_chronicle.custom_labels`
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 - `rbac_enabled` (Boolean) Designate this label for role-based access control and filtering
 
 <a id="nestedatt--output_databricks--retry_settings"></a>
@@ -6350,15 +6739,50 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
+
+<a id="nestedatt--output_snowflake_streaming--pem"></a>
+### Nested Schema for `output_snowflake_streaming.pem`
+
+Optional:
+
+- `key_name` (String) Select the stored secret containing the RSA private key (PEM format) for Snowflake key-pair authentication
+
+<a id="nestedatt--output_snowflake_streaming--extra_http_headers"></a>
+### Nested Schema for `output_snowflake_streaming.extra_http_headers`
+
+Optional:
+
+- `name` (String) Field Name
+- `value` (String) Field Value
+
+<a id="nestedatt--output_snowflake_streaming--response_retry_settings"></a>
+### Nested Schema for `output_snowflake_streaming.response_retry_settings`
+
+Optional:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
+
+<a id="nestedatt--output_snowflake_streaming--timeout_retry_settings"></a>
+### Nested Schema for `output_snowflake_streaming.timeout_retry_settings`
+
+Optional:
+
+- `timeout_retry` (Boolean) Retry timed-out HTTP requests
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 <a id="nestedatt--output_microsoft_fabric--sasl"></a>
 ### Nested Schema for `output_microsoft_fabric.sasl`
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `mechanism` (String)
 - `username` (String) The username for authentication. This should always be $ConnectionString.
 - `text_secret` (String) Select or create a stored text secret corresponding to the SASL JASS Password Primary or Password Secondary
@@ -6378,7 +6802,7 @@ Optional:
 
 Optional:
 
-- `disabled` (Boolean)
+- `disabled` (Boolean) Disabled
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 <a id="nestedatt--output_cloudflare_r2--retry_settings"></a>
@@ -6405,8 +6829,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_nutanix_objects--retry_settings"></a>
 ### Nested Schema for `output_nutanix_objects.retry_settings`
@@ -6432,8 +6856,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_storj_s3--retry_settings"></a>
 ### Nested Schema for `output_storj_s3.retry_settings`
@@ -6459,8 +6883,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_alphasoc_s3--retry_settings"></a>
 ### Nested Schema for `output_alphasoc_s3.retry_settings`
@@ -6486,8 +6910,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_dell_s3--retry_settings"></a>
 ### Nested Schema for `output_dell_s3.retry_settings`
@@ -6513,8 +6937,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_cloudian_s3--retry_settings"></a>
 ### Nested Schema for `output_cloudian_s3.retry_settings`
@@ -6540,8 +6964,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_scality_s3--retry_settings"></a>
 ### Nested Schema for `output_scality_s3.retry_settings`
@@ -6567,8 +6991,8 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
 
 <a id="nestedatt--output_alibaba_cloud_s3--retry_settings"></a>
 ### Nested Schema for `output_alibaba_cloud_s3.retry_settings`
@@ -6594,8 +7018,35 @@ Optional:
 
 Optional:
 
-- `key` (String)
-- `value` (String)
+- `key` (String) Key
+- `value` (String) Value
+
+<a id="nestedatt--output_ibm_cloud_s3--retry_settings"></a>
+### Nested Schema for `output_ibm_cloud_s3.retry_settings`
+
+Optional:
+
+- `enabled` (Boolean) Apply exponential backoff with jitter when file uploads fail repeatedly.
+- `initial_backoff_ms` (Number) Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.
+- `backoff_multiplier` (Number) Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.
+- `max_backoff_ms` (Number) Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.
+- `jitter_percent` (Number) Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.
+
+<a id="nestedatt--output_ibm_cloud_s3--orphans"></a>
+### Nested Schema for `output_ibm_cloud_s3.orphans`
+
+Optional:
+
+- `disabled` (Boolean) Periodically scan the staging directory for files not tracked by any Worker manifest to recover them
+- `period_min` (Number) Minimum interval between reconciliation runs
+
+<a id="nestedatt--output_ibm_cloud_s3--key_value_metadata"></a>
+### Nested Schema for `output_ibm_cloud_s3.key_value_metadata`
+
+Optional:
+
+- `key` (String) Key
+- `value` (String) Value
 
 ## Import
 

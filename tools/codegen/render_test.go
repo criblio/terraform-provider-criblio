@@ -9,6 +9,25 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
+func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
+	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
+		APIName:       "collector",
+		TerraformName: "collector",
+		Fields: []parser.FieldDef{{
+			APIName:       "parquetChunkSizeMB",
+			TerraformName: "parquet_chunk_size_mb",
+		}},
+	}}}
+
+	overrides := apiNameOverrides(resource)
+	if len(overrides) != 1 {
+		t.Fatalf("apiNameOverrides returned %d entries, want 1", len(overrides))
+	}
+	if overrides[0].APIName != "parquetChunkSizeMB" {
+		t.Fatalf("API name = %q, want parquetChunkSizeMB", overrides[0].APIName)
+	}
+}
+
 func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	resources := parseFixture(t)
 	ignored, err := readIgnoreFile(filepath.Join("testdata", ".codegen-ignore"))
@@ -255,7 +274,8 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, typesContent, "InUse []types.String")
 	assertContains(t, typesContent, "func (m CertificateModel) MarshalJSON()")
 	assertContains(t, typesContent, "func CertificateTerraformNameToAPIName(name string) string")
-	assertContains(t, typesContent, "output[CertificateTerraformNameToAPIName(key)] = value")
+	assertContains(t, typesContent, "apiKey := CertificateTerraformNameToAPIName(key)")
+	assertContains(t, typesContent, "output[apiKey] = value")
 	assertContains(t, typesContent, "func CertificateAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)")
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.InUse)")
 
@@ -337,6 +357,15 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
 	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
 
+	searchDatasetTypes := renderTemplate(t, "types", parser.ResourceDef{
+		StructName: "SearchDataset",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "DatasetCriblSearch", ModelName: "DatasetCriblSearchModel", DiscriminatorValue: "cribl_search"},
+		},
+	})
+	assertContains(t, searchDatasetTypes, `if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {`)
+	assertContains(t, searchDatasetTypes, `return "cribl_search"`)
+
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
 		Read: parser.OperationDef{
@@ -363,12 +392,16 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, notificationTargetTest, "func TestNotificationTarget(t *testing.T)")
 	assertContains(t, notificationTargetTest, "notificationTargetConfig(id, \"created\")")
 	assertContains(t, notificationTargetTest, "ImportStateVerifyIgnore: notificationTargetImportStateVerifyIgnore()")
+	assertContains(t, notificationTargetTest, `"sns_target.system_fields",`)
 	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
 
 	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
 	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
 	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
+	assertContains(t, searchDatasetProviderTest, `ImportStateVerifyIgnore: []string{
+						"description",
+						"apihttp.description",`)
 	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
 
 	searchDatasetProviderTest = renderTemplate(t, "test", parser.ResourceDef{
@@ -708,6 +741,23 @@ func TestRenderedSnippets(t *testing.T) {
 	}
 	assertNotContains(t, fixedAPIFieldExample, "engine_type")
 	assertContains(t, fixedAPIFieldExample, `id = "engine-01"`)
+}
+
+func TestOneOfPreferStatePreservesConfiguredValue(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "Destination",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:    "OutputRouter",
+			ModelName: "OutputRouterModel",
+			Fields: []parser.FieldDef{{
+				GoName:        "Rules",
+				ApplyStrategy: "preferState",
+			}},
+		}},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, "if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown()))")
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {

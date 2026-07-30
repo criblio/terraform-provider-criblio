@@ -36,19 +36,25 @@ func (d *ParquetSchemaDataSource) Schema(_ context.Context, _ datasource.SchemaR
 		MarkdownDescription: "ParquetSchema Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the JSON schema.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the JSON schema.`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
-				Description: `JSON schema matching standards of draft version 2019-09`,
+				Description: `JSON schema content as a string, conforming to draft version 2019-09.`,
 				CustomType:  jsontypes.NormalizedType{},
+			},
+			"tags": schema.StringAttribute{
+				Computed:    true,
+				Description: `Tags for categorizing and filtering JSON schemas.`,
 			},
 		},
 	}

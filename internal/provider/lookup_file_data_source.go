@@ -40,20 +40,24 @@ func (d *LookupFileDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Description: `File content.`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the Lookup.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").`,
 			},
 			"mode": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.`,
 			},
 			"pending_task": schema.SingleNestedAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Details of the pending background task for this Lookup, if one is in progress.`,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -61,20 +65,21 @@ func (d *LookupFileDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
-						Description: `Task type`,
+						Description: `Type of the pending task.`,
 					},
 					"error": schema.StringAttribute{
 						Computed:    true,
-						Description: `Error message if task has failed`,
+						Description: `Error message if the task has failed.`,
 					},
 				},
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Comma-separated list of tags for categorizing the Lookup.`,
 			},
 			"version": schema.StringAttribute{
 				Computed:    true,
-				Description: `Unique string generated for each modification of this lookup`,
+				Description: `Unique string generated for each modification of the Lookup.`,
 			},
 		},
 	}

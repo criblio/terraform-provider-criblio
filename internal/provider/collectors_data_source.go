@@ -883,6 +883,11 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 														},
 													},
 												},
+												"client_secret_param_value": schema.StringAttribute{
+													Computed:    true,
+													Sensitive:   true,
+													Description: `OAuth client secret value added using the configured client secret parameter name.`,
+												},
 											},
 										},
 									},
@@ -1395,7 +1400,35 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 												"max_batch_size": schema.Int64Attribute{
 													Computed: true,
 												},
+												"include_metadata": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Include Azure Blob metadata in collected events.`,
+												},
+												"include_tags": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Include Azure Blob tags in collected events.`,
+												},
+												"disable_time_filter": schema.BoolAttribute{
+													Computed:    true,
+													Description: `Disable Collector event time filtering when a date range is specified.`,
+												},
+												"parquet_chunk_size_mb": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum file size in MB for each Parquet chunk.`,
+												},
+												"parquet_chunk_download_timeout": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Maximum time in seconds allowed to download a Parquet chunk.`,
+												},
 											},
+										},
+										"destructive": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Delete files after they are collected.`,
+										},
+										"encoding": schema.StringAttribute{
+											Computed:    true,
+											Description: `Character encoding used to parse collected data.`,
 										},
 									},
 								},
