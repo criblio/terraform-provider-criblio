@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 locals {
   # Base Cribl HTTP configuration
   cribl_http_config = {
@@ -102,6 +116,29 @@ locals {
       reject_unauthorized = true
       servername          = "collector.cribl.example.com"
     }
+  }
+}
+
+# Router destination with omitted rule descriptions.
+resource "criblio_destination" "router_without_rule_descriptions" {
+  group_id = "default"
+  id       = "router-without-rule-descriptions"
+
+  output_router = {
+    id   = "router-without-rule-descriptions"
+    type = "router"
+    rules = [
+      {
+        filter = "_logType == 'security'"
+        final  = false
+        output = "devnull"
+      },
+      {
+        filter = "true"
+        final  = true
+        output = "default"
+      },
+    ]
   }
 }
 

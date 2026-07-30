@@ -50405,6 +50405,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 			state.OutputIbmCloudS3.MaxRetryNum = types.Float64Null()
 		}
 	}
+	if api.OutputRouter != nil && state.OutputRouter != nil &&
+		!api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() &&
+		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
+		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
+	}
 }
 
 func PackDestinationDebug(value any) string {
