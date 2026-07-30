@@ -507,6 +507,13 @@ func PackDestinationAPIValueToTerraformValue(value any, typ attr.Type) (attr.Val
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := PackDestinationTerraformNameToAPIName(key)
+			// Keep the Microsoft Fabric SASL client ID mapping symmetric with
+			// TerraformValueToJSON. Other destination objects use client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := typed.AttrTypes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]

@@ -264,7 +264,18 @@ func isKeyImportState(state *KeyModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Expires.IsNull() && !state.Expires.IsUnknown() {
+		return false
+	}
+	if !state.UseIV.IsNull() && !state.UseIV.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fillMissingInputs bool) {

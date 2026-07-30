@@ -254,7 +254,21 @@ func isLookupFileImportState(state *LookupFileModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Content.IsNull() && !state.Content.IsUnknown() {
+		return false
+	}
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Mode.IsNull() && !state.Mode.IsUnknown() {
+		return false
+	}
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyLookupFileAPIToState(api *LookupFileModel, state *LookupFileModel, preserveInputs bool, fillMissingInputs bool) {

@@ -4366,7 +4366,39 @@ func isCollectorImportState(state *CollectorModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.InputCollectorSplunk != nil {
+		return false
+	}
+	if state.InputCollectorRest != nil {
+		return false
+	}
+	if state.InputCollectorS3 != nil {
+		return false
+	}
+	if state.InputCollectorAzureBlob != nil {
+		return false
+	}
+	if state.InputCollectorCriblLake != nil {
+		return false
+	}
+	if state.InputCollectorDatabase != nil {
+		return false
+	}
+	if state.InputCollectorGCS != nil {
+		return false
+	}
+	if state.InputCollectorHealthCheck != nil {
+		return false
+	}
+	if state.InputCollectorScript != nil {
+		return false
+	}
+	if state.InputCollectorFilesystem != nil {
+		return false
+	}
+	return true
 }
 
 func applyCollectorAPIToState(api *CollectorModel, state *CollectorModel, preserveInputs bool, fillMissingInputs bool) {

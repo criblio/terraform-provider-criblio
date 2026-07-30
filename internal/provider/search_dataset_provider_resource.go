@@ -1392,7 +1392,78 @@ func isSearchDatasetProviderImportState(state *SearchDatasetProviderModel) bool 
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.APIHttpProvider != nil {
+		return false
+	}
+	if state.APIAwsProvider != nil {
+		return false
+	}
+	if state.APIAzureProvider != nil {
+		return false
+	}
+	if state.APIGcpProvider != nil {
+		return false
+	}
+	if state.APIGoogleWorkspaceProvider != nil {
+		return false
+	}
+	if state.APIMsGraphProvider != nil {
+		return false
+	}
+	if state.APIOktaProvider != nil {
+		return false
+	}
+	if state.APITailscaleProvider != nil {
+		return false
+	}
+	if state.APIZoomProvider != nil {
+		return false
+	}
+	if state.APIAzureDataExplorerProvider != nil {
+		return false
+	}
+	if state.SnowflakeProvider != nil {
+		return false
+	}
+	if state.ClickHouseProvider != nil {
+		return false
+	}
+	if state.PrometheusProvider != nil {
+		return false
+	}
+	if state.APIOpenSearchProvider != nil {
+		return false
+	}
+	if state.APIElasticSearchProvider != nil {
+		return false
+	}
+	if state.AwsSecurityLakeProvider != nil {
+		return false
+	}
+	if state.S3Provider != nil {
+		return false
+	}
+	if state.CriblLeaderProvider != nil {
+		return false
+	}
+	if state.CriblSearchProvider != nil {
+		return false
+	}
+	if state.MetaProvider != nil {
+		return false
+	}
+	if state.EdgeProvider != nil {
+		return false
+	}
+	if state.AzureBlobProvider != nil {
+		return false
+	}
+	if state.GcsProvider != nil {
+		return false
+	}
+	return true
 }
 
 func applySearchDatasetProviderAPIToState(api *SearchDatasetProviderModel, state *SearchDatasetProviderModel, preserveInputs bool, fillMissingInputs bool) {

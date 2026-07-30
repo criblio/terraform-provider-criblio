@@ -696,7 +696,57 @@ func isGroupSystemSettingsImportState(state *GroupSystemSettingsModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.API.IsNull() && !state.API.IsUnknown() {
+		return false
+	}
+	if !state.Apps.IsNull() && !state.Apps.IsUnknown() {
+		return false
+	}
+	if !state.Backups.IsNull() && !state.Backups.IsUnknown() {
+		return false
+	}
+	if !state.CustomLogo.IsNull() && !state.CustomLogo.IsUnknown() {
+		return false
+	}
+	if !state.Pii.IsNull() && !state.Pii.IsUnknown() {
+		return false
+	}
+	if !state.Proxy.IsNull() && !state.Proxy.IsUnknown() {
+		return false
+	}
+	if !state.Rollback.IsNull() && !state.Rollback.IsUnknown() {
+		return false
+	}
+	if !state.Shutdown.IsNull() && !state.Shutdown.IsUnknown() {
+		return false
+	}
+	if !state.Sni.IsNull() && !state.Sni.IsUnknown() {
+		return false
+	}
+	if !state.Sockets.IsNull() && !state.Sockets.IsUnknown() {
+		return false
+	}
+	if !state.Support.IsNull() && !state.Support.IsUnknown() {
+		return false
+	}
+	if !state.System.IsNull() && !state.System.IsUnknown() {
+		return false
+	}
+	if !state.TLS.IsNull() && !state.TLS.IsUnknown() {
+		return false
+	}
+	if !state.UpgradeGroupSettings.IsNull() && !state.UpgradeGroupSettings.IsUnknown() {
+		return false
+	}
+	if !state.UpgradeSettings.IsNull() && !state.UpgradeSettings.IsUnknown() {
+		return false
+	}
+	if !state.Workers.IsNull() && !state.Workers.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *GroupSystemSettingsModel, preserveInputs bool, fillMissingInputs bool) {

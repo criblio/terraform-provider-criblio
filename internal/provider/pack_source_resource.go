@@ -47514,7 +47514,222 @@ func isPackSourceImportState(state *PackSourceModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.InputCollection != nil {
+		return false
+	}
+	if state.InputKafka != nil {
+		return false
+	}
+	if state.InputMsk != nil {
+		return false
+	}
+	if state.InputHttp != nil {
+		return false
+	}
+	if state.InputSplunk != nil {
+		return false
+	}
+	if state.InputSplunkSearch != nil {
+		return false
+	}
+	if state.InputSplunkHec != nil {
+		return false
+	}
+	if state.InputAzureBlob != nil {
+		return false
+	}
+	if state.InputElastic != nil {
+		return false
+	}
+	if state.InputConfluentCloud != nil {
+		return false
+	}
+	if state.InputGrafana != nil {
+		return false
+	}
+	if state.InputLoki != nil {
+		return false
+	}
+	if state.InputPrometheusRw != nil {
+		return false
+	}
+	if state.InputPrometheus != nil {
+		return false
+	}
+	if state.InputEdgePrometheus != nil {
+		return false
+	}
+	if state.InputOffice365Mgmt != nil {
+		return false
+	}
+	if state.InputOffice365Service != nil {
+		return false
+	}
+	if state.InputOffice365MsgTrace != nil {
+		return false
+	}
+	if state.InputMicrosoftGraph != nil {
+		return false
+	}
+	if state.InputEventhub != nil {
+		return false
+	}
+	if state.InputEventhubAmqp != nil {
+		return false
+	}
+	if state.InputExec != nil {
+		return false
+	}
+	if state.InputFirehose != nil {
+		return false
+	}
+	if state.InputGooglePubsub != nil {
+		return false
+	}
+	if state.InputCribl != nil {
+		return false
+	}
+	if state.InputCriblTcp != nil {
+		return false
+	}
+	if state.InputCriblHttp != nil {
+		return false
+	}
+	if state.InputCriblLakeHttp != nil {
+		return false
+	}
+	if state.InputTcpjson != nil {
+		return false
+	}
+	if state.InputSystemMetrics != nil {
+		return false
+	}
+	if state.InputSystemState != nil {
+		return false
+	}
+	if state.InputKubeMetrics != nil {
+		return false
+	}
+	if state.InputKubeLogs != nil {
+		return false
+	}
+	if state.InputKubeEvents != nil {
+		return false
+	}
+	if state.InputWindowsMetrics != nil {
+		return false
+	}
+	if state.InputCrowdstrike != nil {
+		return false
+	}
+	if state.InputDatadogAgent != nil {
+		return false
+	}
+	if state.InputDatagen != nil {
+		return false
+	}
+	if state.InputHttpRaw != nil {
+		return false
+	}
+	if state.InputKinesis != nil {
+		return false
+	}
+	if state.InputCriblmetrics != nil {
+		return false
+	}
+	if state.InputMetrics != nil {
+		return false
+	}
+	if state.InputS3 != nil {
+		return false
+	}
+	if state.InputS3Inventory != nil {
+		return false
+	}
+	if state.InputSnmp != nil {
+		return false
+	}
+	if state.InputOpenTelemetry != nil {
+		return false
+	}
+	if state.InputModelDrivenTelemetry != nil {
+		return false
+	}
+	if state.InputSqs != nil {
+		return false
+	}
+	if state.InputSyslog != nil {
+		return false
+	}
+	if state.InputFile != nil {
+		return false
+	}
+	if state.InputTcp != nil {
+		return false
+	}
+	if state.InputAppscope != nil {
+		return false
+	}
+	if state.InputWef != nil {
+		return false
+	}
+	if state.InputWinEventLogs != nil {
+		return false
+	}
+	if state.InputAppleUnifiedLogs != nil {
+		return false
+	}
+	if state.InputRawUdp != nil {
+		return false
+	}
+	if state.InputJournalFiles != nil {
+		return false
+	}
+	if state.InputWiz != nil {
+		return false
+	}
+	if state.InputOpenai != nil {
+		return false
+	}
+	if state.InputWizWebhook != nil {
+		return false
+	}
+	if state.InputNetflow != nil {
+		return false
+	}
+	if state.InputSecurityLake != nil {
+		return false
+	}
+	if state.InputBedrockS3 != nil {
+		return false
+	}
+	if state.InputServicenowTable != nil {
+		return false
+	}
+	if state.InputZscalerHec != nil {
+		return false
+	}
+	if state.InputCloudflareHec != nil {
+		return false
+	}
+	if state.InputSysdigHec != nil {
+		return false
+	}
+	if state.InputUpwindHec != nil {
+		return false
+	}
+	if state.InputOpenaiComplianceLogs != nil {
+		return false
+	}
+	if state.InputAnthropicCompliance != nil {
+		return false
+	}
+	if state.InputOkta != nil {
+		return false
+	}
+	return true
 }
 
 func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, preserveInputs bool, fillMissingInputs bool) {

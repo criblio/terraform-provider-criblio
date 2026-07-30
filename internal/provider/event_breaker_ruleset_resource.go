@@ -401,7 +401,24 @@ func isEventBreakerRulesetImportState(state *EventBreakerRulesetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Description.IsNull() && !state.Description.IsUnknown() {
+		return false
+	}
+	if !state.Lib.IsNull() && !state.Lib.IsUnknown() {
+		return false
+	}
+	if !state.MinRawLength.IsNull() && !state.MinRawLength.IsUnknown() {
+		return false
+	}
+	if !state.Rules.IsNull() && !state.Rules.IsUnknown() {
+		return false
+	}
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyEventBreakerRulesetAPIToState(api *EventBreakerRulesetModel, state *EventBreakerRulesetModel, preserveInputs bool, fillMissingInputs bool) {

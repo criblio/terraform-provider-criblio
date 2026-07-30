@@ -35,6 +35,25 @@ func TestDestinationMicrosoftFabricSASLUsesClientIDAPIKey(t *testing.T) {
 	}
 }
 
+func TestDestinationMicrosoftFabricSASLReadsClientIDAPIKey(t *testing.T) {
+	value, err := DestinationAPIValueToTerraformValue(
+		map[string]any{
+			"disabled":             false,
+			"mechanism":            "oauthbearer",
+			"clientSecretAuthType": "secret",
+			"clientId":             "fabric-client-id",
+		},
+		types.ObjectType{AttrTypes: OutputMicrosoftFabricSaslAttrTypes()},
+	)
+	if err != nil {
+		t.Fatalf("convert SASL response: %v", err)
+	}
+	clientID := value.(types.Object).Attributes()["client_id"].(types.String)
+	if clientID.IsNull() || clientID.ValueString() != "fabric-client-id" {
+		t.Fatalf("client_id = %#v, want fabric-client-id", clientID)
+	}
+}
+
 func TestDestinationSplunkResponseResolvesPlannedUnknowns(t *testing.T) {
 	var api DestinationModel
 	if err := json.Unmarshal([]byte(`{

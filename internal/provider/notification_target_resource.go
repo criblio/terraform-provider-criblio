@@ -510,7 +510,24 @@ func isNotificationTargetImportState(state *NotificationTargetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.WebhookTarget != nil {
+		return false
+	}
+	if state.PagerDutyTarget != nil {
+		return false
+	}
+	if state.SlackTarget != nil {
+		return false
+	}
+	if state.SnsTarget != nil {
+		return false
+	}
+	if state.SmtpTarget != nil {
+		return false
+	}
+	return true
 }
 
 func applyNotificationTargetAPIToState(api *NotificationTargetModel, state *NotificationTargetModel, preserveInputs bool, fillMissingInputs bool) {

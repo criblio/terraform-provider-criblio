@@ -517,6 +517,15 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 				}
 			}
 {{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+			// Keep the Microsoft Fabric SASL client ID mapping symmetric with
+			// TerraformValueToJSON. Other destination objects use client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := typed.AttrTypes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+{{- end }}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -1899,8 +1908,24 @@ func is{{ .StructName }}ImportState(state *{{ .StructName }}Model) bool {
 		return true
 	}
 {{- end }}
-{{- end }}
 	return false
+{{- else }}
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+{{- range .Fields }}
+{{- if and (not .PathParam) (not .Computed) }}
+	if !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() {
+		return false
+	}
+{{- end }}
+{{- end }}
+{{- range .OneOfVariants }}
+	if state.{{ .GoName }} != nil {
+		return false
+	}
+{{- end }}
+	return true
+{{- end }}
 }
 
 func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .StructName }}Model, preserveInputs bool, fillMissingInputs bool) {
@@ -3163,6 +3188,7 @@ func notificationTargetImportStateVerifyIgnore() []string {
 		"sns_target.aws_api_key",
 		"sns_target.aws_secret_key",
 		"sns_target.phone_number",
+		"sns_target.system_fields",
 	}
 }
 {{- else if eq .StructName "SearchDatasetProvider" }}
@@ -3222,6 +3248,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportStateId:     apiHTTPID,
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
+						"description",
 						"apihttp.description",
 					},
 				},

@@ -383,6 +383,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, notificationTargetTest, "func TestNotificationTarget(t *testing.T)")
 	assertContains(t, notificationTargetTest, "notificationTargetConfig(id, \"created\")")
 	assertContains(t, notificationTargetTest, "ImportStateVerifyIgnore: notificationTargetImportStateVerifyIgnore()")
+	assertContains(t, notificationTargetTest, `"sns_target.system_fields",`)
 	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
 
 	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
@@ -390,6 +391,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
 	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
 	assertContains(t, searchDatasetProviderTest, `ImportStateVerifyIgnore: []string{
+						"description",
 						"apihttp.description",`)
 	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
 

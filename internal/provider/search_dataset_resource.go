@@ -5374,7 +5374,87 @@ func isSearchDatasetImportState(state *SearchDatasetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.DatasetAmazonSecurityLake != nil {
+		return false
+	}
+	if state.DatasetAPIAws != nil {
+		return false
+	}
+	if state.DatasetAPIAzure != nil {
+		return false
+	}
+	if state.DatasetAPIAzureDataExplorer != nil {
+		return false
+	}
+	if state.DatasetAPIElasticsearch != nil {
+		return false
+	}
+	if state.DatasetAPIGcp != nil {
+		return false
+	}
+	if state.DatasetAPIGoogleWorkspace != nil {
+		return false
+	}
+	if state.DatasetAPIHttp != nil {
+		return false
+	}
+	if state.DatasetAPILogAnalytics != nil {
+		return false
+	}
+	if state.DatasetAPIMsgraph != nil {
+		return false
+	}
+	if state.DatasetAPIOkta != nil {
+		return false
+	}
+	if state.DatasetAPIOpensearch != nil {
+		return false
+	}
+	if state.DatasetAPITailscale != nil {
+		return false
+	}
+	if state.DatasetAPIZoom != nil {
+		return false
+	}
+	if state.DatasetAzureBlob != nil {
+		return false
+	}
+	if state.DatasetClickhouse != nil {
+		return false
+	}
+	if state.DatasetCriblEdge != nil {
+		return false
+	}
+	if state.DatasetCriblLake != nil {
+		return false
+	}
+	if state.DatasetCriblLeader != nil {
+		return false
+	}
+	if state.DatasetCriblLocal != nil {
+		return false
+	}
+	if state.DatasetCriblMeta != nil {
+		return false
+	}
+	if state.DatasetCriblSearch != nil {
+		return false
+	}
+	if state.DatasetGcs != nil {
+		return false
+	}
+	if state.DatasetPrometheus != nil {
+		return false
+	}
+	if state.DatasetS3 != nil {
+		return false
+	}
+	if state.DatasetSnowflake != nil {
+		return false
+	}
+	return true
 }
 
 func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetModel, preserveInputs bool, fillMissingInputs bool) {

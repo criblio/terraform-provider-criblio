@@ -29586,7 +29586,261 @@ func isPackDestinationImportState(state *PackDestinationModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.OutputDefault != nil {
+		return false
+	}
+	if state.OutputWebhook != nil {
+		return false
+	}
+	if state.OutputSentinel != nil {
+		return false
+	}
+	if state.OutputDevnull != nil {
+		return false
+	}
+	if state.OutputSyslog != nil {
+		return false
+	}
+	if state.OutputSplunk != nil {
+		return false
+	}
+	if state.OutputSplunkLb != nil {
+		return false
+	}
+	if state.OutputSplunkHec != nil {
+		return false
+	}
+	if state.OutputWizHec != nil {
+		return false
+	}
+	if state.OutputTcpjson != nil {
+		return false
+	}
+	if state.OutputWavefront != nil {
+		return false
+	}
+	if state.OutputSignalfx != nil {
+		return false
+	}
+	if state.OutputFilesystem != nil {
+		return false
+	}
+	if state.OutputS3 != nil {
+		return false
+	}
+	if state.OutputAzureBlob != nil {
+		return false
+	}
+	if state.OutputAzureDataExplorer != nil {
+		return false
+	}
+	if state.OutputAzureLogs != nil {
+		return false
+	}
+	if state.OutputKinesis != nil {
+		return false
+	}
+	if state.OutputHoneycomb != nil {
+		return false
+	}
+	if state.OutputAzureEventhub != nil {
+		return false
+	}
+	if state.OutputGoogleBigquery != nil {
+		return false
+	}
+	if state.OutputGoogleChronicle != nil {
+		return false
+	}
+	if state.OutputGoogleCloudStorage != nil {
+		return false
+	}
+	if state.OutputGoogleCloudLogging != nil {
+		return false
+	}
+	if state.OutputGoogleCloudObservability != nil {
+		return false
+	}
+	if state.OutputGooglePubsub != nil {
+		return false
+	}
+	if state.OutputExabeam != nil {
+		return false
+	}
+	if state.OutputKafka != nil {
+		return false
+	}
+	if state.OutputConfluentCloud != nil {
+		return false
+	}
+	if state.OutputMsk != nil {
+		return false
+	}
+	if state.OutputElastic != nil {
+		return false
+	}
+	if state.OutputElasticCloud != nil {
+		return false
+	}
+	if state.OutputNewrelic != nil {
+		return false
+	}
+	if state.OutputNewrelicEvents != nil {
+		return false
+	}
+	if state.OutputInfluxdb != nil {
+		return false
+	}
+	if state.OutputCloudwatch != nil {
+		return false
+	}
+	if state.OutputMinio != nil {
+		return false
+	}
+	if state.OutputStatsd != nil {
+		return false
+	}
+	if state.OutputStatsdExt != nil {
+		return false
+	}
+	if state.OutputGraphite != nil {
+		return false
+	}
+	if state.OutputRouter != nil {
+		return false
+	}
+	if state.OutputSns != nil {
+		return false
+	}
+	if state.OutputSqs != nil {
+		return false
+	}
+	if state.OutputSnmp != nil {
+		return false
+	}
+	if state.OutputSumoLogic != nil {
+		return false
+	}
+	if state.OutputDatadog != nil {
+		return false
+	}
+	if state.OutputGrafanaCloud != nil {
+		return false
+	}
+	if state.OutputLoki != nil {
+		return false
+	}
+	if state.OutputAmazonManagedPrometheus != nil {
+		return false
+	}
+	if state.OutputPrometheus != nil {
+		return false
+	}
+	if state.OutputRing != nil {
+		return false
+	}
+	if state.OutputOpenTelemetry != nil {
+		return false
+	}
+	if state.OutputServiceNow != nil {
+		return false
+	}
+	if state.OutputDataset != nil {
+		return false
+	}
+	if state.OutputCriblTcp != nil {
+		return false
+	}
+	if state.OutputCriblHttp != nil {
+		return false
+	}
+	if state.OutputCriblSearchEngine != nil {
+		return false
+	}
+	if state.OutputHumioHec != nil {
+		return false
+	}
+	if state.OutputCrowdstrikeNextGenSiem != nil {
+		return false
+	}
+	if state.OutputDlS3 != nil {
+		return false
+	}
+	if state.OutputSecurityLake != nil {
+		return false
+	}
+	if state.OutputCriblLake != nil {
+		return false
+	}
+	if state.OutputDiskSpool != nil {
+		return false
+	}
+	if state.OutputClickHouse != nil {
+		return false
+	}
+	if state.OutputCustomerMetricsStorage != nil {
+		return false
+	}
+	if state.OutputLocalSearchStorage != nil {
+		return false
+	}
+	if state.OutputXsiam != nil {
+		return false
+	}
+	if state.OutputNetflow != nil {
+		return false
+	}
+	if state.OutputDynatraceHttp != nil {
+		return false
+	}
+	if state.OutputDynatraceOtlp != nil {
+		return false
+	}
+	if state.OutputSentinelOneAiSiem != nil {
+		return false
+	}
+	if state.OutputChronicle != nil {
+		return false
+	}
+	if state.OutputDatabricks != nil {
+		return false
+	}
+	if state.OutputSnowflakeStreaming != nil {
+		return false
+	}
+	if state.OutputMicrosoftFabric != nil {
+		return false
+	}
+	if state.OutputCloudflareR2 != nil {
+		return false
+	}
+	if state.OutputNutanixObjects != nil {
+		return false
+	}
+	if state.OutputStorjS3 != nil {
+		return false
+	}
+	if state.OutputAlphasocS3 != nil {
+		return false
+	}
+	if state.OutputDellS3 != nil {
+		return false
+	}
+	if state.OutputCloudianS3 != nil {
+		return false
+	}
+	if state.OutputScalityS3 != nil {
+		return false
+	}
+	if state.OutputAlibabaCloudS3 != nil {
+		return false
+	}
+	if state.OutputIbmCloudS3 != nil {
+		return false
+	}
+	return true
 }
 
 func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestinationModel, preserveInputs bool, fillMissingInputs bool) {
