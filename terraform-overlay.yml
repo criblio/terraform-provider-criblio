@@ -3377,21 +3377,52 @@ actions:
 
   - target: "$.paths./apps.post"
     update:
+      x-cribl-availability: cloud
       x-terraform-resource: true
       x-terraform-resource-name: App
       x-terraform-response-item: true
   - target: "$.paths./apps/{id}.get"
     update:
+      x-cribl-availability: cloud
       x-terraform-read: App
       x-terraform-response-item: true
   - target: "$.paths./apps/{id}.patch"
     update:
+      x-cribl-availability: cloud
       x-terraform-update: App
       x-terraform-read-after-write: true
       x-terraform-preserve-inputs-after-write: true
   - target: "$.paths./apps/{id}.delete"
     update:
+      x-cribl-availability: cloud
       x-terraform-delete: App
+  - target: "$.paths./apps.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps.put"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/apply.post"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/teams/apply.post"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/teams.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/policies.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/proxies.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/preinstall-check.post"
+    update:
+      x-cribl-availability: cloud
   - target: "$.components.schemas.AppRequestBody.properties.id"
     update:
       x-terraform-suppress-diff: explicit
@@ -3399,14 +3430,17 @@ actions:
     update:
       filename:
         type: string
-        description: Local App archive to upload before installation.
+        description: Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.
         x-terraform-local-only: true
         x-terraform-prefer-state: true
         x-terraform-force-new-always: true
   - target: "$.components.schemas.AppRequestBody.properties.force"
     update:
       x-terraform-prefer-state: true
-      x-terraform-force-new: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.source"
+    update:
+      description: "The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud."
   - target: "$.components.schemas.AppRequestBody.properties.author"
     update:
       x-terraform-force-new-always: true

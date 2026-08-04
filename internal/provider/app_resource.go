@@ -102,7 +102,7 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Local App archive to upload before installation.`,
+				Description: `Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -113,7 +113,7 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Computed:    false,
 				Description: `If <code>true</code>, overwrite any existing App that has the same <code>id</code>. If <code>false</code>, and an App with the same <code>id</code> already exists, the request fails.`,
 				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
+					boolplanmodifier.RequiresReplace(),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -139,7 +139,7 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `The source of the app: a URL, uploaded filename, or <code>git+</code>URL. If omitted, the request creates an empty App.`,
+				Description: `The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.`,
 			},
 			"spec": schema.StringAttribute{
 				Required:    false,

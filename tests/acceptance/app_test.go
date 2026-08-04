@@ -8,31 +8,34 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestApp(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Apps API is not supported on-prem")
+	}
+
 	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
 	createID := "tf-created-" + suffix
 	fileID := "tf-file-" + suffix
 	urlID := "tf-url-" + suffix
 	gitID := "tf-git-" + suffix
 	configText := appExampleConfig(t, createID, fileID, urlID, gitID)
-	if os.Getenv("DEPLOYMENT") == "onprem" {
-		configText = appOnPremConfig(urlID, gitID)
-	}
 
 	checks := []resource.TestCheckFunc{
 		resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", urlID),
 		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
-	}
-	if os.Getenv("DEPLOYMENT") != "onprem" {
-		checks = append(checks,
-			resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
-			resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
-		)
+		resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
+		func(*terraform.State) error {
+			time.Sleep(30 * time.Second)
+			return nil
+		},
 	}
 
 	resource.Test(t, resource.TestCase{
@@ -69,19 +72,4 @@ func appExampleConfig(t *testing.T, createID, fileID, urlID, gitID string) strin
 		"git-repository-example", gitID,
 	)
 	return replacer.Replace(string(content))
-}
-
-func appOnPremConfig(urlID, gitID string) string {
-	return fmt.Sprintf(`resource "criblio_app" "import_from_url" {
-  id     = %[1]q
-  source = "https://github.com/criblio/apm/releases/download/v0.10.0/apm-0.10.0.tgz"
-  force  = true
-}
-
-resource "criblio_app" "import_from_git" {
-  id         = %[2]q
-  source     = "git+https://github.com/criblapps/cribl-ai-o11y.git"
-  depends_on = [criblio_app.import_from_url]
-}
-`, urlID, gitID)
 }

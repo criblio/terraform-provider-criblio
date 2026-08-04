@@ -33,10 +33,10 @@ resource "criblio_app" "my_app" {
 - `cribl` (Attributes) (see [below for nested schema](#nestedatt--cribl))
 - `description` (String) Brief description of the app.
 - `display_name` (String) Human-readable display name for the app.
-- `filename` (String) Local App archive to upload before installation.
+- `filename` (String) Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.
 - `force` (Boolean) If <code>true</code>, overwrite any existing App that has the same <code>id</code>. If <code>false</code>, and an App with the same <code>id</code> already exists, the request fails.
 - `min_log_stream_version` (String) Minimum Cribl Stream version required by this app.
-- `source` (String) The source of the app: a URL, uploaded filename, or <code>git+</code>URL. If omitted, the request creates an empty App.
+- `source` (String) The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.
 - `spec` (String) Schema spec version for the app.
 - `version` (String) Semantic version of the app.
 

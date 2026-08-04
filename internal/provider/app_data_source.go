@@ -66,7 +66,7 @@ func (d *AppDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 			},
 			"filename": schema.StringAttribute{
 				Computed:    true,
-				Description: `Local App archive to upload before installation.`,
+				Description: `Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.`,
 			},
 			"force": schema.BoolAttribute{
 				Computed:    true,
@@ -82,7 +82,7 @@ func (d *AppDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 			},
 			"source": schema.StringAttribute{
 				Computed:    true,
-				Description: `The source of the app: a URL, uploaded filename, or <code>git+</code>URL. If omitted, the request creates an empty App.`,
+				Description: `The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.`,
 			},
 			"spec": schema.StringAttribute{
 				Computed:    true,

@@ -80,10 +80,6 @@ func runWithConfig(config mergeConfig) error {
 		return fmt.Errorf("read input spec: %v", err)
 	}
 
-	cloudOnlyPaths, err := collectCloudOnlyPaths(spec)
-	if err != nil {
-		return err
-	}
 	if err := prefixGroupScopedPaths(spec); err != nil {
 		return err
 	}
@@ -97,6 +93,10 @@ func runWithConfig(config mergeConfig) error {
 		return err
 	}
 	if err := mergeManagementSpec(spec, config.MgmtInputPath, config.MgmtOverlayPath); err != nil {
+		return err
+	}
+	cloudOnlyPaths, err := collectCloudOnlyPaths(spec)
+	if err != nil {
 		return err
 	}
 
@@ -384,7 +384,7 @@ func collectCloudOnlyPaths(spec *yaml.Node) ([]string, error) {
 			continue
 		}
 		if pathIsCloudOnly(pathItem) {
-			cloudOnlyPaths = append(cloudOnlyPaths, path)
+			cloudOnlyPaths = append(cloudOnlyPaths, strings.TrimPrefix(path, groupPrefix))
 		}
 	}
 	sort.Strings(cloudOnlyPaths)

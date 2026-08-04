@@ -8,6 +8,9 @@ The configuration maps the four **Add App** UI options to Terraform:
 - **Import from URL**: set `source` to a direct artifact URL.
 - **Import from Git**: set `source` to a `git+https://...` repository URL.
 
+Cribl.Cloud supports all four workflows. On-prem deployments do not expose the
+App upload endpoint, so they must use Import from URL or Import from Git.
+
 `fixture` is a minimal complete Cribl App. Its archive must contain
 `package.json` and `static/index.html` at the archive root.
 
