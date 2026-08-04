@@ -13,7 +13,6 @@ resource "criblio_routes" "my_routes" {
     mygroup = {
       name        = "firstgroup"
       description = "Group of related routes"
-      disabled    = false
       index       = 1
     }
   }

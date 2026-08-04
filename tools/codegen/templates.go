@@ -2171,7 +2171,6 @@ func is{{ .StructName }}ImportState(state *{{ .StructName }}Model) bool {
 		return true
 	}
 {{- end }}
-{{- end }}
 {{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	if len(state.Routes.Elements()) == 0 {
 		return true
