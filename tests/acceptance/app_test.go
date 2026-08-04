@@ -8,11 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestApp(t *testing.T) {
@@ -32,10 +30,6 @@ func TestApp(t *testing.T) {
 		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
 		resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
 		resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
-		func(*terraform.State) error {
-			time.Sleep(30 * time.Second)
-			return nil
-		},
 	}
 
 	resource.Test(t, resource.TestCase{

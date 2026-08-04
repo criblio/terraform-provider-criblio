@@ -1231,7 +1231,19 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 {{- if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
-{{- if eq .StructName "Key" }}
+{{- if eq .StructName "App" }}
+	id := model.ID.ValueString()
+	items, err := restclient.Get[[]AppModel](ctx, a.client, "/apps")
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range *items {
+		if item.ID.ValueString() == id {
+			return &item, nil
+		}
+	}
+	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/apps/%s", id)}
+{{- else if eq .StructName "Key" }}
 	id := keyAPIID(model)
 	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))
 	if err != nil {
@@ -2637,11 +2649,9 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestApp(t *testing.T) {
@@ -2661,10 +2671,6 @@ func TestApp(t *testing.T) {
 		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
 		resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
 		resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
-		func(*terraform.State) error {
-			time.Sleep(30 * time.Second)
-			return nil
-		},
 	}
 
 	resource.Test(t, resource.TestCase{

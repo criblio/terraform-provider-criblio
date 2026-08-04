@@ -8,6 +8,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -15,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -46,18 +48,20 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 			"author": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Author of the app.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"cribl": schema.SingleNestedAttribute{
 				Required: false,
 				Optional: true,
-				Computed: false,
+				Computed: true,
 				PlanModifiers: []planmodifier.Object{
 					objectplanmodifier.RequiresReplace(),
+					objectplanmodifier.UseStateForUnknown(),
 				},
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
@@ -83,19 +87,21 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 			"description": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Brief description of the app.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"display_name": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Human-readable display name for the app.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"filename": schema.StringAttribute{
@@ -105,6 +111,9 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Description: `Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+				},
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRoot("source")),
 				},
 			},
 			"force": schema.BoolAttribute{
@@ -129,31 +138,39 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 			"min_log_stream_version": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Minimum Cribl Stream version required by this app.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"source": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"spec": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Schema spec version for the app.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"version": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Semantic version of the app.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 		},
@@ -262,34 +279,10 @@ func isAppImportState(state *AppModel) bool {
 	}
 	// Resources whose bodies contain only optional fields have no required
 	// sentinel. An ID-only state is an import and must be hydrated from Read.
-	if !state.Author.IsNull() && !state.Author.IsUnknown() {
-		return false
-	}
-	if !state.Cribl.IsNull() && !state.Cribl.IsUnknown() {
-		return false
-	}
-	if !state.Description.IsNull() && !state.Description.IsUnknown() {
-		return false
-	}
-	if !state.DisplayName.IsNull() && !state.DisplayName.IsUnknown() {
-		return false
-	}
 	if !state.Filename.IsNull() && !state.Filename.IsUnknown() {
 		return false
 	}
 	if !state.Force.IsNull() && !state.Force.IsUnknown() {
-		return false
-	}
-	if !state.MinLogStreamVersion.IsNull() && !state.MinLogStreamVersion.IsUnknown() {
-		return false
-	}
-	if !state.Source.IsNull() && !state.Source.IsUnknown() {
-		return false
-	}
-	if !state.Spec.IsNull() && !state.Spec.IsUnknown() {
-		return false
-	}
-	if !state.Version.IsNull() && !state.Version.IsUnknown() {
 		return false
 	}
 	return true
@@ -299,28 +292,32 @@ func applyAppAPIToState(api *AppModel, state *AppModel, preserveInputs bool, fil
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Author.IsNull() || state.Author.IsUnknown())) {
-		if !api.Author.IsNull() && !api.Author.IsUnknown() {
-			state.Author = api.Author
-		}
+	if !api.Author.IsNull() && !api.Author.IsUnknown() {
+		state.Author = api.Author
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Cribl.IsNull() || state.Cribl.IsUnknown())) {
-		if !api.Cribl.IsNull() && !api.Cribl.IsUnknown() {
-			state.Cribl = api.Cribl
-		}
+	if state.Author.IsUnknown() {
+		state.Author = types.StringNull()
+	}
+	if !api.Cribl.IsNull() && !api.Cribl.IsUnknown() {
+		state.Cribl = api.Cribl
+	}
+	if state.Cribl.IsUnknown() {
+		state.Cribl = types.ObjectNull(AppCriblAttrTypes())
 	}
 	if len(state.Cribl.AttributeTypes(context.Background())) == 0 {
 		state.Cribl = types.ObjectNull(AppCriblAttrTypes())
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
-		if !api.Description.IsNull() && !api.Description.IsUnknown() {
-			state.Description = api.Description
-		}
+	if !api.Description.IsNull() && !api.Description.IsUnknown() {
+		state.Description = api.Description
 	}
-	if !preserveInputs || (fillMissingInputs && (state.DisplayName.IsNull() || state.DisplayName.IsUnknown())) {
-		if !api.DisplayName.IsNull() && !api.DisplayName.IsUnknown() {
-			state.DisplayName = api.DisplayName
-		}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
+	if !api.DisplayName.IsNull() && !api.DisplayName.IsUnknown() {
+		state.DisplayName = api.DisplayName
+	}
+	if state.DisplayName.IsUnknown() {
+		state.DisplayName = types.StringNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Filename.IsNull() || state.Filename.IsUnknown())) {
 		if !api.Filename.IsNull() && !api.Filename.IsUnknown() {
@@ -337,25 +334,29 @@ func applyAppAPIToState(api *AppModel, state *AppModel, preserveInputs bool, fil
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.MinLogStreamVersion.IsNull() || state.MinLogStreamVersion.IsUnknown())) {
-		if !api.MinLogStreamVersion.IsNull() && !api.MinLogStreamVersion.IsUnknown() {
-			state.MinLogStreamVersion = api.MinLogStreamVersion
-		}
+	if !api.MinLogStreamVersion.IsNull() && !api.MinLogStreamVersion.IsUnknown() {
+		state.MinLogStreamVersion = api.MinLogStreamVersion
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Source.IsNull() || state.Source.IsUnknown())) {
-		if !api.Source.IsNull() && !api.Source.IsUnknown() {
-			state.Source = api.Source
-		}
+	if state.MinLogStreamVersion.IsUnknown() {
+		state.MinLogStreamVersion = types.StringNull()
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Spec.IsNull() || state.Spec.IsUnknown())) {
-		if !api.Spec.IsNull() && !api.Spec.IsUnknown() {
-			state.Spec = api.Spec
-		}
+	if !api.Source.IsNull() && !api.Source.IsUnknown() {
+		state.Source = api.Source
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Version.IsNull() || state.Version.IsUnknown())) {
-		if !api.Version.IsNull() && !api.Version.IsUnknown() {
-			state.Version = api.Version
-		}
+	if state.Source.IsUnknown() {
+		state.Source = types.StringNull()
+	}
+	if !api.Spec.IsNull() && !api.Spec.IsUnknown() {
+		state.Spec = api.Spec
+	}
+	if state.Spec.IsUnknown() {
+		state.Spec = types.StringNull()
+	}
+	if !api.Version.IsNull() && !api.Version.IsUnknown() {
+		state.Version = api.Version
+	}
+	if state.Version.IsUnknown() {
+		state.Version = types.StringNull()
 	}
 }
 

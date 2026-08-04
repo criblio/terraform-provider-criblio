@@ -3,6 +3,8 @@ package parser
 import (
 	"path/filepath"
 	"testing"
+
+	"go.yaml.in/yaml/v3"
 )
 
 func TestParseCertificateResource(t *testing.T) {
@@ -373,6 +375,18 @@ components:
 	status := fieldByTFName(t, app.Fields, "status")
 	if !status.Computed || status.Required || status.Optional {
 		t.Fatalf("status flags = required:%v optional:%v computed:%v", status.Required, status.Optional, status.Computed)
+	}
+}
+
+func TestParseTerraformConflictsWith(t *testing.T) {
+	field := FieldDef{}
+	var property yaml.Node
+	if err := yaml.Unmarshal([]byte("x-terraform-conflicts-with: source\n"), &property); err != nil {
+		t.Fatalf("parse property: %v", err)
+	}
+	applyFieldAnnotations(&field, property.Content[0], false, true, false, false)
+	if field.ConflictsWith != "source" {
+		t.Fatalf("conflicts with = %q, want source", field.ConflictsWith)
 	}
 }
 

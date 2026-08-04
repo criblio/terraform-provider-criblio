@@ -26,4 +26,3 @@ tf*
 go.work*
 dist/*
 merged-spec.yml
-internal/auth/cloud_only_paths.go

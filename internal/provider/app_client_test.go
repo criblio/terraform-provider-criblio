@@ -11,6 +11,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -105,5 +106,37 @@ func TestAppUpload(t *testing.T) {
 	}
 	if source != "example.random.tgz" {
 		t.Fatalf("source = %q, want example.random.tgz", source)
+	}
+}
+
+func TestAppReadUsesCollectionEndpoint(t *testing.T) {
+	httpClient := &http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		if r.Method != http.MethodGet || r.URL.Path != "/api/v1/apps" {
+			t.Fatalf("request = %s %s, want GET /api/v1/apps", r.Method, r.URL.Path)
+		}
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     http.Header{"Content-Type": []string{"application/json"}},
+			Body: io.NopCloser(strings.NewReader(`{
+  "items": [
+    {"id": "other-app"},
+    {"id": "expected-app", "displayName": "Expected App"}
+  ]
+}`)),
+			Request: r,
+		}, nil
+	})}
+
+	api := newAppAPI(restclient.New(restclient.Config{
+		BaseURL:     "https://example.test",
+		BearerToken: "test",
+		HTTPClient:  httpClient,
+	}))
+	app, err := api.Read(context.Background(), AppModel{ID: types.StringValue("expected-app")})
+	if err != nil {
+		t.Fatalf("read App: %v", err)
+	}
+	if app.ID.ValueString() != "expected-app" || app.DisplayName.ValueString() != "Expected App" {
+		t.Fatalf("App = %#v", app)
 	}
 }

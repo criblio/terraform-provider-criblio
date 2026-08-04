@@ -85,6 +85,7 @@ type FieldDef struct {
 	DefaultValue       string
 	Enum               []string
 	ValidateEnum       bool
+	ConflictsWith      string
 	Fields             []FieldDef
 	ObjectAsJSON       bool
 	NotNull            bool

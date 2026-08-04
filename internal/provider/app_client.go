@@ -127,7 +127,17 @@ func createAppArchive(model AppModel) ([]byte, error) {
 }
 
 func (a AppAPI) Read(ctx context.Context, model AppModel) (*AppModel, error) {
-	return restclient.Get[AppModel](ctx, a.client, fmt.Sprintf("/apps/%s", model.ID.ValueString()))
+	id := model.ID.ValueString()
+	items, err := restclient.Get[[]AppModel](ctx, a.client, "/apps")
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range *items {
+		if item.ID.ValueString() == id {
+			return &item, nil
+		}
+	}
+	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/apps/%s", id)}
 }
 
 func (a AppAPI) Update(ctx context.Context, model AppModel) (*AppModel, error) {

@@ -684,6 +684,7 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.RequestField = false
 		field.UpdateField = false
 	}
+	field.ConflictsWith = scalarValue(property, "x-terraform-conflicts-with")
 	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
 		field.FixedValue = fixedValue
 		field.Required = false
