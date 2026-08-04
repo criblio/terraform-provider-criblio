@@ -96,6 +96,123 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas.InputCollectorAzureBlob.allOf.1.properties.collector.properties"
+    update:
+      destructive:
+        type: boolean
+        description: Delete files after they are collected.
+        x-terraform-optional-computed: true
+      encoding:
+        type: string
+        description: Character encoding used to parse collected data.
+        x-terraform-optional-computed: true
+  - target: "$.components.schemas.InputCollectorAzureBlob.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      includeMetadata:
+        type: boolean
+        description: Include Azure Blob metadata in collected events.
+        x-terraform-optional-computed: true
+      includeTags:
+        type: boolean
+        description: Include Azure Blob tags in collected events.
+        x-terraform-optional-computed: true
+      disableTimeFilter:
+        type: boolean
+        description: Disable Collector event time filtering when a date range is specified.
+        x-terraform-optional-computed: true
+      parquetChunkSizeMB:
+        type: number
+        description: Maximum file size in MB for each Parquet chunk.
+        x-terraform-optional-computed: true
+      parquetChunkDownloadTimeout:
+        type: number
+        description: Maximum time in seconds allowed to download a Parquet chunk.
+        x-terraform-optional-computed: true
+  - target: "$.components.schemas.InputCollectorRest.allOf.1.properties.collector.properties.conf.properties"
+    update:
+      clientSecretParamValue:
+        type: string
+        description: OAuth client secret value added using the configured client secret parameter name.
+        x-terraform-optional-computed: true
+        x-terraform-sensitive: true
+        x-terraform-prefer-state: true
+  - target: "$.components.schemas"
+    update:
+      InputCollectorFilesystem:
+        allOf:
+          - $ref: "#/components/schemas/InputCollectorBase"
+          - type: object
+            properties:
+              collector:
+                type: object
+                required:
+                  - type
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - filesystem
+                    example: filesystem
+                  destructive:
+                    type: boolean
+                    title: Destructive
+                    description: Delete any files collected.
+                    default: false
+                    example: false
+                  encoding:
+                    type: string
+                    title: Encoding
+                    description: Character encoding to use when parsing ingested data.
+                    default: utf8
+                    example: utf8
+                  conf:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        title: Directory
+                        description: The directory from which to collect data.
+                        example: /var/log/application/*.log
+                      extractors:
+                        type: array
+                        title: Path extractors
+                        items:
+                          type: object
+                          required:
+                            - key
+                            - expression
+                          properties:
+                            key:
+                              type: string
+                              title: Token
+                            expression:
+                              type: string
+                              title: Extractor expression
+                        description: Enrich discovery results from template path tokens.
+                      recurse:
+                        type: boolean
+                        title: Recursive
+                        description: Recurse through subdirectories.
+                        example: true
+                      maxBatchSize:
+                        type: integer
+                        title: Batch size limit (files)
+                        description: Maximum number of metadata files to batch before recording as results.
+                        minimum: 1
+                        example: 10
+  - target: "$.components.schemas.InputCollector"
+    update:
+      oneOf:
+        - $ref: "#/components/schemas/InputCollectorSplunk"
+        - $ref: "#/components/schemas/InputCollectorRest"
+        - $ref: "#/components/schemas/InputCollectorS3"
+        - $ref: "#/components/schemas/InputCollectorAzureBlob"
+        - $ref: "#/components/schemas/InputCollectorCriblLake"
+        - $ref: "#/components/schemas/InputCollectorDatabase"
+        - $ref: "#/components/schemas/InputCollectorGCS"
+        - $ref: "#/components/schemas/InputCollectorHealthCheck"
+        - $ref: "#/components/schemas/InputCollectorScript"
+        - $ref: "#/components/schemas/InputCollectorFilesystem"
 
   - target: "$.paths./m/{groupId}/pipelines.post"
     update:
@@ -224,6 +341,12 @@ actions:
       default: []
       x-terraform-optional-computed: true
       x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
+  - target: "$.components.schemas.OutputRouter.properties.rules"
+    update:
+      # Cribl trims router filter expressions when persisting them. Keep the
+      # configured rules in Terraform state so that normalization does not
+      # produce an inconsistent result during apply.
+      x-terraform-prefer-state: true
   - target: "$.components.schemas.RouteComment.properties.groupId"
     update:
       x-terraform-optional-computed: true
@@ -755,6 +878,11 @@ actions:
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionResponseEnvelope.properties.count"
+    update:
+      # Response-envelope metadata is not part of an individual connection,
+      # and count is reserved at the Terraform resource/data-source root.
+      x-terraform-ignore: true
 
   - target: "$.paths./m/{groupId}/lib/appscope-configs.post"
     update:
@@ -2419,6 +2547,73 @@ actions:
   - target: "$.components.schemas.DatasetCriblSearch"
     update:
       x-terraform-name: cribl_search_dataset
+  - target: "$.components.schemas.DatasetCriblSearch.properties"
+    update:
+      staleChannelFlushMs:
+        type: integer
+        description: Time, in milliseconds, after which an inactive ingest channel is flushed.
+        x-terraform-optional-computed: true
+      retentionPeriod:
+        type: integer
+        description: Dataset retention period, in days.
+        x-terraform-optional-computed: true
+      expectedRelativeTimeRange:
+        type: object
+        description: Expected relative time range for events stored in the Dataset.
+        x-terraform-optional-computed: true
+        properties:
+          earliest:
+            type: string
+            description: Earliest expected event time, expressed as a relative duration.
+            x-terraform-optional-computed: true
+          latest:
+            type: string
+            description: Latest expected event time, expressed as a relative duration.
+            x-terraform-optional-computed: true
+      engine:
+        type: string
+        description: Identifier for the Lakehouse engine linked to the Dataset.
+        x-terraform-optional-computed: true
+      eventStorageSchemaVersion:
+        type: integer
+        description: Event storage schema version used by the Dataset.
+        x-terraform-optional-computed: true
+      skipEventTimeFilter:
+        type: boolean
+        description: Whether searches skip filtering events by event time.
+        x-terraform-optional-computed: true
+      storageClasses:
+        type: array
+        description: Storage classes that apply to the Dataset.
+        x-terraform-optional-computed: true
+        items:
+          type: string
+      partitioningScheme:
+        type: string
+        description: Partitioning scheme used by the Dataset.
+        x-terraform-optional-computed: true
+      autoDetectRegion:
+        type: boolean
+        description: Whether to automatically detect the storage region.
+        x-terraform-optional-computed: true
+      engineDeleted:
+        type: boolean
+        description: Whether the linked Lakehouse engine no longer exists.
+        x-terraform-computed: true
+      favorites:
+        type: array
+        description: Users who marked the Dataset as a favorite, and when.
+        x-terraform-computed: true
+        items:
+          $ref: "#/components/schemas/DatasetFavorite"
+      favoriteCount:
+        type: integer
+        description: Number of users who marked the Dataset as a favorite.
+        x-terraform-computed: true
+      isFavorited:
+        type: boolean
+        description: Whether the requesting user marked the Dataset as a favorite.
+        x-terraform-computed: true
   - target: "$.components.schemas.DatasetGcs"
     update:
       x-terraform-name: gcs_dataset
@@ -2469,6 +2664,35 @@ actions:
         type: string
         description: Templated path under which to look for data.
         x-terraform-optional-computed: true
+      paths:
+        type: array
+        description: Bucket paths and datatype filters used by search execution v2.
+        x-terraform-optional-computed: true
+        items:
+          type: object
+          required:
+            - bucket
+            - filters
+          properties:
+            autoDetectRegion:
+              type: boolean
+              description: Whether to automatically detect the bucket region.
+              x-terraform-optional-computed: true
+            bucket:
+              type: string
+              description: S3 bucket name.
+            filters:
+              type: array
+              description: Glob-to-Datatype mappings for this bucket path.
+              items:
+                $ref: "#/components/schemas/ObjectStorageFilter"
+            partitioningScheme:
+              $ref: "#/components/schemas/PartitioningScheme"
+              x-terraform-optional-computed: true
+            region:
+              type: string
+              description: AWS region where the bucket is located.
+              x-terraform-optional-computed: true
       region:
         type: string
         description: AWS region where the bucket is located.
@@ -2677,9 +2901,13 @@ actions:
       x-terraform-read: SearchDatasetRuleset
   - target: "$.components.schemas.DatasetRuleset.properties.id"
     update:
-      const: default
+      enum:
+        - default
+        - metrics
       default: default
-      x-terraform-fixed-value: default
+      description: Ruleset identifier. Use `default` for log dataset rules or `metrics` for metric dataset rules.
+      x-terraform-default-value: default
+      x-terraform-enum-validator: true
       x-terraform-suppress-diff: explicit
   - target: "$.components.schemas.DatasetRuleset.properties.rules"
     update:
@@ -2708,6 +2936,41 @@ actions:
   - target: "$.components.schemas.DatatypeRuleset.properties.rules"
     update:
       x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/search/datatypes.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.get"
+    update:
+      x-terraform-read: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.patch"
+    update:
+      x-terraform-update: SearchDatatype
+  - target: "$.paths./m/{groupId}/search/datatypes/{id}.delete"
+    update:
+      x-terraform-delete: SearchDatatype
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties"
+    update:
+      minRawLength:
+        type: integer
+        description: Minimum raw event length used when identifying the Datatype.
+        x-terraform-optional-computed: true
+      searchVersion:
+        type: string
+        enum:
+          - v1
+          - v2
+        description: Search execution version used by the Datatype.
+        x-terraform-optional-computed: true
+        x-terraform-enum-validator: true
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.0.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DataTypeDescriptor.allOf.1.oneOf.0.properties.dataFormat"
+    update:
+      x-terraform-request-computed: true
 
   - target: "$.paths./m/{groupId}/search/macros.post"
     update:
@@ -3111,3 +3374,107 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Deploy
       x-terraform-action: true
+
+  - target: "$.paths./apps.post"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-resource: true
+      x-terraform-resource-name: App
+      x-terraform-response-item: true
+  - target: "$.paths./apps/{id}.get"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-read: App
+      x-terraform-response-item: true
+  - target: "$.paths./apps/{id}.patch"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-update: App
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+  - target: "$.paths./apps/{id}.delete"
+    update:
+      x-cribl-availability: cloud
+      x-terraform-delete: App
+  - target: "$.paths./apps.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps.put"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/apply.post"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/teams/apply.post"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl/teams.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/acl.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/policies.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/{id}/proxies.get"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.paths./apps/preinstall-check.post"
+    update:
+      x-cribl-availability: cloud
+  - target: "$.components.schemas.AppRequestBody.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.AppRequestBody.properties"
+    update:
+      filename:
+        type: string
+        description: Local App archive to upload before installation. Apps are supported only in Cribl.Cloud.
+        x-terraform-local-only: true
+        x-terraform-prefer-state: true
+        x-terraform-force-new-always: true
+        x-terraform-conflicts-with: source
+  - target: "$.components.schemas.AppRequestBody.properties.force"
+    update:
+      x-terraform-prefer-state: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.source"
+    update:
+      description: "The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud."
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+  - target: "$.components.schemas.AppRequestBody.properties.spec"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+  - target: "$.components.schemas.AppRequestBody.properties.author"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.cribl"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.description"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.displayName"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.minLogStreamVersion"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.version"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+      x-terraform-force-new-always: true

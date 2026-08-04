@@ -181,7 +181,9 @@ func isLakehouseDatasetConnectionImportState(state *LakehouseDatasetConnectionMo
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	return true
 }
 
 func applyLakehouseDatasetConnectionAPIToState(api *LakehouseDatasetConnectionModel, state *LakehouseDatasetConnectionModel, preserveInputs bool, fillMissingInputs bool) {

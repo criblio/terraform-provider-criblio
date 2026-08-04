@@ -183,7 +183,8 @@ func RoutesTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := RoutesTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -191,7 +192,8 @@ func RoutesTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[RoutesTerraformNameToAPIName(key)] = value
+			apiKey := RoutesTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -579,5 +581,6 @@ func (m *RoutesModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.Routes = types.ListNull(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()})
 	}
+	m.Routes = normalizeRouteClonePlaceholders(m.Routes)
 	return nil
 }

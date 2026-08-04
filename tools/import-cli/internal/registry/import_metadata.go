@@ -56,7 +56,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_appscope_config":              {SDKService: "AppscopeConfigs", ListMethod: "ListAppscopeLibEntry", GetMethod: "GetAppscopeLibEntryByID", ImportIDFormat: ""},
 	"criblio_certificate":                  {SDKService: "Certificates", ListMethod: "ListCertificate", GetMethod: "GetCertificateByID", ImportIDFormat: ""},
 	"criblio_custom_banner":                {SDKService: "Banners", ListMethod: "", GetMethod: "", ImportIDFormat: "id"},
-	"criblio_collector":                    {SDKService: "SavedJobs", ListMethod: "ListCollectors", GetMethod: "GetSavedJobByID", ImportIDFormat: "", OneOf: &OneOfConfig{ReadOnlyAttr: "items", DiscriminatorField: "type", BlockNamePrefix: "input_collector_", KeysToSkip: []string{"status"}, UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"}, NestedDiscriminatorField: "collector.type"}},
+	"criblio_collector":                    {SDKService: "SavedJobs", ListMethod: "ListCollectors", GetMethod: "GetSavedJobByID", ImportIDFormat: "", OneOf: &OneOfConfig{ReadOnlyAttr: "items", DiscriminatorField: "type", BlockNamePrefix: "input_collector_", KeysToSkip: []string{"status"}, UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"}, NestedDiscriminatorField: "collector.type", DiscriminatorAlias: map[string]string{"google_cloud_storage": "gcs"}}},
 	"criblio_commit":                       {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_cribl_lake_dataset":           {SDKService: "Lake", ListMethod: "GetCriblLakeDatasetByLakeID", GetMethod: "GetCriblLakeDatasetByLakeIDAndID", ImportIDFormat: ""},
 	"criblio_cribl_lake_house":             {SDKService: "LakeHouse", ListMethod: "ListDefaultLakeLakehouse", GetMethod: "GetDefaultLakeLakehouseByID", ImportIDFormat: ""},
@@ -109,6 +109,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 }
 
 var importMetadataOverrides = map[string]ResourceMetadata{
+	"criblio_app":                          {ImportIDFormat: "id", RESTListPath: "/apps", RESTGetPath: "/apps/{id}"},
 	"criblio_appscope_config":              {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/appscope-configs", RESTGetPath: "/m/{group_id}/lib/appscope-configs/{id}"},
 	"criblio_collector":                    {ListMethod: "ListCollectors", ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/jobs", RESTGetPath: "/m/{group_id}/lib/jobs/{id}"},
 	"criblio_cribl_lake_house":             {ListMethod: "ListDefaultLakeLakehouses", ImportIDFormat: "id", RESTListPath: "/products/lake/lakes/default/lakehouses", RESTGetPath: "/products/lake/lakes/default/lakehouses/{id}"},
@@ -151,6 +152,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_subscription":                 {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/subscriptions", RESTGetPath: "/m/{group_id}/system/subscriptions/{id}"},
 	"criblio_search_dataset":               {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/datasets", RESTGetPath: "/m/default_search/search/datasets/{id}"},
 	"criblio_search_dataset_provider":      {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/dataset-providers", RESTGetPath: "/m/default_search/search/dataset-providers/{id}"},
+	"criblio_search_datatype":              {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/datatypes", RESTGetPath: "/m/default_search/search/datatypes/{id}"},
 	"criblio_search_engine":                {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/local_search/engines", RESTGetPath: "/m/default_search/search/local_search/engines/{id}"},
 	"criblio_search_source":                {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/local_search/sources", RESTGetPath: "/m/default_search/search/local_search/sources/{id}"},
 	"criblio_search_dataset_ruleset":       {GetMethod: "GetDatasetRuleByID", ImportIDFormat: "id", RESTGetPath: "/m/default_search/search/local_search/dataset-rulesets/{id}", RefreshFromMethod: "RefreshFromSharedCountedDatasetRuleset"},

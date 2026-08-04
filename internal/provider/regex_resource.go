@@ -44,9 +44,10 @@ func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 		MarkdownDescription: "Regex Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the Regex Library entry.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -58,23 +59,26 @@ func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Regex Library entry.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Library classification for the Regex Library entry.`,
 			},
 			"regex": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Regular expression pattern.`,
 			},
 			"sample_data": schema.StringAttribute{
 				Required:    false,
@@ -83,9 +87,10 @@ func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Description: `Optionally, paste in sample data to match against this regex`,
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Comma-separated list of tags for the Regex Library entry.`,
 			},
 		},
 	}

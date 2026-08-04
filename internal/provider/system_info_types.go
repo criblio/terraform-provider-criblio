@@ -133,52 +133,28 @@ func SystemInfoConfAttrTypes() map[string]attr.Type {
 }
 
 type SystemInfoLicenseModel struct {
-	Customer             types.String  `tfsdk:"customer" json:"customer,omitempty"`
-	EffectiveClass       types.String  `tfsdk:"effective_class" json:"effectiveClass,omitempty"`
-	Email                types.String  `tfsdk:"email" json:"email,omitempty"`
-	Expiration           types.Float64 `tfsdk:"expiration" json:"expiration,omitempty"`
-	Guid                 types.String  `tfsdk:"guid" json:"guid,omitempty"`
-	IsRunningInSaaS      types.Bool    `tfsdk:"is_running_in_saa_s" json:"isRunningInSaaS,omitempty"`
-	LicenseEnforceReason types.String  `tfsdk:"license_enforce_reason" json:"licenseEnforceReason,omitempty"`
-	LicenseIDs           types.List    `tfsdk:"license_ids" json:"licenseIds,omitempty"`
-	Limits               types.Object  `tfsdk:"limits" json:"limits,omitempty"`
-	PaidAmiType          types.Int64   `tfsdk:"paid_ami_type" json:"paidAmiType,omitempty"`
-	PhoneHome            types.Bool    `tfsdk:"phone_home" json:"phoneHome,omitempty"`
-	PhoneHomeGrace       types.Float64 `tfsdk:"phone_home_grace" json:"phoneHomeGrace,omitempty"`
-	Quota                types.Float64 `tfsdk:"quota" json:"quota,omitempty"`
+	Email        types.String `tfsdk:"email" json:"email,omitempty"`
+	IsRegistered types.Bool   `tfsdk:"is_registered" json:"isRegistered,omitempty"`
+	IsSplunkApp  types.Bool   `tfsdk:"is_splunk_app" json:"isSplunkApp,omitempty"`
+	Limits       types.Object `tfsdk:"limits" json:"limits,omitempty"`
+	Type         types.String `tfsdk:"type" json:"type,omitempty"`
 }
 
 type SystemInfoLicenseAPIModel struct {
-	Customer             *string  `json:"customer,omitempty"`
-	EffectiveClass       *string  `json:"effectiveClass,omitempty"`
-	Email                *string  `json:"email,omitempty"`
-	Expiration           *float64 `json:"expiration,omitempty"`
-	Guid                 *string  `json:"guid,omitempty"`
-	IsRunningInSaaS      *bool    `json:"isRunningInSaaS,omitempty"`
-	LicenseEnforceReason *string  `json:"licenseEnforceReason,omitempty"`
-	LicenseIDs           []string `json:"licenseIds,omitempty"`
-	Limits               any      `json:"limits,omitempty"`
-	PaidAmiType          *int64   `json:"paidAmiType,omitempty"`
-	PhoneHome            *bool    `json:"phoneHome,omitempty"`
-	PhoneHomeGrace       *float64 `json:"phoneHomeGrace,omitempty"`
-	Quota                *float64 `json:"quota,omitempty"`
+	Email        *string `json:"email,omitempty"`
+	IsRegistered *bool   `json:"isRegistered,omitempty"`
+	IsSplunkApp  *bool   `json:"isSplunkApp,omitempty"`
+	Limits       any     `json:"limits,omitempty"`
+	Type         *string `json:"type,omitempty"`
 }
 
 func SystemInfoLicenseAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"customer":               types.StringType,
-		"effective_class":        types.StringType,
-		"email":                  types.StringType,
-		"expiration":             types.Float64Type,
-		"guid":                   types.StringType,
-		"is_running_in_saa_s":    types.BoolType,
-		"license_enforce_reason": types.StringType,
-		"license_ids":            types.ListType{ElemType: types.StringType},
-		"limits":                 types.ObjectType{AttrTypes: SystemInfoLicenseLimitsAttrTypes()},
-		"paid_ami_type":          types.Int64Type,
-		"phone_home":             types.BoolType,
-		"phone_home_grace":       types.Float64Type,
-		"quota":                  types.Float64Type,
+		"email":         types.StringType,
+		"is_registered": types.BoolType,
+		"is_splunk_app": types.BoolType,
+		"limits":        types.ObjectType{AttrTypes: SystemInfoLicenseLimitsAttrTypes()},
+		"type":          types.StringType,
 	}
 }
 
@@ -186,6 +162,7 @@ type SystemInfoLicenseLimitsModel struct {
 	AppPlatform           types.Int64 `tfsdk:"app_platform" json:"app_platform,omitempty"`
 	EdgeGroups            types.Int64 `tfsdk:"edge_groups" json:"edge_groups,omitempty"`
 	EdgeProcs             types.Int64 `tfsdk:"edge_procs" json:"edge_procs,omitempty"`
+	ExternalSecretStores  types.Int64 `tfsdk:"external_secret_stores" json:"external_secret_stores,omitempty"`
 	Kms                   types.Int64 `tfsdk:"kms" json:"kms,omitempty"`
 	LakeAccessGroups      types.Int64 `tfsdk:"lake_access_groups" json:"lake_access_groups,omitempty"`
 	LakeDdss              types.Int64 `tfsdk:"lake_ddss" json:"lake_ddss,omitempty"`
@@ -215,6 +192,7 @@ type SystemInfoLicenseLimitsAPIModel struct {
 	AppPlatform           *int64 `json:"app_platform,omitempty"`
 	EdgeGroups            *int64 `json:"edge_groups,omitempty"`
 	EdgeProcs             *int64 `json:"edge_procs,omitempty"`
+	ExternalSecretStores  *int64 `json:"external_secret_stores,omitempty"`
 	Kms                   *int64 `json:"kms,omitempty"`
 	LakeAccessGroups      *int64 `json:"lake_access_groups,omitempty"`
 	LakeDdss              *int64 `json:"lake_ddss,omitempty"`
@@ -245,6 +223,7 @@ func SystemInfoLicenseLimitsAttrTypes() map[string]attr.Type {
 		"app_platform":             types.Int64Type,
 		"edge_groups":              types.Int64Type,
 		"edge_procs":               types.Int64Type,
+		"external_secret_stores":   types.Int64Type,
 		"kms":                      types.Int64Type,
 		"lake_access_groups":       types.Int64Type,
 		"lake_ddss":                types.Int64Type,
@@ -400,7 +379,8 @@ func SystemInfoTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SystemInfoTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -408,7 +388,8 @@ func SystemInfoTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SystemInfoTerraformNameToAPIName(key)] = value
+			apiKey := SystemInfoTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -423,6 +404,50 @@ func SystemInfoTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "app_platform":
+		return prefix + "app_platform"
+	case "build":
+		return prefix + "BUILD"
+	case "edge_groups":
+		return prefix + "edge_groups"
+	case "edge_procs":
+		return prefix + "edge_procs"
+	case "external_secret_stores":
+		return prefix + "external_secret_stores"
+	case "lake_access_groups":
+		return prefix + "lake_access_groups"
+	case "lake_ddss":
+		return prefix + "lake_ddss"
+	case "lake_metrics":
+		return prefix + "lake_metrics"
+	case "lake_storage_locations":
+		return prefix + "lake_storage_locations"
+	case "leader_resiliency":
+		return prefix + "leader_resiliency"
+	case "max_executors_per_search":
+		return prefix + "max_executors_per_search"
+	case "outpost_groups":
+		return prefix + "outpost_groups"
+	case "persistent_queue":
+		return prefix + "persistent_queue"
+	case "remote_auth":
+		return prefix + "remote_auth"
+	case "remote_git":
+		return prefix + "remote_git"
+	case "s3_bundle":
+		return prefix + "s3_bundle"
+	case "search_acceleration":
+		return prefix + "search_acceleration"
+	case "search_groups":
+		return prefix + "search_groups"
+	case "system_email":
+		return prefix + "system_email"
+	case "worker_groups":
+		return prefix + "worker_groups"
+	case "worker_procs":
+		return prefix + "worker_procs"
 	}
 	var output strings.Builder
 	upperNext := false

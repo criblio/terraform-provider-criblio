@@ -49,293 +49,378 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"cloud_workspace": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Cribl.Cloud Workspace connection settings, when the Node is managed by a Cribl.Cloud Leader.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_token": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Authentication token that the Node uses to connect to the Leader.`,
 										},
 										"auth_token_rotated": schema.BoolAttribute{
 											Computed:    true,
-											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the node token via RESTProxy.`,
+											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the Node token via RESTProxy.`,
 										},
 										"compression": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Compression algorithm applied to data sent to the Leader.`,
 										},
 										"config_bundles": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Configuration bundle settings for fetching remote config bundles.`,
 											Attributes: map[string]schema.Attribute{
 												"remote_url": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Remote URL used to retrieve distributed configuration bundles.`,
 												},
 											},
 										},
 										"config_helper_socket_dir": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Filesystem path to the directory used for config helper socket files.`,
 										},
-										"connection_timeout": schema.Float64Attribute{
-											Computed: true,
+										"connection_timeout": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum time (in milliseconds) to wait when establishing a connection to the Leader.`,
 										},
 										"disable_sni_routing": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, disable SNI-based routing for this connection. Otherwise, <code>false</code>.`,
 										},
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, disable the Cribl.Cloud Workspace connection. Otherwise, <code>false</code>.`,
 										},
 										"failover": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Failover configuration for Leader resiliency.`,
 											Attributes: map[string]schema.Attribute{
-												"missed_hb_limit": schema.Float64Attribute{
-													Computed: true,
+												"missed_hb_limit": schema.Int64Attribute{
+													Computed:    true,
+													Description: `Number of missed heartbeats before failover is triggered.`,
 												},
 												"period": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Duration of the lease period.`,
 												},
 												"volume": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum data volume that must be processed before a failover candidate is considered eligible.`,
 												},
 											},
 										},
 										"forward_to_leader_api": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code> (default), proxy distributed API traffic through the Leader API server. Otherwise, <code>false</code>.`,
 										},
 										"host": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Hostname or IP address of the Leader Node.`,
 										},
 										"ip_whitelist_regex": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Regular expression that restricts which IP addresses may connect. Leave empty to allow all.`,
 										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed: true,
+										"max_active_cxn": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum number of simultaneous connections to the Leader.`,
 										},
-										"max_buffer_bytes": schema.Float64Attribute{
-											Computed: true,
+										"max_buffer_bytes": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum number of bytes to buffer in memory before applying backpressure on the connection.`,
 										},
-										"port": schema.Float64Attribute{
-											Computed: true,
+										"port": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Port number on which the Leader Node is listening.`,
 										},
 										"protocol": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Protocol used to connect to the Leader Node.`,
 										},
 										"proxy": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Optional SOCKS proxy configuration for outbound connections to the Leader.`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, disable the proxy. Otherwise, <code>false</code>.`,
 												},
 												"host": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Hostname or IP address of the SOCKS proxy server.`,
 												},
 												"password": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Password for proxy authentication.`,
 												},
-												"port": schema.Float64Attribute{
-													Computed: true,
+												"port": schema.Int64Attribute{
+													Computed:    true,
+													Description: `Port number of the SOCKS proxy server.`,
 												},
-												"type": schema.Float64Attribute{
-													Computed: true,
+												"type": schema.Int64Attribute{
+													Computed:    true,
+													Description: `SOCKS proxy type. Use <code>4</code> for SOCKS4 or <code>5</code> for SOCKS5.`,
 												},
 												"user_id": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Username for proxy authentication.`,
 												},
 											},
 										},
 										"resiliency": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Resiliency mode for the Node's connection to the Leader.`,
 										},
 										"subscription_agreement": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, the subscription agreement for the Cribl.Cloud Workspace has been accepted. Otherwise, <code>false</code>.`,
 										},
 										"tls": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `TLS settings for the connection to the Leader Node.`,
 											Attributes: map[string]schema.Attribute{
 												"ca_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to PEM-encoded Certificate Authority (CA) certificates.`,
 												},
 												"cert_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to the PEM-encoded certificate chain.`,
 												},
 												"certificate_name": schema.StringAttribute{
-													Computed: true,
-												},
-												"common_name_regex": schema.MapAttribute{
 													Computed:    true,
-													ElementType: types.StringType,
+													Description: `Name of a predefined Certificate stored in Cribl.`,
+												},
+												"common_name_regex": schema.StringAttribute{
+													Computed:    true,
+													Description: `Regular expression used to validate the TLS peer common name.`,
 												},
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, disable TLS for distributed communication. Otherwise, <code>false</code>.`,
 												},
 												"max_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Maximum TLS protocol version to accept.`,
 												},
 												"min_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum TLS protocol version to accept.`,
 												},
 												"passphrase": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Passphrase used to decrypt the PEM-encoded private key.`,
 												},
 												"priv_key_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to the PEM-encoded private key used for TLS client authentication.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, reject connections with unauthorized TLS certificates. Otherwise, <code>false</code>.`,
 												},
 												"request_cert": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, request client certificates during TLS handshakes. Otherwise, <code>false</code>.`,
 												},
 												"servername": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Server name for TLS Server Name Indication (SNI).`,
 												},
 											},
 										},
-										"write_timeout": schema.Float64Attribute{
-											Computed: true,
+										"write_timeout": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum time (in milliseconds) to wait for a write operation to complete before timing out.`,
 										},
 									},
 								},
 								"env_regex": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Regular expression used to filter environment variable names included in system information responses.`,
 								},
 								"group": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Unique identifier for the Worker Group or Edge Fleet the Node belongs to.`,
 								},
 								"id": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Unique identifier for the Instance Settings entry.`,
 								},
 								"master": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Leader Node connection settings for Distributed deployments.`,
 									Attributes: map[string]schema.Attribute{
 										"auth_token": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Authentication token that the Node uses to connect to the Leader.`,
 										},
 										"auth_token_rotated": schema.BoolAttribute{
 											Computed:    true,
-											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the node token via RESTProxy.`,
+											Description: `When <code>true</code>, merged settings prefer <code>authToken</code> from instance configuration over userinfo embedded in <code>CRIBL_DIST_MASTER_URL</code>. Set when the Leader rotates the Node token via RESTProxy.`,
 										},
 										"compression": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Compression algorithm applied to data sent to the Leader.`,
 										},
 										"config_bundles": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Configuration bundle settings for fetching remote config bundles.`,
 											Attributes: map[string]schema.Attribute{
 												"remote_url": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Remote URL used to retrieve distributed configuration bundles.`,
 												},
 											},
 										},
 										"config_helper_socket_dir": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Filesystem path to the directory used for config helper socket files.`,
 										},
-										"connection_timeout": schema.Float64Attribute{
-											Computed: true,
+										"connection_timeout": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum time (in milliseconds) to wait when establishing a connection to the Leader.`,
 										},
 										"disable_sni_routing": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code>, disable SNI-based routing for this connection. Otherwise, <code>false</code>.`,
 										},
 										"failover": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Failover configuration for Leader resiliency.`,
 											Attributes: map[string]schema.Attribute{
-												"missed_hb_limit": schema.Float64Attribute{
-													Computed: true,
+												"missed_hb_limit": schema.Int64Attribute{
+													Computed:    true,
+													Description: `Number of missed heartbeats before failover is triggered.`,
 												},
 												"period": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Duration of the lease period.`,
 												},
 												"volume": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum data volume that must be processed before a failover candidate is considered eligible.`,
 												},
 											},
 										},
 										"forward_to_leader_api": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `If <code>true</code> (default), proxy distributed API traffic through the Leader API server. Otherwise, <code>false</code>.`,
 										},
 										"host": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Hostname or IP address of the Leader Node.`,
 										},
 										"ip_whitelist_regex": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Regular expression that restricts which IP addresses may connect. Leave empty to allow all.`,
 										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed: true,
+										"max_active_cxn": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum number of simultaneous connections to the Leader.`,
 										},
-										"max_buffer_bytes": schema.Float64Attribute{
-											Computed: true,
+										"max_buffer_bytes": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum number of bytes to buffer in memory before applying backpressure on the connection.`,
 										},
-										"port": schema.Float64Attribute{
-											Computed: true,
+										"port": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Port number on which the Leader Node is listening.`,
 										},
 										"protocol": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Protocol used to connect to the Leader Node.`,
 										},
 										"proxy": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Optional SOCKS proxy configuration for outbound connections to the Leader.`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, disable the proxy. Otherwise, <code>false</code>.`,
 												},
 												"host": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Hostname or IP address of the SOCKS proxy server.`,
 												},
 												"password": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Password for proxy authentication.`,
 												},
-												"port": schema.Float64Attribute{
-													Computed: true,
+												"port": schema.Int64Attribute{
+													Computed:    true,
+													Description: `Port number of the SOCKS proxy server.`,
 												},
-												"type": schema.Float64Attribute{
-													Computed: true,
+												"type": schema.Int64Attribute{
+													Computed:    true,
+													Description: `SOCKS proxy type. Use <code>4</code> for SOCKS4 or <code>5</code> for SOCKS5.`,
 												},
 												"user_id": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Username for proxy authentication.`,
 												},
 											},
 										},
 										"resiliency": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Resiliency mode for the Node's connection to the Leader.`,
 										},
 										"tls": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `TLS settings for the connection to the Leader Node.`,
 											Attributes: map[string]schema.Attribute{
 												"ca_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to PEM-encoded Certificate Authority (CA) certificates.`,
 												},
 												"cert_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to the PEM-encoded certificate chain.`,
 												},
 												"certificate_name": schema.StringAttribute{
-													Computed: true,
-												},
-												"common_name_regex": schema.MapAttribute{
 													Computed:    true,
-													ElementType: types.StringType,
+													Description: `Name of a predefined Certificate stored in Cribl.`,
+												},
+												"common_name_regex": schema.StringAttribute{
+													Computed:    true,
+													Description: `Regular expression used to validate the TLS peer common name.`,
 												},
 												"disabled": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, disable TLS for distributed communication. Otherwise, <code>false</code>.`,
 												},
 												"max_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Maximum TLS protocol version to accept.`,
 												},
 												"min_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum TLS protocol version to accept.`,
 												},
 												"passphrase": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Passphrase used to decrypt the PEM-encoded private key.`,
 												},
 												"priv_key_path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Filesystem path to the PEM-encoded private key used for TLS client authentication.`,
 												},
 												"reject_unauthorized": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, reject connections with unauthorized TLS certificates. Otherwise, <code>false</code>.`,
 												},
 												"request_cert": schema.BoolAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `If <code>true</code>, request client certificates during TLS handshakes. Otherwise, <code>false</code>.`,
 												},
 												"servername": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Server name for TLS Server Name Indication (SNI).`,
 												},
 											},
 										},
-										"write_timeout": schema.Float64Attribute{
-											Computed: true,
+										"write_timeout": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum time (in milliseconds) to wait for a write operation to complete before timing out.`,
 										},
 									},
 								},
@@ -343,10 +428,12 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 									Computed: true,
 								},
 								"reported_deployment_id": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Deployment identifier reported to the Leader for tracking purposes.`,
 								},
 								"tags": schema.ListAttribute{
 									Computed:    true,
+									Description: `Tags associated with this instance for categorization and routing.`,
 									ElementType: types.StringType,
 								},
 							},
@@ -355,10 +442,12 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"bootstrap_host": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Hostname or URL of the bootstrap Leader used during initial Node registration.`,
 								},
 								"id": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Unique identifier for the bootstrap settings entry.`,
 								},
 							},
 						},

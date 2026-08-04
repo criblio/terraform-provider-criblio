@@ -43,24 +43,24 @@ resource "criblio_event_breaker_ruleset" "my_event_breaker_ruleset" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier for the Event Breaker Ruleset.
 
 ### Optional
 
-- `description` (String)
-- `lib` (String)
-- `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use
+- `description` (String) Brief description of the Event Breaker Ruleset.
+- `lib` (String) Library classification for the Event Breaker Ruleset.
+- `min_raw_length` (Integer) The  minimum number of characters in _raw to determine which rule to use
 - `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))
-- `tags` (String)
+- `tags` (String) Tags for filtering and grouping Event Breaker Rulesets.
 
 <a id="nestedatt--rules"></a>
 ### Nested Schema for `rules`
 
 Required:
 
-- `name` (String)
+- `name` (String) Unique name for this Event Breaker Rule within the Ruleset.
 - `condition` (String) JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.
-- `type` (String)
+- `type` (String) Event breaking strategy to apply.
 - `timestamp_anchor_regex` (String) The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction.
 - `timestamp` (Attributes) Auto, manual format (strptime), or current time (see [below for nested schema](#nestedatt--rules--timestamp))
 
@@ -69,10 +69,10 @@ Optional:
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
 - `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time.
 - `timestamp_latest` (String) The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.
-- `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines
+- `max_event_bytes` (Integer) The maximum number of bytes in an event before it is flushed to the pipelines
 - `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
 - `disabled` (Boolean) Disable this breaker rule (enabled by default)
-- `parser_enabled` (Boolean)
+- `parser_enabled` (Boolean) If <code>true</code>, enable the parser for this rule. Otherwise, <code>false</code>.
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.
 - `delimiter` (String)
 - `delimiter_regex` (String)
@@ -87,12 +87,12 @@ Optional:
 
 Required:
 
-- `type` (String)
+- `type` (String) Timestamp extraction mode.
 
 Optional:
 
-- `length` (Number)
-- `format` (String)
+- `length` (Integer) Number of characters from the start of the event to search for a timestamp.
+- `format` (String) strptime format string for manual timestamp parsing. Required when <code>type</code> is <code>format</code>.
 
 <a id="nestedatt--rules--fields"></a>
 ### Nested Schema for `rules.fields`
@@ -103,7 +103,7 @@ Required:
 
 Optional:
 
-- `name` (String)
+- `name` (String) Name of the field to extract from the event.
 
 ## Import
 

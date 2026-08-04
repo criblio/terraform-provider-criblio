@@ -288,7 +288,15 @@ func isMappingRulesetImportState(state *MappingRulesetModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.Active.IsNull() && !state.Active.IsUnknown() {
+		return false
+	}
+	if !state.Conf.IsNull() && !state.Conf.IsUnknown() {
+		return false
+	}
+	return true
 }
 
 func applyMappingRulesetAPIToState(api *MappingRulesetModel, state *MappingRulesetModel, preserveInputs bool, fillMissingInputs bool) {

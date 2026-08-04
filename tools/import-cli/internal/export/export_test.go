@@ -430,6 +430,14 @@ func buildTestRegistry(t *testing.T) *registry.Registry {
 	return reg
 }
 
+func TestCollectorRegistrySupportsFilesystemOneOfBlock(t *testing.T) {
+	reg := buildTestRegistry(t)
+	entry, ok := reg.ByTypeName("criblio_collector")
+	require.True(t, ok)
+	require.NotNil(t, entry.OneOf)
+	assert.Contains(t, entry.OneOf.SupportedBlockNames, "input_collector_filesystem")
+}
+
 func TestResolveNestedDiscriminator(t *testing.T) {
 	t.Run("extracts nested field", func(t *testing.T) {
 		itemMap := map[string]string{
@@ -471,7 +479,7 @@ type testModel struct {
 func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 	supportedBlocks := []string{
 		"input_collector_azure_blob", "input_collector_cribl_lake",
-		"input_collector_database", "input_collector_gcs",
+		"input_collector_database", "input_collector_filesystem", "input_collector_gcs",
 		"input_collector_health_check", "input_collector_rest",
 		"input_collector_s3", "input_collector_script", "input_collector_splunk",
 	}
@@ -507,6 +515,49 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 		err := addOneOfBlockFromFirstItem(model, attrs, cfg)
 		require.NoError(t, err)
 		assert.Contains(t, attrs, "input_collector_s3")
+	})
+
+	t.Run("collection type resolves via nested collector.type=filesystem", func(t *testing.T) {
+		model := testModel{Items: []map[string]jsontypes.Normalized{{
+			"type": jsontypes.NewNormalizedValue(`"collection"`),
+			"id":   jsontypes.NewNormalizedValue(`"ABC-Collector"`),
+			"collector": jsontypes.NewNormalizedValue(`{
+				"type":"filesystem",
+				"destructive":true,
+				"conf":{"path":"/home/xxx/xxx","recurse":true,"maxBatchSize":10}
+			}`),
+		}}}
+		attrs := make(map[string]hcl.Value)
+		err := addOneOfBlockFromFirstItem(model, attrs, cfg)
+		require.NoError(t, err)
+		assert.Contains(t, attrs, "input_collector_filesystem")
+		block := attrs["input_collector_filesystem"]
+		require.Equal(t, hcl.KindMap, block.Kind)
+		collector := block.Map["collector"]
+		require.Equal(t, hcl.KindMap, collector.Kind)
+		assert.True(t, collector.Map["destructive"].Bool)
+		conf := collector.Map["conf"]
+		require.Equal(t, hcl.KindMap, conf.Kind)
+		assert.Equal(t, "/home/xxx/xxx", conf.Map["path"].String)
+		assert.True(t, conf.Map["recurse"].Bool)
+		assert.Equal(t, float64(10), conf.Map["max_batch_size"].Number)
+	})
+
+	t.Run("collection type resolves google_cloud_storage alias to gcs block", func(t *testing.T) {
+		cfg := *cfg
+		cfg.DiscriminatorAlias = map[string]string{"google_cloud_storage": "gcs"}
+		model := testModel{Items: []map[string]jsontypes.Normalized{{
+			"type": jsontypes.NewNormalizedValue(`"collection"`),
+			"id":   jsontypes.NewNormalizedValue(`"my_gcs_collector"`),
+			"collector": jsontypes.NewNormalizedValue(`{
+				"type":"google_cloud_storage",
+				"conf":{"bucket":"my-bucket","path":"logs/"}
+			}`),
+		}}}
+		attrs := make(map[string]hcl.Value)
+		err := addOneOfBlockFromFirstItem(model, attrs, &cfg)
+		require.NoError(t, err)
+		assert.Contains(t, attrs, "input_collector_gcs")
 	})
 
 	t.Run("scheduledSearch type returns ErrUnsupportedOneOfType", func(t *testing.T) {
@@ -971,6 +1022,7 @@ func TestNormalizeRoutesForExport(t *testing.T) {
 				"description": {Kind: hcl.KindString, String: ""},
 				"clones": {Kind: hcl.KindList, List: []hcl.Value{
 					{Kind: hcl.KindNull},
+					{Kind: hcl.KindMap, Map: map[string]hcl.Value{}},
 				}},
 			}},
 		}}
@@ -1001,6 +1053,42 @@ func TestNormalizeRoutesForExport(t *testing.T) {
 		require.Equal(t, hcl.KindList, clones.Kind)
 		require.Len(t, clones.List, 1)
 		assert.Equal(t, clone, clones.List[0])
+	})
+}
+
+func TestTrimRouterFilterWhitespace(t *testing.T) {
+	attrs := map[string]hcl.Value{
+		"output_router": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"rules": {Kind: hcl.KindList, List: []hcl.Value{
+				{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+					"filter": {Kind: hcl.KindString, String: "  _logType == 'test_log' \t"},
+				}},
+			}},
+		}},
+	}
+
+	trimRouterFilterWhitespace(attrs)
+
+	filter := attrs["output_router"].Map["rules"].List[0].Map["filter"]
+	assert.Equal(t, "  _logType == 'test_log'", filter.String)
+}
+
+func TestEnsurePipelineConfForExport(t *testing.T) {
+	t.Run("creates required conf when API omits it", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindNull}}
+
+		ensurePipelineConfForExport(attrs)
+
+		assert.Equal(t, "default", attrs["conf"].Map["output"].String)
+	})
+	t.Run("does not add output to existing conf", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"description": {Kind: hcl.KindString, String: "existing"},
+		}}}
+
+		ensurePipelineConfForExport(attrs)
+
+		assert.NotContains(t, attrs["conf"].Map, "output")
 	})
 }
 

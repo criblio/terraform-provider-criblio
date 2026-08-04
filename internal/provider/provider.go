@@ -269,6 +269,7 @@ func (p *CriblioProvider) Actions(_ context.Context) []func() action.Action {
 
 func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewAppResource,
 		NewAppscopeConfigResource,
 		NewCertificateResource,
 		NewCollectorResource,
@@ -311,6 +312,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewSearchDatasetResource,
 		NewSearchDatasetProviderResource,
 		NewSearchDatasetRulesetResource,
+		NewSearchDatatypeResource,
 		NewSearchDatatypeRulesetResource,
 		NewSearchEngineResource,
 		NewSearchMacroResource,
@@ -325,6 +327,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 
 func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewAppDataSource,
 		NewAppscopeConfigDataSource,
 		NewCertificateDataSource,
 		NewCertificatesDataSource,
@@ -375,6 +378,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchDatasetProviderDataSource,
 		NewSearchDatasetProvidersDataSource,
 		NewSearchDatasetRulesetDataSource,
+		NewSearchDatatypeDataSource,
 		NewSearchDatatypeRulesetDataSource,
 		NewSearchDatatypeRulesetsDataSource,
 		NewSearchEngineDataSource,

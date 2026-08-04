@@ -50,16 +50,20 @@ func (d *KeysDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, r
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"algorithm": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Encryption algorithm`,
 						},
 						"created": schema.Float64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Creation time`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Description`,
 						},
 						"expires": schema.Float64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Expiration time`,
 						},
 						"group": schema.StringAttribute{
 							Computed:    true,
@@ -78,10 +82,12 @@ func (d *KeysDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, r
 							Description: `API-assigned key ID returned by Cribl.`,
 						},
 						"keyclass": schema.Float64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Key class`,
 						},
 						"kms": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `KMS for this key`,
 						},
 						"use_iv": schema.BoolAttribute{
 							Computed:    true,

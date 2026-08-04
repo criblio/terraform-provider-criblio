@@ -27,12 +27,13 @@ resource "criblio_parquet_schema" "my_parquet_schema" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
-- `schema` (String) JSON schema matching standards of draft version 2019-09
+- `id` (String) Unique identifier for the JSON schema.
+- `schema` (String) JSON schema content as a string, conforming to draft version 2019-09.
 
 ### Optional
 
-- `description` (String)
+- `description` (String) Brief description of the JSON schema.
+- `tags` (String) Tags for categorizing and filtering JSON schemas.
 
 ## Import
 

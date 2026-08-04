@@ -545,6 +545,7 @@ func SearchSavedQueryChartConfigYAxisFormatAttrTypes() map[string]attr.Type {
 type SearchSavedQueryScheduleModel struct {
 	CronSchedule  types.String `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
 	Enabled       types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+	JitterPercent types.Int64  `tfsdk:"jitter_percent" json:"jitterPercent,omitempty"`
 	KeepLastN     types.Int64  `tfsdk:"keep_last_n" json:"keepLastN,omitempty"`
 	Notifications types.Object `tfsdk:"notifications" json:"notifications,omitempty"`
 	Tz            types.String `tfsdk:"tz" json:"tz,omitempty"`
@@ -553,6 +554,7 @@ type SearchSavedQueryScheduleModel struct {
 type SearchSavedQueryScheduleAPIModel struct {
 	CronSchedule  *string `json:"cronSchedule,omitempty"`
 	Enabled       *bool   `json:"enabled,omitempty"`
+	JitterPercent *int64  `json:"jitterPercent,omitempty"`
 	KeepLastN     *int64  `json:"keepLastN,omitempty"`
 	Notifications any     `json:"notifications,omitempty"`
 	Tz            *string `json:"tz,omitempty"`
@@ -560,11 +562,12 @@ type SearchSavedQueryScheduleAPIModel struct {
 
 func SearchSavedQueryScheduleAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"cron_schedule": types.StringType,
-		"enabled":       types.BoolType,
-		"keep_last_n":   types.Int64Type,
-		"notifications": types.ObjectType{AttrTypes: SearchSavedQueryScheduleNotificationsAttrTypes()},
-		"tz":            types.StringType,
+		"cron_schedule":  types.StringType,
+		"enabled":        types.BoolType,
+		"jitter_percent": types.Int64Type,
+		"keep_last_n":    types.Int64Type,
+		"notifications":  types.ObjectType{AttrTypes: SearchSavedQueryScheduleNotificationsAttrTypes()},
+		"tz":             types.StringType,
 	}
 }
 
@@ -620,7 +623,8 @@ func SearchSavedQueryTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SearchSavedQueryTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -628,7 +632,8 @@ func SearchSavedQueryTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SearchSavedQueryTerraformNameToAPIName(key)] = value
+			apiKey := SearchSavedQueryTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -643,6 +648,10 @@ func SearchSavedQueryTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "map_source_id":
+		return prefix + "mapSourceID"
 	}
 	var output strings.Builder
 	upperNext := false

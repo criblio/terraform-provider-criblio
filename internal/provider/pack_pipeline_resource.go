@@ -52,15 +52,16 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 		MarkdownDescription: "PackPipeline Resource",
 		Attributes: map[string]schema.Attribute{
 			"conf": schema.SingleNestedAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Configuration for the Pipeline, including functions and settings.`,
 				Attributes: map[string]schema.Attribute{
 					"async_func_timeout": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
+						Description: `Timeout (in milliseconds) for asynchronous Pipeline functions.`,
 						PlanModifiers: []planmodifier.Int64{
 							custom_int64planmodifier.SuppressDiff(custom_int64planmodifier.ExplicitSuppress),
 						},
@@ -69,15 +70,16 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The output destination for events processed by this Pipeline`,
+						Description: `The output destination for events processed by this Pipeline.`,
 						PlanModifiers: []planmodifier.String{
 							custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Brief description of the Pipeline.`,
 						PlanModifiers: []planmodifier.String{
 							custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 						},
@@ -86,7 +88,7 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						PlanModifiers: []planmodifier.List{
 							custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress),
 						},
@@ -96,7 +98,7 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `List of Functions to pass data through`,
+						Description: `List of Functions to pass data through the Pipeline.`,
 						PlanModifiers: []planmodifier.List{
 							custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress),
 						},
@@ -179,9 +181,10 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 						},
 					},
 					"groups": schema.MapNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Named groups of Pipeline functions for organizational display in the UI.`,
 						PlanModifiers: []planmodifier.Map{
 							custom_mapplanmodifier.SuppressDiff(custom_mapplanmodifier.ExplicitSuppress),
 						},
@@ -235,9 +238,10 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the Pipeline.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),

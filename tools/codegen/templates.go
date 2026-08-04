@@ -155,7 +155,8 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 {{- if hasObjectAsJSON . }}
 		attributeTypes := typed.AttributeTypes(context.Background())
 {{- end }}
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 {{- if hasObjectAsJSON . }}
 			var value any
 			var err error
@@ -173,7 +174,26 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[{{ .StructName }}TerraformNameToAPIName(key)] = value
+			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			// Prometheus search filters use capitalized Name and Values. Other
+			// source metadata and header objects use the ordinary name key.
+			if key == "name" {
+				if _, searchFilter := attributes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+{{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+			// Microsoft Fabric SASL uses clientId, while other destination
+			// objects legitimately use the literal API key client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := attributes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+{{- end }}
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -374,6 +394,14 @@ func {{ .StructName }}TerraformNameToAPIName(name string) string {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
 	}
+{{- with apiNameOverrides . }}
+	switch name {
+{{- range . }}
+	case {{ printf "%q" .TerraformName }}:
+		return prefix + {{ printf "%q" .APIName }}
+{{- end }}
+	}
+{{- end }}
 	var output strings.Builder
 	upperNext := false
 	for _, char := range name {
@@ -485,6 +513,22 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
 			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			if key == "name" {
+				if _, searchFilter := typed.AttrTypes["values"]; !searchFilter {
+					apiKey = "name"
+				}
+			}
+{{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+			// Keep the Microsoft Fabric SASL client ID mapping symmetric with
+			// TerraformValueToJSON. Other destination objects use client_id.
+			if key == "client_id" {
+				if _, microsoftFabricSASL := typed.AttrTypes["client_secret_auth_type"]; microsoftFabricSASL {
+					apiKey = "clientId"
+				}
+			}
+{{- end }}
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
@@ -624,7 +668,7 @@ func {{ .StructName }}ValueWithKnownNulls(value attr.Value, typ attr.Type) (attr
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
-{{- if and .RequestField (or (not .Computed) .OptionalComputed) }}
+{{- if and .RequestField (or (not .Computed) .OptionalComputed .RequestComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 {{- if objectAsJSON . }}
 		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
@@ -956,19 +1000,23 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	switch {{ .StructName }}OneOfDiscriminator(raw) {
 {{- range .OneOfVariants }}
 {{- if .DiscriminatorValue }}
-	case "{{ .DiscriminatorValue }}":
+	case {{ range $i, $value := discriminatorCaseValues $ . }}{{ if $i }}, {{ end }}"{{ $value }}"{{ end }}:
 		m.{{ .GoName }} = &{{ .ModelName }}{}
 		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
 			return err
 		}
 {{- end }}
 {{- end }}
-	}
 {{- if noDiscriminatorVariants . }}
-	if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
-		return err
+	default:
+		if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
+			return err
+		}
+{{- end }}
 	}
 {{- end }}
+{{- if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	m.Routes = normalizeRouteClonePlaceholders(m.Routes)
 {{- end }}
 	return nil
 }
@@ -1041,6 +1089,11 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 	if value, ok := input["type"].(string); ok {
 		return value
 	}
+{{- if eq .StructName "SearchDataset" }}
+	if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {
+		return "cribl_search"
+	}
+{{- end }}
 	return ""
 }
 {{- if noDiscriminatorVariants . }}
@@ -1083,21 +1136,31 @@ package provider
 
 import (
 	"context"
+{{- if eq .StructName "App" }}
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
+	"encoding/json"
+{{- end }}
 {{- if eq .StructName "PackPipeline" }}
 	"errors"
 {{- end }}
 {{- if needsClientFmt . }}
 	"fmt"
 {{- end }}
-{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
+{{- if or (resourceHasQueryParams .) (eq .StructName "App") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"net/url"
+{{- end }}
+{{- if eq .StructName "App" }}
+	"os"
+	"path/filepath"
 {{- end }}
 {{- if or (eq .StructName "LookupFile") (eq .StructName "PackPipeline") }}
 	"strings"
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
+{{- if or (eq .StructName "App") (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 {{- end }}
 )
@@ -1159,6 +1222,26 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
+{{- else if eq .StructName "App" }}
+	if !model.Filename.IsNull() && !model.Filename.IsUnknown() && model.Filename.ValueString() != "" {
+		source, err := a.upload(ctx, model.Filename.ValueString())
+		if err != nil {
+			return nil, err
+		}
+		model.Source = types.StringValue(source)
+	} else if model.Source.IsNull() || model.Source.IsUnknown() || model.Source.ValueString() == "" {
+		content, err := createAppArchive(model)
+		if err != nil {
+			return nil, err
+		}
+		filename := model.ID.ValueString() + ".tgz"
+		source, err := a.uploadContent(ctx, filename, content)
+		if err != nil {
+			return nil, err
+		}
+		model.Source = types.StringValue(source)
+	}
+	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, "/apps", model)
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
@@ -1191,11 +1274,106 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- end }}
 }
 
+{{- if eq .StructName "App" }}
+func (a AppAPI) upload(ctx context.Context, filename string) (string, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return "", fmt.Errorf("read app archive %q: %w", filename, err)
+	}
+	return a.uploadContent(ctx, filepath.Base(filename), content)
+}
+
+func (a AppAPI) uploadContent(ctx context.Context, filename string, content []byte) (string, error) {
+	query := url.Values{"filename": []string{filename}}
+	body, err := restclient.PutRaw(ctx, a.client, "/apps?"+query.Encode(), "application/octet-stream", content)
+	if err != nil {
+		return "", fmt.Errorf("upload app archive %q: %w", filename, err)
+	}
+	var response struct {
+		Source string ` + "`json:\"source\"`" + `
+	}
+	if err := json.Unmarshal(body, &response); err != nil {
+		return "", fmt.Errorf("decode app upload response: %w", err)
+	}
+	if response.Source == "" {
+		return "", fmt.Errorf("app upload response did not include source")
+	}
+	return response.Source, nil
+}
+
+func createAppArchive(model AppModel) ([]byte, error) {
+	manifest := map[string]any{
+		"name":        model.ID.ValueString(),
+		"version":     "0.0.1",
+		"displayName": model.ID.ValueString(),
+		"cribl":       map[string]any{"type": "app"},
+	}
+	if !model.Version.IsNull() && !model.Version.IsUnknown() && model.Version.ValueString() != "" {
+		manifest["version"] = model.Version.ValueString()
+	}
+	if !model.DisplayName.IsNull() && !model.DisplayName.IsUnknown() && model.DisplayName.ValueString() != "" {
+		manifest["displayName"] = model.DisplayName.ValueString()
+	}
+	if !model.Author.IsNull() && !model.Author.IsUnknown() {
+		manifest["author"] = model.Author.ValueString()
+	}
+	if !model.Description.IsNull() && !model.Description.IsUnknown() {
+		manifest["description"] = model.Description.ValueString()
+	}
+	packageJSON, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("encode generated app manifest: %w", err)
+	}
+
+	var output bytes.Buffer
+	gzipWriter := gzip.NewWriter(&output)
+	tarWriter := tar.NewWriter(gzipWriter)
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "static/", Mode: 0o755, Typeflag: tar.TypeDir}); err != nil {
+		return nil, fmt.Errorf("write generated app static directory: %w", err)
+	}
+	files := []struct {
+		name string
+		body []byte
+	}{
+		{name: "package.json", body: packageJSON},
+		{name: "static/index.html", body: []byte("<!doctype html><html><head><meta charset=\"utf-8\"><title>Cribl App</title></head><body><main id=\"app\"></main></body></html>")},
+	}
+	for _, file := range files {
+		header := &tar.Header{Name: file.name, Mode: 0o644, Size: int64(len(file.body))}
+		if err := tarWriter.WriteHeader(header); err != nil {
+			return nil, fmt.Errorf("write generated app archive header: %w", err)
+		}
+		if _, err := tarWriter.Write(file.body); err != nil {
+			return nil, fmt.Errorf("write generated app archive content: %w", err)
+		}
+	}
+	if err := tarWriter.Close(); err != nil {
+		return nil, fmt.Errorf("close generated app tar archive: %w", err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		return nil, fmt.Errorf("close generated app gzip archive: %w", err)
+	}
+	return output.Bytes(), nil
+}
+{{- end }}
+
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
-{{- if eq .StructName "Key" }}
+{{- if eq .StructName "App" }}
+	id := model.ID.ValueString()
+	items, err := restclient.Get[[]AppModel](ctx, a.client, "/apps")
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range *items {
+		if item.ID.ValueString() == id {
+			return &item, nil
+		}
+	}
+	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/apps/%s", id)}
+{{- else if eq .StructName "Key" }}
 	id := keyAPIID(model)
 	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))
 	if err != nil {
@@ -2000,6 +2178,23 @@ func is{{ .StructName }}ImportState(state *{{ .StructName }}Model) bool {
 	}
 {{- end }}
 	return false
+{{- else }}
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+{{- range .Fields }}
+{{- if and (not .PathParam) (not .Computed) }}
+	if !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() {
+		return false
+	}
+{{- end }}
+{{- end }}
+{{- range .OneOfVariants }}
+	if state.{{ .GoName }} != nil {
+		return false
+	}
+{{- end }}
+	return true
+{{- end }}
 }
 
 func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .StructName }}Model, preserveInputs bool, fillMissingInputs bool) {
@@ -2008,6 +2203,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
 	sync{{ .StructName }}LegacyItems(api, state)
+	syncSourceLikeActiveInput(api, state)
 {{- end }}
 {{- range .Fields }}
 {{- if and (or (eq $.StructName "LookupFile") (eq $.StructName "PackLookups")) (eq .TerraformName "content") }}
@@ -2183,6 +2379,12 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- end }}
 {{- end }}
+{{- else if eq .ApplyStrategy "preferState" }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+			if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+				state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+			}
+		}
 {{- else }}
 {{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
@@ -2200,7 +2402,35 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- end }}
 {{- end }}
+{{- if nestedObjectList . }}
+		if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		} else if len(state.{{ $variant.GoName }}.{{ .GoName }}.Elements()) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+		}
+{{- else if eq .Type "array" }}
+		if elementType := state.{{ $variant.GoName }}.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
+			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
+		}
+{{- else if nestedObjectMap . }}
+		if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		} else if len(state.{{ $variant.GoName }}.{{ .GoName }}.Elements()) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.MapValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+		}
+{{- else if nestedObject . }}
+		if len(state.{{ $variant.GoName }}.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
+			state.{{ $variant.GoName }}.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
+		}
 {{- end }}
+{{- end }}
+	}
+{{- end }}
+{{- if or (eq .StructName "Destination") (eq .StructName "PackDestination") }}
+	if api.OutputRouter != nil && state.OutputRouter != nil &&
+		!api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() &&
+		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
+		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
 	}
 {{- end }}
 }
@@ -2210,7 +2440,59 @@ func {{ .Name }}Debug(value any) string {
 }
 
 {{- if eq .StructName "Routes" }}
+func normalizeRouteClonePlaceholders(routes types.List) types.List {
+	if routes.IsNull() || routes.IsUnknown() {
+		return routes
+	}
+	elements := routes.Elements()
+	changed := false
+	for index, element := range elements {
+		route, ok := element.(types.Object)
+		if !ok || route.IsNull() || route.IsUnknown() {
+			continue
+		}
+		attributes := route.Attributes()
+		clones, ok := attributes["clones"].(types.List)
+		if !ok || clones.IsNull() || clones.IsUnknown() {
+			continue
+		}
+		cloneElements := clones.Elements()
+		filtered := make([]attr.Value, 0, len(cloneElements))
+		for _, cloneElement := range cloneElements {
+			cloneMap, ok := cloneElement.(types.Map)
+			if ok && !cloneMap.IsNull() && !cloneMap.IsUnknown() && len(cloneMap.Elements()) == 0 {
+				changed = true
+				continue
+			}
+			filtered = append(filtered, cloneElement)
+		}
+		if len(filtered) == len(cloneElements) {
+			continue
+		}
+		value, diags := types.ListValue(clones.ElementType(context.Background()), filtered)
+		if diags.HasError() {
+			continue
+		}
+		attributes["clones"] = value
+		normalized, diags := types.ObjectValue(route.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = normalized
+	}
+	if !changed {
+		return routes
+	}
+	value, diags := types.ListValue(routes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return routes
+	}
+	return value
+}
+
 func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) types.List {
+	apiRoutes = normalizeRouteClonePlaceholders(apiRoutes)
+	stateRoutes = normalizeRouteClonePlaceholders(stateRoutes)
 	elements := stateRoutes.Elements()
 	apiElements := apiRoutes.Elements()
 	for index := range elements {
@@ -2472,9 +2754,9 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 		return
 	}
 {{- range .Fields }}
-{{- if and .FixedValue (eq .Type "string") }}
+{{- if and (or .FixedValue .DefaultValue) (eq .Type "string") }}
 	if model.{{ .GoName }}.IsNull() || model.{{ .GoName }}.IsUnknown() || model.{{ .GoName }}.ValueString() == "" {
-		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" (or .FixedValue .DefaultValue) }})
 	}
 {{- end }}
 {{- end }}
@@ -2664,7 +2946,74 @@ const testTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
 
 package tests
 
-{{- if eq .Name "certificate" }}
+{{- if eq .StructName "App" }}
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestApp(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Apps API is not supported on-prem")
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	createID := "tf-created-" + suffix
+	fileID := "tf-file-" + suffix
+	urlID := "tf-url-" + suffix
+	gitID := "tf-git-" + suffix
+	configText := appExampleConfig(t, createID, fileID, urlID, gitID)
+
+	checks := []resource.TestCheckFunc{
+		resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", urlID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
+		resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
+	}
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: configText,
+				Check:  resource.ComposeAggregateTestCheckFunc(checks...),
+			},
+			{
+				Config:   configText,
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+func appExampleConfig(t *testing.T, createID, fileID, urlID, gitID string) string {
+	t.Helper()
+	content, err := os.ReadFile("../../examples/apps/main.tf")
+	if err != nil {
+		t.Fatalf("read App example: %v", err)
+	}
+	archive, err := filepath.Abs("../../examples/apps/terraform-example-app-1.0.0.tgz")
+	if err != nil {
+		t.Fatalf("resolve App archive: %v", err)
+	}
+	replacer := strings.NewReplacer(
+		` + "`" + `abspath("${path.module}/terraform-example-app-1.0.0.tgz")` + "`" + `, fmt.Sprintf("%q", archive),
+		"terraform-created-app", createID,
+		"terraform-example-app", fileID,
+		"url-imported-app", urlID,
+		"git-repository-example", gitID,
+	)
+	return replacer.Replace(string(content))
+}
+
+{{- else if eq .Name "certificate" }}
 import (
 {{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"
@@ -3347,6 +3696,7 @@ func notificationTargetImportStateVerifyIgnore() []string {
 		"sns_target.aws_api_key",
 		"sns_target.aws_secret_key",
 		"sns_target.phone_number",
+		"sns_target.system_fields",
 	}
 }
 {{- else if eq .StructName "SearchDatasetProvider" }}
@@ -3407,6 +3757,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
 						"description",
+						"apihttp.description",
 					},
 				},
 			},

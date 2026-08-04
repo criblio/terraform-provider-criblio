@@ -42,17 +42,19 @@ func (r *CommitResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 		MarkdownDescription: "Commit Resource",
 		Attributes: map[string]schema.Attribute{
 			"effective": schema.BoolAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `If <code>true</code>, apply the commit to the group's effective configuration. Requires a group context.`,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"files": schema.ListAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Array of file paths to include in the commit, relative to the configuration root. If omitted, all pending changes are committed.`,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -68,9 +70,10 @@ func (r *CommitResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				},
 			},
 			"message": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Commit message to use for the new Git commit.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

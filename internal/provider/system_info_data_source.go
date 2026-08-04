@@ -96,8 +96,7 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Description: `Filesystem path to the Cribl configuration directory.`,
 						},
 						"dist_mode": schema.StringAttribute{
-							Computed:    true,
-							Description: `Distribution mode of the Cribl instance.`,
+							Computed: true,
 						},
 						"env": schema.MapAttribute{
 							Computed:    true,
@@ -124,33 +123,21 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Computed:    true,
 							Description: `License information for the Cribl instance.`,
 							Attributes: map[string]schema.Attribute{
-								"customer": schema.StringAttribute{
-									Computed: true,
-								},
-								"effective_class": schema.StringAttribute{
-									Computed: true,
-								},
 								"email": schema.StringAttribute{
-									Computed: true,
-								},
-								"expiration": schema.Float64Attribute{
-									Computed: true,
-								},
-								"guid": schema.StringAttribute{
-									Computed: true,
-								},
-								"is_running_in_saa_s": schema.BoolAttribute{
-									Computed: true,
-								},
-								"license_enforce_reason": schema.StringAttribute{
-									Computed: true,
-								},
-								"license_ids": schema.ListAttribute{
 									Computed:    true,
-									ElementType: types.StringType,
+									Description: `Email address associated with the license.`,
+								},
+								"is_registered": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, the license is registered.`,
+								},
+								"is_splunk_app": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, Cribl is running as a Splunk app.`,
 								},
 								"limits": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `License-based feature and resource limits.`,
 									Attributes: map[string]schema.Attribute{
 										"app_platform": schema.Int64Attribute{
 											Computed:    true,
@@ -163,6 +150,10 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 										"edge_procs": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Maximum number of Edge Processes.`,
+										},
+										"external_secret_stores": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Maximum number of externally backed secret stores.`,
 										},
 										"kms": schema.Int64Attribute{
 											Computed:    true,
@@ -258,17 +249,9 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 										},
 									},
 								},
-								"paid_ami_type": schema.Int64Attribute{
-									Computed: true,
-								},
-								"phone_home": schema.BoolAttribute{
-									Computed: true,
-								},
-								"phone_home_grace": schema.Float64Attribute{
-									Computed: true,
-								},
-								"quota": schema.Float64Attribute{
-									Computed: true,
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `License type.`,
 								},
 							},
 						},

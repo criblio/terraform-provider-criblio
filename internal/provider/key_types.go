@@ -114,7 +114,8 @@ func KeyTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := KeyTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -122,7 +123,8 @@ func KeyTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[KeyTerraformNameToAPIName(key)] = value
+			apiKey := KeyTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -137,6 +139,14 @@ func KeyTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "id":
+		return prefix + "keyId"
+	case "key_id":
+		return prefix + "terraformKeyId"
+	case "use_iv":
+		return prefix + "useIV"
 	}
 	var output strings.Builder
 	upperNext := false

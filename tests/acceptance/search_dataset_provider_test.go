@@ -63,6 +63,7 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
 						"description",
+						"apihttp.description",
 					},
 				},
 			},

@@ -35,16 +35,16 @@ resource "criblio_global_var" "my_global_var" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String) Global variable name
-- `type` (String)
+- `id` (String) Unique identifier for the Global Variable.
+- `type` (String) Data type of the Global Variable value.
 
 ### Optional
 
 - `args` (Attributes List) Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)). (see [below for nested schema](#nestedatt--args))
-- `description` (String)
-- `lib` (String)
-- `tags` (String)
-- `value` (String)
+- `description` (String) Brief description of the Global Variable.
+- `lib` (String) Library that contains the Global Variable.
+- `tags` (String) Metadata tags for categorizing and filtering Global Variables.
+- `value` (String) Value of the Global Variable. For <code>type: expression</code>, the value is a JavaScript expression.
 
 <a id="nestedatt--args"></a>
 ### Nested Schema for `args`

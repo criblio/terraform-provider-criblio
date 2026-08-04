@@ -38,7 +38,7 @@ func (d *SearchDatasetRulesetDataSource) Schema(_ context.Context, _ datasource.
 			"id": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
-				Description: `Unique identifier for the ruleset.`,
+				Description: "Ruleset identifier. Use `default` for log dataset rules or `metrics` for metric dataset rules.",
 			},
 			"rules": schema.ListNestedAttribute{
 				Computed:    true,

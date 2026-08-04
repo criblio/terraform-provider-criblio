@@ -29,19 +29,19 @@ resource "criblio_lookup_file" "my_lookup_file" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String)
+- `id` (String) Unique identifier for the Lookup. Must match the underlying Lookup file name, including the file extension if present (for example, "ip-reputation.csv").
 
 ### Optional
 
 - `content` (String) File content.
-- `description` (String)
-- `mode` (String)
-- `tags` (String)
+- `description` (String) Brief description of the Lookup.
+- `mode` (String) Storage mode for the Lookup. Use "memory" to load the Lookup into memory for fast access. Use "disk" to query the Lookup from disk using indexes.
+- `tags` (String) Comma-separated list of tags for categorizing the Lookup.
 
 ### Read-Only
 
-- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--pending_task))
-- `version` (String) Unique string generated for each modification of this lookup
+- `pending_task` (Attributes) Details of the pending background task for this Lookup, if one is in progress. (see [below for nested schema](#nestedatt--pending_task))
+- `version` (String) Unique string generated for each modification of the Lookup.
 
 <a id="nestedatt--pending_task"></a>
 ### Nested Schema for `pending_task`
@@ -49,8 +49,8 @@ resource "criblio_lookup_file" "my_lookup_file" {
 Read-Only:
 
 - `id` (String) Task ID (generated).
-- `type` (String) Task type
-- `error` (String) Error message if task has failed
+- `type` (String) Type of the pending task.
+- `error` (String) Error message if the task has failed.
 
 ## Import
 

@@ -33,6 +33,7 @@ type CollectorModel struct {
 	InputCollectorGCS         *InputCollectorGCSModel         `tfsdk:"input_collector_gcs" json:"InputCollectorGCS,omitempty"`
 	InputCollectorHealthCheck *InputCollectorHealthCheckModel `tfsdk:"input_collector_health_check" json:"InputCollectorHealthCheck,omitempty"`
 	InputCollectorScript      *InputCollectorScriptModel      `tfsdk:"input_collector_script" json:"InputCollectorScript,omitempty"`
+	InputCollectorFilesystem  *InputCollectorFilesystemModel  `tfsdk:"input_collector_filesystem" json:"InputCollectorFilesystem,omitempty"`
 }
 
 type CollectorResourceModel struct {
@@ -52,6 +53,7 @@ type CollectorResourceModel struct {
 	InputCollectorGCS         *InputCollectorGCSModel         `tfsdk:"input_collector_gcs" json:"InputCollectorGCS,omitempty"`
 	InputCollectorHealthCheck *InputCollectorHealthCheckModel `tfsdk:"input_collector_health_check" json:"InputCollectorHealthCheck,omitempty"`
 	InputCollectorScript      *InputCollectorScriptModel      `tfsdk:"input_collector_script" json:"InputCollectorScript,omitempty"`
+	InputCollectorFilesystem  *InputCollectorFilesystemModel  `tfsdk:"input_collector_filesystem" json:"InputCollectorFilesystem,omitempty"`
 }
 
 type CollectorDataSourceModel struct {
@@ -71,6 +73,7 @@ type CollectorDataSourceModel struct {
 	InputCollectorGCS         *InputCollectorGCSModel         `tfsdk:"input_collector_gcs" json:"InputCollectorGCS,omitempty"`
 	InputCollectorHealthCheck *InputCollectorHealthCheckModel `tfsdk:"input_collector_health_check" json:"InputCollectorHealthCheck,omitempty"`
 	InputCollectorScript      *InputCollectorScriptModel      `tfsdk:"input_collector_script" json:"InputCollectorScript,omitempty"`
+	InputCollectorFilesystem  *InputCollectorFilesystemModel  `tfsdk:"input_collector_filesystem" json:"InputCollectorFilesystem,omitempty"`
 }
 
 type CollectorAPIModel struct {
@@ -561,6 +564,7 @@ type InputCollectorRestCollectorConfModel struct {
 	Discovery                       types.Object `tfsdk:"discovery" json:"discovery,omitempty"`
 	Pagination                      types.Object `tfsdk:"pagination" json:"pagination,omitempty"`
 	RetryRules                      types.Object `tfsdk:"retry_rules" json:"retryRules,omitempty"`
+	ClientSecretParamValue          types.String `tfsdk:"client_secret_param_value" json:"clientSecretParamValue,omitempty"`
 }
 
 type InputCollectorRestCollectorConfAPIModel struct {
@@ -597,6 +601,7 @@ type InputCollectorRestCollectorConfAPIModel struct {
 	Discovery                       any      `json:"discovery,omitempty"`
 	Pagination                      any      `json:"pagination,omitempty"`
 	RetryRules                      any      `json:"retryRules,omitempty"`
+	ClientSecretParamValue          *string  `json:"clientSecretParamValue,omitempty"`
 }
 
 func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
@@ -634,6 +639,7 @@ func InputCollectorRestCollectorConfAttrTypes() map[string]attr.Type {
 		"discovery":                          types.ObjectType{AttrTypes: InputCollectorRestCollectorConfDiscoveryAttrTypes()},
 		"pagination":                         types.ObjectType{AttrTypes: InputCollectorRestCollectorConfPaginationAttrTypes()},
 		"retry_rules":                        types.ObjectType{AttrTypes: InputCollectorRestCollectorConfRetryRulesAttrTypes()},
+		"client_secret_param_value":          types.StringType,
 	}
 }
 
@@ -1366,54 +1372,75 @@ func InputCollectorAzureBlobInputMetadataAttrTypes() map[string]attr.Type {
 }
 
 type InputCollectorAzureBlobCollectorModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Conf types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
 }
 
 type InputCollectorAzureBlobCollectorAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Conf any     `json:"conf,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
 }
 
 func InputCollectorAzureBlobCollectorAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"type": types.StringType,
-		"conf": types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfAttrTypes()},
+		"type":        types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfAttrTypes()},
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
 	}
 }
 
 type InputCollectorAzureBlobCollectorConfModel struct {
-	ContainerName      types.String `tfsdk:"container_name" json:"containerName,omitempty"`
-	StorageAccountName types.String `tfsdk:"storage_account_name" json:"storageAccountName,omitempty"`
-	ConnectionString   types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
-	AuthType           types.String `tfsdk:"auth_type" json:"authType,omitempty"`
-	Path               types.String `tfsdk:"path" json:"path,omitempty"`
-	Recurse            types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
-	Extractors         types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
-	MaxBatchSize       types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	ContainerName               types.String  `tfsdk:"container_name" json:"containerName,omitempty"`
+	StorageAccountName          types.String  `tfsdk:"storage_account_name" json:"storageAccountName,omitempty"`
+	ConnectionString            types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	AuthType                    types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
+	Path                        types.String  `tfsdk:"path" json:"path,omitempty"`
+	Recurse                     types.Bool    `tfsdk:"recurse" json:"recurse,omitempty"`
+	Extractors                  types.List    `tfsdk:"extractors" json:"extractors,omitempty"`
+	MaxBatchSize                types.Int64   `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+	IncludeMetadata             types.Bool    `tfsdk:"include_metadata" json:"includeMetadata,omitempty"`
+	IncludeTags                 types.Bool    `tfsdk:"include_tags" json:"includeTags,omitempty"`
+	DisableTimeFilter           types.Bool    `tfsdk:"disable_time_filter" json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          types.Float64 `tfsdk:"parquet_chunk_size_mb" json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout types.Float64 `tfsdk:"parquet_chunk_download_timeout" json:"parquetChunkDownloadTimeout,omitempty"`
 }
 
 type InputCollectorAzureBlobCollectorConfAPIModel struct {
-	ContainerName      *string `json:"containerName,omitempty"`
-	StorageAccountName *string `json:"storageAccountName,omitempty"`
-	ConnectionString   *string `json:"connectionString,omitempty"`
-	AuthType           *string `json:"authType,omitempty"`
-	Path               *string `json:"path,omitempty"`
-	Recurse            *bool   `json:"recurse,omitempty"`
-	Extractors         any     `json:"extractors,omitempty"`
-	MaxBatchSize       *int64  `json:"maxBatchSize,omitempty"`
+	ContainerName               *string  `json:"containerName,omitempty"`
+	StorageAccountName          *string  `json:"storageAccountName,omitempty"`
+	ConnectionString            *string  `json:"connectionString,omitempty"`
+	AuthType                    *string  `json:"authType,omitempty"`
+	Path                        *string  `json:"path,omitempty"`
+	Recurse                     *bool    `json:"recurse,omitempty"`
+	Extractors                  any      `json:"extractors,omitempty"`
+	MaxBatchSize                *int64   `json:"maxBatchSize,omitempty"`
+	IncludeMetadata             *bool    `json:"includeMetadata,omitempty"`
+	IncludeTags                 *bool    `json:"includeTags,omitempty"`
+	DisableTimeFilter           *bool    `json:"disableTimeFilter,omitempty"`
+	ParquetChunkSizeMB          *float64 `json:"parquetChunkSizeMB,omitempty"`
+	ParquetChunkDownloadTimeout *float64 `json:"parquetChunkDownloadTimeout,omitempty"`
 }
 
 func InputCollectorAzureBlobCollectorConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"container_name":       types.StringType,
-		"storage_account_name": types.StringType,
-		"connection_string":    types.StringType,
-		"auth_type":            types.StringType,
-		"path":                 types.StringType,
-		"recurse":              types.BoolType,
-		"extractors":           types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfExtractorsAttrTypes()}},
-		"max_batch_size":       types.Int64Type,
+		"container_name":                 types.StringType,
+		"storage_account_name":           types.StringType,
+		"connection_string":              types.StringType,
+		"auth_type":                      types.StringType,
+		"path":                           types.StringType,
+		"recurse":                        types.BoolType,
+		"extractors":                     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorAzureBlobCollectorConfExtractorsAttrTypes()}},
+		"max_batch_size":                 types.Int64Type,
+		"include_metadata":               types.BoolType,
+		"include_tags":                   types.BoolType,
+		"disable_time_filter":            types.BoolType,
+		"parquet_chunk_size_mb":          types.Float64Type,
+		"parquet_chunk_download_timeout": types.Float64Type,
 	}
 }
 
@@ -2533,6 +2560,243 @@ func InputCollectorScriptCollectorConfAttrTypes() map[string]attr.Type {
 	}
 }
 
+type InputCollectorFilesystemScheduleModel struct {
+	Enabled           types.Bool    `tfsdk:"enabled" json:"enabled,omitempty"`
+	CronSchedule      types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
+	MaxConcurrentRuns types.Float64 `tfsdk:"max_concurrent_runs" json:"maxConcurrentRuns,omitempty"`
+	Skippable         types.Bool    `tfsdk:"skippable" json:"skippable,omitempty"`
+	ResumeMissed      types.Bool    `tfsdk:"resume_missed" json:"resumeMissed,omitempty"`
+	Run               types.Object  `tfsdk:"run" json:"run,omitempty"`
+}
+
+type InputCollectorFilesystemScheduleAPIModel struct {
+	Enabled           *bool    `json:"enabled,omitempty"`
+	CronSchedule      *string  `json:"cronSchedule,omitempty"`
+	MaxConcurrentRuns *float64 `json:"maxConcurrentRuns,omitempty"`
+	Skippable         *bool    `json:"skippable,omitempty"`
+	ResumeMissed      *bool    `json:"resumeMissed,omitempty"`
+	Run               any      `json:"run,omitempty"`
+}
+
+func InputCollectorFilesystemScheduleAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"enabled":             types.BoolType,
+		"cron_schedule":       types.StringType,
+		"max_concurrent_runs": types.Float64Type,
+		"skippable":           types.BoolType,
+		"resume_missed":       types.BoolType,
+		"run":                 types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleRunAttrTypes()},
+	}
+}
+
+type InputCollectorFilesystemScheduleRunModel struct {
+	RescheduleDroppedTasks types.Bool    `tfsdk:"reschedule_dropped_tasks" json:"rescheduleDroppedTasks,omitempty"`
+	MaxTaskReschedule      types.Float64 `tfsdk:"max_task_reschedule" json:"maxTaskReschedule,omitempty"`
+	LogLevel               types.String  `tfsdk:"log_level" json:"logLevel,omitempty"`
+	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
+	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
+	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
+	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
+	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
+	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
+	TimeWarning            types.Map     `tfsdk:"time_warning" json:"timeWarning,omitempty"`
+	StateTracking          types.Object  `tfsdk:"state_tracking" json:"stateTracking,omitempty"`
+}
+
+type InputCollectorFilesystemScheduleRunAPIModel struct {
+	RescheduleDroppedTasks *bool             `json:"rescheduleDroppedTasks,omitempty"`
+	MaxTaskReschedule      *float64          `json:"maxTaskReschedule,omitempty"`
+	LogLevel               *string           `json:"logLevel,omitempty"`
+	JobTimeout             *string           `json:"jobTimeout,omitempty"`
+	Mode                   *string           `json:"mode,omitempty"`
+	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
+	Earliest               *float64          `json:"earliest,omitempty"`
+	Latest                 *float64          `json:"latest,omitempty"`
+	Expression             *string           `json:"expression,omitempty"`
+	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
+	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
+	TimeWarning            map[string]string `json:"timeWarning,omitempty"`
+	StateTracking          any               `json:"stateTracking,omitempty"`
+}
+
+func InputCollectorFilesystemScheduleRunAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"reschedule_dropped_tasks": types.BoolType,
+		"max_task_reschedule":      types.Float64Type,
+		"log_level":                types.StringType,
+		"job_timeout":              types.StringType,
+		"mode":                     types.StringType,
+		"time_range_type":          types.StringType,
+		"earliest":                 types.Float64Type,
+		"latest":                   types.Float64Type,
+		"expression":               types.StringType,
+		"min_task_size":            types.StringType,
+		"max_task_size":            types.StringType,
+		"time_warning":             types.MapType{ElemType: types.StringType},
+		"state_tracking":           types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleRunStateTrackingAttrTypes()},
+	}
+}
+
+type InputCollectorFilesystemScheduleRunStateTrackingModel struct {
+	StateUpdateExpression types.String `tfsdk:"state_update_expression" json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  types.String `tfsdk:"state_merge_expression" json:"stateMergeExpression,omitempty"`
+	Enabled               types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
+}
+
+type InputCollectorFilesystemScheduleRunStateTrackingAPIModel struct {
+	StateUpdateExpression *string `json:"stateUpdateExpression,omitempty"`
+	StateMergeExpression  *string `json:"stateMergeExpression,omitempty"`
+	Enabled               *bool   `json:"enabled,omitempty"`
+}
+
+func InputCollectorFilesystemScheduleRunStateTrackingAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"state_update_expression": types.StringType,
+		"state_merge_expression":  types.StringType,
+		"enabled":                 types.BoolType,
+	}
+}
+
+type InputCollectorFilesystemInputModel struct {
+	Type                types.String  `tfsdk:"type" json:"type,omitempty"`
+	BreakerRulesets     types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes        types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Preprocess          types.Object  `tfsdk:"preprocess" json:"preprocess,omitempty"`
+	ThrottleRatePerSec  types.String  `tfsdk:"throttle_rate_per_sec" json:"throttleRatePerSec,omitempty"`
+	Metadata            types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	Pipeline            types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	Output              types.String  `tfsdk:"output" json:"output,omitempty"`
+}
+
+type InputCollectorFilesystemInputAPIModel struct {
+	Type                *string  `json:"type,omitempty"`
+	BreakerRulesets     []string `json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
+	SendToRoutes        *bool    `json:"sendToRoutes,omitempty"`
+	Preprocess          any      `json:"preprocess,omitempty"`
+	ThrottleRatePerSec  *string  `json:"throttleRatePerSec,omitempty"`
+	Metadata            any      `json:"metadata,omitempty"`
+	Pipeline            *string  `json:"pipeline,omitempty"`
+	Output              *string  `json:"output,omitempty"`
+}
+
+func InputCollectorFilesystemInputAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                   types.StringType,
+		"breaker_rulesets":       types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms": types.Float64Type,
+		"send_to_routes":         types.BoolType,
+		"preprocess":             types.ObjectType{AttrTypes: InputCollectorFilesystemInputPreprocessAttrTypes()},
+		"throttle_rate_per_sec":  types.StringType,
+		"metadata":               types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorFilesystemInputMetadataAttrTypes()}},
+		"pipeline":               types.StringType,
+		"output":                 types.StringType,
+	}
+}
+
+type InputCollectorFilesystemInputPreprocessModel struct {
+	Disabled types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Command  types.String `tfsdk:"command" json:"command,omitempty"`
+	Args     types.List   `tfsdk:"args" json:"args,omitempty"`
+}
+
+type InputCollectorFilesystemInputPreprocessAPIModel struct {
+	Disabled *bool    `json:"disabled,omitempty"`
+	Command  *string  `json:"command,omitempty"`
+	Args     []string `json:"args,omitempty"`
+}
+
+func InputCollectorFilesystemInputPreprocessAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"disabled": types.BoolType,
+		"command":  types.StringType,
+		"args":     types.ListType{ElemType: types.StringType},
+	}
+}
+
+type InputCollectorFilesystemInputMetadataModel struct {
+	Name  types.String `tfsdk:"name" json:"name,omitempty"`
+	Value types.String `tfsdk:"value" json:"value,omitempty"`
+}
+
+type InputCollectorFilesystemInputMetadataAPIModel struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+func InputCollectorFilesystemInputMetadataAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"name":  types.StringType,
+		"value": types.StringType,
+	}
+}
+
+type InputCollectorFilesystemCollectorModel struct {
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+	Destructive types.Bool   `tfsdk:"destructive" json:"destructive,omitempty"`
+	Encoding    types.String `tfsdk:"encoding" json:"encoding,omitempty"`
+	Conf        types.Object `tfsdk:"conf" json:"conf,omitempty"`
+}
+
+type InputCollectorFilesystemCollectorAPIModel struct {
+	Type        *string `json:"type,omitempty"`
+	Destructive *bool   `json:"destructive,omitempty"`
+	Encoding    *string `json:"encoding,omitempty"`
+	Conf        any     `json:"conf,omitempty"`
+}
+
+func InputCollectorFilesystemCollectorAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":        types.StringType,
+		"destructive": types.BoolType,
+		"encoding":    types.StringType,
+		"conf":        types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorConfAttrTypes()},
+	}
+}
+
+type InputCollectorFilesystemCollectorConfModel struct {
+	Path         types.String `tfsdk:"path" json:"path,omitempty"`
+	Extractors   types.List   `tfsdk:"extractors" json:"extractors,omitempty"`
+	Recurse      types.Bool   `tfsdk:"recurse" json:"recurse,omitempty"`
+	MaxBatchSize types.Int64  `tfsdk:"max_batch_size" json:"maxBatchSize,omitempty"`
+}
+
+type InputCollectorFilesystemCollectorConfAPIModel struct {
+	Path         *string `json:"path,omitempty"`
+	Extractors   any     `json:"extractors,omitempty"`
+	Recurse      *bool   `json:"recurse,omitempty"`
+	MaxBatchSize *int64  `json:"maxBatchSize,omitempty"`
+}
+
+func InputCollectorFilesystemCollectorConfAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"path":           types.StringType,
+		"extractors":     types.ListType{ElemType: types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorConfExtractorsAttrTypes()}},
+		"recurse":        types.BoolType,
+		"max_batch_size": types.Int64Type,
+	}
+}
+
+type InputCollectorFilesystemCollectorConfExtractorsModel struct {
+	Key        types.String `tfsdk:"key" json:"key,omitempty"`
+	Expression types.String `tfsdk:"expression" json:"expression,omitempty"`
+}
+
+type InputCollectorFilesystemCollectorConfExtractorsAPIModel struct {
+	Key        *string `json:"key,omitempty"`
+	Expression *string `json:"expression,omitempty"`
+}
+
+func InputCollectorFilesystemCollectorConfExtractorsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"key":        types.StringType,
+		"expression": types.StringType,
+	}
+}
+
 func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 	if value.IsNull() || value.IsUnknown() {
 		return nil, nil
@@ -2571,7 +2835,8 @@ func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := CollectorTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -2579,7 +2844,8 @@ func CollectorTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[CollectorTerraformNameToAPIName(key)] = value
+			apiKey := CollectorTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -2594,6 +2860,10 @@ func CollectorTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "parquet_chunk_size_mb":
+		return prefix + "parquetChunkSizeMB"
 	}
 	var output strings.Builder
 	upperNext := false
@@ -2860,6 +3130,15 @@ func (m CollectorModel) MarshalJSON() ([]byte, error) {
 			output[key] = item
 		}
 	}
+	if m.InputCollectorFilesystem != nil {
+		value, err := m.InputCollectorFilesystem.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 	output["type"] = "collection"
 	return json.Marshal(output)
 }
@@ -2924,7 +3203,7 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputCollectorS3.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "azureblob":
+	case "azureblob", "azure_blob":
 		m.InputCollectorAzureBlob = &InputCollectorAzureBlobModel{}
 		if err := m.InputCollectorAzureBlob.unmarshalPayload(raw); err != nil {
 			return err
@@ -2939,12 +3218,12 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 		if err := m.InputCollectorDatabase.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "gcs":
+	case "gcs", "google_cloud_storage":
 		m.InputCollectorGCS = &InputCollectorGCSModel{}
 		if err := m.InputCollectorGCS.unmarshalPayload(raw); err != nil {
 			return err
 		}
-	case "healthcheck":
+	case "healthcheck", "health_check":
 		m.InputCollectorHealthCheck = &InputCollectorHealthCheckModel{}
 		if err := m.InputCollectorHealthCheck.unmarshalPayload(raw); err != nil {
 			return err
@@ -2952,6 +3231,11 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 	case "script":
 		m.InputCollectorScript = &InputCollectorScriptModel{}
 		if err := m.InputCollectorScript.unmarshalPayload(raw); err != nil {
+			return err
+		}
+	case "filesystem":
+		m.InputCollectorFilesystem = &InputCollectorFilesystemModel{}
+		if err := m.InputCollectorFilesystem.unmarshalPayload(raw); err != nil {
 			return err
 		}
 	}
@@ -5051,6 +5335,239 @@ func (m *InputCollectorScriptModel) unmarshalPayload(input map[string]any) error
 		m.Collector = value.(types.Object)
 	} else {
 		m.Collector = types.ObjectNull(InputCollectorScriptCollectorAttrTypes())
+	}
+	return nil
+}
+
+type InputCollectorFilesystemModel struct {
+	ID                   types.String `tfsdk:"id" json:"id,omitempty"`
+	Ttl                  types.String `tfsdk:"ttl" json:"ttl,omitempty"`
+	IgnoreGroupJobsLimit types.Bool   `tfsdk:"ignore_group_jobs_limit" json:"ignoreGroupJobsLimit,omitempty"`
+	RemoveFields         types.List   `tfsdk:"remove_fields" json:"removeFields,omitempty"`
+	ResumeOnBoot         types.Bool   `tfsdk:"resume_on_boot" json:"resumeOnBoot,omitempty"`
+	Environment          types.String `tfsdk:"environment" json:"environment,omitempty"`
+	SavedState           types.Map    `tfsdk:"saved_state" json:"savedState,omitempty"`
+	Schedule             types.Object `tfsdk:"schedule" json:"schedule,omitempty"`
+	Streamtags           types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	WorkerAffinity       types.Bool   `tfsdk:"worker_affinity" json:"workerAffinity,omitempty"`
+	Input                types.Object `tfsdk:"input" json:"input,omitempty"`
+	Collector            types.Object `tfsdk:"collector" json:"collector,omitempty"`
+}
+
+func InputCollectorFilesystemModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                      types.StringType,
+		"ttl":                     types.StringType,
+		"ignore_group_jobs_limit": types.BoolType,
+		"remove_fields":           types.ListType{ElemType: types.StringType},
+		"resume_on_boot":          types.BoolType,
+		"environment":             types.StringType,
+		"saved_state":             types.MapType{ElemType: types.StringType},
+		"schedule":                types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleAttrTypes()},
+		"streamtags":              types.ListType{ElemType: types.StringType},
+		"worker_affinity":         types.BoolType,
+		"input":                   types.ObjectType{AttrTypes: InputCollectorFilesystemInputAttrTypes()},
+		"collector":               types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorAttrTypes()},
+	}
+}
+
+func (m InputCollectorFilesystemModel) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Ttl.IsNull() && !m.Ttl.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Ttl)
+		if err != nil {
+			return nil, fmt.Errorf("convert ttl to API value: %v", err)
+		}
+		output["ttl"] = value
+	}
+	if !m.IgnoreGroupJobsLimit.IsNull() && !m.IgnoreGroupJobsLimit.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.IgnoreGroupJobsLimit)
+		if err != nil {
+			return nil, fmt.Errorf("convert ignore_group_jobs_limit to API value: %v", err)
+		}
+		output["ignoreGroupJobsLimit"] = value
+	}
+	if !m.RemoveFields.IsNull() && !m.RemoveFields.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.RemoveFields)
+		if err != nil {
+			return nil, fmt.Errorf("convert remove_fields to API value: %v", err)
+		}
+		output["removeFields"] = value
+	}
+	if !m.ResumeOnBoot.IsNull() && !m.ResumeOnBoot.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.ResumeOnBoot)
+		if err != nil {
+			return nil, fmt.Errorf("convert resume_on_boot to API value: %v", err)
+		}
+		output["resumeOnBoot"] = value
+	}
+	if !m.Environment.IsNull() && !m.Environment.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Environment)
+		if err != nil {
+			return nil, fmt.Errorf("convert environment to API value: %v", err)
+		}
+		output["environment"] = value
+	}
+	if !m.SavedState.IsNull() && !m.SavedState.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.SavedState)
+		if err != nil {
+			return nil, fmt.Errorf("convert saved_state to API value: %v", err)
+		}
+		output["savedState"] = value
+	}
+	if !m.Schedule.IsNull() && !m.Schedule.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Schedule)
+		if err != nil {
+			return nil, fmt.Errorf("convert schedule to API value: %v", err)
+		}
+		output["schedule"] = value
+	}
+	if !m.Streamtags.IsNull() && !m.Streamtags.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Streamtags)
+		if err != nil {
+			return nil, fmt.Errorf("convert streamtags to API value: %v", err)
+		}
+		output["streamtags"] = value
+	}
+	if !m.WorkerAffinity.IsNull() && !m.WorkerAffinity.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.WorkerAffinity)
+		if err != nil {
+			return nil, fmt.Errorf("convert worker_affinity to API value: %v", err)
+		}
+		output["workerAffinity"] = value
+	}
+	if !m.Input.IsNull() && !m.Input.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Input)
+		if err != nil {
+			return nil, fmt.Errorf("convert input to API value: %v", err)
+		}
+		output["input"] = value
+	}
+	if !m.Collector.IsNull() && !m.Collector.IsUnknown() {
+		value, err := CollectorTerraformValueToJSON(m.Collector)
+		if err != nil {
+			return nil, fmt.Errorf("convert collector to API value: %v", err)
+		}
+		output["collector"] = value
+	}
+	return output, nil
+}
+
+func (m *InputCollectorFilesystemModel) unmarshalPayload(input map[string]any) error {
+	if item, ok := input["id"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert id from API value: %v", err)
+		}
+		m.ID = value.(types.String)
+	} else {
+		m.ID = types.StringNull()
+	}
+	if item, ok := input["ttl"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert ttl from API value: %v", err)
+		}
+		m.Ttl = value.(types.String)
+	} else {
+		m.Ttl = types.StringNull()
+	}
+	if item, ok := input["ignoreGroupJobsLimit"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert ignoreGroupJobsLimit from API value: %v", err)
+		}
+		m.IgnoreGroupJobsLimit = value.(types.Bool)
+	} else {
+		m.IgnoreGroupJobsLimit = types.BoolNull()
+	}
+	if item, ok := input["removeFields"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert removeFields from API value: %v", err)
+		}
+		m.RemoveFields = value.(types.List)
+	} else {
+		m.RemoveFields = types.ListNull(types.StringType)
+	}
+	if item, ok := input["resumeOnBoot"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert resumeOnBoot from API value: %v", err)
+		}
+		m.ResumeOnBoot = value.(types.Bool)
+	} else {
+		m.ResumeOnBoot = types.BoolNull()
+	}
+	if item, ok := input["environment"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert environment from API value: %v", err)
+		}
+		m.Environment = value.(types.String)
+	} else {
+		m.Environment = types.StringNull()
+	}
+	if item, ok := input["savedState"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert savedState from API value: %v", err)
+		}
+		m.SavedState = value.(types.Map)
+	} else {
+		m.SavedState = types.MapNull(types.StringType)
+	}
+	if item, ok := input["schedule"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorFilesystemScheduleAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert schedule from API value: %v", err)
+		}
+		m.Schedule = value.(types.Object)
+	} else {
+		m.Schedule = types.ObjectNull(InputCollectorFilesystemScheduleAttrTypes())
+	}
+	if item, ok := input["streamtags"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert streamtags from API value: %v", err)
+		}
+		m.Streamtags = value.(types.List)
+	} else {
+		m.Streamtags = types.ListNull(types.StringType)
+	}
+	if item, ok := input["workerAffinity"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert workerAffinity from API value: %v", err)
+		}
+		m.WorkerAffinity = value.(types.Bool)
+	} else {
+		m.WorkerAffinity = types.BoolNull()
+	}
+	if item, ok := input["input"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorFilesystemInputAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert input from API value: %v", err)
+		}
+		m.Input = value.(types.Object)
+	} else {
+		m.Input = types.ObjectNull(InputCollectorFilesystemInputAttrTypes())
+	}
+	if item, ok := input["collector"]; ok {
+		value, err := CollectorAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: InputCollectorFilesystemCollectorAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert collector from API value: %v", err)
+		}
+		m.Collector = value.(types.Object)
+	} else {
+		m.Collector = types.ObjectNull(InputCollectorFilesystemCollectorAttrTypes())
 	}
 	return nil
 }

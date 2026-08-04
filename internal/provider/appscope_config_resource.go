@@ -306,10 +306,11 @@ func (r *AppscopeConfigResource) Schema(_ context.Context, _ resource.SchemaRequ
 													},
 												},
 												"type": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
-													Default:  stringdefault.StaticString("ndjson"),
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Default:     stringdefault.StaticString("ndjson"),
+													Description: `Resource type identifier.`,
 													Validators: []validator.String{
 														stringvalidator.OneOf("ndjson"),
 													},
@@ -738,10 +739,11 @@ func (r *AppscopeConfigResource) Schema(_ context.Context, _ resource.SchemaRequ
 								},
 							},
 							"type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
-								Default:  stringdefault.StaticString("ndjson"),
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Default:     stringdefault.StaticString("ndjson"),
+								Description: `Resource type identifier.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf("ndjson"),
 								},

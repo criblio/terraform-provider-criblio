@@ -74,7 +74,8 @@ func LakehouseDatasetConnectionTerraformValueToJSON(value attr.Value) (any, erro
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := LakehouseDatasetConnectionTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -82,7 +83,8 @@ func LakehouseDatasetConnectionTerraformValueToJSON(value attr.Value) (any, erro
 			if value == nil {
 				continue
 			}
-			output[LakehouseDatasetConnectionTerraformNameToAPIName(key)] = value
+			apiKey := LakehouseDatasetConnectionTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -97,6 +99,12 @@ func LakehouseDatasetConnectionTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "lake_dataset_id":
+		return prefix + "lake_dataset_id"
+	case "lakehouse_id":
+		return prefix + "lakehouse_id"
 	}
 	var output strings.Builder
 	upperNext := false

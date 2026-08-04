@@ -21,6 +21,7 @@ type SchemaModel struct {
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
+	Tags        types.String         `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type SchemaResourceModel struct {
@@ -28,6 +29,7 @@ type SchemaResourceModel struct {
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
+	Tags        types.String         `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type SchemaDataSourceModel struct {
@@ -35,6 +37,7 @@ type SchemaDataSourceModel struct {
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
+	Tags        types.String         `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type SchemaAPIModel struct {
@@ -42,6 +45,7 @@ type SchemaAPIModel struct {
 	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
 	Schema      *string `json:"schema,omitempty"`
+	Tags        *string `json:"tags,omitempty"`
 }
 
 func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
@@ -92,7 +96,8 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SchemaTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -100,7 +105,8 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SchemaTerraformNameToAPIName(key)] = value
+			apiKey := SchemaTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -296,6 +302,13 @@ func (m SchemaModel) MarshalJSON() ([]byte, error) {
 		value := m.Schema.ValueString()
 		output["schema"] = value
 	}
+	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
+		value, err := SchemaTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
+	}
 	return json.Marshal(output)
 }
 
@@ -323,6 +336,11 @@ func (m *SchemaModel) UnmarshalJSON(data []byte) error {
 		m.Schema = jsontypes.NewNormalizedValue(*input.Schema)
 	} else {
 		m.Schema = jsontypes.NewNormalizedNull()
+	}
+	if input.Tags != nil {
+		m.Tags = types.StringValue(*input.Tags)
+	} else {
+		m.Tags = types.StringNull()
 	}
 	return nil
 }

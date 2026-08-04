@@ -73,9 +73,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Description: `Pipeline to process data before sending out to this output`,
 			},
 			"type": schema.StringAttribute{
-				Required: false,
-				Optional: false,
-				Computed: true,
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `Connector type identifier.`,
 			},
 
 			"output_default": schema.SingleNestedAttribute{
@@ -88,9 +89,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -115,7 +117,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"default_id": schema.StringAttribute{
@@ -136,9 +138,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -163,7 +166,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -235,14 +238,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -305,9 +310,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -352,9 +358,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -418,9 +425,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_source_expression": schema.StringAttribute{
 						Required:    false,
@@ -537,18 +545,21 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -650,6 +661,46 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 							},
 						},
 					},
+					"refresh_token_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -663,9 +714,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Webhook URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -707,9 +759,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -734,7 +787,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"keep_alive": schema.BoolAttribute{
@@ -795,14 +848,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -865,9 +920,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -901,9 +957,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"login_url": schema.StringAttribute{
 						Required:    false,
@@ -917,6 +974,46 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Sensitive:   true,
 						Description: `Secret parameter value to pass in request body`,
+					},
+					"refresh_token_field": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Field name in the token response that contains a refresh token (example: 'refresh_token'). When set, @{product} will use the refresh token to obtain new access tokens without re-sending credentials.`,
+					},
+					"rotate_refresh_token": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `@{product} will update the stored value on each successful refresh. Enable if the server issues a new refresh token on every use.`,
+					},
+					"refresh_url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+					},
+					"refresh_request_params": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parameters to include in the refresh token request body. Most servers require 'client_id' here. If not set, @{product} sends only grant_type, refresh_token, and client_secret.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
 					},
 					"client_id": schema.StringAttribute{
 						Required:    false,
@@ -943,9 +1040,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"format": schema.StringAttribute{
 						Required: false,
@@ -1067,6 +1165,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -1105,9 +1204,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1132,7 +1232,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1174,7 +1274,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -1232,9 +1332,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Use to troubleshoot issues with sending data`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"load_balanced": schema.BoolAttribute{
 						Required:    false,
@@ -1335,9 +1436,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1485,6 +1587,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -1526,7 +1629,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"host": schema.StringAttribute{
@@ -1570,9 +1673,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1664,9 +1768,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Required:    false,
@@ -1746,6 +1851,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -1773,9 +1879,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1800,7 +1907,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dns_resolve_period_sec": schema.Float64Attribute{
@@ -1850,9 +1957,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -1956,9 +2064,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Required:    false,
@@ -2161,6 +2270,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -2188,9 +2298,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2215,7 +2326,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -2224,27 +2335,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
-					"next_queue": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -2347,14 +2447,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2422,9 +2524,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -2452,15 +2555,28 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"next_queue": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
+					},
+					"tcp_routing": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -2481,9 +2597,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Splunk HEC Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -2593,6 +2710,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -2607,9 +2725,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2634,20 +2753,8 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"next_queue": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
-					},
-					"tcp_routing": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -2655,9 +2762,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -2760,14 +2868,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -2829,9 +2939,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -2859,11 +2970,6 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
-					"on_backpressure": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
 					"wiz_connector_id": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2874,23 +2980,43 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Your Wiz deployment environment.`,
+						Description: `Your Wiz deployment environment`,
 					},
 					"data_center": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
+						Description: `Your Wiz deployment data center (such as us1, us8, or eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.`,
 					},
 					"wiz_sourcetype": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Wiz Defend Source type`,
+					},
+					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"token": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Wiz Defend Auth token`,
+					},
+					"text_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored text secret`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -2959,20 +3085,8 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
-					},
-					"token": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Sensitive:   true,
-						Description: `Wiz Defend Auth token`,
-					},
-					"text_secret": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Select or create a stored text secret`,
 					},
 				},
 			},
@@ -3013,7 +3127,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -3045,9 +3159,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -3140,9 +3255,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Required:    false,
@@ -3286,6 +3402,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"auth_token": schema.StringAttribute{
@@ -3313,9 +3430,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3340,7 +3458,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -3406,14 +3524,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -3476,9 +3596,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3512,9 +3633,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -3596,6 +3718,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -3610,9 +3733,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3637,7 +3761,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
@@ -3703,14 +3827,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -3773,9 +3899,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -3809,9 +3936,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -3893,6 +4021,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -3907,9 +4036,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3934,7 +4064,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -4099,9 +4229,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -4161,14 +4292,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -4254,7 +4387,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -4524,9 +4657,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -4598,14 +4732,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -4691,7 +4827,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"container_name": schema.StringAttribute{
@@ -4879,14 +5015,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"storage_class": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Blob access tier`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -4946,14 +5084,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5073,9 +5213,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5100,7 +5241,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"cluster_url": schema.StringAttribute{
@@ -5128,9 +5269,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.`,
 					},
 					"ingest_mode": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Ingestion mode`,
 					},
 					"oauth_endpoint": schema.StringAttribute{
 						Required: false,
@@ -5162,9 +5304,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `The type of OAuth 2.0 client credentials grant flow to use`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -5255,14 +5398,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5485,14 +5630,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"prefix": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Prefix (optional)`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5505,9 +5652,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5532,14 +5680,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -5584,9 +5734,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -5725,6 +5876,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -5739,9 +5891,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5766,7 +5919,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_type": schema.StringAttribute{
@@ -5832,14 +5985,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -5908,9 +6063,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -5950,9 +6106,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Enter workspace ID and workspace key directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6021,6 +6178,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"workspace_id": schema.StringAttribute{
@@ -6080,7 +6238,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"stream_name": schema.StringAttribute{
@@ -6095,10 +6253,11 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -6190,14 +6349,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -6278,6 +6439,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -6292,9 +6454,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6319,7 +6482,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dataset": schema.StringAttribute{
@@ -6380,14 +6543,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -6450,9 +6615,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -6491,9 +6657,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6562,6 +6729,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"team": schema.StringAttribute{
@@ -6588,9 +6756,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6615,7 +6784,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -6713,9 +6882,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -6817,9 +6987,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -6835,9 +7006,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6906,11 +7078,12 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_google_chronicle": schema.SingleNestedAttribute{
+			"output_google_bigquery": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -6920,9 +7093,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6947,18 +7121,211 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"project_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Google Cloud project ID that contains the BigQuery dataset`,
+					},
+					"dataset_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `BigQuery dataset ID`,
+					},
+					"table_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `BigQuery table ID`,
+					},
+					"timestamp_column": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Column name to write event time (`_time`) as a BigQuery TIMESTAMP. Used for time partitioning",
+					},
+					"google_auth_method": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), or Secret to select or create a stored secret that references Google service account credentials`,
+					},
+					"secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Select or create a stored text secret`,
+					},
+					"flush_period": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
+					},
+					"max_queue_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of queued batches before blocking`,
+					},
+					"max_record_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size (KB) of a single append request. BigQuery limit is 10 MB`,
+					},
+					"max_in_progress": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum number of in-progress API requests before backpressure is applied`,
+					},
+					"max_send_retries": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_google_chronicle": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
@@ -7000,9 +7367,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -7031,9 +7399,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"log_format_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Send events as`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -7093,14 +7462,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -7135,9 +7506,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"extra_log_types": schema.ListNestedAttribute{
 						Required:    false,
@@ -7147,14 +7519,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"log_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Log Type`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -7191,14 +7565,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -7301,6 +7677,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -7315,9 +7692,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7342,7 +7720,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -7364,9 +7742,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Google Cloud Storage service endpoint`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -7558,9 +7937,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -7620,14 +8000,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -7705,9 +8087,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7732,13 +8115,14 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_location_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log location type`,
 					},
 					"log_name_expression": schema.StringAttribute{
 						Required:    false,
@@ -7747,9 +8131,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.`,
 					},
 					"sanitize_log_names": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Validate and correct log name`,
 					},
 					"payload_format": schema.StringAttribute{
 						Required:    false,
@@ -8059,9 +8444,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"log_location_expression": schema.StringAttribute{
 						Required:    false,
@@ -8142,6 +8528,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8156,9 +8543,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8183,18 +8571,20 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"otlp_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Discriminator value.`,
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,
@@ -8216,14 +8606,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -8287,9 +8679,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -8353,9 +8746,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"secret": schema.StringAttribute{
 						Required:    false,
@@ -8431,6 +8825,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8472,7 +8867,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_name": schema.StringAttribute{
@@ -8559,9 +8954,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -8630,6 +9026,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -8644,9 +9041,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8671,7 +9069,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"bucket": schema.StringAttribute{
@@ -8854,9 +9252,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.`,
 					},
 					"timezone_offset": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Timezone offset`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -8872,9 +9271,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: "HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.",
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Required:    false,
@@ -8939,7 +9339,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -8994,9 +9394,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -9028,9 +9429,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -9069,14 +9471,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -9107,9 +9511,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -9235,20 +9640,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -9321,14 +9729,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -9341,14 +9751,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -9361,9 +9773,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -9427,9 +9840,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Required:    false,
@@ -9510,6 +9924,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -9551,7 +9966,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -9567,9 +9982,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -9672,9 +10088,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -9706,9 +10123,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -9747,14 +10165,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -9785,9 +10205,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -9913,20 +10334,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -9999,14 +10423,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Parameter Value`,
 										},
 									},
 								},
@@ -10019,14 +10445,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Name`,
 										},
 										"value": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: true,
+											Required:    false,
+											Optional:    true,
+											Computed:    true,
+											Description: `Field Value`,
 										},
 									},
 								},
@@ -10039,9 +10467,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"protobuf_library_id": schema.StringAttribute{
 						Required:    false,
@@ -10122,6 +10551,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10163,7 +10593,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"brokers": schema.ListAttribute{
@@ -10218,9 +10648,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"schema_registry_url": schema.StringAttribute{
 								Required:    false,
@@ -10252,9 +10683,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"oauth_enabled": schema.BoolAttribute{
 										Required:    false,
@@ -10293,14 +10725,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Name`,
 												},
 												"value": schema.StringAttribute{
-													Required: false,
-													Optional: true,
-													Computed: true,
+													Required:    false,
+													Optional:    true,
+													Computed:    true,
+													Description: `Parameter Value`,
 												},
 											},
 										},
@@ -10331,9 +10765,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
-										Required: false,
-										Optional: true,
-										Computed: true,
+										Required:    false,
+										Optional:    true,
+										Computed:    true,
+										Description: `Disabled`,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -10459,10 +10894,11 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -10518,9 +10954,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -10584,14 +11021,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -10678,6 +11117,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -10692,9 +11132,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -10719,7 +11160,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -10792,14 +11233,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10856,9 +11299,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -10887,20 +11331,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"extra_params": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Extra parameters`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -10911,20 +11358,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -10987,9 +11437,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -11010,9 +11461,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Bulk API URLs`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -11109,6 +11561,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11123,9 +11576,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11150,7 +11604,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -11217,14 +11671,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11249,14 +11705,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11267,20 +11725,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Authentication Disabled`,
 							},
 							"username": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Username`,
 							},
 							"password": schema.StringAttribute{
-								Required:  false,
-								Optional:  true,
-								Computed:  true,
-								Sensitive: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
 								Required: false,
@@ -11359,9 +11820,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -11395,9 +11857,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -11466,6 +11929,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -11480,9 +11944,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11507,7 +11972,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -11535,9 +12000,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name of the metadata field.`,
 								},
 								"value": schema.StringAttribute{
 									Required:    false,
@@ -11600,14 +12066,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11670,9 +12138,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -11717,9 +12186,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -11793,6 +12263,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -11820,9 +12291,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11847,7 +12319,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
@@ -11919,14 +12391,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -11989,9 +12463,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -12030,9 +12505,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -12106,6 +12582,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -12133,9 +12610,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12160,7 +12638,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -12245,14 +12723,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -12315,9 +12795,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -12357,9 +12838,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `InfluxDB authentication type`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"database": schema.StringAttribute{
 						Required:    false,
@@ -12446,18 +12928,21 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -12490,9 +12975,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12517,7 +13003,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"log_group_name": schema.StringAttribute{
@@ -12538,10 +13024,11 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -12615,14 +13102,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -12697,6 +13186,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -12711,9 +13201,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12738,7 +13229,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -12978,9 +13469,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -13052,14 +13544,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -13118,9 +13612,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13145,7 +13640,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13184,9 +13679,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13278,6 +13774,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13292,9 +13789,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13319,7 +13817,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13358,9 +13856,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13452,6 +13951,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13466,9 +13966,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13493,7 +13994,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -13532,9 +14033,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Required:    false,
@@ -13626,6 +14128,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13640,9 +14143,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13667,7 +14171,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"rules": schema.ListNestedAttribute{
@@ -13705,9 +14209,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -13721,9 +14226,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13748,7 +14254,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic_arn": schema.StringAttribute{
@@ -13775,10 +14281,11 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -13834,14 +14341,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -13916,6 +14425,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -13957,7 +14467,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"queue_name": schema.StringAttribute{
@@ -13996,10 +14506,11 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"region": schema.StringAttribute{
 						Required:    false,
@@ -14079,14 +14590,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Access key`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -14161,6 +14674,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14202,7 +14716,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -14233,10 +14747,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.`,
 					},
+					"enable_ip_spoofing": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Send SNMP Trap traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"max_record_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `MTU in bytes. The actual maximum SNMP Trap payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). Payloads exceeding this limit will be dropped.`,
 					},
 				},
 			},
@@ -14250,9 +14777,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14277,7 +14805,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -14356,14 +14884,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14426,9 +14956,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14468,9 +14999,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -14539,6 +15071,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -14553,9 +15086,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14580,7 +15114,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"content_type": schema.StringAttribute{
@@ -14702,14 +15236,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -14772,9 +15308,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -14819,9 +15356,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -14895,6 +15433,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -14922,9 +15461,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14949,7 +15489,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"loki_url": schema.StringAttribute{
@@ -14983,14 +15523,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15135,14 +15677,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15205,9 +15749,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15241,9 +15786,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -15318,6 +15864,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -15332,9 +15879,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15359,7 +15907,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -15387,14 +15935,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -15450,14 +16000,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15520,9 +16072,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15568,9 +16121,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -15677,11 +16231,12 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_prometheus": schema.SingleNestedAttribute{
+			"output_amazon_managed_prometheus": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -15691,9 +16246,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15718,14 +16274,64 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `The endpoint to send metrics to`,
+						Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
+					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Region where the AMSP is located`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access AMSP`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"metric_rename_expr": schema.StringAttribute{
 						Required:    false,
@@ -15755,21 +16361,13 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Maximum size, in KB, of the request body`,
+						Description: `Maximum uncompressed size, in KB, of the request body. The 1 MB cap is intentional and protects against data that compresses poorly, since oversized requests fail with a non-retryable 413.`,
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
-					},
-					"reject_unauthorized": schema.BoolAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
-        that value will take precedence.`,
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15787,18 +16385,20 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Headers to add to all events`,
+						Description: `Headers to add to all events. SigV4-managed headers and the Prometheus remote-write protocol version header are generated by this Destination and cannot be configured here.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -15861,9 +16461,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -15896,15 +16497,17 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional: true,
 						Computed: true,
 					},
-					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"metrics_flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15979,18 +16582,329 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
-					"username": schema.StringAttribute{
+				},
+			},
+			"output_prometheus": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The endpoint to send metrics to`,
+					},
+					"metric_rename_expr": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+					},
+					"send_metadata": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Generate and send metadata (`type` and `metricFamilyName`) requests",
+					},
+					"use_prometheus_histogram_bucket_suffix": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Serialize histogram bucket series as `<metric>_bucket` to match Prometheus histogram naming convention",
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"auth_type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Remote Write authentication type`,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"metrics_flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+					"username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
+					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -16011,6 +16925,53 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed:    true,
 						Description: `Select or create a stored text secret`,
 					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `AWS region used to sign Remote Write requests`,
+					},
+					"aws_service": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "ID used to sign Remote Write requests (for example, `aps` for Amazon Managed Service for Prometheus)",
+					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Prometheus`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amazon Resource Name (ARN) of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID to use when assuming role`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
 				},
 			},
 			"output_ring": schema.SingleNestedAttribute{
@@ -16023,9 +16984,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16050,7 +17012,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"format": schema.StringAttribute{
@@ -16094,9 +17056,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -16110,9 +17073,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16137,7 +17101,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -16168,9 +17132,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"http_traces_endpoint_override": schema.StringAttribute{
 						Required:    false,
@@ -16198,14 +17163,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16275,20 +17242,23 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -16411,14 +17381,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -16470,9 +17442,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -16506,9 +17479,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -16627,6 +17601,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -16641,9 +17616,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16668,7 +17644,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -16684,9 +17660,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Auth token name`,
 					},
 					"otlp_version": schema.StringAttribute{
 						Required: false,
@@ -16740,14 +17717,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -16811,9 +17790,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -16837,14 +17817,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -16896,9 +17878,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -16932,9 +17915,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17053,6 +18037,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -17067,9 +18052,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17094,7 +18080,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"message_field": schema.StringAttribute{
@@ -17168,9 +18154,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -17256,14 +18243,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -17303,9 +18292,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"custom_url": schema.StringAttribute{
 						Required: false,
@@ -17379,6 +18369,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"api_key": schema.StringAttribute{
@@ -17433,7 +18424,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -17465,9 +18456,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17557,9 +18549,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -17583,9 +18576,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"host": schema.StringAttribute{
 						Required:    false,
@@ -17729,6 +18723,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -17743,9 +18738,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17770,7 +18766,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -17785,9 +18781,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -17909,14 +18906,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -17979,9 +18978,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18023,14 +19023,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -18041,9 +19043,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -18064,9 +19067,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -18163,6 +19167,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18177,9 +19182,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18204,7 +19210,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -18219,9 +19225,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required: false,
@@ -18343,14 +19350,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -18413,9 +19422,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18457,14 +19467,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Description: `Select or create a stored text secret`,
 								},
 								"enabled": schema.BoolAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Enable token`,
 								},
 								"description": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Description`,
 								},
 							},
 						},
@@ -18481,9 +19493,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -18498,9 +19511,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl Worker endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -18597,6 +19611,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18611,9 +19626,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18638,7 +19654,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -18699,14 +19715,16 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -18779,9 +19797,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -18815,9 +19834,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -18899,6 +19919,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -18913,9 +19934,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18940,7 +19962,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -19002,14 +20024,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -19082,9 +20106,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -19118,15 +20143,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Next-Gen SIEM authentication token`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    false,
@@ -19201,6 +20228,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -19215,9 +20243,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19242,7 +20271,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -19513,9 +20542,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -19587,14 +20617,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -19680,7 +20712,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -19899,10 +20931,11 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Secret key`,
 					},
 					"object_acl": schema.StringAttribute{
 						Required: false,
@@ -19979,14 +21012,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -20010,9 +21045,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -20068,9 +21104,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20095,80 +21132,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"endpoint": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
-					},
-					"enable_assume_role": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Use Assume Role credentials to access S3`,
-					},
-					"assume_role_arn": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Amazon Resource Name (ARN) of the role to assume`,
-					},
-					"assume_role_external_id": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `External ID to use when assuming role`,
-					},
-					"duration_seconds": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
-					},
-					"reuse_connections": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Reuse connections between requests, which can improve performance`,
-					},
-					"reject_unauthorized": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
-					},
-					"bucket": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: "Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
-					},
-					"region": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Region where the S3 bucket is located`,
-					},
-					"dest_path": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Lake dataset to send the data to.`,
-					},
-					"verify_permissions": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Disable if you can access files within the bucket but not the bucket itself`,
-					},
-					"max_closing_files_to_backpressure": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -20314,54 +21279,133 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 							},
 						},
 					},
-					"aws_secret_key": schema.StringAttribute{
+					"storage_location_id": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Sensitive:   true,
-						Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
+						Description: `Storage location that contains the target Lake dataset.`,
 					},
-					"object_acl": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"storage_class": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"server_side_encryption": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
-					},
-					"kms_key_id": schema.StringAttribute{
+					"dest_path": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
-					},
-					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Description: `Lake dataset to send the data to.`,
 					},
 					"format": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
-					"max_concurrent_file_parts": schema.Float64Attribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
-					},
-					"description": schema.StringAttribute{
+					"dynamic_dataset": schema.BoolAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"max_concurrent_file_parts": schema.Float64Attribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
 					},
 					"empty_dir_cleanup_sec": schema.Float64Attribute{
 						Required:    false,
@@ -20399,9 +21443,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20426,7 +21471,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"time_window": schema.StringAttribute{
@@ -20459,9 +21504,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 				},
 			},
@@ -20475,9 +21521,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20502,7 +21549,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
@@ -20517,9 +21564,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Required:    false,
@@ -20528,16 +21576,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `How event fields are mapped to ClickHouse columns`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Required:    false,
@@ -20551,9 +21597,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -20656,14 +21703,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -20726,9 +21775,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -20774,20 +21824,23 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -20821,9 +21874,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -20914,11 +21968,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
 			},
-			"output_local_search_storage": schema.SingleNestedAttribute{
+			"output_customer_metrics_storage": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -20928,9 +21983,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20955,14 +22011,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `URL of the database instance. Example: http://localhost:8123/`,
+						Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -20970,33 +22026,32 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"database": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ClickHouse database`,
 					},
 					"table_name": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"mapping_type": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `How event fields are mapped to columns.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+						Description: `Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -21004,9 +22059,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"servername": schema.StringAttribute{
 								Required:    false,
@@ -21109,14 +22165,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -21179,9 +22237,474 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"workload": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional ClickHouse workload name to append as a SETTINGS clause on INSERT queries. Used for workload scheduling classification.`,
+					},
+					"dump_format_errors_to_disk": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log the most recent event that fails to match the table schema`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
+					},
+					"password": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
+					},
+					"credentials_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a secret that references your credentials`,
+					},
+					"sql_username": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username for certificate authentication`,
+					},
+					"wait_for_async_inserts": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.`,
+					},
+					"exclude_mapping_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to exclude from sending to ClickHouse`,
+						ElementType: types.StringType,
+					},
+					"describe_table": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
+					},
+					"column_mappings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"column_name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Name of the column in ClickHouse that will store field value`,
+								},
+								"column_type": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Type of the column in the ClickHouse database`,
+								},
+								"column_value_expression": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `JavaScript expression to compute value to be inserted into ClickHouse table`,
+								},
+							},
+						},
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_local_search_storage": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `URL of the database instance. Example: http://localhost:8123/`,
+					},
+					"auth_type": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"database": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Database`,
+					},
+					"table_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+					},
+					"format": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Data format to use when sending data. Defaults to JSON Compact.`,
+					},
+					"mapping_type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How event fields are mapped to columns.`,
+					},
+					"async_inserts": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
+							},
+							"servername": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"ca_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"passphrase": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"min_version": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+							},
+							"max_version": schema.StringAttribute{
+								Required: false,
+								Optional: true,
+								Computed: true,
+							},
+						},
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+					},
+					"compress": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Compress the payload body before sending`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21280,20 +22803,23 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"username": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Username`,
 					},
 					"password": schema.StringAttribute{
-						Required:  false,
-						Optional:  true,
-						Computed:  true,
-						Sensitive: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Sensitive:   true,
+						Description: `Password`,
 					},
 					"credentials_secret": schema.StringAttribute{
 						Required:    false,
@@ -21327,9 +22853,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Retrieves the table schema and populates the Column Mapping table`,
 					},
 					"column_mappings": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Column Mapping`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"column_name": schema.StringAttribute{
@@ -21420,6 +22947,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -21434,9 +22962,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21461,7 +22990,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"load_balanced": schema.BoolAttribute{
@@ -21522,14 +23051,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -21592,9 +23123,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -21640,9 +23172,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"url": schema.StringAttribute{
 						Required:    false,
@@ -21663,9 +23196,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
 					},
 					"urls": schema.ListNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `XSIAM Endpoints`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"weight": schema.Float64Attribute{
@@ -21769,6 +23303,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -21810,7 +23345,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"hosts": schema.ListNestedAttribute{
@@ -21848,9 +23383,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: "Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.",
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"max_record_size": schema.Float64Attribute{
 						Required:    false,
@@ -21870,9 +23406,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21897,7 +23434,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
@@ -21963,14 +23500,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22033,9 +23572,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22069,9 +23609,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"format": schema.StringAttribute{
 						Required:    false,
@@ -22080,14 +23621,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `How to format events before sending. Defaults to JSON. Plaintext is not currently supported.`,
 					},
 					"endpoint": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Endpoint`,
 					},
 					"telemetry_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Telemetry type`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Required:    false,
@@ -22096,9 +23639,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -22167,6 +23711,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 					"token": schema.StringAttribute{
@@ -22212,9 +23757,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22239,7 +23785,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
@@ -22295,14 +23841,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -22379,9 +23927,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored text secret`,
 					},
 					"auth_token_name": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Api-Token name`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -22389,9 +23938,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -22415,14 +23965,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22474,9 +24026,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22571,6 +24124,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -22585,9 +24139,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22612,20 +24167,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
-					},
-					"region": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
-					},
-					"endpoint": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
@@ -22679,14 +24222,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -22748,9 +24293,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -22778,15 +24324,28 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
+					"region": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
+					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -22958,6 +24517,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -22972,9 +24532,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22999,18 +24560,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"api_version": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `API version`,
 					},
 					"authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
@@ -23052,9 +24615,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"timeout_retry": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
 							},
 							"initial_backoff": schema.Float64Attribute{
 								Required:    false,
@@ -23140,14 +24704,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
 								},
 							},
 						},
@@ -23182,9 +24748,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
 					},
 					"ingestion_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Chronicle API ingestion method`,
 					},
 					"namespace": schema.StringAttribute{
 						Required:    false,
@@ -23224,14 +24791,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 								"rbac_enabled": schema.BoolAttribute{
 									Required:    false,
@@ -23249,9 +24818,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Required:    false,
@@ -23332,6 +24902,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -23346,9 +24917,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23373,7 +24945,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"dest_path": schema.StringAttribute{
@@ -23592,9 +25164,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -23654,14 +25227,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -23710,7 +25285,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 					},
 				},
 			},
-			"output_microsoft_fabric": schema.SingleNestedAttribute{
+			"output_snowflake_streaming": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
@@ -23720,9 +25295,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23747,7 +25323,348 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"account_identifier": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake account identifier in org-account format (example: MYORG-MYACCOUNT)`,
+					},
+					"user": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake user with key-pair authentication configured`,
+					},
+					"pem": schema.SingleNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Private key`,
+						Attributes: map[string]schema.Attribute{
+							"key_name": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Select the stored secret containing the RSA private key (PEM format) for Snowflake key-pair authentication`,
+							},
+						},
+					},
+					"database": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target database`,
+					},
+					"schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target schema`,
+					},
+					"table": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target table`,
+					},
+					"url": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Override endpoint URL (for PrivateLink or custom deployments). Defaults to https://<accountIdentifier>.snowflakecomputing.com:443`,
+					},
+					"role": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Snowflake role to assume for this connection`,
+					},
+					"keep_alive": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Keep connections open between requests. Disable only if experiencing connection pooling issues.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events per request. Default is 0 (unlimited, size-gated only).`,
+					},
+					"compress": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Compress the payload body using zstd compression before sending.`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.`,
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Headers to add to all events`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Name`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Field Value`,
+								},
+							},
+						},
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"safe_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `List of headers that are safe to log in plain text`,
+						ElementType: types.StringType,
+					},
+					"control_request_timeout_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Timeout in seconds for token exchange, channel open/close, and hostname discovery. Defaults to 30 seconds.`,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"http_status": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"timeout_retry": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Retry timed-out HTTP requests`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"backoff_rate": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+						},
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"pq_strict_ordering": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+					},
+					"pq_rate_per_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+					},
+					"pq_max_backpressure_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"pq_max_buffer_size_bytes": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+					},
+					"pq_controls": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Persistent queue controls.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"output_microsoft_fabric": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -23839,9 +25756,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"mechanism": schema.StringAttribute{
 								Required: false,
@@ -23924,9 +25842,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
-								Required: false,
-								Optional: true,
-								Computed: true,
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Disabled`,
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -23948,9 +25867,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Bootstrap server from Fabric Eventstream's endpoint`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -24019,6 +25939,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
+						Description: `Persistent queue controls.`,
 						ElementType: types.StringType,
 					},
 				},
@@ -24033,9 +25954,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24060,14 +25982,13 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    true,
-						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+						Required: false,
+						Optional: true,
+						Computed: true,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Required:    false,
@@ -24290,9 +26211,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -24358,14 +26280,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -24424,9 +26348,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24451,7 +26376,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -24669,9 +26594,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Nutanix Objects S3-compatible endpoint URL (example: https://objects.nutanix.local)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -24737,14 +26663,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -24803,9 +26731,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24830,7 +26759,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25042,9 +26971,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Storj S3-compatible gateway endpoint URL (example: https://gateway.storjshare.io)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25110,14 +27040,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25176,9 +27108,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25203,7 +27136,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25415,9 +27348,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `AlphaSOC S3-compatible endpoint URL (example: https://s3.alphasoc.net)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25483,14 +27417,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25549,9 +27485,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25576,7 +27513,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -25799,9 +27736,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Dell PowerScale OneFS S3-compatible endpoint URL (example: https://powerscale.example.com:9021)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -25867,14 +27805,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -25933,9 +27873,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25960,7 +27901,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"endpoint": schema.StringAttribute{
@@ -26199,9 +28140,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -26267,14 +28209,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -26333,9 +28277,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26360,7 +28305,7 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
@@ -26578,9 +28523,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Scality RING S3-compatible endpoint URL (example: https://s3.scality.example.com)`,
 					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -26646,14 +28592,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -26712,9 +28660,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26739,13 +28688,14 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Required:    false,
@@ -26955,10 +28905,35 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: "Alibaba OSS S3-compatible endpoint URL. Examples: public `https://s3.oss-{region}.aliyuncs.com`, internal `https://s3.oss-{region}-internal.aliyuncs.com`",
 					},
+					"enable_assume_role": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Use Assume Role credentials to access Alibaba OSS`,
+					},
+					"duration_seconds": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `ARN of the RAM role to assume. Format: acs:ram::<account-id>:role/<role-name>. Example: acs:ram::123456789:role/OSSAccessRole`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `External ID for the assumed role (optional, for security when configured in the role trust policy)`,
+					},
 					"description": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Required:    false,
@@ -27024,14 +28999,393 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
 								},
 								"value": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: true,
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
+								},
+							},
+						},
+					},
+					"enable_statistics": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+					},
+					"enable_write_page_index": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+					},
+					"enable_page_checksum": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+					},
+					"empty_dir_cleanup_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `How frequently, in seconds, to clean up empty directories`,
+					},
+					"directory_batch_size": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+					},
+					"deadletter_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+					},
+					"max_retry_num": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+					},
+				},
+			},
+			"output_ibm_cloud_s3": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"type": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"system_fields": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						ElementType: types.StringType,
+					},
+					"environment": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"streamtags": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Metadata tags used for categorization and filtering.`,
+						ElementType: types.StringType,
+					},
+					"endpoint": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"reuse_connections": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Reuse connections between requests, which can improve performance`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+					},
+					"bucket": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Name of the destination IBM Cloud Object Storage bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`",
+					},
+					"dest_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "Prefix to prepend to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `myKeyPrefix-${C.vars.myVar}`",
+					},
+					"max_concurrent_file_parts": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+					},
+					"verify_permissions": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Disable if you can access files within the bucket but not the bucket itself`,
+					},
+					"max_closing_files_to_backpressure": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+					},
+					"stage_path": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+					},
+					"add_id_to_stage_path": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Add the Output ID value to staging location`,
+					},
+					"remove_empty_dirs": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Remove empty staging directories after moving files`,
+					},
+					"partition_expr": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+					},
+					"format": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"base_file_name": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+					},
+					"file_name_suffix": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: "JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).",
+					},
+					"max_file_size_mb": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+					},
+					"max_file_open_time_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_file_idle_time_sec": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+					},
+					"max_open_files": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+					},
+					"header_line": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `If set, this line will be written to the beginning of each output file`,
+					},
+					"write_high_water_mark": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Buffer size used to write to a file`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"deadletter_enabled": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+					},
+					"on_disk_full_backpressure": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"force_close_on_shutdown": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+					},
+					"retry_settings": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Apply exponential backoff with jitter when file uploads fail repeatedly.`,
+							},
+							"initial_backoff_ms": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Initial delay before first retry attempt. Valid range: 1s-5min (1000-300000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"backoff_multiplier": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Multiplier applied to backoff delay after each retry. Valid range: 1-10. Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"max_backoff_ms": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Maximum delay between retry attempts. Valid range: 1s-10min (1000-600000ms). Values outside this range will be clamped to the nearest valid value.`,
+							},
+							"jitter_percent": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Random jitter percentage added to backoff delay to prevent thundering herd. Valid range: 0-100. Values outside this range will be clamped to the nearest valid value.`,
+							},
+						},
+					},
+					"orphans": schema.SingleNestedAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Periodically scan the staging directory for files not tracked by any Worker manifest to recover them`,
+							},
+							"period_min": schema.Float64Attribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    true,
+								Description: `Minimum interval between reconciliation runs`,
+							},
+						},
+					},
+					"description": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Optional description for this configuration.`,
+					},
+					"aws_secret": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Select or create a stored secret that references your access key and secret key`,
+					},
+					"compress": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"compression_level": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"automatic_schema": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+					},
+					"parquet_schema": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+					},
+					"parquet_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_data_page_version": schema.StringAttribute{
+						Required: false,
+						Optional: true,
+						Computed: true,
+					},
+					"parquet_row_group_length": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+					},
+					"parquet_page_size": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+					},
+					"should_log_invalid_rows": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+					},
+					"key_value_metadata": schema.ListNestedAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Key`,
+								},
+								"value": schema.StringAttribute{
+									Required:    false,
+									Optional:    true,
+									Computed:    true,
+									Description: `Value`,
 								},
 							},
 						},
@@ -27216,7 +29570,261 @@ func isDestinationImportState(state *DestinationModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if state.OutputDefault != nil {
+		return false
+	}
+	if state.OutputWebhook != nil {
+		return false
+	}
+	if state.OutputSentinel != nil {
+		return false
+	}
+	if state.OutputDevnull != nil {
+		return false
+	}
+	if state.OutputSyslog != nil {
+		return false
+	}
+	if state.OutputSplunk != nil {
+		return false
+	}
+	if state.OutputSplunkLb != nil {
+		return false
+	}
+	if state.OutputSplunkHec != nil {
+		return false
+	}
+	if state.OutputWizHec != nil {
+		return false
+	}
+	if state.OutputTcpjson != nil {
+		return false
+	}
+	if state.OutputWavefront != nil {
+		return false
+	}
+	if state.OutputSignalfx != nil {
+		return false
+	}
+	if state.OutputFilesystem != nil {
+		return false
+	}
+	if state.OutputS3 != nil {
+		return false
+	}
+	if state.OutputAzureBlob != nil {
+		return false
+	}
+	if state.OutputAzureDataExplorer != nil {
+		return false
+	}
+	if state.OutputAzureLogs != nil {
+		return false
+	}
+	if state.OutputKinesis != nil {
+		return false
+	}
+	if state.OutputHoneycomb != nil {
+		return false
+	}
+	if state.OutputAzureEventhub != nil {
+		return false
+	}
+	if state.OutputGoogleBigquery != nil {
+		return false
+	}
+	if state.OutputGoogleChronicle != nil {
+		return false
+	}
+	if state.OutputGoogleCloudStorage != nil {
+		return false
+	}
+	if state.OutputGoogleCloudLogging != nil {
+		return false
+	}
+	if state.OutputGoogleCloudObservability != nil {
+		return false
+	}
+	if state.OutputGooglePubsub != nil {
+		return false
+	}
+	if state.OutputExabeam != nil {
+		return false
+	}
+	if state.OutputKafka != nil {
+		return false
+	}
+	if state.OutputConfluentCloud != nil {
+		return false
+	}
+	if state.OutputMsk != nil {
+		return false
+	}
+	if state.OutputElastic != nil {
+		return false
+	}
+	if state.OutputElasticCloud != nil {
+		return false
+	}
+	if state.OutputNewrelic != nil {
+		return false
+	}
+	if state.OutputNewrelicEvents != nil {
+		return false
+	}
+	if state.OutputInfluxdb != nil {
+		return false
+	}
+	if state.OutputCloudwatch != nil {
+		return false
+	}
+	if state.OutputMinio != nil {
+		return false
+	}
+	if state.OutputStatsd != nil {
+		return false
+	}
+	if state.OutputStatsdExt != nil {
+		return false
+	}
+	if state.OutputGraphite != nil {
+		return false
+	}
+	if state.OutputRouter != nil {
+		return false
+	}
+	if state.OutputSns != nil {
+		return false
+	}
+	if state.OutputSqs != nil {
+		return false
+	}
+	if state.OutputSnmp != nil {
+		return false
+	}
+	if state.OutputSumoLogic != nil {
+		return false
+	}
+	if state.OutputDatadog != nil {
+		return false
+	}
+	if state.OutputGrafanaCloud != nil {
+		return false
+	}
+	if state.OutputLoki != nil {
+		return false
+	}
+	if state.OutputAmazonManagedPrometheus != nil {
+		return false
+	}
+	if state.OutputPrometheus != nil {
+		return false
+	}
+	if state.OutputRing != nil {
+		return false
+	}
+	if state.OutputOpenTelemetry != nil {
+		return false
+	}
+	if state.OutputServiceNow != nil {
+		return false
+	}
+	if state.OutputDataset != nil {
+		return false
+	}
+	if state.OutputCriblTcp != nil {
+		return false
+	}
+	if state.OutputCriblHttp != nil {
+		return false
+	}
+	if state.OutputCriblSearchEngine != nil {
+		return false
+	}
+	if state.OutputHumioHec != nil {
+		return false
+	}
+	if state.OutputCrowdstrikeNextGenSiem != nil {
+		return false
+	}
+	if state.OutputDlS3 != nil {
+		return false
+	}
+	if state.OutputSecurityLake != nil {
+		return false
+	}
+	if state.OutputCriblLake != nil {
+		return false
+	}
+	if state.OutputDiskSpool != nil {
+		return false
+	}
+	if state.OutputClickHouse != nil {
+		return false
+	}
+	if state.OutputCustomerMetricsStorage != nil {
+		return false
+	}
+	if state.OutputLocalSearchStorage != nil {
+		return false
+	}
+	if state.OutputXsiam != nil {
+		return false
+	}
+	if state.OutputNetflow != nil {
+		return false
+	}
+	if state.OutputDynatraceHttp != nil {
+		return false
+	}
+	if state.OutputDynatraceOtlp != nil {
+		return false
+	}
+	if state.OutputSentinelOneAiSiem != nil {
+		return false
+	}
+	if state.OutputChronicle != nil {
+		return false
+	}
+	if state.OutputDatabricks != nil {
+		return false
+	}
+	if state.OutputSnowflakeStreaming != nil {
+		return false
+	}
+	if state.OutputMicrosoftFabric != nil {
+		return false
+	}
+	if state.OutputCloudflareR2 != nil {
+		return false
+	}
+	if state.OutputNutanixObjects != nil {
+		return false
+	}
+	if state.OutputStorjS3 != nil {
+		return false
+	}
+	if state.OutputAlphasocS3 != nil {
+		return false
+	}
+	if state.OutputDellS3 != nil {
+		return false
+	}
+	if state.OutputCloudianS3 != nil {
+		return false
+	}
+	if state.OutputScalityS3 != nil {
+		return false
+	}
+	if state.OutputAlibabaCloudS3 != nil {
+		return false
+	}
+	if state.OutputIbmCloudS3 != nil {
+		return false
+	}
+	return true
 }
 
 func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, preserveInputs bool, fillMissingInputs bool) {
@@ -27272,6 +29880,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDefault.SystemFields.IsNull() || state.OutputDefault.SystemFields.IsUnknown() {
 			state.OutputDefault.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDefault.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDefault.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDefault.Environment.IsNull() && !api.OutputDefault.Environment.IsUnknown() {
 			state.OutputDefault.Environment = api.OutputDefault.Environment
 		} else if state.OutputDefault.Environment.IsNull() || state.OutputDefault.Environment.IsUnknown() {
@@ -27280,6 +29891,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDefault.Streamtags.IsNull() && !api.OutputDefault.Streamtags.IsUnknown() {
 			state.OutputDefault.Streamtags = api.OutputDefault.Streamtags
 		} else if state.OutputDefault.Streamtags.IsNull() || state.OutputDefault.Streamtags.IsUnknown() {
+			state.OutputDefault.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDefault.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDefault.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDefault.DefaultID.IsNull() && !api.OutputDefault.DefaultID.IsUnknown() {
@@ -27312,6 +29926,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWebhook.SystemFields.IsNull() || state.OutputWebhook.SystemFields.IsUnknown() {
 			state.OutputWebhook.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputWebhook.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputWebhook.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputWebhook.Environment.IsNull() && !api.OutputWebhook.Environment.IsUnknown() {
 			state.OutputWebhook.Environment = api.OutputWebhook.Environment
 		} else if state.OutputWebhook.Environment.IsNull() || state.OutputWebhook.Environment.IsUnknown() {
@@ -27320,6 +29937,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputWebhook.Streamtags.IsNull() && !api.OutputWebhook.Streamtags.IsUnknown() {
 			state.OutputWebhook.Streamtags = api.OutputWebhook.Streamtags
 		} else if state.OutputWebhook.Streamtags.IsNull() || state.OutputWebhook.Streamtags.IsUnknown() {
+			state.OutputWebhook.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputWebhook.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputWebhook.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputWebhook.Method.IsNull() && !api.OutputWebhook.Method.IsUnknown() {
@@ -27377,6 +29997,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWebhook.ExtraHttpHeaders.IsNull() || state.OutputWebhook.ExtraHttpHeaders.IsUnknown() {
 			state.OutputWebhook.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputWebhook.ExtraHttpHeaders.IsNull() || state.OutputWebhook.ExtraHttpHeaders.IsUnknown() {
+			state.OutputWebhook.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputWebhook.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputWebhook.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputWebhook.UseRoundRobinDns.IsNull() && !api.OutputWebhook.UseRoundRobinDns.IsUnknown() {
 			state.OutputWebhook.UseRoundRobinDns = api.OutputWebhook.UseRoundRobinDns
 		} else if state.OutputWebhook.UseRoundRobinDns.IsNull() || state.OutputWebhook.UseRoundRobinDns.IsUnknown() {
@@ -27392,14 +30017,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWebhook.SafeHeaders.IsNull() || state.OutputWebhook.SafeHeaders.IsUnknown() {
 			state.OutputWebhook.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputWebhook.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputWebhook.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputWebhook.ResponseRetrySettings.IsNull() && !api.OutputWebhook.ResponseRetrySettings.IsUnknown() {
 			state.OutputWebhook.ResponseRetrySettings = api.OutputWebhook.ResponseRetrySettings
 		} else if state.OutputWebhook.ResponseRetrySettings.IsNull() || state.OutputWebhook.ResponseRetrySettings.IsUnknown() {
 			state.OutputWebhook.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputWebhook.ResponseRetrySettings.IsNull() || state.OutputWebhook.ResponseRetrySettings.IsUnknown() {
+			state.OutputWebhook.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputWebhook.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputWebhook.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputWebhook.TimeoutRetrySettings.IsNull() && !api.OutputWebhook.TimeoutRetrySettings.IsUnknown() {
 			state.OutputWebhook.TimeoutRetrySettings = api.OutputWebhook.TimeoutRetrySettings
 		} else if state.OutputWebhook.TimeoutRetrySettings.IsNull() || state.OutputWebhook.TimeoutRetrySettings.IsUnknown() {
+			state.OutputWebhook.TimeoutRetrySettings = types.ObjectNull(OutputWebhookTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputWebhook.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputWebhook.TimeoutRetrySettings = types.ObjectNull(OutputWebhookTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputWebhook.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputWebhook.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -27420,6 +30056,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputWebhook.TLS.IsNull() && !api.OutputWebhook.TLS.IsUnknown() {
 			state.OutputWebhook.TLS = api.OutputWebhook.TLS
 		} else if state.OutputWebhook.TLS.IsNull() || state.OutputWebhook.TLS.IsUnknown() {
+			state.OutputWebhook.TLS = types.ObjectNull(OutputWebhookTLSAttrTypes())
+		}
+		if len(state.OutputWebhook.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputWebhook.TLS = types.ObjectNull(OutputWebhookTLSAttrTypes())
 		}
 		if !api.OutputWebhook.TotalMemoryLimitKB.IsNull() && !api.OutputWebhook.TotalMemoryLimitKB.IsUnknown() {
@@ -27597,10 +30236,45 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWebhook.OauthParams.IsNull() || state.OutputWebhook.OauthParams.IsUnknown() {
 			state.OutputWebhook.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookOauthParamsAttrTypes()})
 		}
+		if state.OutputWebhook.OauthParams.IsNull() || state.OutputWebhook.OauthParams.IsUnknown() {
+			state.OutputWebhook.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookOauthParamsAttrTypes()})
+		} else if len(state.OutputWebhook.OauthParams.Elements()) == 0 {
+			state.OutputWebhook.OauthParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookOauthParamsAttrTypes()}, nil)
+		}
 		if !api.OutputWebhook.OauthHeaders.IsNull() && !api.OutputWebhook.OauthHeaders.IsUnknown() {
 			state.OutputWebhook.OauthHeaders = api.OutputWebhook.OauthHeaders
 		} else if state.OutputWebhook.OauthHeaders.IsNull() || state.OutputWebhook.OauthHeaders.IsUnknown() {
 			state.OutputWebhook.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookOauthHeadersAttrTypes()})
+		}
+		if state.OutputWebhook.OauthHeaders.IsNull() || state.OutputWebhook.OauthHeaders.IsUnknown() {
+			state.OutputWebhook.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookOauthHeadersAttrTypes()})
+		} else if len(state.OutputWebhook.OauthHeaders.Elements()) == 0 {
+			state.OutputWebhook.OauthHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookOauthHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputWebhook.RefreshTokenField.IsNull() && !api.OutputWebhook.RefreshTokenField.IsUnknown() {
+			state.OutputWebhook.RefreshTokenField = api.OutputWebhook.RefreshTokenField
+		} else if state.OutputWebhook.RefreshTokenField.IsNull() || state.OutputWebhook.RefreshTokenField.IsUnknown() {
+			state.OutputWebhook.RefreshTokenField = types.StringNull()
+		}
+		if !api.OutputWebhook.RotateRefreshToken.IsNull() && !api.OutputWebhook.RotateRefreshToken.IsUnknown() {
+			state.OutputWebhook.RotateRefreshToken = api.OutputWebhook.RotateRefreshToken
+		} else if state.OutputWebhook.RotateRefreshToken.IsNull() || state.OutputWebhook.RotateRefreshToken.IsUnknown() {
+			state.OutputWebhook.RotateRefreshToken = types.BoolNull()
+		}
+		if !api.OutputWebhook.RefreshURL.IsNull() && !api.OutputWebhook.RefreshURL.IsUnknown() {
+			state.OutputWebhook.RefreshURL = api.OutputWebhook.RefreshURL
+		} else if state.OutputWebhook.RefreshURL.IsNull() || state.OutputWebhook.RefreshURL.IsUnknown() {
+			state.OutputWebhook.RefreshURL = types.StringNull()
+		}
+		if !api.OutputWebhook.RefreshRequestParams.IsNull() && !api.OutputWebhook.RefreshRequestParams.IsUnknown() {
+			state.OutputWebhook.RefreshRequestParams = api.OutputWebhook.RefreshRequestParams
+		} else if state.OutputWebhook.RefreshRequestParams.IsNull() || state.OutputWebhook.RefreshRequestParams.IsUnknown() {
+			state.OutputWebhook.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookRefreshRequestParamsAttrTypes()})
+		}
+		if state.OutputWebhook.RefreshRequestParams.IsNull() || state.OutputWebhook.RefreshRequestParams.IsUnknown() {
+			state.OutputWebhook.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookRefreshRequestParamsAttrTypes()})
+		} else if len(state.OutputWebhook.RefreshRequestParams.Elements()) == 0 {
+			state.OutputWebhook.RefreshRequestParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookRefreshRequestParamsAttrTypes()}, nil)
 		}
 		if !api.OutputWebhook.URL.IsNull() && !api.OutputWebhook.URL.IsUnknown() {
 			state.OutputWebhook.URL = api.OutputWebhook.URL
@@ -27616,6 +30290,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputWebhook.URLs = api.OutputWebhook.URLs
 		} else if state.OutputWebhook.URLs.IsNull() || state.OutputWebhook.URLs.IsUnknown() {
 			state.OutputWebhook.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookURLsAttrTypes()})
+		}
+		if state.OutputWebhook.URLs.IsNull() || state.OutputWebhook.URLs.IsUnknown() {
+			state.OutputWebhook.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputWebhookURLsAttrTypes()})
+		} else if len(state.OutputWebhook.URLs.Elements()) == 0 {
+			state.OutputWebhook.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputWebhookURLsAttrTypes()}, nil)
 		}
 		if !api.OutputWebhook.DnsResolvePeriodSec.IsNull() && !api.OutputWebhook.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputWebhook.DnsResolvePeriodSec = api.OutputWebhook.DnsResolvePeriodSec
@@ -27652,6 +30331,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinel.SystemFields.IsNull() || state.OutputSentinel.SystemFields.IsUnknown() {
 			state.OutputSentinel.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSentinel.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSentinel.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSentinel.Environment.IsNull() && !api.OutputSentinel.Environment.IsUnknown() {
 			state.OutputSentinel.Environment = api.OutputSentinel.Environment
 		} else if state.OutputSentinel.Environment.IsNull() || state.OutputSentinel.Environment.IsUnknown() {
@@ -27660,6 +30342,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSentinel.Streamtags.IsNull() && !api.OutputSentinel.Streamtags.IsUnknown() {
 			state.OutputSentinel.Streamtags = api.OutputSentinel.Streamtags
 		} else if state.OutputSentinel.Streamtags.IsNull() || state.OutputSentinel.Streamtags.IsUnknown() {
+			state.OutputSentinel.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSentinel.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSentinel.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSentinel.KeepAlive.IsNull() && !api.OutputSentinel.KeepAlive.IsUnknown() {
@@ -27707,6 +30392,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinel.ExtraHttpHeaders.IsNull() || state.OutputSentinel.ExtraHttpHeaders.IsUnknown() {
 			state.OutputSentinel.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputSentinel.ExtraHttpHeaders.IsNull() || state.OutputSentinel.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSentinel.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSentinel.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSentinel.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputSentinel.UseRoundRobinDns.IsNull() && !api.OutputSentinel.UseRoundRobinDns.IsUnknown() {
 			state.OutputSentinel.UseRoundRobinDns = api.OutputSentinel.UseRoundRobinDns
 		} else if state.OutputSentinel.UseRoundRobinDns.IsNull() || state.OutputSentinel.UseRoundRobinDns.IsUnknown() {
@@ -27722,14 +30412,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinel.SafeHeaders.IsNull() || state.OutputSentinel.SafeHeaders.IsUnknown() {
 			state.OutputSentinel.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSentinel.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputSentinel.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputSentinel.ResponseRetrySettings.IsNull() && !api.OutputSentinel.ResponseRetrySettings.IsUnknown() {
 			state.OutputSentinel.ResponseRetrySettings = api.OutputSentinel.ResponseRetrySettings
 		} else if state.OutputSentinel.ResponseRetrySettings.IsNull() || state.OutputSentinel.ResponseRetrySettings.IsUnknown() {
 			state.OutputSentinel.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputSentinel.ResponseRetrySettings.IsNull() || state.OutputSentinel.ResponseRetrySettings.IsUnknown() {
+			state.OutputSentinel.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSentinel.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSentinel.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputSentinel.TimeoutRetrySettings.IsNull() && !api.OutputSentinel.TimeoutRetrySettings.IsUnknown() {
 			state.OutputSentinel.TimeoutRetrySettings = api.OutputSentinel.TimeoutRetrySettings
 		} else if state.OutputSentinel.TimeoutRetrySettings.IsNull() || state.OutputSentinel.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSentinel.TimeoutRetrySettings = types.ObjectNull(OutputSentinelTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSentinel.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputSentinel.TimeoutRetrySettings = types.ObjectNull(OutputSentinelTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputSentinel.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSentinel.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -27756,6 +30457,31 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputSentinel.Secret = stringFromAPIOrPrior(api.OutputSentinel.Secret.ValueString(), state.OutputSentinel.Secret)
 		} else if state.OutputSentinel.Secret.IsNull() || state.OutputSentinel.Secret.IsUnknown() {
 			state.OutputSentinel.Secret = types.StringNull()
+		}
+		if !api.OutputSentinel.RefreshTokenField.IsNull() && !api.OutputSentinel.RefreshTokenField.IsUnknown() {
+			state.OutputSentinel.RefreshTokenField = api.OutputSentinel.RefreshTokenField
+		} else if state.OutputSentinel.RefreshTokenField.IsNull() || state.OutputSentinel.RefreshTokenField.IsUnknown() {
+			state.OutputSentinel.RefreshTokenField = types.StringNull()
+		}
+		if !api.OutputSentinel.RotateRefreshToken.IsNull() && !api.OutputSentinel.RotateRefreshToken.IsUnknown() {
+			state.OutputSentinel.RotateRefreshToken = api.OutputSentinel.RotateRefreshToken
+		} else if state.OutputSentinel.RotateRefreshToken.IsNull() || state.OutputSentinel.RotateRefreshToken.IsUnknown() {
+			state.OutputSentinel.RotateRefreshToken = types.BoolNull()
+		}
+		if !api.OutputSentinel.RefreshURL.IsNull() && !api.OutputSentinel.RefreshURL.IsUnknown() {
+			state.OutputSentinel.RefreshURL = api.OutputSentinel.RefreshURL
+		} else if state.OutputSentinel.RefreshURL.IsNull() || state.OutputSentinel.RefreshURL.IsUnknown() {
+			state.OutputSentinel.RefreshURL = types.StringNull()
+		}
+		if !api.OutputSentinel.RefreshRequestParams.IsNull() && !api.OutputSentinel.RefreshRequestParams.IsUnknown() {
+			state.OutputSentinel.RefreshRequestParams = api.OutputSentinel.RefreshRequestParams
+		} else if state.OutputSentinel.RefreshRequestParams.IsNull() || state.OutputSentinel.RefreshRequestParams.IsUnknown() {
+			state.OutputSentinel.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()})
+		}
+		if state.OutputSentinel.RefreshRequestParams.IsNull() || state.OutputSentinel.RefreshRequestParams.IsUnknown() {
+			state.OutputSentinel.RefreshRequestParams = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()})
+		} else if len(state.OutputSentinel.RefreshRequestParams.Elements()) == 0 {
+			state.OutputSentinel.RefreshRequestParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelRefreshRequestParamsAttrTypes()}, nil)
 		}
 		if !api.OutputSentinel.ClientID.IsNull() && !api.OutputSentinel.ClientID.IsUnknown() {
 			state.OutputSentinel.ClientID = api.OutputSentinel.ClientID
@@ -27932,6 +30658,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDevnull.SystemFields.IsNull() || state.OutputDevnull.SystemFields.IsUnknown() {
 			state.OutputDevnull.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDevnull.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDevnull.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDevnull.Environment.IsNull() && !api.OutputDevnull.Environment.IsUnknown() {
 			state.OutputDevnull.Environment = api.OutputDevnull.Environment
 		} else if state.OutputDevnull.Environment.IsNull() || state.OutputDevnull.Environment.IsUnknown() {
@@ -27940,6 +30669,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDevnull.Streamtags.IsNull() && !api.OutputDevnull.Streamtags.IsUnknown() {
 			state.OutputDevnull.Streamtags = api.OutputDevnull.Streamtags
 		} else if state.OutputDevnull.Streamtags.IsNull() || state.OutputDevnull.Streamtags.IsUnknown() {
+			state.OutputDevnull.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDevnull.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDevnull.Streamtags = types.ListNull(types.StringType)
 		}
 	}
@@ -27967,6 +30699,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSyslog.SystemFields.IsNull() || state.OutputSyslog.SystemFields.IsUnknown() {
 			state.OutputSyslog.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSyslog.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSyslog.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSyslog.Environment.IsNull() && !api.OutputSyslog.Environment.IsUnknown() {
 			state.OutputSyslog.Environment = api.OutputSyslog.Environment
 		} else if state.OutputSyslog.Environment.IsNull() || state.OutputSyslog.Environment.IsUnknown() {
@@ -27975,6 +30710,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSyslog.Streamtags.IsNull() && !api.OutputSyslog.Streamtags.IsUnknown() {
 			state.OutputSyslog.Streamtags = api.OutputSyslog.Streamtags
 		} else if state.OutputSyslog.Streamtags.IsNull() || state.OutputSyslog.Streamtags.IsUnknown() {
+			state.OutputSyslog.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSyslog.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSyslog.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSyslog.Protocol.IsNull() && !api.OutputSyslog.Protocol.IsUnknown() {
@@ -28052,6 +30790,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSyslog.Hosts.IsNull() || state.OutputSyslog.Hosts.IsUnknown() {
 			state.OutputSyslog.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSyslogHostsAttrTypes()})
 		}
+		if state.OutputSyslog.Hosts.IsNull() || state.OutputSyslog.Hosts.IsUnknown() {
+			state.OutputSyslog.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSyslogHostsAttrTypes()})
+		} else if len(state.OutputSyslog.Hosts.Elements()) == 0 {
+			state.OutputSyslog.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputSyslogHostsAttrTypes()}, nil)
+		}
 		if !api.OutputSyslog.DnsResolvePeriodSec.IsNull() && !api.OutputSyslog.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputSyslog.DnsResolvePeriodSec = api.OutputSyslog.DnsResolvePeriodSec
 		} else if state.OutputSyslog.DnsResolvePeriodSec.IsNull() || state.OutputSyslog.DnsResolvePeriodSec.IsUnknown() {
@@ -28080,6 +30823,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSyslog.TLS.IsNull() && !api.OutputSyslog.TLS.IsUnknown() {
 			state.OutputSyslog.TLS = api.OutputSyslog.TLS
 		} else if state.OutputSyslog.TLS.IsNull() || state.OutputSyslog.TLS.IsUnknown() {
+			state.OutputSyslog.TLS = types.ObjectNull(OutputSyslogTLSAttrTypes())
+		}
+		if len(state.OutputSyslog.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputSyslog.TLS = types.ObjectNull(OutputSyslogTLSAttrTypes())
 		}
 		if !api.OutputSyslog.OnBackpressure.IsNull() && !api.OutputSyslog.OnBackpressure.IsUnknown() {
@@ -28187,6 +30933,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunk.SystemFields.IsNull() || state.OutputSplunk.SystemFields.IsUnknown() {
 			state.OutputSplunk.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSplunk.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSplunk.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSplunk.Environment.IsNull() && !api.OutputSplunk.Environment.IsUnknown() {
 			state.OutputSplunk.Environment = api.OutputSplunk.Environment
 		} else if state.OutputSplunk.Environment.IsNull() || state.OutputSplunk.Environment.IsUnknown() {
@@ -28195,6 +30944,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSplunk.Streamtags.IsNull() && !api.OutputSplunk.Streamtags.IsUnknown() {
 			state.OutputSplunk.Streamtags = api.OutputSplunk.Streamtags
 		} else if state.OutputSplunk.Streamtags.IsNull() || state.OutputSplunk.Streamtags.IsUnknown() {
+			state.OutputSplunk.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSplunk.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSplunk.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSplunk.Host.IsNull() && !api.OutputSplunk.Host.IsUnknown() {
@@ -28230,6 +30982,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSplunk.TLS.IsNull() && !api.OutputSplunk.TLS.IsUnknown() {
 			state.OutputSplunk.TLS = api.OutputSplunk.TLS
 		} else if state.OutputSplunk.TLS.IsNull() || state.OutputSplunk.TLS.IsUnknown() {
+			state.OutputSplunk.TLS = types.ObjectNull(OutputSplunkTLSAttrTypes())
+		}
+		if len(state.OutputSplunk.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputSplunk.TLS = types.ObjectNull(OutputSplunkTLSAttrTypes())
 		}
 		if !api.OutputSplunk.EnableMultiMetrics.IsNull() && !api.OutputSplunk.EnableMultiMetrics.IsUnknown() {
@@ -28372,6 +31127,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkLb.SystemFields.IsNull() || state.OutputSplunkLb.SystemFields.IsUnknown() {
 			state.OutputSplunkLb.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSplunkLb.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSplunkLb.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSplunkLb.Environment.IsNull() && !api.OutputSplunkLb.Environment.IsUnknown() {
 			state.OutputSplunkLb.Environment = api.OutputSplunkLb.Environment
 		} else if state.OutputSplunkLb.Environment.IsNull() || state.OutputSplunkLb.Environment.IsUnknown() {
@@ -28380,6 +31138,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSplunkLb.Streamtags.IsNull() && !api.OutputSplunkLb.Streamtags.IsUnknown() {
 			state.OutputSplunkLb.Streamtags = api.OutputSplunkLb.Streamtags
 		} else if state.OutputSplunkLb.Streamtags.IsNull() || state.OutputSplunkLb.Streamtags.IsUnknown() {
+			state.OutputSplunkLb.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSplunkLb.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSplunkLb.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSplunkLb.DnsResolvePeriodSec.IsNull() && !api.OutputSplunkLb.DnsResolvePeriodSec.IsUnknown() {
@@ -28420,6 +31181,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSplunkLb.TLS.IsNull() && !api.OutputSplunkLb.TLS.IsUnknown() {
 			state.OutputSplunkLb.TLS = api.OutputSplunkLb.TLS
 		} else if state.OutputSplunkLb.TLS.IsNull() || state.OutputSplunkLb.TLS.IsUnknown() {
+			state.OutputSplunkLb.TLS = types.ObjectNull(OutputSplunkLbTLSAttrTypes())
+		}
+		if len(state.OutputSplunkLb.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputSplunkLb.TLS = types.ObjectNull(OutputSplunkLbTLSAttrTypes())
 		}
 		if !api.OutputSplunkLb.EnableMultiMetrics.IsNull() && !api.OutputSplunkLb.EnableMultiMetrics.IsUnknown() {
@@ -28482,6 +31246,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkLb.IndexerDiscoveryConfigs.IsNull() || state.OutputSplunkLb.IndexerDiscoveryConfigs.IsUnknown() {
 			state.OutputSplunkLb.IndexerDiscoveryConfigs = types.ObjectNull(OutputSplunkLbIndexerDiscoveryConfigsAttrTypes())
 		}
+		if len(state.OutputSplunkLb.IndexerDiscoveryConfigs.AttributeTypes(context.Background())) == 0 {
+			state.OutputSplunkLb.IndexerDiscoveryConfigs = types.ObjectNull(OutputSplunkLbIndexerDiscoveryConfigsAttrTypes())
+		}
 		if !api.OutputSplunkLb.ExcludeSelf.IsNull() && !api.OutputSplunkLb.ExcludeSelf.IsUnknown() {
 			state.OutputSplunkLb.ExcludeSelf = api.OutputSplunkLb.ExcludeSelf
 		} else if state.OutputSplunkLb.ExcludeSelf.IsNull() || state.OutputSplunkLb.ExcludeSelf.IsUnknown() {
@@ -28491,6 +31258,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputSplunkLb.Hosts = api.OutputSplunkLb.Hosts
 		} else if state.OutputSplunkLb.Hosts.IsNull() || state.OutputSplunkLb.Hosts.IsUnknown() {
 			state.OutputSplunkLb.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkLbHostsAttrTypes()})
+		}
+		if state.OutputSplunkLb.Hosts.IsNull() || state.OutputSplunkLb.Hosts.IsUnknown() {
+			state.OutputSplunkLb.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkLbHostsAttrTypes()})
+		} else if len(state.OutputSplunkLb.Hosts.Elements()) == 0 {
+			state.OutputSplunkLb.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputSplunkLbHostsAttrTypes()}, nil)
 		}
 		if !api.OutputSplunkLb.PqStrictOrdering.IsNull() && !api.OutputSplunkLb.PqStrictOrdering.IsUnknown() {
 			state.OutputSplunkLb.PqStrictOrdering = api.OutputSplunkLb.PqStrictOrdering
@@ -28587,6 +31359,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkHec.SystemFields.IsNull() || state.OutputSplunkHec.SystemFields.IsUnknown() {
 			state.OutputSplunkHec.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSplunkHec.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSplunkHec.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSplunkHec.Environment.IsNull() && !api.OutputSplunkHec.Environment.IsUnknown() {
 			state.OutputSplunkHec.Environment = api.OutputSplunkHec.Environment
 		} else if state.OutputSplunkHec.Environment.IsNull() || state.OutputSplunkHec.Environment.IsUnknown() {
@@ -28597,24 +31372,20 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkHec.Streamtags.IsNull() || state.OutputSplunkHec.Streamtags.IsUnknown() {
 			state.OutputSplunkHec.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSplunkHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputSplunkHec.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputSplunkHec.LoadBalanced.IsNull() && !api.OutputSplunkHec.LoadBalanced.IsUnknown() {
 			state.OutputSplunkHec.LoadBalanced = api.OutputSplunkHec.LoadBalanced
 		} else if state.OutputSplunkHec.LoadBalanced.IsNull() || state.OutputSplunkHec.LoadBalanced.IsUnknown() {
 			state.OutputSplunkHec.LoadBalanced = types.BoolNull()
 		}
-		if !api.OutputSplunkHec.NextQueue.IsNull() && !api.OutputSplunkHec.NextQueue.IsUnknown() {
-			state.OutputSplunkHec.NextQueue = api.OutputSplunkHec.NextQueue
-		} else if state.OutputSplunkHec.NextQueue.IsNull() || state.OutputSplunkHec.NextQueue.IsUnknown() {
-			state.OutputSplunkHec.NextQueue = types.StringNull()
-		}
-		if !api.OutputSplunkHec.TcpRouting.IsNull() && !api.OutputSplunkHec.TcpRouting.IsUnknown() {
-			state.OutputSplunkHec.TcpRouting = api.OutputSplunkHec.TcpRouting
-		} else if state.OutputSplunkHec.TcpRouting.IsNull() || state.OutputSplunkHec.TcpRouting.IsUnknown() {
-			state.OutputSplunkHec.TcpRouting = types.StringNull()
-		}
 		if !api.OutputSplunkHec.TLS.IsNull() && !api.OutputSplunkHec.TLS.IsUnknown() {
 			state.OutputSplunkHec.TLS = api.OutputSplunkHec.TLS
 		} else if state.OutputSplunkHec.TLS.IsNull() || state.OutputSplunkHec.TLS.IsUnknown() {
+			state.OutputSplunkHec.TLS = types.ObjectNull(OutputSplunkHecTLSAttrTypes())
+		}
+		if len(state.OutputSplunkHec.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputSplunkHec.TLS = types.ObjectNull(OutputSplunkHecTLSAttrTypes())
 		}
 		if !api.OutputSplunkHec.Concurrency.IsNull() && !api.OutputSplunkHec.Concurrency.IsUnknown() {
@@ -28657,6 +31428,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkHec.ExtraHttpHeaders.IsNull() || state.OutputSplunkHec.ExtraHttpHeaders.IsUnknown() {
 			state.OutputSplunkHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputSplunkHec.ExtraHttpHeaders.IsNull() || state.OutputSplunkHec.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSplunkHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSplunkHec.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSplunkHec.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSplunkHecExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputSplunkHec.FailedRequestLoggingMode.IsNull() && !api.OutputSplunkHec.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputSplunkHec.FailedRequestLoggingMode = api.OutputSplunkHec.FailedRequestLoggingMode
 		} else if state.OutputSplunkHec.FailedRequestLoggingMode.IsNull() || state.OutputSplunkHec.FailedRequestLoggingMode.IsUnknown() {
@@ -28665,6 +31441,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSplunkHec.SafeHeaders.IsNull() && !api.OutputSplunkHec.SafeHeaders.IsUnknown() {
 			state.OutputSplunkHec.SafeHeaders = api.OutputSplunkHec.SafeHeaders
 		} else if state.OutputSplunkHec.SafeHeaders.IsNull() || state.OutputSplunkHec.SafeHeaders.IsUnknown() {
+			state.OutputSplunkHec.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSplunkHec.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputSplunkHec.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputSplunkHec.EnableMultiMetrics.IsNull() && !api.OutputSplunkHec.EnableMultiMetrics.IsUnknown() {
@@ -28682,15 +31461,33 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSplunkHec.ResponseRetrySettings.IsNull() || state.OutputSplunkHec.ResponseRetrySettings.IsUnknown() {
 			state.OutputSplunkHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputSplunkHec.ResponseRetrySettings.IsNull() || state.OutputSplunkHec.ResponseRetrySettings.IsUnknown() {
+			state.OutputSplunkHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSplunkHec.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSplunkHec.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSplunkHecResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputSplunkHec.TimeoutRetrySettings.IsNull() && !api.OutputSplunkHec.TimeoutRetrySettings.IsUnknown() {
 			state.OutputSplunkHec.TimeoutRetrySettings = api.OutputSplunkHec.TimeoutRetrySettings
 		} else if state.OutputSplunkHec.TimeoutRetrySettings.IsNull() || state.OutputSplunkHec.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSplunkHec.TimeoutRetrySettings = types.ObjectNull(OutputSplunkHecTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSplunkHec.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputSplunkHec.TimeoutRetrySettings = types.ObjectNull(OutputSplunkHecTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSplunkHec.ResponseHonorRetryAfterHeader = api.OutputSplunkHec.ResponseHonorRetryAfterHeader
 		} else if state.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSplunkHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSplunkHec.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSplunkHec.NextQueue.IsNull() && !api.OutputSplunkHec.NextQueue.IsUnknown() {
+			state.OutputSplunkHec.NextQueue = api.OutputSplunkHec.NextQueue
+		} else if state.OutputSplunkHec.NextQueue.IsNull() || state.OutputSplunkHec.NextQueue.IsUnknown() {
+			state.OutputSplunkHec.NextQueue = types.StringNull()
+		}
+		if !api.OutputSplunkHec.TcpRouting.IsNull() && !api.OutputSplunkHec.TcpRouting.IsUnknown() {
+			state.OutputSplunkHec.TcpRouting = api.OutputSplunkHec.TcpRouting
+		} else if state.OutputSplunkHec.TcpRouting.IsNull() || state.OutputSplunkHec.TcpRouting.IsUnknown() {
+			state.OutputSplunkHec.TcpRouting = types.StringNull()
 		}
 		if !api.OutputSplunkHec.OnBackpressure.IsNull() && !api.OutputSplunkHec.OnBackpressure.IsUnknown() {
 			state.OutputSplunkHec.OnBackpressure = api.OutputSplunkHec.OnBackpressure
@@ -28721,6 +31518,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputSplunkHec.URLs = api.OutputSplunkHec.URLs
 		} else if state.OutputSplunkHec.URLs.IsNull() || state.OutputSplunkHec.URLs.IsUnknown() {
 			state.OutputSplunkHec.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecURLsAttrTypes()})
+		}
+		if state.OutputSplunkHec.URLs.IsNull() || state.OutputSplunkHec.URLs.IsUnknown() {
+			state.OutputSplunkHec.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputSplunkHecURLsAttrTypes()})
+		} else if len(state.OutputSplunkHec.URLs.Elements()) == 0 {
+			state.OutputSplunkHec.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputSplunkHecURLsAttrTypes()}, nil)
 		}
 		if !api.OutputSplunkHec.DnsResolvePeriodSec.IsNull() && !api.OutputSplunkHec.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputSplunkHec.DnsResolvePeriodSec = api.OutputSplunkHec.DnsResolvePeriodSec
@@ -28827,6 +31629,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.SystemFields.IsNull() || state.OutputWizHec.SystemFields.IsUnknown() {
 			state.OutputWizHec.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputWizHec.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputWizHec.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputWizHec.Environment.IsNull() && !api.OutputWizHec.Environment.IsUnknown() {
 			state.OutputWizHec.Environment = api.OutputWizHec.Environment
 		} else if state.OutputWizHec.Environment.IsNull() || state.OutputWizHec.Environment.IsUnknown() {
@@ -28837,19 +31642,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.Streamtags.IsNull() || state.OutputWizHec.Streamtags.IsUnknown() {
 			state.OutputWizHec.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputWizHec.NextQueue.IsNull() && !api.OutputWizHec.NextQueue.IsUnknown() {
-			state.OutputWizHec.NextQueue = api.OutputWizHec.NextQueue
-		} else if state.OutputWizHec.NextQueue.IsNull() || state.OutputWizHec.NextQueue.IsUnknown() {
-			state.OutputWizHec.NextQueue = types.StringNull()
-		}
-		if !api.OutputWizHec.TcpRouting.IsNull() && !api.OutputWizHec.TcpRouting.IsUnknown() {
-			state.OutputWizHec.TcpRouting = api.OutputWizHec.TcpRouting
-		} else if state.OutputWizHec.TcpRouting.IsNull() || state.OutputWizHec.TcpRouting.IsUnknown() {
-			state.OutputWizHec.TcpRouting = types.StringNull()
+		if elementType := state.OutputWizHec.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputWizHec.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputWizHec.TLS.IsNull() && !api.OutputWizHec.TLS.IsUnknown() {
 			state.OutputWizHec.TLS = api.OutputWizHec.TLS
 		} else if state.OutputWizHec.TLS.IsNull() || state.OutputWizHec.TLS.IsUnknown() {
+			state.OutputWizHec.TLS = types.ObjectNull(OutputWizHecTLSAttrTypes())
+		}
+		if len(state.OutputWizHec.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputWizHec.TLS = types.ObjectNull(OutputWizHecTLSAttrTypes())
 		}
 		if !api.OutputWizHec.Concurrency.IsNull() && !api.OutputWizHec.Concurrency.IsUnknown() {
@@ -28892,6 +31693,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.ExtraHttpHeaders.IsNull() || state.OutputWizHec.ExtraHttpHeaders.IsUnknown() {
 			state.OutputWizHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWizHecExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputWizHec.ExtraHttpHeaders.IsNull() || state.OutputWizHec.ExtraHttpHeaders.IsUnknown() {
+			state.OutputWizHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWizHecExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputWizHec.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputWizHec.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputWizHecExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputWizHec.FailedRequestLoggingMode.IsNull() && !api.OutputWizHec.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputWizHec.FailedRequestLoggingMode = api.OutputWizHec.FailedRequestLoggingMode
 		} else if state.OutputWizHec.FailedRequestLoggingMode.IsNull() || state.OutputWizHec.FailedRequestLoggingMode.IsUnknown() {
@@ -28900,6 +31706,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputWizHec.SafeHeaders.IsNull() && !api.OutputWizHec.SafeHeaders.IsUnknown() {
 			state.OutputWizHec.SafeHeaders = api.OutputWizHec.SafeHeaders
 		} else if state.OutputWizHec.SafeHeaders.IsNull() || state.OutputWizHec.SafeHeaders.IsUnknown() {
+			state.OutputWizHec.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputWizHec.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputWizHec.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputWizHec.AuthType.IsNull() && !api.OutputWizHec.AuthType.IsUnknown() {
@@ -28912,20 +31721,23 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.ResponseRetrySettings.IsNull() || state.OutputWizHec.ResponseRetrySettings.IsUnknown() {
 			state.OutputWizHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWizHecResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputWizHec.ResponseRetrySettings.IsNull() || state.OutputWizHec.ResponseRetrySettings.IsUnknown() {
+			state.OutputWizHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWizHecResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputWizHec.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputWizHec.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputWizHecResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputWizHec.TimeoutRetrySettings.IsNull() && !api.OutputWizHec.TimeoutRetrySettings.IsUnknown() {
 			state.OutputWizHec.TimeoutRetrySettings = api.OutputWizHec.TimeoutRetrySettings
 		} else if state.OutputWizHec.TimeoutRetrySettings.IsNull() || state.OutputWizHec.TimeoutRetrySettings.IsUnknown() {
+			state.OutputWizHec.TimeoutRetrySettings = types.ObjectNull(OutputWizHecTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputWizHec.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputWizHec.TimeoutRetrySettings = types.ObjectNull(OutputWizHecTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputWizHec.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputWizHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputWizHec.ResponseHonorRetryAfterHeader = api.OutputWizHec.ResponseHonorRetryAfterHeader
 		} else if state.OutputWizHec.ResponseHonorRetryAfterHeader.IsNull() || state.OutputWizHec.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputWizHec.ResponseHonorRetryAfterHeader = types.BoolNull()
-		}
-		if !api.OutputWizHec.OnBackpressure.IsNull() && !api.OutputWizHec.OnBackpressure.IsUnknown() {
-			state.OutputWizHec.OnBackpressure = api.OutputWizHec.OnBackpressure
-		} else if state.OutputWizHec.OnBackpressure.IsNull() || state.OutputWizHec.OnBackpressure.IsUnknown() {
-			state.OutputWizHec.OnBackpressure = types.StringNull()
 		}
 		if !api.OutputWizHec.WizConnectorID.IsNull() && !api.OutputWizHec.WizConnectorID.IsUnknown() {
 			state.OutputWizHec.WizConnectorID = api.OutputWizHec.WizConnectorID
@@ -28947,10 +31759,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.WizSourcetype.IsNull() || state.OutputWizHec.WizSourcetype.IsUnknown() {
 			state.OutputWizHec.WizSourcetype = types.StringNull()
 		}
+		if !api.OutputWizHec.OnBackpressure.IsNull() && !api.OutputWizHec.OnBackpressure.IsUnknown() {
+			state.OutputWizHec.OnBackpressure = api.OutputWizHec.OnBackpressure
+		} else if state.OutputWizHec.OnBackpressure.IsNull() || state.OutputWizHec.OnBackpressure.IsUnknown() {
+			state.OutputWizHec.OnBackpressure = types.StringNull()
+		}
 		if !api.OutputWizHec.Description.IsNull() && !api.OutputWizHec.Description.IsUnknown() {
 			state.OutputWizHec.Description = api.OutputWizHec.Description
 		} else if state.OutputWizHec.Description.IsNull() || state.OutputWizHec.Description.IsUnknown() {
 			state.OutputWizHec.Description = types.StringNull()
+		}
+		if !api.OutputWizHec.Token.IsNull() && !api.OutputWizHec.Token.IsUnknown() {
+			state.OutputWizHec.Token = stringFromAPIOrPrior(api.OutputWizHec.Token.ValueString(), state.OutputWizHec.Token)
+		} else if state.OutputWizHec.Token.IsNull() || state.OutputWizHec.Token.IsUnknown() {
+			state.OutputWizHec.Token = types.StringNull()
+		}
+		if !api.OutputWizHec.TextSecret.IsNull() && !api.OutputWizHec.TextSecret.IsUnknown() {
+			state.OutputWizHec.TextSecret = api.OutputWizHec.TextSecret
+		} else if state.OutputWizHec.TextSecret.IsNull() || state.OutputWizHec.TextSecret.IsUnknown() {
+			state.OutputWizHec.TextSecret = types.StringNull()
 		}
 		if !api.OutputWizHec.PqStrictOrdering.IsNull() && !api.OutputWizHec.PqStrictOrdering.IsUnknown() {
 			state.OutputWizHec.PqStrictOrdering = api.OutputWizHec.PqStrictOrdering
@@ -29012,16 +31839,6 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWizHec.PqControls.IsNull() || state.OutputWizHec.PqControls.IsUnknown() {
 			state.OutputWizHec.PqControls = types.MapNull(types.StringType)
 		}
-		if !api.OutputWizHec.Token.IsNull() && !api.OutputWizHec.Token.IsUnknown() {
-			state.OutputWizHec.Token = stringFromAPIOrPrior(api.OutputWizHec.Token.ValueString(), state.OutputWizHec.Token)
-		} else if state.OutputWizHec.Token.IsNull() || state.OutputWizHec.Token.IsUnknown() {
-			state.OutputWizHec.Token = types.StringNull()
-		}
-		if !api.OutputWizHec.TextSecret.IsNull() && !api.OutputWizHec.TextSecret.IsUnknown() {
-			state.OutputWizHec.TextSecret = api.OutputWizHec.TextSecret
-		} else if state.OutputWizHec.TextSecret.IsNull() || state.OutputWizHec.TextSecret.IsUnknown() {
-			state.OutputWizHec.TextSecret = types.StringNull()
-		}
 	}
 	if api.OutputTcpjson != nil {
 		if state.OutputTcpjson == nil {
@@ -29047,6 +31864,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputTcpjson.SystemFields.IsNull() || state.OutputTcpjson.SystemFields.IsUnknown() {
 			state.OutputTcpjson.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputTcpjson.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputTcpjson.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputTcpjson.Environment.IsNull() && !api.OutputTcpjson.Environment.IsUnknown() {
 			state.OutputTcpjson.Environment = api.OutputTcpjson.Environment
 		} else if state.OutputTcpjson.Environment.IsNull() || state.OutputTcpjson.Environment.IsUnknown() {
@@ -29055,6 +31875,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputTcpjson.Streamtags.IsNull() && !api.OutputTcpjson.Streamtags.IsUnknown() {
 			state.OutputTcpjson.Streamtags = api.OutputTcpjson.Streamtags
 		} else if state.OutputTcpjson.Streamtags.IsNull() || state.OutputTcpjson.Streamtags.IsUnknown() {
+			state.OutputTcpjson.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputTcpjson.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputTcpjson.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputTcpjson.LoadBalanced.IsNull() && !api.OutputTcpjson.LoadBalanced.IsUnknown() {
@@ -29080,6 +31903,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputTcpjson.TLS.IsNull() && !api.OutputTcpjson.TLS.IsUnknown() {
 			state.OutputTcpjson.TLS = api.OutputTcpjson.TLS
 		} else if state.OutputTcpjson.TLS.IsNull() || state.OutputTcpjson.TLS.IsUnknown() {
+			state.OutputTcpjson.TLS = types.ObjectNull(OutputTcpjsonTLSAttrTypes())
+		}
+		if len(state.OutputTcpjson.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputTcpjson.TLS = types.ObjectNull(OutputTcpjsonTLSAttrTypes())
 		}
 		if !api.OutputTcpjson.ConnectionTimeout.IsNull() && !api.OutputTcpjson.ConnectionTimeout.IsUnknown() {
@@ -29136,6 +31962,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputTcpjson.Hosts = api.OutputTcpjson.Hosts
 		} else if state.OutputTcpjson.Hosts.IsNull() || state.OutputTcpjson.Hosts.IsUnknown() {
 			state.OutputTcpjson.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputTcpjsonHostsAttrTypes()})
+		}
+		if state.OutputTcpjson.Hosts.IsNull() || state.OutputTcpjson.Hosts.IsUnknown() {
+			state.OutputTcpjson.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputTcpjsonHostsAttrTypes()})
+		} else if len(state.OutputTcpjson.Hosts.Elements()) == 0 {
+			state.OutputTcpjson.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputTcpjsonHostsAttrTypes()}, nil)
 		}
 		if !api.OutputTcpjson.DnsResolvePeriodSec.IsNull() && !api.OutputTcpjson.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputTcpjson.DnsResolvePeriodSec = api.OutputTcpjson.DnsResolvePeriodSec
@@ -29247,6 +32078,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWavefront.SystemFields.IsNull() || state.OutputWavefront.SystemFields.IsUnknown() {
 			state.OutputWavefront.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputWavefront.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputWavefront.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputWavefront.Environment.IsNull() && !api.OutputWavefront.Environment.IsUnknown() {
 			state.OutputWavefront.Environment = api.OutputWavefront.Environment
 		} else if state.OutputWavefront.Environment.IsNull() || state.OutputWavefront.Environment.IsUnknown() {
@@ -29255,6 +32089,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputWavefront.Streamtags.IsNull() && !api.OutputWavefront.Streamtags.IsUnknown() {
 			state.OutputWavefront.Streamtags = api.OutputWavefront.Streamtags
 		} else if state.OutputWavefront.Streamtags.IsNull() || state.OutputWavefront.Streamtags.IsUnknown() {
+			state.OutputWavefront.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputWavefront.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputWavefront.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputWavefront.AuthType.IsNull() && !api.OutputWavefront.AuthType.IsUnknown() {
@@ -29307,6 +32144,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWavefront.ExtraHttpHeaders.IsNull() || state.OutputWavefront.ExtraHttpHeaders.IsUnknown() {
 			state.OutputWavefront.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWavefrontExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputWavefront.ExtraHttpHeaders.IsNull() || state.OutputWavefront.ExtraHttpHeaders.IsUnknown() {
+			state.OutputWavefront.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputWavefrontExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputWavefront.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputWavefront.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputWavefrontExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputWavefront.UseRoundRobinDns.IsNull() && !api.OutputWavefront.UseRoundRobinDns.IsUnknown() {
 			state.OutputWavefront.UseRoundRobinDns = api.OutputWavefront.UseRoundRobinDns
 		} else if state.OutputWavefront.UseRoundRobinDns.IsNull() || state.OutputWavefront.UseRoundRobinDns.IsUnknown() {
@@ -29322,14 +32164,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputWavefront.SafeHeaders.IsNull() || state.OutputWavefront.SafeHeaders.IsUnknown() {
 			state.OutputWavefront.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputWavefront.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputWavefront.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputWavefront.ResponseRetrySettings.IsNull() && !api.OutputWavefront.ResponseRetrySettings.IsUnknown() {
 			state.OutputWavefront.ResponseRetrySettings = api.OutputWavefront.ResponseRetrySettings
 		} else if state.OutputWavefront.ResponseRetrySettings.IsNull() || state.OutputWavefront.ResponseRetrySettings.IsUnknown() {
 			state.OutputWavefront.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWavefrontResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputWavefront.ResponseRetrySettings.IsNull() || state.OutputWavefront.ResponseRetrySettings.IsUnknown() {
+			state.OutputWavefront.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputWavefrontResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputWavefront.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputWavefront.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputWavefrontResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputWavefront.TimeoutRetrySettings.IsNull() && !api.OutputWavefront.TimeoutRetrySettings.IsUnknown() {
 			state.OutputWavefront.TimeoutRetrySettings = api.OutputWavefront.TimeoutRetrySettings
 		} else if state.OutputWavefront.TimeoutRetrySettings.IsNull() || state.OutputWavefront.TimeoutRetrySettings.IsUnknown() {
+			state.OutputWavefront.TimeoutRetrySettings = types.ObjectNull(OutputWavefrontTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputWavefront.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputWavefront.TimeoutRetrySettings = types.ObjectNull(OutputWavefrontTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputWavefront.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputWavefront.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -29442,6 +32295,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSignalfx.SystemFields.IsNull() || state.OutputSignalfx.SystemFields.IsUnknown() {
 			state.OutputSignalfx.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSignalfx.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSignalfx.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSignalfx.Environment.IsNull() && !api.OutputSignalfx.Environment.IsUnknown() {
 			state.OutputSignalfx.Environment = api.OutputSignalfx.Environment
 		} else if state.OutputSignalfx.Environment.IsNull() || state.OutputSignalfx.Environment.IsUnknown() {
@@ -29450,6 +32306,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSignalfx.Streamtags.IsNull() && !api.OutputSignalfx.Streamtags.IsUnknown() {
 			state.OutputSignalfx.Streamtags = api.OutputSignalfx.Streamtags
 		} else if state.OutputSignalfx.Streamtags.IsNull() || state.OutputSignalfx.Streamtags.IsUnknown() {
+			state.OutputSignalfx.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSignalfx.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSignalfx.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSignalfx.AuthType.IsNull() && !api.OutputSignalfx.AuthType.IsUnknown() {
@@ -29502,6 +32361,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSignalfx.ExtraHttpHeaders.IsNull() || state.OutputSignalfx.ExtraHttpHeaders.IsUnknown() {
 			state.OutputSignalfx.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSignalfxExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputSignalfx.ExtraHttpHeaders.IsNull() || state.OutputSignalfx.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSignalfx.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSignalfxExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSignalfx.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSignalfx.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSignalfxExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputSignalfx.UseRoundRobinDns.IsNull() && !api.OutputSignalfx.UseRoundRobinDns.IsUnknown() {
 			state.OutputSignalfx.UseRoundRobinDns = api.OutputSignalfx.UseRoundRobinDns
 		} else if state.OutputSignalfx.UseRoundRobinDns.IsNull() || state.OutputSignalfx.UseRoundRobinDns.IsUnknown() {
@@ -29517,14 +32381,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSignalfx.SafeHeaders.IsNull() || state.OutputSignalfx.SafeHeaders.IsUnknown() {
 			state.OutputSignalfx.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSignalfx.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputSignalfx.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputSignalfx.ResponseRetrySettings.IsNull() && !api.OutputSignalfx.ResponseRetrySettings.IsUnknown() {
 			state.OutputSignalfx.ResponseRetrySettings = api.OutputSignalfx.ResponseRetrySettings
 		} else if state.OutputSignalfx.ResponseRetrySettings.IsNull() || state.OutputSignalfx.ResponseRetrySettings.IsUnknown() {
 			state.OutputSignalfx.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSignalfxResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputSignalfx.ResponseRetrySettings.IsNull() || state.OutputSignalfx.ResponseRetrySettings.IsUnknown() {
+			state.OutputSignalfx.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSignalfxResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSignalfx.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSignalfx.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSignalfxResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputSignalfx.TimeoutRetrySettings.IsNull() && !api.OutputSignalfx.TimeoutRetrySettings.IsUnknown() {
 			state.OutputSignalfx.TimeoutRetrySettings = api.OutputSignalfx.TimeoutRetrySettings
 		} else if state.OutputSignalfx.TimeoutRetrySettings.IsNull() || state.OutputSignalfx.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSignalfx.TimeoutRetrySettings = types.ObjectNull(OutputSignalfxTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSignalfx.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputSignalfx.TimeoutRetrySettings = types.ObjectNull(OutputSignalfxTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputSignalfx.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSignalfx.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -29637,6 +32512,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputFilesystem.SystemFields.IsNull() || state.OutputFilesystem.SystemFields.IsUnknown() {
 			state.OutputFilesystem.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputFilesystem.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputFilesystem.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputFilesystem.Environment.IsNull() && !api.OutputFilesystem.Environment.IsUnknown() {
 			state.OutputFilesystem.Environment = api.OutputFilesystem.Environment
 		} else if state.OutputFilesystem.Environment.IsNull() || state.OutputFilesystem.Environment.IsUnknown() {
@@ -29645,6 +32523,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputFilesystem.Streamtags.IsNull() && !api.OutputFilesystem.Streamtags.IsUnknown() {
 			state.OutputFilesystem.Streamtags = api.OutputFilesystem.Streamtags
 		} else if state.OutputFilesystem.Streamtags.IsNull() || state.OutputFilesystem.Streamtags.IsUnknown() {
+			state.OutputFilesystem.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputFilesystem.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputFilesystem.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputFilesystem.DestPath.IsNull() && !api.OutputFilesystem.DestPath.IsUnknown() {
@@ -29742,9 +32623,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputFilesystem.RetrySettings.IsNull() || state.OutputFilesystem.RetrySettings.IsUnknown() {
 			state.OutputFilesystem.RetrySettings = types.ObjectNull(OutputFilesystemRetrySettingsAttrTypes())
 		}
+		if len(state.OutputFilesystem.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputFilesystem.RetrySettings = types.ObjectNull(OutputFilesystemRetrySettingsAttrTypes())
+		}
 		if !api.OutputFilesystem.Orphans.IsNull() && !api.OutputFilesystem.Orphans.IsUnknown() {
 			state.OutputFilesystem.Orphans = api.OutputFilesystem.Orphans
 		} else if state.OutputFilesystem.Orphans.IsNull() || state.OutputFilesystem.Orphans.IsUnknown() {
+			state.OutputFilesystem.Orphans = types.ObjectNull(OutputFilesystemOrphansAttrTypes())
+		}
+		if len(state.OutputFilesystem.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputFilesystem.Orphans = types.ObjectNull(OutputFilesystemOrphansAttrTypes())
 		}
 		if !api.OutputFilesystem.Description.IsNull() && !api.OutputFilesystem.Description.IsUnknown() {
@@ -29801,6 +32688,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputFilesystem.KeyValueMetadata = api.OutputFilesystem.KeyValueMetadata
 		} else if state.OutputFilesystem.KeyValueMetadata.IsNull() || state.OutputFilesystem.KeyValueMetadata.IsUnknown() {
 			state.OutputFilesystem.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputFilesystemKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputFilesystem.KeyValueMetadata.IsNull() || state.OutputFilesystem.KeyValueMetadata.IsUnknown() {
+			state.OutputFilesystem.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputFilesystemKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputFilesystem.KeyValueMetadata.Elements()) == 0 {
+			state.OutputFilesystem.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputFilesystemKeyValueMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputFilesystem.EnableStatistics.IsNull() && !api.OutputFilesystem.EnableStatistics.IsUnknown() {
 			state.OutputFilesystem.EnableStatistics = api.OutputFilesystem.EnableStatistics
@@ -29862,6 +32754,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputS3.SystemFields.IsNull() || state.OutputS3.SystemFields.IsUnknown() {
 			state.OutputS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputS3.Environment.IsNull() && !api.OutputS3.Environment.IsUnknown() {
 			state.OutputS3.Environment = api.OutputS3.Environment
 		} else if state.OutputS3.Environment.IsNull() || state.OutputS3.Environment.IsUnknown() {
@@ -29870,6 +32765,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputS3.Streamtags.IsNull() && !api.OutputS3.Streamtags.IsUnknown() {
 			state.OutputS3.Streamtags = api.OutputS3.Streamtags
 		} else if state.OutputS3.Streamtags.IsNull() || state.OutputS3.Streamtags.IsUnknown() {
+			state.OutputS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputS3.Endpoint.IsNull() && !api.OutputS3.Endpoint.IsUnknown() {
@@ -30032,9 +32930,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputS3.RetrySettings.IsNull() || state.OutputS3.RetrySettings.IsUnknown() {
 			state.OutputS3.RetrySettings = types.ObjectNull(OutputS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputS3.RetrySettings = types.ObjectNull(OutputS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputS3.Orphans.IsNull() && !api.OutputS3.Orphans.IsUnknown() {
 			state.OutputS3.Orphans = api.OutputS3.Orphans
 		} else if state.OutputS3.Orphans.IsNull() || state.OutputS3.Orphans.IsUnknown() {
+			state.OutputS3.Orphans = types.ObjectNull(OutputS3OrphansAttrTypes())
+		}
+		if len(state.OutputS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputS3.Orphans = types.ObjectNull(OutputS3OrphansAttrTypes())
 		}
 		if !api.OutputS3.AwsSecretKey.IsNull() && !api.OutputS3.AwsSecretKey.IsUnknown() {
@@ -30127,6 +33031,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputS3.KeyValueMetadata.IsNull() || state.OutputS3.KeyValueMetadata.IsUnknown() {
 			state.OutputS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputS3.KeyValueMetadata.IsNull() || state.OutputS3.KeyValueMetadata.IsUnknown() {
+			state.OutputS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputS3.EnableStatistics.IsNull() && !api.OutputS3.EnableStatistics.IsUnknown() {
 			state.OutputS3.EnableStatistics = api.OutputS3.EnableStatistics
 		} else if state.OutputS3.EnableStatistics.IsNull() || state.OutputS3.EnableStatistics.IsUnknown() {
@@ -30187,6 +33096,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureBlob.SystemFields.IsNull() || state.OutputAzureBlob.SystemFields.IsUnknown() {
 			state.OutputAzureBlob.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureBlob.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureBlob.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureBlob.Environment.IsNull() && !api.OutputAzureBlob.Environment.IsUnknown() {
 			state.OutputAzureBlob.Environment = api.OutputAzureBlob.Environment
 		} else if state.OutputAzureBlob.Environment.IsNull() || state.OutputAzureBlob.Environment.IsUnknown() {
@@ -30195,6 +33107,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputAzureBlob.Streamtags.IsNull() && !api.OutputAzureBlob.Streamtags.IsUnknown() {
 			state.OutputAzureBlob.Streamtags = api.OutputAzureBlob.Streamtags
 		} else if state.OutputAzureBlob.Streamtags.IsNull() || state.OutputAzureBlob.Streamtags.IsUnknown() {
+			state.OutputAzureBlob.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAzureBlob.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputAzureBlob.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputAzureBlob.ContainerName.IsNull() && !api.OutputAzureBlob.ContainerName.IsUnknown() {
@@ -30307,9 +33222,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureBlob.RetrySettings.IsNull() || state.OutputAzureBlob.RetrySettings.IsUnknown() {
 			state.OutputAzureBlob.RetrySettings = types.ObjectNull(OutputAzureBlobRetrySettingsAttrTypes())
 		}
+		if len(state.OutputAzureBlob.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputAzureBlob.RetrySettings = types.ObjectNull(OutputAzureBlobRetrySettingsAttrTypes())
+		}
 		if !api.OutputAzureBlob.Orphans.IsNull() && !api.OutputAzureBlob.Orphans.IsUnknown() {
 			state.OutputAzureBlob.Orphans = api.OutputAzureBlob.Orphans
 		} else if state.OutputAzureBlob.Orphans.IsNull() || state.OutputAzureBlob.Orphans.IsUnknown() {
+			state.OutputAzureBlob.Orphans = types.ObjectNull(OutputAzureBlobOrphansAttrTypes())
+		}
+		if len(state.OutputAzureBlob.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputAzureBlob.Orphans = types.ObjectNull(OutputAzureBlobOrphansAttrTypes())
 		}
 		if !api.OutputAzureBlob.AuthType.IsNull() && !api.OutputAzureBlob.AuthType.IsUnknown() {
@@ -30376,6 +33297,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputAzureBlob.KeyValueMetadata = api.OutputAzureBlob.KeyValueMetadata
 		} else if state.OutputAzureBlob.KeyValueMetadata.IsNull() || state.OutputAzureBlob.KeyValueMetadata.IsUnknown() {
 			state.OutputAzureBlob.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAzureBlobKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputAzureBlob.KeyValueMetadata.IsNull() || state.OutputAzureBlob.KeyValueMetadata.IsUnknown() {
+			state.OutputAzureBlob.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAzureBlobKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputAzureBlob.KeyValueMetadata.Elements()) == 0 {
+			state.OutputAzureBlob.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureBlobKeyValueMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputAzureBlob.EnableStatistics.IsNull() && !api.OutputAzureBlob.EnableStatistics.IsUnknown() {
 			state.OutputAzureBlob.EnableStatistics = api.OutputAzureBlob.EnableStatistics
@@ -30457,6 +33383,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureBlob.Certificate.IsNull() || state.OutputAzureBlob.Certificate.IsUnknown() {
 			state.OutputAzureBlob.Certificate = types.ObjectNull(OutputAzureBlobCertificateAttrTypes())
 		}
+		if len(state.OutputAzureBlob.Certificate.AttributeTypes(context.Background())) == 0 {
+			state.OutputAzureBlob.Certificate = types.ObjectNull(OutputAzureBlobCertificateAttrTypes())
+		}
 	}
 	if api.OutputAzureDataExplorer != nil {
 		if state.OutputAzureDataExplorer == nil {
@@ -30482,6 +33411,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureDataExplorer.SystemFields.IsNull() || state.OutputAzureDataExplorer.SystemFields.IsUnknown() {
 			state.OutputAzureDataExplorer.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureDataExplorer.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureDataExplorer.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureDataExplorer.Environment.IsNull() && !api.OutputAzureDataExplorer.Environment.IsUnknown() {
 			state.OutputAzureDataExplorer.Environment = api.OutputAzureDataExplorer.Environment
 		} else if state.OutputAzureDataExplorer.Environment.IsNull() || state.OutputAzureDataExplorer.Environment.IsUnknown() {
@@ -30490,6 +33422,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputAzureDataExplorer.Streamtags.IsNull() && !api.OutputAzureDataExplorer.Streamtags.IsUnknown() {
 			state.OutputAzureDataExplorer.Streamtags = api.OutputAzureDataExplorer.Streamtags
 		} else if state.OutputAzureDataExplorer.Streamtags.IsNull() || state.OutputAzureDataExplorer.Streamtags.IsUnknown() {
+			state.OutputAzureDataExplorer.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAzureDataExplorer.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputAzureDataExplorer.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputAzureDataExplorer.ClusterURL.IsNull() && !api.OutputAzureDataExplorer.ClusterURL.IsUnknown() {
@@ -30562,6 +33497,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureDataExplorer.Certificate.IsNull() || state.OutputAzureDataExplorer.Certificate.IsUnknown() {
 			state.OutputAzureDataExplorer.Certificate = types.ObjectNull(OutputAzureDataExplorerCertificateAttrTypes())
 		}
+		if len(state.OutputAzureDataExplorer.Certificate.AttributeTypes(context.Background())) == 0 {
+			state.OutputAzureDataExplorer.Certificate = types.ObjectNull(OutputAzureDataExplorerCertificateAttrTypes())
+		}
 		if !api.OutputAzureDataExplorer.Format.IsNull() && !api.OutputAzureDataExplorer.Format.IsUnknown() {
 			state.OutputAzureDataExplorer.Format = api.OutputAzureDataExplorer.Format
 		} else if state.OutputAzureDataExplorer.Format.IsNull() || state.OutputAzureDataExplorer.Format.IsUnknown() {
@@ -30616,6 +33554,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputAzureDataExplorer.KeyValueMetadata = api.OutputAzureDataExplorer.KeyValueMetadata
 		} else if state.OutputAzureDataExplorer.KeyValueMetadata.IsNull() || state.OutputAzureDataExplorer.KeyValueMetadata.IsUnknown() {
 			state.OutputAzureDataExplorer.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputAzureDataExplorer.KeyValueMetadata.IsNull() || state.OutputAzureDataExplorer.KeyValueMetadata.IsUnknown() {
+			state.OutputAzureDataExplorer.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputAzureDataExplorer.KeyValueMetadata.Elements()) == 0 {
+			state.OutputAzureDataExplorer.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureDataExplorerKeyValueMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputAzureDataExplorer.EnableStatistics.IsNull() && !api.OutputAzureDataExplorer.EnableStatistics.IsUnknown() {
 			state.OutputAzureDataExplorer.EnableStatistics = api.OutputAzureDataExplorer.EnableStatistics
@@ -30737,9 +33680,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureDataExplorer.RetrySettings.IsNull() || state.OutputAzureDataExplorer.RetrySettings.IsUnknown() {
 			state.OutputAzureDataExplorer.RetrySettings = types.ObjectNull(OutputAzureDataExplorerRetrySettingsAttrTypes())
 		}
+		if len(state.OutputAzureDataExplorer.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputAzureDataExplorer.RetrySettings = types.ObjectNull(OutputAzureDataExplorerRetrySettingsAttrTypes())
+		}
 		if !api.OutputAzureDataExplorer.Orphans.IsNull() && !api.OutputAzureDataExplorer.Orphans.IsUnknown() {
 			state.OutputAzureDataExplorer.Orphans = api.OutputAzureDataExplorer.Orphans
 		} else if state.OutputAzureDataExplorer.Orphans.IsNull() || state.OutputAzureDataExplorer.Orphans.IsUnknown() {
+			state.OutputAzureDataExplorer.Orphans = types.ObjectNull(OutputAzureDataExplorerOrphansAttrTypes())
+		}
+		if len(state.OutputAzureDataExplorer.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputAzureDataExplorer.Orphans = types.ObjectNull(OutputAzureDataExplorerOrphansAttrTypes())
 		}
 		if !api.OutputAzureDataExplorer.TimeoutSec.IsNull() && !api.OutputAzureDataExplorer.TimeoutSec.IsUnknown() {
@@ -30762,10 +33711,20 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureDataExplorer.ExtentTags.IsNull() || state.OutputAzureDataExplorer.ExtentTags.IsUnknown() {
 			state.OutputAzureDataExplorer.ExtentTags = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerExtentTagsAttrTypes()})
 		}
+		if state.OutputAzureDataExplorer.ExtentTags.IsNull() || state.OutputAzureDataExplorer.ExtentTags.IsUnknown() {
+			state.OutputAzureDataExplorer.ExtentTags = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerExtentTagsAttrTypes()})
+		} else if len(state.OutputAzureDataExplorer.ExtentTags.Elements()) == 0 {
+			state.OutputAzureDataExplorer.ExtentTags = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureDataExplorerExtentTagsAttrTypes()}, nil)
+		}
 		if !api.OutputAzureDataExplorer.IngestIfNotExists.IsNull() && !api.OutputAzureDataExplorer.IngestIfNotExists.IsUnknown() {
 			state.OutputAzureDataExplorer.IngestIfNotExists = api.OutputAzureDataExplorer.IngestIfNotExists
 		} else if state.OutputAzureDataExplorer.IngestIfNotExists.IsNull() || state.OutputAzureDataExplorer.IngestIfNotExists.IsUnknown() {
 			state.OutputAzureDataExplorer.IngestIfNotExists = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerIngestIfNotExistsAttrTypes()})
+		}
+		if state.OutputAzureDataExplorer.IngestIfNotExists.IsNull() || state.OutputAzureDataExplorer.IngestIfNotExists.IsUnknown() {
+			state.OutputAzureDataExplorer.IngestIfNotExists = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerIngestIfNotExistsAttrTypes()})
+		} else if len(state.OutputAzureDataExplorer.IngestIfNotExists.Elements()) == 0 {
+			state.OutputAzureDataExplorer.IngestIfNotExists = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureDataExplorerIngestIfNotExistsAttrTypes()}, nil)
 		}
 		if !api.OutputAzureDataExplorer.ReportLevel.IsNull() && !api.OutputAzureDataExplorer.ReportLevel.IsUnknown() {
 			state.OutputAzureDataExplorer.ReportLevel = api.OutputAzureDataExplorer.ReportLevel
@@ -30782,14 +33741,27 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureDataExplorer.AdditionalProperties.IsNull() || state.OutputAzureDataExplorer.AdditionalProperties.IsUnknown() {
 			state.OutputAzureDataExplorer.AdditionalProperties = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerAdditionalPropertiesAttrTypes()})
 		}
+		if state.OutputAzureDataExplorer.AdditionalProperties.IsNull() || state.OutputAzureDataExplorer.AdditionalProperties.IsUnknown() {
+			state.OutputAzureDataExplorer.AdditionalProperties = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerAdditionalPropertiesAttrTypes()})
+		} else if len(state.OutputAzureDataExplorer.AdditionalProperties.Elements()) == 0 {
+			state.OutputAzureDataExplorer.AdditionalProperties = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureDataExplorerAdditionalPropertiesAttrTypes()}, nil)
+		}
 		if !api.OutputAzureDataExplorer.ResponseRetrySettings.IsNull() && !api.OutputAzureDataExplorer.ResponseRetrySettings.IsUnknown() {
 			state.OutputAzureDataExplorer.ResponseRetrySettings = api.OutputAzureDataExplorer.ResponseRetrySettings
 		} else if state.OutputAzureDataExplorer.ResponseRetrySettings.IsNull() || state.OutputAzureDataExplorer.ResponseRetrySettings.IsUnknown() {
 			state.OutputAzureDataExplorer.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputAzureDataExplorer.ResponseRetrySettings.IsNull() || state.OutputAzureDataExplorer.ResponseRetrySettings.IsUnknown() {
+			state.OutputAzureDataExplorer.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAzureDataExplorerResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputAzureDataExplorer.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputAzureDataExplorer.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureDataExplorerResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputAzureDataExplorer.TimeoutRetrySettings.IsNull() && !api.OutputAzureDataExplorer.TimeoutRetrySettings.IsUnknown() {
 			state.OutputAzureDataExplorer.TimeoutRetrySettings = api.OutputAzureDataExplorer.TimeoutRetrySettings
 		} else if state.OutputAzureDataExplorer.TimeoutRetrySettings.IsNull() || state.OutputAzureDataExplorer.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAzureDataExplorer.TimeoutRetrySettings = types.ObjectNull(OutputAzureDataExplorerTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputAzureDataExplorer.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputAzureDataExplorer.TimeoutRetrySettings = types.ObjectNull(OutputAzureDataExplorerTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -30917,6 +33889,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureLogs.SystemFields.IsNull() || state.OutputAzureLogs.SystemFields.IsUnknown() {
 			state.OutputAzureLogs.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureLogs.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureLogs.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureLogs.Environment.IsNull() && !api.OutputAzureLogs.Environment.IsUnknown() {
 			state.OutputAzureLogs.Environment = api.OutputAzureLogs.Environment
 		} else if state.OutputAzureLogs.Environment.IsNull() || state.OutputAzureLogs.Environment.IsUnknown() {
@@ -30925,6 +33900,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputAzureLogs.Streamtags.IsNull() && !api.OutputAzureLogs.Streamtags.IsUnknown() {
 			state.OutputAzureLogs.Streamtags = api.OutputAzureLogs.Streamtags
 		} else if state.OutputAzureLogs.Streamtags.IsNull() || state.OutputAzureLogs.Streamtags.IsUnknown() {
+			state.OutputAzureLogs.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAzureLogs.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputAzureLogs.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputAzureLogs.LogType.IsNull() && !api.OutputAzureLogs.LogType.IsUnknown() {
@@ -30977,6 +33955,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureLogs.ExtraHttpHeaders.IsNull() || state.OutputAzureLogs.ExtraHttpHeaders.IsUnknown() {
 			state.OutputAzureLogs.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputAzureLogsExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputAzureLogs.ExtraHttpHeaders.IsNull() || state.OutputAzureLogs.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAzureLogs.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputAzureLogsExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputAzureLogs.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputAzureLogs.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureLogsExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputAzureLogs.UseRoundRobinDns.IsNull() && !api.OutputAzureLogs.UseRoundRobinDns.IsUnknown() {
 			state.OutputAzureLogs.UseRoundRobinDns = api.OutputAzureLogs.UseRoundRobinDns
 		} else if state.OutputAzureLogs.UseRoundRobinDns.IsNull() || state.OutputAzureLogs.UseRoundRobinDns.IsUnknown() {
@@ -30992,6 +33975,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureLogs.SafeHeaders.IsNull() || state.OutputAzureLogs.SafeHeaders.IsUnknown() {
 			state.OutputAzureLogs.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureLogs.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureLogs.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureLogs.APIURL.IsNull() && !api.OutputAzureLogs.APIURL.IsUnknown() {
 			state.OutputAzureLogs.APIURL = api.OutputAzureLogs.APIURL
 		} else if state.OutputAzureLogs.APIURL.IsNull() || state.OutputAzureLogs.APIURL.IsUnknown() {
@@ -31002,9 +33988,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureLogs.ResponseRetrySettings.IsNull() || state.OutputAzureLogs.ResponseRetrySettings.IsUnknown() {
 			state.OutputAzureLogs.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAzureLogsResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputAzureLogs.ResponseRetrySettings.IsNull() || state.OutputAzureLogs.ResponseRetrySettings.IsUnknown() {
+			state.OutputAzureLogs.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAzureLogsResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputAzureLogs.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputAzureLogs.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputAzureLogsResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputAzureLogs.TimeoutRetrySettings.IsNull() && !api.OutputAzureLogs.TimeoutRetrySettings.IsUnknown() {
 			state.OutputAzureLogs.TimeoutRetrySettings = api.OutputAzureLogs.TimeoutRetrySettings
 		} else if state.OutputAzureLogs.TimeoutRetrySettings.IsNull() || state.OutputAzureLogs.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAzureLogs.TimeoutRetrySettings = types.ObjectNull(OutputAzureLogsTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputAzureLogs.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputAzureLogs.TimeoutRetrySettings = types.ObjectNull(OutputAzureLogsTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputAzureLogs.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputAzureLogs.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -31127,6 +34121,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputKinesis.SystemFields.IsNull() || state.OutputKinesis.SystemFields.IsUnknown() {
 			state.OutputKinesis.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputKinesis.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputKinesis.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputKinesis.Environment.IsNull() && !api.OutputKinesis.Environment.IsUnknown() {
 			state.OutputKinesis.Environment = api.OutputKinesis.Environment
 		} else if state.OutputKinesis.Environment.IsNull() || state.OutputKinesis.Environment.IsUnknown() {
@@ -31135,6 +34132,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputKinesis.Streamtags.IsNull() && !api.OutputKinesis.Streamtags.IsUnknown() {
 			state.OutputKinesis.Streamtags = api.OutputKinesis.Streamtags
 		} else if state.OutputKinesis.Streamtags.IsNull() || state.OutputKinesis.Streamtags.IsUnknown() {
+			state.OutputKinesis.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputKinesis.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputKinesis.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputKinesis.StreamName.IsNull() && !api.OutputKinesis.StreamName.IsUnknown() {
@@ -31332,6 +34332,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHoneycomb.SystemFields.IsNull() || state.OutputHoneycomb.SystemFields.IsUnknown() {
 			state.OutputHoneycomb.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputHoneycomb.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputHoneycomb.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputHoneycomb.Environment.IsNull() && !api.OutputHoneycomb.Environment.IsUnknown() {
 			state.OutputHoneycomb.Environment = api.OutputHoneycomb.Environment
 		} else if state.OutputHoneycomb.Environment.IsNull() || state.OutputHoneycomb.Environment.IsUnknown() {
@@ -31340,6 +34343,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputHoneycomb.Streamtags.IsNull() && !api.OutputHoneycomb.Streamtags.IsUnknown() {
 			state.OutputHoneycomb.Streamtags = api.OutputHoneycomb.Streamtags
 		} else if state.OutputHoneycomb.Streamtags.IsNull() || state.OutputHoneycomb.Streamtags.IsUnknown() {
+			state.OutputHoneycomb.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputHoneycomb.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputHoneycomb.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputHoneycomb.Dataset.IsNull() && !api.OutputHoneycomb.Dataset.IsUnknown() {
@@ -31387,6 +34393,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHoneycomb.ExtraHttpHeaders.IsNull() || state.OutputHoneycomb.ExtraHttpHeaders.IsUnknown() {
 			state.OutputHoneycomb.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputHoneycombExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputHoneycomb.ExtraHttpHeaders.IsNull() || state.OutputHoneycomb.ExtraHttpHeaders.IsUnknown() {
+			state.OutputHoneycomb.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputHoneycombExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputHoneycomb.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputHoneycomb.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputHoneycombExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputHoneycomb.UseRoundRobinDns.IsNull() && !api.OutputHoneycomb.UseRoundRobinDns.IsUnknown() {
 			state.OutputHoneycomb.UseRoundRobinDns = api.OutputHoneycomb.UseRoundRobinDns
 		} else if state.OutputHoneycomb.UseRoundRobinDns.IsNull() || state.OutputHoneycomb.UseRoundRobinDns.IsUnknown() {
@@ -31402,14 +34413,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHoneycomb.SafeHeaders.IsNull() || state.OutputHoneycomb.SafeHeaders.IsUnknown() {
 			state.OutputHoneycomb.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputHoneycomb.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputHoneycomb.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputHoneycomb.ResponseRetrySettings.IsNull() && !api.OutputHoneycomb.ResponseRetrySettings.IsUnknown() {
 			state.OutputHoneycomb.ResponseRetrySettings = api.OutputHoneycomb.ResponseRetrySettings
 		} else if state.OutputHoneycomb.ResponseRetrySettings.IsNull() || state.OutputHoneycomb.ResponseRetrySettings.IsUnknown() {
 			state.OutputHoneycomb.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputHoneycombResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputHoneycomb.ResponseRetrySettings.IsNull() || state.OutputHoneycomb.ResponseRetrySettings.IsUnknown() {
+			state.OutputHoneycomb.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputHoneycombResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputHoneycomb.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputHoneycomb.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputHoneycombResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputHoneycomb.TimeoutRetrySettings.IsNull() && !api.OutputHoneycomb.TimeoutRetrySettings.IsUnknown() {
 			state.OutputHoneycomb.TimeoutRetrySettings = api.OutputHoneycomb.TimeoutRetrySettings
 		} else if state.OutputHoneycomb.TimeoutRetrySettings.IsNull() || state.OutputHoneycomb.TimeoutRetrySettings.IsUnknown() {
+			state.OutputHoneycomb.TimeoutRetrySettings = types.ObjectNull(OutputHoneycombTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputHoneycomb.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputHoneycomb.TimeoutRetrySettings = types.ObjectNull(OutputHoneycombTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputHoneycomb.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputHoneycomb.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -31527,6 +34549,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureEventhub.SystemFields.IsNull() || state.OutputAzureEventhub.SystemFields.IsUnknown() {
 			state.OutputAzureEventhub.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureEventhub.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureEventhub.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureEventhub.Environment.IsNull() && !api.OutputAzureEventhub.Environment.IsUnknown() {
 			state.OutputAzureEventhub.Environment = api.OutputAzureEventhub.Environment
 		} else if state.OutputAzureEventhub.Environment.IsNull() || state.OutputAzureEventhub.Environment.IsUnknown() {
@@ -31537,9 +34562,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureEventhub.Streamtags.IsNull() || state.OutputAzureEventhub.Streamtags.IsUnknown() {
 			state.OutputAzureEventhub.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAzureEventhub.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputAzureEventhub.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputAzureEventhub.Brokers.IsNull() && !api.OutputAzureEventhub.Brokers.IsUnknown() {
 			state.OutputAzureEventhub.Brokers = api.OutputAzureEventhub.Brokers
 		} else if state.OutputAzureEventhub.Brokers.IsNull() || state.OutputAzureEventhub.Brokers.IsUnknown() {
+			state.OutputAzureEventhub.Brokers = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAzureEventhub.Brokers.ElementType(context.Background()); elementType == nil {
 			state.OutputAzureEventhub.Brokers = types.ListNull(types.StringType)
 		}
 		if !api.OutputAzureEventhub.Topic.IsNull() && !api.OutputAzureEventhub.Topic.IsUnknown() {
@@ -31617,9 +34648,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAzureEventhub.Sasl.IsNull() || state.OutputAzureEventhub.Sasl.IsUnknown() {
 			state.OutputAzureEventhub.Sasl = types.ObjectNull(OutputAzureEventhubSaslAttrTypes())
 		}
+		if len(state.OutputAzureEventhub.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.OutputAzureEventhub.Sasl = types.ObjectNull(OutputAzureEventhubSaslAttrTypes())
+		}
 		if !api.OutputAzureEventhub.TLS.IsNull() && !api.OutputAzureEventhub.TLS.IsUnknown() {
 			state.OutputAzureEventhub.TLS = api.OutputAzureEventhub.TLS
 		} else if state.OutputAzureEventhub.TLS.IsNull() || state.OutputAzureEventhub.TLS.IsUnknown() {
+			state.OutputAzureEventhub.TLS = types.ObjectNull(OutputAzureEventhubTLSAttrTypes())
+		}
+		if len(state.OutputAzureEventhub.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputAzureEventhub.TLS = types.ObjectNull(OutputAzureEventhubTLSAttrTypes())
 		}
 		if !api.OutputAzureEventhub.OnBackpressure.IsNull() && !api.OutputAzureEventhub.OnBackpressure.IsUnknown() {
@@ -31693,6 +34730,172 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputAzureEventhub.PqControls = types.MapNull(types.StringType)
 		}
 	}
+	if api.OutputGoogleBigquery != nil {
+		if state.OutputGoogleBigquery == nil {
+			state.OutputGoogleBigquery = &OutputGoogleBigqueryModel{}
+		}
+		if !api.OutputGoogleBigquery.ID.IsNull() && !api.OutputGoogleBigquery.ID.IsUnknown() {
+			state.OutputGoogleBigquery.ID = api.OutputGoogleBigquery.ID
+		} else if state.OutputGoogleBigquery.ID.IsNull() || state.OutputGoogleBigquery.ID.IsUnknown() {
+			state.OutputGoogleBigquery.ID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Type.IsNull() && !api.OutputGoogleBigquery.Type.IsUnknown() {
+			state.OutputGoogleBigquery.Type = api.OutputGoogleBigquery.Type
+		} else if state.OutputGoogleBigquery.Type.IsNull() || state.OutputGoogleBigquery.Type.IsUnknown() {
+			state.OutputGoogleBigquery.Type = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Pipeline.IsNull() && !api.OutputGoogleBigquery.Pipeline.IsUnknown() {
+			state.OutputGoogleBigquery.Pipeline = api.OutputGoogleBigquery.Pipeline
+		} else if state.OutputGoogleBigquery.Pipeline.IsNull() || state.OutputGoogleBigquery.Pipeline.IsUnknown() {
+			state.OutputGoogleBigquery.Pipeline = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.SystemFields.IsNull() && !api.OutputGoogleBigquery.SystemFields.IsUnknown() {
+			state.OutputGoogleBigquery.SystemFields = api.OutputGoogleBigquery.SystemFields
+		} else if state.OutputGoogleBigquery.SystemFields.IsNull() || state.OutputGoogleBigquery.SystemFields.IsUnknown() {
+			state.OutputGoogleBigquery.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleBigquery.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleBigquery.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleBigquery.Environment.IsNull() && !api.OutputGoogleBigquery.Environment.IsUnknown() {
+			state.OutputGoogleBigquery.Environment = api.OutputGoogleBigquery.Environment
+		} else if state.OutputGoogleBigquery.Environment.IsNull() || state.OutputGoogleBigquery.Environment.IsUnknown() {
+			state.OutputGoogleBigquery.Environment = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Streamtags.IsNull() && !api.OutputGoogleBigquery.Streamtags.IsUnknown() {
+			state.OutputGoogleBigquery.Streamtags = api.OutputGoogleBigquery.Streamtags
+		} else if state.OutputGoogleBigquery.Streamtags.IsNull() || state.OutputGoogleBigquery.Streamtags.IsUnknown() {
+			state.OutputGoogleBigquery.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleBigquery.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleBigquery.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputGoogleBigquery.ProjectID.IsNull() && !api.OutputGoogleBigquery.ProjectID.IsUnknown() {
+			state.OutputGoogleBigquery.ProjectID = api.OutputGoogleBigquery.ProjectID
+		} else if state.OutputGoogleBigquery.ProjectID.IsNull() || state.OutputGoogleBigquery.ProjectID.IsUnknown() {
+			state.OutputGoogleBigquery.ProjectID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.DatasetID.IsNull() && !api.OutputGoogleBigquery.DatasetID.IsUnknown() {
+			state.OutputGoogleBigquery.DatasetID = api.OutputGoogleBigquery.DatasetID
+		} else if state.OutputGoogleBigquery.DatasetID.IsNull() || state.OutputGoogleBigquery.DatasetID.IsUnknown() {
+			state.OutputGoogleBigquery.DatasetID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.TableID.IsNull() && !api.OutputGoogleBigquery.TableID.IsUnknown() {
+			state.OutputGoogleBigquery.TableID = api.OutputGoogleBigquery.TableID
+		} else if state.OutputGoogleBigquery.TableID.IsNull() || state.OutputGoogleBigquery.TableID.IsUnknown() {
+			state.OutputGoogleBigquery.TableID = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.TimestampColumn.IsNull() && !api.OutputGoogleBigquery.TimestampColumn.IsUnknown() {
+			state.OutputGoogleBigquery.TimestampColumn = api.OutputGoogleBigquery.TimestampColumn
+		} else if state.OutputGoogleBigquery.TimestampColumn.IsNull() || state.OutputGoogleBigquery.TimestampColumn.IsUnknown() {
+			state.OutputGoogleBigquery.TimestampColumn = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.GoogleAuthMethod.IsNull() && !api.OutputGoogleBigquery.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleBigquery.GoogleAuthMethod = api.OutputGoogleBigquery.GoogleAuthMethod
+		} else if state.OutputGoogleBigquery.GoogleAuthMethod.IsNull() || state.OutputGoogleBigquery.GoogleAuthMethod.IsUnknown() {
+			state.OutputGoogleBigquery.GoogleAuthMethod = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Secret.IsNull() && !api.OutputGoogleBigquery.Secret.IsUnknown() {
+			state.OutputGoogleBigquery.Secret = stringFromAPIOrPrior(api.OutputGoogleBigquery.Secret.ValueString(), state.OutputGoogleBigquery.Secret)
+		} else if state.OutputGoogleBigquery.Secret.IsNull() || state.OutputGoogleBigquery.Secret.IsUnknown() {
+			state.OutputGoogleBigquery.Secret = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.FlushPeriod.IsNull() && !api.OutputGoogleBigquery.FlushPeriod.IsUnknown() {
+			state.OutputGoogleBigquery.FlushPeriod = api.OutputGoogleBigquery.FlushPeriod
+		} else if state.OutputGoogleBigquery.FlushPeriod.IsNull() || state.OutputGoogleBigquery.FlushPeriod.IsUnknown() {
+			state.OutputGoogleBigquery.FlushPeriod = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxQueueSize.IsNull() && !api.OutputGoogleBigquery.MaxQueueSize.IsUnknown() {
+			state.OutputGoogleBigquery.MaxQueueSize = api.OutputGoogleBigquery.MaxQueueSize
+		} else if state.OutputGoogleBigquery.MaxQueueSize.IsNull() || state.OutputGoogleBigquery.MaxQueueSize.IsUnknown() {
+			state.OutputGoogleBigquery.MaxQueueSize = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxRecordSizeKB.IsNull() && !api.OutputGoogleBigquery.MaxRecordSizeKB.IsUnknown() {
+			state.OutputGoogleBigquery.MaxRecordSizeKB = api.OutputGoogleBigquery.MaxRecordSizeKB
+		} else if state.OutputGoogleBigquery.MaxRecordSizeKB.IsNull() || state.OutputGoogleBigquery.MaxRecordSizeKB.IsUnknown() {
+			state.OutputGoogleBigquery.MaxRecordSizeKB = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxInProgress.IsNull() && !api.OutputGoogleBigquery.MaxInProgress.IsUnknown() {
+			state.OutputGoogleBigquery.MaxInProgress = api.OutputGoogleBigquery.MaxInProgress
+		} else if state.OutputGoogleBigquery.MaxInProgress.IsNull() || state.OutputGoogleBigquery.MaxInProgress.IsUnknown() {
+			state.OutputGoogleBigquery.MaxInProgress = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.MaxSendRetries.IsNull() && !api.OutputGoogleBigquery.MaxSendRetries.IsUnknown() {
+			state.OutputGoogleBigquery.MaxSendRetries = api.OutputGoogleBigquery.MaxSendRetries
+		} else if state.OutputGoogleBigquery.MaxSendRetries.IsNull() || state.OutputGoogleBigquery.MaxSendRetries.IsUnknown() {
+			state.OutputGoogleBigquery.MaxSendRetries = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.OnBackpressure.IsNull() && !api.OutputGoogleBigquery.OnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.OnBackpressure = api.OutputGoogleBigquery.OnBackpressure
+		} else if state.OutputGoogleBigquery.OnBackpressure.IsNull() || state.OutputGoogleBigquery.OnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.Description.IsNull() && !api.OutputGoogleBigquery.Description.IsUnknown() {
+			state.OutputGoogleBigquery.Description = api.OutputGoogleBigquery.Description
+		} else if state.OutputGoogleBigquery.Description.IsNull() || state.OutputGoogleBigquery.Description.IsUnknown() {
+			state.OutputGoogleBigquery.Description = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqStrictOrdering.IsNull() && !api.OutputGoogleBigquery.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleBigquery.PqStrictOrdering = api.OutputGoogleBigquery.PqStrictOrdering
+		} else if state.OutputGoogleBigquery.PqStrictOrdering.IsNull() || state.OutputGoogleBigquery.PqStrictOrdering.IsUnknown() {
+			state.OutputGoogleBigquery.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputGoogleBigquery.PqRatePerSec.IsNull() && !api.OutputGoogleBigquery.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqRatePerSec = api.OutputGoogleBigquery.PqRatePerSec
+		} else if state.OutputGoogleBigquery.PqRatePerSec.IsNull() || state.OutputGoogleBigquery.PqRatePerSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMode.IsNull() && !api.OutputGoogleBigquery.PqMode.IsUnknown() {
+			state.OutputGoogleBigquery.PqMode = api.OutputGoogleBigquery.PqMode
+		} else if state.OutputGoogleBigquery.PqMode.IsNull() || state.OutputGoogleBigquery.PqMode.IsUnknown() {
+			state.OutputGoogleBigquery.PqMode = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBufferSize.IsNull() && !api.OutputGoogleBigquery.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSize = api.OutputGoogleBigquery.PqMaxBufferSize
+		} else if state.OutputGoogleBigquery.PqMaxBufferSize.IsNull() || state.OutputGoogleBigquery.PqMaxBufferSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBackpressureSec.IsNull() && !api.OutputGoogleBigquery.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBackpressureSec = api.OutputGoogleBigquery.PqMaxBackpressureSec
+		} else if state.OutputGoogleBigquery.PqMaxBackpressureSec.IsNull() || state.OutputGoogleBigquery.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputGoogleBigquery.PqMaxFileSize.IsNull() && !api.OutputGoogleBigquery.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxFileSize = api.OutputGoogleBigquery.PqMaxFileSize
+		} else if state.OutputGoogleBigquery.PqMaxFileSize.IsNull() || state.OutputGoogleBigquery.PqMaxFileSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxSize.IsNull() && !api.OutputGoogleBigquery.PqMaxSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxSize = api.OutputGoogleBigquery.PqMaxSize
+		} else if state.OutputGoogleBigquery.PqMaxSize.IsNull() || state.OutputGoogleBigquery.PqMaxSize.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqPath.IsNull() && !api.OutputGoogleBigquery.PqPath.IsUnknown() {
+			state.OutputGoogleBigquery.PqPath = api.OutputGoogleBigquery.PqPath
+		} else if state.OutputGoogleBigquery.PqPath.IsNull() || state.OutputGoogleBigquery.PqPath.IsUnknown() {
+			state.OutputGoogleBigquery.PqPath = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqCompress.IsNull() && !api.OutputGoogleBigquery.PqCompress.IsUnknown() {
+			state.OutputGoogleBigquery.PqCompress = api.OutputGoogleBigquery.PqCompress
+		} else if state.OutputGoogleBigquery.PqCompress.IsNull() || state.OutputGoogleBigquery.PqCompress.IsUnknown() {
+			state.OutputGoogleBigquery.PqCompress = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqOnBackpressure.IsNull() && !api.OutputGoogleBigquery.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.PqOnBackpressure = api.OutputGoogleBigquery.PqOnBackpressure
+		} else if state.OutputGoogleBigquery.PqOnBackpressure.IsNull() || state.OutputGoogleBigquery.PqOnBackpressure.IsUnknown() {
+			state.OutputGoogleBigquery.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsNull() && !api.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSizeBytes = api.OutputGoogleBigquery.PqMaxBufferSizeBytes
+		} else if state.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsNull() || state.OutputGoogleBigquery.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputGoogleBigquery.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputGoogleBigquery.PqControls.IsNull() && !api.OutputGoogleBigquery.PqControls.IsUnknown() {
+			state.OutputGoogleBigquery.PqControls = api.OutputGoogleBigquery.PqControls
+		} else if state.OutputGoogleBigquery.PqControls.IsNull() || state.OutputGoogleBigquery.PqControls.IsUnknown() {
+			state.OutputGoogleBigquery.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputGoogleChronicle != nil {
 		if state.OutputGoogleChronicle == nil {
 			state.OutputGoogleChronicle = &OutputGoogleChronicleModel{}
@@ -31717,6 +34920,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleChronicle.SystemFields.IsNull() || state.OutputGoogleChronicle.SystemFields.IsUnknown() {
 			state.OutputGoogleChronicle.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGoogleChronicle.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleChronicle.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGoogleChronicle.Environment.IsNull() && !api.OutputGoogleChronicle.Environment.IsUnknown() {
 			state.OutputGoogleChronicle.Environment = api.OutputGoogleChronicle.Environment
 		} else if state.OutputGoogleChronicle.Environment.IsNull() || state.OutputGoogleChronicle.Environment.IsUnknown() {
@@ -31725,6 +34931,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleChronicle.Streamtags.IsNull() && !api.OutputGoogleChronicle.Streamtags.IsUnknown() {
 			state.OutputGoogleChronicle.Streamtags = api.OutputGoogleChronicle.Streamtags
 		} else if state.OutputGoogleChronicle.Streamtags.IsNull() || state.OutputGoogleChronicle.Streamtags.IsUnknown() {
+			state.OutputGoogleChronicle.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleChronicle.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGoogleChronicle.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGoogleChronicle.APIVersion.IsNull() && !api.OutputGoogleChronicle.APIVersion.IsUnknown() {
@@ -31742,9 +34951,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleChronicle.ResponseRetrySettings.IsNull() || state.OutputGoogleChronicle.ResponseRetrySettings.IsUnknown() {
 			state.OutputGoogleChronicle.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputGoogleChronicle.ResponseRetrySettings.IsNull() || state.OutputGoogleChronicle.ResponseRetrySettings.IsUnknown() {
+			state.OutputGoogleChronicle.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputGoogleChronicle.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputGoogleChronicle.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleChronicleResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputGoogleChronicle.TimeoutRetrySettings.IsNull() && !api.OutputGoogleChronicle.TimeoutRetrySettings.IsUnknown() {
 			state.OutputGoogleChronicle.TimeoutRetrySettings = api.OutputGoogleChronicle.TimeoutRetrySettings
 		} else if state.OutputGoogleChronicle.TimeoutRetrySettings.IsNull() || state.OutputGoogleChronicle.TimeoutRetrySettings.IsUnknown() {
+			state.OutputGoogleChronicle.TimeoutRetrySettings = types.ObjectNull(OutputGoogleChronicleTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputGoogleChronicle.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputGoogleChronicle.TimeoutRetrySettings = types.ObjectNull(OutputGoogleChronicleTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputGoogleChronicle.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputGoogleChronicle.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -31802,6 +35019,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleChronicle.ExtraHttpHeaders.IsNull() || state.OutputGoogleChronicle.ExtraHttpHeaders.IsUnknown() {
 			state.OutputGoogleChronicle.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputGoogleChronicle.ExtraHttpHeaders.IsNull() || state.OutputGoogleChronicle.ExtraHttpHeaders.IsUnknown() {
+			state.OutputGoogleChronicle.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputGoogleChronicle.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputGoogleChronicle.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputGoogleChronicle.FailedRequestLoggingMode.IsNull() && !api.OutputGoogleChronicle.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputGoogleChronicle.FailedRequestLoggingMode = api.OutputGoogleChronicle.FailedRequestLoggingMode
 		} else if state.OutputGoogleChronicle.FailedRequestLoggingMode.IsNull() || state.OutputGoogleChronicle.FailedRequestLoggingMode.IsUnknown() {
@@ -31810,6 +35032,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleChronicle.SafeHeaders.IsNull() && !api.OutputGoogleChronicle.SafeHeaders.IsUnknown() {
 			state.OutputGoogleChronicle.SafeHeaders = api.OutputGoogleChronicle.SafeHeaders
 		} else if state.OutputGoogleChronicle.SafeHeaders.IsNull() || state.OutputGoogleChronicle.SafeHeaders.IsUnknown() {
+			state.OutputGoogleChronicle.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleChronicle.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputGoogleChronicle.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputGoogleChronicle.UseRoundRobinDns.IsNull() && !api.OutputGoogleChronicle.UseRoundRobinDns.IsUnknown() {
@@ -31837,6 +35062,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleChronicle.ExtraLogTypes.IsNull() || state.OutputGoogleChronicle.ExtraLogTypes.IsUnknown() {
 			state.OutputGoogleChronicle.ExtraLogTypes = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraLogTypesAttrTypes()})
 		}
+		if state.OutputGoogleChronicle.ExtraLogTypes.IsNull() || state.OutputGoogleChronicle.ExtraLogTypes.IsUnknown() {
+			state.OutputGoogleChronicle.ExtraLogTypes = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraLogTypesAttrTypes()})
+		} else if len(state.OutputGoogleChronicle.ExtraLogTypes.Elements()) == 0 {
+			state.OutputGoogleChronicle.ExtraLogTypes = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleChronicleExtraLogTypesAttrTypes()}, nil)
+		}
 		if !api.OutputGoogleChronicle.LogType.IsNull() && !api.OutputGoogleChronicle.LogType.IsUnknown() {
 			state.OutputGoogleChronicle.LogType = api.OutputGoogleChronicle.LogType
 		} else if state.OutputGoogleChronicle.LogType.IsNull() || state.OutputGoogleChronicle.LogType.IsUnknown() {
@@ -31861,6 +35091,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputGoogleChronicle.CustomLabels = api.OutputGoogleChronicle.CustomLabels
 		} else if state.OutputGoogleChronicle.CustomLabels.IsNull() || state.OutputGoogleChronicle.CustomLabels.IsUnknown() {
 			state.OutputGoogleChronicle.CustomLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleCustomLabelsAttrTypes()})
+		}
+		if state.OutputGoogleChronicle.CustomLabels.IsNull() || state.OutputGoogleChronicle.CustomLabels.IsUnknown() {
+			state.OutputGoogleChronicle.CustomLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleChronicleCustomLabelsAttrTypes()})
+		} else if len(state.OutputGoogleChronicle.CustomLabels.Elements()) == 0 {
+			state.OutputGoogleChronicle.CustomLabels = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleChronicleCustomLabelsAttrTypes()}, nil)
 		}
 		if !api.OutputGoogleChronicle.UdmType.IsNull() && !api.OutputGoogleChronicle.UdmType.IsUnknown() {
 			state.OutputGoogleChronicle.UdmType = api.OutputGoogleChronicle.UdmType
@@ -31972,6 +35207,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleCloudStorage.SystemFields.IsNull() || state.OutputGoogleCloudStorage.SystemFields.IsUnknown() {
 			state.OutputGoogleCloudStorage.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGoogleCloudStorage.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleCloudStorage.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGoogleCloudStorage.Environment.IsNull() && !api.OutputGoogleCloudStorage.Environment.IsUnknown() {
 			state.OutputGoogleCloudStorage.Environment = api.OutputGoogleCloudStorage.Environment
 		} else if state.OutputGoogleCloudStorage.Environment.IsNull() || state.OutputGoogleCloudStorage.Environment.IsUnknown() {
@@ -31980,6 +35218,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleCloudStorage.Streamtags.IsNull() && !api.OutputGoogleCloudStorage.Streamtags.IsUnknown() {
 			state.OutputGoogleCloudStorage.Streamtags = api.OutputGoogleCloudStorage.Streamtags
 		} else if state.OutputGoogleCloudStorage.Streamtags.IsNull() || state.OutputGoogleCloudStorage.Streamtags.IsUnknown() {
+			state.OutputGoogleCloudStorage.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleCloudStorage.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGoogleCloudStorage.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGoogleCloudStorage.Bucket.IsNull() && !api.OutputGoogleCloudStorage.Bucket.IsUnknown() {
@@ -32122,9 +35363,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleCloudStorage.RetrySettings.IsNull() || state.OutputGoogleCloudStorage.RetrySettings.IsUnknown() {
 			state.OutputGoogleCloudStorage.RetrySettings = types.ObjectNull(OutputGoogleCloudStorageRetrySettingsAttrTypes())
 		}
+		if len(state.OutputGoogleCloudStorage.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputGoogleCloudStorage.RetrySettings = types.ObjectNull(OutputGoogleCloudStorageRetrySettingsAttrTypes())
+		}
 		if !api.OutputGoogleCloudStorage.Orphans.IsNull() && !api.OutputGoogleCloudStorage.Orphans.IsUnknown() {
 			state.OutputGoogleCloudStorage.Orphans = api.OutputGoogleCloudStorage.Orphans
 		} else if state.OutputGoogleCloudStorage.Orphans.IsNull() || state.OutputGoogleCloudStorage.Orphans.IsUnknown() {
+			state.OutputGoogleCloudStorage.Orphans = types.ObjectNull(OutputGoogleCloudStorageOrphansAttrTypes())
+		}
+		if len(state.OutputGoogleCloudStorage.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputGoogleCloudStorage.Orphans = types.ObjectNull(OutputGoogleCloudStorageOrphansAttrTypes())
 		}
 		if !api.OutputGoogleCloudStorage.Description.IsNull() && !api.OutputGoogleCloudStorage.Description.IsUnknown() {
@@ -32181,6 +35428,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputGoogleCloudStorage.KeyValueMetadata = api.OutputGoogleCloudStorage.KeyValueMetadata
 		} else if state.OutputGoogleCloudStorage.KeyValueMetadata.IsNull() || state.OutputGoogleCloudStorage.KeyValueMetadata.IsUnknown() {
 			state.OutputGoogleCloudStorage.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudStorageKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputGoogleCloudStorage.KeyValueMetadata.IsNull() || state.OutputGoogleCloudStorage.KeyValueMetadata.IsUnknown() {
+			state.OutputGoogleCloudStorage.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudStorageKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputGoogleCloudStorage.KeyValueMetadata.Elements()) == 0 {
+			state.OutputGoogleCloudStorage.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleCloudStorageKeyValueMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputGoogleCloudStorage.EnableStatistics.IsNull() && !api.OutputGoogleCloudStorage.EnableStatistics.IsUnknown() {
 			state.OutputGoogleCloudStorage.EnableStatistics = api.OutputGoogleCloudStorage.EnableStatistics
@@ -32257,6 +35509,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleCloudLogging.SystemFields.IsNull() || state.OutputGoogleCloudLogging.SystemFields.IsUnknown() {
 			state.OutputGoogleCloudLogging.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGoogleCloudLogging.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleCloudLogging.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGoogleCloudLogging.Environment.IsNull() && !api.OutputGoogleCloudLogging.Environment.IsUnknown() {
 			state.OutputGoogleCloudLogging.Environment = api.OutputGoogleCloudLogging.Environment
 		} else if state.OutputGoogleCloudLogging.Environment.IsNull() || state.OutputGoogleCloudLogging.Environment.IsUnknown() {
@@ -32265,6 +35520,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleCloudLogging.Streamtags.IsNull() && !api.OutputGoogleCloudLogging.Streamtags.IsUnknown() {
 			state.OutputGoogleCloudLogging.Streamtags = api.OutputGoogleCloudLogging.Streamtags
 		} else if state.OutputGoogleCloudLogging.Streamtags.IsNull() || state.OutputGoogleCloudLogging.Streamtags.IsUnknown() {
+			state.OutputGoogleCloudLogging.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleCloudLogging.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGoogleCloudLogging.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGoogleCloudLogging.LogLocationType.IsNull() && !api.OutputGoogleCloudLogging.LogLocationType.IsUnknown() {
@@ -32292,6 +35550,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleCloudLogging.LogLabels.IsNull() || state.OutputGoogleCloudLogging.LogLabels.IsUnknown() {
 			state.OutputGoogleCloudLogging.LogLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingLogLabelsAttrTypes()})
 		}
+		if state.OutputGoogleCloudLogging.LogLabels.IsNull() || state.OutputGoogleCloudLogging.LogLabels.IsUnknown() {
+			state.OutputGoogleCloudLogging.LogLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingLogLabelsAttrTypes()})
+		} else if len(state.OutputGoogleCloudLogging.LogLabels.Elements()) == 0 {
+			state.OutputGoogleCloudLogging.LogLabels = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingLogLabelsAttrTypes()}, nil)
+		}
 		if !api.OutputGoogleCloudLogging.ResourceTypeExpression.IsNull() && !api.OutputGoogleCloudLogging.ResourceTypeExpression.IsUnknown() {
 			state.OutputGoogleCloudLogging.ResourceTypeExpression = api.OutputGoogleCloudLogging.ResourceTypeExpression
 		} else if state.OutputGoogleCloudLogging.ResourceTypeExpression.IsNull() || state.OutputGoogleCloudLogging.ResourceTypeExpression.IsUnknown() {
@@ -32301,6 +35564,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputGoogleCloudLogging.ResourceTypeLabels = api.OutputGoogleCloudLogging.ResourceTypeLabels
 		} else if state.OutputGoogleCloudLogging.ResourceTypeLabels.IsNull() || state.OutputGoogleCloudLogging.ResourceTypeLabels.IsUnknown() {
 			state.OutputGoogleCloudLogging.ResourceTypeLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes()})
+		}
+		if state.OutputGoogleCloudLogging.ResourceTypeLabels.IsNull() || state.OutputGoogleCloudLogging.ResourceTypeLabels.IsUnknown() {
+			state.OutputGoogleCloudLogging.ResourceTypeLabels = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes()})
+		} else if len(state.OutputGoogleCloudLogging.ResourceTypeLabels.Elements()) == 0 {
+			state.OutputGoogleCloudLogging.ResourceTypeLabels = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleCloudLoggingResourceTypeLabelsAttrTypes()}, nil)
 		}
 		if !api.OutputGoogleCloudLogging.SeverityExpression.IsNull() && !api.OutputGoogleCloudLogging.SeverityExpression.IsUnknown() {
 			state.OutputGoogleCloudLogging.SeverityExpression = api.OutputGoogleCloudLogging.SeverityExpression
@@ -32612,6 +35880,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGoogleCloudObservability.SystemFields.IsNull() || state.OutputGoogleCloudObservability.SystemFields.IsUnknown() {
 			state.OutputGoogleCloudObservability.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGoogleCloudObservability.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGoogleCloudObservability.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGoogleCloudObservability.Environment.IsNull() && !api.OutputGoogleCloudObservability.Environment.IsUnknown() {
 			state.OutputGoogleCloudObservability.Environment = api.OutputGoogleCloudObservability.Environment
 		} else if state.OutputGoogleCloudObservability.Environment.IsNull() || state.OutputGoogleCloudObservability.Environment.IsUnknown() {
@@ -32620,6 +35891,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleCloudObservability.Streamtags.IsNull() && !api.OutputGoogleCloudObservability.Streamtags.IsUnknown() {
 			state.OutputGoogleCloudObservability.Streamtags = api.OutputGoogleCloudObservability.Streamtags
 		} else if state.OutputGoogleCloudObservability.Streamtags.IsNull() || state.OutputGoogleCloudObservability.Streamtags.IsUnknown() {
+			state.OutputGoogleCloudObservability.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGoogleCloudObservability.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGoogleCloudObservability.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGoogleCloudObservability.Protocol.IsNull() && !api.OutputGoogleCloudObservability.Protocol.IsUnknown() {
@@ -32646,6 +35920,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputGoogleCloudObservability.Metadata = api.OutputGoogleCloudObservability.Metadata
 		} else if state.OutputGoogleCloudObservability.Metadata.IsNull() || state.OutputGoogleCloudObservability.Metadata.IsUnknown() {
 			state.OutputGoogleCloudObservability.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()})
+		}
+		if state.OutputGoogleCloudObservability.Metadata.IsNull() || state.OutputGoogleCloudObservability.Metadata.IsUnknown() {
+			state.OutputGoogleCloudObservability.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()})
+		} else if len(state.OutputGoogleCloudObservability.Metadata.Elements()) == 0 {
+			state.OutputGoogleCloudObservability.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsNull() && !api.OutputGoogleCloudObservability.DynamicHeadersEnabled.IsUnknown() {
 			state.OutputGoogleCloudObservability.DynamicHeadersEnabled = api.OutputGoogleCloudObservability.DynamicHeadersEnabled
@@ -32695,6 +35974,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGoogleCloudObservability.TLS.IsNull() && !api.OutputGoogleCloudObservability.TLS.IsUnknown() {
 			state.OutputGoogleCloudObservability.TLS = api.OutputGoogleCloudObservability.TLS
 		} else if state.OutputGoogleCloudObservability.TLS.IsNull() || state.OutputGoogleCloudObservability.TLS.IsUnknown() {
+			state.OutputGoogleCloudObservability.TLS = types.ObjectNull(OutputGoogleCloudObservabilityTLSAttrTypes())
+		}
+		if len(state.OutputGoogleCloudObservability.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputGoogleCloudObservability.TLS = types.ObjectNull(OutputGoogleCloudObservabilityTLSAttrTypes())
 		}
 		if !api.OutputGoogleCloudObservability.MaxPayloadEvents.IsNull() && !api.OutputGoogleCloudObservability.MaxPayloadEvents.IsUnknown() {
@@ -32802,6 +36084,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGooglePubsub.SystemFields.IsNull() || state.OutputGooglePubsub.SystemFields.IsUnknown() {
 			state.OutputGooglePubsub.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGooglePubsub.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGooglePubsub.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGooglePubsub.Environment.IsNull() && !api.OutputGooglePubsub.Environment.IsUnknown() {
 			state.OutputGooglePubsub.Environment = api.OutputGooglePubsub.Environment
 		} else if state.OutputGooglePubsub.Environment.IsNull() || state.OutputGooglePubsub.Environment.IsUnknown() {
@@ -32810,6 +36095,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGooglePubsub.Streamtags.IsNull() && !api.OutputGooglePubsub.Streamtags.IsUnknown() {
 			state.OutputGooglePubsub.Streamtags = api.OutputGooglePubsub.Streamtags
 		} else if state.OutputGooglePubsub.Streamtags.IsNull() || state.OutputGooglePubsub.Streamtags.IsUnknown() {
+			state.OutputGooglePubsub.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGooglePubsub.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGooglePubsub.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGooglePubsub.TopicName.IsNull() && !api.OutputGooglePubsub.TopicName.IsUnknown() {
@@ -32972,6 +36260,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputExabeam.SystemFields.IsNull() || state.OutputExabeam.SystemFields.IsUnknown() {
 			state.OutputExabeam.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputExabeam.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputExabeam.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputExabeam.Environment.IsNull() && !api.OutputExabeam.Environment.IsUnknown() {
 			state.OutputExabeam.Environment = api.OutputExabeam.Environment
 		} else if state.OutputExabeam.Environment.IsNull() || state.OutputExabeam.Environment.IsUnknown() {
@@ -32980,6 +36271,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputExabeam.Streamtags.IsNull() && !api.OutputExabeam.Streamtags.IsUnknown() {
 			state.OutputExabeam.Streamtags = api.OutputExabeam.Streamtags
 		} else if state.OutputExabeam.Streamtags.IsNull() || state.OutputExabeam.Streamtags.IsUnknown() {
+			state.OutputExabeam.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputExabeam.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputExabeam.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputExabeam.Bucket.IsNull() && !api.OutputExabeam.Bucket.IsUnknown() {
@@ -33067,9 +36361,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputExabeam.RetrySettings.IsNull() || state.OutputExabeam.RetrySettings.IsUnknown() {
 			state.OutputExabeam.RetrySettings = types.ObjectNull(OutputExabeamRetrySettingsAttrTypes())
 		}
+		if len(state.OutputExabeam.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputExabeam.RetrySettings = types.ObjectNull(OutputExabeamRetrySettingsAttrTypes())
+		}
 		if !api.OutputExabeam.Orphans.IsNull() && !api.OutputExabeam.Orphans.IsUnknown() {
 			state.OutputExabeam.Orphans = api.OutputExabeam.Orphans
 		} else if state.OutputExabeam.Orphans.IsNull() || state.OutputExabeam.Orphans.IsUnknown() {
+			state.OutputExabeam.Orphans = types.ObjectNull(OutputExabeamOrphansAttrTypes())
+		}
+		if len(state.OutputExabeam.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputExabeam.Orphans = types.ObjectNull(OutputExabeamOrphansAttrTypes())
 		}
 		if !api.OutputExabeam.MaxFileSizeMB.IsNull() && !api.OutputExabeam.MaxFileSizeMB.IsUnknown() {
@@ -33162,6 +36462,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputKafka.SystemFields.IsNull() || state.OutputKafka.SystemFields.IsUnknown() {
 			state.OutputKafka.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputKafka.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputKafka.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputKafka.Environment.IsNull() && !api.OutputKafka.Environment.IsUnknown() {
 			state.OutputKafka.Environment = api.OutputKafka.Environment
 		} else if state.OutputKafka.Environment.IsNull() || state.OutputKafka.Environment.IsUnknown() {
@@ -33172,9 +36475,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputKafka.Streamtags.IsNull() || state.OutputKafka.Streamtags.IsUnknown() {
 			state.OutputKafka.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputKafka.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputKafka.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputKafka.Brokers.IsNull() && !api.OutputKafka.Brokers.IsUnknown() {
 			state.OutputKafka.Brokers = api.OutputKafka.Brokers
 		} else if state.OutputKafka.Brokers.IsNull() || state.OutputKafka.Brokers.IsUnknown() {
+			state.OutputKafka.Brokers = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputKafka.Brokers.ElementType(context.Background()); elementType == nil {
 			state.OutputKafka.Brokers = types.ListNull(types.StringType)
 		}
 		if !api.OutputKafka.Topic.IsNull() && !api.OutputKafka.Topic.IsUnknown() {
@@ -33215,6 +36524,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputKafka.KafkaSchemaRegistry.IsNull() && !api.OutputKafka.KafkaSchemaRegistry.IsUnknown() {
 			state.OutputKafka.KafkaSchemaRegistry = api.OutputKafka.KafkaSchemaRegistry
 		} else if state.OutputKafka.KafkaSchemaRegistry.IsNull() || state.OutputKafka.KafkaSchemaRegistry.IsUnknown() {
+			state.OutputKafka.KafkaSchemaRegistry = types.ObjectNull(OutputKafkaKafkaSchemaRegistryAttrTypes())
+		}
+		if len(state.OutputKafka.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
 			state.OutputKafka.KafkaSchemaRegistry = types.ObjectNull(OutputKafkaKafkaSchemaRegistryAttrTypes())
 		}
 		if !api.OutputKafka.ConnectionTimeout.IsNull() && !api.OutputKafka.ConnectionTimeout.IsUnknown() {
@@ -33262,9 +36574,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputKafka.Sasl.IsNull() || state.OutputKafka.Sasl.IsUnknown() {
 			state.OutputKafka.Sasl = types.ObjectNull(OutputKafkaSaslAttrTypes())
 		}
+		if len(state.OutputKafka.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.OutputKafka.Sasl = types.ObjectNull(OutputKafkaSaslAttrTypes())
+		}
 		if !api.OutputKafka.TLS.IsNull() && !api.OutputKafka.TLS.IsUnknown() {
 			state.OutputKafka.TLS = api.OutputKafka.TLS
 		} else if state.OutputKafka.TLS.IsNull() || state.OutputKafka.TLS.IsUnknown() {
+			state.OutputKafka.TLS = types.ObjectNull(OutputKafkaTLSAttrTypes())
+		}
+		if len(state.OutputKafka.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputKafka.TLS = types.ObjectNull(OutputKafkaTLSAttrTypes())
 		}
 		if !api.OutputKafka.OnBackpressure.IsNull() && !api.OutputKafka.OnBackpressure.IsUnknown() {
@@ -33372,6 +36690,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputConfluentCloud.SystemFields.IsNull() || state.OutputConfluentCloud.SystemFields.IsUnknown() {
 			state.OutputConfluentCloud.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputConfluentCloud.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputConfluentCloud.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputConfluentCloud.Environment.IsNull() && !api.OutputConfluentCloud.Environment.IsUnknown() {
 			state.OutputConfluentCloud.Environment = api.OutputConfluentCloud.Environment
 		} else if state.OutputConfluentCloud.Environment.IsNull() || state.OutputConfluentCloud.Environment.IsUnknown() {
@@ -33382,14 +36703,23 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputConfluentCloud.Streamtags.IsNull() || state.OutputConfluentCloud.Streamtags.IsUnknown() {
 			state.OutputConfluentCloud.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputConfluentCloud.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputConfluentCloud.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputConfluentCloud.Brokers.IsNull() && !api.OutputConfluentCloud.Brokers.IsUnknown() {
 			state.OutputConfluentCloud.Brokers = api.OutputConfluentCloud.Brokers
 		} else if state.OutputConfluentCloud.Brokers.IsNull() || state.OutputConfluentCloud.Brokers.IsUnknown() {
 			state.OutputConfluentCloud.Brokers = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputConfluentCloud.Brokers.ElementType(context.Background()); elementType == nil {
+			state.OutputConfluentCloud.Brokers = types.ListNull(types.StringType)
+		}
 		if !api.OutputConfluentCloud.TLS.IsNull() && !api.OutputConfluentCloud.TLS.IsUnknown() {
 			state.OutputConfluentCloud.TLS = api.OutputConfluentCloud.TLS
 		} else if state.OutputConfluentCloud.TLS.IsNull() || state.OutputConfluentCloud.TLS.IsUnknown() {
+			state.OutputConfluentCloud.TLS = types.ObjectNull(OutputConfluentCloudTLSAttrTypes())
+		}
+		if len(state.OutputConfluentCloud.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputConfluentCloud.TLS = types.ObjectNull(OutputConfluentCloudTLSAttrTypes())
 		}
 		if !api.OutputConfluentCloud.Topic.IsNull() && !api.OutputConfluentCloud.Topic.IsUnknown() {
@@ -33430,6 +36760,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputConfluentCloud.KafkaSchemaRegistry.IsNull() && !api.OutputConfluentCloud.KafkaSchemaRegistry.IsUnknown() {
 			state.OutputConfluentCloud.KafkaSchemaRegistry = api.OutputConfluentCloud.KafkaSchemaRegistry
 		} else if state.OutputConfluentCloud.KafkaSchemaRegistry.IsNull() || state.OutputConfluentCloud.KafkaSchemaRegistry.IsUnknown() {
+			state.OutputConfluentCloud.KafkaSchemaRegistry = types.ObjectNull(OutputConfluentCloudKafkaSchemaRegistryAttrTypes())
+		}
+		if len(state.OutputConfluentCloud.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
 			state.OutputConfluentCloud.KafkaSchemaRegistry = types.ObjectNull(OutputConfluentCloudKafkaSchemaRegistryAttrTypes())
 		}
 		if !api.OutputConfluentCloud.ConnectionTimeout.IsNull() && !api.OutputConfluentCloud.ConnectionTimeout.IsUnknown() {
@@ -33475,6 +36808,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputConfluentCloud.Sasl.IsNull() && !api.OutputConfluentCloud.Sasl.IsUnknown() {
 			state.OutputConfluentCloud.Sasl = api.OutputConfluentCloud.Sasl
 		} else if state.OutputConfluentCloud.Sasl.IsNull() || state.OutputConfluentCloud.Sasl.IsUnknown() {
+			state.OutputConfluentCloud.Sasl = types.ObjectNull(OutputConfluentCloudSaslAttrTypes())
+		}
+		if len(state.OutputConfluentCloud.Sasl.AttributeTypes(context.Background())) == 0 {
 			state.OutputConfluentCloud.Sasl = types.ObjectNull(OutputConfluentCloudSaslAttrTypes())
 		}
 		if !api.OutputConfluentCloud.OnBackpressure.IsNull() && !api.OutputConfluentCloud.OnBackpressure.IsUnknown() {
@@ -33582,6 +36918,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMsk.SystemFields.IsNull() || state.OutputMsk.SystemFields.IsUnknown() {
 			state.OutputMsk.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputMsk.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputMsk.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputMsk.Environment.IsNull() && !api.OutputMsk.Environment.IsUnknown() {
 			state.OutputMsk.Environment = api.OutputMsk.Environment
 		} else if state.OutputMsk.Environment.IsNull() || state.OutputMsk.Environment.IsUnknown() {
@@ -33592,9 +36931,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMsk.Streamtags.IsNull() || state.OutputMsk.Streamtags.IsUnknown() {
 			state.OutputMsk.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputMsk.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputMsk.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputMsk.Brokers.IsNull() && !api.OutputMsk.Brokers.IsUnknown() {
 			state.OutputMsk.Brokers = api.OutputMsk.Brokers
 		} else if state.OutputMsk.Brokers.IsNull() || state.OutputMsk.Brokers.IsUnknown() {
+			state.OutputMsk.Brokers = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputMsk.Brokers.ElementType(context.Background()); elementType == nil {
 			state.OutputMsk.Brokers = types.ListNull(types.StringType)
 		}
 		if !api.OutputMsk.Topic.IsNull() && !api.OutputMsk.Topic.IsUnknown() {
@@ -33635,6 +36980,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputMsk.KafkaSchemaRegistry.IsNull() && !api.OutputMsk.KafkaSchemaRegistry.IsUnknown() {
 			state.OutputMsk.KafkaSchemaRegistry = api.OutputMsk.KafkaSchemaRegistry
 		} else if state.OutputMsk.KafkaSchemaRegistry.IsNull() || state.OutputMsk.KafkaSchemaRegistry.IsUnknown() {
+			state.OutputMsk.KafkaSchemaRegistry = types.ObjectNull(OutputMskKafkaSchemaRegistryAttrTypes())
+		}
+		if len(state.OutputMsk.KafkaSchemaRegistry.AttributeTypes(context.Background())) == 0 {
 			state.OutputMsk.KafkaSchemaRegistry = types.ObjectNull(OutputMskKafkaSchemaRegistryAttrTypes())
 		}
 		if !api.OutputMsk.ConnectionTimeout.IsNull() && !api.OutputMsk.ConnectionTimeout.IsUnknown() {
@@ -33730,6 +37078,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputMsk.TLS.IsNull() && !api.OutputMsk.TLS.IsUnknown() {
 			state.OutputMsk.TLS = api.OutputMsk.TLS
 		} else if state.OutputMsk.TLS.IsNull() || state.OutputMsk.TLS.IsUnknown() {
+			state.OutputMsk.TLS = types.ObjectNull(OutputMskTLSAttrTypes())
+		}
+		if len(state.OutputMsk.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputMsk.TLS = types.ObjectNull(OutputMskTLSAttrTypes())
 		}
 		if !api.OutputMsk.OnBackpressure.IsNull() && !api.OutputMsk.OnBackpressure.IsUnknown() {
@@ -33847,6 +37198,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElastic.SystemFields.IsNull() || state.OutputElastic.SystemFields.IsUnknown() {
 			state.OutputElastic.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputElastic.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputElastic.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputElastic.Environment.IsNull() && !api.OutputElastic.Environment.IsUnknown() {
 			state.OutputElastic.Environment = api.OutputElastic.Environment
 		} else if state.OutputElastic.Environment.IsNull() || state.OutputElastic.Environment.IsUnknown() {
@@ -33855,6 +37209,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputElastic.Streamtags.IsNull() && !api.OutputElastic.Streamtags.IsUnknown() {
 			state.OutputElastic.Streamtags = api.OutputElastic.Streamtags
 		} else if state.OutputElastic.Streamtags.IsNull() || state.OutputElastic.Streamtags.IsUnknown() {
+			state.OutputElastic.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputElastic.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputElastic.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputElastic.LoadBalanced.IsNull() && !api.OutputElastic.LoadBalanced.IsUnknown() {
@@ -33912,6 +37269,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElastic.ExtraHttpHeaders.IsNull() || state.OutputElastic.ExtraHttpHeaders.IsUnknown() {
 			state.OutputElastic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputElasticExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputElastic.ExtraHttpHeaders.IsNull() || state.OutputElastic.ExtraHttpHeaders.IsUnknown() {
+			state.OutputElastic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputElasticExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputElastic.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputElastic.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputElastic.FailedRequestLoggingMode.IsNull() && !api.OutputElastic.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputElastic.FailedRequestLoggingMode = api.OutputElastic.FailedRequestLoggingMode
 		} else if state.OutputElastic.FailedRequestLoggingMode.IsNull() || state.OutputElastic.FailedRequestLoggingMode.IsUnknown() {
@@ -33922,14 +37284,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElastic.SafeHeaders.IsNull() || state.OutputElastic.SafeHeaders.IsUnknown() {
 			state.OutputElastic.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputElastic.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputElastic.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputElastic.ResponseRetrySettings.IsNull() && !api.OutputElastic.ResponseRetrySettings.IsUnknown() {
 			state.OutputElastic.ResponseRetrySettings = api.OutputElastic.ResponseRetrySettings
 		} else if state.OutputElastic.ResponseRetrySettings.IsNull() || state.OutputElastic.ResponseRetrySettings.IsUnknown() {
 			state.OutputElastic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputElasticResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputElastic.ResponseRetrySettings.IsNull() || state.OutputElastic.ResponseRetrySettings.IsUnknown() {
+			state.OutputElastic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputElasticResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputElastic.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputElastic.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputElastic.TimeoutRetrySettings.IsNull() && !api.OutputElastic.TimeoutRetrySettings.IsUnknown() {
 			state.OutputElastic.TimeoutRetrySettings = api.OutputElastic.TimeoutRetrySettings
 		} else if state.OutputElastic.TimeoutRetrySettings.IsNull() || state.OutputElastic.TimeoutRetrySettings.IsUnknown() {
+			state.OutputElastic.TimeoutRetrySettings = types.ObjectNull(OutputElasticTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputElastic.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputElastic.TimeoutRetrySettings = types.ObjectNull(OutputElasticTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputElastic.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputElastic.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -33942,9 +37315,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElastic.ExtraParams.IsNull() || state.OutputElastic.ExtraParams.IsUnknown() {
 			state.OutputElastic.ExtraParams = types.ListNull(types.ObjectType{AttrTypes: OutputElasticExtraParamsAttrTypes()})
 		}
+		if state.OutputElastic.ExtraParams.IsNull() || state.OutputElastic.ExtraParams.IsUnknown() {
+			state.OutputElastic.ExtraParams = types.ListNull(types.ObjectType{AttrTypes: OutputElasticExtraParamsAttrTypes()})
+		} else if len(state.OutputElastic.ExtraParams.Elements()) == 0 {
+			state.OutputElastic.ExtraParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticExtraParamsAttrTypes()}, nil)
+		}
 		if !api.OutputElastic.Auth.IsNull() && !api.OutputElastic.Auth.IsUnknown() {
 			state.OutputElastic.Auth = api.OutputElastic.Auth
 		} else if state.OutputElastic.Auth.IsNull() || state.OutputElastic.Auth.IsUnknown() {
+			state.OutputElastic.Auth = types.ObjectNull(OutputElasticAuthAttrTypes())
+		}
+		if len(state.OutputElastic.Auth.AttributeTypes(context.Background())) == 0 {
 			state.OutputElastic.Auth = types.ObjectNull(OutputElasticAuthAttrTypes())
 		}
 		if !api.OutputElastic.ElasticVersion.IsNull() && !api.OutputElastic.ElasticVersion.IsUnknown() {
@@ -34001,6 +37382,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputElastic.URLs = api.OutputElastic.URLs
 		} else if state.OutputElastic.URLs.IsNull() || state.OutputElastic.URLs.IsUnknown() {
 			state.OutputElastic.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputElasticURLsAttrTypes()})
+		}
+		if state.OutputElastic.URLs.IsNull() || state.OutputElastic.URLs.IsUnknown() {
+			state.OutputElastic.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputElasticURLsAttrTypes()})
+		} else if len(state.OutputElastic.URLs.Elements()) == 0 {
+			state.OutputElastic.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticURLsAttrTypes()}, nil)
 		}
 		if !api.OutputElastic.DnsResolvePeriodSec.IsNull() && !api.OutputElastic.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputElastic.DnsResolvePeriodSec = api.OutputElastic.DnsResolvePeriodSec
@@ -34097,6 +37483,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElasticCloud.SystemFields.IsNull() || state.OutputElasticCloud.SystemFields.IsUnknown() {
 			state.OutputElasticCloud.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputElasticCloud.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputElasticCloud.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputElasticCloud.Environment.IsNull() && !api.OutputElasticCloud.Environment.IsUnknown() {
 			state.OutputElasticCloud.Environment = api.OutputElasticCloud.Environment
 		} else if state.OutputElasticCloud.Environment.IsNull() || state.OutputElasticCloud.Environment.IsUnknown() {
@@ -34105,6 +37494,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputElasticCloud.Streamtags.IsNull() && !api.OutputElasticCloud.Streamtags.IsUnknown() {
 			state.OutputElasticCloud.Streamtags = api.OutputElasticCloud.Streamtags
 		} else if state.OutputElasticCloud.Streamtags.IsNull() || state.OutputElasticCloud.Streamtags.IsUnknown() {
+			state.OutputElasticCloud.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputElasticCloud.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputElasticCloud.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputElasticCloud.URL.IsNull() && !api.OutputElasticCloud.URL.IsUnknown() {
@@ -34157,6 +37549,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElasticCloud.ExtraHttpHeaders.IsNull() || state.OutputElasticCloud.ExtraHttpHeaders.IsUnknown() {
 			state.OutputElasticCloud.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputElasticCloud.ExtraHttpHeaders.IsNull() || state.OutputElasticCloud.ExtraHttpHeaders.IsUnknown() {
+			state.OutputElasticCloud.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputElasticCloud.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputElasticCloud.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticCloudExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputElasticCloud.FailedRequestLoggingMode.IsNull() && !api.OutputElasticCloud.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputElasticCloud.FailedRequestLoggingMode = api.OutputElasticCloud.FailedRequestLoggingMode
 		} else if state.OutputElasticCloud.FailedRequestLoggingMode.IsNull() || state.OutputElasticCloud.FailedRequestLoggingMode.IsUnknown() {
@@ -34167,14 +37564,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElasticCloud.SafeHeaders.IsNull() || state.OutputElasticCloud.SafeHeaders.IsUnknown() {
 			state.OutputElasticCloud.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputElasticCloud.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputElasticCloud.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputElasticCloud.ExtraParams.IsNull() && !api.OutputElasticCloud.ExtraParams.IsUnknown() {
 			state.OutputElasticCloud.ExtraParams = api.OutputElasticCloud.ExtraParams
 		} else if state.OutputElasticCloud.ExtraParams.IsNull() || state.OutputElasticCloud.ExtraParams.IsUnknown() {
 			state.OutputElasticCloud.ExtraParams = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudExtraParamsAttrTypes()})
 		}
+		if state.OutputElasticCloud.ExtraParams.IsNull() || state.OutputElasticCloud.ExtraParams.IsUnknown() {
+			state.OutputElasticCloud.ExtraParams = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudExtraParamsAttrTypes()})
+		} else if len(state.OutputElasticCloud.ExtraParams.Elements()) == 0 {
+			state.OutputElasticCloud.ExtraParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticCloudExtraParamsAttrTypes()}, nil)
+		}
 		if !api.OutputElasticCloud.Auth.IsNull() && !api.OutputElasticCloud.Auth.IsUnknown() {
 			state.OutputElasticCloud.Auth = api.OutputElasticCloud.Auth
 		} else if state.OutputElasticCloud.Auth.IsNull() || state.OutputElasticCloud.Auth.IsUnknown() {
+			state.OutputElasticCloud.Auth = types.ObjectNull(OutputElasticCloudAuthAttrTypes())
+		}
+		if len(state.OutputElasticCloud.Auth.AttributeTypes(context.Background())) == 0 {
 			state.OutputElasticCloud.Auth = types.ObjectNull(OutputElasticCloudAuthAttrTypes())
 		}
 		if !api.OutputElasticCloud.ElasticPipeline.IsNull() && !api.OutputElasticCloud.ElasticPipeline.IsUnknown() {
@@ -34192,9 +37600,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputElasticCloud.ResponseRetrySettings.IsNull() || state.OutputElasticCloud.ResponseRetrySettings.IsUnknown() {
 			state.OutputElasticCloud.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputElasticCloud.ResponseRetrySettings.IsNull() || state.OutputElasticCloud.ResponseRetrySettings.IsUnknown() {
+			state.OutputElasticCloud.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputElasticCloudResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputElasticCloud.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputElasticCloud.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputElasticCloudResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputElasticCloud.TimeoutRetrySettings.IsNull() && !api.OutputElasticCloud.TimeoutRetrySettings.IsUnknown() {
 			state.OutputElasticCloud.TimeoutRetrySettings = api.OutputElasticCloud.TimeoutRetrySettings
 		} else if state.OutputElasticCloud.TimeoutRetrySettings.IsNull() || state.OutputElasticCloud.TimeoutRetrySettings.IsUnknown() {
+			state.OutputElasticCloud.TimeoutRetrySettings = types.ObjectNull(OutputElasticCloudTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputElasticCloud.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputElasticCloud.TimeoutRetrySettings = types.ObjectNull(OutputElasticCloudTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputElasticCloud.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputElasticCloud.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -34297,6 +37713,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelic.SystemFields.IsNull() || state.OutputNewrelic.SystemFields.IsUnknown() {
 			state.OutputNewrelic.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNewrelic.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputNewrelic.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputNewrelic.Environment.IsNull() && !api.OutputNewrelic.Environment.IsUnknown() {
 			state.OutputNewrelic.Environment = api.OutputNewrelic.Environment
 		} else if state.OutputNewrelic.Environment.IsNull() || state.OutputNewrelic.Environment.IsUnknown() {
@@ -34305,6 +37724,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputNewrelic.Streamtags.IsNull() && !api.OutputNewrelic.Streamtags.IsUnknown() {
 			state.OutputNewrelic.Streamtags = api.OutputNewrelic.Streamtags
 		} else if state.OutputNewrelic.Streamtags.IsNull() || state.OutputNewrelic.Streamtags.IsUnknown() {
+			state.OutputNewrelic.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputNewrelic.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputNewrelic.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputNewrelic.Region.IsNull() && !api.OutputNewrelic.Region.IsUnknown() {
@@ -34326,6 +37748,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputNewrelic.Metadata = api.OutputNewrelic.Metadata
 		} else if state.OutputNewrelic.Metadata.IsNull() || state.OutputNewrelic.Metadata.IsUnknown() {
 			state.OutputNewrelic.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicMetadataAttrTypes()})
+		}
+		if state.OutputNewrelic.Metadata.IsNull() || state.OutputNewrelic.Metadata.IsUnknown() {
+			state.OutputNewrelic.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicMetadataAttrTypes()})
+		} else if len(state.OutputNewrelic.Metadata.Elements()) == 0 {
+			state.OutputNewrelic.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputNewrelicMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputNewrelic.Concurrency.IsNull() && !api.OutputNewrelic.Concurrency.IsUnknown() {
 			state.OutputNewrelic.Concurrency = api.OutputNewrelic.Concurrency
@@ -34367,6 +37794,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelic.ExtraHttpHeaders.IsNull() || state.OutputNewrelic.ExtraHttpHeaders.IsUnknown() {
 			state.OutputNewrelic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputNewrelic.ExtraHttpHeaders.IsNull() || state.OutputNewrelic.ExtraHttpHeaders.IsUnknown() {
+			state.OutputNewrelic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputNewrelic.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputNewrelic.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputNewrelicExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputNewrelic.UseRoundRobinDns.IsNull() && !api.OutputNewrelic.UseRoundRobinDns.IsUnknown() {
 			state.OutputNewrelic.UseRoundRobinDns = api.OutputNewrelic.UseRoundRobinDns
 		} else if state.OutputNewrelic.UseRoundRobinDns.IsNull() || state.OutputNewrelic.UseRoundRobinDns.IsUnknown() {
@@ -34382,14 +37814,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelic.SafeHeaders.IsNull() || state.OutputNewrelic.SafeHeaders.IsUnknown() {
 			state.OutputNewrelic.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNewrelic.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputNewrelic.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputNewrelic.ResponseRetrySettings.IsNull() && !api.OutputNewrelic.ResponseRetrySettings.IsUnknown() {
 			state.OutputNewrelic.ResponseRetrySettings = api.OutputNewrelic.ResponseRetrySettings
 		} else if state.OutputNewrelic.ResponseRetrySettings.IsNull() || state.OutputNewrelic.ResponseRetrySettings.IsUnknown() {
 			state.OutputNewrelic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputNewrelic.ResponseRetrySettings.IsNull() || state.OutputNewrelic.ResponseRetrySettings.IsUnknown() {
+			state.OutputNewrelic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputNewrelic.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputNewrelic.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputNewrelicResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputNewrelic.TimeoutRetrySettings.IsNull() && !api.OutputNewrelic.TimeoutRetrySettings.IsUnknown() {
 			state.OutputNewrelic.TimeoutRetrySettings = api.OutputNewrelic.TimeoutRetrySettings
 		} else if state.OutputNewrelic.TimeoutRetrySettings.IsNull() || state.OutputNewrelic.TimeoutRetrySettings.IsUnknown() {
+			state.OutputNewrelic.TimeoutRetrySettings = types.ObjectNull(OutputNewrelicTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputNewrelic.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputNewrelic.TimeoutRetrySettings = types.ObjectNull(OutputNewrelicTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputNewrelic.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputNewrelic.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -34517,6 +37960,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelicEvents.SystemFields.IsNull() || state.OutputNewrelicEvents.SystemFields.IsUnknown() {
 			state.OutputNewrelicEvents.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNewrelicEvents.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputNewrelicEvents.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputNewrelicEvents.Environment.IsNull() && !api.OutputNewrelicEvents.Environment.IsUnknown() {
 			state.OutputNewrelicEvents.Environment = api.OutputNewrelicEvents.Environment
 		} else if state.OutputNewrelicEvents.Environment.IsNull() || state.OutputNewrelicEvents.Environment.IsUnknown() {
@@ -34525,6 +37971,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputNewrelicEvents.Streamtags.IsNull() && !api.OutputNewrelicEvents.Streamtags.IsUnknown() {
 			state.OutputNewrelicEvents.Streamtags = api.OutputNewrelicEvents.Streamtags
 		} else if state.OutputNewrelicEvents.Streamtags.IsNull() || state.OutputNewrelicEvents.Streamtags.IsUnknown() {
+			state.OutputNewrelicEvents.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputNewrelicEvents.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputNewrelicEvents.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputNewrelicEvents.Region.IsNull() && !api.OutputNewrelicEvents.Region.IsUnknown() {
@@ -34582,6 +38031,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelicEvents.ExtraHttpHeaders.IsNull() || state.OutputNewrelicEvents.ExtraHttpHeaders.IsUnknown() {
 			state.OutputNewrelicEvents.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicEventsExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputNewrelicEvents.ExtraHttpHeaders.IsNull() || state.OutputNewrelicEvents.ExtraHttpHeaders.IsUnknown() {
+			state.OutputNewrelicEvents.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicEventsExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputNewrelicEvents.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputNewrelicEvents.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputNewrelicEventsExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputNewrelicEvents.UseRoundRobinDns.IsNull() && !api.OutputNewrelicEvents.UseRoundRobinDns.IsUnknown() {
 			state.OutputNewrelicEvents.UseRoundRobinDns = api.OutputNewrelicEvents.UseRoundRobinDns
 		} else if state.OutputNewrelicEvents.UseRoundRobinDns.IsNull() || state.OutputNewrelicEvents.UseRoundRobinDns.IsUnknown() {
@@ -34597,14 +38051,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNewrelicEvents.SafeHeaders.IsNull() || state.OutputNewrelicEvents.SafeHeaders.IsUnknown() {
 			state.OutputNewrelicEvents.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNewrelicEvents.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputNewrelicEvents.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputNewrelicEvents.ResponseRetrySettings.IsNull() && !api.OutputNewrelicEvents.ResponseRetrySettings.IsUnknown() {
 			state.OutputNewrelicEvents.ResponseRetrySettings = api.OutputNewrelicEvents.ResponseRetrySettings
 		} else if state.OutputNewrelicEvents.ResponseRetrySettings.IsNull() || state.OutputNewrelicEvents.ResponseRetrySettings.IsUnknown() {
 			state.OutputNewrelicEvents.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicEventsResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputNewrelicEvents.ResponseRetrySettings.IsNull() || state.OutputNewrelicEvents.ResponseRetrySettings.IsUnknown() {
+			state.OutputNewrelicEvents.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputNewrelicEventsResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputNewrelicEvents.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputNewrelicEvents.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputNewrelicEventsResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputNewrelicEvents.TimeoutRetrySettings.IsNull() && !api.OutputNewrelicEvents.TimeoutRetrySettings.IsUnknown() {
 			state.OutputNewrelicEvents.TimeoutRetrySettings = api.OutputNewrelicEvents.TimeoutRetrySettings
 		} else if state.OutputNewrelicEvents.TimeoutRetrySettings.IsNull() || state.OutputNewrelicEvents.TimeoutRetrySettings.IsUnknown() {
+			state.OutputNewrelicEvents.TimeoutRetrySettings = types.ObjectNull(OutputNewrelicEventsTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputNewrelicEvents.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputNewrelicEvents.TimeoutRetrySettings = types.ObjectNull(OutputNewrelicEventsTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputNewrelicEvents.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputNewrelicEvents.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -34727,6 +38192,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputInfluxdb.SystemFields.IsNull() || state.OutputInfluxdb.SystemFields.IsUnknown() {
 			state.OutputInfluxdb.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputInfluxdb.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputInfluxdb.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputInfluxdb.Environment.IsNull() && !api.OutputInfluxdb.Environment.IsUnknown() {
 			state.OutputInfluxdb.Environment = api.OutputInfluxdb.Environment
 		} else if state.OutputInfluxdb.Environment.IsNull() || state.OutputInfluxdb.Environment.IsUnknown() {
@@ -34735,6 +38203,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputInfluxdb.Streamtags.IsNull() && !api.OutputInfluxdb.Streamtags.IsUnknown() {
 			state.OutputInfluxdb.Streamtags = api.OutputInfluxdb.Streamtags
 		} else if state.OutputInfluxdb.Streamtags.IsNull() || state.OutputInfluxdb.Streamtags.IsUnknown() {
+			state.OutputInfluxdb.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputInfluxdb.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputInfluxdb.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputInfluxdb.URL.IsNull() && !api.OutputInfluxdb.URL.IsUnknown() {
@@ -34802,6 +38273,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputInfluxdb.ExtraHttpHeaders.IsNull() || state.OutputInfluxdb.ExtraHttpHeaders.IsUnknown() {
 			state.OutputInfluxdb.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputInfluxdbExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputInfluxdb.ExtraHttpHeaders.IsNull() || state.OutputInfluxdb.ExtraHttpHeaders.IsUnknown() {
+			state.OutputInfluxdb.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputInfluxdbExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputInfluxdb.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputInfluxdb.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputInfluxdbExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputInfluxdb.UseRoundRobinDns.IsNull() && !api.OutputInfluxdb.UseRoundRobinDns.IsUnknown() {
 			state.OutputInfluxdb.UseRoundRobinDns = api.OutputInfluxdb.UseRoundRobinDns
 		} else if state.OutputInfluxdb.UseRoundRobinDns.IsNull() || state.OutputInfluxdb.UseRoundRobinDns.IsUnknown() {
@@ -34817,14 +38293,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputInfluxdb.SafeHeaders.IsNull() || state.OutputInfluxdb.SafeHeaders.IsUnknown() {
 			state.OutputInfluxdb.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputInfluxdb.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputInfluxdb.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputInfluxdb.ResponseRetrySettings.IsNull() && !api.OutputInfluxdb.ResponseRetrySettings.IsUnknown() {
 			state.OutputInfluxdb.ResponseRetrySettings = api.OutputInfluxdb.ResponseRetrySettings
 		} else if state.OutputInfluxdb.ResponseRetrySettings.IsNull() || state.OutputInfluxdb.ResponseRetrySettings.IsUnknown() {
 			state.OutputInfluxdb.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputInfluxdbResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputInfluxdb.ResponseRetrySettings.IsNull() || state.OutputInfluxdb.ResponseRetrySettings.IsUnknown() {
+			state.OutputInfluxdb.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputInfluxdbResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputInfluxdb.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputInfluxdb.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputInfluxdbResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputInfluxdb.TimeoutRetrySettings.IsNull() && !api.OutputInfluxdb.TimeoutRetrySettings.IsUnknown() {
 			state.OutputInfluxdb.TimeoutRetrySettings = api.OutputInfluxdb.TimeoutRetrySettings
 		} else if state.OutputInfluxdb.TimeoutRetrySettings.IsNull() || state.OutputInfluxdb.TimeoutRetrySettings.IsUnknown() {
+			state.OutputInfluxdb.TimeoutRetrySettings = types.ObjectNull(OutputInfluxdbTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputInfluxdb.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputInfluxdb.TimeoutRetrySettings = types.ObjectNull(OutputInfluxdbTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputInfluxdb.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputInfluxdb.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -34972,6 +38459,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudwatch.SystemFields.IsNull() || state.OutputCloudwatch.SystemFields.IsUnknown() {
 			state.OutputCloudwatch.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCloudwatch.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCloudwatch.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCloudwatch.Environment.IsNull() && !api.OutputCloudwatch.Environment.IsUnknown() {
 			state.OutputCloudwatch.Environment = api.OutputCloudwatch.Environment
 		} else if state.OutputCloudwatch.Environment.IsNull() || state.OutputCloudwatch.Environment.IsUnknown() {
@@ -34980,6 +38470,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCloudwatch.Streamtags.IsNull() && !api.OutputCloudwatch.Streamtags.IsUnknown() {
 			state.OutputCloudwatch.Streamtags = api.OutputCloudwatch.Streamtags
 		} else if state.OutputCloudwatch.Streamtags.IsNull() || state.OutputCloudwatch.Streamtags.IsUnknown() {
+			state.OutputCloudwatch.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCloudwatch.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCloudwatch.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCloudwatch.LogGroupName.IsNull() && !api.OutputCloudwatch.LogGroupName.IsUnknown() {
@@ -35162,6 +38655,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMinio.SystemFields.IsNull() || state.OutputMinio.SystemFields.IsUnknown() {
 			state.OutputMinio.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputMinio.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputMinio.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputMinio.Environment.IsNull() && !api.OutputMinio.Environment.IsUnknown() {
 			state.OutputMinio.Environment = api.OutputMinio.Environment
 		} else if state.OutputMinio.Environment.IsNull() || state.OutputMinio.Environment.IsUnknown() {
@@ -35170,6 +38666,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputMinio.Streamtags.IsNull() && !api.OutputMinio.Streamtags.IsUnknown() {
 			state.OutputMinio.Streamtags = api.OutputMinio.Streamtags
 		} else if state.OutputMinio.Streamtags.IsNull() || state.OutputMinio.Streamtags.IsUnknown() {
+			state.OutputMinio.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputMinio.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputMinio.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputMinio.AwsAuthenticationMethod.IsNull() && !api.OutputMinio.AwsAuthenticationMethod.IsUnknown() {
@@ -35307,9 +38806,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMinio.RetrySettings.IsNull() || state.OutputMinio.RetrySettings.IsUnknown() {
 			state.OutputMinio.RetrySettings = types.ObjectNull(OutputMinioRetrySettingsAttrTypes())
 		}
+		if len(state.OutputMinio.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputMinio.RetrySettings = types.ObjectNull(OutputMinioRetrySettingsAttrTypes())
+		}
 		if !api.OutputMinio.Orphans.IsNull() && !api.OutputMinio.Orphans.IsUnknown() {
 			state.OutputMinio.Orphans = api.OutputMinio.Orphans
 		} else if state.OutputMinio.Orphans.IsNull() || state.OutputMinio.Orphans.IsUnknown() {
+			state.OutputMinio.Orphans = types.ObjectNull(OutputMinioOrphansAttrTypes())
+		}
+		if len(state.OutputMinio.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputMinio.Orphans = types.ObjectNull(OutputMinioOrphansAttrTypes())
 		}
 		if !api.OutputMinio.AwsSecretKey.IsNull() && !api.OutputMinio.AwsSecretKey.IsUnknown() {
@@ -35402,6 +38907,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMinio.KeyValueMetadata.IsNull() || state.OutputMinio.KeyValueMetadata.IsUnknown() {
 			state.OutputMinio.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputMinioKeyValueMetadataAttrTypes()})
 		}
+		if state.OutputMinio.KeyValueMetadata.IsNull() || state.OutputMinio.KeyValueMetadata.IsUnknown() {
+			state.OutputMinio.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputMinioKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputMinio.KeyValueMetadata.Elements()) == 0 {
+			state.OutputMinio.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputMinioKeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputMinio.EnableStatistics.IsNull() && !api.OutputMinio.EnableStatistics.IsUnknown() {
 			state.OutputMinio.EnableStatistics = api.OutputMinio.EnableStatistics
 		} else if state.OutputMinio.EnableStatistics.IsNull() || state.OutputMinio.EnableStatistics.IsUnknown() {
@@ -35462,6 +38972,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputStatsd.SystemFields.IsNull() || state.OutputStatsd.SystemFields.IsUnknown() {
 			state.OutputStatsd.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputStatsd.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputStatsd.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputStatsd.Environment.IsNull() && !api.OutputStatsd.Environment.IsUnknown() {
 			state.OutputStatsd.Environment = api.OutputStatsd.Environment
 		} else if state.OutputStatsd.Environment.IsNull() || state.OutputStatsd.Environment.IsUnknown() {
@@ -35470,6 +38983,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputStatsd.Streamtags.IsNull() && !api.OutputStatsd.Streamtags.IsUnknown() {
 			state.OutputStatsd.Streamtags = api.OutputStatsd.Streamtags
 		} else if state.OutputStatsd.Streamtags.IsNull() || state.OutputStatsd.Streamtags.IsUnknown() {
+			state.OutputStatsd.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputStatsd.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputStatsd.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputStatsd.Protocol.IsNull() && !api.OutputStatsd.Protocol.IsUnknown() {
@@ -35612,6 +39128,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputStatsdExt.SystemFields.IsNull() || state.OutputStatsdExt.SystemFields.IsUnknown() {
 			state.OutputStatsdExt.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputStatsdExt.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputStatsdExt.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputStatsdExt.Environment.IsNull() && !api.OutputStatsdExt.Environment.IsUnknown() {
 			state.OutputStatsdExt.Environment = api.OutputStatsdExt.Environment
 		} else if state.OutputStatsdExt.Environment.IsNull() || state.OutputStatsdExt.Environment.IsUnknown() {
@@ -35620,6 +39139,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputStatsdExt.Streamtags.IsNull() && !api.OutputStatsdExt.Streamtags.IsUnknown() {
 			state.OutputStatsdExt.Streamtags = api.OutputStatsdExt.Streamtags
 		} else if state.OutputStatsdExt.Streamtags.IsNull() || state.OutputStatsdExt.Streamtags.IsUnknown() {
+			state.OutputStatsdExt.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputStatsdExt.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputStatsdExt.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputStatsdExt.Protocol.IsNull() && !api.OutputStatsdExt.Protocol.IsUnknown() {
@@ -35762,6 +39284,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGraphite.SystemFields.IsNull() || state.OutputGraphite.SystemFields.IsUnknown() {
 			state.OutputGraphite.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGraphite.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGraphite.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGraphite.Environment.IsNull() && !api.OutputGraphite.Environment.IsUnknown() {
 			state.OutputGraphite.Environment = api.OutputGraphite.Environment
 		} else if state.OutputGraphite.Environment.IsNull() || state.OutputGraphite.Environment.IsUnknown() {
@@ -35770,6 +39295,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGraphite.Streamtags.IsNull() && !api.OutputGraphite.Streamtags.IsUnknown() {
 			state.OutputGraphite.Streamtags = api.OutputGraphite.Streamtags
 		} else if state.OutputGraphite.Streamtags.IsNull() || state.OutputGraphite.Streamtags.IsUnknown() {
+			state.OutputGraphite.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGraphite.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGraphite.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGraphite.Protocol.IsNull() && !api.OutputGraphite.Protocol.IsUnknown() {
@@ -35912,6 +39440,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputRouter.SystemFields.IsNull() || state.OutputRouter.SystemFields.IsUnknown() {
 			state.OutputRouter.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputRouter.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputRouter.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputRouter.Environment.IsNull() && !api.OutputRouter.Environment.IsUnknown() {
 			state.OutputRouter.Environment = api.OutputRouter.Environment
 		} else if state.OutputRouter.Environment.IsNull() || state.OutputRouter.Environment.IsUnknown() {
@@ -35922,10 +39453,18 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputRouter.Streamtags.IsNull() || state.OutputRouter.Streamtags.IsUnknown() {
 			state.OutputRouter.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
-			state.OutputRouter.Rules = api.OutputRouter.Rules
-		} else if state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown() {
+		if elementType := state.OutputRouter.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputRouter.Streamtags = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown())) {
+			if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
+				state.OutputRouter.Rules = api.OutputRouter.Rules
+			}
+		}
+		if state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown() {
 			state.OutputRouter.Rules = types.ListNull(types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()})
+		} else if len(state.OutputRouter.Rules.Elements()) == 0 {
+			state.OutputRouter.Rules = types.ListValueMust(types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()}, nil)
 		}
 		if !api.OutputRouter.Description.IsNull() && !api.OutputRouter.Description.IsUnknown() {
 			state.OutputRouter.Description = api.OutputRouter.Description
@@ -35957,6 +39496,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSns.SystemFields.IsNull() || state.OutputSns.SystemFields.IsUnknown() {
 			state.OutputSns.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSns.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSns.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSns.Environment.IsNull() && !api.OutputSns.Environment.IsUnknown() {
 			state.OutputSns.Environment = api.OutputSns.Environment
 		} else if state.OutputSns.Environment.IsNull() || state.OutputSns.Environment.IsUnknown() {
@@ -35965,6 +39507,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSns.Streamtags.IsNull() && !api.OutputSns.Streamtags.IsUnknown() {
 			state.OutputSns.Streamtags = api.OutputSns.Streamtags
 		} else if state.OutputSns.Streamtags.IsNull() || state.OutputSns.Streamtags.IsUnknown() {
+			state.OutputSns.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSns.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSns.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSns.TopicArn.IsNull() && !api.OutputSns.TopicArn.IsUnknown() {
@@ -36137,6 +39682,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSqs.SystemFields.IsNull() || state.OutputSqs.SystemFields.IsUnknown() {
 			state.OutputSqs.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSqs.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSqs.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSqs.Environment.IsNull() && !api.OutputSqs.Environment.IsUnknown() {
 			state.OutputSqs.Environment = api.OutputSqs.Environment
 		} else if state.OutputSqs.Environment.IsNull() || state.OutputSqs.Environment.IsUnknown() {
@@ -36145,6 +39693,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSqs.Streamtags.IsNull() && !api.OutputSqs.Streamtags.IsUnknown() {
 			state.OutputSqs.Streamtags = api.OutputSqs.Streamtags
 		} else if state.OutputSqs.Streamtags.IsNull() || state.OutputSqs.Streamtags.IsUnknown() {
+			state.OutputSqs.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSqs.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSqs.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSqs.QueueName.IsNull() && !api.OutputSqs.QueueName.IsUnknown() {
@@ -36347,6 +39898,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSnmp.SystemFields.IsNull() || state.OutputSnmp.SystemFields.IsUnknown() {
 			state.OutputSnmp.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSnmp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSnmp.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSnmp.Environment.IsNull() && !api.OutputSnmp.Environment.IsUnknown() {
 			state.OutputSnmp.Environment = api.OutputSnmp.Environment
 		} else if state.OutputSnmp.Environment.IsNull() || state.OutputSnmp.Environment.IsUnknown() {
@@ -36357,20 +39911,38 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSnmp.Streamtags.IsNull() || state.OutputSnmp.Streamtags.IsUnknown() {
 			state.OutputSnmp.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSnmp.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputSnmp.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputSnmp.Hosts.IsNull() && !api.OutputSnmp.Hosts.IsUnknown() {
 			state.OutputSnmp.Hosts = api.OutputSnmp.Hosts
 		} else if state.OutputSnmp.Hosts.IsNull() || state.OutputSnmp.Hosts.IsUnknown() {
 			state.OutputSnmp.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSnmpHostsAttrTypes()})
+		}
+		if state.OutputSnmp.Hosts.IsNull() || state.OutputSnmp.Hosts.IsUnknown() {
+			state.OutputSnmp.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputSnmpHostsAttrTypes()})
+		} else if len(state.OutputSnmp.Hosts.Elements()) == 0 {
+			state.OutputSnmp.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputSnmpHostsAttrTypes()}, nil)
 		}
 		if !api.OutputSnmp.DnsResolvePeriodSec.IsNull() && !api.OutputSnmp.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputSnmp.DnsResolvePeriodSec = api.OutputSnmp.DnsResolvePeriodSec
 		} else if state.OutputSnmp.DnsResolvePeriodSec.IsNull() || state.OutputSnmp.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputSnmp.DnsResolvePeriodSec = types.Float64Null()
 		}
+		if !api.OutputSnmp.EnableIpSpoofing.IsNull() && !api.OutputSnmp.EnableIpSpoofing.IsUnknown() {
+			state.OutputSnmp.EnableIpSpoofing = api.OutputSnmp.EnableIpSpoofing
+		} else if state.OutputSnmp.EnableIpSpoofing.IsNull() || state.OutputSnmp.EnableIpSpoofing.IsUnknown() {
+			state.OutputSnmp.EnableIpSpoofing = types.BoolNull()
+		}
 		if !api.OutputSnmp.Description.IsNull() && !api.OutputSnmp.Description.IsUnknown() {
 			state.OutputSnmp.Description = api.OutputSnmp.Description
 		} else if state.OutputSnmp.Description.IsNull() || state.OutputSnmp.Description.IsUnknown() {
 			state.OutputSnmp.Description = types.StringNull()
+		}
+		if !api.OutputSnmp.MaxRecordSize.IsNull() && !api.OutputSnmp.MaxRecordSize.IsUnknown() {
+			state.OutputSnmp.MaxRecordSize = api.OutputSnmp.MaxRecordSize
+		} else if state.OutputSnmp.MaxRecordSize.IsNull() || state.OutputSnmp.MaxRecordSize.IsUnknown() {
+			state.OutputSnmp.MaxRecordSize = types.Float64Null()
 		}
 	}
 	if api.OutputSumoLogic != nil {
@@ -36397,6 +39969,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSumoLogic.SystemFields.IsNull() || state.OutputSumoLogic.SystemFields.IsUnknown() {
 			state.OutputSumoLogic.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSumoLogic.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSumoLogic.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSumoLogic.Environment.IsNull() && !api.OutputSumoLogic.Environment.IsUnknown() {
 			state.OutputSumoLogic.Environment = api.OutputSumoLogic.Environment
 		} else if state.OutputSumoLogic.Environment.IsNull() || state.OutputSumoLogic.Environment.IsUnknown() {
@@ -36405,6 +39980,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSumoLogic.Streamtags.IsNull() && !api.OutputSumoLogic.Streamtags.IsUnknown() {
 			state.OutputSumoLogic.Streamtags = api.OutputSumoLogic.Streamtags
 		} else if state.OutputSumoLogic.Streamtags.IsNull() || state.OutputSumoLogic.Streamtags.IsUnknown() {
+			state.OutputSumoLogic.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSumoLogic.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSumoLogic.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSumoLogic.URL.IsNull() && !api.OutputSumoLogic.URL.IsUnknown() {
@@ -36467,6 +40045,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSumoLogic.ExtraHttpHeaders.IsNull() || state.OutputSumoLogic.ExtraHttpHeaders.IsUnknown() {
 			state.OutputSumoLogic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSumoLogicExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputSumoLogic.ExtraHttpHeaders.IsNull() || state.OutputSumoLogic.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSumoLogic.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSumoLogicExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSumoLogic.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSumoLogic.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSumoLogicExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputSumoLogic.UseRoundRobinDns.IsNull() && !api.OutputSumoLogic.UseRoundRobinDns.IsUnknown() {
 			state.OutputSumoLogic.UseRoundRobinDns = api.OutputSumoLogic.UseRoundRobinDns
 		} else if state.OutputSumoLogic.UseRoundRobinDns.IsNull() || state.OutputSumoLogic.UseRoundRobinDns.IsUnknown() {
@@ -36482,14 +40065,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSumoLogic.SafeHeaders.IsNull() || state.OutputSumoLogic.SafeHeaders.IsUnknown() {
 			state.OutputSumoLogic.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSumoLogic.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputSumoLogic.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputSumoLogic.ResponseRetrySettings.IsNull() && !api.OutputSumoLogic.ResponseRetrySettings.IsUnknown() {
 			state.OutputSumoLogic.ResponseRetrySettings = api.OutputSumoLogic.ResponseRetrySettings
 		} else if state.OutputSumoLogic.ResponseRetrySettings.IsNull() || state.OutputSumoLogic.ResponseRetrySettings.IsUnknown() {
 			state.OutputSumoLogic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSumoLogicResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputSumoLogic.ResponseRetrySettings.IsNull() || state.OutputSumoLogic.ResponseRetrySettings.IsUnknown() {
+			state.OutputSumoLogic.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSumoLogicResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSumoLogic.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSumoLogic.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSumoLogicResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputSumoLogic.TimeoutRetrySettings.IsNull() && !api.OutputSumoLogic.TimeoutRetrySettings.IsUnknown() {
 			state.OutputSumoLogic.TimeoutRetrySettings = api.OutputSumoLogic.TimeoutRetrySettings
 		} else if state.OutputSumoLogic.TimeoutRetrySettings.IsNull() || state.OutputSumoLogic.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSumoLogic.TimeoutRetrySettings = types.ObjectNull(OutputSumoLogicTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSumoLogic.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputSumoLogic.TimeoutRetrySettings = types.ObjectNull(OutputSumoLogicTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputSumoLogic.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSumoLogic.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -36597,6 +40191,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatadog.SystemFields.IsNull() || state.OutputDatadog.SystemFields.IsUnknown() {
 			state.OutputDatadog.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDatadog.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDatadog.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDatadog.Environment.IsNull() && !api.OutputDatadog.Environment.IsUnknown() {
 			state.OutputDatadog.Environment = api.OutputDatadog.Environment
 		} else if state.OutputDatadog.Environment.IsNull() || state.OutputDatadog.Environment.IsUnknown() {
@@ -36605,6 +40202,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDatadog.Streamtags.IsNull() && !api.OutputDatadog.Streamtags.IsUnknown() {
 			state.OutputDatadog.Streamtags = api.OutputDatadog.Streamtags
 		} else if state.OutputDatadog.Streamtags.IsNull() || state.OutputDatadog.Streamtags.IsUnknown() {
+			state.OutputDatadog.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDatadog.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDatadog.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDatadog.ContentType.IsNull() && !api.OutputDatadog.ContentType.IsUnknown() {
@@ -36635,6 +40235,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDatadog.Tags.IsNull() && !api.OutputDatadog.Tags.IsUnknown() {
 			state.OutputDatadog.Tags = api.OutputDatadog.Tags
 		} else if state.OutputDatadog.Tags.IsNull() || state.OutputDatadog.Tags.IsUnknown() {
+			state.OutputDatadog.Tags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDatadog.Tags.ElementType(context.Background()); elementType == nil {
 			state.OutputDatadog.Tags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDatadog.BatchByTags.IsNull() && !api.OutputDatadog.BatchByTags.IsUnknown() {
@@ -36702,6 +40305,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatadog.ExtraHttpHeaders.IsNull() || state.OutputDatadog.ExtraHttpHeaders.IsUnknown() {
 			state.OutputDatadog.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDatadogExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputDatadog.ExtraHttpHeaders.IsNull() || state.OutputDatadog.ExtraHttpHeaders.IsUnknown() {
+			state.OutputDatadog.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDatadogExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputDatadog.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputDatadog.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputDatadogExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputDatadog.UseRoundRobinDns.IsNull() && !api.OutputDatadog.UseRoundRobinDns.IsUnknown() {
 			state.OutputDatadog.UseRoundRobinDns = api.OutputDatadog.UseRoundRobinDns
 		} else if state.OutputDatadog.UseRoundRobinDns.IsNull() || state.OutputDatadog.UseRoundRobinDns.IsUnknown() {
@@ -36717,14 +40325,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatadog.SafeHeaders.IsNull() || state.OutputDatadog.SafeHeaders.IsUnknown() {
 			state.OutputDatadog.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDatadog.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputDatadog.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputDatadog.ResponseRetrySettings.IsNull() && !api.OutputDatadog.ResponseRetrySettings.IsUnknown() {
 			state.OutputDatadog.ResponseRetrySettings = api.OutputDatadog.ResponseRetrySettings
 		} else if state.OutputDatadog.ResponseRetrySettings.IsNull() || state.OutputDatadog.ResponseRetrySettings.IsUnknown() {
 			state.OutputDatadog.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDatadogResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputDatadog.ResponseRetrySettings.IsNull() || state.OutputDatadog.ResponseRetrySettings.IsUnknown() {
+			state.OutputDatadog.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDatadogResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputDatadog.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputDatadog.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputDatadogResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputDatadog.TimeoutRetrySettings.IsNull() && !api.OutputDatadog.TimeoutRetrySettings.IsUnknown() {
 			state.OutputDatadog.TimeoutRetrySettings = api.OutputDatadog.TimeoutRetrySettings
 		} else if state.OutputDatadog.TimeoutRetrySettings.IsNull() || state.OutputDatadog.TimeoutRetrySettings.IsUnknown() {
+			state.OutputDatadog.TimeoutRetrySettings = types.ObjectNull(OutputDatadogTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputDatadog.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputDatadog.TimeoutRetrySettings = types.ObjectNull(OutputDatadogTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputDatadog.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputDatadog.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -36852,6 +40471,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGrafanaCloud.SystemFields.IsNull() || state.OutputGrafanaCloud.SystemFields.IsUnknown() {
 			state.OutputGrafanaCloud.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGrafanaCloud.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputGrafanaCloud.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputGrafanaCloud.Environment.IsNull() && !api.OutputGrafanaCloud.Environment.IsUnknown() {
 			state.OutputGrafanaCloud.Environment = api.OutputGrafanaCloud.Environment
 		} else if state.OutputGrafanaCloud.Environment.IsNull() || state.OutputGrafanaCloud.Environment.IsUnknown() {
@@ -36860,6 +40482,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputGrafanaCloud.Streamtags.IsNull() && !api.OutputGrafanaCloud.Streamtags.IsUnknown() {
 			state.OutputGrafanaCloud.Streamtags = api.OutputGrafanaCloud.Streamtags
 		} else if state.OutputGrafanaCloud.Streamtags.IsNull() || state.OutputGrafanaCloud.Streamtags.IsUnknown() {
+			state.OutputGrafanaCloud.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputGrafanaCloud.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputGrafanaCloud.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputGrafanaCloud.LokiURL.IsNull() && !api.OutputGrafanaCloud.LokiURL.IsUnknown() {
@@ -36887,6 +40512,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGrafanaCloud.Labels.IsNull() || state.OutputGrafanaCloud.Labels.IsUnknown() {
 			state.OutputGrafanaCloud.Labels = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudLabelsAttrTypes()})
 		}
+		if state.OutputGrafanaCloud.Labels.IsNull() || state.OutputGrafanaCloud.Labels.IsUnknown() {
+			state.OutputGrafanaCloud.Labels = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudLabelsAttrTypes()})
+		} else if len(state.OutputGrafanaCloud.Labels.Elements()) == 0 {
+			state.OutputGrafanaCloud.Labels = types.ListValueMust(types.ObjectType{AttrTypes: OutputGrafanaCloudLabelsAttrTypes()}, nil)
+		}
 		if !api.OutputGrafanaCloud.MetricRenameExpr.IsNull() && !api.OutputGrafanaCloud.MetricRenameExpr.IsUnknown() {
 			state.OutputGrafanaCloud.MetricRenameExpr = api.OutputGrafanaCloud.MetricRenameExpr
 		} else if state.OutputGrafanaCloud.MetricRenameExpr.IsNull() || state.OutputGrafanaCloud.MetricRenameExpr.IsUnknown() {
@@ -36897,9 +40527,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGrafanaCloud.PrometheusAuth.IsNull() || state.OutputGrafanaCloud.PrometheusAuth.IsUnknown() {
 			state.OutputGrafanaCloud.PrometheusAuth = types.ObjectNull(OutputGrafanaCloudPrometheusAuthAttrTypes())
 		}
+		if len(state.OutputGrafanaCloud.PrometheusAuth.AttributeTypes(context.Background())) == 0 {
+			state.OutputGrafanaCloud.PrometheusAuth = types.ObjectNull(OutputGrafanaCloudPrometheusAuthAttrTypes())
+		}
 		if !api.OutputGrafanaCloud.LokiAuth.IsNull() && !api.OutputGrafanaCloud.LokiAuth.IsUnknown() {
 			state.OutputGrafanaCloud.LokiAuth = api.OutputGrafanaCloud.LokiAuth
 		} else if state.OutputGrafanaCloud.LokiAuth.IsNull() || state.OutputGrafanaCloud.LokiAuth.IsUnknown() {
+			state.OutputGrafanaCloud.LokiAuth = types.ObjectNull(OutputGrafanaCloudLokiAuthAttrTypes())
+		}
+		if len(state.OutputGrafanaCloud.LokiAuth.AttributeTypes(context.Background())) == 0 {
 			state.OutputGrafanaCloud.LokiAuth = types.ObjectNull(OutputGrafanaCloudLokiAuthAttrTypes())
 		}
 		if !api.OutputGrafanaCloud.Concurrency.IsNull() && !api.OutputGrafanaCloud.Concurrency.IsUnknown() {
@@ -36937,6 +40573,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGrafanaCloud.ExtraHttpHeaders.IsNull() || state.OutputGrafanaCloud.ExtraHttpHeaders.IsUnknown() {
 			state.OutputGrafanaCloud.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputGrafanaCloud.ExtraHttpHeaders.IsNull() || state.OutputGrafanaCloud.ExtraHttpHeaders.IsUnknown() {
+			state.OutputGrafanaCloud.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputGrafanaCloud.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputGrafanaCloud.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputGrafanaCloudExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputGrafanaCloud.UseRoundRobinDns.IsNull() && !api.OutputGrafanaCloud.UseRoundRobinDns.IsUnknown() {
 			state.OutputGrafanaCloud.UseRoundRobinDns = api.OutputGrafanaCloud.UseRoundRobinDns
 		} else if state.OutputGrafanaCloud.UseRoundRobinDns.IsNull() || state.OutputGrafanaCloud.UseRoundRobinDns.IsUnknown() {
@@ -36952,14 +40593,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputGrafanaCloud.SafeHeaders.IsNull() || state.OutputGrafanaCloud.SafeHeaders.IsUnknown() {
 			state.OutputGrafanaCloud.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputGrafanaCloud.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputGrafanaCloud.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputGrafanaCloud.ResponseRetrySettings.IsNull() && !api.OutputGrafanaCloud.ResponseRetrySettings.IsUnknown() {
 			state.OutputGrafanaCloud.ResponseRetrySettings = api.OutputGrafanaCloud.ResponseRetrySettings
 		} else if state.OutputGrafanaCloud.ResponseRetrySettings.IsNull() || state.OutputGrafanaCloud.ResponseRetrySettings.IsUnknown() {
 			state.OutputGrafanaCloud.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputGrafanaCloud.ResponseRetrySettings.IsNull() || state.OutputGrafanaCloud.ResponseRetrySettings.IsUnknown() {
+			state.OutputGrafanaCloud.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputGrafanaCloudResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputGrafanaCloud.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputGrafanaCloud.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputGrafanaCloudResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputGrafanaCloud.TimeoutRetrySettings.IsNull() && !api.OutputGrafanaCloud.TimeoutRetrySettings.IsUnknown() {
 			state.OutputGrafanaCloud.TimeoutRetrySettings = api.OutputGrafanaCloud.TimeoutRetrySettings
 		} else if state.OutputGrafanaCloud.TimeoutRetrySettings.IsNull() || state.OutputGrafanaCloud.TimeoutRetrySettings.IsUnknown() {
+			state.OutputGrafanaCloud.TimeoutRetrySettings = types.ObjectNull(OutputGrafanaCloudTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputGrafanaCloud.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputGrafanaCloud.TimeoutRetrySettings = types.ObjectNull(OutputGrafanaCloudTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputGrafanaCloud.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputGrafanaCloud.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -37067,6 +40719,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLoki.SystemFields.IsNull() || state.OutputLoki.SystemFields.IsUnknown() {
 			state.OutputLoki.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputLoki.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputLoki.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputLoki.Environment.IsNull() && !api.OutputLoki.Environment.IsUnknown() {
 			state.OutputLoki.Environment = api.OutputLoki.Environment
 		} else if state.OutputLoki.Environment.IsNull() || state.OutputLoki.Environment.IsUnknown() {
@@ -37075,6 +40730,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputLoki.Streamtags.IsNull() && !api.OutputLoki.Streamtags.IsUnknown() {
 			state.OutputLoki.Streamtags = api.OutputLoki.Streamtags
 		} else if state.OutputLoki.Streamtags.IsNull() || state.OutputLoki.Streamtags.IsUnknown() {
+			state.OutputLoki.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputLoki.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputLoki.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputLoki.URL.IsNull() && !api.OutputLoki.URL.IsUnknown() {
@@ -37096,6 +40754,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputLoki.Labels = api.OutputLoki.Labels
 		} else if state.OutputLoki.Labels.IsNull() || state.OutputLoki.Labels.IsUnknown() {
 			state.OutputLoki.Labels = types.ListNull(types.ObjectType{AttrTypes: OutputLokiLabelsAttrTypes()})
+		}
+		if state.OutputLoki.Labels.IsNull() || state.OutputLoki.Labels.IsUnknown() {
+			state.OutputLoki.Labels = types.ListNull(types.ObjectType{AttrTypes: OutputLokiLabelsAttrTypes()})
+		} else if len(state.OutputLoki.Labels.Elements()) == 0 {
+			state.OutputLoki.Labels = types.ListValueMust(types.ObjectType{AttrTypes: OutputLokiLabelsAttrTypes()}, nil)
 		}
 		if !api.OutputLoki.AuthType.IsNull() && !api.OutputLoki.AuthType.IsUnknown() {
 			state.OutputLoki.AuthType = api.OutputLoki.AuthType
@@ -37137,6 +40800,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLoki.ExtraHttpHeaders.IsNull() || state.OutputLoki.ExtraHttpHeaders.IsUnknown() {
 			state.OutputLoki.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputLokiExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputLoki.ExtraHttpHeaders.IsNull() || state.OutputLoki.ExtraHttpHeaders.IsUnknown() {
+			state.OutputLoki.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputLokiExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputLoki.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputLoki.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputLokiExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputLoki.UseRoundRobinDns.IsNull() && !api.OutputLoki.UseRoundRobinDns.IsUnknown() {
 			state.OutputLoki.UseRoundRobinDns = api.OutputLoki.UseRoundRobinDns
 		} else if state.OutputLoki.UseRoundRobinDns.IsNull() || state.OutputLoki.UseRoundRobinDns.IsUnknown() {
@@ -37152,14 +40820,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLoki.SafeHeaders.IsNull() || state.OutputLoki.SafeHeaders.IsUnknown() {
 			state.OutputLoki.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputLoki.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputLoki.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputLoki.ResponseRetrySettings.IsNull() && !api.OutputLoki.ResponseRetrySettings.IsUnknown() {
 			state.OutputLoki.ResponseRetrySettings = api.OutputLoki.ResponseRetrySettings
 		} else if state.OutputLoki.ResponseRetrySettings.IsNull() || state.OutputLoki.ResponseRetrySettings.IsUnknown() {
 			state.OutputLoki.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLokiResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputLoki.ResponseRetrySettings.IsNull() || state.OutputLoki.ResponseRetrySettings.IsUnknown() {
+			state.OutputLoki.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLokiResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputLoki.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputLoki.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputLokiResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputLoki.TimeoutRetrySettings.IsNull() && !api.OutputLoki.TimeoutRetrySettings.IsUnknown() {
 			state.OutputLoki.TimeoutRetrySettings = api.OutputLoki.TimeoutRetrySettings
 		} else if state.OutputLoki.TimeoutRetrySettings.IsNull() || state.OutputLoki.TimeoutRetrySettings.IsUnknown() {
+			state.OutputLoki.TimeoutRetrySettings = types.ObjectNull(OutputLokiTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputLoki.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputLoki.TimeoutRetrySettings = types.ObjectNull(OutputLokiTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputLoki.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputLoki.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -37278,6 +40957,263 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputLoki.PqControls = types.MapNull(types.StringType)
 		}
 	}
+	if api.OutputAmazonManagedPrometheus != nil {
+		if state.OutputAmazonManagedPrometheus == nil {
+			state.OutputAmazonManagedPrometheus = &OutputAmazonManagedPrometheusModel{}
+		}
+		if !api.OutputAmazonManagedPrometheus.ID.IsNull() && !api.OutputAmazonManagedPrometheus.ID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ID = api.OutputAmazonManagedPrometheus.ID
+		} else if state.OutputAmazonManagedPrometheus.ID.IsNull() || state.OutputAmazonManagedPrometheus.ID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ID = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Type.IsNull() && !api.OutputAmazonManagedPrometheus.Type.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Type = api.OutputAmazonManagedPrometheus.Type
+		} else if state.OutputAmazonManagedPrometheus.Type.IsNull() || state.OutputAmazonManagedPrometheus.Type.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Type = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Pipeline.IsNull() && !api.OutputAmazonManagedPrometheus.Pipeline.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Pipeline = api.OutputAmazonManagedPrometheus.Pipeline
+		} else if state.OutputAmazonManagedPrometheus.Pipeline.IsNull() || state.OutputAmazonManagedPrometheus.Pipeline.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Pipeline = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SystemFields.IsNull() && !api.OutputAmazonManagedPrometheus.SystemFields.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SystemFields = api.OutputAmazonManagedPrometheus.SystemFields
+		} else if state.OutputAmazonManagedPrometheus.SystemFields.IsNull() || state.OutputAmazonManagedPrometheus.SystemFields.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAmazonManagedPrometheus.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAmazonManagedPrometheus.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.Environment.IsNull() && !api.OutputAmazonManagedPrometheus.Environment.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Environment = api.OutputAmazonManagedPrometheus.Environment
+		} else if state.OutputAmazonManagedPrometheus.Environment.IsNull() || state.OutputAmazonManagedPrometheus.Environment.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Environment = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Streamtags.IsNull() && !api.OutputAmazonManagedPrometheus.Streamtags.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Streamtags = api.OutputAmazonManagedPrometheus.Streamtags
+		} else if state.OutputAmazonManagedPrometheus.Streamtags.IsNull() || state.OutputAmazonManagedPrometheus.Streamtags.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAmazonManagedPrometheus.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputAmazonManagedPrometheus.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.URL.IsNull() && !api.OutputAmazonManagedPrometheus.URL.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.URL = api.OutputAmazonManagedPrometheus.URL
+		} else if state.OutputAmazonManagedPrometheus.URL.IsNull() || state.OutputAmazonManagedPrometheus.URL.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.URL = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsNull() && !api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod = api.OutputAmazonManagedPrometheus.AwsAuthenticationMethod
+		} else if state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsNull() || state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsSecretKey.IsNull() && !api.OutputAmazonManagedPrometheus.AwsSecretKey.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecretKey = stringFromAPIOrPrior(api.OutputAmazonManagedPrometheus.AwsSecretKey.ValueString(), state.OutputAmazonManagedPrometheus.AwsSecretKey)
+		} else if state.OutputAmazonManagedPrometheus.AwsSecretKey.IsNull() || state.OutputAmazonManagedPrometheus.AwsSecretKey.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecretKey = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Region.IsNull() && !api.OutputAmazonManagedPrometheus.Region.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Region = api.OutputAmazonManagedPrometheus.Region
+		} else if state.OutputAmazonManagedPrometheus.Region.IsNull() || state.OutputAmazonManagedPrometheus.Region.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Region = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.RejectUnauthorized.IsNull() && !api.OutputAmazonManagedPrometheus.RejectUnauthorized.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.RejectUnauthorized = api.OutputAmazonManagedPrometheus.RejectUnauthorized
+		} else if state.OutputAmazonManagedPrometheus.RejectUnauthorized.IsNull() || state.OutputAmazonManagedPrometheus.RejectUnauthorized.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.EnableAssumeRole.IsNull() && !api.OutputAmazonManagedPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.EnableAssumeRole = api.OutputAmazonManagedPrometheus.EnableAssumeRole
+		} else if state.OutputAmazonManagedPrometheus.EnableAssumeRole.IsNull() || state.OutputAmazonManagedPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AssumeRoleArn.IsNull() && !api.OutputAmazonManagedPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleArn = api.OutputAmazonManagedPrometheus.AssumeRoleArn
+		} else if state.OutputAmazonManagedPrometheus.AssumeRoleArn.IsNull() || state.OutputAmazonManagedPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsNull() && !api.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleExternalID = api.OutputAmazonManagedPrometheus.AssumeRoleExternalID
+		} else if state.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsNull() || state.OutputAmazonManagedPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AssumeRoleExternalID = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.DurationSeconds.IsNull() && !api.OutputAmazonManagedPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.DurationSeconds = api.OutputAmazonManagedPrometheus.DurationSeconds
+		} else if state.OutputAmazonManagedPrometheus.DurationSeconds.IsNull() || state.OutputAmazonManagedPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.DurationSeconds = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MetricRenameExpr.IsNull() && !api.OutputAmazonManagedPrometheus.MetricRenameExpr.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricRenameExpr = api.OutputAmazonManagedPrometheus.MetricRenameExpr
+		} else if state.OutputAmazonManagedPrometheus.MetricRenameExpr.IsNull() || state.OutputAmazonManagedPrometheus.MetricRenameExpr.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricRenameExpr = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SendMetadata.IsNull() && !api.OutputAmazonManagedPrometheus.SendMetadata.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SendMetadata = api.OutputAmazonManagedPrometheus.SendMetadata
+		} else if state.OutputAmazonManagedPrometheus.SendMetadata.IsNull() || state.OutputAmazonManagedPrometheus.SendMetadata.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SendMetadata = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsNull() && !api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix = api.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix
+		} else if state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsNull() || state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UsePrometheusHistogramBucketSuffix = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Concurrency.IsNull() && !api.OutputAmazonManagedPrometheus.Concurrency.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Concurrency = api.OutputAmazonManagedPrometheus.Concurrency
+		} else if state.OutputAmazonManagedPrometheus.Concurrency.IsNull() || state.OutputAmazonManagedPrometheus.Concurrency.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Concurrency = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsNull() && !api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB = api.OutputAmazonManagedPrometheus.MaxPayloadSizeKB
+		} else if state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsNull() || state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsNull() && !api.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadEvents = api.OutputAmazonManagedPrometheus.MaxPayloadEvents
+		} else if state.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsNull() || state.OutputAmazonManagedPrometheus.MaxPayloadEvents.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.TimeoutSec.IsNull() && !api.OutputAmazonManagedPrometheus.TimeoutSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutSec = api.OutputAmazonManagedPrometheus.TimeoutSec
+		} else if state.OutputAmazonManagedPrometheus.TimeoutSec.IsNull() || state.OutputAmazonManagedPrometheus.TimeoutSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.FlushPeriodSec.IsNull() && !api.OutputAmazonManagedPrometheus.FlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FlushPeriodSec = api.OutputAmazonManagedPrometheus.FlushPeriodSec
+		} else if state.OutputAmazonManagedPrometheus.FlushPeriodSec.IsNull() || state.OutputAmazonManagedPrometheus.FlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsNull() && !api.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = api.OutputAmazonManagedPrometheus.ExtraHttpHeaders
+		} else if state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsNull() || state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusExtraHttpHeadersAttrTypes()})
+		}
+		if state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsNull() || state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputAmazonManagedPrometheus.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputAmazonManagedPrometheus.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusExtraHttpHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsNull() && !api.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UseRoundRobinDns = api.OutputAmazonManagedPrometheus.UseRoundRobinDns
+		} else if state.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsNull() || state.OutputAmazonManagedPrometheus.UseRoundRobinDns.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.UseRoundRobinDns = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsNull() && !api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode = api.OutputAmazonManagedPrometheus.FailedRequestLoggingMode
+		} else if state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsNull() || state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.SafeHeaders.IsNull() && !api.OutputAmazonManagedPrometheus.SafeHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SafeHeaders = api.OutputAmazonManagedPrometheus.SafeHeaders
+		} else if state.OutputAmazonManagedPrometheus.SafeHeaders.IsNull() || state.OutputAmazonManagedPrometheus.SafeHeaders.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAmazonManagedPrometheus.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputAmazonManagedPrometheus.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsNull() && !api.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = api.OutputAmazonManagedPrometheus.ResponseRetrySettings
+		} else if state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsNull() || state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusResponseRetrySettingsAttrTypes()})
+		}
+		if state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsNull() || state.OutputAmazonManagedPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputAmazonManagedPrometheus.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputAmazonManagedPrometheus.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusResponseRetrySettingsAttrTypes()}, nil)
+		}
+		if !api.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsNull() && !api.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutRetrySettings = api.OutputAmazonManagedPrometheus.TimeoutRetrySettings
+		} else if state.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsNull() || state.OutputAmazonManagedPrometheus.TimeoutRetrySettings.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.TimeoutRetrySettings = types.ObjectNull(OutputAmazonManagedPrometheusTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputAmazonManagedPrometheus.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputAmazonManagedPrometheus.TimeoutRetrySettings = types.ObjectNull(OutputAmazonManagedPrometheusTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader = api.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader
+		} else if state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsNull() || state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.OnBackpressure.IsNull() && !api.OutputAmazonManagedPrometheus.OnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.OnBackpressure = api.OutputAmazonManagedPrometheus.OnBackpressure
+		} else if state.OutputAmazonManagedPrometheus.OnBackpressure.IsNull() || state.OutputAmazonManagedPrometheus.OnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.Description.IsNull() && !api.OutputAmazonManagedPrometheus.Description.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Description = api.OutputAmazonManagedPrometheus.Description
+		} else if state.OutputAmazonManagedPrometheus.Description.IsNull() || state.OutputAmazonManagedPrometheus.Description.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.Description = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.AwsSecret.IsNull() && !api.OutputAmazonManagedPrometheus.AwsSecret.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecret = api.OutputAmazonManagedPrometheus.AwsSecret
+		} else if state.OutputAmazonManagedPrometheus.AwsSecret.IsNull() || state.OutputAmazonManagedPrometheus.AwsSecret.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.AwsSecret = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsNull() && !api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec = api.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec
+		} else if state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsNull() || state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.MetricsFlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqStrictOrdering.IsNull() && !api.OutputAmazonManagedPrometheus.PqStrictOrdering.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqStrictOrdering = api.OutputAmazonManagedPrometheus.PqStrictOrdering
+		} else if state.OutputAmazonManagedPrometheus.PqStrictOrdering.IsNull() || state.OutputAmazonManagedPrometheus.PqStrictOrdering.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqRatePerSec.IsNull() && !api.OutputAmazonManagedPrometheus.PqRatePerSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqRatePerSec = api.OutputAmazonManagedPrometheus.PqRatePerSec
+		} else if state.OutputAmazonManagedPrometheus.PqRatePerSec.IsNull() || state.OutputAmazonManagedPrometheus.PqRatePerSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMode.IsNull() && !api.OutputAmazonManagedPrometheus.PqMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMode = api.OutputAmazonManagedPrometheus.PqMode
+		} else if state.OutputAmazonManagedPrometheus.PqMode.IsNull() || state.OutputAmazonManagedPrometheus.PqMode.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMode = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSize = api.OutputAmazonManagedPrometheus.PqMaxBufferSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBufferSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec = api.OutputAmazonManagedPrometheus.PqMaxBackpressureSec
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxFileSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxFileSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxFileSize = api.OutputAmazonManagedPrometheus.PqMaxFileSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxFileSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxFileSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxSize.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxSize = api.OutputAmazonManagedPrometheus.PqMaxSize
+		} else if state.OutputAmazonManagedPrometheus.PqMaxSize.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxSize.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqPath.IsNull() && !api.OutputAmazonManagedPrometheus.PqPath.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqPath = api.OutputAmazonManagedPrometheus.PqPath
+		} else if state.OutputAmazonManagedPrometheus.PqPath.IsNull() || state.OutputAmazonManagedPrometheus.PqPath.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqPath = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqCompress.IsNull() && !api.OutputAmazonManagedPrometheus.PqCompress.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqCompress = api.OutputAmazonManagedPrometheus.PqCompress
+		} else if state.OutputAmazonManagedPrometheus.PqCompress.IsNull() || state.OutputAmazonManagedPrometheus.PqCompress.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqCompress = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqOnBackpressure.IsNull() && !api.OutputAmazonManagedPrometheus.PqOnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqOnBackpressure = api.OutputAmazonManagedPrometheus.PqOnBackpressure
+		} else if state.OutputAmazonManagedPrometheus.PqOnBackpressure.IsNull() || state.OutputAmazonManagedPrometheus.PqOnBackpressure.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsNull() && !api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes = api.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes
+		} else if state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsNull() || state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputAmazonManagedPrometheus.PqControls.IsNull() && !api.OutputAmazonManagedPrometheus.PqControls.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqControls = api.OutputAmazonManagedPrometheus.PqControls
+		} else if state.OutputAmazonManagedPrometheus.PqControls.IsNull() || state.OutputAmazonManagedPrometheus.PqControls.IsUnknown() {
+			state.OutputAmazonManagedPrometheus.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputPrometheus != nil {
 		if state.OutputPrometheus == nil {
 			state.OutputPrometheus = &OutputPrometheusModel{}
@@ -37302,6 +41238,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputPrometheus.SystemFields.IsNull() || state.OutputPrometheus.SystemFields.IsUnknown() {
 			state.OutputPrometheus.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputPrometheus.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputPrometheus.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputPrometheus.Environment.IsNull() && !api.OutputPrometheus.Environment.IsUnknown() {
 			state.OutputPrometheus.Environment = api.OutputPrometheus.Environment
 		} else if state.OutputPrometheus.Environment.IsNull() || state.OutputPrometheus.Environment.IsUnknown() {
@@ -37310,6 +41249,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputPrometheus.Streamtags.IsNull() && !api.OutputPrometheus.Streamtags.IsUnknown() {
 			state.OutputPrometheus.Streamtags = api.OutputPrometheus.Streamtags
 		} else if state.OutputPrometheus.Streamtags.IsNull() || state.OutputPrometheus.Streamtags.IsUnknown() {
+			state.OutputPrometheus.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputPrometheus.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputPrometheus.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputPrometheus.URL.IsNull() && !api.OutputPrometheus.URL.IsUnknown() {
@@ -37367,6 +41309,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputPrometheus.ExtraHttpHeaders.IsNull() || state.OutputPrometheus.ExtraHttpHeaders.IsUnknown() {
 			state.OutputPrometheus.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputPrometheusExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputPrometheus.ExtraHttpHeaders.IsNull() || state.OutputPrometheus.ExtraHttpHeaders.IsUnknown() {
+			state.OutputPrometheus.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputPrometheusExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputPrometheus.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputPrometheus.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputPrometheusExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputPrometheus.UseRoundRobinDns.IsNull() && !api.OutputPrometheus.UseRoundRobinDns.IsUnknown() {
 			state.OutputPrometheus.UseRoundRobinDns = api.OutputPrometheus.UseRoundRobinDns
 		} else if state.OutputPrometheus.UseRoundRobinDns.IsNull() || state.OutputPrometheus.UseRoundRobinDns.IsUnknown() {
@@ -37382,14 +41329,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputPrometheus.SafeHeaders.IsNull() || state.OutputPrometheus.SafeHeaders.IsUnknown() {
 			state.OutputPrometheus.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputPrometheus.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputPrometheus.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputPrometheus.ResponseRetrySettings.IsNull() && !api.OutputPrometheus.ResponseRetrySettings.IsUnknown() {
 			state.OutputPrometheus.ResponseRetrySettings = api.OutputPrometheus.ResponseRetrySettings
 		} else if state.OutputPrometheus.ResponseRetrySettings.IsNull() || state.OutputPrometheus.ResponseRetrySettings.IsUnknown() {
 			state.OutputPrometheus.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputPrometheusResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputPrometheus.ResponseRetrySettings.IsNull() || state.OutputPrometheus.ResponseRetrySettings.IsUnknown() {
+			state.OutputPrometheus.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputPrometheusResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputPrometheus.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputPrometheus.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputPrometheusResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputPrometheus.TimeoutRetrySettings.IsNull() && !api.OutputPrometheus.TimeoutRetrySettings.IsUnknown() {
 			state.OutputPrometheus.TimeoutRetrySettings = api.OutputPrometheus.TimeoutRetrySettings
 		} else if state.OutputPrometheus.TimeoutRetrySettings.IsNull() || state.OutputPrometheus.TimeoutRetrySettings.IsUnknown() {
+			state.OutputPrometheus.TimeoutRetrySettings = types.ObjectNull(OutputPrometheusTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputPrometheus.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputPrometheus.TimeoutRetrySettings = types.ObjectNull(OutputPrometheusTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputPrometheus.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -37502,6 +41460,46 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputPrometheus.TextSecret.IsNull() || state.OutputPrometheus.TextSecret.IsUnknown() {
 			state.OutputPrometheus.TextSecret = types.StringNull()
 		}
+		if !api.OutputPrometheus.AwsAuthenticationMethod.IsNull() && !api.OutputPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputPrometheus.AwsAuthenticationMethod = api.OutputPrometheus.AwsAuthenticationMethod
+		} else if state.OutputPrometheus.AwsAuthenticationMethod.IsNull() || state.OutputPrometheus.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputPrometheus.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputPrometheus.AwsSecret.IsNull() && !api.OutputPrometheus.AwsSecret.IsUnknown() {
+			state.OutputPrometheus.AwsSecret = api.OutputPrometheus.AwsSecret
+		} else if state.OutputPrometheus.AwsSecret.IsNull() || state.OutputPrometheus.AwsSecret.IsUnknown() {
+			state.OutputPrometheus.AwsSecret = types.StringNull()
+		}
+		if !api.OutputPrometheus.Region.IsNull() && !api.OutputPrometheus.Region.IsUnknown() {
+			state.OutputPrometheus.Region = api.OutputPrometheus.Region
+		} else if state.OutputPrometheus.Region.IsNull() || state.OutputPrometheus.Region.IsUnknown() {
+			state.OutputPrometheus.Region = types.StringNull()
+		}
+		if !api.OutputPrometheus.AwsService.IsNull() && !api.OutputPrometheus.AwsService.IsUnknown() {
+			state.OutputPrometheus.AwsService = api.OutputPrometheus.AwsService
+		} else if state.OutputPrometheus.AwsService.IsNull() || state.OutputPrometheus.AwsService.IsUnknown() {
+			state.OutputPrometheus.AwsService = types.StringNull()
+		}
+		if !api.OutputPrometheus.EnableAssumeRole.IsNull() && !api.OutputPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputPrometheus.EnableAssumeRole = api.OutputPrometheus.EnableAssumeRole
+		} else if state.OutputPrometheus.EnableAssumeRole.IsNull() || state.OutputPrometheus.EnableAssumeRole.IsUnknown() {
+			state.OutputPrometheus.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputPrometheus.AssumeRoleArn.IsNull() && !api.OutputPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleArn = api.OutputPrometheus.AssumeRoleArn
+		} else if state.OutputPrometheus.AssumeRoleArn.IsNull() || state.OutputPrometheus.AssumeRoleArn.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputPrometheus.AssumeRoleExternalID.IsNull() && !api.OutputPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleExternalID = api.OutputPrometheus.AssumeRoleExternalID
+		} else if state.OutputPrometheus.AssumeRoleExternalID.IsNull() || state.OutputPrometheus.AssumeRoleExternalID.IsUnknown() {
+			state.OutputPrometheus.AssumeRoleExternalID = types.StringNull()
+		}
+		if !api.OutputPrometheus.DurationSeconds.IsNull() && !api.OutputPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputPrometheus.DurationSeconds = api.OutputPrometheus.DurationSeconds
+		} else if state.OutputPrometheus.DurationSeconds.IsNull() || state.OutputPrometheus.DurationSeconds.IsUnknown() {
+			state.OutputPrometheus.DurationSeconds = types.Float64Null()
+		}
 	}
 	if api.OutputRing != nil {
 		if state.OutputRing == nil {
@@ -37527,6 +41525,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputRing.SystemFields.IsNull() || state.OutputRing.SystemFields.IsUnknown() {
 			state.OutputRing.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputRing.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputRing.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputRing.Environment.IsNull() && !api.OutputRing.Environment.IsUnknown() {
 			state.OutputRing.Environment = api.OutputRing.Environment
 		} else if state.OutputRing.Environment.IsNull() || state.OutputRing.Environment.IsUnknown() {
@@ -37535,6 +41536,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputRing.Streamtags.IsNull() && !api.OutputRing.Streamtags.IsUnknown() {
 			state.OutputRing.Streamtags = api.OutputRing.Streamtags
 		} else if state.OutputRing.Streamtags.IsNull() || state.OutputRing.Streamtags.IsUnknown() {
+			state.OutputRing.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputRing.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputRing.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputRing.Format.IsNull() && !api.OutputRing.Format.IsUnknown() {
@@ -37602,6 +41606,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputOpenTelemetry.SystemFields.IsNull() || state.OutputOpenTelemetry.SystemFields.IsUnknown() {
 			state.OutputOpenTelemetry.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputOpenTelemetry.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputOpenTelemetry.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputOpenTelemetry.Environment.IsNull() && !api.OutputOpenTelemetry.Environment.IsUnknown() {
 			state.OutputOpenTelemetry.Environment = api.OutputOpenTelemetry.Environment
 		} else if state.OutputOpenTelemetry.Environment.IsNull() || state.OutputOpenTelemetry.Environment.IsUnknown() {
@@ -37610,6 +41617,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputOpenTelemetry.Streamtags.IsNull() && !api.OutputOpenTelemetry.Streamtags.IsUnknown() {
 			state.OutputOpenTelemetry.Streamtags = api.OutputOpenTelemetry.Streamtags
 		} else if state.OutputOpenTelemetry.Streamtags.IsNull() || state.OutputOpenTelemetry.Streamtags.IsUnknown() {
+			state.OutputOpenTelemetry.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputOpenTelemetry.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputOpenTelemetry.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputOpenTelemetry.Protocol.IsNull() && !api.OutputOpenTelemetry.Protocol.IsUnknown() {
@@ -37661,6 +41671,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputOpenTelemetry.Metadata = api.OutputOpenTelemetry.Metadata
 		} else if state.OutputOpenTelemetry.Metadata.IsNull() || state.OutputOpenTelemetry.Metadata.IsUnknown() {
 			state.OutputOpenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryMetadataAttrTypes()})
+		}
+		if state.OutputOpenTelemetry.Metadata.IsNull() || state.OutputOpenTelemetry.Metadata.IsUnknown() {
+			state.OutputOpenTelemetry.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryMetadataAttrTypes()})
+		} else if len(state.OutputOpenTelemetry.Metadata.Elements()) == 0 {
+			state.OutputOpenTelemetry.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputOpenTelemetryMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputOpenTelemetry.DynamicHeadersEnabled.IsNull() && !api.OutputOpenTelemetry.DynamicHeadersEnabled.IsUnknown() {
 			state.OutputOpenTelemetry.DynamicHeadersEnabled = api.OutputOpenTelemetry.DynamicHeadersEnabled
@@ -37782,10 +41797,20 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputOpenTelemetry.OauthParams.IsNull() || state.OutputOpenTelemetry.OauthParams.IsUnknown() {
 			state.OutputOpenTelemetry.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthParamsAttrTypes()})
 		}
+		if state.OutputOpenTelemetry.OauthParams.IsNull() || state.OutputOpenTelemetry.OauthParams.IsUnknown() {
+			state.OutputOpenTelemetry.OauthParams = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthParamsAttrTypes()})
+		} else if len(state.OutputOpenTelemetry.OauthParams.Elements()) == 0 {
+			state.OutputOpenTelemetry.OauthParams = types.ListValueMust(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthParamsAttrTypes()}, nil)
+		}
 		if !api.OutputOpenTelemetry.OauthHeaders.IsNull() && !api.OutputOpenTelemetry.OauthHeaders.IsUnknown() {
 			state.OutputOpenTelemetry.OauthHeaders = api.OutputOpenTelemetry.OauthHeaders
 		} else if state.OutputOpenTelemetry.OauthHeaders.IsNull() || state.OutputOpenTelemetry.OauthHeaders.IsUnknown() {
 			state.OutputOpenTelemetry.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthHeadersAttrTypes()})
+		}
+		if state.OutputOpenTelemetry.OauthHeaders.IsNull() || state.OutputOpenTelemetry.OauthHeaders.IsUnknown() {
+			state.OutputOpenTelemetry.OauthHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthHeadersAttrTypes()})
+		} else if len(state.OutputOpenTelemetry.OauthHeaders.Elements()) == 0 {
+			state.OutputOpenTelemetry.OauthHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputOpenTelemetryOauthHeadersAttrTypes()}, nil)
 		}
 		if !api.OutputOpenTelemetry.RejectUnauthorized.IsNull() && !api.OutputOpenTelemetry.RejectUnauthorized.IsUnknown() {
 			state.OutputOpenTelemetry.RejectUnauthorized = api.OutputOpenTelemetry.RejectUnauthorized
@@ -37802,9 +41827,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputOpenTelemetry.ExtraHttpHeaders.IsNull() || state.OutputOpenTelemetry.ExtraHttpHeaders.IsUnknown() {
 			state.OutputOpenTelemetry.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputOpenTelemetry.ExtraHttpHeaders.IsNull() || state.OutputOpenTelemetry.ExtraHttpHeaders.IsUnknown() {
+			state.OutputOpenTelemetry.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputOpenTelemetry.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputOpenTelemetry.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputOpenTelemetryExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputOpenTelemetry.SafeHeaders.IsNull() && !api.OutputOpenTelemetry.SafeHeaders.IsUnknown() {
 			state.OutputOpenTelemetry.SafeHeaders = api.OutputOpenTelemetry.SafeHeaders
 		} else if state.OutputOpenTelemetry.SafeHeaders.IsNull() || state.OutputOpenTelemetry.SafeHeaders.IsUnknown() {
+			state.OutputOpenTelemetry.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputOpenTelemetry.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputOpenTelemetry.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputOpenTelemetry.ResponseRetrySettings.IsNull() && !api.OutputOpenTelemetry.ResponseRetrySettings.IsUnknown() {
@@ -37812,9 +41845,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputOpenTelemetry.ResponseRetrySettings.IsNull() || state.OutputOpenTelemetry.ResponseRetrySettings.IsUnknown() {
 			state.OutputOpenTelemetry.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputOpenTelemetry.ResponseRetrySettings.IsNull() || state.OutputOpenTelemetry.ResponseRetrySettings.IsUnknown() {
+			state.OutputOpenTelemetry.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputOpenTelemetryResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputOpenTelemetry.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputOpenTelemetry.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputOpenTelemetryResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputOpenTelemetry.TimeoutRetrySettings.IsNull() && !api.OutputOpenTelemetry.TimeoutRetrySettings.IsUnknown() {
 			state.OutputOpenTelemetry.TimeoutRetrySettings = api.OutputOpenTelemetry.TimeoutRetrySettings
 		} else if state.OutputOpenTelemetry.TimeoutRetrySettings.IsNull() || state.OutputOpenTelemetry.TimeoutRetrySettings.IsUnknown() {
+			state.OutputOpenTelemetry.TimeoutRetrySettings = types.ObjectNull(OutputOpenTelemetryTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputOpenTelemetry.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputOpenTelemetry.TimeoutRetrySettings = types.ObjectNull(OutputOpenTelemetryTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -37825,6 +41866,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputOpenTelemetry.TLS.IsNull() && !api.OutputOpenTelemetry.TLS.IsUnknown() {
 			state.OutputOpenTelemetry.TLS = api.OutputOpenTelemetry.TLS
 		} else if state.OutputOpenTelemetry.TLS.IsNull() || state.OutputOpenTelemetry.TLS.IsUnknown() {
+			state.OutputOpenTelemetry.TLS = types.ObjectNull(OutputOpenTelemetryTLSAttrTypes())
+		}
+		if len(state.OutputOpenTelemetry.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputOpenTelemetry.TLS = types.ObjectNull(OutputOpenTelemetryTLSAttrTypes())
 		}
 		if !api.OutputOpenTelemetry.PqStrictOrdering.IsNull() && !api.OutputOpenTelemetry.PqStrictOrdering.IsUnknown() {
@@ -37912,6 +41956,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputServiceNow.SystemFields.IsNull() || state.OutputServiceNow.SystemFields.IsUnknown() {
 			state.OutputServiceNow.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputServiceNow.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputServiceNow.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputServiceNow.Environment.IsNull() && !api.OutputServiceNow.Environment.IsUnknown() {
 			state.OutputServiceNow.Environment = api.OutputServiceNow.Environment
 		} else if state.OutputServiceNow.Environment.IsNull() || state.OutputServiceNow.Environment.IsUnknown() {
@@ -37920,6 +41967,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputServiceNow.Streamtags.IsNull() && !api.OutputServiceNow.Streamtags.IsUnknown() {
 			state.OutputServiceNow.Streamtags = api.OutputServiceNow.Streamtags
 		} else if state.OutputServiceNow.Streamtags.IsNull() || state.OutputServiceNow.Streamtags.IsUnknown() {
+			state.OutputServiceNow.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputServiceNow.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputServiceNow.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputServiceNow.Endpoint.IsNull() && !api.OutputServiceNow.Endpoint.IsUnknown() {
@@ -37981,6 +42031,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputServiceNow.Metadata = api.OutputServiceNow.Metadata
 		} else if state.OutputServiceNow.Metadata.IsNull() || state.OutputServiceNow.Metadata.IsUnknown() {
 			state.OutputServiceNow.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowMetadataAttrTypes()})
+		}
+		if state.OutputServiceNow.Metadata.IsNull() || state.OutputServiceNow.Metadata.IsUnknown() {
+			state.OutputServiceNow.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowMetadataAttrTypes()})
+		} else if len(state.OutputServiceNow.Metadata.Elements()) == 0 {
+			state.OutputServiceNow.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputServiceNowMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputServiceNow.DynamicHeadersEnabled.IsNull() && !api.OutputServiceNow.DynamicHeadersEnabled.IsUnknown() {
 			state.OutputServiceNow.DynamicHeadersEnabled = api.OutputServiceNow.DynamicHeadersEnabled
@@ -38052,9 +42107,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputServiceNow.ExtraHttpHeaders.IsNull() || state.OutputServiceNow.ExtraHttpHeaders.IsUnknown() {
 			state.OutputServiceNow.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputServiceNow.ExtraHttpHeaders.IsNull() || state.OutputServiceNow.ExtraHttpHeaders.IsUnknown() {
+			state.OutputServiceNow.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputServiceNow.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputServiceNow.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputServiceNowExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputServiceNow.SafeHeaders.IsNull() && !api.OutputServiceNow.SafeHeaders.IsUnknown() {
 			state.OutputServiceNow.SafeHeaders = api.OutputServiceNow.SafeHeaders
 		} else if state.OutputServiceNow.SafeHeaders.IsNull() || state.OutputServiceNow.SafeHeaders.IsUnknown() {
+			state.OutputServiceNow.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputServiceNow.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputServiceNow.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputServiceNow.ResponseRetrySettings.IsNull() && !api.OutputServiceNow.ResponseRetrySettings.IsUnknown() {
@@ -38062,9 +42125,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputServiceNow.ResponseRetrySettings.IsNull() || state.OutputServiceNow.ResponseRetrySettings.IsUnknown() {
 			state.OutputServiceNow.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputServiceNow.ResponseRetrySettings.IsNull() || state.OutputServiceNow.ResponseRetrySettings.IsUnknown() {
+			state.OutputServiceNow.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputServiceNowResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputServiceNow.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputServiceNow.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputServiceNowResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputServiceNow.TimeoutRetrySettings.IsNull() && !api.OutputServiceNow.TimeoutRetrySettings.IsUnknown() {
 			state.OutputServiceNow.TimeoutRetrySettings = api.OutputServiceNow.TimeoutRetrySettings
 		} else if state.OutputServiceNow.TimeoutRetrySettings.IsNull() || state.OutputServiceNow.TimeoutRetrySettings.IsUnknown() {
+			state.OutputServiceNow.TimeoutRetrySettings = types.ObjectNull(OutputServiceNowTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputServiceNow.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputServiceNow.TimeoutRetrySettings = types.ObjectNull(OutputServiceNowTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputServiceNow.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputServiceNow.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -38075,6 +42146,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputServiceNow.TLS.IsNull() && !api.OutputServiceNow.TLS.IsUnknown() {
 			state.OutputServiceNow.TLS = api.OutputServiceNow.TLS
 		} else if state.OutputServiceNow.TLS.IsNull() || state.OutputServiceNow.TLS.IsUnknown() {
+			state.OutputServiceNow.TLS = types.ObjectNull(OutputServiceNowTLSAttrTypes())
+		}
+		if len(state.OutputServiceNow.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputServiceNow.TLS = types.ObjectNull(OutputServiceNowTLSAttrTypes())
 		}
 		if !api.OutputServiceNow.PqStrictOrdering.IsNull() && !api.OutputServiceNow.PqStrictOrdering.IsUnknown() {
@@ -38162,6 +42236,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDataset.SystemFields.IsNull() || state.OutputDataset.SystemFields.IsUnknown() {
 			state.OutputDataset.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDataset.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDataset.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDataset.Environment.IsNull() && !api.OutputDataset.Environment.IsUnknown() {
 			state.OutputDataset.Environment = api.OutputDataset.Environment
 		} else if state.OutputDataset.Environment.IsNull() || state.OutputDataset.Environment.IsUnknown() {
@@ -38172,6 +42249,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDataset.Streamtags.IsNull() || state.OutputDataset.Streamtags.IsUnknown() {
 			state.OutputDataset.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDataset.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputDataset.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputDataset.MessageField.IsNull() && !api.OutputDataset.MessageField.IsUnknown() {
 			state.OutputDataset.MessageField = api.OutputDataset.MessageField
 		} else if state.OutputDataset.MessageField.IsNull() || state.OutputDataset.MessageField.IsUnknown() {
@@ -38180,6 +42260,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDataset.ExcludeFields.IsNull() && !api.OutputDataset.ExcludeFields.IsUnknown() {
 			state.OutputDataset.ExcludeFields = api.OutputDataset.ExcludeFields
 		} else if state.OutputDataset.ExcludeFields.IsNull() || state.OutputDataset.ExcludeFields.IsUnknown() {
+			state.OutputDataset.ExcludeFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDataset.ExcludeFields.ElementType(context.Background()); elementType == nil {
 			state.OutputDataset.ExcludeFields = types.ListNull(types.StringType)
 		}
 		if !api.OutputDataset.ServerHostField.IsNull() && !api.OutputDataset.ServerHostField.IsUnknown() {
@@ -38202,9 +42285,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDataset.ResponseRetrySettings.IsNull() || state.OutputDataset.ResponseRetrySettings.IsUnknown() {
 			state.OutputDataset.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDatasetResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputDataset.ResponseRetrySettings.IsNull() || state.OutputDataset.ResponseRetrySettings.IsUnknown() {
+			state.OutputDataset.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDatasetResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputDataset.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputDataset.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputDatasetResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputDataset.TimeoutRetrySettings.IsNull() && !api.OutputDataset.TimeoutRetrySettings.IsUnknown() {
 			state.OutputDataset.TimeoutRetrySettings = api.OutputDataset.TimeoutRetrySettings
 		} else if state.OutputDataset.TimeoutRetrySettings.IsNull() || state.OutputDataset.TimeoutRetrySettings.IsUnknown() {
+			state.OutputDataset.TimeoutRetrySettings = types.ObjectNull(OutputDatasetTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputDataset.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputDataset.TimeoutRetrySettings = types.ObjectNull(OutputDatasetTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputDataset.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputDataset.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -38257,6 +42348,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDataset.ExtraHttpHeaders.IsNull() || state.OutputDataset.ExtraHttpHeaders.IsUnknown() {
 			state.OutputDataset.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDatasetExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputDataset.ExtraHttpHeaders.IsNull() || state.OutputDataset.ExtraHttpHeaders.IsUnknown() {
+			state.OutputDataset.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDatasetExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputDataset.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputDataset.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputDatasetExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputDataset.UseRoundRobinDns.IsNull() && !api.OutputDataset.UseRoundRobinDns.IsUnknown() {
 			state.OutputDataset.UseRoundRobinDns = api.OutputDataset.UseRoundRobinDns
 		} else if state.OutputDataset.UseRoundRobinDns.IsNull() || state.OutputDataset.UseRoundRobinDns.IsUnknown() {
@@ -38270,6 +42366,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDataset.SafeHeaders.IsNull() && !api.OutputDataset.SafeHeaders.IsUnknown() {
 			state.OutputDataset.SafeHeaders = api.OutputDataset.SafeHeaders
 		} else if state.OutputDataset.SafeHeaders.IsNull() || state.OutputDataset.SafeHeaders.IsUnknown() {
+			state.OutputDataset.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDataset.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputDataset.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputDataset.OnBackpressure.IsNull() && !api.OutputDataset.OnBackpressure.IsUnknown() {
@@ -38392,6 +42491,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblTcp.SystemFields.IsNull() || state.OutputCriblTcp.SystemFields.IsUnknown() {
 			state.OutputCriblTcp.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCriblTcp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCriblTcp.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCriblTcp.Environment.IsNull() && !api.OutputCriblTcp.Environment.IsUnknown() {
 			state.OutputCriblTcp.Environment = api.OutputCriblTcp.Environment
 		} else if state.OutputCriblTcp.Environment.IsNull() || state.OutputCriblTcp.Environment.IsUnknown() {
@@ -38400,6 +42502,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblTcp.Streamtags.IsNull() && !api.OutputCriblTcp.Streamtags.IsUnknown() {
 			state.OutputCriblTcp.Streamtags = api.OutputCriblTcp.Streamtags
 		} else if state.OutputCriblTcp.Streamtags.IsNull() || state.OutputCriblTcp.Streamtags.IsUnknown() {
+			state.OutputCriblTcp.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblTcp.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblTcp.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblTcp.LoadBalanced.IsNull() && !api.OutputCriblTcp.LoadBalanced.IsUnknown() {
@@ -38427,6 +42532,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblTcp.TLS.IsNull() || state.OutputCriblTcp.TLS.IsUnknown() {
 			state.OutputCriblTcp.TLS = types.ObjectNull(OutputCriblTcpTLSAttrTypes())
 		}
+		if len(state.OutputCriblTcp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputCriblTcp.TLS = types.ObjectNull(OutputCriblTcpTLSAttrTypes())
+		}
 		if !api.OutputCriblTcp.ConnectionTimeout.IsNull() && !api.OutputCriblTcp.ConnectionTimeout.IsUnknown() {
 			state.OutputCriblTcp.ConnectionTimeout = api.OutputCriblTcp.ConnectionTimeout
 		} else if state.OutputCriblTcp.ConnectionTimeout.IsNull() || state.OutputCriblTcp.ConnectionTimeout.IsUnknown() {
@@ -38447,9 +42555,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblTcp.AuthTokens.IsNull() || state.OutputCriblTcp.AuthTokens.IsUnknown() {
 			state.OutputCriblTcp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblTcpAuthTokensAttrTypes()})
 		}
+		if state.OutputCriblTcp.AuthTokens.IsNull() || state.OutputCriblTcp.AuthTokens.IsUnknown() {
+			state.OutputCriblTcp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblTcpAuthTokensAttrTypes()})
+		} else if len(state.OutputCriblTcp.AuthTokens.Elements()) == 0 {
+			state.OutputCriblTcp.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblTcpAuthTokensAttrTypes()}, nil)
+		}
 		if !api.OutputCriblTcp.ExcludeFields.IsNull() && !api.OutputCriblTcp.ExcludeFields.IsUnknown() {
 			state.OutputCriblTcp.ExcludeFields = api.OutputCriblTcp.ExcludeFields
 		} else if state.OutputCriblTcp.ExcludeFields.IsNull() || state.OutputCriblTcp.ExcludeFields.IsUnknown() {
+			state.OutputCriblTcp.ExcludeFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblTcp.ExcludeFields.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblTcp.ExcludeFields = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblTcp.OnBackpressure.IsNull() && !api.OutputCriblTcp.OnBackpressure.IsUnknown() {
@@ -38481,6 +42597,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblTcp.Hosts = api.OutputCriblTcp.Hosts
 		} else if state.OutputCriblTcp.Hosts.IsNull() || state.OutputCriblTcp.Hosts.IsUnknown() {
 			state.OutputCriblTcp.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputCriblTcpHostsAttrTypes()})
+		}
+		if state.OutputCriblTcp.Hosts.IsNull() || state.OutputCriblTcp.Hosts.IsUnknown() {
+			state.OutputCriblTcp.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputCriblTcpHostsAttrTypes()})
+		} else if len(state.OutputCriblTcp.Hosts.Elements()) == 0 {
+			state.OutputCriblTcp.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblTcpHostsAttrTypes()}, nil)
 		}
 		if !api.OutputCriblTcp.DnsResolvePeriodSec.IsNull() && !api.OutputCriblTcp.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputCriblTcp.DnsResolvePeriodSec = api.OutputCriblTcp.DnsResolvePeriodSec
@@ -38582,6 +42703,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblHttp.SystemFields.IsNull() || state.OutputCriblHttp.SystemFields.IsUnknown() {
 			state.OutputCriblHttp.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCriblHttp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCriblHttp.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCriblHttp.Environment.IsNull() && !api.OutputCriblHttp.Environment.IsUnknown() {
 			state.OutputCriblHttp.Environment = api.OutputCriblHttp.Environment
 		} else if state.OutputCriblHttp.Environment.IsNull() || state.OutputCriblHttp.Environment.IsUnknown() {
@@ -38590,6 +42714,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblHttp.Streamtags.IsNull() && !api.OutputCriblHttp.Streamtags.IsUnknown() {
 			state.OutputCriblHttp.Streamtags = api.OutputCriblHttp.Streamtags
 		} else if state.OutputCriblHttp.Streamtags.IsNull() || state.OutputCriblHttp.Streamtags.IsUnknown() {
+			state.OutputCriblHttp.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblHttp.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblHttp.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblHttp.LoadBalanced.IsNull() && !api.OutputCriblHttp.LoadBalanced.IsUnknown() {
@@ -38602,6 +42729,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblHttp.TLS.IsNull() || state.OutputCriblHttp.TLS.IsUnknown() {
 			state.OutputCriblHttp.TLS = types.ObjectNull(OutputCriblHttpTLSAttrTypes())
 		}
+		if len(state.OutputCriblHttp.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputCriblHttp.TLS = types.ObjectNull(OutputCriblHttpTLSAttrTypes())
+		}
 		if !api.OutputCriblHttp.TokenTTLMinutes.IsNull() && !api.OutputCriblHttp.TokenTTLMinutes.IsUnknown() {
 			state.OutputCriblHttp.TokenTTLMinutes = api.OutputCriblHttp.TokenTTLMinutes
 		} else if state.OutputCriblHttp.TokenTTLMinutes.IsNull() || state.OutputCriblHttp.TokenTTLMinutes.IsUnknown() {
@@ -38610,6 +42740,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblHttp.ExcludeFields.IsNull() && !api.OutputCriblHttp.ExcludeFields.IsUnknown() {
 			state.OutputCriblHttp.ExcludeFields = api.OutputCriblHttp.ExcludeFields
 		} else if state.OutputCriblHttp.ExcludeFields.IsNull() || state.OutputCriblHttp.ExcludeFields.IsUnknown() {
+			state.OutputCriblHttp.ExcludeFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblHttp.ExcludeFields.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblHttp.ExcludeFields = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblHttp.Compression.IsNull() && !api.OutputCriblHttp.Compression.IsUnknown() {
@@ -38652,6 +42785,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblHttp.ExtraHttpHeaders.IsNull() || state.OutputCriblHttp.ExtraHttpHeaders.IsUnknown() {
 			state.OutputCriblHttp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputCriblHttp.ExtraHttpHeaders.IsNull() || state.OutputCriblHttp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCriblHttp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputCriblHttp.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputCriblHttp.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblHttpExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputCriblHttp.FailedRequestLoggingMode.IsNull() && !api.OutputCriblHttp.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputCriblHttp.FailedRequestLoggingMode = api.OutputCriblHttp.FailedRequestLoggingMode
 		} else if state.OutputCriblHttp.FailedRequestLoggingMode.IsNull() || state.OutputCriblHttp.FailedRequestLoggingMode.IsUnknown() {
@@ -38660,6 +42798,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblHttp.SafeHeaders.IsNull() && !api.OutputCriblHttp.SafeHeaders.IsUnknown() {
 			state.OutputCriblHttp.SafeHeaders = api.OutputCriblHttp.SafeHeaders
 		} else if state.OutputCriblHttp.SafeHeaders.IsNull() || state.OutputCriblHttp.SafeHeaders.IsUnknown() {
+			state.OutputCriblHttp.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblHttp.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblHttp.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblHttp.ThrottleRatePerSec.IsNull() && !api.OutputCriblHttp.ThrottleRatePerSec.IsUnknown() {
@@ -38672,9 +42813,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblHttp.ResponseRetrySettings.IsNull() || state.OutputCriblHttp.ResponseRetrySettings.IsUnknown() {
 			state.OutputCriblHttp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputCriblHttp.ResponseRetrySettings.IsNull() || state.OutputCriblHttp.ResponseRetrySettings.IsUnknown() {
+			state.OutputCriblHttp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputCriblHttp.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputCriblHttp.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblHttpResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputCriblHttp.TimeoutRetrySettings.IsNull() && !api.OutputCriblHttp.TimeoutRetrySettings.IsUnknown() {
 			state.OutputCriblHttp.TimeoutRetrySettings = api.OutputCriblHttp.TimeoutRetrySettings
 		} else if state.OutputCriblHttp.TimeoutRetrySettings.IsNull() || state.OutputCriblHttp.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCriblHttp.TimeoutRetrySettings = types.ObjectNull(OutputCriblHttpTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputCriblHttp.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputCriblHttp.TimeoutRetrySettings = types.ObjectNull(OutputCriblHttpTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputCriblHttp.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputCriblHttp.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -38686,6 +42835,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblHttp.AuthTokens = api.OutputCriblHttp.AuthTokens
 		} else if state.OutputCriblHttp.AuthTokens.IsNull() || state.OutputCriblHttp.AuthTokens.IsUnknown() {
 			state.OutputCriblHttp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpAuthTokensAttrTypes()})
+		}
+		if state.OutputCriblHttp.AuthTokens.IsNull() || state.OutputCriblHttp.AuthTokens.IsUnknown() {
+			state.OutputCriblHttp.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpAuthTokensAttrTypes()})
+		} else if len(state.OutputCriblHttp.AuthTokens.Elements()) == 0 {
+			state.OutputCriblHttp.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblHttpAuthTokensAttrTypes()}, nil)
 		}
 		if !api.OutputCriblHttp.OnBackpressure.IsNull() && !api.OutputCriblHttp.OnBackpressure.IsUnknown() {
 			state.OutputCriblHttp.OnBackpressure = api.OutputCriblHttp.OnBackpressure
@@ -38716,6 +42870,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblHttp.URLs = api.OutputCriblHttp.URLs
 		} else if state.OutputCriblHttp.URLs.IsNull() || state.OutputCriblHttp.URLs.IsUnknown() {
 			state.OutputCriblHttp.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpURLsAttrTypes()})
+		}
+		if state.OutputCriblHttp.URLs.IsNull() || state.OutputCriblHttp.URLs.IsUnknown() {
+			state.OutputCriblHttp.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputCriblHttpURLsAttrTypes()})
+		} else if len(state.OutputCriblHttp.URLs.Elements()) == 0 {
+			state.OutputCriblHttp.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblHttpURLsAttrTypes()}, nil)
 		}
 		if !api.OutputCriblHttp.DnsResolvePeriodSec.IsNull() && !api.OutputCriblHttp.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputCriblHttp.DnsResolvePeriodSec = api.OutputCriblHttp.DnsResolvePeriodSec
@@ -38812,6 +42971,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblSearchEngine.SystemFields.IsNull() || state.OutputCriblSearchEngine.SystemFields.IsUnknown() {
 			state.OutputCriblSearchEngine.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCriblSearchEngine.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCriblSearchEngine.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCriblSearchEngine.Environment.IsNull() && !api.OutputCriblSearchEngine.Environment.IsUnknown() {
 			state.OutputCriblSearchEngine.Environment = api.OutputCriblSearchEngine.Environment
 		} else if state.OutputCriblSearchEngine.Environment.IsNull() || state.OutputCriblSearchEngine.Environment.IsUnknown() {
@@ -38820,6 +42982,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblSearchEngine.Streamtags.IsNull() && !api.OutputCriblSearchEngine.Streamtags.IsUnknown() {
 			state.OutputCriblSearchEngine.Streamtags = api.OutputCriblSearchEngine.Streamtags
 		} else if state.OutputCriblSearchEngine.Streamtags.IsNull() || state.OutputCriblSearchEngine.Streamtags.IsUnknown() {
+			state.OutputCriblSearchEngine.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblSearchEngine.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblSearchEngine.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblSearchEngine.LoadBalanced.IsNull() && !api.OutputCriblSearchEngine.LoadBalanced.IsUnknown() {
@@ -38832,6 +42997,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblSearchEngine.TLS.IsNull() || state.OutputCriblSearchEngine.TLS.IsUnknown() {
 			state.OutputCriblSearchEngine.TLS = types.ObjectNull(OutputCriblSearchEngineTLSAttrTypes())
 		}
+		if len(state.OutputCriblSearchEngine.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputCriblSearchEngine.TLS = types.ObjectNull(OutputCriblSearchEngineTLSAttrTypes())
+		}
 		if !api.OutputCriblSearchEngine.TokenTTLMinutes.IsNull() && !api.OutputCriblSearchEngine.TokenTTLMinutes.IsUnknown() {
 			state.OutputCriblSearchEngine.TokenTTLMinutes = api.OutputCriblSearchEngine.TokenTTLMinutes
 		} else if state.OutputCriblSearchEngine.TokenTTLMinutes.IsNull() || state.OutputCriblSearchEngine.TokenTTLMinutes.IsUnknown() {
@@ -38840,6 +43008,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblSearchEngine.ExcludeFields.IsNull() && !api.OutputCriblSearchEngine.ExcludeFields.IsUnknown() {
 			state.OutputCriblSearchEngine.ExcludeFields = api.OutputCriblSearchEngine.ExcludeFields
 		} else if state.OutputCriblSearchEngine.ExcludeFields.IsNull() || state.OutputCriblSearchEngine.ExcludeFields.IsUnknown() {
+			state.OutputCriblSearchEngine.ExcludeFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblSearchEngine.ExcludeFields.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblSearchEngine.ExcludeFields = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblSearchEngine.Compression.IsNull() && !api.OutputCriblSearchEngine.Compression.IsUnknown() {
@@ -38882,6 +43053,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblSearchEngine.ExtraHttpHeaders.IsNull() || state.OutputCriblSearchEngine.ExtraHttpHeaders.IsUnknown() {
 			state.OutputCriblSearchEngine.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputCriblSearchEngine.ExtraHttpHeaders.IsNull() || state.OutputCriblSearchEngine.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCriblSearchEngine.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputCriblSearchEngine.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputCriblSearchEngine.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblSearchEngineExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputCriblSearchEngine.FailedRequestLoggingMode.IsNull() && !api.OutputCriblSearchEngine.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputCriblSearchEngine.FailedRequestLoggingMode = api.OutputCriblSearchEngine.FailedRequestLoggingMode
 		} else if state.OutputCriblSearchEngine.FailedRequestLoggingMode.IsNull() || state.OutputCriblSearchEngine.FailedRequestLoggingMode.IsUnknown() {
@@ -38890,6 +43066,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCriblSearchEngine.SafeHeaders.IsNull() && !api.OutputCriblSearchEngine.SafeHeaders.IsUnknown() {
 			state.OutputCriblSearchEngine.SafeHeaders = api.OutputCriblSearchEngine.SafeHeaders
 		} else if state.OutputCriblSearchEngine.SafeHeaders.IsNull() || state.OutputCriblSearchEngine.SafeHeaders.IsUnknown() {
+			state.OutputCriblSearchEngine.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCriblSearchEngine.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputCriblSearchEngine.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblSearchEngine.ThrottleRatePerSec.IsNull() && !api.OutputCriblSearchEngine.ThrottleRatePerSec.IsUnknown() {
@@ -38902,9 +43081,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblSearchEngine.ResponseRetrySettings.IsNull() || state.OutputCriblSearchEngine.ResponseRetrySettings.IsUnknown() {
 			state.OutputCriblSearchEngine.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputCriblSearchEngine.ResponseRetrySettings.IsNull() || state.OutputCriblSearchEngine.ResponseRetrySettings.IsUnknown() {
+			state.OutputCriblSearchEngine.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputCriblSearchEngine.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputCriblSearchEngine.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblSearchEngineResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputCriblSearchEngine.TimeoutRetrySettings.IsNull() && !api.OutputCriblSearchEngine.TimeoutRetrySettings.IsUnknown() {
 			state.OutputCriblSearchEngine.TimeoutRetrySettings = api.OutputCriblSearchEngine.TimeoutRetrySettings
 		} else if state.OutputCriblSearchEngine.TimeoutRetrySettings.IsNull() || state.OutputCriblSearchEngine.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCriblSearchEngine.TimeoutRetrySettings = types.ObjectNull(OutputCriblSearchEngineTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputCriblSearchEngine.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputCriblSearchEngine.TimeoutRetrySettings = types.ObjectNull(OutputCriblSearchEngineTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -38916,6 +43103,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblSearchEngine.AuthTokens = api.OutputCriblSearchEngine.AuthTokens
 		} else if state.OutputCriblSearchEngine.AuthTokens.IsNull() || state.OutputCriblSearchEngine.AuthTokens.IsUnknown() {
 			state.OutputCriblSearchEngine.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineAuthTokensAttrTypes()})
+		}
+		if state.OutputCriblSearchEngine.AuthTokens.IsNull() || state.OutputCriblSearchEngine.AuthTokens.IsUnknown() {
+			state.OutputCriblSearchEngine.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineAuthTokensAttrTypes()})
+		} else if len(state.OutputCriblSearchEngine.AuthTokens.Elements()) == 0 {
+			state.OutputCriblSearchEngine.AuthTokens = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblSearchEngineAuthTokensAttrTypes()}, nil)
 		}
 		if !api.OutputCriblSearchEngine.OnBackpressure.IsNull() && !api.OutputCriblSearchEngine.OnBackpressure.IsUnknown() {
 			state.OutputCriblSearchEngine.OnBackpressure = api.OutputCriblSearchEngine.OnBackpressure
@@ -38946,6 +43138,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblSearchEngine.URLs = api.OutputCriblSearchEngine.URLs
 		} else if state.OutputCriblSearchEngine.URLs.IsNull() || state.OutputCriblSearchEngine.URLs.IsUnknown() {
 			state.OutputCriblSearchEngine.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineURLsAttrTypes()})
+		}
+		if state.OutputCriblSearchEngine.URLs.IsNull() || state.OutputCriblSearchEngine.URLs.IsUnknown() {
+			state.OutputCriblSearchEngine.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputCriblSearchEngineURLsAttrTypes()})
+		} else if len(state.OutputCriblSearchEngine.URLs.Elements()) == 0 {
+			state.OutputCriblSearchEngine.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblSearchEngineURLsAttrTypes()}, nil)
 		}
 		if !api.OutputCriblSearchEngine.DnsResolvePeriodSec.IsNull() && !api.OutputCriblSearchEngine.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputCriblSearchEngine.DnsResolvePeriodSec = api.OutputCriblSearchEngine.DnsResolvePeriodSec
@@ -39042,6 +43239,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHumioHec.SystemFields.IsNull() || state.OutputHumioHec.SystemFields.IsUnknown() {
 			state.OutputHumioHec.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputHumioHec.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputHumioHec.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputHumioHec.Environment.IsNull() && !api.OutputHumioHec.Environment.IsUnknown() {
 			state.OutputHumioHec.Environment = api.OutputHumioHec.Environment
 		} else if state.OutputHumioHec.Environment.IsNull() || state.OutputHumioHec.Environment.IsUnknown() {
@@ -39050,6 +43250,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputHumioHec.Streamtags.IsNull() && !api.OutputHumioHec.Streamtags.IsUnknown() {
 			state.OutputHumioHec.Streamtags = api.OutputHumioHec.Streamtags
 		} else if state.OutputHumioHec.Streamtags.IsNull() || state.OutputHumioHec.Streamtags.IsUnknown() {
+			state.OutputHumioHec.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputHumioHec.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputHumioHec.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputHumioHec.URL.IsNull() && !api.OutputHumioHec.URL.IsUnknown() {
@@ -39097,6 +43300,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHumioHec.ExtraHttpHeaders.IsNull() || state.OutputHumioHec.ExtraHttpHeaders.IsUnknown() {
 			state.OutputHumioHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputHumioHecExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputHumioHec.ExtraHttpHeaders.IsNull() || state.OutputHumioHec.ExtraHttpHeaders.IsUnknown() {
+			state.OutputHumioHec.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputHumioHecExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputHumioHec.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputHumioHec.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputHumioHecExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputHumioHec.UseRoundRobinDns.IsNull() && !api.OutputHumioHec.UseRoundRobinDns.IsUnknown() {
 			state.OutputHumioHec.UseRoundRobinDns = api.OutputHumioHec.UseRoundRobinDns
 		} else if state.OutputHumioHec.UseRoundRobinDns.IsNull() || state.OutputHumioHec.UseRoundRobinDns.IsUnknown() {
@@ -39110,6 +43318,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputHumioHec.SafeHeaders.IsNull() && !api.OutputHumioHec.SafeHeaders.IsUnknown() {
 			state.OutputHumioHec.SafeHeaders = api.OutputHumioHec.SafeHeaders
 		} else if state.OutputHumioHec.SafeHeaders.IsNull() || state.OutputHumioHec.SafeHeaders.IsUnknown() {
+			state.OutputHumioHec.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputHumioHec.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputHumioHec.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputHumioHec.Format.IsNull() && !api.OutputHumioHec.Format.IsUnknown() {
@@ -39127,9 +43338,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputHumioHec.ResponseRetrySettings.IsNull() || state.OutputHumioHec.ResponseRetrySettings.IsUnknown() {
 			state.OutputHumioHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputHumioHecResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputHumioHec.ResponseRetrySettings.IsNull() || state.OutputHumioHec.ResponseRetrySettings.IsUnknown() {
+			state.OutputHumioHec.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputHumioHecResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputHumioHec.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputHumioHec.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputHumioHecResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputHumioHec.TimeoutRetrySettings.IsNull() && !api.OutputHumioHec.TimeoutRetrySettings.IsUnknown() {
 			state.OutputHumioHec.TimeoutRetrySettings = api.OutputHumioHec.TimeoutRetrySettings
 		} else if state.OutputHumioHec.TimeoutRetrySettings.IsNull() || state.OutputHumioHec.TimeoutRetrySettings.IsUnknown() {
+			state.OutputHumioHec.TimeoutRetrySettings = types.ObjectNull(OutputHumioHecTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputHumioHec.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputHumioHec.TimeoutRetrySettings = types.ObjectNull(OutputHumioHecTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputHumioHec.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputHumioHec.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -39242,6 +43461,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCrowdstrikeNextGenSiem.SystemFields.IsNull() || state.OutputCrowdstrikeNextGenSiem.SystemFields.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCrowdstrikeNextGenSiem.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCrowdstrikeNextGenSiem.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCrowdstrikeNextGenSiem.Environment.IsNull() && !api.OutputCrowdstrikeNextGenSiem.Environment.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.Environment = api.OutputCrowdstrikeNextGenSiem.Environment
 		} else if state.OutputCrowdstrikeNextGenSiem.Environment.IsNull() || state.OutputCrowdstrikeNextGenSiem.Environment.IsUnknown() {
@@ -39250,6 +43472,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCrowdstrikeNextGenSiem.Streamtags.IsNull() && !api.OutputCrowdstrikeNextGenSiem.Streamtags.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.Streamtags = api.OutputCrowdstrikeNextGenSiem.Streamtags
 		} else if state.OutputCrowdstrikeNextGenSiem.Streamtags.IsNull() || state.OutputCrowdstrikeNextGenSiem.Streamtags.IsUnknown() {
+			state.OutputCrowdstrikeNextGenSiem.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCrowdstrikeNextGenSiem.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCrowdstrikeNextGenSiem.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCrowdstrikeNextGenSiem.URL.IsNull() && !api.OutputCrowdstrikeNextGenSiem.URL.IsUnknown() {
@@ -39297,6 +43522,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders.IsNull() || state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders.IsNull() || state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputCrowdstrikeNextGenSiem.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns.IsNull() && !api.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns = api.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns
 		} else if state.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns.IsNull() || state.OutputCrowdstrikeNextGenSiem.UseRoundRobinDns.IsUnknown() {
@@ -39310,6 +43540,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCrowdstrikeNextGenSiem.SafeHeaders.IsNull() && !api.OutputCrowdstrikeNextGenSiem.SafeHeaders.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.SafeHeaders = api.OutputCrowdstrikeNextGenSiem.SafeHeaders
 		} else if state.OutputCrowdstrikeNextGenSiem.SafeHeaders.IsNull() || state.OutputCrowdstrikeNextGenSiem.SafeHeaders.IsUnknown() {
+			state.OutputCrowdstrikeNextGenSiem.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCrowdstrikeNextGenSiem.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputCrowdstrikeNextGenSiem.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputCrowdstrikeNextGenSiem.Format.IsNull() && !api.OutputCrowdstrikeNextGenSiem.Format.IsUnknown() {
@@ -39327,9 +43560,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings.IsNull() || state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings.IsNull() || state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings.IsUnknown() {
+			state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.IsNull() && !api.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.IsUnknown() {
 			state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = api.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings
 		} else if state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.IsNull() || state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = types.ObjectNull(OutputCrowdstrikeNextGenSiemTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = types.ObjectNull(OutputCrowdstrikeNextGenSiemTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -39442,6 +43683,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDlS3.SystemFields.IsNull() || state.OutputDlS3.SystemFields.IsUnknown() {
 			state.OutputDlS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDlS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDlS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDlS3.Environment.IsNull() && !api.OutputDlS3.Environment.IsUnknown() {
 			state.OutputDlS3.Environment = api.OutputDlS3.Environment
 		} else if state.OutputDlS3.Environment.IsNull() || state.OutputDlS3.Environment.IsUnknown() {
@@ -39450,6 +43694,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDlS3.Streamtags.IsNull() && !api.OutputDlS3.Streamtags.IsUnknown() {
 			state.OutputDlS3.Streamtags = api.OutputDlS3.Streamtags
 		} else if state.OutputDlS3.Streamtags.IsNull() || state.OutputDlS3.Streamtags.IsUnknown() {
+			state.OutputDlS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDlS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDlS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDlS3.Endpoint.IsNull() && !api.OutputDlS3.Endpoint.IsUnknown() {
@@ -39607,9 +43854,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDlS3.RetrySettings.IsNull() || state.OutputDlS3.RetrySettings.IsUnknown() {
 			state.OutputDlS3.RetrySettings = types.ObjectNull(OutputDlS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputDlS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputDlS3.RetrySettings = types.ObjectNull(OutputDlS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputDlS3.Orphans.IsNull() && !api.OutputDlS3.Orphans.IsUnknown() {
 			state.OutputDlS3.Orphans = api.OutputDlS3.Orphans
 		} else if state.OutputDlS3.Orphans.IsNull() || state.OutputDlS3.Orphans.IsUnknown() {
+			state.OutputDlS3.Orphans = types.ObjectNull(OutputDlS3OrphansAttrTypes())
+		}
+		if len(state.OutputDlS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputDlS3.Orphans = types.ObjectNull(OutputDlS3OrphansAttrTypes())
 		}
 		if !api.OutputDlS3.AwsSecretKey.IsNull() && !api.OutputDlS3.AwsSecretKey.IsUnknown() {
@@ -39640,6 +43893,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDlS3.PartitioningFields.IsNull() && !api.OutputDlS3.PartitioningFields.IsUnknown() {
 			state.OutputDlS3.PartitioningFields = api.OutputDlS3.PartitioningFields
 		} else if state.OutputDlS3.PartitioningFields.IsNull() || state.OutputDlS3.PartitioningFields.IsUnknown() {
+			state.OutputDlS3.PartitioningFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDlS3.PartitioningFields.ElementType(context.Background()); elementType == nil {
 			state.OutputDlS3.PartitioningFields = types.ListNull(types.StringType)
 		}
 		if !api.OutputDlS3.Description.IsNull() && !api.OutputDlS3.Description.IsUnknown() {
@@ -39707,6 +43963,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDlS3.KeyValueMetadata.IsNull() || state.OutputDlS3.KeyValueMetadata.IsUnknown() {
 			state.OutputDlS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDlS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputDlS3.KeyValueMetadata.IsNull() || state.OutputDlS3.KeyValueMetadata.IsUnknown() {
+			state.OutputDlS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDlS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputDlS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputDlS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputDlS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputDlS3.EnableStatistics.IsNull() && !api.OutputDlS3.EnableStatistics.IsUnknown() {
 			state.OutputDlS3.EnableStatistics = api.OutputDlS3.EnableStatistics
 		} else if state.OutputDlS3.EnableStatistics.IsNull() || state.OutputDlS3.EnableStatistics.IsUnknown() {
@@ -39767,6 +44028,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSecurityLake.SystemFields.IsNull() || state.OutputSecurityLake.SystemFields.IsUnknown() {
 			state.OutputSecurityLake.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSecurityLake.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSecurityLake.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSecurityLake.Environment.IsNull() && !api.OutputSecurityLake.Environment.IsUnknown() {
 			state.OutputSecurityLake.Environment = api.OutputSecurityLake.Environment
 		} else if state.OutputSecurityLake.Environment.IsNull() || state.OutputSecurityLake.Environment.IsUnknown() {
@@ -39775,6 +44039,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSecurityLake.Streamtags.IsNull() && !api.OutputSecurityLake.Streamtags.IsUnknown() {
 			state.OutputSecurityLake.Streamtags = api.OutputSecurityLake.Streamtags
 		} else if state.OutputSecurityLake.Streamtags.IsNull() || state.OutputSecurityLake.Streamtags.IsUnknown() {
+			state.OutputSecurityLake.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSecurityLake.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputSecurityLake.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSecurityLake.Endpoint.IsNull() && !api.OutputSecurityLake.Endpoint.IsUnknown() {
@@ -39917,9 +44184,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSecurityLake.RetrySettings.IsNull() || state.OutputSecurityLake.RetrySettings.IsUnknown() {
 			state.OutputSecurityLake.RetrySettings = types.ObjectNull(OutputSecurityLakeRetrySettingsAttrTypes())
 		}
+		if len(state.OutputSecurityLake.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputSecurityLake.RetrySettings = types.ObjectNull(OutputSecurityLakeRetrySettingsAttrTypes())
+		}
 		if !api.OutputSecurityLake.Orphans.IsNull() && !api.OutputSecurityLake.Orphans.IsUnknown() {
 			state.OutputSecurityLake.Orphans = api.OutputSecurityLake.Orphans
 		} else if state.OutputSecurityLake.Orphans.IsNull() || state.OutputSecurityLake.Orphans.IsUnknown() {
+			state.OutputSecurityLake.Orphans = types.ObjectNull(OutputSecurityLakeOrphansAttrTypes())
+		}
+		if len(state.OutputSecurityLake.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputSecurityLake.Orphans = types.ObjectNull(OutputSecurityLakeOrphansAttrTypes())
 		}
 		if !api.OutputSecurityLake.AwsSecretKey.IsNull() && !api.OutputSecurityLake.AwsSecretKey.IsUnknown() {
@@ -39991,6 +44264,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputSecurityLake.KeyValueMetadata = api.OutputSecurityLake.KeyValueMetadata
 		} else if state.OutputSecurityLake.KeyValueMetadata.IsNull() || state.OutputSecurityLake.KeyValueMetadata.IsUnknown() {
 			state.OutputSecurityLake.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputSecurityLakeKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputSecurityLake.KeyValueMetadata.IsNull() || state.OutputSecurityLake.KeyValueMetadata.IsUnknown() {
+			state.OutputSecurityLake.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputSecurityLakeKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputSecurityLake.KeyValueMetadata.Elements()) == 0 {
+			state.OutputSecurityLake.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputSecurityLakeKeyValueMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputSecurityLake.EnableStatistics.IsNull() && !api.OutputSecurityLake.EnableStatistics.IsUnknown() {
 			state.OutputSecurityLake.EnableStatistics = api.OutputSecurityLake.EnableStatistics
@@ -40072,6 +44350,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblLake.SystemFields.IsNull() || state.OutputCriblLake.SystemFields.IsUnknown() {
 			state.OutputCriblLake.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCriblLake.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCriblLake.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCriblLake.Environment.IsNull() && !api.OutputCriblLake.Environment.IsUnknown() {
 			state.OutputCriblLake.Environment = api.OutputCriblLake.Environment
 		} else if state.OutputCriblLake.Environment.IsNull() || state.OutputCriblLake.Environment.IsUnknown() {
@@ -40082,65 +44363,8 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblLake.Streamtags.IsNull() || state.OutputCriblLake.Streamtags.IsUnknown() {
 			state.OutputCriblLake.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputCriblLake.Endpoint.IsNull() && !api.OutputCriblLake.Endpoint.IsUnknown() {
-			state.OutputCriblLake.Endpoint = api.OutputCriblLake.Endpoint
-		} else if state.OutputCriblLake.Endpoint.IsNull() || state.OutputCriblLake.Endpoint.IsUnknown() {
-			state.OutputCriblLake.Endpoint = types.StringNull()
-		}
-		if !api.OutputCriblLake.EnableAssumeRole.IsNull() && !api.OutputCriblLake.EnableAssumeRole.IsUnknown() {
-			state.OutputCriblLake.EnableAssumeRole = api.OutputCriblLake.EnableAssumeRole
-		} else if state.OutputCriblLake.EnableAssumeRole.IsNull() || state.OutputCriblLake.EnableAssumeRole.IsUnknown() {
-			state.OutputCriblLake.EnableAssumeRole = types.BoolNull()
-		}
-		if !api.OutputCriblLake.AssumeRoleArn.IsNull() && !api.OutputCriblLake.AssumeRoleArn.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleArn = api.OutputCriblLake.AssumeRoleArn
-		} else if state.OutputCriblLake.AssumeRoleArn.IsNull() || state.OutputCriblLake.AssumeRoleArn.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleArn = types.StringNull()
-		}
-		if !api.OutputCriblLake.AssumeRoleExternalID.IsNull() && !api.OutputCriblLake.AssumeRoleExternalID.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleExternalID = api.OutputCriblLake.AssumeRoleExternalID
-		} else if state.OutputCriblLake.AssumeRoleExternalID.IsNull() || state.OutputCriblLake.AssumeRoleExternalID.IsUnknown() {
-			state.OutputCriblLake.AssumeRoleExternalID = types.StringNull()
-		}
-		if !api.OutputCriblLake.DurationSeconds.IsNull() && !api.OutputCriblLake.DurationSeconds.IsUnknown() {
-			state.OutputCriblLake.DurationSeconds = api.OutputCriblLake.DurationSeconds
-		} else if state.OutputCriblLake.DurationSeconds.IsNull() || state.OutputCriblLake.DurationSeconds.IsUnknown() {
-			state.OutputCriblLake.DurationSeconds = types.Float64Null()
-		}
-		if !api.OutputCriblLake.ReuseConnections.IsNull() && !api.OutputCriblLake.ReuseConnections.IsUnknown() {
-			state.OutputCriblLake.ReuseConnections = api.OutputCriblLake.ReuseConnections
-		} else if state.OutputCriblLake.ReuseConnections.IsNull() || state.OutputCriblLake.ReuseConnections.IsUnknown() {
-			state.OutputCriblLake.ReuseConnections = types.BoolNull()
-		}
-		if !api.OutputCriblLake.RejectUnauthorized.IsNull() && !api.OutputCriblLake.RejectUnauthorized.IsUnknown() {
-			state.OutputCriblLake.RejectUnauthorized = api.OutputCriblLake.RejectUnauthorized
-		} else if state.OutputCriblLake.RejectUnauthorized.IsNull() || state.OutputCriblLake.RejectUnauthorized.IsUnknown() {
-			state.OutputCriblLake.RejectUnauthorized = types.BoolNull()
-		}
-		if !api.OutputCriblLake.Bucket.IsNull() && !api.OutputCriblLake.Bucket.IsUnknown() {
-			state.OutputCriblLake.Bucket = api.OutputCriblLake.Bucket
-		} else if state.OutputCriblLake.Bucket.IsNull() || state.OutputCriblLake.Bucket.IsUnknown() {
-			state.OutputCriblLake.Bucket = types.StringNull()
-		}
-		if !api.OutputCriblLake.Region.IsNull() && !api.OutputCriblLake.Region.IsUnknown() {
-			state.OutputCriblLake.Region = api.OutputCriblLake.Region
-		} else if state.OutputCriblLake.Region.IsNull() || state.OutputCriblLake.Region.IsUnknown() {
-			state.OutputCriblLake.Region = types.StringNull()
-		}
-		if !api.OutputCriblLake.DestPath.IsNull() && !api.OutputCriblLake.DestPath.IsUnknown() {
-			state.OutputCriblLake.DestPath = api.OutputCriblLake.DestPath
-		} else if state.OutputCriblLake.DestPath.IsNull() || state.OutputCriblLake.DestPath.IsUnknown() {
-			state.OutputCriblLake.DestPath = types.StringNull()
-		}
-		if !api.OutputCriblLake.VerifyPermissions.IsNull() && !api.OutputCriblLake.VerifyPermissions.IsUnknown() {
-			state.OutputCriblLake.VerifyPermissions = api.OutputCriblLake.VerifyPermissions
-		} else if state.OutputCriblLake.VerifyPermissions.IsNull() || state.OutputCriblLake.VerifyPermissions.IsUnknown() {
-			state.OutputCriblLake.VerifyPermissions = types.BoolNull()
-		}
-		if !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() && !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
-			state.OutputCriblLake.MaxClosingFilesToBackpressure = api.OutputCriblLake.MaxClosingFilesToBackpressure
-		} else if state.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() || state.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
-			state.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64Null()
+		if elementType := state.OutputCriblLake.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputCriblLake.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCriblLake.StagePath.IsNull() && !api.OutputCriblLake.StagePath.IsUnknown() {
 			state.OutputCriblLake.StagePath = api.OutputCriblLake.StagePath
@@ -40222,45 +44446,41 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCriblLake.RetrySettings.IsNull() || state.OutputCriblLake.RetrySettings.IsUnknown() {
 			state.OutputCriblLake.RetrySettings = types.ObjectNull(OutputCriblLakeRetrySettingsAttrTypes())
 		}
+		if len(state.OutputCriblLake.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputCriblLake.RetrySettings = types.ObjectNull(OutputCriblLakeRetrySettingsAttrTypes())
+		}
 		if !api.OutputCriblLake.Orphans.IsNull() && !api.OutputCriblLake.Orphans.IsUnknown() {
 			state.OutputCriblLake.Orphans = api.OutputCriblLake.Orphans
 		} else if state.OutputCriblLake.Orphans.IsNull() || state.OutputCriblLake.Orphans.IsUnknown() {
 			state.OutputCriblLake.Orphans = types.ObjectNull(OutputCriblLakeOrphansAttrTypes())
 		}
-		if !api.OutputCriblLake.AwsSecretKey.IsNull() && !api.OutputCriblLake.AwsSecretKey.IsUnknown() {
-			state.OutputCriblLake.AwsSecretKey = stringFromAPIOrPrior(api.OutputCriblLake.AwsSecretKey.ValueString(), state.OutputCriblLake.AwsSecretKey)
-		} else if state.OutputCriblLake.AwsSecretKey.IsNull() || state.OutputCriblLake.AwsSecretKey.IsUnknown() {
-			state.OutputCriblLake.AwsSecretKey = types.StringNull()
+		if len(state.OutputCriblLake.Orphans.AttributeTypes(context.Background())) == 0 {
+			state.OutputCriblLake.Orphans = types.ObjectNull(OutputCriblLakeOrphansAttrTypes())
 		}
-		if !api.OutputCriblLake.ObjectACL.IsNull() && !api.OutputCriblLake.ObjectACL.IsUnknown() {
-			state.OutputCriblLake.ObjectACL = api.OutputCriblLake.ObjectACL
-		} else if state.OutputCriblLake.ObjectACL.IsNull() || state.OutputCriblLake.ObjectACL.IsUnknown() {
-			state.OutputCriblLake.ObjectACL = types.StringNull()
+		if !api.OutputCriblLake.StorageLocationID.IsNull() && !api.OutputCriblLake.StorageLocationID.IsUnknown() {
+			state.OutputCriblLake.StorageLocationID = api.OutputCriblLake.StorageLocationID
+		} else if state.OutputCriblLake.StorageLocationID.IsNull() || state.OutputCriblLake.StorageLocationID.IsUnknown() {
+			state.OutputCriblLake.StorageLocationID = types.StringNull()
 		}
-		if !api.OutputCriblLake.StorageClass.IsNull() && !api.OutputCriblLake.StorageClass.IsUnknown() {
-			state.OutputCriblLake.StorageClass = api.OutputCriblLake.StorageClass
-		} else if state.OutputCriblLake.StorageClass.IsNull() || state.OutputCriblLake.StorageClass.IsUnknown() {
-			state.OutputCriblLake.StorageClass = types.StringNull()
-		}
-		if !api.OutputCriblLake.ServerSideEncryption.IsNull() && !api.OutputCriblLake.ServerSideEncryption.IsUnknown() {
-			state.OutputCriblLake.ServerSideEncryption = api.OutputCriblLake.ServerSideEncryption
-		} else if state.OutputCriblLake.ServerSideEncryption.IsNull() || state.OutputCriblLake.ServerSideEncryption.IsUnknown() {
-			state.OutputCriblLake.ServerSideEncryption = types.StringNull()
-		}
-		if !api.OutputCriblLake.KmsKeyID.IsNull() && !api.OutputCriblLake.KmsKeyID.IsUnknown() {
-			state.OutputCriblLake.KmsKeyID = api.OutputCriblLake.KmsKeyID
-		} else if state.OutputCriblLake.KmsKeyID.IsNull() || state.OutputCriblLake.KmsKeyID.IsUnknown() {
-			state.OutputCriblLake.KmsKeyID = types.StringNull()
-		}
-		if !api.OutputCriblLake.AwsAuthenticationMethod.IsNull() && !api.OutputCriblLake.AwsAuthenticationMethod.IsUnknown() {
-			state.OutputCriblLake.AwsAuthenticationMethod = api.OutputCriblLake.AwsAuthenticationMethod
-		} else if state.OutputCriblLake.AwsAuthenticationMethod.IsNull() || state.OutputCriblLake.AwsAuthenticationMethod.IsUnknown() {
-			state.OutputCriblLake.AwsAuthenticationMethod = types.StringNull()
+		if !api.OutputCriblLake.DestPath.IsNull() && !api.OutputCriblLake.DestPath.IsUnknown() {
+			state.OutputCriblLake.DestPath = api.OutputCriblLake.DestPath
+		} else if state.OutputCriblLake.DestPath.IsNull() || state.OutputCriblLake.DestPath.IsUnknown() {
+			state.OutputCriblLake.DestPath = types.StringNull()
 		}
 		if !api.OutputCriblLake.Format.IsNull() && !api.OutputCriblLake.Format.IsUnknown() {
 			state.OutputCriblLake.Format = api.OutputCriblLake.Format
 		} else if state.OutputCriblLake.Format.IsNull() || state.OutputCriblLake.Format.IsUnknown() {
 			state.OutputCriblLake.Format = types.StringNull()
+		}
+		if !api.OutputCriblLake.DynamicDataset.IsNull() && !api.OutputCriblLake.DynamicDataset.IsUnknown() {
+			state.OutputCriblLake.DynamicDataset = api.OutputCriblLake.DynamicDataset
+		} else if state.OutputCriblLake.DynamicDataset.IsNull() || state.OutputCriblLake.DynamicDataset.IsUnknown() {
+			state.OutputCriblLake.DynamicDataset = types.BoolNull()
+		}
+		if !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() && !api.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputCriblLake.MaxClosingFilesToBackpressure = api.OutputCriblLake.MaxClosingFilesToBackpressure
+		} else if state.OutputCriblLake.MaxClosingFilesToBackpressure.IsNull() || state.OutputCriblLake.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64Null()
 		}
 		if !api.OutputCriblLake.MaxConcurrentFileParts.IsNull() && !api.OutputCriblLake.MaxConcurrentFileParts.IsUnknown() {
 			state.OutputCriblLake.MaxConcurrentFileParts = api.OutputCriblLake.MaxConcurrentFileParts
@@ -40271,6 +44491,76 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputCriblLake.Description = api.OutputCriblLake.Description
 		} else if state.OutputCriblLake.Description.IsNull() || state.OutputCriblLake.Description.IsUnknown() {
 			state.OutputCriblLake.Description = types.StringNull()
+		}
+		if !api.OutputCriblLake.Compress.IsNull() && !api.OutputCriblLake.Compress.IsUnknown() {
+			state.OutputCriblLake.Compress = api.OutputCriblLake.Compress
+		} else if state.OutputCriblLake.Compress.IsNull() || state.OutputCriblLake.Compress.IsUnknown() {
+			state.OutputCriblLake.Compress = types.StringNull()
+		}
+		if !api.OutputCriblLake.CompressionLevel.IsNull() && !api.OutputCriblLake.CompressionLevel.IsUnknown() {
+			state.OutputCriblLake.CompressionLevel = api.OutputCriblLake.CompressionLevel
+		} else if state.OutputCriblLake.CompressionLevel.IsNull() || state.OutputCriblLake.CompressionLevel.IsUnknown() {
+			state.OutputCriblLake.CompressionLevel = types.StringNull()
+		}
+		if !api.OutputCriblLake.AutomaticSchema.IsNull() && !api.OutputCriblLake.AutomaticSchema.IsUnknown() {
+			state.OutputCriblLake.AutomaticSchema = api.OutputCriblLake.AutomaticSchema
+		} else if state.OutputCriblLake.AutomaticSchema.IsNull() || state.OutputCriblLake.AutomaticSchema.IsUnknown() {
+			state.OutputCriblLake.AutomaticSchema = types.BoolNull()
+		}
+		if !api.OutputCriblLake.ParquetSchema.IsNull() && !api.OutputCriblLake.ParquetSchema.IsUnknown() {
+			state.OutputCriblLake.ParquetSchema = api.OutputCriblLake.ParquetSchema
+		} else if state.OutputCriblLake.ParquetSchema.IsNull() || state.OutputCriblLake.ParquetSchema.IsUnknown() {
+			state.OutputCriblLake.ParquetSchema = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetVersion.IsNull() && !api.OutputCriblLake.ParquetVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetVersion = api.OutputCriblLake.ParquetVersion
+		} else if state.OutputCriblLake.ParquetVersion.IsNull() || state.OutputCriblLake.ParquetVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetVersion = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetDataPageVersion.IsNull() && !api.OutputCriblLake.ParquetDataPageVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetDataPageVersion = api.OutputCriblLake.ParquetDataPageVersion
+		} else if state.OutputCriblLake.ParquetDataPageVersion.IsNull() || state.OutputCriblLake.ParquetDataPageVersion.IsUnknown() {
+			state.OutputCriblLake.ParquetDataPageVersion = types.StringNull()
+		}
+		if !api.OutputCriblLake.ParquetRowGroupLength.IsNull() && !api.OutputCriblLake.ParquetRowGroupLength.IsUnknown() {
+			state.OutputCriblLake.ParquetRowGroupLength = api.OutputCriblLake.ParquetRowGroupLength
+		} else if state.OutputCriblLake.ParquetRowGroupLength.IsNull() || state.OutputCriblLake.ParquetRowGroupLength.IsUnknown() {
+			state.OutputCriblLake.ParquetRowGroupLength = types.Float64Null()
+		}
+		if !api.OutputCriblLake.ParquetPageSize.IsNull() && !api.OutputCriblLake.ParquetPageSize.IsUnknown() {
+			state.OutputCriblLake.ParquetPageSize = api.OutputCriblLake.ParquetPageSize
+		} else if state.OutputCriblLake.ParquetPageSize.IsNull() || state.OutputCriblLake.ParquetPageSize.IsUnknown() {
+			state.OutputCriblLake.ParquetPageSize = types.StringNull()
+		}
+		if !api.OutputCriblLake.ShouldLogInvalidRows.IsNull() && !api.OutputCriblLake.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputCriblLake.ShouldLogInvalidRows = api.OutputCriblLake.ShouldLogInvalidRows
+		} else if state.OutputCriblLake.ShouldLogInvalidRows.IsNull() || state.OutputCriblLake.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputCriblLake.ShouldLogInvalidRows = types.BoolNull()
+		}
+		if !api.OutputCriblLake.KeyValueMetadata.IsNull() && !api.OutputCriblLake.KeyValueMetadata.IsUnknown() {
+			state.OutputCriblLake.KeyValueMetadata = api.OutputCriblLake.KeyValueMetadata
+		} else if state.OutputCriblLake.KeyValueMetadata.IsNull() || state.OutputCriblLake.KeyValueMetadata.IsUnknown() {
+			state.OutputCriblLake.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCriblLakeKeyValueMetadataAttrTypes()})
+		}
+		if state.OutputCriblLake.KeyValueMetadata.IsNull() || state.OutputCriblLake.KeyValueMetadata.IsUnknown() {
+			state.OutputCriblLake.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCriblLakeKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputCriblLake.KeyValueMetadata.Elements()) == 0 {
+			state.OutputCriblLake.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputCriblLakeKeyValueMetadataAttrTypes()}, nil)
+		}
+		if !api.OutputCriblLake.EnableStatistics.IsNull() && !api.OutputCriblLake.EnableStatistics.IsUnknown() {
+			state.OutputCriblLake.EnableStatistics = api.OutputCriblLake.EnableStatistics
+		} else if state.OutputCriblLake.EnableStatistics.IsNull() || state.OutputCriblLake.EnableStatistics.IsUnknown() {
+			state.OutputCriblLake.EnableStatistics = types.BoolNull()
+		}
+		if !api.OutputCriblLake.EnableWritePageIndex.IsNull() && !api.OutputCriblLake.EnableWritePageIndex.IsUnknown() {
+			state.OutputCriblLake.EnableWritePageIndex = api.OutputCriblLake.EnableWritePageIndex
+		} else if state.OutputCriblLake.EnableWritePageIndex.IsNull() || state.OutputCriblLake.EnableWritePageIndex.IsUnknown() {
+			state.OutputCriblLake.EnableWritePageIndex = types.BoolNull()
+		}
+		if !api.OutputCriblLake.EnablePageChecksum.IsNull() && !api.OutputCriblLake.EnablePageChecksum.IsUnknown() {
+			state.OutputCriblLake.EnablePageChecksum = api.OutputCriblLake.EnablePageChecksum
+		} else if state.OutputCriblLake.EnablePageChecksum.IsNull() || state.OutputCriblLake.EnablePageChecksum.IsUnknown() {
+			state.OutputCriblLake.EnablePageChecksum = types.BoolNull()
 		}
 		if !api.OutputCriblLake.EmptyDirCleanupSec.IsNull() && !api.OutputCriblLake.EmptyDirCleanupSec.IsUnknown() {
 			state.OutputCriblLake.EmptyDirCleanupSec = api.OutputCriblLake.EmptyDirCleanupSec
@@ -40317,6 +44607,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDiskSpool.SystemFields.IsNull() || state.OutputDiskSpool.SystemFields.IsUnknown() {
 			state.OutputDiskSpool.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDiskSpool.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDiskSpool.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDiskSpool.Environment.IsNull() && !api.OutputDiskSpool.Environment.IsUnknown() {
 			state.OutputDiskSpool.Environment = api.OutputDiskSpool.Environment
 		} else if state.OutputDiskSpool.Environment.IsNull() || state.OutputDiskSpool.Environment.IsUnknown() {
@@ -40325,6 +44618,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDiskSpool.Streamtags.IsNull() && !api.OutputDiskSpool.Streamtags.IsUnknown() {
 			state.OutputDiskSpool.Streamtags = api.OutputDiskSpool.Streamtags
 		} else if state.OutputDiskSpool.Streamtags.IsNull() || state.OutputDiskSpool.Streamtags.IsUnknown() {
+			state.OutputDiskSpool.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDiskSpool.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDiskSpool.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDiskSpool.TimeWindow.IsNull() && !api.OutputDiskSpool.TimeWindow.IsUnknown() {
@@ -40382,6 +44678,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.SystemFields.IsNull() || state.OutputClickHouse.SystemFields.IsUnknown() {
 			state.OutputClickHouse.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputClickHouse.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputClickHouse.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputClickHouse.Environment.IsNull() && !api.OutputClickHouse.Environment.IsUnknown() {
 			state.OutputClickHouse.Environment = api.OutputClickHouse.Environment
 		} else if state.OutputClickHouse.Environment.IsNull() || state.OutputClickHouse.Environment.IsUnknown() {
@@ -40390,6 +44689,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputClickHouse.Streamtags.IsNull() && !api.OutputClickHouse.Streamtags.IsUnknown() {
 			state.OutputClickHouse.Streamtags = api.OutputClickHouse.Streamtags
 		} else if state.OutputClickHouse.Streamtags.IsNull() || state.OutputClickHouse.Streamtags.IsUnknown() {
+			state.OutputClickHouse.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputClickHouse.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputClickHouse.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputClickHouse.URL.IsNull() && !api.OutputClickHouse.URL.IsUnknown() {
@@ -40432,6 +44734,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.TLS.IsNull() || state.OutputClickHouse.TLS.IsUnknown() {
 			state.OutputClickHouse.TLS = types.ObjectNull(OutputClickHouseTLSAttrTypes())
 		}
+		if len(state.OutputClickHouse.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputClickHouse.TLS = types.ObjectNull(OutputClickHouseTLSAttrTypes())
+		}
 		if !api.OutputClickHouse.Concurrency.IsNull() && !api.OutputClickHouse.Concurrency.IsUnknown() {
 			state.OutputClickHouse.Concurrency = api.OutputClickHouse.Concurrency
 		} else if state.OutputClickHouse.Concurrency.IsNull() || state.OutputClickHouse.Concurrency.IsUnknown() {
@@ -40472,6 +44777,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.ExtraHttpHeaders.IsNull() || state.OutputClickHouse.ExtraHttpHeaders.IsUnknown() {
 			state.OutputClickHouse.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputClickHouse.ExtraHttpHeaders.IsNull() || state.OutputClickHouse.ExtraHttpHeaders.IsUnknown() {
+			state.OutputClickHouse.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputClickHouse.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputClickHouse.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputClickHouseExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputClickHouse.UseRoundRobinDns.IsNull() && !api.OutputClickHouse.UseRoundRobinDns.IsUnknown() {
 			state.OutputClickHouse.UseRoundRobinDns = api.OutputClickHouse.UseRoundRobinDns
 		} else if state.OutputClickHouse.UseRoundRobinDns.IsNull() || state.OutputClickHouse.UseRoundRobinDns.IsUnknown() {
@@ -40487,14 +44797,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.SafeHeaders.IsNull() || state.OutputClickHouse.SafeHeaders.IsUnknown() {
 			state.OutputClickHouse.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputClickHouse.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputClickHouse.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputClickHouse.ResponseRetrySettings.IsNull() && !api.OutputClickHouse.ResponseRetrySettings.IsUnknown() {
 			state.OutputClickHouse.ResponseRetrySettings = api.OutputClickHouse.ResponseRetrySettings
 		} else if state.OutputClickHouse.ResponseRetrySettings.IsNull() || state.OutputClickHouse.ResponseRetrySettings.IsUnknown() {
 			state.OutputClickHouse.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputClickHouse.ResponseRetrySettings.IsNull() || state.OutputClickHouse.ResponseRetrySettings.IsUnknown() {
+			state.OutputClickHouse.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputClickHouse.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputClickHouse.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputClickHouseResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputClickHouse.TimeoutRetrySettings.IsNull() && !api.OutputClickHouse.TimeoutRetrySettings.IsUnknown() {
 			state.OutputClickHouse.TimeoutRetrySettings = api.OutputClickHouse.TimeoutRetrySettings
 		} else if state.OutputClickHouse.TimeoutRetrySettings.IsNull() || state.OutputClickHouse.TimeoutRetrySettings.IsUnknown() {
+			state.OutputClickHouse.TimeoutRetrySettings = types.ObjectNull(OutputClickHouseTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputClickHouse.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputClickHouse.TimeoutRetrySettings = types.ObjectNull(OutputClickHouseTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputClickHouse.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputClickHouse.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -40552,6 +44873,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputClickHouse.ExcludeMappingFields.IsNull() || state.OutputClickHouse.ExcludeMappingFields.IsUnknown() {
 			state.OutputClickHouse.ExcludeMappingFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputClickHouse.ExcludeMappingFields.ElementType(context.Background()); elementType == nil {
+			state.OutputClickHouse.ExcludeMappingFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputClickHouse.DescribeTable.IsNull() && !api.OutputClickHouse.DescribeTable.IsUnknown() {
 			state.OutputClickHouse.DescribeTable = api.OutputClickHouse.DescribeTable
 		} else if state.OutputClickHouse.DescribeTable.IsNull() || state.OutputClickHouse.DescribeTable.IsUnknown() {
@@ -40561,6 +44885,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputClickHouse.ColumnMappings = api.OutputClickHouse.ColumnMappings
 		} else if state.OutputClickHouse.ColumnMappings.IsNull() || state.OutputClickHouse.ColumnMappings.IsUnknown() {
 			state.OutputClickHouse.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseColumnMappingsAttrTypes()})
+		}
+		if state.OutputClickHouse.ColumnMappings.IsNull() || state.OutputClickHouse.ColumnMappings.IsUnknown() {
+			state.OutputClickHouse.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputClickHouseColumnMappingsAttrTypes()})
+		} else if len(state.OutputClickHouse.ColumnMappings.Elements()) == 0 {
+			state.OutputClickHouse.ColumnMappings = types.ListValueMust(types.ObjectType{AttrTypes: OutputClickHouseColumnMappingsAttrTypes()}, nil)
 		}
 		if !api.OutputClickHouse.PqStrictOrdering.IsNull() && !api.OutputClickHouse.PqStrictOrdering.IsUnknown() {
 			state.OutputClickHouse.PqStrictOrdering = api.OutputClickHouse.PqStrictOrdering
@@ -40623,6 +44952,304 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputClickHouse.PqControls = types.MapNull(types.StringType)
 		}
 	}
+	if api.OutputCustomerMetricsStorage != nil {
+		if state.OutputCustomerMetricsStorage == nil {
+			state.OutputCustomerMetricsStorage = &OutputCustomerMetricsStorageModel{}
+		}
+		if !api.OutputCustomerMetricsStorage.ID.IsNull() && !api.OutputCustomerMetricsStorage.ID.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ID = api.OutputCustomerMetricsStorage.ID
+		} else if state.OutputCustomerMetricsStorage.ID.IsNull() || state.OutputCustomerMetricsStorage.ID.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ID = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Type.IsNull() && !api.OutputCustomerMetricsStorage.Type.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Type = api.OutputCustomerMetricsStorage.Type
+		} else if state.OutputCustomerMetricsStorage.Type.IsNull() || state.OutputCustomerMetricsStorage.Type.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Type = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Pipeline.IsNull() && !api.OutputCustomerMetricsStorage.Pipeline.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Pipeline = api.OutputCustomerMetricsStorage.Pipeline
+		} else if state.OutputCustomerMetricsStorage.Pipeline.IsNull() || state.OutputCustomerMetricsStorage.Pipeline.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Pipeline = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SystemFields.IsNull() && !api.OutputCustomerMetricsStorage.SystemFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SystemFields = api.OutputCustomerMetricsStorage.SystemFields
+		} else if state.OutputCustomerMetricsStorage.SystemFields.IsNull() || state.OutputCustomerMetricsStorage.SystemFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCustomerMetricsStorage.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCustomerMetricsStorage.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.Environment.IsNull() && !api.OutputCustomerMetricsStorage.Environment.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Environment = api.OutputCustomerMetricsStorage.Environment
+		} else if state.OutputCustomerMetricsStorage.Environment.IsNull() || state.OutputCustomerMetricsStorage.Environment.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Environment = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Streamtags.IsNull() && !api.OutputCustomerMetricsStorage.Streamtags.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Streamtags = api.OutputCustomerMetricsStorage.Streamtags
+		} else if state.OutputCustomerMetricsStorage.Streamtags.IsNull() || state.OutputCustomerMetricsStorage.Streamtags.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCustomerMetricsStorage.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputCustomerMetricsStorage.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.URL.IsNull() && !api.OutputCustomerMetricsStorage.URL.IsUnknown() {
+			state.OutputCustomerMetricsStorage.URL = api.OutputCustomerMetricsStorage.URL
+		} else if state.OutputCustomerMetricsStorage.URL.IsNull() || state.OutputCustomerMetricsStorage.URL.IsUnknown() {
+			state.OutputCustomerMetricsStorage.URL = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.AuthType.IsNull() && !api.OutputCustomerMetricsStorage.AuthType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AuthType = api.OutputCustomerMetricsStorage.AuthType
+		} else if state.OutputCustomerMetricsStorage.AuthType.IsNull() || state.OutputCustomerMetricsStorage.AuthType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AuthType = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Database.IsNull() && !api.OutputCustomerMetricsStorage.Database.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Database = api.OutputCustomerMetricsStorage.Database
+		} else if state.OutputCustomerMetricsStorage.Database.IsNull() || state.OutputCustomerMetricsStorage.Database.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Database = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TableName.IsNull() && !api.OutputCustomerMetricsStorage.TableName.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TableName = api.OutputCustomerMetricsStorage.TableName
+		} else if state.OutputCustomerMetricsStorage.TableName.IsNull() || state.OutputCustomerMetricsStorage.TableName.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TableName = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Format.IsNull() && !api.OutputCustomerMetricsStorage.Format.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Format = api.OutputCustomerMetricsStorage.Format
+		} else if state.OutputCustomerMetricsStorage.Format.IsNull() || state.OutputCustomerMetricsStorage.Format.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Format = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.MappingType.IsNull() && !api.OutputCustomerMetricsStorage.MappingType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MappingType = api.OutputCustomerMetricsStorage.MappingType
+		} else if state.OutputCustomerMetricsStorage.MappingType.IsNull() || state.OutputCustomerMetricsStorage.MappingType.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MappingType = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.AsyncInserts.IsNull() && !api.OutputCustomerMetricsStorage.AsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AsyncInserts = api.OutputCustomerMetricsStorage.AsyncInserts
+		} else if state.OutputCustomerMetricsStorage.AsyncInserts.IsNull() || state.OutputCustomerMetricsStorage.AsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.AsyncInserts = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TLS.IsNull() && !api.OutputCustomerMetricsStorage.TLS.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TLS = api.OutputCustomerMetricsStorage.TLS
+		} else if state.OutputCustomerMetricsStorage.TLS.IsNull() || state.OutputCustomerMetricsStorage.TLS.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TLS = types.ObjectNull(OutputCustomerMetricsStorageTLSAttrTypes())
+		}
+		if len(state.OutputCustomerMetricsStorage.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputCustomerMetricsStorage.TLS = types.ObjectNull(OutputCustomerMetricsStorageTLSAttrTypes())
+		}
+		if !api.OutputCustomerMetricsStorage.Concurrency.IsNull() && !api.OutputCustomerMetricsStorage.Concurrency.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Concurrency = api.OutputCustomerMetricsStorage.Concurrency
+		} else if state.OutputCustomerMetricsStorage.Concurrency.IsNull() || state.OutputCustomerMetricsStorage.Concurrency.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Concurrency = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsNull() && !api.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadSizeKB = api.OutputCustomerMetricsStorage.MaxPayloadSizeKB
+		} else if state.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsNull() || state.OutputCustomerMetricsStorage.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.MaxPayloadEvents.IsNull() && !api.OutputCustomerMetricsStorage.MaxPayloadEvents.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadEvents = api.OutputCustomerMetricsStorage.MaxPayloadEvents
+		} else if state.OutputCustomerMetricsStorage.MaxPayloadEvents.IsNull() || state.OutputCustomerMetricsStorage.MaxPayloadEvents.IsUnknown() {
+			state.OutputCustomerMetricsStorage.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.Compress.IsNull() && !api.OutputCustomerMetricsStorage.Compress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Compress = api.OutputCustomerMetricsStorage.Compress
+		} else if state.OutputCustomerMetricsStorage.Compress.IsNull() || state.OutputCustomerMetricsStorage.Compress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Compress = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.RejectUnauthorized.IsNull() && !api.OutputCustomerMetricsStorage.RejectUnauthorized.IsUnknown() {
+			state.OutputCustomerMetricsStorage.RejectUnauthorized = api.OutputCustomerMetricsStorage.RejectUnauthorized
+		} else if state.OutputCustomerMetricsStorage.RejectUnauthorized.IsNull() || state.OutputCustomerMetricsStorage.RejectUnauthorized.IsUnknown() {
+			state.OutputCustomerMetricsStorage.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.TimeoutSec.IsNull() && !api.OutputCustomerMetricsStorage.TimeoutSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutSec = api.OutputCustomerMetricsStorage.TimeoutSec
+		} else if state.OutputCustomerMetricsStorage.TimeoutSec.IsNull() || state.OutputCustomerMetricsStorage.TimeoutSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.FlushPeriodSec.IsNull() && !api.OutputCustomerMetricsStorage.FlushPeriodSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FlushPeriodSec = api.OutputCustomerMetricsStorage.FlushPeriodSec
+		} else if state.OutputCustomerMetricsStorage.FlushPeriodSec.IsNull() || state.OutputCustomerMetricsStorage.FlushPeriodSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsNull() && !api.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = api.OutputCustomerMetricsStorage.ExtraHttpHeaders
+		} else if state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsNull() || state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageExtraHttpHeadersAttrTypes()})
+		}
+		if state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsNull() || state.OutputCustomerMetricsStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputCustomerMetricsStorage.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputCustomerMetricsStorage.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageExtraHttpHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputCustomerMetricsStorage.UseRoundRobinDns.IsNull() && !api.OutputCustomerMetricsStorage.UseRoundRobinDns.IsUnknown() {
+			state.OutputCustomerMetricsStorage.UseRoundRobinDns = api.OutputCustomerMetricsStorage.UseRoundRobinDns
+		} else if state.OutputCustomerMetricsStorage.UseRoundRobinDns.IsNull() || state.OutputCustomerMetricsStorage.UseRoundRobinDns.IsUnknown() {
+			state.OutputCustomerMetricsStorage.UseRoundRobinDns = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsNull() && !api.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FailedRequestLoggingMode = api.OutputCustomerMetricsStorage.FailedRequestLoggingMode
+		} else if state.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsNull() || state.OutputCustomerMetricsStorage.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SafeHeaders.IsNull() && !api.OutputCustomerMetricsStorage.SafeHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SafeHeaders = api.OutputCustomerMetricsStorage.SafeHeaders
+		} else if state.OutputCustomerMetricsStorage.SafeHeaders.IsNull() || state.OutputCustomerMetricsStorage.SafeHeaders.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCustomerMetricsStorage.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputCustomerMetricsStorage.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.ResponseRetrySettings.IsNull() && !api.OutputCustomerMetricsStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = api.OutputCustomerMetricsStorage.ResponseRetrySettings
+		} else if state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsNull() || state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageResponseRetrySettingsAttrTypes()})
+		}
+		if state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsNull() || state.OutputCustomerMetricsStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputCustomerMetricsStorage.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputCustomerMetricsStorage.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageResponseRetrySettingsAttrTypes()}, nil)
+		}
+		if !api.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsNull() && !api.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutRetrySettings = api.OutputCustomerMetricsStorage.TimeoutRetrySettings
+		} else if state.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsNull() || state.OutputCustomerMetricsStorage.TimeoutRetrySettings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.TimeoutRetrySettings = types.ObjectNull(OutputCustomerMetricsStorageTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputCustomerMetricsStorage.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputCustomerMetricsStorage.TimeoutRetrySettings = types.ObjectNull(OutputCustomerMetricsStorageTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader = api.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader
+		} else if state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsNull() || state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Workload.IsNull() && !api.OutputCustomerMetricsStorage.Workload.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Workload = api.OutputCustomerMetricsStorage.Workload
+		} else if state.OutputCustomerMetricsStorage.Workload.IsNull() || state.OutputCustomerMetricsStorage.Workload.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Workload = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsNull() && !api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk = api.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk
+		} else if state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsNull() || state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DumpFormatErrorsToDisk = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.OnBackpressure.IsNull() && !api.OutputCustomerMetricsStorage.OnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.OnBackpressure = api.OutputCustomerMetricsStorage.OnBackpressure
+		} else if state.OutputCustomerMetricsStorage.OnBackpressure.IsNull() || state.OutputCustomerMetricsStorage.OnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Description.IsNull() && !api.OutputCustomerMetricsStorage.Description.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Description = api.OutputCustomerMetricsStorage.Description
+		} else if state.OutputCustomerMetricsStorage.Description.IsNull() || state.OutputCustomerMetricsStorage.Description.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Description = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Username.IsNull() && !api.OutputCustomerMetricsStorage.Username.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Username = api.OutputCustomerMetricsStorage.Username
+		} else if state.OutputCustomerMetricsStorage.Username.IsNull() || state.OutputCustomerMetricsStorage.Username.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Username = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.Password.IsNull() && !api.OutputCustomerMetricsStorage.Password.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Password = stringFromAPIOrPrior(api.OutputCustomerMetricsStorage.Password.ValueString(), state.OutputCustomerMetricsStorage.Password)
+		} else if state.OutputCustomerMetricsStorage.Password.IsNull() || state.OutputCustomerMetricsStorage.Password.IsUnknown() {
+			state.OutputCustomerMetricsStorage.Password = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.CredentialsSecret.IsNull() && !api.OutputCustomerMetricsStorage.CredentialsSecret.IsUnknown() {
+			state.OutputCustomerMetricsStorage.CredentialsSecret = api.OutputCustomerMetricsStorage.CredentialsSecret
+		} else if state.OutputCustomerMetricsStorage.CredentialsSecret.IsNull() || state.OutputCustomerMetricsStorage.CredentialsSecret.IsUnknown() {
+			state.OutputCustomerMetricsStorage.CredentialsSecret = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.SqlUsername.IsNull() && !api.OutputCustomerMetricsStorage.SqlUsername.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SqlUsername = api.OutputCustomerMetricsStorage.SqlUsername
+		} else if state.OutputCustomerMetricsStorage.SqlUsername.IsNull() || state.OutputCustomerMetricsStorage.SqlUsername.IsUnknown() {
+			state.OutputCustomerMetricsStorage.SqlUsername = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsNull() && !api.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.WaitForAsyncInserts = api.OutputCustomerMetricsStorage.WaitForAsyncInserts
+		} else if state.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsNull() || state.OutputCustomerMetricsStorage.WaitForAsyncInserts.IsUnknown() {
+			state.OutputCustomerMetricsStorage.WaitForAsyncInserts = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.ExcludeMappingFields.IsNull() && !api.OutputCustomerMetricsStorage.ExcludeMappingFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExcludeMappingFields = api.OutputCustomerMetricsStorage.ExcludeMappingFields
+		} else if state.OutputCustomerMetricsStorage.ExcludeMappingFields.IsNull() || state.OutputCustomerMetricsStorage.ExcludeMappingFields.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ExcludeMappingFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCustomerMetricsStorage.ExcludeMappingFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCustomerMetricsStorage.ExcludeMappingFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputCustomerMetricsStorage.DescribeTable.IsNull() && !api.OutputCustomerMetricsStorage.DescribeTable.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DescribeTable = api.OutputCustomerMetricsStorage.DescribeTable
+		} else if state.OutputCustomerMetricsStorage.DescribeTable.IsNull() || state.OutputCustomerMetricsStorage.DescribeTable.IsUnknown() {
+			state.OutputCustomerMetricsStorage.DescribeTable = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.ColumnMappings.IsNull() && !api.OutputCustomerMetricsStorage.ColumnMappings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ColumnMappings = api.OutputCustomerMetricsStorage.ColumnMappings
+		} else if state.OutputCustomerMetricsStorage.ColumnMappings.IsNull() || state.OutputCustomerMetricsStorage.ColumnMappings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageColumnMappingsAttrTypes()})
+		}
+		if state.OutputCustomerMetricsStorage.ColumnMappings.IsNull() || state.OutputCustomerMetricsStorage.ColumnMappings.IsUnknown() {
+			state.OutputCustomerMetricsStorage.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageColumnMappingsAttrTypes()})
+		} else if len(state.OutputCustomerMetricsStorage.ColumnMappings.Elements()) == 0 {
+			state.OutputCustomerMetricsStorage.ColumnMappings = types.ListValueMust(types.ObjectType{AttrTypes: OutputCustomerMetricsStorageColumnMappingsAttrTypes()}, nil)
+		}
+		if !api.OutputCustomerMetricsStorage.PqStrictOrdering.IsNull() && !api.OutputCustomerMetricsStorage.PqStrictOrdering.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqStrictOrdering = api.OutputCustomerMetricsStorage.PqStrictOrdering
+		} else if state.OutputCustomerMetricsStorage.PqStrictOrdering.IsNull() || state.OutputCustomerMetricsStorage.PqStrictOrdering.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqRatePerSec.IsNull() && !api.OutputCustomerMetricsStorage.PqRatePerSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqRatePerSec = api.OutputCustomerMetricsStorage.PqRatePerSec
+		} else if state.OutputCustomerMetricsStorage.PqRatePerSec.IsNull() || state.OutputCustomerMetricsStorage.PqRatePerSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMode.IsNull() && !api.OutputCustomerMetricsStorage.PqMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMode = api.OutputCustomerMetricsStorage.PqMode
+		} else if state.OutputCustomerMetricsStorage.PqMode.IsNull() || state.OutputCustomerMetricsStorage.PqMode.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMode = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBufferSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBufferSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSize = api.OutputCustomerMetricsStorage.PqMaxBufferSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxBufferSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBufferSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBackpressureSec = api.OutputCustomerMetricsStorage.PqMaxBackpressureSec
+		} else if state.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxFileSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxFileSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxFileSize = api.OutputCustomerMetricsStorage.PqMaxFileSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxFileSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxFileSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxSize.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxSize = api.OutputCustomerMetricsStorage.PqMaxSize
+		} else if state.OutputCustomerMetricsStorage.PqMaxSize.IsNull() || state.OutputCustomerMetricsStorage.PqMaxSize.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqPath.IsNull() && !api.OutputCustomerMetricsStorage.PqPath.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqPath = api.OutputCustomerMetricsStorage.PqPath
+		} else if state.OutputCustomerMetricsStorage.PqPath.IsNull() || state.OutputCustomerMetricsStorage.PqPath.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqPath = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqCompress.IsNull() && !api.OutputCustomerMetricsStorage.PqCompress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqCompress = api.OutputCustomerMetricsStorage.PqCompress
+		} else if state.OutputCustomerMetricsStorage.PqCompress.IsNull() || state.OutputCustomerMetricsStorage.PqCompress.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqCompress = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqOnBackpressure.IsNull() && !api.OutputCustomerMetricsStorage.PqOnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqOnBackpressure = api.OutputCustomerMetricsStorage.PqOnBackpressure
+		} else if state.OutputCustomerMetricsStorage.PqOnBackpressure.IsNull() || state.OutputCustomerMetricsStorage.PqOnBackpressure.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsNull() && !api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes = api.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes
+		} else if state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsNull() || state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputCustomerMetricsStorage.PqControls.IsNull() && !api.OutputCustomerMetricsStorage.PqControls.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqControls = api.OutputCustomerMetricsStorage.PqControls
+		} else if state.OutputCustomerMetricsStorage.PqControls.IsNull() || state.OutputCustomerMetricsStorage.PqControls.IsUnknown() {
+			state.OutputCustomerMetricsStorage.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputLocalSearchStorage != nil {
 		if state.OutputLocalSearchStorage == nil {
 			state.OutputLocalSearchStorage = &OutputLocalSearchStorageModel{}
@@ -40647,6 +45274,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLocalSearchStorage.SystemFields.IsNull() || state.OutputLocalSearchStorage.SystemFields.IsUnknown() {
 			state.OutputLocalSearchStorage.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputLocalSearchStorage.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputLocalSearchStorage.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputLocalSearchStorage.Environment.IsNull() && !api.OutputLocalSearchStorage.Environment.IsUnknown() {
 			state.OutputLocalSearchStorage.Environment = api.OutputLocalSearchStorage.Environment
 		} else if state.OutputLocalSearchStorage.Environment.IsNull() || state.OutputLocalSearchStorage.Environment.IsUnknown() {
@@ -40655,6 +45285,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputLocalSearchStorage.Streamtags.IsNull() && !api.OutputLocalSearchStorage.Streamtags.IsUnknown() {
 			state.OutputLocalSearchStorage.Streamtags = api.OutputLocalSearchStorage.Streamtags
 		} else if state.OutputLocalSearchStorage.Streamtags.IsNull() || state.OutputLocalSearchStorage.Streamtags.IsUnknown() {
+			state.OutputLocalSearchStorage.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputLocalSearchStorage.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputLocalSearchStorage.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputLocalSearchStorage.URL.IsNull() && !api.OutputLocalSearchStorage.URL.IsUnknown() {
@@ -40697,6 +45330,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLocalSearchStorage.TLS.IsNull() || state.OutputLocalSearchStorage.TLS.IsUnknown() {
 			state.OutputLocalSearchStorage.TLS = types.ObjectNull(OutputLocalSearchStorageTLSAttrTypes())
 		}
+		if len(state.OutputLocalSearchStorage.TLS.AttributeTypes(context.Background())) == 0 {
+			state.OutputLocalSearchStorage.TLS = types.ObjectNull(OutputLocalSearchStorageTLSAttrTypes())
+		}
 		if !api.OutputLocalSearchStorage.Concurrency.IsNull() && !api.OutputLocalSearchStorage.Concurrency.IsUnknown() {
 			state.OutputLocalSearchStorage.Concurrency = api.OutputLocalSearchStorage.Concurrency
 		} else if state.OutputLocalSearchStorage.Concurrency.IsNull() || state.OutputLocalSearchStorage.Concurrency.IsUnknown() {
@@ -40737,6 +45373,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLocalSearchStorage.ExtraHttpHeaders.IsNull() || state.OutputLocalSearchStorage.ExtraHttpHeaders.IsUnknown() {
 			state.OutputLocalSearchStorage.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputLocalSearchStorage.ExtraHttpHeaders.IsNull() || state.OutputLocalSearchStorage.ExtraHttpHeaders.IsUnknown() {
+			state.OutputLocalSearchStorage.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputLocalSearchStorage.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputLocalSearchStorage.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputLocalSearchStorageExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputLocalSearchStorage.UseRoundRobinDns.IsNull() && !api.OutputLocalSearchStorage.UseRoundRobinDns.IsUnknown() {
 			state.OutputLocalSearchStorage.UseRoundRobinDns = api.OutputLocalSearchStorage.UseRoundRobinDns
 		} else if state.OutputLocalSearchStorage.UseRoundRobinDns.IsNull() || state.OutputLocalSearchStorage.UseRoundRobinDns.IsUnknown() {
@@ -40752,14 +45393,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLocalSearchStorage.SafeHeaders.IsNull() || state.OutputLocalSearchStorage.SafeHeaders.IsUnknown() {
 			state.OutputLocalSearchStorage.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputLocalSearchStorage.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputLocalSearchStorage.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputLocalSearchStorage.ResponseRetrySettings.IsNull() && !api.OutputLocalSearchStorage.ResponseRetrySettings.IsUnknown() {
 			state.OutputLocalSearchStorage.ResponseRetrySettings = api.OutputLocalSearchStorage.ResponseRetrySettings
 		} else if state.OutputLocalSearchStorage.ResponseRetrySettings.IsNull() || state.OutputLocalSearchStorage.ResponseRetrySettings.IsUnknown() {
 			state.OutputLocalSearchStorage.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputLocalSearchStorage.ResponseRetrySettings.IsNull() || state.OutputLocalSearchStorage.ResponseRetrySettings.IsUnknown() {
+			state.OutputLocalSearchStorage.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputLocalSearchStorage.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputLocalSearchStorage.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputLocalSearchStorageResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputLocalSearchStorage.TimeoutRetrySettings.IsNull() && !api.OutputLocalSearchStorage.TimeoutRetrySettings.IsUnknown() {
 			state.OutputLocalSearchStorage.TimeoutRetrySettings = api.OutputLocalSearchStorage.TimeoutRetrySettings
 		} else if state.OutputLocalSearchStorage.TimeoutRetrySettings.IsNull() || state.OutputLocalSearchStorage.TimeoutRetrySettings.IsUnknown() {
+			state.OutputLocalSearchStorage.TimeoutRetrySettings = types.ObjectNull(OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputLocalSearchStorage.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputLocalSearchStorage.TimeoutRetrySettings = types.ObjectNull(OutputLocalSearchStorageTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -40785,6 +45437,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputLocalSearchStorage.StatsDestination.IsNull() && !api.OutputLocalSearchStorage.StatsDestination.IsUnknown() {
 			state.OutputLocalSearchStorage.StatsDestination = api.OutputLocalSearchStorage.StatsDestination
 		} else if state.OutputLocalSearchStorage.StatsDestination.IsNull() || state.OutputLocalSearchStorage.StatsDestination.IsUnknown() {
+			state.OutputLocalSearchStorage.StatsDestination = types.ObjectNull(OutputLocalSearchStorageStatsDestinationAttrTypes())
+		}
+		if len(state.OutputLocalSearchStorage.StatsDestination.AttributeTypes(context.Background())) == 0 {
 			state.OutputLocalSearchStorage.StatsDestination = types.ObjectNull(OutputLocalSearchStorageStatsDestinationAttrTypes())
 		}
 		if !api.OutputLocalSearchStorage.Description.IsNull() && !api.OutputLocalSearchStorage.Description.IsUnknown() {
@@ -40822,6 +45477,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputLocalSearchStorage.ExcludeMappingFields.IsNull() || state.OutputLocalSearchStorage.ExcludeMappingFields.IsUnknown() {
 			state.OutputLocalSearchStorage.ExcludeMappingFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputLocalSearchStorage.ExcludeMappingFields.ElementType(context.Background()); elementType == nil {
+			state.OutputLocalSearchStorage.ExcludeMappingFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputLocalSearchStorage.DescribeTable.IsNull() && !api.OutputLocalSearchStorage.DescribeTable.IsUnknown() {
 			state.OutputLocalSearchStorage.DescribeTable = api.OutputLocalSearchStorage.DescribeTable
 		} else if state.OutputLocalSearchStorage.DescribeTable.IsNull() || state.OutputLocalSearchStorage.DescribeTable.IsUnknown() {
@@ -40831,6 +45489,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputLocalSearchStorage.ColumnMappings = api.OutputLocalSearchStorage.ColumnMappings
 		} else if state.OutputLocalSearchStorage.ColumnMappings.IsNull() || state.OutputLocalSearchStorage.ColumnMappings.IsUnknown() {
 			state.OutputLocalSearchStorage.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageColumnMappingsAttrTypes()})
+		}
+		if state.OutputLocalSearchStorage.ColumnMappings.IsNull() || state.OutputLocalSearchStorage.ColumnMappings.IsUnknown() {
+			state.OutputLocalSearchStorage.ColumnMappings = types.ListNull(types.ObjectType{AttrTypes: OutputLocalSearchStorageColumnMappingsAttrTypes()})
+		} else if len(state.OutputLocalSearchStorage.ColumnMappings.Elements()) == 0 {
+			state.OutputLocalSearchStorage.ColumnMappings = types.ListValueMust(types.ObjectType{AttrTypes: OutputLocalSearchStorageColumnMappingsAttrTypes()}, nil)
 		}
 		if !api.OutputLocalSearchStorage.PqStrictOrdering.IsNull() && !api.OutputLocalSearchStorage.PqStrictOrdering.IsUnknown() {
 			state.OutputLocalSearchStorage.PqStrictOrdering = api.OutputLocalSearchStorage.PqStrictOrdering
@@ -40917,6 +45580,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputXsiam.SystemFields.IsNull() || state.OutputXsiam.SystemFields.IsUnknown() {
 			state.OutputXsiam.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputXsiam.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputXsiam.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputXsiam.Environment.IsNull() && !api.OutputXsiam.Environment.IsUnknown() {
 			state.OutputXsiam.Environment = api.OutputXsiam.Environment
 		} else if state.OutputXsiam.Environment.IsNull() || state.OutputXsiam.Environment.IsUnknown() {
@@ -40925,6 +45591,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputXsiam.Streamtags.IsNull() && !api.OutputXsiam.Streamtags.IsUnknown() {
 			state.OutputXsiam.Streamtags = api.OutputXsiam.Streamtags
 		} else if state.OutputXsiam.Streamtags.IsNull() || state.OutputXsiam.Streamtags.IsUnknown() {
+			state.OutputXsiam.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputXsiam.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputXsiam.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputXsiam.LoadBalanced.IsNull() && !api.OutputXsiam.LoadBalanced.IsUnknown() {
@@ -40972,6 +45641,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputXsiam.ExtraHttpHeaders.IsNull() || state.OutputXsiam.ExtraHttpHeaders.IsUnknown() {
 			state.OutputXsiam.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputXsiam.ExtraHttpHeaders.IsNull() || state.OutputXsiam.ExtraHttpHeaders.IsUnknown() {
+			state.OutputXsiam.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputXsiam.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputXsiam.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputXsiamExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputXsiam.FailedRequestLoggingMode.IsNull() && !api.OutputXsiam.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputXsiam.FailedRequestLoggingMode = api.OutputXsiam.FailedRequestLoggingMode
 		} else if state.OutputXsiam.FailedRequestLoggingMode.IsNull() || state.OutputXsiam.FailedRequestLoggingMode.IsUnknown() {
@@ -40980,6 +45654,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputXsiam.SafeHeaders.IsNull() && !api.OutputXsiam.SafeHeaders.IsUnknown() {
 			state.OutputXsiam.SafeHeaders = api.OutputXsiam.SafeHeaders
 		} else if state.OutputXsiam.SafeHeaders.IsNull() || state.OutputXsiam.SafeHeaders.IsUnknown() {
+			state.OutputXsiam.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputXsiam.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputXsiam.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputXsiam.AuthType.IsNull() && !api.OutputXsiam.AuthType.IsUnknown() {
@@ -40992,9 +45669,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputXsiam.ResponseRetrySettings.IsNull() || state.OutputXsiam.ResponseRetrySettings.IsUnknown() {
 			state.OutputXsiam.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputXsiam.ResponseRetrySettings.IsNull() || state.OutputXsiam.ResponseRetrySettings.IsUnknown() {
+			state.OutputXsiam.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputXsiam.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputXsiam.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputXsiamResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputXsiam.TimeoutRetrySettings.IsNull() && !api.OutputXsiam.TimeoutRetrySettings.IsUnknown() {
 			state.OutputXsiam.TimeoutRetrySettings = api.OutputXsiam.TimeoutRetrySettings
 		} else if state.OutputXsiam.TimeoutRetrySettings.IsNull() || state.OutputXsiam.TimeoutRetrySettings.IsUnknown() {
+			state.OutputXsiam.TimeoutRetrySettings = types.ObjectNull(OutputXsiamTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputXsiam.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputXsiam.TimeoutRetrySettings = types.ObjectNull(OutputXsiamTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputXsiam.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputXsiam.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -41041,6 +45726,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputXsiam.URLs = api.OutputXsiam.URLs
 		} else if state.OutputXsiam.URLs.IsNull() || state.OutputXsiam.URLs.IsUnknown() {
 			state.OutputXsiam.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamURLsAttrTypes()})
+		}
+		if state.OutputXsiam.URLs.IsNull() || state.OutputXsiam.URLs.IsUnknown() {
+			state.OutputXsiam.URLs = types.ListNull(types.ObjectType{AttrTypes: OutputXsiamURLsAttrTypes()})
+		} else if len(state.OutputXsiam.URLs.Elements()) == 0 {
+			state.OutputXsiam.URLs = types.ListValueMust(types.ObjectType{AttrTypes: OutputXsiamURLsAttrTypes()}, nil)
 		}
 		if !api.OutputXsiam.DnsResolvePeriodSec.IsNull() && !api.OutputXsiam.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputXsiam.DnsResolvePeriodSec = api.OutputXsiam.DnsResolvePeriodSec
@@ -41147,6 +45837,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNetflow.SystemFields.IsNull() || state.OutputNetflow.SystemFields.IsUnknown() {
 			state.OutputNetflow.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNetflow.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputNetflow.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputNetflow.Environment.IsNull() && !api.OutputNetflow.Environment.IsUnknown() {
 			state.OutputNetflow.Environment = api.OutputNetflow.Environment
 		} else if state.OutputNetflow.Environment.IsNull() || state.OutputNetflow.Environment.IsUnknown() {
@@ -41157,10 +45850,18 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNetflow.Streamtags.IsNull() || state.OutputNetflow.Streamtags.IsUnknown() {
 			state.OutputNetflow.Streamtags = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNetflow.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputNetflow.Streamtags = types.ListNull(types.StringType)
+		}
 		if !api.OutputNetflow.Hosts.IsNull() && !api.OutputNetflow.Hosts.IsUnknown() {
 			state.OutputNetflow.Hosts = api.OutputNetflow.Hosts
 		} else if state.OutputNetflow.Hosts.IsNull() || state.OutputNetflow.Hosts.IsUnknown() {
 			state.OutputNetflow.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputNetflowHostsAttrTypes()})
+		}
+		if state.OutputNetflow.Hosts.IsNull() || state.OutputNetflow.Hosts.IsUnknown() {
+			state.OutputNetflow.Hosts = types.ListNull(types.ObjectType{AttrTypes: OutputNetflowHostsAttrTypes()})
+		} else if len(state.OutputNetflow.Hosts.Elements()) == 0 {
+			state.OutputNetflow.Hosts = types.ListValueMust(types.ObjectType{AttrTypes: OutputNetflowHostsAttrTypes()}, nil)
 		}
 		if !api.OutputNetflow.DnsResolvePeriodSec.IsNull() && !api.OutputNetflow.DnsResolvePeriodSec.IsUnknown() {
 			state.OutputNetflow.DnsResolvePeriodSec = api.OutputNetflow.DnsResolvePeriodSec
@@ -41207,6 +45908,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceHttp.SystemFields.IsNull() || state.OutputDynatraceHttp.SystemFields.IsUnknown() {
 			state.OutputDynatraceHttp.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDynatraceHttp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDynatraceHttp.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDynatraceHttp.Environment.IsNull() && !api.OutputDynatraceHttp.Environment.IsUnknown() {
 			state.OutputDynatraceHttp.Environment = api.OutputDynatraceHttp.Environment
 		} else if state.OutputDynatraceHttp.Environment.IsNull() || state.OutputDynatraceHttp.Environment.IsUnknown() {
@@ -41215,6 +45919,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDynatraceHttp.Streamtags.IsNull() && !api.OutputDynatraceHttp.Streamtags.IsUnknown() {
 			state.OutputDynatraceHttp.Streamtags = api.OutputDynatraceHttp.Streamtags
 		} else if state.OutputDynatraceHttp.Streamtags.IsNull() || state.OutputDynatraceHttp.Streamtags.IsUnknown() {
+			state.OutputDynatraceHttp.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDynatraceHttp.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDynatraceHttp.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDynatraceHttp.Method.IsNull() && !api.OutputDynatraceHttp.Method.IsUnknown() {
@@ -41267,6 +45974,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceHttp.ExtraHttpHeaders.IsNull() || state.OutputDynatraceHttp.ExtraHttpHeaders.IsUnknown() {
 			state.OutputDynatraceHttp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceHttpExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputDynatraceHttp.ExtraHttpHeaders.IsNull() || state.OutputDynatraceHttp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputDynatraceHttp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceHttpExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputDynatraceHttp.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputDynatraceHttp.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputDynatraceHttpExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputDynatraceHttp.UseRoundRobinDns.IsNull() && !api.OutputDynatraceHttp.UseRoundRobinDns.IsUnknown() {
 			state.OutputDynatraceHttp.UseRoundRobinDns = api.OutputDynatraceHttp.UseRoundRobinDns
 		} else if state.OutputDynatraceHttp.UseRoundRobinDns.IsNull() || state.OutputDynatraceHttp.UseRoundRobinDns.IsUnknown() {
@@ -41282,14 +45994,25 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceHttp.SafeHeaders.IsNull() || state.OutputDynatraceHttp.SafeHeaders.IsUnknown() {
 			state.OutputDynatraceHttp.SafeHeaders = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDynatraceHttp.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputDynatraceHttp.SafeHeaders = types.ListNull(types.StringType)
+		}
 		if !api.OutputDynatraceHttp.ResponseRetrySettings.IsNull() && !api.OutputDynatraceHttp.ResponseRetrySettings.IsUnknown() {
 			state.OutputDynatraceHttp.ResponseRetrySettings = api.OutputDynatraceHttp.ResponseRetrySettings
 		} else if state.OutputDynatraceHttp.ResponseRetrySettings.IsNull() || state.OutputDynatraceHttp.ResponseRetrySettings.IsUnknown() {
 			state.OutputDynatraceHttp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceHttpResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputDynatraceHttp.ResponseRetrySettings.IsNull() || state.OutputDynatraceHttp.ResponseRetrySettings.IsUnknown() {
+			state.OutputDynatraceHttp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceHttpResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputDynatraceHttp.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputDynatraceHttp.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputDynatraceHttpResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputDynatraceHttp.TimeoutRetrySettings.IsNull() && !api.OutputDynatraceHttp.TimeoutRetrySettings.IsUnknown() {
 			state.OutputDynatraceHttp.TimeoutRetrySettings = api.OutputDynatraceHttp.TimeoutRetrySettings
 		} else if state.OutputDynatraceHttp.TimeoutRetrySettings.IsNull() || state.OutputDynatraceHttp.TimeoutRetrySettings.IsUnknown() {
+			state.OutputDynatraceHttp.TimeoutRetrySettings = types.ObjectNull(OutputDynatraceHttpTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputDynatraceHttp.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputDynatraceHttp.TimeoutRetrySettings = types.ObjectNull(OutputDynatraceHttpTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputDynatraceHttp.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputDynatraceHttp.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -41442,6 +46165,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceOtlp.SystemFields.IsNull() || state.OutputDynatraceOtlp.SystemFields.IsUnknown() {
 			state.OutputDynatraceOtlp.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDynatraceOtlp.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDynatraceOtlp.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDynatraceOtlp.Environment.IsNull() && !api.OutputDynatraceOtlp.Environment.IsUnknown() {
 			state.OutputDynatraceOtlp.Environment = api.OutputDynatraceOtlp.Environment
 		} else if state.OutputDynatraceOtlp.Environment.IsNull() || state.OutputDynatraceOtlp.Environment.IsUnknown() {
@@ -41450,6 +46176,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDynatraceOtlp.Streamtags.IsNull() && !api.OutputDynatraceOtlp.Streamtags.IsUnknown() {
 			state.OutputDynatraceOtlp.Streamtags = api.OutputDynatraceOtlp.Streamtags
 		} else if state.OutputDynatraceOtlp.Streamtags.IsNull() || state.OutputDynatraceOtlp.Streamtags.IsUnknown() {
+			state.OutputDynatraceOtlp.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDynatraceOtlp.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDynatraceOtlp.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDynatraceOtlp.Protocol.IsNull() && !api.OutputDynatraceOtlp.Protocol.IsUnknown() {
@@ -41496,6 +46225,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputDynatraceOtlp.Metadata = api.OutputDynatraceOtlp.Metadata
 		} else if state.OutputDynatraceOtlp.Metadata.IsNull() || state.OutputDynatraceOtlp.Metadata.IsUnknown() {
 			state.OutputDynatraceOtlp.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpMetadataAttrTypes()})
+		}
+		if state.OutputDynatraceOtlp.Metadata.IsNull() || state.OutputDynatraceOtlp.Metadata.IsUnknown() {
+			state.OutputDynatraceOtlp.Metadata = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpMetadataAttrTypes()})
+		} else if len(state.OutputDynatraceOtlp.Metadata.Elements()) == 0 {
+			state.OutputDynatraceOtlp.Metadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputDynatraceOtlpMetadataAttrTypes()}, nil)
 		}
 		if !api.OutputDynatraceOtlp.DynamicHeadersEnabled.IsNull() && !api.OutputDynatraceOtlp.DynamicHeadersEnabled.IsUnknown() {
 			state.OutputDynatraceOtlp.DynamicHeadersEnabled = api.OutputDynatraceOtlp.DynamicHeadersEnabled
@@ -41587,9 +46321,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceOtlp.ExtraHttpHeaders.IsNull() || state.OutputDynatraceOtlp.ExtraHttpHeaders.IsUnknown() {
 			state.OutputDynatraceOtlp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputDynatraceOtlp.ExtraHttpHeaders.IsNull() || state.OutputDynatraceOtlp.ExtraHttpHeaders.IsUnknown() {
+			state.OutputDynatraceOtlp.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputDynatraceOtlp.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputDynatraceOtlp.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputDynatraceOtlpExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputDynatraceOtlp.SafeHeaders.IsNull() && !api.OutputDynatraceOtlp.SafeHeaders.IsUnknown() {
 			state.OutputDynatraceOtlp.SafeHeaders = api.OutputDynatraceOtlp.SafeHeaders
 		} else if state.OutputDynatraceOtlp.SafeHeaders.IsNull() || state.OutputDynatraceOtlp.SafeHeaders.IsUnknown() {
+			state.OutputDynatraceOtlp.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDynatraceOtlp.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputDynatraceOtlp.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputDynatraceOtlp.ResponseRetrySettings.IsNull() && !api.OutputDynatraceOtlp.ResponseRetrySettings.IsUnknown() {
@@ -41597,9 +46339,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDynatraceOtlp.ResponseRetrySettings.IsNull() || state.OutputDynatraceOtlp.ResponseRetrySettings.IsUnknown() {
 			state.OutputDynatraceOtlp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputDynatraceOtlp.ResponseRetrySettings.IsNull() || state.OutputDynatraceOtlp.ResponseRetrySettings.IsUnknown() {
+			state.OutputDynatraceOtlp.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputDynatraceOtlpResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputDynatraceOtlp.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputDynatraceOtlp.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputDynatraceOtlpResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputDynatraceOtlp.TimeoutRetrySettings.IsNull() && !api.OutputDynatraceOtlp.TimeoutRetrySettings.IsUnknown() {
 			state.OutputDynatraceOtlp.TimeoutRetrySettings = api.OutputDynatraceOtlp.TimeoutRetrySettings
 		} else if state.OutputDynatraceOtlp.TimeoutRetrySettings.IsNull() || state.OutputDynatraceOtlp.TimeoutRetrySettings.IsUnknown() {
+			state.OutputDynatraceOtlp.TimeoutRetrySettings = types.ObjectNull(OutputDynatraceOtlpTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputDynatraceOtlp.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputDynatraceOtlp.TimeoutRetrySettings = types.ObjectNull(OutputDynatraceOtlpTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -41692,6 +46442,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinelOneAiSiem.SystemFields.IsNull() || state.OutputSentinelOneAiSiem.SystemFields.IsUnknown() {
 			state.OutputSentinelOneAiSiem.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputSentinelOneAiSiem.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSentinelOneAiSiem.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputSentinelOneAiSiem.Environment.IsNull() && !api.OutputSentinelOneAiSiem.Environment.IsUnknown() {
 			state.OutputSentinelOneAiSiem.Environment = api.OutputSentinelOneAiSiem.Environment
 		} else if state.OutputSentinelOneAiSiem.Environment.IsNull() || state.OutputSentinelOneAiSiem.Environment.IsUnknown() {
@@ -41702,15 +46455,8 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinelOneAiSiem.Streamtags.IsNull() || state.OutputSentinelOneAiSiem.Streamtags.IsUnknown() {
 			state.OutputSentinelOneAiSiem.Streamtags = types.ListNull(types.StringType)
 		}
-		if !api.OutputSentinelOneAiSiem.Region.IsNull() && !api.OutputSentinelOneAiSiem.Region.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Region = api.OutputSentinelOneAiSiem.Region
-		} else if state.OutputSentinelOneAiSiem.Region.IsNull() || state.OutputSentinelOneAiSiem.Region.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Region = types.StringNull()
-		}
-		if !api.OutputSentinelOneAiSiem.Endpoint.IsNull() && !api.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Endpoint = api.OutputSentinelOneAiSiem.Endpoint
-		} else if state.OutputSentinelOneAiSiem.Endpoint.IsNull() || state.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
-			state.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
+		if elementType := state.OutputSentinelOneAiSiem.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputSentinelOneAiSiem.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputSentinelOneAiSiem.Concurrency.IsNull() && !api.OutputSentinelOneAiSiem.Concurrency.IsUnknown() {
 			state.OutputSentinelOneAiSiem.Concurrency = api.OutputSentinelOneAiSiem.Concurrency
@@ -41752,6 +46498,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinelOneAiSiem.ExtraHttpHeaders.IsNull() || state.OutputSentinelOneAiSiem.ExtraHttpHeaders.IsUnknown() {
 			state.OutputSentinelOneAiSiem.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputSentinelOneAiSiem.ExtraHttpHeaders.IsNull() || state.OutputSentinelOneAiSiem.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSentinelOneAiSiem.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSentinelOneAiSiem.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSentinelOneAiSiem.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsNull() && !api.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputSentinelOneAiSiem.FailedRequestLoggingMode = api.OutputSentinelOneAiSiem.FailedRequestLoggingMode
 		} else if state.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsNull() || state.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsUnknown() {
@@ -41760,6 +46511,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputSentinelOneAiSiem.SafeHeaders.IsNull() && !api.OutputSentinelOneAiSiem.SafeHeaders.IsUnknown() {
 			state.OutputSentinelOneAiSiem.SafeHeaders = api.OutputSentinelOneAiSiem.SafeHeaders
 		} else if state.OutputSentinelOneAiSiem.SafeHeaders.IsNull() || state.OutputSentinelOneAiSiem.SafeHeaders.IsUnknown() {
+			state.OutputSentinelOneAiSiem.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSentinelOneAiSiem.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputSentinelOneAiSiem.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputSentinelOneAiSiem.AuthType.IsNull() && !api.OutputSentinelOneAiSiem.AuthType.IsUnknown() {
@@ -41772,15 +46526,33 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputSentinelOneAiSiem.ResponseRetrySettings.IsNull() || state.OutputSentinelOneAiSiem.ResponseRetrySettings.IsUnknown() {
 			state.OutputSentinelOneAiSiem.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputSentinelOneAiSiem.ResponseRetrySettings.IsNull() || state.OutputSentinelOneAiSiem.ResponseRetrySettings.IsUnknown() {
+			state.OutputSentinelOneAiSiem.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSentinelOneAiSiem.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSentinelOneAiSiem.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSentinelOneAiSiemResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputSentinelOneAiSiem.TimeoutRetrySettings.IsNull() && !api.OutputSentinelOneAiSiem.TimeoutRetrySettings.IsUnknown() {
 			state.OutputSentinelOneAiSiem.TimeoutRetrySettings = api.OutputSentinelOneAiSiem.TimeoutRetrySettings
 		} else if state.OutputSentinelOneAiSiem.TimeoutRetrySettings.IsNull() || state.OutputSentinelOneAiSiem.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSentinelOneAiSiem.TimeoutRetrySettings = types.ObjectNull(OutputSentinelOneAiSiemTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSentinelOneAiSiem.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputSentinelOneAiSiem.TimeoutRetrySettings = types.ObjectNull(OutputSentinelOneAiSiemTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = api.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader
 		} else if state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() {
 			state.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSentinelOneAiSiem.Region.IsNull() && !api.OutputSentinelOneAiSiem.Region.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Region = api.OutputSentinelOneAiSiem.Region
+		} else if state.OutputSentinelOneAiSiem.Region.IsNull() || state.OutputSentinelOneAiSiem.Region.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Region = types.StringNull()
+		}
+		if !api.OutputSentinelOneAiSiem.Endpoint.IsNull() && !api.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Endpoint = api.OutputSentinelOneAiSiem.Endpoint
+		} else if state.OutputSentinelOneAiSiem.Endpoint.IsNull() || state.OutputSentinelOneAiSiem.Endpoint.IsUnknown() {
+			state.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
 		}
 		if !api.OutputSentinelOneAiSiem.OnBackpressure.IsNull() && !api.OutputSentinelOneAiSiem.OnBackpressure.IsUnknown() {
 			state.OutputSentinelOneAiSiem.OnBackpressure = api.OutputSentinelOneAiSiem.OnBackpressure
@@ -41962,6 +46734,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputChronicle.SystemFields.IsNull() || state.OutputChronicle.SystemFields.IsUnknown() {
 			state.OutputChronicle.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputChronicle.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputChronicle.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputChronicle.Environment.IsNull() && !api.OutputChronicle.Environment.IsUnknown() {
 			state.OutputChronicle.Environment = api.OutputChronicle.Environment
 		} else if state.OutputChronicle.Environment.IsNull() || state.OutputChronicle.Environment.IsUnknown() {
@@ -41970,6 +46745,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputChronicle.Streamtags.IsNull() && !api.OutputChronicle.Streamtags.IsUnknown() {
 			state.OutputChronicle.Streamtags = api.OutputChronicle.Streamtags
 		} else if state.OutputChronicle.Streamtags.IsNull() || state.OutputChronicle.Streamtags.IsUnknown() {
+			state.OutputChronicle.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputChronicle.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputChronicle.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputChronicle.APIVersion.IsNull() && !api.OutputChronicle.APIVersion.IsUnknown() {
@@ -41987,9 +46765,17 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputChronicle.ResponseRetrySettings.IsNull() || state.OutputChronicle.ResponseRetrySettings.IsUnknown() {
 			state.OutputChronicle.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleResponseRetrySettingsAttrTypes()})
 		}
+		if state.OutputChronicle.ResponseRetrySettings.IsNull() || state.OutputChronicle.ResponseRetrySettings.IsUnknown() {
+			state.OutputChronicle.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputChronicle.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputChronicle.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputChronicleResponseRetrySettingsAttrTypes()}, nil)
+		}
 		if !api.OutputChronicle.TimeoutRetrySettings.IsNull() && !api.OutputChronicle.TimeoutRetrySettings.IsUnknown() {
 			state.OutputChronicle.TimeoutRetrySettings = api.OutputChronicle.TimeoutRetrySettings
 		} else if state.OutputChronicle.TimeoutRetrySettings.IsNull() || state.OutputChronicle.TimeoutRetrySettings.IsUnknown() {
+			state.OutputChronicle.TimeoutRetrySettings = types.ObjectNull(OutputChronicleTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputChronicle.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
 			state.OutputChronicle.TimeoutRetrySettings = types.ObjectNull(OutputChronicleTimeoutRetrySettingsAttrTypes())
 		}
 		if !api.OutputChronicle.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputChronicle.ResponseHonorRetryAfterHeader.IsUnknown() {
@@ -42042,6 +46828,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputChronicle.ExtraHttpHeaders.IsNull() || state.OutputChronicle.ExtraHttpHeaders.IsUnknown() {
 			state.OutputChronicle.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleExtraHttpHeadersAttrTypes()})
 		}
+		if state.OutputChronicle.ExtraHttpHeaders.IsNull() || state.OutputChronicle.ExtraHttpHeaders.IsUnknown() {
+			state.OutputChronicle.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputChronicle.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputChronicle.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputChronicleExtraHttpHeadersAttrTypes()}, nil)
+		}
 		if !api.OutputChronicle.FailedRequestLoggingMode.IsNull() && !api.OutputChronicle.FailedRequestLoggingMode.IsUnknown() {
 			state.OutputChronicle.FailedRequestLoggingMode = api.OutputChronicle.FailedRequestLoggingMode
 		} else if state.OutputChronicle.FailedRequestLoggingMode.IsNull() || state.OutputChronicle.FailedRequestLoggingMode.IsUnknown() {
@@ -42050,6 +46841,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputChronicle.SafeHeaders.IsNull() && !api.OutputChronicle.SafeHeaders.IsUnknown() {
 			state.OutputChronicle.SafeHeaders = api.OutputChronicle.SafeHeaders
 		} else if state.OutputChronicle.SafeHeaders.IsNull() || state.OutputChronicle.SafeHeaders.IsUnknown() {
+			state.OutputChronicle.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputChronicle.SafeHeaders.ElementType(context.Background()); elementType == nil {
 			state.OutputChronicle.SafeHeaders = types.ListNull(types.StringType)
 		}
 		if !api.OutputChronicle.UseRoundRobinDns.IsNull() && !api.OutputChronicle.UseRoundRobinDns.IsUnknown() {
@@ -42101,6 +46895,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputChronicle.CustomLabels = api.OutputChronicle.CustomLabels
 		} else if state.OutputChronicle.CustomLabels.IsNull() || state.OutputChronicle.CustomLabels.IsUnknown() {
 			state.OutputChronicle.CustomLabels = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleCustomLabelsAttrTypes()})
+		}
+		if state.OutputChronicle.CustomLabels.IsNull() || state.OutputChronicle.CustomLabels.IsUnknown() {
+			state.OutputChronicle.CustomLabels = types.ListNull(types.ObjectType{AttrTypes: OutputChronicleCustomLabelsAttrTypes()})
+		} else if len(state.OutputChronicle.CustomLabels.Elements()) == 0 {
+			state.OutputChronicle.CustomLabels = types.ListValueMust(types.ObjectType{AttrTypes: OutputChronicleCustomLabelsAttrTypes()}, nil)
 		}
 		if !api.OutputChronicle.Endpoint.IsNull() && !api.OutputChronicle.Endpoint.IsUnknown() {
 			state.OutputChronicle.Endpoint = api.OutputChronicle.Endpoint
@@ -42207,6 +47006,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatabricks.SystemFields.IsNull() || state.OutputDatabricks.SystemFields.IsUnknown() {
 			state.OutputDatabricks.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDatabricks.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDatabricks.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDatabricks.Environment.IsNull() && !api.OutputDatabricks.Environment.IsUnknown() {
 			state.OutputDatabricks.Environment = api.OutputDatabricks.Environment
 		} else if state.OutputDatabricks.Environment.IsNull() || state.OutputDatabricks.Environment.IsUnknown() {
@@ -42215,6 +47017,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDatabricks.Streamtags.IsNull() && !api.OutputDatabricks.Streamtags.IsUnknown() {
 			state.OutputDatabricks.Streamtags = api.OutputDatabricks.Streamtags
 		} else if state.OutputDatabricks.Streamtags.IsNull() || state.OutputDatabricks.Streamtags.IsUnknown() {
+			state.OutputDatabricks.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDatabricks.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDatabricks.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDatabricks.DestPath.IsNull() && !api.OutputDatabricks.DestPath.IsUnknown() {
@@ -42312,9 +47117,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatabricks.RetrySettings.IsNull() || state.OutputDatabricks.RetrySettings.IsUnknown() {
 			state.OutputDatabricks.RetrySettings = types.ObjectNull(OutputDatabricksRetrySettingsAttrTypes())
 		}
+		if len(state.OutputDatabricks.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputDatabricks.RetrySettings = types.ObjectNull(OutputDatabricksRetrySettingsAttrTypes())
+		}
 		if !api.OutputDatabricks.Orphans.IsNull() && !api.OutputDatabricks.Orphans.IsUnknown() {
 			state.OutputDatabricks.Orphans = api.OutputDatabricks.Orphans
 		} else if state.OutputDatabricks.Orphans.IsNull() || state.OutputDatabricks.Orphans.IsUnknown() {
+			state.OutputDatabricks.Orphans = types.ObjectNull(OutputDatabricksOrphansAttrTypes())
+		}
+		if len(state.OutputDatabricks.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputDatabricks.Orphans = types.ObjectNull(OutputDatabricksOrphansAttrTypes())
 		}
 		if !api.OutputDatabricks.WorkspaceID.IsNull() && !api.OutputDatabricks.WorkspaceID.IsUnknown() {
@@ -42417,6 +47228,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDatabricks.KeyValueMetadata.IsNull() || state.OutputDatabricks.KeyValueMetadata.IsUnknown() {
 			state.OutputDatabricks.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDatabricksKeyValueMetadataAttrTypes()})
 		}
+		if state.OutputDatabricks.KeyValueMetadata.IsNull() || state.OutputDatabricks.KeyValueMetadata.IsUnknown() {
+			state.OutputDatabricks.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDatabricksKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputDatabricks.KeyValueMetadata.Elements()) == 0 {
+			state.OutputDatabricks.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputDatabricksKeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputDatabricks.EnableStatistics.IsNull() && !api.OutputDatabricks.EnableStatistics.IsUnknown() {
 			state.OutputDatabricks.EnableStatistics = api.OutputDatabricks.EnableStatistics
 		} else if state.OutputDatabricks.EnableStatistics.IsNull() || state.OutputDatabricks.EnableStatistics.IsUnknown() {
@@ -42453,6 +47269,251 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputDatabricks.MaxRetryNum = types.Float64Null()
 		}
 	}
+	if api.OutputSnowflakeStreaming != nil {
+		if state.OutputSnowflakeStreaming == nil {
+			state.OutputSnowflakeStreaming = &OutputSnowflakeStreamingModel{}
+		}
+		if !api.OutputSnowflakeStreaming.ID.IsNull() && !api.OutputSnowflakeStreaming.ID.IsUnknown() {
+			state.OutputSnowflakeStreaming.ID = api.OutputSnowflakeStreaming.ID
+		} else if state.OutputSnowflakeStreaming.ID.IsNull() || state.OutputSnowflakeStreaming.ID.IsUnknown() {
+			state.OutputSnowflakeStreaming.ID = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Type.IsNull() && !api.OutputSnowflakeStreaming.Type.IsUnknown() {
+			state.OutputSnowflakeStreaming.Type = api.OutputSnowflakeStreaming.Type
+		} else if state.OutputSnowflakeStreaming.Type.IsNull() || state.OutputSnowflakeStreaming.Type.IsUnknown() {
+			state.OutputSnowflakeStreaming.Type = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Pipeline.IsNull() && !api.OutputSnowflakeStreaming.Pipeline.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pipeline = api.OutputSnowflakeStreaming.Pipeline
+		} else if state.OutputSnowflakeStreaming.Pipeline.IsNull() || state.OutputSnowflakeStreaming.Pipeline.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pipeline = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.SystemFields.IsNull() && !api.OutputSnowflakeStreaming.SystemFields.IsUnknown() {
+			state.OutputSnowflakeStreaming.SystemFields = api.OutputSnowflakeStreaming.SystemFields
+		} else if state.OutputSnowflakeStreaming.SystemFields.IsNull() || state.OutputSnowflakeStreaming.SystemFields.IsUnknown() {
+			state.OutputSnowflakeStreaming.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSnowflakeStreaming.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputSnowflakeStreaming.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.Environment.IsNull() && !api.OutputSnowflakeStreaming.Environment.IsUnknown() {
+			state.OutputSnowflakeStreaming.Environment = api.OutputSnowflakeStreaming.Environment
+		} else if state.OutputSnowflakeStreaming.Environment.IsNull() || state.OutputSnowflakeStreaming.Environment.IsUnknown() {
+			state.OutputSnowflakeStreaming.Environment = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Streamtags.IsNull() && !api.OutputSnowflakeStreaming.Streamtags.IsUnknown() {
+			state.OutputSnowflakeStreaming.Streamtags = api.OutputSnowflakeStreaming.Streamtags
+		} else if state.OutputSnowflakeStreaming.Streamtags.IsNull() || state.OutputSnowflakeStreaming.Streamtags.IsUnknown() {
+			state.OutputSnowflakeStreaming.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSnowflakeStreaming.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputSnowflakeStreaming.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.AccountIDentifier.IsNull() && !api.OutputSnowflakeStreaming.AccountIDentifier.IsUnknown() {
+			state.OutputSnowflakeStreaming.AccountIDentifier = api.OutputSnowflakeStreaming.AccountIDentifier
+		} else if state.OutputSnowflakeStreaming.AccountIDentifier.IsNull() || state.OutputSnowflakeStreaming.AccountIDentifier.IsUnknown() {
+			state.OutputSnowflakeStreaming.AccountIDentifier = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.User.IsNull() && !api.OutputSnowflakeStreaming.User.IsUnknown() {
+			state.OutputSnowflakeStreaming.User = api.OutputSnowflakeStreaming.User
+		} else if state.OutputSnowflakeStreaming.User.IsNull() || state.OutputSnowflakeStreaming.User.IsUnknown() {
+			state.OutputSnowflakeStreaming.User = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Pem.IsNull() && !api.OutputSnowflakeStreaming.Pem.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pem = api.OutputSnowflakeStreaming.Pem
+		} else if state.OutputSnowflakeStreaming.Pem.IsNull() || state.OutputSnowflakeStreaming.Pem.IsUnknown() {
+			state.OutputSnowflakeStreaming.Pem = types.ObjectNull(OutputSnowflakeStreamingPemAttrTypes())
+		}
+		if len(state.OutputSnowflakeStreaming.Pem.AttributeTypes(context.Background())) == 0 {
+			state.OutputSnowflakeStreaming.Pem = types.ObjectNull(OutputSnowflakeStreamingPemAttrTypes())
+		}
+		if !api.OutputSnowflakeStreaming.Database.IsNull() && !api.OutputSnowflakeStreaming.Database.IsUnknown() {
+			state.OutputSnowflakeStreaming.Database = api.OutputSnowflakeStreaming.Database
+		} else if state.OutputSnowflakeStreaming.Database.IsNull() || state.OutputSnowflakeStreaming.Database.IsUnknown() {
+			state.OutputSnowflakeStreaming.Database = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Schema.IsNull() && !api.OutputSnowflakeStreaming.Schema.IsUnknown() {
+			state.OutputSnowflakeStreaming.Schema = api.OutputSnowflakeStreaming.Schema
+		} else if state.OutputSnowflakeStreaming.Schema.IsNull() || state.OutputSnowflakeStreaming.Schema.IsUnknown() {
+			state.OutputSnowflakeStreaming.Schema = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Table.IsNull() && !api.OutputSnowflakeStreaming.Table.IsUnknown() {
+			state.OutputSnowflakeStreaming.Table = api.OutputSnowflakeStreaming.Table
+		} else if state.OutputSnowflakeStreaming.Table.IsNull() || state.OutputSnowflakeStreaming.Table.IsUnknown() {
+			state.OutputSnowflakeStreaming.Table = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.URL.IsNull() && !api.OutputSnowflakeStreaming.URL.IsUnknown() {
+			state.OutputSnowflakeStreaming.URL = api.OutputSnowflakeStreaming.URL
+		} else if state.OutputSnowflakeStreaming.URL.IsNull() || state.OutputSnowflakeStreaming.URL.IsUnknown() {
+			state.OutputSnowflakeStreaming.URL = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Role.IsNull() && !api.OutputSnowflakeStreaming.Role.IsUnknown() {
+			state.OutputSnowflakeStreaming.Role = api.OutputSnowflakeStreaming.Role
+		} else if state.OutputSnowflakeStreaming.Role.IsNull() || state.OutputSnowflakeStreaming.Role.IsUnknown() {
+			state.OutputSnowflakeStreaming.Role = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.KeepAlive.IsNull() && !api.OutputSnowflakeStreaming.KeepAlive.IsUnknown() {
+			state.OutputSnowflakeStreaming.KeepAlive = api.OutputSnowflakeStreaming.KeepAlive
+		} else if state.OutputSnowflakeStreaming.KeepAlive.IsNull() || state.OutputSnowflakeStreaming.KeepAlive.IsUnknown() {
+			state.OutputSnowflakeStreaming.KeepAlive = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.Concurrency.IsNull() && !api.OutputSnowflakeStreaming.Concurrency.IsUnknown() {
+			state.OutputSnowflakeStreaming.Concurrency = api.OutputSnowflakeStreaming.Concurrency
+		} else if state.OutputSnowflakeStreaming.Concurrency.IsNull() || state.OutputSnowflakeStreaming.Concurrency.IsUnknown() {
+			state.OutputSnowflakeStreaming.Concurrency = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsNull() && !api.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadSizeKB = api.OutputSnowflakeStreaming.MaxPayloadSizeKB
+		} else if state.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsNull() || state.OutputSnowflakeStreaming.MaxPayloadSizeKB.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadSizeKB = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.MaxPayloadEvents.IsNull() && !api.OutputSnowflakeStreaming.MaxPayloadEvents.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadEvents = api.OutputSnowflakeStreaming.MaxPayloadEvents
+		} else if state.OutputSnowflakeStreaming.MaxPayloadEvents.IsNull() || state.OutputSnowflakeStreaming.MaxPayloadEvents.IsUnknown() {
+			state.OutputSnowflakeStreaming.MaxPayloadEvents = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.Compress.IsNull() && !api.OutputSnowflakeStreaming.Compress.IsUnknown() {
+			state.OutputSnowflakeStreaming.Compress = api.OutputSnowflakeStreaming.Compress
+		} else if state.OutputSnowflakeStreaming.Compress.IsNull() || state.OutputSnowflakeStreaming.Compress.IsUnknown() {
+			state.OutputSnowflakeStreaming.Compress = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.RejectUnauthorized.IsNull() && !api.OutputSnowflakeStreaming.RejectUnauthorized.IsUnknown() {
+			state.OutputSnowflakeStreaming.RejectUnauthorized = api.OutputSnowflakeStreaming.RejectUnauthorized
+		} else if state.OutputSnowflakeStreaming.RejectUnauthorized.IsNull() || state.OutputSnowflakeStreaming.RejectUnauthorized.IsUnknown() {
+			state.OutputSnowflakeStreaming.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.TimeoutSec.IsNull() && !api.OutputSnowflakeStreaming.TimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutSec = api.OutputSnowflakeStreaming.TimeoutSec
+		} else if state.OutputSnowflakeStreaming.TimeoutSec.IsNull() || state.OutputSnowflakeStreaming.TimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.FlushPeriodSec.IsNull() && !api.OutputSnowflakeStreaming.FlushPeriodSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.FlushPeriodSec = api.OutputSnowflakeStreaming.FlushPeriodSec
+		} else if state.OutputSnowflakeStreaming.FlushPeriodSec.IsNull() || state.OutputSnowflakeStreaming.FlushPeriodSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.FlushPeriodSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.ExtraHttpHeaders.IsNull() && !api.OutputSnowflakeStreaming.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = api.OutputSnowflakeStreaming.ExtraHttpHeaders
+		} else if state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsNull() || state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingExtraHttpHeadersAttrTypes()})
+		}
+		if state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsNull() || state.OutputSnowflakeStreaming.ExtraHttpHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingExtraHttpHeadersAttrTypes()})
+		} else if len(state.OutputSnowflakeStreaming.ExtraHttpHeaders.Elements()) == 0 {
+			state.OutputSnowflakeStreaming.ExtraHttpHeaders = types.ListValueMust(types.ObjectType{AttrTypes: OutputSnowflakeStreamingExtraHttpHeadersAttrTypes()}, nil)
+		}
+		if !api.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsNull() && !api.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.FailedRequestLoggingMode = api.OutputSnowflakeStreaming.FailedRequestLoggingMode
+		} else if state.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsNull() || state.OutputSnowflakeStreaming.FailedRequestLoggingMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.FailedRequestLoggingMode = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.SafeHeaders.IsNull() && !api.OutputSnowflakeStreaming.SafeHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.SafeHeaders = api.OutputSnowflakeStreaming.SafeHeaders
+		} else if state.OutputSnowflakeStreaming.SafeHeaders.IsNull() || state.OutputSnowflakeStreaming.SafeHeaders.IsUnknown() {
+			state.OutputSnowflakeStreaming.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputSnowflakeStreaming.SafeHeaders.ElementType(context.Background()); elementType == nil {
+			state.OutputSnowflakeStreaming.SafeHeaders = types.ListNull(types.StringType)
+		}
+		if !api.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsNull() && !api.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.ControlRequestTimeoutSec = api.OutputSnowflakeStreaming.ControlRequestTimeoutSec
+		} else if state.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsNull() || state.OutputSnowflakeStreaming.ControlRequestTimeoutSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.ControlRequestTimeoutSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.ResponseRetrySettings.IsNull() && !api.OutputSnowflakeStreaming.ResponseRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = api.OutputSnowflakeStreaming.ResponseRetrySettings
+		} else if state.OutputSnowflakeStreaming.ResponseRetrySettings.IsNull() || state.OutputSnowflakeStreaming.ResponseRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingResponseRetrySettingsAttrTypes()})
+		}
+		if state.OutputSnowflakeStreaming.ResponseRetrySettings.IsNull() || state.OutputSnowflakeStreaming.ResponseRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = types.ListNull(types.ObjectType{AttrTypes: OutputSnowflakeStreamingResponseRetrySettingsAttrTypes()})
+		} else if len(state.OutputSnowflakeStreaming.ResponseRetrySettings.Elements()) == 0 {
+			state.OutputSnowflakeStreaming.ResponseRetrySettings = types.ListValueMust(types.ObjectType{AttrTypes: OutputSnowflakeStreamingResponseRetrySettingsAttrTypes()}, nil)
+		}
+		if !api.OutputSnowflakeStreaming.TimeoutRetrySettings.IsNull() && !api.OutputSnowflakeStreaming.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutRetrySettings = api.OutputSnowflakeStreaming.TimeoutRetrySettings
+		} else if state.OutputSnowflakeStreaming.TimeoutRetrySettings.IsNull() || state.OutputSnowflakeStreaming.TimeoutRetrySettings.IsUnknown() {
+			state.OutputSnowflakeStreaming.TimeoutRetrySettings = types.ObjectNull(OutputSnowflakeStreamingTimeoutRetrySettingsAttrTypes())
+		}
+		if len(state.OutputSnowflakeStreaming.TimeoutRetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputSnowflakeStreaming.TimeoutRetrySettings = types.ObjectNull(OutputSnowflakeStreamingTimeoutRetrySettingsAttrTypes())
+		}
+		if !api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsNull() && !api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader = api.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader
+		} else if state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsNull() || state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader.IsUnknown() {
+			state.OutputSnowflakeStreaming.ResponseHonorRetryAfterHeader = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.OnBackpressure.IsNull() && !api.OutputSnowflakeStreaming.OnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.OnBackpressure = api.OutputSnowflakeStreaming.OnBackpressure
+		} else if state.OutputSnowflakeStreaming.OnBackpressure.IsNull() || state.OutputSnowflakeStreaming.OnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.Description.IsNull() && !api.OutputSnowflakeStreaming.Description.IsUnknown() {
+			state.OutputSnowflakeStreaming.Description = api.OutputSnowflakeStreaming.Description
+		} else if state.OutputSnowflakeStreaming.Description.IsNull() || state.OutputSnowflakeStreaming.Description.IsUnknown() {
+			state.OutputSnowflakeStreaming.Description = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqStrictOrdering.IsNull() && !api.OutputSnowflakeStreaming.PqStrictOrdering.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqStrictOrdering = api.OutputSnowflakeStreaming.PqStrictOrdering
+		} else if state.OutputSnowflakeStreaming.PqStrictOrdering.IsNull() || state.OutputSnowflakeStreaming.PqStrictOrdering.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqStrictOrdering = types.BoolNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqRatePerSec.IsNull() && !api.OutputSnowflakeStreaming.PqRatePerSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqRatePerSec = api.OutputSnowflakeStreaming.PqRatePerSec
+		} else if state.OutputSnowflakeStreaming.PqRatePerSec.IsNull() || state.OutputSnowflakeStreaming.PqRatePerSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqRatePerSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMode.IsNull() && !api.OutputSnowflakeStreaming.PqMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMode = api.OutputSnowflakeStreaming.PqMode
+		} else if state.OutputSnowflakeStreaming.PqMode.IsNull() || state.OutputSnowflakeStreaming.PqMode.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMode = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBufferSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBufferSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSize = api.OutputSnowflakeStreaming.PqMaxBufferSize
+		} else if state.OutputSnowflakeStreaming.PqMaxBufferSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxBufferSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSize = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBackpressureSec = api.OutputSnowflakeStreaming.PqMaxBackpressureSec
+		} else if state.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsNull() || state.OutputSnowflakeStreaming.PqMaxBackpressureSec.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBackpressureSec = types.Float64Null()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxFileSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxFileSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxFileSize = api.OutputSnowflakeStreaming.PqMaxFileSize
+		} else if state.OutputSnowflakeStreaming.PqMaxFileSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxFileSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxFileSize = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxSize.IsNull() && !api.OutputSnowflakeStreaming.PqMaxSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxSize = api.OutputSnowflakeStreaming.PqMaxSize
+		} else if state.OutputSnowflakeStreaming.PqMaxSize.IsNull() || state.OutputSnowflakeStreaming.PqMaxSize.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxSize = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqPath.IsNull() && !api.OutputSnowflakeStreaming.PqPath.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqPath = api.OutputSnowflakeStreaming.PqPath
+		} else if state.OutputSnowflakeStreaming.PqPath.IsNull() || state.OutputSnowflakeStreaming.PqPath.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqPath = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqCompress.IsNull() && !api.OutputSnowflakeStreaming.PqCompress.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqCompress = api.OutputSnowflakeStreaming.PqCompress
+		} else if state.OutputSnowflakeStreaming.PqCompress.IsNull() || state.OutputSnowflakeStreaming.PqCompress.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqCompress = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqOnBackpressure.IsNull() && !api.OutputSnowflakeStreaming.PqOnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqOnBackpressure = api.OutputSnowflakeStreaming.PqOnBackpressure
+		} else if state.OutputSnowflakeStreaming.PqOnBackpressure.IsNull() || state.OutputSnowflakeStreaming.PqOnBackpressure.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqOnBackpressure = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsNull() && !api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes = api.OutputSnowflakeStreaming.PqMaxBufferSizeBytes
+		} else if state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsNull() || state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqMaxBufferSizeBytes = types.StringNull()
+		}
+		if !api.OutputSnowflakeStreaming.PqControls.IsNull() && !api.OutputSnowflakeStreaming.PqControls.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqControls = api.OutputSnowflakeStreaming.PqControls
+		} else if state.OutputSnowflakeStreaming.PqControls.IsNull() || state.OutputSnowflakeStreaming.PqControls.IsUnknown() {
+			state.OutputSnowflakeStreaming.PqControls = types.MapNull(types.StringType)
+		}
+	}
 	if api.OutputMicrosoftFabric != nil {
 		if state.OutputMicrosoftFabric == nil {
 			state.OutputMicrosoftFabric = &OutputMicrosoftFabricModel{}
@@ -42477,6 +47538,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMicrosoftFabric.SystemFields.IsNull() || state.OutputMicrosoftFabric.SystemFields.IsUnknown() {
 			state.OutputMicrosoftFabric.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputMicrosoftFabric.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputMicrosoftFabric.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputMicrosoftFabric.Environment.IsNull() && !api.OutputMicrosoftFabric.Environment.IsUnknown() {
 			state.OutputMicrosoftFabric.Environment = api.OutputMicrosoftFabric.Environment
 		} else if state.OutputMicrosoftFabric.Environment.IsNull() || state.OutputMicrosoftFabric.Environment.IsUnknown() {
@@ -42485,6 +47549,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputMicrosoftFabric.Streamtags.IsNull() && !api.OutputMicrosoftFabric.Streamtags.IsUnknown() {
 			state.OutputMicrosoftFabric.Streamtags = api.OutputMicrosoftFabric.Streamtags
 		} else if state.OutputMicrosoftFabric.Streamtags.IsNull() || state.OutputMicrosoftFabric.Streamtags.IsUnknown() {
+			state.OutputMicrosoftFabric.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputMicrosoftFabric.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputMicrosoftFabric.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputMicrosoftFabric.Topic.IsNull() && !api.OutputMicrosoftFabric.Topic.IsUnknown() {
@@ -42562,9 +47629,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputMicrosoftFabric.Sasl.IsNull() || state.OutputMicrosoftFabric.Sasl.IsUnknown() {
 			state.OutputMicrosoftFabric.Sasl = types.ObjectNull(OutputMicrosoftFabricSaslAttrTypes())
 		}
+		if len(state.OutputMicrosoftFabric.Sasl.AttributeTypes(context.Background())) == 0 {
+			state.OutputMicrosoftFabric.Sasl = types.ObjectNull(OutputMicrosoftFabricSaslAttrTypes())
+		}
 		if !api.OutputMicrosoftFabric.TLS.IsNull() && !api.OutputMicrosoftFabric.TLS.IsUnknown() {
 			state.OutputMicrosoftFabric.TLS = api.OutputMicrosoftFabric.TLS
 		} else if state.OutputMicrosoftFabric.TLS.IsNull() || state.OutputMicrosoftFabric.TLS.IsUnknown() {
+			state.OutputMicrosoftFabric.TLS = types.ObjectNull(OutputMicrosoftFabricTLSAttrTypes())
+		}
+		if len(state.OutputMicrosoftFabric.TLS.AttributeTypes(context.Background())) == 0 {
 			state.OutputMicrosoftFabric.TLS = types.ObjectNull(OutputMicrosoftFabricTLSAttrTypes())
 		}
 		if !api.OutputMicrosoftFabric.OnBackpressure.IsNull() && !api.OutputMicrosoftFabric.OnBackpressure.IsUnknown() {
@@ -42667,6 +47740,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudflareR2.SystemFields.IsNull() || state.OutputCloudflareR2.SystemFields.IsUnknown() {
 			state.OutputCloudflareR2.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCloudflareR2.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCloudflareR2.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCloudflareR2.Environment.IsNull() && !api.OutputCloudflareR2.Environment.IsUnknown() {
 			state.OutputCloudflareR2.Environment = api.OutputCloudflareR2.Environment
 		} else if state.OutputCloudflareR2.Environment.IsNull() || state.OutputCloudflareR2.Environment.IsUnknown() {
@@ -42675,6 +47751,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCloudflareR2.Streamtags.IsNull() && !api.OutputCloudflareR2.Streamtags.IsUnknown() {
 			state.OutputCloudflareR2.Streamtags = api.OutputCloudflareR2.Streamtags
 		} else if state.OutputCloudflareR2.Streamtags.IsNull() || state.OutputCloudflareR2.Streamtags.IsUnknown() {
+			state.OutputCloudflareR2.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCloudflareR2.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCloudflareR2.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCloudflareR2.AwsAuthenticationMethod.IsNull() && !api.OutputCloudflareR2.AwsAuthenticationMethod.IsUnknown() {
@@ -42807,9 +47886,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudflareR2.RetrySettings.IsNull() || state.OutputCloudflareR2.RetrySettings.IsUnknown() {
 			state.OutputCloudflareR2.RetrySettings = types.ObjectNull(OutputCloudflareR2RetrySettingsAttrTypes())
 		}
+		if len(state.OutputCloudflareR2.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputCloudflareR2.RetrySettings = types.ObjectNull(OutputCloudflareR2RetrySettingsAttrTypes())
+		}
 		if !api.OutputCloudflareR2.Orphans.IsNull() && !api.OutputCloudflareR2.Orphans.IsUnknown() {
 			state.OutputCloudflareR2.Orphans = api.OutputCloudflareR2.Orphans
 		} else if state.OutputCloudflareR2.Orphans.IsNull() || state.OutputCloudflareR2.Orphans.IsUnknown() {
+			state.OutputCloudflareR2.Orphans = types.ObjectNull(OutputCloudflareR2OrphansAttrTypes())
+		}
+		if len(state.OutputCloudflareR2.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputCloudflareR2.Orphans = types.ObjectNull(OutputCloudflareR2OrphansAttrTypes())
 		}
 		if !api.OutputCloudflareR2.AwsSecretKey.IsNull() && !api.OutputCloudflareR2.AwsSecretKey.IsUnknown() {
@@ -42892,6 +47977,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudflareR2.KeyValueMetadata.IsNull() || state.OutputCloudflareR2.KeyValueMetadata.IsUnknown() {
 			state.OutputCloudflareR2.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCloudflareR2KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputCloudflareR2.KeyValueMetadata.IsNull() || state.OutputCloudflareR2.KeyValueMetadata.IsUnknown() {
+			state.OutputCloudflareR2.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCloudflareR2KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputCloudflareR2.KeyValueMetadata.Elements()) == 0 {
+			state.OutputCloudflareR2.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputCloudflareR2KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputCloudflareR2.EnableStatistics.IsNull() && !api.OutputCloudflareR2.EnableStatistics.IsUnknown() {
 			state.OutputCloudflareR2.EnableStatistics = api.OutputCloudflareR2.EnableStatistics
 		} else if state.OutputCloudflareR2.EnableStatistics.IsNull() || state.OutputCloudflareR2.EnableStatistics.IsUnknown() {
@@ -42952,6 +48042,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNutanixObjects.SystemFields.IsNull() || state.OutputNutanixObjects.SystemFields.IsUnknown() {
 			state.OutputNutanixObjects.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputNutanixObjects.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputNutanixObjects.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputNutanixObjects.Environment.IsNull() && !api.OutputNutanixObjects.Environment.IsUnknown() {
 			state.OutputNutanixObjects.Environment = api.OutputNutanixObjects.Environment
 		} else if state.OutputNutanixObjects.Environment.IsNull() || state.OutputNutanixObjects.Environment.IsUnknown() {
@@ -42960,6 +48053,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputNutanixObjects.Streamtags.IsNull() && !api.OutputNutanixObjects.Streamtags.IsUnknown() {
 			state.OutputNutanixObjects.Streamtags = api.OutputNutanixObjects.Streamtags
 		} else if state.OutputNutanixObjects.Streamtags.IsNull() || state.OutputNutanixObjects.Streamtags.IsUnknown() {
+			state.OutputNutanixObjects.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputNutanixObjects.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputNutanixObjects.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputNutanixObjects.AwsAuthenticationMethod.IsNull() && !api.OutputNutanixObjects.AwsAuthenticationMethod.IsUnknown() {
@@ -43097,9 +48193,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNutanixObjects.RetrySettings.IsNull() || state.OutputNutanixObjects.RetrySettings.IsUnknown() {
 			state.OutputNutanixObjects.RetrySettings = types.ObjectNull(OutputNutanixObjectsRetrySettingsAttrTypes())
 		}
+		if len(state.OutputNutanixObjects.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputNutanixObjects.RetrySettings = types.ObjectNull(OutputNutanixObjectsRetrySettingsAttrTypes())
+		}
 		if !api.OutputNutanixObjects.Orphans.IsNull() && !api.OutputNutanixObjects.Orphans.IsUnknown() {
 			state.OutputNutanixObjects.Orphans = api.OutputNutanixObjects.Orphans
 		} else if state.OutputNutanixObjects.Orphans.IsNull() || state.OutputNutanixObjects.Orphans.IsUnknown() {
+			state.OutputNutanixObjects.Orphans = types.ObjectNull(OutputNutanixObjectsOrphansAttrTypes())
+		}
+		if len(state.OutputNutanixObjects.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputNutanixObjects.Orphans = types.ObjectNull(OutputNutanixObjectsOrphansAttrTypes())
 		}
 		if !api.OutputNutanixObjects.Endpoint.IsNull() && !api.OutputNutanixObjects.Endpoint.IsUnknown() {
@@ -43167,6 +48269,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputNutanixObjects.KeyValueMetadata.IsNull() || state.OutputNutanixObjects.KeyValueMetadata.IsUnknown() {
 			state.OutputNutanixObjects.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputNutanixObjectsKeyValueMetadataAttrTypes()})
 		}
+		if state.OutputNutanixObjects.KeyValueMetadata.IsNull() || state.OutputNutanixObjects.KeyValueMetadata.IsUnknown() {
+			state.OutputNutanixObjects.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputNutanixObjectsKeyValueMetadataAttrTypes()})
+		} else if len(state.OutputNutanixObjects.KeyValueMetadata.Elements()) == 0 {
+			state.OutputNutanixObjects.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputNutanixObjectsKeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputNutanixObjects.EnableStatistics.IsNull() && !api.OutputNutanixObjects.EnableStatistics.IsUnknown() {
 			state.OutputNutanixObjects.EnableStatistics = api.OutputNutanixObjects.EnableStatistics
 		} else if state.OutputNutanixObjects.EnableStatistics.IsNull() || state.OutputNutanixObjects.EnableStatistics.IsUnknown() {
@@ -43227,6 +48334,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputStorjS3.SystemFields.IsNull() || state.OutputStorjS3.SystemFields.IsUnknown() {
 			state.OutputStorjS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputStorjS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputStorjS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputStorjS3.Environment.IsNull() && !api.OutputStorjS3.Environment.IsUnknown() {
 			state.OutputStorjS3.Environment = api.OutputStorjS3.Environment
 		} else if state.OutputStorjS3.Environment.IsNull() || state.OutputStorjS3.Environment.IsUnknown() {
@@ -43235,6 +48345,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputStorjS3.Streamtags.IsNull() && !api.OutputStorjS3.Streamtags.IsUnknown() {
 			state.OutputStorjS3.Streamtags = api.OutputStorjS3.Streamtags
 		} else if state.OutputStorjS3.Streamtags.IsNull() || state.OutputStorjS3.Streamtags.IsUnknown() {
+			state.OutputStorjS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputStorjS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputStorjS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputStorjS3.AwsAuthenticationMethod.IsNull() && !api.OutputStorjS3.AwsAuthenticationMethod.IsUnknown() {
@@ -43367,9 +48480,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputStorjS3.RetrySettings.IsNull() || state.OutputStorjS3.RetrySettings.IsUnknown() {
 			state.OutputStorjS3.RetrySettings = types.ObjectNull(OutputStorjS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputStorjS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputStorjS3.RetrySettings = types.ObjectNull(OutputStorjS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputStorjS3.Orphans.IsNull() && !api.OutputStorjS3.Orphans.IsUnknown() {
 			state.OutputStorjS3.Orphans = api.OutputStorjS3.Orphans
 		} else if state.OutputStorjS3.Orphans.IsNull() || state.OutputStorjS3.Orphans.IsUnknown() {
+			state.OutputStorjS3.Orphans = types.ObjectNull(OutputStorjS3OrphansAttrTypes())
+		}
+		if len(state.OutputStorjS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputStorjS3.Orphans = types.ObjectNull(OutputStorjS3OrphansAttrTypes())
 		}
 		if !api.OutputStorjS3.Endpoint.IsNull() && !api.OutputStorjS3.Endpoint.IsUnknown() {
@@ -43437,6 +48556,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputStorjS3.KeyValueMetadata.IsNull() || state.OutputStorjS3.KeyValueMetadata.IsUnknown() {
 			state.OutputStorjS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputStorjS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputStorjS3.KeyValueMetadata.IsNull() || state.OutputStorjS3.KeyValueMetadata.IsUnknown() {
+			state.OutputStorjS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputStorjS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputStorjS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputStorjS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputStorjS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputStorjS3.EnableStatistics.IsNull() && !api.OutputStorjS3.EnableStatistics.IsUnknown() {
 			state.OutputStorjS3.EnableStatistics = api.OutputStorjS3.EnableStatistics
 		} else if state.OutputStorjS3.EnableStatistics.IsNull() || state.OutputStorjS3.EnableStatistics.IsUnknown() {
@@ -43497,6 +48621,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlphasocS3.SystemFields.IsNull() || state.OutputAlphasocS3.SystemFields.IsUnknown() {
 			state.OutputAlphasocS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAlphasocS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAlphasocS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAlphasocS3.Environment.IsNull() && !api.OutputAlphasocS3.Environment.IsUnknown() {
 			state.OutputAlphasocS3.Environment = api.OutputAlphasocS3.Environment
 		} else if state.OutputAlphasocS3.Environment.IsNull() || state.OutputAlphasocS3.Environment.IsUnknown() {
@@ -43505,6 +48632,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputAlphasocS3.Streamtags.IsNull() && !api.OutputAlphasocS3.Streamtags.IsUnknown() {
 			state.OutputAlphasocS3.Streamtags = api.OutputAlphasocS3.Streamtags
 		} else if state.OutputAlphasocS3.Streamtags.IsNull() || state.OutputAlphasocS3.Streamtags.IsUnknown() {
+			state.OutputAlphasocS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAlphasocS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputAlphasocS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputAlphasocS3.AwsAuthenticationMethod.IsNull() && !api.OutputAlphasocS3.AwsAuthenticationMethod.IsUnknown() {
@@ -43637,9 +48767,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlphasocS3.RetrySettings.IsNull() || state.OutputAlphasocS3.RetrySettings.IsUnknown() {
 			state.OutputAlphasocS3.RetrySettings = types.ObjectNull(OutputAlphasocS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputAlphasocS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputAlphasocS3.RetrySettings = types.ObjectNull(OutputAlphasocS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputAlphasocS3.Orphans.IsNull() && !api.OutputAlphasocS3.Orphans.IsUnknown() {
 			state.OutputAlphasocS3.Orphans = api.OutputAlphasocS3.Orphans
 		} else if state.OutputAlphasocS3.Orphans.IsNull() || state.OutputAlphasocS3.Orphans.IsUnknown() {
+			state.OutputAlphasocS3.Orphans = types.ObjectNull(OutputAlphasocS3OrphansAttrTypes())
+		}
+		if len(state.OutputAlphasocS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputAlphasocS3.Orphans = types.ObjectNull(OutputAlphasocS3OrphansAttrTypes())
 		}
 		if !api.OutputAlphasocS3.Endpoint.IsNull() && !api.OutputAlphasocS3.Endpoint.IsUnknown() {
@@ -43707,6 +48843,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlphasocS3.KeyValueMetadata.IsNull() || state.OutputAlphasocS3.KeyValueMetadata.IsUnknown() {
 			state.OutputAlphasocS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAlphasocS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputAlphasocS3.KeyValueMetadata.IsNull() || state.OutputAlphasocS3.KeyValueMetadata.IsUnknown() {
+			state.OutputAlphasocS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAlphasocS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputAlphasocS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputAlphasocS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputAlphasocS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputAlphasocS3.EnableStatistics.IsNull() && !api.OutputAlphasocS3.EnableStatistics.IsUnknown() {
 			state.OutputAlphasocS3.EnableStatistics = api.OutputAlphasocS3.EnableStatistics
 		} else if state.OutputAlphasocS3.EnableStatistics.IsNull() || state.OutputAlphasocS3.EnableStatistics.IsUnknown() {
@@ -43767,6 +48908,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDellS3.SystemFields.IsNull() || state.OutputDellS3.SystemFields.IsUnknown() {
 			state.OutputDellS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputDellS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputDellS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputDellS3.Environment.IsNull() && !api.OutputDellS3.Environment.IsUnknown() {
 			state.OutputDellS3.Environment = api.OutputDellS3.Environment
 		} else if state.OutputDellS3.Environment.IsNull() || state.OutputDellS3.Environment.IsUnknown() {
@@ -43775,6 +48919,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputDellS3.Streamtags.IsNull() && !api.OutputDellS3.Streamtags.IsUnknown() {
 			state.OutputDellS3.Streamtags = api.OutputDellS3.Streamtags
 		} else if state.OutputDellS3.Streamtags.IsNull() || state.OutputDellS3.Streamtags.IsUnknown() {
+			state.OutputDellS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputDellS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputDellS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputDellS3.AwsAuthenticationMethod.IsNull() && !api.OutputDellS3.AwsAuthenticationMethod.IsUnknown() {
@@ -43912,9 +49059,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDellS3.RetrySettings.IsNull() || state.OutputDellS3.RetrySettings.IsUnknown() {
 			state.OutputDellS3.RetrySettings = types.ObjectNull(OutputDellS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputDellS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputDellS3.RetrySettings = types.ObjectNull(OutputDellS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputDellS3.Orphans.IsNull() && !api.OutputDellS3.Orphans.IsUnknown() {
 			state.OutputDellS3.Orphans = api.OutputDellS3.Orphans
 		} else if state.OutputDellS3.Orphans.IsNull() || state.OutputDellS3.Orphans.IsUnknown() {
+			state.OutputDellS3.Orphans = types.ObjectNull(OutputDellS3OrphansAttrTypes())
+		}
+		if len(state.OutputDellS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputDellS3.Orphans = types.ObjectNull(OutputDellS3OrphansAttrTypes())
 		}
 		if !api.OutputDellS3.ObjectACL.IsNull() && !api.OutputDellS3.ObjectACL.IsUnknown() {
@@ -43987,6 +49140,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputDellS3.KeyValueMetadata.IsNull() || state.OutputDellS3.KeyValueMetadata.IsUnknown() {
 			state.OutputDellS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDellS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputDellS3.KeyValueMetadata.IsNull() || state.OutputDellS3.KeyValueMetadata.IsUnknown() {
+			state.OutputDellS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputDellS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputDellS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputDellS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputDellS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputDellS3.EnableStatistics.IsNull() && !api.OutputDellS3.EnableStatistics.IsUnknown() {
 			state.OutputDellS3.EnableStatistics = api.OutputDellS3.EnableStatistics
 		} else if state.OutputDellS3.EnableStatistics.IsNull() || state.OutputDellS3.EnableStatistics.IsUnknown() {
@@ -44047,6 +49205,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudianS3.SystemFields.IsNull() || state.OutputCloudianS3.SystemFields.IsUnknown() {
 			state.OutputCloudianS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputCloudianS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputCloudianS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputCloudianS3.Environment.IsNull() && !api.OutputCloudianS3.Environment.IsUnknown() {
 			state.OutputCloudianS3.Environment = api.OutputCloudianS3.Environment
 		} else if state.OutputCloudianS3.Environment.IsNull() || state.OutputCloudianS3.Environment.IsUnknown() {
@@ -44055,6 +49216,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputCloudianS3.Streamtags.IsNull() && !api.OutputCloudianS3.Streamtags.IsUnknown() {
 			state.OutputCloudianS3.Streamtags = api.OutputCloudianS3.Streamtags
 		} else if state.OutputCloudianS3.Streamtags.IsNull() || state.OutputCloudianS3.Streamtags.IsUnknown() {
+			state.OutputCloudianS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputCloudianS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputCloudianS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputCloudianS3.Endpoint.IsNull() && !api.OutputCloudianS3.Endpoint.IsUnknown() {
@@ -44197,9 +49361,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudianS3.RetrySettings.IsNull() || state.OutputCloudianS3.RetrySettings.IsUnknown() {
 			state.OutputCloudianS3.RetrySettings = types.ObjectNull(OutputCloudianS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputCloudianS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputCloudianS3.RetrySettings = types.ObjectNull(OutputCloudianS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputCloudianS3.Orphans.IsNull() && !api.OutputCloudianS3.Orphans.IsUnknown() {
 			state.OutputCloudianS3.Orphans = api.OutputCloudianS3.Orphans
 		} else if state.OutputCloudianS3.Orphans.IsNull() || state.OutputCloudianS3.Orphans.IsUnknown() {
+			state.OutputCloudianS3.Orphans = types.ObjectNull(OutputCloudianS3OrphansAttrTypes())
+		}
+		if len(state.OutputCloudianS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputCloudianS3.Orphans = types.ObjectNull(OutputCloudianS3OrphansAttrTypes())
 		}
 		if !api.OutputCloudianS3.ObjectACL.IsNull() && !api.OutputCloudianS3.ObjectACL.IsUnknown() {
@@ -44282,6 +49452,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputCloudianS3.KeyValueMetadata.IsNull() || state.OutputCloudianS3.KeyValueMetadata.IsUnknown() {
 			state.OutputCloudianS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCloudianS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputCloudianS3.KeyValueMetadata.IsNull() || state.OutputCloudianS3.KeyValueMetadata.IsUnknown() {
+			state.OutputCloudianS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputCloudianS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputCloudianS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputCloudianS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputCloudianS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputCloudianS3.EnableStatistics.IsNull() && !api.OutputCloudianS3.EnableStatistics.IsUnknown() {
 			state.OutputCloudianS3.EnableStatistics = api.OutputCloudianS3.EnableStatistics
 		} else if state.OutputCloudianS3.EnableStatistics.IsNull() || state.OutputCloudianS3.EnableStatistics.IsUnknown() {
@@ -44342,6 +49517,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputScalityS3.SystemFields.IsNull() || state.OutputScalityS3.SystemFields.IsUnknown() {
 			state.OutputScalityS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputScalityS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputScalityS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputScalityS3.Environment.IsNull() && !api.OutputScalityS3.Environment.IsUnknown() {
 			state.OutputScalityS3.Environment = api.OutputScalityS3.Environment
 		} else if state.OutputScalityS3.Environment.IsNull() || state.OutputScalityS3.Environment.IsUnknown() {
@@ -44350,6 +49528,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputScalityS3.Streamtags.IsNull() && !api.OutputScalityS3.Streamtags.IsUnknown() {
 			state.OutputScalityS3.Streamtags = api.OutputScalityS3.Streamtags
 		} else if state.OutputScalityS3.Streamtags.IsNull() || state.OutputScalityS3.Streamtags.IsUnknown() {
+			state.OutputScalityS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputScalityS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputScalityS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputScalityS3.AwsAuthenticationMethod.IsNull() && !api.OutputScalityS3.AwsAuthenticationMethod.IsUnknown() {
@@ -44487,9 +49668,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputScalityS3.RetrySettings.IsNull() || state.OutputScalityS3.RetrySettings.IsUnknown() {
 			state.OutputScalityS3.RetrySettings = types.ObjectNull(OutputScalityS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputScalityS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputScalityS3.RetrySettings = types.ObjectNull(OutputScalityS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputScalityS3.Orphans.IsNull() && !api.OutputScalityS3.Orphans.IsUnknown() {
 			state.OutputScalityS3.Orphans = api.OutputScalityS3.Orphans
 		} else if state.OutputScalityS3.Orphans.IsNull() || state.OutputScalityS3.Orphans.IsUnknown() {
+			state.OutputScalityS3.Orphans = types.ObjectNull(OutputScalityS3OrphansAttrTypes())
+		}
+		if len(state.OutputScalityS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputScalityS3.Orphans = types.ObjectNull(OutputScalityS3OrphansAttrTypes())
 		}
 		if !api.OutputScalityS3.Endpoint.IsNull() && !api.OutputScalityS3.Endpoint.IsUnknown() {
@@ -44557,6 +49744,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputScalityS3.KeyValueMetadata.IsNull() || state.OutputScalityS3.KeyValueMetadata.IsUnknown() {
 			state.OutputScalityS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputScalityS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputScalityS3.KeyValueMetadata.IsNull() || state.OutputScalityS3.KeyValueMetadata.IsUnknown() {
+			state.OutputScalityS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputScalityS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputScalityS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputScalityS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputScalityS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputScalityS3.EnableStatistics.IsNull() && !api.OutputScalityS3.EnableStatistics.IsUnknown() {
 			state.OutputScalityS3.EnableStatistics = api.OutputScalityS3.EnableStatistics
 		} else if state.OutputScalityS3.EnableStatistics.IsNull() || state.OutputScalityS3.EnableStatistics.IsUnknown() {
@@ -44617,6 +49809,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlibabaCloudS3.SystemFields.IsNull() || state.OutputAlibabaCloudS3.SystemFields.IsUnknown() {
 			state.OutputAlibabaCloudS3.SystemFields = types.ListNull(types.StringType)
 		}
+		if elementType := state.OutputAlibabaCloudS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputAlibabaCloudS3.SystemFields = types.ListNull(types.StringType)
+		}
 		if !api.OutputAlibabaCloudS3.Environment.IsNull() && !api.OutputAlibabaCloudS3.Environment.IsUnknown() {
 			state.OutputAlibabaCloudS3.Environment = api.OutputAlibabaCloudS3.Environment
 		} else if state.OutputAlibabaCloudS3.Environment.IsNull() || state.OutputAlibabaCloudS3.Environment.IsUnknown() {
@@ -44625,6 +49820,9 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		if !api.OutputAlibabaCloudS3.Streamtags.IsNull() && !api.OutputAlibabaCloudS3.Streamtags.IsUnknown() {
 			state.OutputAlibabaCloudS3.Streamtags = api.OutputAlibabaCloudS3.Streamtags
 		} else if state.OutputAlibabaCloudS3.Streamtags.IsNull() || state.OutputAlibabaCloudS3.Streamtags.IsUnknown() {
+			state.OutputAlibabaCloudS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputAlibabaCloudS3.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputAlibabaCloudS3.Streamtags = types.ListNull(types.StringType)
 		}
 		if !api.OutputAlibabaCloudS3.AwsAuthenticationMethod.IsNull() && !api.OutputAlibabaCloudS3.AwsAuthenticationMethod.IsUnknown() {
@@ -44757,9 +49955,15 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlibabaCloudS3.RetrySettings.IsNull() || state.OutputAlibabaCloudS3.RetrySettings.IsUnknown() {
 			state.OutputAlibabaCloudS3.RetrySettings = types.ObjectNull(OutputAlibabaCloudS3RetrySettingsAttrTypes())
 		}
+		if len(state.OutputAlibabaCloudS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputAlibabaCloudS3.RetrySettings = types.ObjectNull(OutputAlibabaCloudS3RetrySettingsAttrTypes())
+		}
 		if !api.OutputAlibabaCloudS3.Orphans.IsNull() && !api.OutputAlibabaCloudS3.Orphans.IsUnknown() {
 			state.OutputAlibabaCloudS3.Orphans = api.OutputAlibabaCloudS3.Orphans
 		} else if state.OutputAlibabaCloudS3.Orphans.IsNull() || state.OutputAlibabaCloudS3.Orphans.IsUnknown() {
+			state.OutputAlibabaCloudS3.Orphans = types.ObjectNull(OutputAlibabaCloudS3OrphansAttrTypes())
+		}
+		if len(state.OutputAlibabaCloudS3.Orphans.AttributeTypes(context.Background())) == 0 {
 			state.OutputAlibabaCloudS3.Orphans = types.ObjectNull(OutputAlibabaCloudS3OrphansAttrTypes())
 		}
 		if !api.OutputAlibabaCloudS3.ObjectACL.IsNull() && !api.OutputAlibabaCloudS3.ObjectACL.IsUnknown() {
@@ -44771,6 +49975,26 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 			state.OutputAlibabaCloudS3.Endpoint = api.OutputAlibabaCloudS3.Endpoint
 		} else if state.OutputAlibabaCloudS3.Endpoint.IsNull() || state.OutputAlibabaCloudS3.Endpoint.IsUnknown() {
 			state.OutputAlibabaCloudS3.Endpoint = types.StringNull()
+		}
+		if !api.OutputAlibabaCloudS3.EnableAssumeRole.IsNull() && !api.OutputAlibabaCloudS3.EnableAssumeRole.IsUnknown() {
+			state.OutputAlibabaCloudS3.EnableAssumeRole = api.OutputAlibabaCloudS3.EnableAssumeRole
+		} else if state.OutputAlibabaCloudS3.EnableAssumeRole.IsNull() || state.OutputAlibabaCloudS3.EnableAssumeRole.IsUnknown() {
+			state.OutputAlibabaCloudS3.EnableAssumeRole = types.BoolNull()
+		}
+		if !api.OutputAlibabaCloudS3.DurationSeconds.IsNull() && !api.OutputAlibabaCloudS3.DurationSeconds.IsUnknown() {
+			state.OutputAlibabaCloudS3.DurationSeconds = api.OutputAlibabaCloudS3.DurationSeconds
+		} else if state.OutputAlibabaCloudS3.DurationSeconds.IsNull() || state.OutputAlibabaCloudS3.DurationSeconds.IsUnknown() {
+			state.OutputAlibabaCloudS3.DurationSeconds = types.Float64Null()
+		}
+		if !api.OutputAlibabaCloudS3.AssumeRoleArn.IsNull() && !api.OutputAlibabaCloudS3.AssumeRoleArn.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleArn = api.OutputAlibabaCloudS3.AssumeRoleArn
+		} else if state.OutputAlibabaCloudS3.AssumeRoleArn.IsNull() || state.OutputAlibabaCloudS3.AssumeRoleArn.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleArn = types.StringNull()
+		}
+		if !api.OutputAlibabaCloudS3.AssumeRoleExternalID.IsNull() && !api.OutputAlibabaCloudS3.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleExternalID = api.OutputAlibabaCloudS3.AssumeRoleExternalID
+		} else if state.OutputAlibabaCloudS3.AssumeRoleExternalID.IsNull() || state.OutputAlibabaCloudS3.AssumeRoleExternalID.IsUnknown() {
+			state.OutputAlibabaCloudS3.AssumeRoleExternalID = types.StringNull()
 		}
 		if !api.OutputAlibabaCloudS3.Description.IsNull() && !api.OutputAlibabaCloudS3.Description.IsUnknown() {
 			state.OutputAlibabaCloudS3.Description = api.OutputAlibabaCloudS3.Description
@@ -44832,6 +50056,11 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlibabaCloudS3.KeyValueMetadata.IsNull() || state.OutputAlibabaCloudS3.KeyValueMetadata.IsUnknown() {
 			state.OutputAlibabaCloudS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAlibabaCloudS3KeyValueMetadataAttrTypes()})
 		}
+		if state.OutputAlibabaCloudS3.KeyValueMetadata.IsNull() || state.OutputAlibabaCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputAlibabaCloudS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputAlibabaCloudS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputAlibabaCloudS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputAlibabaCloudS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputAlibabaCloudS3KeyValueMetadataAttrTypes()}, nil)
+		}
 		if !api.OutputAlibabaCloudS3.EnableStatistics.IsNull() && !api.OutputAlibabaCloudS3.EnableStatistics.IsUnknown() {
 			state.OutputAlibabaCloudS3.EnableStatistics = api.OutputAlibabaCloudS3.EnableStatistics
 		} else if state.OutputAlibabaCloudS3.EnableStatistics.IsNull() || state.OutputAlibabaCloudS3.EnableStatistics.IsUnknown() {
@@ -44867,6 +50096,298 @@ func applyDestinationAPIToState(api *DestinationModel, state *DestinationModel, 
 		} else if state.OutputAlibabaCloudS3.MaxRetryNum.IsNull() || state.OutputAlibabaCloudS3.MaxRetryNum.IsUnknown() {
 			state.OutputAlibabaCloudS3.MaxRetryNum = types.Float64Null()
 		}
+	}
+	if api.OutputIbmCloudS3 != nil {
+		if state.OutputIbmCloudS3 == nil {
+			state.OutputIbmCloudS3 = &OutputIbmCloudS3Model{}
+		}
+		if !api.OutputIbmCloudS3.ID.IsNull() && !api.OutputIbmCloudS3.ID.IsUnknown() {
+			state.OutputIbmCloudS3.ID = api.OutputIbmCloudS3.ID
+		} else if state.OutputIbmCloudS3.ID.IsNull() || state.OutputIbmCloudS3.ID.IsUnknown() {
+			state.OutputIbmCloudS3.ID = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Type.IsNull() && !api.OutputIbmCloudS3.Type.IsUnknown() {
+			state.OutputIbmCloudS3.Type = api.OutputIbmCloudS3.Type
+		} else if state.OutputIbmCloudS3.Type.IsNull() || state.OutputIbmCloudS3.Type.IsUnknown() {
+			state.OutputIbmCloudS3.Type = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Pipeline.IsNull() && !api.OutputIbmCloudS3.Pipeline.IsUnknown() {
+			state.OutputIbmCloudS3.Pipeline = api.OutputIbmCloudS3.Pipeline
+		} else if state.OutputIbmCloudS3.Pipeline.IsNull() || state.OutputIbmCloudS3.Pipeline.IsUnknown() {
+			state.OutputIbmCloudS3.Pipeline = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.SystemFields.IsNull() && !api.OutputIbmCloudS3.SystemFields.IsUnknown() {
+			state.OutputIbmCloudS3.SystemFields = api.OutputIbmCloudS3.SystemFields
+		} else if state.OutputIbmCloudS3.SystemFields.IsNull() || state.OutputIbmCloudS3.SystemFields.IsUnknown() {
+			state.OutputIbmCloudS3.SystemFields = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputIbmCloudS3.SystemFields.ElementType(context.Background()); elementType == nil {
+			state.OutputIbmCloudS3.SystemFields = types.ListNull(types.StringType)
+		}
+		if !api.OutputIbmCloudS3.Environment.IsNull() && !api.OutputIbmCloudS3.Environment.IsUnknown() {
+			state.OutputIbmCloudS3.Environment = api.OutputIbmCloudS3.Environment
+		} else if state.OutputIbmCloudS3.Environment.IsNull() || state.OutputIbmCloudS3.Environment.IsUnknown() {
+			state.OutputIbmCloudS3.Environment = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Streamtags.IsNull() && !api.OutputIbmCloudS3.Streamtags.IsUnknown() {
+			state.OutputIbmCloudS3.Streamtags = api.OutputIbmCloudS3.Streamtags
+		} else if state.OutputIbmCloudS3.Streamtags.IsNull() || state.OutputIbmCloudS3.Streamtags.IsUnknown() {
+			state.OutputIbmCloudS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if elementType := state.OutputIbmCloudS3.Streamtags.ElementType(context.Background()); elementType == nil {
+			state.OutputIbmCloudS3.Streamtags = types.ListNull(types.StringType)
+		}
+		if !api.OutputIbmCloudS3.Endpoint.IsNull() && !api.OutputIbmCloudS3.Endpoint.IsUnknown() {
+			state.OutputIbmCloudS3.Endpoint = api.OutputIbmCloudS3.Endpoint
+		} else if state.OutputIbmCloudS3.Endpoint.IsNull() || state.OutputIbmCloudS3.Endpoint.IsUnknown() {
+			state.OutputIbmCloudS3.Endpoint = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AwsAuthenticationMethod.IsNull() && !api.OutputIbmCloudS3.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputIbmCloudS3.AwsAuthenticationMethod = api.OutputIbmCloudS3.AwsAuthenticationMethod
+		} else if state.OutputIbmCloudS3.AwsAuthenticationMethod.IsNull() || state.OutputIbmCloudS3.AwsAuthenticationMethod.IsUnknown() {
+			state.OutputIbmCloudS3.AwsAuthenticationMethod = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ReuseConnections.IsNull() && !api.OutputIbmCloudS3.ReuseConnections.IsUnknown() {
+			state.OutputIbmCloudS3.ReuseConnections = api.OutputIbmCloudS3.ReuseConnections
+		} else if state.OutputIbmCloudS3.ReuseConnections.IsNull() || state.OutputIbmCloudS3.ReuseConnections.IsUnknown() {
+			state.OutputIbmCloudS3.ReuseConnections = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RejectUnauthorized.IsNull() && !api.OutputIbmCloudS3.RejectUnauthorized.IsUnknown() {
+			state.OutputIbmCloudS3.RejectUnauthorized = api.OutputIbmCloudS3.RejectUnauthorized
+		} else if state.OutputIbmCloudS3.RejectUnauthorized.IsNull() || state.OutputIbmCloudS3.RejectUnauthorized.IsUnknown() {
+			state.OutputIbmCloudS3.RejectUnauthorized = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.Bucket.IsNull() && !api.OutputIbmCloudS3.Bucket.IsUnknown() {
+			state.OutputIbmCloudS3.Bucket = api.OutputIbmCloudS3.Bucket
+		} else if state.OutputIbmCloudS3.Bucket.IsNull() || state.OutputIbmCloudS3.Bucket.IsUnknown() {
+			state.OutputIbmCloudS3.Bucket = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.DestPath.IsNull() && !api.OutputIbmCloudS3.DestPath.IsUnknown() {
+			state.OutputIbmCloudS3.DestPath = api.OutputIbmCloudS3.DestPath
+		} else if state.OutputIbmCloudS3.DestPath.IsNull() || state.OutputIbmCloudS3.DestPath.IsUnknown() {
+			state.OutputIbmCloudS3.DestPath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxConcurrentFileParts.IsNull() && !api.OutputIbmCloudS3.MaxConcurrentFileParts.IsUnknown() {
+			state.OutputIbmCloudS3.MaxConcurrentFileParts = api.OutputIbmCloudS3.MaxConcurrentFileParts
+		} else if state.OutputIbmCloudS3.MaxConcurrentFileParts.IsNull() || state.OutputIbmCloudS3.MaxConcurrentFileParts.IsUnknown() {
+			state.OutputIbmCloudS3.MaxConcurrentFileParts = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.VerifyPermissions.IsNull() && !api.OutputIbmCloudS3.VerifyPermissions.IsUnknown() {
+			state.OutputIbmCloudS3.VerifyPermissions = api.OutputIbmCloudS3.VerifyPermissions
+		} else if state.OutputIbmCloudS3.VerifyPermissions.IsNull() || state.OutputIbmCloudS3.VerifyPermissions.IsUnknown() {
+			state.OutputIbmCloudS3.VerifyPermissions = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsNull() && !api.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.MaxClosingFilesToBackpressure = api.OutputIbmCloudS3.MaxClosingFilesToBackpressure
+		} else if state.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsNull() || state.OutputIbmCloudS3.MaxClosingFilesToBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.MaxClosingFilesToBackpressure = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.StagePath.IsNull() && !api.OutputIbmCloudS3.StagePath.IsUnknown() {
+			state.OutputIbmCloudS3.StagePath = api.OutputIbmCloudS3.StagePath
+		} else if state.OutputIbmCloudS3.StagePath.IsNull() || state.OutputIbmCloudS3.StagePath.IsUnknown() {
+			state.OutputIbmCloudS3.StagePath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AddIDToStagePath.IsNull() && !api.OutputIbmCloudS3.AddIDToStagePath.IsUnknown() {
+			state.OutputIbmCloudS3.AddIDToStagePath = api.OutputIbmCloudS3.AddIDToStagePath
+		} else if state.OutputIbmCloudS3.AddIDToStagePath.IsNull() || state.OutputIbmCloudS3.AddIDToStagePath.IsUnknown() {
+			state.OutputIbmCloudS3.AddIDToStagePath = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RemoveEmptyDirs.IsNull() && !api.OutputIbmCloudS3.RemoveEmptyDirs.IsUnknown() {
+			state.OutputIbmCloudS3.RemoveEmptyDirs = api.OutputIbmCloudS3.RemoveEmptyDirs
+		} else if state.OutputIbmCloudS3.RemoveEmptyDirs.IsNull() || state.OutputIbmCloudS3.RemoveEmptyDirs.IsUnknown() {
+			state.OutputIbmCloudS3.RemoveEmptyDirs = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.PartitionExpr.IsNull() && !api.OutputIbmCloudS3.PartitionExpr.IsUnknown() {
+			state.OutputIbmCloudS3.PartitionExpr = api.OutputIbmCloudS3.PartitionExpr
+		} else if state.OutputIbmCloudS3.PartitionExpr.IsNull() || state.OutputIbmCloudS3.PartitionExpr.IsUnknown() {
+			state.OutputIbmCloudS3.PartitionExpr = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Format.IsNull() && !api.OutputIbmCloudS3.Format.IsUnknown() {
+			state.OutputIbmCloudS3.Format = api.OutputIbmCloudS3.Format
+		} else if state.OutputIbmCloudS3.Format.IsNull() || state.OutputIbmCloudS3.Format.IsUnknown() {
+			state.OutputIbmCloudS3.Format = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.BaseFileName.IsNull() && !api.OutputIbmCloudS3.BaseFileName.IsUnknown() {
+			state.OutputIbmCloudS3.BaseFileName = api.OutputIbmCloudS3.BaseFileName
+		} else if state.OutputIbmCloudS3.BaseFileName.IsNull() || state.OutputIbmCloudS3.BaseFileName.IsUnknown() {
+			state.OutputIbmCloudS3.BaseFileName = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.FileNameSuffix.IsNull() && !api.OutputIbmCloudS3.FileNameSuffix.IsUnknown() {
+			state.OutputIbmCloudS3.FileNameSuffix = api.OutputIbmCloudS3.FileNameSuffix
+		} else if state.OutputIbmCloudS3.FileNameSuffix.IsNull() || state.OutputIbmCloudS3.FileNameSuffix.IsUnknown() {
+			state.OutputIbmCloudS3.FileNameSuffix = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxFileSizeMB.IsNull() && !api.OutputIbmCloudS3.MaxFileSizeMB.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileSizeMB = api.OutputIbmCloudS3.MaxFileSizeMB
+		} else if state.OutputIbmCloudS3.MaxFileSizeMB.IsNull() || state.OutputIbmCloudS3.MaxFileSizeMB.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileSizeMB = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxFileOpenTimeSec.IsNull() && !api.OutputIbmCloudS3.MaxFileOpenTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileOpenTimeSec = api.OutputIbmCloudS3.MaxFileOpenTimeSec
+		} else if state.OutputIbmCloudS3.MaxFileOpenTimeSec.IsNull() || state.OutputIbmCloudS3.MaxFileOpenTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileOpenTimeSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxFileIDleTimeSec.IsNull() && !api.OutputIbmCloudS3.MaxFileIDleTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileIDleTimeSec = api.OutputIbmCloudS3.MaxFileIDleTimeSec
+		} else if state.OutputIbmCloudS3.MaxFileIDleTimeSec.IsNull() || state.OutputIbmCloudS3.MaxFileIDleTimeSec.IsUnknown() {
+			state.OutputIbmCloudS3.MaxFileIDleTimeSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.MaxOpenFiles.IsNull() && !api.OutputIbmCloudS3.MaxOpenFiles.IsUnknown() {
+			state.OutputIbmCloudS3.MaxOpenFiles = api.OutputIbmCloudS3.MaxOpenFiles
+		} else if state.OutputIbmCloudS3.MaxOpenFiles.IsNull() || state.OutputIbmCloudS3.MaxOpenFiles.IsUnknown() {
+			state.OutputIbmCloudS3.MaxOpenFiles = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.HeaderLine.IsNull() && !api.OutputIbmCloudS3.HeaderLine.IsUnknown() {
+			state.OutputIbmCloudS3.HeaderLine = api.OutputIbmCloudS3.HeaderLine
+		} else if state.OutputIbmCloudS3.HeaderLine.IsNull() || state.OutputIbmCloudS3.HeaderLine.IsUnknown() {
+			state.OutputIbmCloudS3.HeaderLine = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.WriteHighWaterMark.IsNull() && !api.OutputIbmCloudS3.WriteHighWaterMark.IsUnknown() {
+			state.OutputIbmCloudS3.WriteHighWaterMark = api.OutputIbmCloudS3.WriteHighWaterMark
+		} else if state.OutputIbmCloudS3.WriteHighWaterMark.IsNull() || state.OutputIbmCloudS3.WriteHighWaterMark.IsUnknown() {
+			state.OutputIbmCloudS3.WriteHighWaterMark = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.OnBackpressure.IsNull() && !api.OutputIbmCloudS3.OnBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnBackpressure = api.OutputIbmCloudS3.OnBackpressure
+		} else if state.OutputIbmCloudS3.OnBackpressure.IsNull() || state.OutputIbmCloudS3.OnBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnBackpressure = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.DeadletterEnabled.IsNull() && !api.OutputIbmCloudS3.DeadletterEnabled.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterEnabled = api.OutputIbmCloudS3.DeadletterEnabled
+		} else if state.OutputIbmCloudS3.DeadletterEnabled.IsNull() || state.OutputIbmCloudS3.DeadletterEnabled.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterEnabled = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.OnDiskFullBackpressure.IsNull() && !api.OutputIbmCloudS3.OnDiskFullBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnDiskFullBackpressure = api.OutputIbmCloudS3.OnDiskFullBackpressure
+		} else if state.OutputIbmCloudS3.OnDiskFullBackpressure.IsNull() || state.OutputIbmCloudS3.OnDiskFullBackpressure.IsUnknown() {
+			state.OutputIbmCloudS3.OnDiskFullBackpressure = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ForceCloseOnShutdown.IsNull() && !api.OutputIbmCloudS3.ForceCloseOnShutdown.IsUnknown() {
+			state.OutputIbmCloudS3.ForceCloseOnShutdown = api.OutputIbmCloudS3.ForceCloseOnShutdown
+		} else if state.OutputIbmCloudS3.ForceCloseOnShutdown.IsNull() || state.OutputIbmCloudS3.ForceCloseOnShutdown.IsUnknown() {
+			state.OutputIbmCloudS3.ForceCloseOnShutdown = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.RetrySettings.IsNull() && !api.OutputIbmCloudS3.RetrySettings.IsUnknown() {
+			state.OutputIbmCloudS3.RetrySettings = api.OutputIbmCloudS3.RetrySettings
+		} else if state.OutputIbmCloudS3.RetrySettings.IsNull() || state.OutputIbmCloudS3.RetrySettings.IsUnknown() {
+			state.OutputIbmCloudS3.RetrySettings = types.ObjectNull(OutputIbmCloudS3RetrySettingsAttrTypes())
+		}
+		if len(state.OutputIbmCloudS3.RetrySettings.AttributeTypes(context.Background())) == 0 {
+			state.OutputIbmCloudS3.RetrySettings = types.ObjectNull(OutputIbmCloudS3RetrySettingsAttrTypes())
+		}
+		if !api.OutputIbmCloudS3.Orphans.IsNull() && !api.OutputIbmCloudS3.Orphans.IsUnknown() {
+			state.OutputIbmCloudS3.Orphans = api.OutputIbmCloudS3.Orphans
+		} else if state.OutputIbmCloudS3.Orphans.IsNull() || state.OutputIbmCloudS3.Orphans.IsUnknown() {
+			state.OutputIbmCloudS3.Orphans = types.ObjectNull(OutputIbmCloudS3OrphansAttrTypes())
+		}
+		if len(state.OutputIbmCloudS3.Orphans.AttributeTypes(context.Background())) == 0 {
+			state.OutputIbmCloudS3.Orphans = types.ObjectNull(OutputIbmCloudS3OrphansAttrTypes())
+		}
+		if !api.OutputIbmCloudS3.Description.IsNull() && !api.OutputIbmCloudS3.Description.IsUnknown() {
+			state.OutputIbmCloudS3.Description = api.OutputIbmCloudS3.Description
+		} else if state.OutputIbmCloudS3.Description.IsNull() || state.OutputIbmCloudS3.Description.IsUnknown() {
+			state.OutputIbmCloudS3.Description = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AwsSecret.IsNull() && !api.OutputIbmCloudS3.AwsSecret.IsUnknown() {
+			state.OutputIbmCloudS3.AwsSecret = api.OutputIbmCloudS3.AwsSecret
+		} else if state.OutputIbmCloudS3.AwsSecret.IsNull() || state.OutputIbmCloudS3.AwsSecret.IsUnknown() {
+			state.OutputIbmCloudS3.AwsSecret = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.Compress.IsNull() && !api.OutputIbmCloudS3.Compress.IsUnknown() {
+			state.OutputIbmCloudS3.Compress = api.OutputIbmCloudS3.Compress
+		} else if state.OutputIbmCloudS3.Compress.IsNull() || state.OutputIbmCloudS3.Compress.IsUnknown() {
+			state.OutputIbmCloudS3.Compress = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.CompressionLevel.IsNull() && !api.OutputIbmCloudS3.CompressionLevel.IsUnknown() {
+			state.OutputIbmCloudS3.CompressionLevel = api.OutputIbmCloudS3.CompressionLevel
+		} else if state.OutputIbmCloudS3.CompressionLevel.IsNull() || state.OutputIbmCloudS3.CompressionLevel.IsUnknown() {
+			state.OutputIbmCloudS3.CompressionLevel = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.AutomaticSchema.IsNull() && !api.OutputIbmCloudS3.AutomaticSchema.IsUnknown() {
+			state.OutputIbmCloudS3.AutomaticSchema = api.OutputIbmCloudS3.AutomaticSchema
+		} else if state.OutputIbmCloudS3.AutomaticSchema.IsNull() || state.OutputIbmCloudS3.AutomaticSchema.IsUnknown() {
+			state.OutputIbmCloudS3.AutomaticSchema = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetSchema.IsNull() && !api.OutputIbmCloudS3.ParquetSchema.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetSchema = api.OutputIbmCloudS3.ParquetSchema
+		} else if state.OutputIbmCloudS3.ParquetSchema.IsNull() || state.OutputIbmCloudS3.ParquetSchema.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetSchema = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetVersion.IsNull() && !api.OutputIbmCloudS3.ParquetVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetVersion = api.OutputIbmCloudS3.ParquetVersion
+		} else if state.OutputIbmCloudS3.ParquetVersion.IsNull() || state.OutputIbmCloudS3.ParquetVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetVersion = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetDataPageVersion.IsNull() && !api.OutputIbmCloudS3.ParquetDataPageVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetDataPageVersion = api.OutputIbmCloudS3.ParquetDataPageVersion
+		} else if state.OutputIbmCloudS3.ParquetDataPageVersion.IsNull() || state.OutputIbmCloudS3.ParquetDataPageVersion.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetDataPageVersion = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ParquetRowGroupLength.IsNull() && !api.OutputIbmCloudS3.ParquetRowGroupLength.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetRowGroupLength = api.OutputIbmCloudS3.ParquetRowGroupLength
+		} else if state.OutputIbmCloudS3.ParquetRowGroupLength.IsNull() || state.OutputIbmCloudS3.ParquetRowGroupLength.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetRowGroupLength = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.ParquetPageSize.IsNull() && !api.OutputIbmCloudS3.ParquetPageSize.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetPageSize = api.OutputIbmCloudS3.ParquetPageSize
+		} else if state.OutputIbmCloudS3.ParquetPageSize.IsNull() || state.OutputIbmCloudS3.ParquetPageSize.IsUnknown() {
+			state.OutputIbmCloudS3.ParquetPageSize = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.ShouldLogInvalidRows.IsNull() && !api.OutputIbmCloudS3.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputIbmCloudS3.ShouldLogInvalidRows = api.OutputIbmCloudS3.ShouldLogInvalidRows
+		} else if state.OutputIbmCloudS3.ShouldLogInvalidRows.IsNull() || state.OutputIbmCloudS3.ShouldLogInvalidRows.IsUnknown() {
+			state.OutputIbmCloudS3.ShouldLogInvalidRows = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.KeyValueMetadata.IsNull() && !api.OutputIbmCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputIbmCloudS3.KeyValueMetadata = api.OutputIbmCloudS3.KeyValueMetadata
+		} else if state.OutputIbmCloudS3.KeyValueMetadata.IsNull() || state.OutputIbmCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputIbmCloudS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputIbmCloudS3KeyValueMetadataAttrTypes()})
+		}
+		if state.OutputIbmCloudS3.KeyValueMetadata.IsNull() || state.OutputIbmCloudS3.KeyValueMetadata.IsUnknown() {
+			state.OutputIbmCloudS3.KeyValueMetadata = types.ListNull(types.ObjectType{AttrTypes: OutputIbmCloudS3KeyValueMetadataAttrTypes()})
+		} else if len(state.OutputIbmCloudS3.KeyValueMetadata.Elements()) == 0 {
+			state.OutputIbmCloudS3.KeyValueMetadata = types.ListValueMust(types.ObjectType{AttrTypes: OutputIbmCloudS3KeyValueMetadataAttrTypes()}, nil)
+		}
+		if !api.OutputIbmCloudS3.EnableStatistics.IsNull() && !api.OutputIbmCloudS3.EnableStatistics.IsUnknown() {
+			state.OutputIbmCloudS3.EnableStatistics = api.OutputIbmCloudS3.EnableStatistics
+		} else if state.OutputIbmCloudS3.EnableStatistics.IsNull() || state.OutputIbmCloudS3.EnableStatistics.IsUnknown() {
+			state.OutputIbmCloudS3.EnableStatistics = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EnableWritePageIndex.IsNull() && !api.OutputIbmCloudS3.EnableWritePageIndex.IsUnknown() {
+			state.OutputIbmCloudS3.EnableWritePageIndex = api.OutputIbmCloudS3.EnableWritePageIndex
+		} else if state.OutputIbmCloudS3.EnableWritePageIndex.IsNull() || state.OutputIbmCloudS3.EnableWritePageIndex.IsUnknown() {
+			state.OutputIbmCloudS3.EnableWritePageIndex = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EnablePageChecksum.IsNull() && !api.OutputIbmCloudS3.EnablePageChecksum.IsUnknown() {
+			state.OutputIbmCloudS3.EnablePageChecksum = api.OutputIbmCloudS3.EnablePageChecksum
+		} else if state.OutputIbmCloudS3.EnablePageChecksum.IsNull() || state.OutputIbmCloudS3.EnablePageChecksum.IsUnknown() {
+			state.OutputIbmCloudS3.EnablePageChecksum = types.BoolNull()
+		}
+		if !api.OutputIbmCloudS3.EmptyDirCleanupSec.IsNull() && !api.OutputIbmCloudS3.EmptyDirCleanupSec.IsUnknown() {
+			state.OutputIbmCloudS3.EmptyDirCleanupSec = api.OutputIbmCloudS3.EmptyDirCleanupSec
+		} else if state.OutputIbmCloudS3.EmptyDirCleanupSec.IsNull() || state.OutputIbmCloudS3.EmptyDirCleanupSec.IsUnknown() {
+			state.OutputIbmCloudS3.EmptyDirCleanupSec = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.DirectoryBatchSize.IsNull() && !api.OutputIbmCloudS3.DirectoryBatchSize.IsUnknown() {
+			state.OutputIbmCloudS3.DirectoryBatchSize = api.OutputIbmCloudS3.DirectoryBatchSize
+		} else if state.OutputIbmCloudS3.DirectoryBatchSize.IsNull() || state.OutputIbmCloudS3.DirectoryBatchSize.IsUnknown() {
+			state.OutputIbmCloudS3.DirectoryBatchSize = types.Float64Null()
+		}
+		if !api.OutputIbmCloudS3.DeadletterPath.IsNull() && !api.OutputIbmCloudS3.DeadletterPath.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterPath = api.OutputIbmCloudS3.DeadletterPath
+		} else if state.OutputIbmCloudS3.DeadletterPath.IsNull() || state.OutputIbmCloudS3.DeadletterPath.IsUnknown() {
+			state.OutputIbmCloudS3.DeadletterPath = types.StringNull()
+		}
+		if !api.OutputIbmCloudS3.MaxRetryNum.IsNull() && !api.OutputIbmCloudS3.MaxRetryNum.IsUnknown() {
+			state.OutputIbmCloudS3.MaxRetryNum = api.OutputIbmCloudS3.MaxRetryNum
+		} else if state.OutputIbmCloudS3.MaxRetryNum.IsNull() || state.OutputIbmCloudS3.MaxRetryNum.IsUnknown() {
+			state.OutputIbmCloudS3.MaxRetryNum = types.Float64Null()
+		}
+	}
+	if api.OutputRouter != nil && state.OutputRouter != nil &&
+		!api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() &&
+		!state.OutputRouter.Rules.IsNull() && !state.OutputRouter.Rules.IsUnknown() {
+		state.OutputRouter.Rules = routesListWithKnownAPIValues(api.OutputRouter.Rules, state.OutputRouter.Rules)
 	}
 }
 

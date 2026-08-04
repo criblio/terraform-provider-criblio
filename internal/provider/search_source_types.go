@@ -252,7 +252,8 @@ func SearchSourceTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SearchSourceTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -260,7 +261,8 @@ func SearchSourceTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SearchSourceTerraformNameToAPIName(key)] = value
+			apiKey := SearchSourceTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -275,6 +277,16 @@ func SearchSourceTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "cribl_api":
+		return prefix + "criblAPI"
+	case "elastic_api":
+		return prefix + "elasticAPI"
+	case "prometheus_api":
+		return prefix + "prometheusAPI"
+	case "splunk_hec_api":
+		return prefix + "splunkHecAPI"
 	}
 	var output strings.Builder
 	upperNext := false

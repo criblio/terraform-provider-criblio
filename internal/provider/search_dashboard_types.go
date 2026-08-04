@@ -1009,7 +1009,8 @@ func SearchDashboardTerraformValueToJSON(value attr.Value) (any, error) {
 			return value, err
 		}
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SearchDashboardTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -1017,7 +1018,8 @@ func SearchDashboardTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SearchDashboardTerraformNameToAPIName(key)] = value
+			apiKey := SearchDashboardTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -1138,6 +1140,24 @@ func SearchDashboardTerraformNameToAPIName(name string) string {
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
 		name = strings.TrimPrefix(name, prefix)
+	}
+	switch name {
+	case "cache_ttl_seconds":
+		return prefix + "cacheTTLSeconds"
+	case "dashboard_element":
+		return prefix + "dashboard_element"
+	case "dashboard_element_input":
+		return prefix + "dashboard_element_input"
+	case "dashboard_element_visualization":
+		return prefix + "dashboard_element_visualization"
+	case "search_query_inline":
+		return prefix + "search_query_inline"
+	case "search_query_metric":
+		return prefix + "search_query_metric"
+	case "search_query_saved":
+		return prefix + "search_query_saved"
+	case "search_query_values":
+		return prefix + "search_query_values"
 	}
 	var output strings.Builder
 	upperNext := false

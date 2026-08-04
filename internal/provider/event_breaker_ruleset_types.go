@@ -17,89 +17,89 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type EventBreakerRulesetModel struct {
-	Description  types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID      types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID           types.String  `tfsdk:"id" json:"id,omitempty"`
-	Lib          types.String  `tfsdk:"lib" json:"lib,omitempty"`
-	MinRawLength types.Float64 `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
-	Rules        types.List    `tfsdk:"rules" json:"rules,omitempty"`
-	Tags         types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Description  types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID      types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID           types.String `tfsdk:"id" json:"id,omitempty"`
+	Lib          types.String `tfsdk:"lib" json:"lib,omitempty"`
+	MinRawLength types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
+	Rules        types.List   `tfsdk:"rules" json:"rules,omitempty"`
+	Tags         types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type EventBreakerRulesetResourceModel struct {
-	Description  types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID      types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID           types.String  `tfsdk:"id" json:"id,omitempty"`
-	Lib          types.String  `tfsdk:"lib" json:"lib,omitempty"`
-	MinRawLength types.Float64 `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
-	Rules        types.List    `tfsdk:"rules" json:"rules,omitempty"`
-	Tags         types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Description  types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID      types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID           types.String `tfsdk:"id" json:"id,omitempty"`
+	Lib          types.String `tfsdk:"lib" json:"lib,omitempty"`
+	MinRawLength types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
+	Rules        types.List   `tfsdk:"rules" json:"rules,omitempty"`
+	Tags         types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type EventBreakerRulesetDataSourceModel struct {
-	Description  types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID      types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID           types.String  `tfsdk:"id" json:"id,omitempty"`
-	Lib          types.String  `tfsdk:"lib" json:"lib,omitempty"`
-	MinRawLength types.Float64 `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
-	Rules        types.List    `tfsdk:"rules" json:"rules,omitempty"`
-	Tags         types.String  `tfsdk:"tags" json:"tags,omitempty"`
+	Description  types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID      types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID           types.String `tfsdk:"id" json:"id,omitempty"`
+	Lib          types.String `tfsdk:"lib" json:"lib,omitempty"`
+	MinRawLength types.Int64  `tfsdk:"min_raw_length" json:"minRawLength,omitempty"`
+	Rules        types.List   `tfsdk:"rules" json:"rules,omitempty"`
+	Tags         types.String `tfsdk:"tags" json:"tags,omitempty"`
 }
 
 type EventBreakerRulesetAPIModel struct {
-	Description  *string  `json:"description,omitempty"`
-	GroupID      *string  `json:"groupId,omitempty"`
-	ID           *string  `json:"id,omitempty"`
-	Lib          *string  `json:"lib,omitempty"`
-	MinRawLength *float64 `json:"minRawLength,omitempty"`
-	Rules        any      `json:"rules,omitempty"`
-	Tags         *string  `json:"tags,omitempty"`
+	Description  *string `json:"description,omitempty"`
+	GroupID      *string `json:"groupId,omitempty"`
+	ID           *string `json:"id,omitempty"`
+	Lib          *string `json:"lib,omitempty"`
+	MinRawLength *int64  `json:"minRawLength,omitempty"`
+	Rules        any     `json:"rules,omitempty"`
+	Tags         *string `json:"tags,omitempty"`
 }
 
 type EventBreakerRulesetRulesModel struct {
-	Name                 types.String  `tfsdk:"name" json:"name,omitempty"`
-	Condition            types.String  `tfsdk:"condition" json:"condition,omitempty"`
-	Type                 types.String  `tfsdk:"type" json:"type,omitempty"`
-	TimestampAnchorRegex types.String  `tfsdk:"timestamp_anchor_regex" json:"timestampAnchorRegex,omitempty"`
-	Timestamp            types.Object  `tfsdk:"timestamp" json:"timestamp,omitempty"`
-	TimestampTimezone    types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
-	TimestampEarliest    types.String  `tfsdk:"timestamp_earliest" json:"timestampEarliest,omitempty"`
-	TimestampLatest      types.String  `tfsdk:"timestamp_latest" json:"timestampLatest,omitempty"`
-	MaxEventBytes        types.Float64 `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
-	Fields               types.List    `tfsdk:"fields" json:"fields,omitempty"`
-	Disabled             types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	ParserEnabled        types.Bool    `tfsdk:"parser_enabled" json:"parserEnabled,omitempty"`
-	ShouldUseDataRaw     types.Bool    `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
-	Delimiter            types.String  `tfsdk:"delimiter" json:"delimiter,omitempty"`
-	DelimiterRegex       types.String  `tfsdk:"delimiter_regex" json:"delimiterRegex,omitempty"`
-	EscapeChar           types.String  `tfsdk:"escape_char" json:"escapeChar,omitempty"`
-	EventBreakerRegex    types.String  `tfsdk:"event_breaker_regex" json:"eventBreakerRegex,omitempty"`
-	FieldsLineRegex      types.String  `tfsdk:"fields_line_regex" json:"fieldsLineRegex,omitempty"`
-	HeaderLineRegex      types.String  `tfsdk:"header_line_regex" json:"headerLineRegex,omitempty"`
-	QuoteChar            types.String  `tfsdk:"quote_char" json:"quoteChar,omitempty"`
+	Name                 types.String `tfsdk:"name" json:"name,omitempty"`
+	Condition            types.String `tfsdk:"condition" json:"condition,omitempty"`
+	Type                 types.String `tfsdk:"type" json:"type,omitempty"`
+	TimestampAnchorRegex types.String `tfsdk:"timestamp_anchor_regex" json:"timestampAnchorRegex,omitempty"`
+	Timestamp            types.Object `tfsdk:"timestamp" json:"timestamp,omitempty"`
+	TimestampTimezone    types.String `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
+	TimestampEarliest    types.String `tfsdk:"timestamp_earliest" json:"timestampEarliest,omitempty"`
+	TimestampLatest      types.String `tfsdk:"timestamp_latest" json:"timestampLatest,omitempty"`
+	MaxEventBytes        types.Int64  `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
+	Fields               types.List   `tfsdk:"fields" json:"fields,omitempty"`
+	Disabled             types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	ParserEnabled        types.Bool   `tfsdk:"parser_enabled" json:"parserEnabled,omitempty"`
+	ShouldUseDataRaw     types.Bool   `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
+	Delimiter            types.String `tfsdk:"delimiter" json:"delimiter,omitempty"`
+	DelimiterRegex       types.String `tfsdk:"delimiter_regex" json:"delimiterRegex,omitempty"`
+	EscapeChar           types.String `tfsdk:"escape_char" json:"escapeChar,omitempty"`
+	EventBreakerRegex    types.String `tfsdk:"event_breaker_regex" json:"eventBreakerRegex,omitempty"`
+	FieldsLineRegex      types.String `tfsdk:"fields_line_regex" json:"fieldsLineRegex,omitempty"`
+	HeaderLineRegex      types.String `tfsdk:"header_line_regex" json:"headerLineRegex,omitempty"`
+	QuoteChar            types.String `tfsdk:"quote_char" json:"quoteChar,omitempty"`
 }
 
 type EventBreakerRulesetRulesAPIModel struct {
-	Name                 *string  `json:"name,omitempty"`
-	Condition            *string  `json:"condition,omitempty"`
-	Type                 *string  `json:"type,omitempty"`
-	TimestampAnchorRegex *string  `json:"timestampAnchorRegex,omitempty"`
-	Timestamp            any      `json:"timestamp,omitempty"`
-	TimestampTimezone    *string  `json:"timestampTimezone,omitempty"`
-	TimestampEarliest    *string  `json:"timestampEarliest,omitempty"`
-	TimestampLatest      *string  `json:"timestampLatest,omitempty"`
-	MaxEventBytes        *float64 `json:"maxEventBytes,omitempty"`
-	Fields               any      `json:"fields,omitempty"`
-	Disabled             *bool    `json:"disabled,omitempty"`
-	ParserEnabled        *bool    `json:"parserEnabled,omitempty"`
-	ShouldUseDataRaw     *bool    `json:"shouldUseDataRaw,omitempty"`
-	Delimiter            *string  `json:"delimiter,omitempty"`
-	DelimiterRegex       *string  `json:"delimiterRegex,omitempty"`
-	EscapeChar           *string  `json:"escapeChar,omitempty"`
-	EventBreakerRegex    *string  `json:"eventBreakerRegex,omitempty"`
-	FieldsLineRegex      *string  `json:"fieldsLineRegex,omitempty"`
-	HeaderLineRegex      *string  `json:"headerLineRegex,omitempty"`
-	QuoteChar            *string  `json:"quoteChar,omitempty"`
+	Name                 *string `json:"name,omitempty"`
+	Condition            *string `json:"condition,omitempty"`
+	Type                 *string `json:"type,omitempty"`
+	TimestampAnchorRegex *string `json:"timestampAnchorRegex,omitempty"`
+	Timestamp            any     `json:"timestamp,omitempty"`
+	TimestampTimezone    *string `json:"timestampTimezone,omitempty"`
+	TimestampEarliest    *string `json:"timestampEarliest,omitempty"`
+	TimestampLatest      *string `json:"timestampLatest,omitempty"`
+	MaxEventBytes        *int64  `json:"maxEventBytes,omitempty"`
+	Fields               any     `json:"fields,omitempty"`
+	Disabled             *bool   `json:"disabled,omitempty"`
+	ParserEnabled        *bool   `json:"parserEnabled,omitempty"`
+	ShouldUseDataRaw     *bool   `json:"shouldUseDataRaw,omitempty"`
+	Delimiter            *string `json:"delimiter,omitempty"`
+	DelimiterRegex       *string `json:"delimiterRegex,omitempty"`
+	EscapeChar           *string `json:"escapeChar,omitempty"`
+	EventBreakerRegex    *string `json:"eventBreakerRegex,omitempty"`
+	FieldsLineRegex      *string `json:"fieldsLineRegex,omitempty"`
+	HeaderLineRegex      *string `json:"headerLineRegex,omitempty"`
+	QuoteChar            *string `json:"quoteChar,omitempty"`
 }
 
 func EventBreakerRulesetRulesAttrTypes() map[string]attr.Type {
@@ -112,7 +112,7 @@ func EventBreakerRulesetRulesAttrTypes() map[string]attr.Type {
 		"timestamp_timezone":     types.StringType,
 		"timestamp_earliest":     types.StringType,
 		"timestamp_latest":       types.StringType,
-		"max_event_bytes":        types.Float64Type,
+		"max_event_bytes":        types.Int64Type,
 		"fields":                 types.ListType{ElemType: types.ObjectType{AttrTypes: EventBreakerRulesetRulesFieldsAttrTypes()}},
 		"disabled":               types.BoolType,
 		"parser_enabled":         types.BoolType,
@@ -128,21 +128,21 @@ func EventBreakerRulesetRulesAttrTypes() map[string]attr.Type {
 }
 
 type EventBreakerRulesetRulesTimestampModel struct {
-	Type   types.String  `tfsdk:"type" json:"type,omitempty"`
-	Length types.Float64 `tfsdk:"length" json:"length,omitempty"`
-	Format types.String  `tfsdk:"format" json:"format,omitempty"`
+	Type   types.String `tfsdk:"type" json:"type,omitempty"`
+	Length types.Int64  `tfsdk:"length" json:"length,omitempty"`
+	Format types.String `tfsdk:"format" json:"format,omitempty"`
 }
 
 type EventBreakerRulesetRulesTimestampAPIModel struct {
-	Type   *string  `json:"type,omitempty"`
-	Length *float64 `json:"length,omitempty"`
-	Format *string  `json:"format,omitempty"`
+	Type   *string `json:"type,omitempty"`
+	Length *int64  `json:"length,omitempty"`
+	Format *string `json:"format,omitempty"`
 }
 
 func EventBreakerRulesetRulesTimestampAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"type":   types.StringType,
-		"length": types.Float64Type,
+		"length": types.Int64Type,
 		"format": types.StringType,
 	}
 }
@@ -202,7 +202,8 @@ func EventBreakerRulesetTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := EventBreakerRulesetTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -210,7 +211,8 @@ func EventBreakerRulesetTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[EventBreakerRulesetTerraformNameToAPIName(key)] = value
+			apiKey := EventBreakerRulesetTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -492,9 +494,9 @@ func (m *EventBreakerRulesetModel) UnmarshalJSON(data []byte) error {
 		m.Lib = types.StringNull()
 	}
 	if input.MinRawLength != nil {
-		m.MinRawLength = types.Float64Value(*input.MinRawLength)
+		m.MinRawLength = types.Int64Value(*input.MinRawLength)
 	} else {
-		m.MinRawLength = types.Float64Null()
+		m.MinRawLength = types.Int64Null()
 	}
 	if input.Rules != nil {
 		value, err := EventBreakerRulesetAPIValueToTerraformValue(input.Rules, types.ListType{ElemType: types.ObjectType{AttrTypes: EventBreakerRulesetRulesAttrTypes()}})

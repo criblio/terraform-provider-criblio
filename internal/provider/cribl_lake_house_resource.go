@@ -173,7 +173,9 @@ func isCriblLakeHouseImportState(state *CriblLakeHouseModel) bool {
 	if state == nil {
 		return false
 	}
-	return false
+	// Resources whose bodies contain only optional fields have no required
+	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	return true
 }
 
 func applyCriblLakeHouseAPIToState(api *CriblLakeHouseModel, state *CriblLakeHouseModel, preserveInputs bool, fillMissingInputs bool) {

@@ -36,30 +36,37 @@ func (d *HmacFunctionDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "HmacFunction Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Brief description of the HMAC Function.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Worker group ID.`,
 			},
 			"header_expression": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `JavaScript expression evaluated to produce the HMAC signature header value. References the <code>signatureString</code> variable constructed from <code>stringBuilders</code>.`,
 			},
 			"header_name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Name of the HTTP header that will contain the HMAC signature value.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the HMAC Function.`,
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Library that contains the HMAC Function.`,
 			},
 			"string_builders": schema.ListAttribute{
 				Computed:    true,
+				Description: `List of JavaScript expressions evaluated and concatenated to form the HMAC signature string. Each expression can access <code>method</code>, <code>urlObj</code>, <code>headers</code>, and <code>body</code> variables.`,
 				ElementType: types.StringType,
 			},
 			"string_delim": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Delimiter used to join the HMAC signature strings before evaluation. Accepts any JavaScript expression. Leave empty to join without a separator.`,
 			},
 		},
 	}

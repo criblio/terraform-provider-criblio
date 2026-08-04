@@ -105,8 +105,23 @@ resource "criblio_collector" "rest_api_collector" {
         }
 
         # Additional REST configuration
-        authentication = "basic"
-        body           = ""
+        authentication   = "oauth"
+        auth_header_expr = "`Bearer $${token}`"
+        auth_request_params = [
+          {
+            name  = "client_id"
+            value = "demo-client-id"
+          },
+          {
+            name  = "grant_type"
+            value = "client_credentials"
+          }
+        ]
+        client_secret_param_name  = "client_secret"
+        client_secret_param_value = "demo-client-secret"
+        login_url                 = "'https://api.demo.example.com/oauth/token'"
+        token_resp_attribute      = "access_token"
+        body                      = ""
         headers = {
           "Content-Type" = "application/json"
           "Accept"       = "application/json"

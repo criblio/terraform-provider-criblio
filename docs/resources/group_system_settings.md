@@ -75,124 +75,124 @@ resource "criblio_group_system_settings" "my_group_system_settings" {
 
 ### Required
 
-- `api` (Attributes) (see [below for nested schema](#nestedatt--api))
-- `backups` (Attributes) (see [below for nested schema](#nestedatt--backups))
 - `group_id` (String) Worker group ID.
-- `pii` (Attributes) (see [below for nested schema](#nestedatt--pii))
-- `proxy` (Attributes) (see [below for nested schema](#nestedatt--proxy))
-- `rollback` (Attributes) (see [below for nested schema](#nestedatt--rollback))
-- `shutdown` (Attributes) (see [below for nested schema](#nestedatt--shutdown))
-- `sni` (Attributes) (see [below for nested schema](#nestedatt--sni))
-- `system` (Attributes) (see [below for nested schema](#nestedatt--system))
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--tls))
-- `upgrade_group_settings` (Attributes) (see [below for nested schema](#nestedatt--upgrade_group_settings))
-- `upgrade_settings` (Attributes) (see [below for nested schema](#nestedatt--upgrade_settings))
-- `workers` (Attributes) (see [below for nested schema](#nestedatt--workers))
 
 ### Optional
 
+- `api` (Attributes) (see [below for nested schema](#nestedatt--api))
 - `apps` (Attributes) (see [below for nested schema](#nestedatt--apps))
+- `backups` (Attributes) Configuration backup settings, including storage location and retention period. (see [below for nested schema](#nestedatt--backups))
 - `custom_logo` (Attributes) (see [below for nested schema](#nestedatt--custom_logo))
+- `pii` (Attributes) Personally identifiable information (PII) detection configuration. (see [below for nested schema](#nestedatt--pii))
+- `proxy` (Attributes) (see [below for nested schema](#nestedatt--proxy))
+- `rollback` (Attributes) Automatic rollback settings applied when an upgrade fails. (see [below for nested schema](#nestedatt--rollback))
+- `shutdown` (Attributes) (see [below for nested schema](#nestedatt--shutdown))
+- `sni` (Attributes) Server Name Indication (SNI) routing configuration. (see [below for nested schema](#nestedatt--sni))
 - `sockets` (Attributes) (see [below for nested schema](#nestedatt--sockets))
 - `support` (Attributes) (see [below for nested schema](#nestedatt--support))
+- `system` (Attributes) (see [below for nested schema](#nestedatt--system))
+- `tls` (Attributes) Global TLS/SSL settings applied to all outbound connections that do not specify their own TLS configuration. (see [below for nested schema](#nestedatt--tls))
+- `upgrade_group_settings` (Attributes) Rolling upgrade group settings that control how many nodes are upgraded at a time. (see [below for nested schema](#nestedatt--upgrade_group_settings))
+- `upgrade_settings` (Attributes) Automatic upgrade scheduling and package source configuration. (see [below for nested schema](#nestedatt--upgrade_settings))
+- `workers` (Attributes) (see [below for nested schema](#nestedatt--workers))
 
 <a id="nestedatt--api"></a>
 ### Nested Schema for `api`
 
 Required:
 
-- `disabled` (Boolean)
-- `host` (String)
-- `port` (Number)
+- `disabled` (Boolean) If <code>true</code>, the API server is disabled. Otherwise, <code>false</code>.
+- `host` (String) Hostname or IP address the API server listens on.
+- `port` (Integer) Port number the API server listens on.
 
 Optional:
 
-- `base_url` (String)
-- `disable_api_cache` (Boolean)
-- `headers` (Map of String)
-- `idle_session_ttl` (Number)
-- `listen_on_port` (Boolean)
-- `login_rate_limit` (String)
-- `protocol` (String)
-- `scripts` (Boolean)
-- `sensitive_fields` (List of String)
+- `base_url` (String) Base URL for the API server. Used when the server is behind a reverse proxy.
+- `disable_api_cache` (Boolean) If <code>true</code>, disable the API response cache. Otherwise, <code>false</code>.
+- `headers` (Map of String) Custom HTTP response headers to include in every API response.
+- `idle_session_ttl` (Integer) Idle session timeout in seconds. Sessions are invalidated after the specified seconds of inactivity.
+- `listen_on_port` (Boolean) If <code>true</code>, bind to the configured port as the server listen port. Otherwise, <code>false</code>.
+- `login_rate_limit` (String) Rate limit for login attempts. Value is a string such as <code>100/min</code>.
+- `protocol` (String) API protocol: <code>http</code> or <code>https</code>.
+- `scripts` (Boolean) If <code>true</code>, enable JavaScript scripting support in the API. Otherwise, <code>false</code>.
+- `sensitive_fields` (List of String) List of field names whose values are redacted in API responses and logs.
 - `ssl` (Attributes) (see [below for nested schema](#nestedatt--api--ssl))
-- `sso_rate_limit` (String)
-- `worker_remote_access` (Boolean)
+- `sso_rate_limit` (String) Rate limit for SSO authentication attempts. Value is a string such as <code>100/min</code>.
+- `worker_remote_access` (Boolean) If <code>true</code>, enable remote access (teleporting) to Worker Processes via the API. Otherwise, <code>false</code>.
 
 <a id="nestedatt--api--ssl"></a>
 ### Nested Schema for `api.ssl`
 
 Required:
 
-- `cert_path` (String)
-- `disabled` (Boolean)
-- `passphrase` (String, Sensitive)
-- `priv_key_path` (String)
+- `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
+- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
+- `passphrase` (String, Sensitive) Passphrase to decrypt the TLS private key, if encrypted.
+- `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
 
 Optional:
 
-- `ca_path` (String)
+- `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
 
 <a id="nestedatt--apps"></a>
 ### Nested Schema for `apps`
 
 Required:
 
-- `enabled` (Boolean)
+- `enabled` (Boolean) If <code>true</code>, enable Apps. Otherwise, <code>false</code>.
 
 <a id="nestedatt--backups"></a>
 ### Nested Schema for `backups`
 
 Required:
 
-- `backup_persistence` (String)
-- `backups_directory` (String)
+- `backup_persistence` (String) How long to retain backups. Value is a duration string such as <code>24h</code>.
+- `backups_directory` (String) Filesystem path where configuration backups are stored.
 
 <a id="nestedatt--custom_logo"></a>
 ### Nested Schema for `custom_logo`
 
 Required:
 
-- `enabled` (Boolean)
+- `enabled` (Boolean) If <code>true</code>, display the custom logo in the UI. Otherwise, <code>false</code>.
 
 Optional:
 
-- `logo_description` (String)
-- `logo_image` (String)
+- `logo_description` (String) Description text displayed alongside the custom logo.
+- `logo_image` (String) Custom logo image as a base64-encoded data URI (PNG or JPEG, maximum 2 MB).
 
 <a id="nestedatt--pii"></a>
 ### Nested Schema for `pii`
 
 Required:
 
-- `enable_pii_detection` (Boolean)
+- `enable_pii_detection` (Boolean) If <code>true</code>, enable PII detection for events processed by the Cribl instance. Otherwise, <code>false</code>.
 
 <a id="nestedatt--proxy"></a>
 ### Nested Schema for `proxy`
 
 Required:
 
-- `use_env_vars` (Boolean)
+- `use_env_vars` (Boolean) If <code>true</code>, use proxy settings from environment variables (<code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>NO_PROXY</code>). Otherwise, <code>false</code>.
 
 <a id="nestedatt--rollback"></a>
 ### Nested Schema for `rollback`
 
 Required:
 
-- `rollback_enabled` (Boolean)
+- `rollback_enabled` (Boolean) If <code>true</code>, enable automatic rollback if an upgrade fails. Otherwise, <code>false</code>.
 
 Optional:
 
-- `rollback_retries` (Number)
-- `rollback_timeout` (Number)
+- `rollback_retries` (Integer) Number of times to retry a rollback before marking it as failed.
+- `rollback_timeout` (Integer) Maximum duration in milliseconds to wait for a rollback to complete before marking it as failed.
 
 <a id="nestedatt--shutdown"></a>
 ### Nested Schema for `shutdown`
 
 Required:
 
-- `drain_timeout` (Number)
+- `drain_timeout` (Integer) Maximum time in milliseconds to wait for in-flight events to drain before forcing a shutdown.
 
 <a id="nestedatt--sni"></a>
 ### Nested Schema for `sni`
@@ -206,31 +206,31 @@ Required:
 
 Optional:
 
-- `directory` (String)
+- `directory` (String) Filesystem directory path where Unix domain socket files are created.
 
 <a id="nestedatt--support"></a>
 ### Nested Schema for `support`
 
 Optional:
 
-- `feature_flag_overrides` (Attributes List) (see [below for nested schema](#nestedatt--support--feature_flag_overrides))
-- `log_file_max_files` (Number)
-- `log_file_max_size` (String)
+- `feature_flag_overrides` (Attributes List) List of feature flag overrides applied to this Cribl instance. (see [below for nested schema](#nestedatt--support--feature_flag_overrides))
+- `log_file_max_files` (Integer) Maximum number of log files to retain before rotating.
+- `log_file_max_size` (String) Maximum size of each log file. Value is a numeral and unit such as <code>10 MB</code>.
 
 <a id="nestedatt--support--feature_flag_overrides"></a>
 ### Nested Schema for `support.feature_flag_overrides`
 
 Required:
 
-- `disabled` (Boolean)
-- `flag_id` (String)
+- `disabled` (Boolean) If <code>true</code>, the feature flag is disabled. Otherwise, <code>false</code>.
+- `flag_id` (String) Unique identifier of the feature flag to override.
 
 <a id="nestedatt--system"></a>
 ### Nested Schema for `system`
 
 Required:
 
-- `intercom` (Boolean)
+- `intercom` (Boolean) If <code>true</code>, enable Intercom integration for in-product messaging. Otherwise, <code>false</code>.
 - `upgrade` (String)
 
 <a id="nestedatt--tls"></a>
@@ -238,60 +238,64 @@ Required:
 
 Required:
 
-- `default_cipher_list` (String)
-- `default_ecdh_curve` (String)
-- `max_version` (String)
-- `min_version` (String)
-- `reject_unauthorized` (Boolean)
+- `default_cipher_list` (String) Cipher suite list to use for TLS connections. <code>DEFAULT</code> means the system default.
+- `default_ecdh_curve` (String) ECDH curve name for TLS key exchange. Use <code>auto</code> to let Node.js choose.
+- `max_version` (String) Maximum TLS protocol version to accept.
+- `min_version` (String) Minimum TLS protocol version to accept.
+- `reject_unauthorized` (Boolean) If <code>true</code>, reject TLS certificates that cannot be verified against a valid Certificate Authority. Otherwise, <code>false</code>.
 
 <a id="nestedatt--upgrade_group_settings"></a>
 ### Nested Schema for `upgrade_group_settings`
 
 Optional:
 
-- `is_rolling` (Boolean)
-- `quantity` (Number)
-- `retry_count` (Number)
-- `retry_delay` (Number)
+- `is_rolling` (Boolean) If <code>true</code>, perform a rolling upgrade that updates nodes incrementally. If <code>false</code>, upgrade all nodes simultaneously.
+- `quantity` (Integer) Percentage of nodes to upgrade at a time during a rolling upgrade.
+- `retry_count` (Integer) Number of times to retry upgrading a node before marking it as failed.
+- `retry_delay` (Integer) Delay in milliseconds between upgrade retries when a node fails to upgrade.
 
 <a id="nestedatt--upgrade_settings"></a>
 ### Nested Schema for `upgrade_settings`
 
 Optional:
 
-- `automatic_upgrade_check_period` (String)
-- `disable_automatic_upgrade` (Boolean)
-- `enable_legacy_edge_upgrade` (Boolean)
-- `package_urls` (Attributes List) (see [below for nested schema](#nestedatt--upgrade_settings--package_urls))
-- `upgrade_source` (String)
+- `automatic_upgrade_check_period` (String) How frequently to check for available upgrades. Value is a duration string such as <code>24h</code>.
+- `disable_automatic_upgrade` (Boolean) If <code>true</code>, automatic upgrades are disabled. Otherwise, <code>false</code>.
+- `enable_legacy_edge_upgrade` (Boolean) If <code>true</code>, enable the legacy upgrade flow for Edge Nodes. Otherwise, <code>false</code>.
+- `package_urls` (Attributes List) List of custom package URLs to use for manual upgrades. (see [below for nested schema](#nestedatt--upgrade_settings--package_urls))
+- `upgrade_source` (String) Upgrade source: <code>cribl</code> for official Cribl packages or <code>custom</code> for a custom package URL.
 
 <a id="nestedatt--upgrade_settings--package_urls"></a>
 ### Nested Schema for `upgrade_settings.package_urls`
 
 Required:
 
-- `package_url` (String)
+- `package_url` (String) URL of the upgrade package file.
 
 Optional:
 
-- `package_hash_url` (String)
+- `package_hash_url` (String) URL of the hash file used to verify the package download.
 
 <a id="nestedatt--workers"></a>
 ### Nested Schema for `workers`
 
 Required:
 
-- `count` (Number)
-- `memory` (Number)
-- `minimum` (Number)
+- `count` (Integer) Number of Worker Processes to spawn. Set to <code>0</code> to use the number of available CPU cores.
+- `memory` (Integer) Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.
+- `minimum` (Integer) Minimum number of Worker Processes to keep running.
 
 Optional:
 
-- `enable_heap_snapshots` (Boolean)
-- `load_throttle_perc` (Number)
-- `startup_max_conns` (Number)
-- `startup_throttle_timeout` (Number)
-- `v8_single_thread` (Boolean)
+- `enable_heap_snapshots` (Boolean) If <code>true</code>, enable V8 heap snapshot generation on out-of-memory errors. Otherwise, <code>false</code>.
+- `load_throttle_perc` (Integer) CPU load percentage threshold above which new connections are throttled.
+- `restart_unresponsive_processes` (Boolean) If <code>true</code>, automatically restart Worker Processes that become unresponsive. Otherwise, <code>false</code>.
+- `startup_max_conns` (Integer) Maximum number of connections to accept during Worker Process startup before throttling begins.
+- `startup_throttle_timeout` (Integer) Timeout in milliseconds to wait for Worker Processes to reach idle before ending the startup throttle period.
+- `v8_single_thread` (Boolean) If <code>true</code>, run all worker threads in a single V8 isolate. Otherwise, <code>false</code>.
+- `worker_process_config_update_concurrency` (Integer) Maximum number of Worker Processes that can reload configuration concurrently.
+- `worker_process_reload_timeout` (Integer) Timeout in milliseconds to wait for a Worker Process to reload configuration before treating the reload as failed.
+- `worker_thread_pool_size` (Integer) Size of the Worker thread pool used for CPU-bound tasks.
 
 ## Import
 

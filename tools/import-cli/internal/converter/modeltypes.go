@@ -60,6 +60,7 @@ func AllAttributeNamesFromModel(modelTypeName string) []string {
 // instantiate provider models and invoke RefreshFrom* methods.
 func ResourceModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"AppResourceModel":                        reflect.TypeOf((*provider.AppResourceModel)(nil)).Elem(),
 		"AppscopeConfigResourceModel":             reflect.TypeOf((*provider.AppscopeConfigResourceModel)(nil)).Elem(),
 		"CertificateResourceModel":                reflect.TypeOf((*provider.CertificateResourceModel)(nil)).Elem(),
 		"CollectorResourceModel":                  reflect.TypeOf((*provider.CollectorResourceModel)(nil)).Elem(),
@@ -100,6 +101,7 @@ func ResourceModelTypes() map[string]reflect.Type {
 		"SearchDashboardCategoryResourceModel":    reflect.TypeOf((*provider.SearchDashboardCategoryResourceModel)(nil)).Elem(),
 		"SearchDatasetResourceModel":              reflect.TypeOf((*provider.SearchDatasetResourceModel)(nil)).Elem(),
 		"SearchDatasetProviderResourceModel":      reflect.TypeOf((*provider.SearchDatasetProviderResourceModel)(nil)).Elem(),
+		"SearchDatatypeResourceModel":             reflect.TypeOf((*provider.SearchDatatypeResourceModel)(nil)).Elem(),
 		"SearchEngineResourceModel":               reflect.TypeOf((*provider.SearchEngineResourceModel)(nil)).Elem(),
 		"SearchMacroResourceModel":                reflect.TypeOf((*provider.SearchMacroResourceModel)(nil)).Elem(),
 		"SearchSavedQueryResourceModel":           reflect.TypeOf((*provider.SearchSavedQueryResourceModel)(nil)).Elem(),
@@ -118,6 +120,7 @@ func ResourceModelTypes() map[string]reflect.Type {
 // mirror these fields but do not have the generated UnmarshalJSON methods.
 func GeneratedModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"AppResourceModel":                        reflect.TypeOf((*provider.AppModel)(nil)).Elem(),
 		"AppscopeConfigResourceModel":             reflect.TypeOf((*provider.AppscopeConfigModel)(nil)).Elem(),
 		"CertificateResourceModel":                reflect.TypeOf((*provider.CertificateModel)(nil)).Elem(),
 		"CollectorResourceModel":                  reflect.TypeOf((*provider.CollectorModel)(nil)).Elem(),
@@ -153,6 +156,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"SearchDatasetResourceModel":              reflect.TypeOf((*provider.SearchDatasetModel)(nil)).Elem(),
 		"SearchDatasetProviderResourceModel":      reflect.TypeOf((*provider.SearchDatasetProviderModel)(nil)).Elem(),
 		"SearchDatasetRulesetResourceModel":       reflect.TypeOf((*provider.SearchDatasetRulesetModel)(nil)).Elem(),
+		"SearchDatatypeResourceModel":             reflect.TypeOf((*provider.SearchDatatypeModel)(nil)).Elem(),
 		"SearchDatatypeRulesetResourceModel":      reflect.TypeOf((*provider.SearchDatatypeRulesetModel)(nil)).Elem(),
 		"SearchEngineResourceModel":               reflect.TypeOf((*provider.SearchEngineModel)(nil)).Elem(),
 		"SearchMacroResourceModel":                reflect.TypeOf((*provider.SearchMacroModel)(nil)).Elem(),

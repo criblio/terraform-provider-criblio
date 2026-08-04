@@ -255,6 +255,101 @@ func TestWriteModuleDirectory_rewrites_pipeline_processor_refs(t *testing.T) {
 	assert.NoError(t, hcl.ParseHCL(mainBytes, "main.tf"))
 }
 
+func TestWriteModuleDirectoryRewritesDestinationRouterReferences(t *testing.T) {
+	tmp := t.TempDir()
+	items := []ResourceItem{
+		{
+			TypeName: "criblio_destination",
+			Name:     "destination_router",
+			Attrs: map[string]hcl.Value{
+				"id": {Kind: hcl.KindString, String: "router"},
+				"output_router": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+					"rules": {Kind: hcl.KindList, List: []hcl.Value{
+						{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+							"filter": {Kind: hcl.KindString, String: "true"},
+							"output": {Kind: hcl.KindString, String: "devnull"},
+						}},
+					}},
+				}},
+			},
+			ImportID: `{"group_id":"default","id":"router"}`,
+		},
+		{
+			TypeName: "criblio_destination",
+			Name:     "destination_devnull",
+			Attrs: map[string]hcl.Value{
+				"id": {Kind: hcl.KindString, String: "devnull"},
+			},
+			ImportID: `{"group_id":"default","id":"devnull"}`,
+		},
+	}
+
+	err := WriteModuleDirectory(tmp, items, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	mainBytes, err := os.ReadFile(filepath.Join(tmp, "destination", "main.tf"))
+	require.NoError(t, err)
+	main := string(mainBytes)
+	assert.Contains(t, main, "output = criblio_destination.destination_devnull.id")
+	assert.NotContains(t, main, hcl.RawExprPlaceholderPrefix)
+	assert.NoError(t, hcl.ParseHCL(mainBytes, "main.tf"))
+}
+
+func TestApplyDestinationRouterReferencesScopesPackDestinations(t *testing.T) {
+	items := []ResourceItem{
+		packDestinationItem("router_a", "pack-a", "router", "shared"),
+		packDestinationItem("shared_a", "pack-a", "shared", ""),
+		packDestinationItem("shared_b", "pack-b", "shared", ""),
+	}
+
+	ApplyDestinationRouterReferences(items)
+
+	output := items[0].Attrs["output_router"].Map["rules"].List[0].Map["output"]
+	assert.Equal(t, hcl.KindExpression, output.Kind)
+	assert.Equal(t, "criblio_pack_destination.shared_a.id", output.Expr)
+}
+
+func TestApplyDestinationRouterReferencesScopesWorkerGroups(t *testing.T) {
+	items := []ResourceItem{
+		{
+			TypeName: "criblio_destination",
+			Name:     "router_a",
+			GroupID:  "group-a",
+			Attrs: map[string]hcl.Value{
+				"id": {Kind: hcl.KindString, String: "router"},
+				"output_router": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+					"rules": {Kind: hcl.KindList, List: []hcl.Value{{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+						"output": {Kind: hcl.KindString, String: "shared"},
+					}}}},
+				}},
+			},
+		},
+		{TypeName: "criblio_destination", Name: "shared_a", GroupID: "group-a", Attrs: map[string]hcl.Value{"id": {Kind: hcl.KindString, String: "shared"}}},
+		{TypeName: "criblio_destination", Name: "shared_b", GroupID: "group-b", Attrs: map[string]hcl.Value{"id": {Kind: hcl.KindString, String: "shared"}}},
+	}
+
+	ApplyDestinationRouterReferences(items)
+
+	output := items[0].Attrs["output_router"].Map["rules"].List[0].Map["output"]
+	assert.Equal(t, "criblio_destination.shared_a.id", output.Expr)
+}
+
+func packDestinationItem(name, pack, id, output string) ResourceItem {
+	attrs := map[string]hcl.Value{
+		"id":   {Kind: hcl.KindString, String: id},
+		"pack": {Kind: hcl.KindString, String: pack},
+	}
+	if output != "" {
+		attrs["output_router"] = hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"rules": {Kind: hcl.KindList, List: []hcl.Value{
+				{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+					"output": {Kind: hcl.KindString, String: output},
+				}},
+			}},
+		}}
+	}
+	return ResourceItem{TypeName: "criblio_pack_destination", Name: name, Attrs: attrs}
+}
+
 func TestWriteAllModuleDirectories_groups_by_type(t *testing.T) {
 	tmp := t.TempDir()
 	items := []ResourceItem{

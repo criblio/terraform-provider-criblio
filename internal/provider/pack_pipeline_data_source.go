@@ -36,27 +36,29 @@ func (d *PackPipelineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "PackPipeline Data Source",
 		Attributes: map[string]schema.Attribute{
 			"conf": schema.SingleNestedAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Configuration for the Pipeline, including functions and settings.`,
 				Attributes: map[string]schema.Attribute{
 					"async_func_timeout": schema.Int64Attribute{
 						Computed:    true,
-						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
+						Description: `Timeout (in milliseconds) for asynchronous Pipeline functions.`,
 					},
 					"output": schema.StringAttribute{
 						Computed:    true,
-						Description: `The output destination for events processed by this Pipeline`,
+						Description: `The output destination for events processed by this Pipeline.`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Brief description of the Pipeline.`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Metadata tags used for categorization and filtering.`,
 						ElementType: types.StringType,
 					},
 					"functions": schema.ListNestedAttribute{
 						Computed:    true,
-						Description: `List of Functions to pass data through`,
+						Description: `List of Functions to pass data through the Pipeline.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"filter": schema.StringAttribute{
@@ -92,7 +94,8 @@ func (d *PackPipelineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						},
 					},
 					"groups": schema.MapNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Named groups of Pipeline functions for organizational display in the UI.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
@@ -117,7 +120,8 @@ func (d *PackPipelineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for the Pipeline.`,
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,

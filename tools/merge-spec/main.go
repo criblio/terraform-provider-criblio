@@ -8,6 +8,7 @@ import (
 	"os"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 
 	"go.yaml.in/yaml/v3"
@@ -79,10 +80,6 @@ func runWithConfig(config mergeConfig) error {
 		return fmt.Errorf("read input spec: %v", err)
 	}
 
-	cloudOnlyPaths, err := collectCloudOnlyPaths(spec)
-	if err != nil {
-		return err
-	}
 	if err := prefixGroupScopedPaths(spec); err != nil {
 		return err
 	}
@@ -96,6 +93,10 @@ func runWithConfig(config mergeConfig) error {
 		return err
 	}
 	if err := mergeManagementSpec(spec, config.MgmtInputPath, config.MgmtOverlayPath); err != nil {
+		return err
+	}
+	cloudOnlyPaths, err := collectCloudOnlyPaths(spec)
+	if err != nil {
 		return err
 	}
 
@@ -383,7 +384,7 @@ func collectCloudOnlyPaths(spec *yaml.Node) ([]string, error) {
 			continue
 		}
 		if pathIsCloudOnly(pathItem) {
-			cloudOnlyPaths = append(cloudOnlyPaths, path)
+			cloudOnlyPaths = append(cloudOnlyPaths, strings.TrimPrefix(path, groupPrefix))
 		}
 	}
 	sort.Strings(cloudOnlyPaths)
@@ -503,6 +504,14 @@ func lookupTarget(root *yaml.Node, target string) (*yaml.Node, error) {
 	for _, segment := range strings.Split(strings.TrimPrefix(target, prefix), ".") {
 		if segment == "" {
 			return nil, fmt.Errorf("empty target segment")
+		}
+		if node.Kind == yaml.SequenceNode {
+			index, err := strconv.Atoi(segment)
+			if err != nil || index < 0 || index >= len(node.Content) {
+				return nil, fmt.Errorf("sequence index %q not found", segment)
+			}
+			node = node.Content[index]
+			continue
 		}
 		next, ok := mappingValue(node, segment)
 		if !ok {

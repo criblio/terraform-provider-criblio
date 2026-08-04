@@ -411,7 +411,7 @@ Read-Only:
 
 Required:
 
-- `id` (String)
+- `id` (String) The <code>id</code> of the Notification target.
 
 <a id="nestedatt--schedule--notifications--items--conf"></a>
 ### Nested Schema for `schedule.notifications.items.conf`
@@ -434,7 +434,7 @@ Optional:
 
 Required:
 
-- `name` (String)
+- `name` (String) Name of the metadata field.
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 <a id="nestedatt--schedule--notifications--items--template_target_pairs"></a>

@@ -199,7 +199,8 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 													},
 												},
 												"type": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Resource type identifier.`,
 												},
 												"watch": schema.ListNestedAttribute{
 													Computed: true,
@@ -475,7 +476,8 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Resource type identifier.`,
 							},
 							"watch": schema.ListNestedAttribute{
 								Computed: true,

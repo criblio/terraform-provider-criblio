@@ -9,6 +9,25 @@ import (
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
 
+func TestAPINameOverridesPreservesAcronyms(t *testing.T) {
+	resource := parser.ResourceDef{Fields: []parser.FieldDef{{
+		APIName:       "collector",
+		TerraformName: "collector",
+		Fields: []parser.FieldDef{{
+			APIName:       "parquetChunkSizeMB",
+			TerraformName: "parquet_chunk_size_mb",
+		}},
+	}}}
+
+	overrides := apiNameOverrides(resource)
+	if len(overrides) != 1 {
+		t.Fatalf("apiNameOverrides returned %d entries, want 1", len(overrides))
+	}
+	if overrides[0].APIName != "parquetChunkSizeMB" {
+		t.Fatalf("API name = %q, want parquetChunkSizeMB", overrides[0].APIName)
+	}
+}
+
 func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	resources := parseFixture(t)
 	ignored, err := readIgnoreFile(filepath.Join("testdata", ".codegen-ignore"))
@@ -255,7 +274,8 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, typesContent, "InUse []types.String")
 	assertContains(t, typesContent, "func (m CertificateModel) MarshalJSON()")
 	assertContains(t, typesContent, "func CertificateTerraformNameToAPIName(name string) string")
-	assertContains(t, typesContent, "output[CertificateTerraformNameToAPIName(key)] = value")
+	assertContains(t, typesContent, "apiKey := CertificateTerraformNameToAPIName(key)")
+	assertContains(t, typesContent, "output[apiKey] = value")
 	assertContains(t, typesContent, "func CertificateAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)")
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.InUse)")
 
@@ -300,6 +320,52 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, sourceResource, `"items": schema.ListNestedAttribute{`)
 	assertContains(t, sourceResource, `"input_collection": schema.SingleNestedAttribute{`)
 
+	collector := parser.ResourceDef{
+		StructName: "Collector",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{
+				GoName:             "InputCollectorAzureBlob",
+				TerraformName:      "input_collector_azure_blob",
+				ModelName:          "InputCollectorAzureBlobModel",
+				DiscriminatorValue: "azureblob",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+			{
+				GoName:             "InputCollectorGCS",
+				TerraformName:      "input_collector_gcs",
+				ModelName:          "InputCollectorGCSModel",
+				DiscriminatorValue: "gcs",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+			{
+				GoName:             "InputCollectorHealthCheck",
+				TerraformName:      "input_collector_health_check",
+				ModelName:          "InputCollectorHealthCheckModel",
+				DiscriminatorValue: "healthcheck",
+				Fields: []parser.FieldDef{
+					{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string"},
+				},
+			},
+		},
+	}
+	collectorTypes := renderTemplate(t, "types", collector)
+	assertContains(t, collectorTypes, `case "azureblob", "azure_blob":`)
+	assertContains(t, collectorTypes, `case "gcs", "google_cloud_storage":`)
+	assertContains(t, collectorTypes, `case "healthcheck", "health_check":`)
+
+	searchDatasetTypes := renderTemplate(t, "types", parser.ResourceDef{
+		StructName: "SearchDataset",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "DatasetCriblSearch", ModelName: "DatasetCriblSearchModel", DiscriminatorValue: "cribl_search"},
+		},
+	})
+	assertContains(t, searchDatasetTypes, `if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {`)
+	assertContains(t, searchDatasetTypes, `return "cribl_search"`)
+
 	searchDatasetProvider := parser.ResourceDef{
 		StructName: "SearchDatasetProvider",
 		Read: parser.OperationDef{
@@ -326,12 +392,47 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, notificationTargetTest, "func TestNotificationTarget(t *testing.T)")
 	assertContains(t, notificationTargetTest, "notificationTargetConfig(id, \"created\")")
 	assertContains(t, notificationTargetTest, "ImportStateVerifyIgnore: notificationTargetImportStateVerifyIgnore()")
+	assertContains(t, notificationTargetTest, `"sns_target.system_fields",`)
 	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
+
+	appTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "App"})
+	assertContains(t, appTest, "func TestApp(t *testing.T)")
+	assertContains(t, appTest, `os.ReadFile("../../examples/apps/main.tf")`)
+	assertContains(t, appTest, `t.Skip("Apps API is not supported on-prem")`)
+	assertNotContains(t, appTest, `time.Sleep`)
+	assertNotContains(t, appTest, `appOnPremConfig`)
+	assertContains(t, appTest, `acctest.RandStringFromCharSet`)
+	assertContains(t, appTest, `"criblio_app.create_app"`)
+	assertContains(t, appTest, `"criblio_app.import_from_file"`)
+	assertContains(t, appTest, `"criblio_app.import_from_url"`)
+	assertContains(t, appTest, `"criblio_app.import_from_git"`)
+	assertContains(t, appTest, "PlanOnly:")
+	assertNotContains(t, appTest, "CRIBL_TEST_APP_SOURCE")
+	assertNotContains(t, appTest, "Generated acceptance scaffold")
+
+	appResource := renderTemplate(t, "resource", parser.ResourceDef{
+		StructName: "App",
+		Fields: []parser.FieldDef{{
+			TerraformName:      "author",
+			GoName:             "Author",
+			Type:               "string",
+			Optional:           true,
+			Computed:           true,
+			ForceNew:           true,
+			StrictForceNew:     true,
+			UseStateForUnknown: true,
+		}},
+	})
+	assertContains(t, appResource, "stringplanmodifier.RequiresReplace()")
+	assertContains(t, appResource, "stringplanmodifier.UseStateForUnknown()")
 
 	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
 	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
 	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
+	assertContains(t, searchDatasetProviderTest, `ImportStateVerifyIgnore: []string{
+						"description",
+						"apihttp.description",`)
 	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
 
 	searchDatasetProviderTest = renderTemplate(t, "test", parser.ResourceDef{
@@ -517,6 +618,31 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, fixedDataSource, `model.ID = types.StringValue("default")`)
 	assertNotContains(t, fixedDataSource, `Required: true`)
 
+	defaultIdentity := fixedIdentity
+	defaultIdentity.StructName = "DatasetRuleset"
+	defaultIdentity.TypeName = "criblio_search_dataset_ruleset"
+	defaultIdentity.Fields = []parser.FieldDef{
+		{
+			APIName:       "id",
+			TerraformName: "id",
+			GoName:        "ID",
+			Type:          "string",
+			Optional:      true,
+			Computed:      true,
+			ForceNew:      true,
+			PathParam:     true,
+			DefaultValue:  "default",
+			Enum:          []string{"default", "metrics"},
+			ValidateEnum:  true,
+		},
+	}
+	defaultResource := renderTemplate(t, "resource", defaultIdentity)
+	assertContains(t, defaultResource, `Default: stringdefault.StaticString("default")`)
+	assertContains(t, defaultResource, `stringvalidator.OneOf("default", "metrics")`)
+	assertNotContains(t, defaultResource, `state.ID = types.StringValue("default")`)
+	defaultDataSource := renderTemplate(t, "data_source", defaultIdentity)
+	assertContains(t, defaultDataSource, `model.ID = types.StringValue("default")`)
+
 	packPipeline := parser.ResourceDef{
 		StructName: "PackPipeline",
 		TypeName:   "criblio_pack_pipeline",
@@ -646,6 +772,23 @@ func TestRenderedSnippets(t *testing.T) {
 	}
 	assertNotContains(t, fixedAPIFieldExample, "engine_type")
 	assertContains(t, fixedAPIFieldExample, `id = "engine-01"`)
+}
+
+func TestOneOfPreferStatePreservesConfiguredValue(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "Destination",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:    "OutputRouter",
+			ModelName: "OutputRouterModel",
+			Fields: []parser.FieldDef{{
+				GoName:        "Rules",
+				ApplyStrategy: "preferState",
+			}},
+		}},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, "if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown()))")
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
@@ -1129,6 +1272,22 @@ func hasSkipped(files []renderedFile, path string) bool {
 		}
 	}
 	return false
+}
+
+func TestStrictForceNewPlanModifier(t *testing.T) {
+	field := parser.FieldDef{Type: "string", ForceNew: true, StrictForceNew: true}
+	calls := planModifierCalls(field)
+	if len(calls) != 1 || calls[0] != "stringplanmodifier.RequiresReplace()" {
+		t.Fatalf("plan modifier calls = %v", calls)
+	}
+}
+
+func TestStringConflictValidator(t *testing.T) {
+	field := parser.FieldDef{Type: "string", ConflictsWith: "source"}
+	calls := stringValidatorCalls(field)
+	if len(calls) != 1 || calls[0] != `stringvalidator.ConflictsWith(path.MatchRoot("source"))` {
+		t.Fatalf("validator calls = %v", calls)
+	}
 }
 
 func assertContains(t *testing.T, content, want string) {

@@ -44,9 +44,10 @@ func (r *SchemaResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 		MarkdownDescription: "Schema Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Brief description of the JSON schema.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -58,9 +59,10 @@ func (r *SchemaResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				},
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Unique identifier for the JSON schema.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
@@ -70,8 +72,14 @@ func (r *SchemaResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `JSON schema matching standards of draft version 2019-09`,
+				Description: `JSON schema content as a string, conforming to draft version 2019-09.`,
 				CustomType:  jsontypes.NormalizedType{},
+			},
+			"tags": schema.StringAttribute{
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Tags for categorizing and filtering JSON schemas.`,
 			},
 		},
 	}
@@ -237,6 +245,11 @@ func applySchemaAPIToState(api *SchemaModel, state *SchemaModel, preserveInputs 
 	if !preserveInputs || (fillMissingInputs && (state.Schema.IsNull() || state.Schema.IsUnknown())) {
 		if !api.Schema.IsNull() && !api.Schema.IsUnknown() {
 			state.Schema = api.Schema
+		}
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
+		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
+			state.Tags = api.Tags
 		}
 	}
 }

@@ -17,71 +17,214 @@ var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
 type DatabaseConnectionModel struct {
-	AuthType          types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	ConfigObj         types.String  `tfsdk:"config_obj" json:"configObj,omitempty"`
-	ConnectionString  types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
-	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
-	CredsSecrets      types.String  `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
-	DatabaseType      types.String  `tfsdk:"database_type" json:"databaseType,omitempty"`
-	Description       types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID           types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                types.String  `tfsdk:"id" json:"id,omitempty"`
-	Password          types.String  `tfsdk:"password" json:"password,omitempty"`
-	RequestTimeout    types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
-	Tags              types.String  `tfsdk:"tags" json:"tags,omitempty"`
-	TextSecret        types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
-	User              types.String  `tfsdk:"user" json:"user,omitempty"`
+	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
+	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
+	Description       types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                types.String `tfsdk:"id" json:"id,omitempty"`
+	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	User              types.String `tfsdk:"user" json:"user,omitempty"`
 }
 
 type DatabaseConnectionResourceModel struct {
-	AuthType          types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	ConfigObj         types.String  `tfsdk:"config_obj" json:"configObj,omitempty"`
-	ConnectionString  types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
-	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
-	CredsSecrets      types.String  `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
-	DatabaseType      types.String  `tfsdk:"database_type" json:"databaseType,omitempty"`
-	Description       types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID           types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                types.String  `tfsdk:"id" json:"id,omitempty"`
-	Password          types.String  `tfsdk:"password" json:"password,omitempty"`
-	RequestTimeout    types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
-	Tags              types.String  `tfsdk:"tags" json:"tags,omitempty"`
-	TextSecret        types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
-	User              types.String  `tfsdk:"user" json:"user,omitempty"`
+	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
+	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
+	Description       types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                types.String `tfsdk:"id" json:"id,omitempty"`
+	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	User              types.String `tfsdk:"user" json:"user,omitempty"`
 }
 
 type DatabaseConnectionDataSourceModel struct {
-	AuthType          types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
-	ConfigObj         types.String  `tfsdk:"config_obj" json:"configObj,omitempty"`
-	ConnectionString  types.String  `tfsdk:"connection_string" json:"connectionString,omitempty"`
-	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
-	CredsSecrets      types.String  `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
-	DatabaseType      types.String  `tfsdk:"database_type" json:"databaseType,omitempty"`
-	Description       types.String  `tfsdk:"description" json:"description,omitempty"`
-	GroupID           types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID                types.String  `tfsdk:"id" json:"id,omitempty"`
-	Password          types.String  `tfsdk:"password" json:"password,omitempty"`
-	RequestTimeout    types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
-	Tags              types.String  `tfsdk:"tags" json:"tags,omitempty"`
-	TextSecret        types.String  `tfsdk:"text_secret" json:"textSecret,omitempty"`
-	User              types.String  `tfsdk:"user" json:"user,omitempty"`
+	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
+	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
+	Description       types.String `tfsdk:"description" json:"description,omitempty"`
+	GroupID           types.String `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID                types.String `tfsdk:"id" json:"id,omitempty"`
+	Items             types.List   `tfsdk:"items" json:"items,omitempty"`
+	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	User              types.String `tfsdk:"user" json:"user,omitempty"`
 }
 
 type DatabaseConnectionAPIModel struct {
-	AuthType          *string  `json:"authType,omitempty"`
-	ConfigObj         *string  `json:"configObj,omitempty"`
-	ConnectionString  *string  `json:"connectionString,omitempty"`
-	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
-	CredsSecrets      *string  `json:"credsSecrets,omitempty"`
-	DatabaseType      *string  `json:"databaseType,omitempty"`
-	Description       *string  `json:"description,omitempty"`
-	GroupID           *string  `json:"groupId,omitempty"`
-	ID                *string  `json:"id,omitempty"`
-	Password          *string  `json:"password,omitempty"`
-	RequestTimeout    *float64 `json:"requestTimeout,omitempty"`
-	Tags              *string  `json:"tags,omitempty"`
-	TextSecret        *string  `json:"textSecret,omitempty"`
-	User              *string  `json:"user,omitempty"`
+	AuthType          *string `json:"authType,omitempty"`
+	ConfigObj         *string `json:"configObj,omitempty"`
+	ConnectionString  *string `json:"connectionString,omitempty"`
+	ConnectionTimeout *int64  `json:"connectionTimeout,omitempty"`
+	CredsSecrets      *string `json:"credsSecrets,omitempty"`
+	DatabaseType      *string `json:"databaseType,omitempty"`
+	Description       *string `json:"description,omitempty"`
+	GroupID           *string `json:"groupId,omitempty"`
+	ID                *string `json:"id,omitempty"`
+	Items             any     `json:"items,omitempty"`
+	Password          *string `json:"password,omitempty"`
+	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Tags              *string `json:"tags,omitempty"`
+	TextSecret        *string `json:"textSecret,omitempty"`
+	TLS               any     `json:"tls,omitempty"`
+	User              *string `json:"user,omitempty"`
+}
+
+type DatabaseConnectionItemsModel struct {
+	AuthType          types.String `tfsdk:"auth_type" json:"authType,omitempty"`
+	ConfigObj         types.String `tfsdk:"config_obj" json:"configObj,omitempty"`
+	ConnectionString  types.String `tfsdk:"connection_string" json:"connectionString,omitempty"`
+	ConnectionTimeout types.Int64  `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
+	CredsSecrets      types.String `tfsdk:"creds_secrets" json:"credsSecrets,omitempty"`
+	DatabaseType      types.String `tfsdk:"database_type" json:"databaseType,omitempty"`
+	Description       types.String `tfsdk:"description" json:"description,omitempty"`
+	ID                types.String `tfsdk:"id" json:"id,omitempty"`
+	Password          types.String `tfsdk:"password" json:"password,omitempty"`
+	RequestTimeout    types.Int64  `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	Tags              types.String `tfsdk:"tags" json:"tags,omitempty"`
+	TextSecret        types.String `tfsdk:"text_secret" json:"textSecret,omitempty"`
+	TLS               types.Object `tfsdk:"tls" json:"tls,omitempty"`
+	User              types.String `tfsdk:"user" json:"user,omitempty"`
+}
+
+type DatabaseConnectionItemsAPIModel struct {
+	AuthType          *string `json:"authType,omitempty"`
+	ConfigObj         *string `json:"configObj,omitempty"`
+	ConnectionString  *string `json:"connectionString,omitempty"`
+	ConnectionTimeout *int64  `json:"connectionTimeout,omitempty"`
+	CredsSecrets      *string `json:"credsSecrets,omitempty"`
+	DatabaseType      *string `json:"databaseType,omitempty"`
+	Description       *string `json:"description,omitempty"`
+	ID                *string `json:"id,omitempty"`
+	Password          *string `json:"password,omitempty"`
+	RequestTimeout    *int64  `json:"requestTimeout,omitempty"`
+	Tags              *string `json:"tags,omitempty"`
+	TextSecret        *string `json:"textSecret,omitempty"`
+	TLS               any     `json:"tls,omitempty"`
+	User              *string `json:"user,omitempty"`
+}
+
+func DatabaseConnectionItemsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"auth_type":          types.StringType,
+		"config_obj":         types.StringType,
+		"connection_string":  types.StringType,
+		"connection_timeout": types.Int64Type,
+		"creds_secrets":      types.StringType,
+		"database_type":      types.StringType,
+		"description":        types.StringType,
+		"id":                 types.StringType,
+		"password":           types.StringType,
+		"request_timeout":    types.Int64Type,
+		"tags":               types.StringType,
+		"text_secret":        types.StringType,
+		"tls":                types.ObjectType{AttrTypes: DatabaseConnectionItemsTLSAttrTypes()},
+		"user":               types.StringType,
+	}
+}
+
+type DatabaseConnectionItemsTLSModel struct {
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Servername         types.String `tfsdk:"servername" json:"servername,omitempty"`
+}
+
+type DatabaseConnectionItemsTLSAPIModel struct {
+	CaPath             *string `json:"caPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	Disabled           *bool   `json:"disabled,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	Servername         *string `json:"servername,omitempty"`
+}
+
+func DatabaseConnectionItemsTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"ca_path":             types.StringType,
+		"cert_path":           types.StringType,
+		"certificate_name":    types.StringType,
+		"disabled":            types.BoolType,
+		"max_version":         types.StringType,
+		"min_version":         types.StringType,
+		"passphrase":          types.StringType,
+		"priv_key_path":       types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"servername":          types.StringType,
+	}
+}
+
+type DatabaseConnectionTLSModel struct {
+	CaPath             types.String `tfsdk:"ca_path" json:"caPath,omitempty"`
+	CertPath           types.String `tfsdk:"cert_path" json:"certPath,omitempty"`
+	CertificateName    types.String `tfsdk:"certificate_name" json:"certificateName,omitempty"`
+	Disabled           types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	MaxVersion         types.String `tfsdk:"max_version" json:"maxVersion,omitempty"`
+	MinVersion         types.String `tfsdk:"min_version" json:"minVersion,omitempty"`
+	Passphrase         types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
+	PrivKeyPath        types.String `tfsdk:"priv_key_path" json:"privKeyPath,omitempty"`
+	RejectUnauthorized types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
+	Servername         types.String `tfsdk:"servername" json:"servername,omitempty"`
+}
+
+type DatabaseConnectionTLSAPIModel struct {
+	CaPath             *string `json:"caPath,omitempty"`
+	CertPath           *string `json:"certPath,omitempty"`
+	CertificateName    *string `json:"certificateName,omitempty"`
+	Disabled           *bool   `json:"disabled,omitempty"`
+	MaxVersion         *string `json:"maxVersion,omitempty"`
+	MinVersion         *string `json:"minVersion,omitempty"`
+	Passphrase         *string `json:"passphrase,omitempty"`
+	PrivKeyPath        *string `json:"privKeyPath,omitempty"`
+	RejectUnauthorized *bool   `json:"rejectUnauthorized,omitempty"`
+	Servername         *string `json:"servername,omitempty"`
+}
+
+func DatabaseConnectionTLSAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"ca_path":             types.StringType,
+		"cert_path":           types.StringType,
+		"certificate_name":    types.StringType,
+		"disabled":            types.BoolType,
+		"max_version":         types.StringType,
+		"min_version":         types.StringType,
+		"passphrase":          types.StringType,
+		"priv_key_path":       types.StringType,
+		"reject_unauthorized": types.BoolType,
+		"servername":          types.StringType,
+	}
 }
 
 func DatabaseConnectionTerraformValueToJSON(value attr.Value) (any, error) {
@@ -122,7 +265,8 @@ func DatabaseConnectionTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := DatabaseConnectionTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -130,7 +274,8 @@ func DatabaseConnectionTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[DatabaseConnectionTerraformNameToAPIName(key)] = value
+			apiKey := DatabaseConnectionTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -379,6 +524,13 @@ func (m DatabaseConnectionModel) MarshalJSON() ([]byte, error) {
 		}
 		output["textSecret"] = value
 	}
+	if !m.TLS.IsNull() && !m.TLS.IsUnknown() {
+		value, err := DatabaseConnectionTerraformValueToJSON(m.TLS)
+		if err != nil {
+			return nil, fmt.Errorf("convert tls to API value: %v", err)
+		}
+		output["tls"] = value
+	}
 	if !m.User.IsNull() && !m.User.IsUnknown() {
 		value, err := DatabaseConnectionTerraformValueToJSON(m.User)
 		if err != nil {
@@ -410,9 +562,9 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 		m.ConnectionString = types.StringNull()
 	}
 	if input.ConnectionTimeout != nil {
-		m.ConnectionTimeout = types.Float64Value(*input.ConnectionTimeout)
+		m.ConnectionTimeout = types.Int64Value(*input.ConnectionTimeout)
 	} else {
-		m.ConnectionTimeout = types.Float64Null()
+		m.ConnectionTimeout = types.Int64Null()
 	}
 	if input.CredsSecrets != nil {
 		m.CredsSecrets = types.StringValue(*input.CredsSecrets)
@@ -439,15 +591,24 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if input.Items != nil {
+		value, err := DatabaseConnectionAPIValueToTerraformValue(input.Items, types.ListType{ElemType: types.ObjectType{AttrTypes: DatabaseConnectionItemsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert items from API value: %v", err)
+		}
+		m.Items = value.(types.List)
+	} else {
+		m.Items = types.ListNull(types.ObjectType{AttrTypes: DatabaseConnectionItemsAttrTypes()})
+	}
 	if input.Password != nil {
 		m.Password = types.StringValue(*input.Password)
 	} else {
 		m.Password = types.StringNull()
 	}
 	if input.RequestTimeout != nil {
-		m.RequestTimeout = types.Float64Value(*input.RequestTimeout)
+		m.RequestTimeout = types.Int64Value(*input.RequestTimeout)
 	} else {
-		m.RequestTimeout = types.Float64Null()
+		m.RequestTimeout = types.Int64Null()
 	}
 	if input.Tags != nil {
 		m.Tags = types.StringValue(*input.Tags)
@@ -458,6 +619,15 @@ func (m *DatabaseConnectionModel) UnmarshalJSON(data []byte) error {
 		m.TextSecret = types.StringValue(*input.TextSecret)
 	} else {
 		m.TextSecret = types.StringNull()
+	}
+	if input.TLS != nil {
+		value, err := DatabaseConnectionAPIValueToTerraformValue(input.TLS, types.ObjectType{AttrTypes: DatabaseConnectionTLSAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tls from API value: %v", err)
+		}
+		m.TLS = value.(types.Object)
+	} else {
+		m.TLS = types.ObjectNull(DatabaseConnectionTLSAttrTypes())
 	}
 	if input.User != nil {
 		m.User = types.StringValue(*input.User)

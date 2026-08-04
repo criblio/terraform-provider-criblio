@@ -114,7 +114,8 @@ func SecretTerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
-		for key, attribute := range typed.Attributes() {
+		attributes := typed.Attributes()
+		for key, attribute := range attributes {
 			value, err := SecretTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
@@ -122,7 +123,8 @@ func SecretTerraformValueToJSON(value attr.Value) (any, error) {
 			if value == nil {
 				continue
 			}
-			output[SecretTerraformNameToAPIName(key)] = value
+			apiKey := SecretTerraformNameToAPIName(key)
+			output[apiKey] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:

@@ -110,6 +110,9 @@ components:
 `)
 
 	writeFile(t, overlay, `actions:
+  - target: "$.paths./m/{groupId}/search/jobs.get"
+    update:
+      x-cribl-availability: cloud
   - target: "$.paths./m/{groupId}/system/certificates.post"
     update:
       x-terraform-resource: true
@@ -150,8 +153,31 @@ components:
 
 	cloudOnlyPaths := readFile(t, cloudOnlyOutput)
 	assertContains(t, cloudOnlyPaths, `"/search/datasets": true`)
-	assertNotContains(t, cloudOnlyPaths, `"/search/jobs": true`)
+	assertContains(t, cloudOnlyPaths, `"/search/jobs": true`)
 	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
+}
+
+func TestLookupTargetSupportsSequenceIndexes(t *testing.T) {
+	var document yaml.Node
+	if err := yaml.Unmarshal([]byte(`components:
+  schemas:
+    Datatype:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+`), &document); err != nil {
+		t.Fatalf("unmarshal test document: %v", err)
+	}
+
+	target, err := lookupTarget(documentMapping(&document), "$.components.schemas.Datatype.allOf.0.properties")
+	if err != nil {
+		t.Fatalf("lookup sequence target: %v", err)
+	}
+	if target.Kind != yaml.MappingNode {
+		t.Fatalf("target kind = %v, want mapping", target.Kind)
+	}
 }
 
 func TestRunMergesManagementAnnotatedPaths(t *testing.T) {

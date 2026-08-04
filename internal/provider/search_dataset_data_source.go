@@ -56,7 +56,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -71,10 +72,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -181,7 +178,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
@@ -206,10 +204,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -316,7 +310,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
@@ -341,10 +336,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -451,7 +442,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"cluster": schema.StringAttribute{
 						Computed:    true,
@@ -489,10 +481,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -599,7 +587,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"index": schema.StringAttribute{
 						Computed:    true,
@@ -622,10 +611,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -732,7 +717,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"endpoint_configs": schema.ListNestedAttribute{
 						Computed:    true,
@@ -763,10 +749,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -873,10 +855,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `Google Workspace Reports API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -892,10 +876,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1002,10 +982,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `HTTP API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1021,10 +1003,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1131,7 +1109,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"table": schema.StringAttribute{
 						Computed:    true,
@@ -1157,10 +1136,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1267,10 +1242,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `Microsoft Graph endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1286,10 +1263,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1396,10 +1369,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `Okta API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1415,10 +1390,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1525,7 +1496,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"index": schema.StringAttribute{
 						Computed:    true,
@@ -1548,10 +1520,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1658,10 +1626,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `Tailscale API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1677,10 +1647,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1787,10 +1753,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"enabled_endpoints": schema.ListAttribute{
 						Computed:    true,
+						Description: `Zoom API endpoints to activate for this Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -1806,10 +1774,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -1916,7 +1880,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -1931,10 +1896,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2041,7 +2002,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -2068,10 +2030,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2178,7 +2136,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"filter": schema.StringAttribute{
 						Computed:    true,
@@ -2186,10 +2145,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					},
 					"fleets": schema.ListAttribute{
 						Computed:    true,
+						Description: `The Cribl Edge Fleets to query. Use <code>*</code> to query all Fleets.`,
 						ElementType: types.StringType,
 					},
 					"partitioning_scheme": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 					},
 					"path": schema.StringAttribute{
 						Computed:    true,
@@ -2208,10 +2169,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2314,7 +2271,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -2329,10 +2287,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2439,10 +2393,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"extra_paths": schema.ListNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Additional path entries searched beyond the primary path.`,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"filter": schema.StringAttribute{
@@ -2477,10 +2433,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2583,7 +2535,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -2598,10 +2551,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2708,10 +2657,12 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"datasets": schema.ListAttribute{
 						Computed:    true,
+						Description: `Member Datasets that make up this composite Dataset.`,
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -2727,10 +2678,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2837,7 +2784,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -2852,10 +2800,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -2956,13 +2900,89 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Lakehouse cache view name, when applicable.`,
 					},
+					"stale_channel_flush_ms": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Time, in milliseconds, after which an inactive ingest channel is flushed.`,
+					},
+					"retention_period": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Dataset retention period, in days.`,
+					},
+					"expected_relative_time_range": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Expected relative time range for events stored in the Dataset.`,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Computed:    true,
+								Description: `Earliest expected event time, expressed as a relative duration.`,
+							},
+							"latest": schema.StringAttribute{
+								Computed:    true,
+								Description: `Latest expected event time, expressed as a relative duration.`,
+							},
+						},
+					},
+					"engine": schema.StringAttribute{
+						Computed:    true,
+						Description: `Identifier for the Lakehouse engine linked to the Dataset.`,
+					},
+					"event_storage_schema_version": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Event storage schema version used by the Dataset.`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether searches skip filtering events by event time.`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Computed:    true,
+						Description: `Storage classes that apply to the Dataset.`,
+						ElementType: types.StringType,
+					},
+					"partitioning_scheme": schema.StringAttribute{
+						Computed:    true,
+						Description: `Partitioning scheme used by the Dataset.`,
+					},
+					"auto_detect_region": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to automatically detect the storage region.`,
+					},
+					"engine_deleted": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the linked Lakehouse engine no longer exists.`,
+					},
+					"favorites": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Users who marked the Dataset as a favorite, and when.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"time": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Timestamp (in Unix time) when the favorite was recorded.`,
+								},
+								"user_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The <code>id</code> of the user who set the Dataset as a favorite.`,
+								},
+							},
+						},
+					},
+					"favorite_count": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Number of users who marked the Dataset as a favorite.`,
+					},
+					"is_favorited": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the requesting user marked the Dataset as a favorite.`,
+					},
 				},
 			},
 			"gcs_dataset": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"bucket": schema.StringAttribute{
 						Computed:    true,
@@ -2982,7 +3002,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 									Description: `Filter expression evaluated against each object path under the bucket.`,
 								},
 								"partitioning_scheme": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -2996,7 +3017,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Description: `Filter expression that is evaluated against each object path to determine inclusion.`,
 					},
 					"partitioning_scheme": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Partitioning scheme Cribl uses to locate objects within the bucket or path.`,
 					},
 					"region": schema.StringAttribute{
 						Computed:    true,
@@ -3024,10 +3046,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -3130,7 +3148,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"desired_num_data_points": schema.Int64Attribute{
 						Computed:    true,
@@ -3157,10 +3176,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -3267,7 +3282,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -3282,10 +3298,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,
@@ -3426,6 +3438,53 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Templated path under which to look for data.`,
 					},
+					"paths": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Bucket paths and datatype filters used by search execution v2.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"auto_detect_region": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to automatically detect the bucket region.`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 bucket name.`,
+								},
+								"filters": schema.ListNestedAttribute{
+									Computed:    true,
+									Description: `Glob-to-Datatype mappings for this bucket path.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"data_path_format": schema.StringAttribute{
+												Computed:    true,
+												Description: `Row format for Search v2 Lake path filters.`,
+											},
+											"data_type_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Datatype identifier that maps filtered objects to a data type definition.`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Description: `Glob pattern for selecting files within the storage path.`,
+											},
+											"preprocess_outer_json": schema.BoolAttribute{
+												Computed:    true,
+												Description: `When true, instructs the C++ reader to unwrap the outer JSON envelope before applying the user datatype to the nested _raw field. Set for Cribl Lake NDJSON filters only.`,
+											},
+										},
+									},
+								},
+								"partitioning_scheme": schema.StringAttribute{
+									Computed: true,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS region where the bucket is located.`,
+								},
+							},
+						},
+					},
 					"region": schema.StringAttribute{
 						Computed:    true,
 						Description: `AWS region where the bucket is located.`,
@@ -3445,7 +3504,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resource type identifier.`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -3484,10 +3544,6 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 								Computed:    true,
 								Description: `Accelerated fields (materialized columns) for the cache connection.`,
 								ElementType: types.StringType,
-							},
-							"backfill_status": schema.StringAttribute{
-								Computed:    true,
-								Description: `Backfill status for data being loaded into the cache.`,
 							},
 							"cache_ref": schema.StringAttribute{
 								Computed:    true,

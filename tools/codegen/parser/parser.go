@@ -162,6 +162,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		OperationID:    scalarValue(operation, "operationId"),
 		RequestSchema:  schemaRefName(requestSchema(operation)),
 		ResponseSchema: schemaRefName(responseSchema(operation)),
+		ResponseItem:   boolAnnotation(operation, "x-terraform-response-item"),
 		PathParams:     pathParams(operation),
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
@@ -186,17 +187,32 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 		return fmt.Errorf("resource %q schema %q not found", resource.Name, schemaName)
 	}
 
-	postFields := schemaPropertySet(schema)
+	postFields, err := resolvedSchemaPropertySet(schema, schemas)
+	if err != nil {
+		return err
+	}
 	updateFields := map[string]bool{}
 	if resource.Update.RequestSchema != "" {
 		if updateSchema, ok := mappingValue(schemas, resource.Update.RequestSchema); ok {
-			updateFields = schemaPropertySet(updateSchema)
+			updateFields, err = resolvedSchemaPropertySet(updateSchema, schemas)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	getFields := map[string]bool{}
-	if resource.Read.ResponseSchema != "" {
-		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
-			getFields = schemaPropertySet(readSchema)
+	readSchemaName := resource.Read.ResponseSchema
+	if resource.Read.ResponseItem {
+		if response, ok := mappingValue(schemas, readSchemaName); ok {
+			readSchemaName = listItemSchemaRefName(response)
+		}
+	}
+	if readSchemaName != "" {
+		if readSchema, ok := mappingValue(schemas, readSchemaName); ok {
+			getFields, err = resolvedSchemaPropertySet(readSchema, schemas)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -204,8 +220,8 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	if resource.Read.ResponseSchema != "" && resource.Read.ResponseSchema != resource.SchemaName {
-		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
+	if readSchemaName != "" && readSchemaName != resource.SchemaName {
+		if readSchema, ok := mappingValue(schemas, readSchemaName); ok {
 			readFields, readVariants, err := parseSchemaFields(resource.StructName, readSchema, schemas, postFields, updateFields, getFields)
 			if err != nil {
 				return err
@@ -628,6 +644,7 @@ func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]On
 
 func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, requestField, updateField, getField bool) {
 	field.RequestField = requestField
+	field.RequestComputed = boolAnnotation(property, "x-terraform-request-computed")
 	field.UpdateField = updateField
 	field.Required = required
 	field.Optional = !field.Required
@@ -659,8 +676,23 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 	if boolAnnotation(property, "x-terraform-force-new") {
 		field.ForceNew = true
 	}
+	if boolAnnotation(property, "x-terraform-force-new-always") {
+		field.ForceNew = true
+		field.StrictForceNew = true
+	}
+	if boolAnnotation(property, "x-terraform-local-only") {
+		field.RequestField = false
+		field.UpdateField = false
+	}
+	field.ConflictsWith = scalarValue(property, "x-terraform-conflicts-with")
 	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
 		field.FixedValue = fixedValue
+		field.Required = false
+		field.Optional = true
+		field.Computed = true
+	}
+	if defaultValue := scalarValue(property, "x-terraform-default-value"); defaultValue != "" {
+		field.DefaultValue = defaultValue
 		field.Required = false
 		field.Optional = true
 		field.Computed = true
@@ -720,6 +752,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		),
 		EmitEmpty:    boolAnnotation(property, "x-terraform-emit-empty"),
 		FixedValue:   fixedValueAnnotation(property),
+		DefaultValue: scalarValue(property, "x-terraform-default-value"),
 		ObjectAsJSON: boolAnnotation(property, "x-terraform-object-as-json"),
 		NotNull:      boolAnnotation(property, "x-terraform-not-null"),
 		ValidJSON:    boolAnnotation(property, "x-terraform-valid-json"),
@@ -729,7 +762,11 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		),
 		ReadOnly:  boolAnnotation(property, "readOnly"),
 		WriteOnly: boolAnnotation(property, "writeOnly"),
-		Enum:      enumValues(property),
+		Enum:      enumValues(schemaForType),
+		ValidateEnum: boolAnnotation(
+			property,
+			"x-terraform-enum-validator",
+		),
 	}
 	if field.Type == "array" && field.ElementType == "object" {
 		items, ok := mappingValue(schemaForType, "items")
@@ -963,7 +1000,7 @@ func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					if fields[index].FixedValue == "" {
+					if fields[index].FixedValue == "" && fields[index].DefaultValue == "" {
 						fields[index].Required = true
 						fields[index].Optional = false
 						fields[index].Computed = false
@@ -1042,7 +1079,7 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					if fields[index].FixedValue == "" {
+					if fields[index].FixedValue == "" && fields[index].DefaultValue == "" {
 						fields[index].Required = true
 						fields[index].Optional = false
 						fields[index].Computed = false
@@ -1245,6 +1282,17 @@ func schemaPropertySet(schema *yaml.Node) map[string]bool {
 		set[properties.Content[index].Value] = true
 	}
 	return set
+}
+
+func resolvedSchemaPropertySet(schema, schemas *yaml.Node) (map[string]bool, error) {
+	resolved, ok, err := objectSchema(schema, schemas)
+	if err != nil {
+		return nil, err
+	}
+	if ok {
+		return schemaPropertySet(resolved), nil
+	}
+	return schemaPropertySet(schema), nil
 }
 
 func requiredSet(schema *yaml.Node) map[string]bool {

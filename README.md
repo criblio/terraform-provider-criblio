@@ -328,6 +328,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_search_dataset](docs/resources/search_dataset.md)
 * [criblio_search_dataset_provider](docs/resources/search_dataset_provider.md)
 * [criblio_search_dataset_ruleset](docs/resources/search_dataset_ruleset.md)
+* [criblio_search_datatype](docs/resources/search_datatype.md)
 * [criblio_search_datatype_ruleset](docs/resources/search_datatype_ruleset.md)
 * [criblio_search_engine](docs/resources/search_engine.md)
 * [criblio_search_macro](docs/resources/search_macro.md)

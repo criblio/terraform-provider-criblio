@@ -50,34 +50,39 @@ func (r *DeployResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				},
 			},
 			"lookups": schema.ListNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Optional list of lookup file deployments to include with the commit deployment.`,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"context": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Lookup context to deploy. Use <code>cribl</code> for the default context or a Pack <code>id</code> for Pack lookups.`,
 						},
 						"lookups": schema.ListNestedAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `List of lookup files to deploy in this context.`,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"file": schema.StringAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Unique identifier (file name) of the lookup to deploy.`,
 									},
 									"version": schema.StringAttribute{
-										Required: true,
-										Optional: false,
-										Computed: false,
+										Required:    true,
+										Optional:    false,
+										Computed:    false,
+										Description: `Version of the lookup file to deploy.`,
 									},
 								},
 							},
@@ -86,9 +91,10 @@ func (r *DeployResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				},
 			},
 			"version": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Commit hash to deploy to the Worker Group, Outpost Group, or Edge Fleet.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
