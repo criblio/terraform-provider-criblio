@@ -269,6 +269,7 @@ func (p *CriblioProvider) Actions(_ context.Context) []func() action.Action {
 
 func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewAppResource,
 		NewAppscopeConfigResource,
 		NewCertificateResource,
 		NewCollectorResource,
@@ -326,6 +327,7 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 
 func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewAppDataSource,
 		NewAppscopeConfigDataSource,
 		NewCertificateDataSource,
 		NewCertificatesDataSource,

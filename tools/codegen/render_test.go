@@ -395,6 +395,37 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, notificationTargetTest, `"sns_target.system_fields",`)
 	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
 
+	appTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "App"})
+	assertContains(t, appTest, "func TestApp(t *testing.T)")
+	assertContains(t, appTest, `os.ReadFile("../../examples/apps/main.tf")`)
+	assertContains(t, appTest, `t.Skip("Apps API is not supported on-prem")`)
+	assertNotContains(t, appTest, `time.Sleep`)
+	assertNotContains(t, appTest, `appOnPremConfig`)
+	assertContains(t, appTest, `acctest.RandStringFromCharSet`)
+	assertContains(t, appTest, `"criblio_app.create_app"`)
+	assertContains(t, appTest, `"criblio_app.import_from_file"`)
+	assertContains(t, appTest, `"criblio_app.import_from_url"`)
+	assertContains(t, appTest, `"criblio_app.import_from_git"`)
+	assertContains(t, appTest, "PlanOnly:")
+	assertNotContains(t, appTest, "CRIBL_TEST_APP_SOURCE")
+	assertNotContains(t, appTest, "Generated acceptance scaffold")
+
+	appResource := renderTemplate(t, "resource", parser.ResourceDef{
+		StructName: "App",
+		Fields: []parser.FieldDef{{
+			TerraformName:      "author",
+			GoName:             "Author",
+			Type:               "string",
+			Optional:           true,
+			Computed:           true,
+			ForceNew:           true,
+			StrictForceNew:     true,
+			UseStateForUnknown: true,
+		}},
+	})
+	assertContains(t, appResource, "stringplanmodifier.RequiresReplace()")
+	assertContains(t, appResource, "stringplanmodifier.UseStateForUnknown()")
+
 	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
 	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
@@ -1241,6 +1272,22 @@ func hasSkipped(files []renderedFile, path string) bool {
 		}
 	}
 	return false
+}
+
+func TestStrictForceNewPlanModifier(t *testing.T) {
+	field := parser.FieldDef{Type: "string", ForceNew: true, StrictForceNew: true}
+	calls := planModifierCalls(field)
+	if len(calls) != 1 || calls[0] != "stringplanmodifier.RequiresReplace()" {
+		t.Fatalf("plan modifier calls = %v", calls)
+	}
+}
+
+func TestStringConflictValidator(t *testing.T) {
+	field := parser.FieldDef{Type: "string", ConflictsWith: "source"}
+	calls := stringValidatorCalls(field)
+	if len(calls) != 1 || calls[0] != `stringvalidator.ConflictsWith(path.MatchRoot("source"))` {
+		t.Fatalf("validator calls = %v", calls)
+	}
 }
 
 func assertContains(t *testing.T, content, want string) {

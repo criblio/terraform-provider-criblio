@@ -974,7 +974,7 @@ func needsValidator(resource parser.ResourceDef) bool {
 
 func needsStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0) && field.Type == "string" {
+		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0 || field.ConflictsWith != "") && field.Type == "string" {
 			return true
 		}
 	}
@@ -1400,7 +1400,11 @@ func planModifierCalls(field parser.FieldDef) []string {
 	}
 	var calls []string
 	if field.ForceNew {
-		calls = append(calls, fmt.Sprintf("%splanmodifier.RequiresReplaceIfConfigured()", frameworkPlanModifierKind(field)))
+		modifier := "RequiresReplaceIfConfigured"
+		if field.StrictForceNew {
+			modifier = "RequiresReplace"
+		}
+		calls = append(calls, fmt.Sprintf("%splanmodifier.%s()", frameworkPlanModifierKind(field), modifier))
 	}
 	if field.UseStateForUnknown {
 		calls = append(calls, fmt.Sprintf("%splanmodifier.UseStateForUnknown()", frameworkPlanModifierKind(field)))
@@ -1434,6 +1438,9 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	}
 	if field.PipelineFunctionID {
 		calls = append(calls, "custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client)")
+	}
+	if field.ConflictsWith != "" {
+		calls = append(calls, fmt.Sprintf("stringvalidator.ConflictsWith(path.MatchRoot(%q))", field.ConflictsWith))
 	}
 	return calls
 }

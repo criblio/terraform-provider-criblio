@@ -110,6 +110,9 @@ components:
 `)
 
 	writeFile(t, overlay, `actions:
+  - target: "$.paths./m/{groupId}/search/jobs.get"
+    update:
+      x-cribl-availability: cloud
   - target: "$.paths./m/{groupId}/system/certificates.post"
     update:
       x-terraform-resource: true
@@ -150,7 +153,7 @@ components:
 
 	cloudOnlyPaths := readFile(t, cloudOnlyOutput)
 	assertContains(t, cloudOnlyPaths, `"/search/datasets": true`)
-	assertNotContains(t, cloudOnlyPaths, `"/search/jobs": true`)
+	assertContains(t, cloudOnlyPaths, `"/search/jobs": true`)
 	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
 }
 

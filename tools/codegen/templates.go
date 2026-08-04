@@ -1006,21 +1006,31 @@ package provider
 
 import (
 	"context"
+{{- if eq .StructName "App" }}
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
+	"encoding/json"
+{{- end }}
 {{- if eq .StructName "PackPipeline" }}
 	"errors"
 {{- end }}
 {{- if needsClientFmt . }}
 	"fmt"
 {{- end }}
-{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
+{{- if or (resourceHasQueryParams .) (eq .StructName "App") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"net/url"
+{{- end }}
+{{- if eq .StructName "App" }}
+	"os"
+	"path/filepath"
 {{- end }}
 {{- if or (eq .StructName "LookupFile") (eq .StructName "PackPipeline") }}
 	"strings"
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
+{{- if or (eq .StructName "App") (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 {{- end }}
 )
@@ -1082,6 +1092,26 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- else if .NoRead }}
 	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
+{{- else if eq .StructName "App" }}
+	if !model.Filename.IsNull() && !model.Filename.IsUnknown() && model.Filename.ValueString() != "" {
+		source, err := a.upload(ctx, model.Filename.ValueString())
+		if err != nil {
+			return nil, err
+		}
+		model.Source = types.StringValue(source)
+	} else if model.Source.IsNull() || model.Source.IsUnknown() || model.Source.ValueString() == "" {
+		content, err := createAppArchive(model)
+		if err != nil {
+			return nil, err
+		}
+		filename := model.ID.ValueString() + ".tgz"
+		source, err := a.uploadContent(ctx, filename, content)
+		if err != nil {
+			return nil, err
+		}
+		model.Source = types.StringValue(source)
+	}
+	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, "/apps", model)
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
@@ -1114,11 +1144,106 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- end }}
 }
 
+{{- if eq .StructName "App" }}
+func (a AppAPI) upload(ctx context.Context, filename string) (string, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return "", fmt.Errorf("read app archive %q: %w", filename, err)
+	}
+	return a.uploadContent(ctx, filepath.Base(filename), content)
+}
+
+func (a AppAPI) uploadContent(ctx context.Context, filename string, content []byte) (string, error) {
+	query := url.Values{"filename": []string{filename}}
+	body, err := restclient.PutRaw(ctx, a.client, "/apps?"+query.Encode(), "application/octet-stream", content)
+	if err != nil {
+		return "", fmt.Errorf("upload app archive %q: %w", filename, err)
+	}
+	var response struct {
+		Source string ` + "`json:\"source\"`" + `
+	}
+	if err := json.Unmarshal(body, &response); err != nil {
+		return "", fmt.Errorf("decode app upload response: %w", err)
+	}
+	if response.Source == "" {
+		return "", fmt.Errorf("app upload response did not include source")
+	}
+	return response.Source, nil
+}
+
+func createAppArchive(model AppModel) ([]byte, error) {
+	manifest := map[string]any{
+		"name":        model.ID.ValueString(),
+		"version":     "0.0.1",
+		"displayName": model.ID.ValueString(),
+		"cribl":       map[string]any{"type": "app"},
+	}
+	if !model.Version.IsNull() && !model.Version.IsUnknown() && model.Version.ValueString() != "" {
+		manifest["version"] = model.Version.ValueString()
+	}
+	if !model.DisplayName.IsNull() && !model.DisplayName.IsUnknown() && model.DisplayName.ValueString() != "" {
+		manifest["displayName"] = model.DisplayName.ValueString()
+	}
+	if !model.Author.IsNull() && !model.Author.IsUnknown() {
+		manifest["author"] = model.Author.ValueString()
+	}
+	if !model.Description.IsNull() && !model.Description.IsUnknown() {
+		manifest["description"] = model.Description.ValueString()
+	}
+	packageJSON, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("encode generated app manifest: %w", err)
+	}
+
+	var output bytes.Buffer
+	gzipWriter := gzip.NewWriter(&output)
+	tarWriter := tar.NewWriter(gzipWriter)
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "static/", Mode: 0o755, Typeflag: tar.TypeDir}); err != nil {
+		return nil, fmt.Errorf("write generated app static directory: %w", err)
+	}
+	files := []struct {
+		name string
+		body []byte
+	}{
+		{name: "package.json", body: packageJSON},
+		{name: "static/index.html", body: []byte("<!doctype html><html><head><meta charset=\"utf-8\"><title>Cribl App</title></head><body><main id=\"app\"></main></body></html>")},
+	}
+	for _, file := range files {
+		header := &tar.Header{Name: file.name, Mode: 0o644, Size: int64(len(file.body))}
+		if err := tarWriter.WriteHeader(header); err != nil {
+			return nil, fmt.Errorf("write generated app archive header: %w", err)
+		}
+		if _, err := tarWriter.Write(file.body); err != nil {
+			return nil, fmt.Errorf("write generated app archive content: %w", err)
+		}
+	}
+	if err := tarWriter.Close(); err != nil {
+		return nil, fmt.Errorf("close generated app tar archive: %w", err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		return nil, fmt.Errorf("close generated app gzip archive: %w", err)
+	}
+	return output.Bytes(), nil
+}
+{{- end }}
+
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
-{{- if eq .StructName "Key" }}
+{{- if eq .StructName "App" }}
+	id := model.ID.ValueString()
+	items, err := restclient.Get[[]AppModel](ctx, a.client, "/apps")
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range *items {
+		if item.ID.ValueString() == id {
+			return &item, nil
+		}
+	}
+	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/apps/%s", id)}
+{{- else if eq .StructName "Key" }}
 	id := keyAPIID(model)
 	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))
 	if err != nil {
@@ -2517,7 +2642,74 @@ const testTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
 
 package tests
 
-{{- if eq .Name "certificate" }}
+{{- if eq .StructName "App" }}
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestApp(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Apps API is not supported on-prem")
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	createID := "tf-created-" + suffix
+	fileID := "tf-file-" + suffix
+	urlID := "tf-url-" + suffix
+	gitID := "tf-git-" + suffix
+	configText := appExampleConfig(t, createID, fileID, urlID, gitID)
+
+	checks := []resource.TestCheckFunc{
+		resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", urlID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
+		resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
+	}
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: configText,
+				Check:  resource.ComposeAggregateTestCheckFunc(checks...),
+			},
+			{
+				Config:   configText,
+				PlanOnly: true,
+			},
+		},
+	})
+}
+
+func appExampleConfig(t *testing.T, createID, fileID, urlID, gitID string) string {
+	t.Helper()
+	content, err := os.ReadFile("../../examples/apps/main.tf")
+	if err != nil {
+		t.Fatalf("read App example: %v", err)
+	}
+	archive, err := filepath.Abs("../../examples/apps/terraform-example-app-1.0.0.tgz")
+	if err != nil {
+		t.Fatalf("resolve App archive: %v", err)
+	}
+	replacer := strings.NewReplacer(
+		` + "`" + `abspath("${path.module}/terraform-example-app-1.0.0.tgz")` + "`" + `, fmt.Sprintf("%q", archive),
+		"terraform-created-app", createID,
+		"terraform-example-app", fileID,
+		"url-imported-app", urlID,
+		"git-repository-example", gitID,
+	)
+	return replacer.Replace(string(content))
+}
+
+{{- else if eq .Name "certificate" }}
 import (
 {{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"

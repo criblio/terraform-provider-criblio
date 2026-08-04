@@ -109,6 +109,7 @@ var importMetadataBase = map[string]ResourceMetadata{
 }
 
 var importMetadataOverrides = map[string]ResourceMetadata{
+	"criblio_app":                          {ImportIDFormat: "id", RESTListPath: "/apps", RESTGetPath: "/apps/{id}"},
 	"criblio_appscope_config":              {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/appscope-configs", RESTGetPath: "/m/{group_id}/lib/appscope-configs/{id}"},
 	"criblio_collector":                    {ListMethod: "ListCollectors", ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/jobs", RESTGetPath: "/m/{group_id}/lib/jobs/{id}"},
 	"criblio_cribl_lake_house":             {ListMethod: "ListDefaultLakeLakehouses", ImportIDFormat: "id", RESTListPath: "/products/lake/lakes/default/lakehouses", RESTGetPath: "/products/lake/lakes/default/lakehouses/{id}"},
