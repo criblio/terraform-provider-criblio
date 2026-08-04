@@ -48,7 +48,7 @@ func (a AppAPI) Create(ctx context.Context, model AppModel) (*AppModel, error) {
 func (a AppAPI) upload(ctx context.Context, filename string) (string, error) {
 	content, err := os.ReadFile(filename)
 	if err != nil {
-		return "", fmt.Errorf("read App archive %q: %w", filename, err)
+		return "", fmt.Errorf("read app archive %q: %w", filename, err)
 	}
 	return a.uploadContent(ctx, filepath.Base(filename), content)
 }
@@ -57,16 +57,16 @@ func (a AppAPI) uploadContent(ctx context.Context, filename string, content []by
 	query := url.Values{"filename": []string{filename}}
 	body, err := restclient.PutRaw(ctx, a.client, "/apps?"+query.Encode(), "application/octet-stream", content)
 	if err != nil {
-		return "", fmt.Errorf("upload App archive %q: %w", filename, err)
+		return "", fmt.Errorf("upload app archive %q: %w", filename, err)
 	}
 	var response struct {
 		Source string `json:"source"`
 	}
 	if err := json.Unmarshal(body, &response); err != nil {
-		return "", fmt.Errorf("decode App upload response: %w", err)
+		return "", fmt.Errorf("decode app upload response: %w", err)
 	}
 	if response.Source == "" {
-		return "", fmt.Errorf("App upload response did not include source")
+		return "", fmt.Errorf("app upload response did not include source")
 	}
 	return response.Source, nil
 }
@@ -92,14 +92,14 @@ func createAppArchive(model AppModel) ([]byte, error) {
 	}
 	packageJSON, err := json.MarshalIndent(manifest, "", "  ")
 	if err != nil {
-		return nil, fmt.Errorf("encode generated App manifest: %w", err)
+		return nil, fmt.Errorf("encode generated app manifest: %w", err)
 	}
 
 	var output bytes.Buffer
 	gzipWriter := gzip.NewWriter(&output)
 	tarWriter := tar.NewWriter(gzipWriter)
 	if err := tarWriter.WriteHeader(&tar.Header{Name: "static/", Mode: 0o755, Typeflag: tar.TypeDir}); err != nil {
-		return nil, fmt.Errorf("write generated App static directory: %w", err)
+		return nil, fmt.Errorf("write generated app static directory: %w", err)
 	}
 	files := []struct {
 		name string
@@ -111,17 +111,17 @@ func createAppArchive(model AppModel) ([]byte, error) {
 	for _, file := range files {
 		header := &tar.Header{Name: file.name, Mode: 0o644, Size: int64(len(file.body))}
 		if err := tarWriter.WriteHeader(header); err != nil {
-			return nil, fmt.Errorf("write generated App archive header: %w", err)
+			return nil, fmt.Errorf("write generated app archive header: %w", err)
 		}
 		if _, err := tarWriter.Write(file.body); err != nil {
-			return nil, fmt.Errorf("write generated App archive content: %w", err)
+			return nil, fmt.Errorf("write generated app archive content: %w", err)
 		}
 	}
 	if err := tarWriter.Close(); err != nil {
-		return nil, fmt.Errorf("close generated App tar archive: %w", err)
+		return nil, fmt.Errorf("close generated app tar archive: %w", err)
 	}
 	if err := gzipWriter.Close(); err != nil {
-		return nil, fmt.Errorf("close generated App gzip archive: %w", err)
+		return nil, fmt.Errorf("close generated app gzip archive: %w", err)
 	}
 	return output.Bytes(), nil
 }

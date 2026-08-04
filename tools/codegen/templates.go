@@ -1148,7 +1148,7 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 func (a AppAPI) upload(ctx context.Context, filename string) (string, error) {
 	content, err := os.ReadFile(filename)
 	if err != nil {
-		return "", fmt.Errorf("read App archive %q: %w", filename, err)
+		return "", fmt.Errorf("read app archive %q: %w", filename, err)
 	}
 	return a.uploadContent(ctx, filepath.Base(filename), content)
 }
@@ -1157,16 +1157,16 @@ func (a AppAPI) uploadContent(ctx context.Context, filename string, content []by
 	query := url.Values{"filename": []string{filename}}
 	body, err := restclient.PutRaw(ctx, a.client, "/apps?"+query.Encode(), "application/octet-stream", content)
 	if err != nil {
-		return "", fmt.Errorf("upload App archive %q: %w", filename, err)
+		return "", fmt.Errorf("upload app archive %q: %w", filename, err)
 	}
 	var response struct {
 		Source string ` + "`json:\"source\"`" + `
 	}
 	if err := json.Unmarshal(body, &response); err != nil {
-		return "", fmt.Errorf("decode App upload response: %w", err)
+		return "", fmt.Errorf("decode app upload response: %w", err)
 	}
 	if response.Source == "" {
-		return "", fmt.Errorf("App upload response did not include source")
+		return "", fmt.Errorf("app upload response did not include source")
 	}
 	return response.Source, nil
 }
@@ -1192,14 +1192,14 @@ func createAppArchive(model AppModel) ([]byte, error) {
 	}
 	packageJSON, err := json.MarshalIndent(manifest, "", "  ")
 	if err != nil {
-		return nil, fmt.Errorf("encode generated App manifest: %w", err)
+		return nil, fmt.Errorf("encode generated app manifest: %w", err)
 	}
 
 	var output bytes.Buffer
 	gzipWriter := gzip.NewWriter(&output)
 	tarWriter := tar.NewWriter(gzipWriter)
 	if err := tarWriter.WriteHeader(&tar.Header{Name: "static/", Mode: 0o755, Typeflag: tar.TypeDir}); err != nil {
-		return nil, fmt.Errorf("write generated App static directory: %w", err)
+		return nil, fmt.Errorf("write generated app static directory: %w", err)
 	}
 	files := []struct {
 		name string
@@ -1211,17 +1211,17 @@ func createAppArchive(model AppModel) ([]byte, error) {
 	for _, file := range files {
 		header := &tar.Header{Name: file.name, Mode: 0o644, Size: int64(len(file.body))}
 		if err := tarWriter.WriteHeader(header); err != nil {
-			return nil, fmt.Errorf("write generated App archive header: %w", err)
+			return nil, fmt.Errorf("write generated app archive header: %w", err)
 		}
 		if _, err := tarWriter.Write(file.body); err != nil {
-			return nil, fmt.Errorf("write generated App archive content: %w", err)
+			return nil, fmt.Errorf("write generated app archive content: %w", err)
 		}
 	}
 	if err := tarWriter.Close(); err != nil {
-		return nil, fmt.Errorf("close generated App tar archive: %w", err)
+		return nil, fmt.Errorf("close generated app tar archive: %w", err)
 	}
 	if err := gzipWriter.Close(); err != nil {
-		return nil, fmt.Errorf("close generated App gzip archive: %w", err)
+		return nil, fmt.Errorf("close generated app gzip archive: %w", err)
 	}
 	return output.Bytes(), nil
 }
@@ -2632,32 +2632,87 @@ package tests
 
 {{- if eq .StructName "App" }}
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestApp(t *testing.T) {
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	createID := "tf-created-" + suffix
+	fileID := "tf-file-" + suffix
+	urlID := "tf-url-" + suffix
+	gitID := "tf-git-" + suffix
+	configText := appExampleConfig(t, createID, fileID, urlID, gitID)
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		configText = appOnPremConfig(urlID, gitID)
+	}
+
+	checks := []resource.TestCheckFunc{
+		resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", urlID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
+	}
+	if os.Getenv("DEPLOYMENT") != "onprem" {
+		checks = append(checks,
+			resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
+			resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
+		)
+	}
+
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				ConfigDirectory: config.StaticDirectory("../../examples/apps"),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("criblio_app.create_app", "id", "terraform-created-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", "terraform-example-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", "url-imported-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", "git-repository-example"),
-				),
+				Config: configText,
+				Check:  resource.ComposeAggregateTestCheckFunc(checks...),
 			},
 			{
-				ConfigDirectory: config.StaticDirectory("../../examples/apps"),
-				PlanOnly:         true,
+				Config:   configText,
+				PlanOnly: true,
 			},
 		},
 	})
+}
+
+func appExampleConfig(t *testing.T, createID, fileID, urlID, gitID string) string {
+	t.Helper()
+	content, err := os.ReadFile("../../examples/apps/main.tf")
+	if err != nil {
+		t.Fatalf("read App example: %v", err)
+	}
+	archive, err := filepath.Abs("../../examples/apps/terraform-example-app-1.0.0.tgz")
+	if err != nil {
+		t.Fatalf("resolve App archive: %v", err)
+	}
+	replacer := strings.NewReplacer(
+		` + "`" + `abspath("${path.module}/terraform-example-app-1.0.0.tgz")` + "`" + `, fmt.Sprintf("%q", archive),
+		"terraform-created-app", createID,
+		"terraform-example-app", fileID,
+		"url-imported-app", urlID,
+		"git-repository-example", gitID,
+	)
+	return replacer.Replace(string(content))
+}
+
+func appOnPremConfig(urlID, gitID string) string {
+	return fmt.Sprintf(` + "`" + `resource "criblio_app" "import_from_url" {
+  id     = %[1]q
+  source = "https://github.com/criblio/apm/releases/download/v0.10.0/apm-0.10.0.tgz"
+  force  = true
+}
+
+resource "criblio_app" "import_from_git" {
+  id         = %[2]q
+  source     = "git+https://github.com/criblapps/cribl-ai-o11y.git"
+  depends_on = [criblio_app.import_from_url]
+}
+` + "`" + `, urlID, gitID)
 }
 {{- else if eq .Name "certificate" }}
 import (

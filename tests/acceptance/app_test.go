@@ -3,30 +3,85 @@
 package tests
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestApp(t *testing.T) {
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	createID := "tf-created-" + suffix
+	fileID := "tf-file-" + suffix
+	urlID := "tf-url-" + suffix
+	gitID := "tf-git-" + suffix
+	configText := appExampleConfig(t, createID, fileID, urlID, gitID)
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		configText = appOnPremConfig(urlID, gitID)
+	}
+
+	checks := []resource.TestCheckFunc{
+		resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", urlID),
+		resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", gitID),
+	}
+	if os.Getenv("DEPLOYMENT") != "onprem" {
+		checks = append(checks,
+			resource.TestCheckResourceAttr("criblio_app.create_app", "id", createID),
+			resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", fileID),
+		)
+	}
+
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				ConfigDirectory: config.StaticDirectory("../../examples/apps"),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("criblio_app.create_app", "id", "terraform-created-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_file", "id", "terraform-example-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_url", "id", "url-imported-app"),
-					resource.TestCheckResourceAttr("criblio_app.import_from_git", "id", "git-repository-example"),
-				),
+				Config: configText,
+				Check:  resource.ComposeAggregateTestCheckFunc(checks...),
 			},
 			{
-				ConfigDirectory: config.StaticDirectory("../../examples/apps"),
-				PlanOnly:        true,
+				Config:   configText,
+				PlanOnly: true,
 			},
 		},
 	})
+}
+
+func appExampleConfig(t *testing.T, createID, fileID, urlID, gitID string) string {
+	t.Helper()
+	content, err := os.ReadFile("../../examples/apps/main.tf")
+	if err != nil {
+		t.Fatalf("read App example: %v", err)
+	}
+	archive, err := filepath.Abs("../../examples/apps/terraform-example-app-1.0.0.tgz")
+	if err != nil {
+		t.Fatalf("resolve App archive: %v", err)
+	}
+	replacer := strings.NewReplacer(
+		`abspath("${path.module}/terraform-example-app-1.0.0.tgz")`, fmt.Sprintf("%q", archive),
+		"terraform-created-app", createID,
+		"terraform-example-app", fileID,
+		"url-imported-app", urlID,
+		"git-repository-example", gitID,
+	)
+	return replacer.Replace(string(content))
+}
+
+func appOnPremConfig(urlID, gitID string) string {
+	return fmt.Sprintf(`resource "criblio_app" "import_from_url" {
+  id     = %[1]q
+  source = "https://github.com/criblio/apm/releases/download/v0.10.0/apm-0.10.0.tgz"
+  force  = true
+}
+
+resource "criblio_app" "import_from_git" {
+  id         = %[2]q
+  source     = "git+https://github.com/criblapps/cribl-ai-o11y.git"
+  depends_on = [criblio_app.import_from_url]
+}
+`, urlID, gitID)
 }

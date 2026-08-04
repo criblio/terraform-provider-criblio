@@ -397,7 +397,9 @@ func TestRenderedSnippets(t *testing.T) {
 
 	appTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "App"})
 	assertContains(t, appTest, "func TestApp(t *testing.T)")
-	assertContains(t, appTest, `config.StaticDirectory("../../examples/apps")`)
+	assertContains(t, appTest, `os.ReadFile("../../examples/apps/main.tf")`)
+	assertContains(t, appTest, `appOnPremConfig(urlID, gitID)`)
+	assertContains(t, appTest, `acctest.RandStringFromCharSet`)
 	assertContains(t, appTest, `"criblio_app.create_app"`)
 	assertContains(t, appTest, `"criblio_app.import_from_file"`)
 	assertContains(t, appTest, `"criblio_app.import_from_url"`)
