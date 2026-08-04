@@ -162,6 +162,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		OperationID:    scalarValue(operation, "operationId"),
 		RequestSchema:  schemaRefName(requestSchema(operation)),
 		ResponseSchema: schemaRefName(responseSchema(operation)),
+		ResponseItem:   boolAnnotation(operation, "x-terraform-response-item"),
 		PathParams:     pathParams(operation),
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
@@ -200,8 +201,14 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 		}
 	}
 	getFields := map[string]bool{}
-	if resource.Read.ResponseSchema != "" {
-		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
+	readSchemaName := resource.Read.ResponseSchema
+	if resource.Read.ResponseItem {
+		if response, ok := mappingValue(schemas, readSchemaName); ok {
+			readSchemaName = listItemSchemaRefName(response)
+		}
+	}
+	if readSchemaName != "" {
+		if readSchema, ok := mappingValue(schemas, readSchemaName); ok {
 			getFields, err = resolvedSchemaPropertySet(readSchema, schemas)
 			if err != nil {
 				return err
@@ -213,8 +220,8 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	if resource.Read.ResponseSchema != "" && resource.Read.ResponseSchema != resource.SchemaName {
-		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
+	if readSchemaName != "" && readSchemaName != resource.SchemaName {
+		if readSchema, ok := mappingValue(schemas, readSchemaName); ok {
 			readFields, readVariants, err := parseSchemaFields(resource.StructName, readSchema, schemas, postFields, updateFields, getFields)
 			if err != nil {
 				return err
@@ -668,6 +675,14 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 	}
 	if boolAnnotation(property, "x-terraform-force-new") {
 		field.ForceNew = true
+	}
+	if boolAnnotation(property, "x-terraform-force-new-always") {
+		field.ForceNew = true
+		field.StrictForceNew = true
+	}
+	if boolAnnotation(property, "x-terraform-local-only") {
+		field.RequestField = false
+		field.UpdateField = false
 	}
 	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
 		field.FixedValue = fixedValue

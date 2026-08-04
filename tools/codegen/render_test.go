@@ -395,6 +395,17 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, notificationTargetTest, `"sns_target.system_fields",`)
 	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
 
+	appTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "App"})
+	assertContains(t, appTest, "func TestApp(t *testing.T)")
+	assertContains(t, appTest, `config.StaticDirectory("../../examples/apps")`)
+	assertContains(t, appTest, `"criblio_app.create_app"`)
+	assertContains(t, appTest, `"criblio_app.import_from_file"`)
+	assertContains(t, appTest, `"criblio_app.import_from_url"`)
+	assertContains(t, appTest, `"criblio_app.import_from_git"`)
+	assertContains(t, appTest, "PlanOnly:")
+	assertNotContains(t, appTest, "CRIBL_TEST_APP_SOURCE")
+	assertNotContains(t, appTest, "Generated acceptance scaffold")
+
 	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
 	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
@@ -1241,6 +1252,14 @@ func hasSkipped(files []renderedFile, path string) bool {
 		}
 	}
 	return false
+}
+
+func TestStrictForceNewPlanModifier(t *testing.T) {
+	field := parser.FieldDef{Type: "string", ForceNew: true, StrictForceNew: true}
+	calls := planModifierCalls(field)
+	if len(calls) != 1 || calls[0] != "stringplanmodifier.RequiresReplace()" {
+		t.Fatalf("plan modifier calls = %v", calls)
+	}
 }
 
 func assertContains(t *testing.T, content, want string) {

@@ -30,6 +30,7 @@ type OperationDef struct {
 	OperationID              string
 	RequestSchema            string
 	ResponseSchema           string
+	ResponseItem             bool
 	PathParams               []FieldDef
 	QueryParams              []FieldDef
 	Examples                 []ExampleDef
@@ -65,6 +66,7 @@ type FieldDef struct {
 	PreferState        bool
 	SuppressDiff       bool
 	ForceNew           bool
+	StrictForceNew     bool
 	Ignored            bool
 	CustomType         string
 	ElementCustomType  string

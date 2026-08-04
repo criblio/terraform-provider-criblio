@@ -1,0 +1,10 @@
+{
+  "name": "terraform-example-app",
+  "version": "1.0.0",
+  "displayName": "Terraform Example App",
+  "description": "Minimal Cribl App used by the Terraform provider example.",
+  "author": "Cribl",
+  "cribl": {
+    "type": "app"
+  }
+}

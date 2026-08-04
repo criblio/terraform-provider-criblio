@@ -1400,7 +1400,11 @@ func planModifierCalls(field parser.FieldDef) []string {
 	}
 	var calls []string
 	if field.ForceNew {
-		calls = append(calls, fmt.Sprintf("%splanmodifier.RequiresReplaceIfConfigured()", frameworkPlanModifierKind(field)))
+		modifier := "RequiresReplaceIfConfigured"
+		if field.StrictForceNew {
+			modifier = "RequiresReplace"
+		}
+		calls = append(calls, fmt.Sprintf("%splanmodifier.%s()", frameworkPlanModifierKind(field), modifier))
 	}
 	if field.UseStateForUnknown {
 		calls = append(calls, fmt.Sprintf("%splanmodifier.UseStateForUnknown()", frameworkPlanModifierKind(field)))

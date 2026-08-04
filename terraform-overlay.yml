@@ -3374,3 +3374,54 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: Deploy
       x-terraform-action: true
+
+  - target: "$.paths./apps.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: App
+      x-terraform-response-item: true
+  - target: "$.paths./apps/{id}.get"
+    update:
+      x-terraform-read: App
+      x-terraform-response-item: true
+  - target: "$.paths./apps/{id}.patch"
+    update:
+      x-terraform-update: App
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+  - target: "$.paths./apps/{id}.delete"
+    update:
+      x-terraform-delete: App
+  - target: "$.components.schemas.AppRequestBody.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.AppRequestBody.properties"
+    update:
+      filename:
+        type: string
+        description: Local App archive to upload before installation.
+        x-terraform-local-only: true
+        x-terraform-prefer-state: true
+        x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.force"
+    update:
+      x-terraform-prefer-state: true
+      x-terraform-force-new: true
+  - target: "$.components.schemas.AppRequestBody.properties.author"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.cribl"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.description"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.displayName"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.minLogStreamVersion"
+    update:
+      x-terraform-force-new-always: true
+  - target: "$.components.schemas.AppRequestBody.properties.version"
+    update:
+      x-terraform-force-new-always: true
