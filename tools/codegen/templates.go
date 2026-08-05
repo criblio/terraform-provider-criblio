@@ -1588,6 +1588,9 @@ import (
 	"encoding/json"
 {{- end }}
 	"fmt"
+{{- if needsRegexp . }}
+	"regexp"
+{{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 {{- if needsCustomPlanModifier . "bool" }}

@@ -7,11 +7,8 @@ package exclusions
 var NoExportTypes = []string{
 	"criblio_commit",                       // No list/get API in SDK; apply-only resource.
 	"criblio_deploy",                       // No list/get API in SDK; apply-only resource.
-	"criblio_group_system_settings",        // Cloud rejects api host/port updates on default group; config/state drift causes apply failures.
 	"criblio_key",                          // Skipped from import; keys are sensitive.
 	"criblio_lakehouse_dataset_connection", // No list/get API; exporting synthesized lakehouse x dataset pairs creates phantom imports.
-	"criblio_mapping_ruleset",              // List API is on root CriblIo (GetAdminProductsMappingsByProduct), not a service; no standard discovery.
-	"criblio_search_usage_group",           // API returns null/empty for rules; required attr causes import/plan issues.
 	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
 }
 

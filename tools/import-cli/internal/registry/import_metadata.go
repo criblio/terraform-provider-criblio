@@ -101,7 +101,6 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_search_datatype_ruleset": {SDKService: "Search", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_search_engine":           {SDKService: "Search", ListMethod: "GetLocalSearchEngine", GetMethod: "GetLocalSearchEngineByID", ImportIDFormat: ""},
 	"criblio_search_source":           {SDKService: "Search", ListMethod: "GetSearchLocalSearchSources", GetMethod: "GetSearchLocalSearchSourcesByID", ImportIDFormat: ""},
-	"criblio_search_usage_group":      {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_secret":                  {SDKService: "Secrets", ListMethod: "ListRestSecret", GetMethod: "GetRestSecretByID", ImportIDFormat: ""},
 	"criblio_source":                  {SDKService: "Inputs", ListMethod: "ListInput", GetMethod: "GetInputByID", ImportIDFormat: "", OneOf: oneOfInput},
 	"criblio_subscription":            {SDKService: "Subscriptions", ListMethod: "ListSubscription", GetMethod: "GetSubscriptionByID", ImportIDFormat: ""},
@@ -118,6 +117,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_grok":                         {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/grok", RESTGetPath: "/m/{group_id}/lib/grok/{id}"},
 	"criblio_group":                        {ImportIDFormat: "group_id", RESTListPath: "/products/{product}/groups", RESTGetPath: "/master/groups/{id}"},
 	"criblio_group_system_settings":        {ListMethod: "GetSystemSettingsConf", ImportIDFormat: "group_id", RESTListPath: "/m/{group_id}/system/settings/conf", RESTGetPath: "/m/{group_id}/system/settings/conf", ListUseGroupIDAsItemID: true},
+	"criblio_mapping_ruleset":              {ImportIDFormat: "json:product,id", RESTListPath: "/admin/products/{product}/mappings", RESTGetPath: "/admin/products/{product}/mappings/{id}"},
 	"criblio_key":                          {SDKService: "Keys", ListMethod: "ListKeyMetadataEntity", GetMethod: "GetKeyMetadataEntityByID", ImportIDFormat: "json:group_id,id,key_id", RESTListPath: "/m/{group_id}/system/keys", RESTGetPath: "/m/{group_id}/system/keys", ListItemIDMethod: "GetKeyID"},
 	"criblio_pack":                         {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/packs", RESTGetPath: "/m/{group_id}/packs/{id}"},
 	"criblio_pack_source":                  {ListMethod: "GetSystemInputsByPack", GetMethod: "GetSystemInputsByPackAndID", ImportIDFormat: "json:group_id,id,pack", RESTListPath: "/m/{group_id}/p/{pack}/system/inputs", RESTGetPath: "/m/{group_id}/p/{pack}/system/inputs/{id}"},
@@ -157,7 +157,6 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_search_source":                {ImportIDFormat: "id", RESTListPath: "/m/default_search/search/local_search/sources", RESTGetPath: "/m/default_search/search/local_search/sources/{id}"},
 	"criblio_search_dataset_ruleset":       {GetMethod: "GetDatasetRuleByID", ImportIDFormat: "id", RESTGetPath: "/m/default_search/search/local_search/dataset-rulesets/{id}", RefreshFromMethod: "RefreshFromSharedCountedDatasetRuleset"},
 	"criblio_search_datatype_ruleset":      {GetMethod: "GetDatatypeRuleByID", ImportIDFormat: "id", RESTGetPath: "/m/default_search/search/local_search/datatype-rulesets/{id}", RefreshFromMethod: "RefreshFromSharedCountedDatatypeRuleset"},
-	"criblio_search_usage_group":           {SDKService: "UsageGroups", ListMethod: "ListUsageGroup", GetMethod: "GetUsageGroupByID", ImportIDFormat: "id", RESTListPath: "/m/default_search/search/usage-groups", RESTGetPath: "/m/default_search/search/usage-groups/{id}", RefreshFromMethod: "RefreshFromOperationsGetUsageGroupByIDResponseBody"},
 	"criblio_lakehouse_dataset_connection": {ImportIDFormat: "json:lakehouse_id,lake_dataset_id"},
 }
 
