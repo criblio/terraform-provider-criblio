@@ -767,6 +767,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			property,
 			"x-terraform-enum-validator",
 		),
+		Pattern: patternValidator(property),
 	}
 	if field.Type == "array" && field.ElementType == "object" {
 		items, ok := mappingValue(schemaForType, "items")
@@ -836,6 +837,13 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		}
 	}
 	return field, nil
+}
+
+func patternValidator(property *yaml.Node) string {
+	if !boolAnnotation(property, "x-terraform-pattern-validator") {
+		return ""
+	}
+	return scalarValue(property, "pattern")
 }
 
 func ignoredAPIProperty(apiName string, property *yaml.Node) bool {

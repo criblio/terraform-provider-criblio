@@ -1216,6 +1216,28 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 	assertContains(t, typesContent, `types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()}}`)
 }
 
+func TestPatternValidator(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "notification_target",
+		FileStem:   "notification_target",
+		TypeName:   "criblio_notification_target",
+		StructName: "NotificationTarget",
+		Fields: []parser.FieldDef{{
+			APIName:       "url",
+			TerraformName: "url",
+			GoName:        "URL",
+			Type:          "string",
+			Optional:      true,
+			Pattern:       `^https?://[a-zA-Z0-9-.]+`,
+		}},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, `"regexp"`)
+	assertContains(t, content, `"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"`)
+	assertContains(t, content, "stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), \"must match pattern ^https?://[a-zA-Z0-9-.]+\")")
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

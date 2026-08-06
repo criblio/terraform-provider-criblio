@@ -965,6 +965,11 @@ func TestToRequestParams(t *testing.T) {
 		got := toRequestParams(idMap)
 		assert.Equal(t, "lake-1", got["LakeID"])
 	})
+	t.Run("includes Product", func(t *testing.T) {
+		got := toRequestParams(map[string]string{"product": "stream", "id": "default"})
+		assert.Equal(t, "stream", got["Product"])
+		assert.Equal(t, "default", got["ID"])
+	})
 }
 
 func TestAttrsHasOutputBlock(t *testing.T) {
