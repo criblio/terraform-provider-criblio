@@ -407,24 +407,6 @@ func TestPatternValidatorRequiresOptIn(t *testing.T) {
 	}
 }
 
-func TestParseStateMergeHook(t *testing.T) {
-	var property yaml.Node
-	if err := yaml.Unmarshal([]byte("type: object\nx-terraform-state-merge-hook: mergeAPIAndState\n"), &property); err != nil {
-		t.Fatalf("parse property: %v", err)
-	}
-	var schemas yaml.Node
-	if err := yaml.Unmarshal([]byte("{}\n"), &schemas); err != nil {
-		t.Fatalf("parse schemas: %v", err)
-	}
-	field, err := fieldDef("Settings", "config", property.Content[0], schemas.Content[0])
-	if err != nil {
-		t.Fatalf("fieldDef returned error: %v", err)
-	}
-	if field.StateMergeHook != "mergeAPIAndState" {
-		t.Fatalf("state merge hook = %q, want mergeAPIAndState", field.StateMergeHook)
-	}
-}
-
 func TestParseSearchDatasetCompatibility(t *testing.T) {
 	resources, err := Parse([]byte(`
 openapi: 3.1.0

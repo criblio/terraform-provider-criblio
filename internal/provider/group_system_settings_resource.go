@@ -41,10 +41,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 		MarkdownDescription: "GroupSystemSettings Resource",
 		Attributes: map[string]schema.Attribute{
 			"api": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"base_url": schema.StringAttribute{
 						Required:    false,
@@ -132,27 +131,27 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 								Description: `Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
+								Required:    true,
+								Optional:    false,
 								Computed:    false,
 								Description: `Filesystem path to the PEM-encoded TLS certificate.`,
 							},
 							"disabled": schema.BoolAttribute{
-								Required:    false,
-								Optional:    true,
+								Required:    true,
+								Optional:    false,
 								Computed:    false,
 								Description: `If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
+								Required:    true,
+								Optional:    false,
 								Computed:    false,
 								Sensitive:   true,
 								Description: `Passphrase to decrypt the TLS private key, if encrypted.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Required:    false,
-								Optional:    true,
+								Required:    true,
+								Optional:    false,
 								Computed:    false,
 								Description: `Filesystem path to the PEM-encoded TLS private key.`,
 							},
@@ -173,10 +172,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"apps": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
 						Required:    true,
@@ -187,11 +185,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"backups": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Configuration backup settings, including storage location and retention period.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Configuration backup settings, including storage location and retention period.`,
 				Attributes: map[string]schema.Attribute{
 					"backup_persistence": schema.StringAttribute{
 						Required:    true,
@@ -208,10 +205,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"custom_logo": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsCustomLogoPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
 						Required:    true,
@@ -243,11 +239,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"pii": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Personally identifiable information (PII) detection configuration.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Personally identifiable information (PII) detection configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"enable_pii_detection": schema.BoolAttribute{
 						Required:    true,
@@ -258,10 +253,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"proxy": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"use_env_vars": schema.BoolAttribute{
 						Required:    true,
@@ -272,11 +266,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"rollback": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Automatic rollback settings applied when an upgrade fails.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Automatic rollback settings applied when an upgrade fails.`,
 				Attributes: map[string]schema.Attribute{
 					"rollback_enabled": schema.BoolAttribute{
 						Required:    true,
@@ -299,10 +292,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"shutdown": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"drain_timeout": schema.Int64Attribute{
 						Required:    true,
@@ -313,11 +305,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"sni": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Server Name Indication (SNI) routing configuration.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Server Name Indication (SNI) routing configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"disable_sni_routing": schema.BoolAttribute{
 						Required: true,
@@ -327,10 +318,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"sockets": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"directory": schema.StringAttribute{
 						Required:    false,
@@ -341,10 +331,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"support": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"feature_flag_overrides": schema.ListNestedAttribute{
 						Required:    false,
@@ -383,10 +372,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"system": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"intercom": schema.BoolAttribute{
 						Required:    true,
@@ -402,50 +390,48 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"tls": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Global TLS/SSL settings applied to all outbound connections that do not specify their own TLS configuration.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Global TLS/SSL settings applied to all outbound connections that do not specify their own TLS configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"default_cipher_list": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
+						Required:    true,
+						Optional:    false,
 						Computed:    false,
 						Description: `Cipher suite list to use for TLS connections. <code>DEFAULT</code> means the system default.`,
 					},
 					"default_ecdh_curve": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
+						Required:    true,
+						Optional:    false,
 						Computed:    false,
 						Description: `ECDH curve name for TLS key exchange. Use <code>auto</code> to let Node.js choose.`,
 					},
 					"max_version": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
+						Required:    true,
+						Optional:    false,
 						Computed:    false,
 						Description: `Maximum TLS protocol version to accept.`,
 					},
 					"min_version": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
+						Required:    true,
+						Optional:    false,
 						Computed:    false,
 						Description: `Minimum TLS protocol version to accept.`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
-						Required:    false,
-						Optional:    true,
+						Required:    true,
+						Optional:    false,
 						Computed:    false,
 						Description: `If <code>true</code>, reject TLS certificates that cannot be verified against a valid Certificate Authority. Otherwise, <code>false</code>.`,
 					},
 				},
 			},
 			"upgrade_group_settings": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Rolling upgrade group settings that control how many nodes are upgraded at a time.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Rolling upgrade group settings that control how many nodes are upgraded at a time.`,
 				Attributes: map[string]schema.Attribute{
 					"is_rolling": schema.BoolAttribute{
 						Required:    false,
@@ -474,11 +460,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"upgrade_settings": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				Description:   `Automatic upgrade scheduling and package source configuration.`,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Automatic upgrade scheduling and package source configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"automatic_upgrade_check_period": schema.StringAttribute{
 						Required:    false,
@@ -529,10 +514,9 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"workers": schema.SingleNestedAttribute{
-				Required:      false,
-				Optional:      true,
-				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				Required: false,
+				Optional: true,
+				Computed: false,
 				Attributes: map[string]schema.Attribute{
 					"count": schema.Int64Attribute{
 						Required:    true,
@@ -647,7 +631,6 @@ func (r *GroupSystemSettingsResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
 	applyGroupSystemSettingsAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -690,7 +673,6 @@ func (r *GroupSystemSettingsResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
 	applyGroupSystemSettingsAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -716,6 +698,54 @@ func isGroupSystemSettingsImportState(state *GroupSystemSettingsModel) bool {
 	}
 	// Resources whose bodies contain only optional fields have no required
 	// sentinel. An ID-only state is an import and must be hydrated from Read.
+	if !state.API.IsNull() && !state.API.IsUnknown() {
+		return false
+	}
+	if !state.Apps.IsNull() && !state.Apps.IsUnknown() {
+		return false
+	}
+	if !state.Backups.IsNull() && !state.Backups.IsUnknown() {
+		return false
+	}
+	if !state.CustomLogo.IsNull() && !state.CustomLogo.IsUnknown() {
+		return false
+	}
+	if !state.Pii.IsNull() && !state.Pii.IsUnknown() {
+		return false
+	}
+	if !state.Proxy.IsNull() && !state.Proxy.IsUnknown() {
+		return false
+	}
+	if !state.Rollback.IsNull() && !state.Rollback.IsUnknown() {
+		return false
+	}
+	if !state.Shutdown.IsNull() && !state.Shutdown.IsUnknown() {
+		return false
+	}
+	if !state.Sni.IsNull() && !state.Sni.IsUnknown() {
+		return false
+	}
+	if !state.Sockets.IsNull() && !state.Sockets.IsUnknown() {
+		return false
+	}
+	if !state.Support.IsNull() && !state.Support.IsUnknown() {
+		return false
+	}
+	if !state.System.IsNull() && !state.System.IsUnknown() {
+		return false
+	}
+	if !state.TLS.IsNull() && !state.TLS.IsUnknown() {
+		return false
+	}
+	if !state.UpgradeGroupSettings.IsNull() && !state.UpgradeGroupSettings.IsUnknown() {
+		return false
+	}
+	if !state.UpgradeSettings.IsNull() && !state.UpgradeSettings.IsUnknown() {
+		return false
+	}
+	if !state.Workers.IsNull() && !state.Workers.IsUnknown() {
+		return false
+	}
 	return true
 }
 
@@ -723,30 +753,34 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 	if api == nil || state == nil {
 		return
 	}
-	state.API = groupSystemSettingsObjectFromAPIOrPrior(api.API, state.API)
-	if state.API.IsUnknown() {
-		state.API = types.ObjectNull(GroupSystemSettingsAPIFieldAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.API.IsNull() || state.API.IsUnknown())) {
+		if !api.API.IsNull() && !api.API.IsUnknown() {
+			state.API = api.API
+		}
 	}
 	if len(state.API.AttributeTypes(context.Background())) == 0 {
 		state.API = types.ObjectNull(GroupSystemSettingsAPIFieldAttrTypes())
 	}
-	state.Apps = groupSystemSettingsObjectFromAPIOrPrior(api.Apps, state.Apps)
-	if state.Apps.IsUnknown() {
-		state.Apps = types.ObjectNull(GroupSystemSettingsAppsAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Apps.IsNull() || state.Apps.IsUnknown())) {
+		if !api.Apps.IsNull() && !api.Apps.IsUnknown() {
+			state.Apps = api.Apps
+		}
 	}
 	if len(state.Apps.AttributeTypes(context.Background())) == 0 {
 		state.Apps = types.ObjectNull(GroupSystemSettingsAppsAttrTypes())
 	}
-	state.Backups = groupSystemSettingsObjectFromAPIOrPrior(api.Backups, state.Backups)
-	if state.Backups.IsUnknown() {
-		state.Backups = types.ObjectNull(GroupSystemSettingsBackupsAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Backups.IsNull() || state.Backups.IsUnknown())) {
+		if !api.Backups.IsNull() && !api.Backups.IsUnknown() {
+			state.Backups = api.Backups
+		}
 	}
 	if len(state.Backups.AttributeTypes(context.Background())) == 0 {
 		state.Backups = types.ObjectNull(GroupSystemSettingsBackupsAttrTypes())
 	}
-	state.CustomLogo = groupSystemSettingsObjectFromAPIOrPrior(api.CustomLogo, state.CustomLogo)
-	if state.CustomLogo.IsUnknown() {
-		state.CustomLogo = types.ObjectNull(GroupSystemSettingsCustomLogoAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.CustomLogo.IsNull() || state.CustomLogo.IsUnknown())) {
+		if !api.CustomLogo.IsNull() && !api.CustomLogo.IsUnknown() {
+			state.CustomLogo = api.CustomLogo
+		}
 	}
 	if len(state.CustomLogo.AttributeTypes(context.Background())) == 0 {
 		state.CustomLogo = types.ObjectNull(GroupSystemSettingsCustomLogoAttrTypes())
@@ -756,86 +790,98 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 			state.GroupID = api.GroupID
 		}
 	}
-	state.Pii = groupSystemSettingsObjectFromAPIOrPrior(api.Pii, state.Pii)
-	if state.Pii.IsUnknown() {
-		state.Pii = types.ObjectNull(GroupSystemSettingsPiiAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Pii.IsNull() || state.Pii.IsUnknown())) {
+		if !api.Pii.IsNull() && !api.Pii.IsUnknown() {
+			state.Pii = api.Pii
+		}
 	}
 	if len(state.Pii.AttributeTypes(context.Background())) == 0 {
 		state.Pii = types.ObjectNull(GroupSystemSettingsPiiAttrTypes())
 	}
-	state.Proxy = groupSystemSettingsObjectFromAPIOrPrior(api.Proxy, state.Proxy)
-	if state.Proxy.IsUnknown() {
-		state.Proxy = types.ObjectNull(GroupSystemSettingsProxyAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Proxy.IsNull() || state.Proxy.IsUnknown())) {
+		if !api.Proxy.IsNull() && !api.Proxy.IsUnknown() {
+			state.Proxy = api.Proxy
+		}
 	}
 	if len(state.Proxy.AttributeTypes(context.Background())) == 0 {
 		state.Proxy = types.ObjectNull(GroupSystemSettingsProxyAttrTypes())
 	}
-	state.Rollback = groupSystemSettingsObjectFromAPIOrPrior(api.Rollback, state.Rollback)
-	if state.Rollback.IsUnknown() {
-		state.Rollback = types.ObjectNull(GroupSystemSettingsRollbackAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Rollback.IsNull() || state.Rollback.IsUnknown())) {
+		if !api.Rollback.IsNull() && !api.Rollback.IsUnknown() {
+			state.Rollback = api.Rollback
+		}
 	}
 	if len(state.Rollback.AttributeTypes(context.Background())) == 0 {
 		state.Rollback = types.ObjectNull(GroupSystemSettingsRollbackAttrTypes())
 	}
-	state.Shutdown = groupSystemSettingsObjectFromAPIOrPrior(api.Shutdown, state.Shutdown)
-	if state.Shutdown.IsUnknown() {
-		state.Shutdown = types.ObjectNull(GroupSystemSettingsShutdownAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Shutdown.IsNull() || state.Shutdown.IsUnknown())) {
+		if !api.Shutdown.IsNull() && !api.Shutdown.IsUnknown() {
+			state.Shutdown = api.Shutdown
+		}
 	}
 	if len(state.Shutdown.AttributeTypes(context.Background())) == 0 {
 		state.Shutdown = types.ObjectNull(GroupSystemSettingsShutdownAttrTypes())
 	}
-	state.Sni = groupSystemSettingsObjectFromAPIOrPrior(api.Sni, state.Sni)
-	if state.Sni.IsUnknown() {
-		state.Sni = types.ObjectNull(GroupSystemSettingsSniAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Sni.IsNull() || state.Sni.IsUnknown())) {
+		if !api.Sni.IsNull() && !api.Sni.IsUnknown() {
+			state.Sni = api.Sni
+		}
 	}
 	if len(state.Sni.AttributeTypes(context.Background())) == 0 {
 		state.Sni = types.ObjectNull(GroupSystemSettingsSniAttrTypes())
 	}
-	state.Sockets = groupSystemSettingsObjectFromAPIOrPrior(api.Sockets, state.Sockets)
-	if state.Sockets.IsUnknown() {
-		state.Sockets = types.ObjectNull(GroupSystemSettingsSocketsAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Sockets.IsNull() || state.Sockets.IsUnknown())) {
+		if !api.Sockets.IsNull() && !api.Sockets.IsUnknown() {
+			state.Sockets = api.Sockets
+		}
 	}
 	if len(state.Sockets.AttributeTypes(context.Background())) == 0 {
 		state.Sockets = types.ObjectNull(GroupSystemSettingsSocketsAttrTypes())
 	}
-	state.Support = groupSystemSettingsObjectFromAPIOrPrior(api.Support, state.Support)
-	if state.Support.IsUnknown() {
-		state.Support = types.ObjectNull(GroupSystemSettingsSupportAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Support.IsNull() || state.Support.IsUnknown())) {
+		if !api.Support.IsNull() && !api.Support.IsUnknown() {
+			state.Support = api.Support
+		}
 	}
 	if len(state.Support.AttributeTypes(context.Background())) == 0 {
 		state.Support = types.ObjectNull(GroupSystemSettingsSupportAttrTypes())
 	}
-	state.System = groupSystemSettingsObjectFromAPIOrPrior(api.System, state.System)
-	if state.System.IsUnknown() {
-		state.System = types.ObjectNull(GroupSystemSettingsSystemAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.System.IsNull() || state.System.IsUnknown())) {
+		if !api.System.IsNull() && !api.System.IsUnknown() {
+			state.System = api.System
+		}
 	}
 	if len(state.System.AttributeTypes(context.Background())) == 0 {
 		state.System = types.ObjectNull(GroupSystemSettingsSystemAttrTypes())
 	}
-	state.TLS = groupSystemSettingsObjectFromAPIOrPrior(api.TLS, state.TLS)
-	if state.TLS.IsUnknown() {
-		state.TLS = types.ObjectNull(GroupSystemSettingsTLSAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.TLS.IsNull() || state.TLS.IsUnknown())) {
+		if !api.TLS.IsNull() && !api.TLS.IsUnknown() {
+			state.TLS = api.TLS
+		}
 	}
 	if len(state.TLS.AttributeTypes(context.Background())) == 0 {
 		state.TLS = types.ObjectNull(GroupSystemSettingsTLSAttrTypes())
 	}
-	state.UpgradeGroupSettings = groupSystemSettingsObjectFromAPIOrPrior(api.UpgradeGroupSettings, state.UpgradeGroupSettings)
-	if state.UpgradeGroupSettings.IsUnknown() {
-		state.UpgradeGroupSettings = types.ObjectNull(GroupSystemSettingsUpgradeGroupSettingsAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.UpgradeGroupSettings.IsNull() || state.UpgradeGroupSettings.IsUnknown())) {
+		if !api.UpgradeGroupSettings.IsNull() && !api.UpgradeGroupSettings.IsUnknown() {
+			state.UpgradeGroupSettings = api.UpgradeGroupSettings
+		}
 	}
 	if len(state.UpgradeGroupSettings.AttributeTypes(context.Background())) == 0 {
 		state.UpgradeGroupSettings = types.ObjectNull(GroupSystemSettingsUpgradeGroupSettingsAttrTypes())
 	}
-	state.UpgradeSettings = groupSystemSettingsObjectFromAPIOrPrior(api.UpgradeSettings, state.UpgradeSettings)
-	if state.UpgradeSettings.IsUnknown() {
-		state.UpgradeSettings = types.ObjectNull(GroupSystemSettingsUpgradeSettingsAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.UpgradeSettings.IsNull() || state.UpgradeSettings.IsUnknown())) {
+		if !api.UpgradeSettings.IsNull() && !api.UpgradeSettings.IsUnknown() {
+			state.UpgradeSettings = api.UpgradeSettings
+		}
 	}
 	if len(state.UpgradeSettings.AttributeTypes(context.Background())) == 0 {
 		state.UpgradeSettings = types.ObjectNull(GroupSystemSettingsUpgradeSettingsAttrTypes())
 	}
-	state.Workers = groupSystemSettingsObjectFromAPIOrPrior(api.Workers, state.Workers)
-	if state.Workers.IsUnknown() {
-		state.Workers = types.ObjectNull(GroupSystemSettingsWorkersAttrTypes())
+	if !preserveInputs || (fillMissingInputs && (state.Workers.IsNull() || state.Workers.IsUnknown())) {
+		if !api.Workers.IsNull() && !api.Workers.IsUnknown() {
+			state.Workers = api.Workers
+		}
 	}
 	if len(state.Workers.AttributeTypes(context.Background())) == 0 {
 		state.Workers = types.ObjectNull(GroupSystemSettingsWorkersAttrTypes())

@@ -1768,18 +1768,12 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-{{- if eq .StructName "GroupSystemSettings" }}
-	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
-{{- end }}
 {{- if .Create.PreserveInputsAfterWrite }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
 {{- end }}
 {{- else }}
-{{- if eq .StructName "GroupSystemSettings" }}
-	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
-{{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
@@ -1856,9 +1850,6 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-{{- if eq .StructName "GroupSystemSettings" }}
-	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
-{{- end }}
 {{- if .Update.ReadAfterWrite }}
 {{- if .Update.PreserveInputsAfterWrite }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
@@ -2114,16 +2105,12 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 	{{- end }}
 {{- else if eq .Type "object" }}
-		{{- if .StateMergeHook }}
-		state.{{ .GoName }} = {{ .StateMergeHook }}(api.{{ .GoName }}, state.{{ .GoName }})
-		{{- else }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}
 		}{{- if and .Computed (not .Optional) }} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = {{ zeroValue . }}
 		}
 	{{- end }}
-		{{- end }}
 {{- else if and .Computed (not .Optional) }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}

@@ -619,10 +619,7 @@ func skipDiscoveryForGroupFilter(typeName string, groupIDs []string) bool {
 }
 
 func skipGroupScopedSingleton(typeName, groupID string) bool {
-	if groupID != "default_search" && groupID != "search" {
-		return false
-	}
-	return typeName == "criblio_routes" || typeName == "criblio_group_system_settings"
+	return typeName == "criblio_routes" && (groupID == "default_search" || groupID == "search")
 }
 
 func filterOutDefaultSearch(groupIDs []string) []string {

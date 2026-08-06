@@ -168,8 +168,7 @@ func TestSkipGroupScopedSingleton(t *testing.T) {
 	assert.True(t, skipGroupScopedSingleton("criblio_routes", "default_search"))
 	assert.True(t, skipGroupScopedSingleton("criblio_routes", "search"))
 	assert.False(t, skipGroupScopedSingleton("criblio_routes", "default"))
-	assert.True(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
-	assert.True(t, skipGroupScopedSingleton("criblio_group_system_settings", "search"))
+	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
 	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default"))
 }
 

@@ -141,7 +141,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 		Files:    files,
 	}
-	it.LifecycleIgnoreChanges = lifecycleIgnoreChangesForConvertedResource(r.TypeName, idMap, attrs)
+	it.LifecycleIgnoreChanges = lifecycleIgnoreChangesForConvertedResource(r.TypeName, attrs)
 	return &it, ""
 }
 
@@ -225,13 +225,7 @@ func removeNullListItems(v hcl.Value) hcl.Value {
 	return v
 }
 
-func lifecycleIgnoreChangesForConvertedResource(typeName string, idMap map[string]string, attrs map[string]hcl.Value) []string {
-	if typeName == "criblio_group_system_settings" && idMap["group_id"] == "default" {
-		// Cribl.Cloud returns the API settings but rejects attempts to update its
-		// managed host and port. Keep the complete exported section for visibility
-		// while preventing an apply from sending those settings back.
-		return []string{"api"}
-	}
+func lifecycleIgnoreChangesForConvertedResource(typeName string, attrs map[string]hcl.Value) []string {
 	if typeName == "criblio_appscope_config" {
 		// Deeply nested Optional+Computed fields (cacertpath, buffer, allowbinary, headers, etc.)
 		// are set to null/empty by the provider Read but absent from HCL, causing perpetual drift.

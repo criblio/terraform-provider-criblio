@@ -1238,49 +1238,6 @@ func TestPatternValidator(t *testing.T) {
 	assertContains(t, content, "stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), \"must match pattern ^https?://[a-zA-Z0-9-.]+\")")
 }
 
-func TestObjectStateMergeHook(t *testing.T) {
-	resource := parser.ResourceDef{
-		Name:       "settings",
-		FileStem:   "settings",
-		TypeName:   "criblio_settings",
-		StructName: "Settings",
-		Fields: []parser.FieldDef{{
-			APIName:        "config",
-			TerraformName:  "config",
-			GoName:         "Config",
-			Type:           "object",
-			Optional:       true,
-			Computed:       true,
-			StateMergeHook: "settingsObjectFromAPIOrPrior",
-		}},
-	}
-
-	content := renderTemplate(t, "resource", resource)
-	assertContains(t, content, "state.Config = settingsObjectFromAPIOrPrior(api.Config, state.Config)")
-}
-
-func TestGroupSystemSettingsPreservesPlanAfterWrite(t *testing.T) {
-	resource := parser.ResourceDef{
-		Name:       "group_system_settings",
-		FileStem:   "group_system_settings",
-		TypeName:   "criblio_group_system_settings",
-		StructName: "GroupSystemSettings",
-		Create: parser.OperationDef{
-			Method: "PATCH",
-			Path:   "/m/{groupId}/system/settings/conf",
-		},
-		Update: parser.OperationDef{
-			Method: "PATCH",
-			Path:   "/m/{groupId}/system/settings/conf",
-		},
-	}
-
-	content := renderTemplate(t, "resource", resource)
-	if got := strings.Count(content, "apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)"); got != 2 {
-		t.Fatalf("after-write merge call count = %d, want 2", got)
-	}
-}
-
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

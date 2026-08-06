@@ -661,27 +661,12 @@ func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
 }
 
 func TestLifecycleIgnoreChangesForConvertedResource_certificateUsesProviderStatePreservation(t *testing.T) {
-	ignored := lifecycleIgnoreChangesForConvertedResource("criblio_certificate", nil, map[string]hcl.Value{
+	ignored := lifecycleIgnoreChangesForConvertedResource("criblio_certificate", map[string]hcl.Value{
 		"cert":     {Kind: hcl.KindVariableRef, VarName: "certificate_cert"},
 		"priv_key": {Kind: hcl.KindVariableRef, VarName: "certificate_priv_key"},
 	})
 
 	assert.Empty(t, ignored, "certificate should not need import-cli lifecycle ignores with generated REST resource state preservation")
-}
-
-func TestLifecycleIgnoreChangesForConvertedResource_groupSystemSettings(t *testing.T) {
-	attrs := map[string]hcl.Value{"api": {Kind: hcl.KindMap}}
-
-	assert.Equal(t, []string{"api"}, lifecycleIgnoreChangesForConvertedResource(
-		"criblio_group_system_settings",
-		map[string]string{"group_id": "default"},
-		attrs,
-	))
-	assert.Empty(t, lifecycleIgnoreChangesForConvertedResource(
-		"criblio_group_system_settings",
-		map[string]string{"group_id": "worker-group"},
-		attrs,
-	))
 }
 
 func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {

@@ -10,6 +10,7 @@ func TestNoExportTypes_ContainsExpectedTypes(t *testing.T) {
 	expected := map[string]bool{
 		"criblio_commit":                       true,
 		"criblio_deploy":                       true,
+		"criblio_group_system_settings":        true,
 		"criblio_key":                          true,
 		"criblio_lakehouse_dataset_connection": true,
 		"criblio_workspace":                    true,

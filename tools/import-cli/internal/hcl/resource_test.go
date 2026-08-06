@@ -253,18 +253,3 @@ func TestResourceBlock_preservesConfiguredEmptyMaps(t *testing.T) {
 	require.NoError(t, err)
 	assert.Contains(t, string(got), "conf = {}")
 }
-
-func TestResourceBlock_omitsEmptyGroupSystemSettingsMaps(t *testing.T) {
-	opts := DefaultResourceBlockOptions()
-	attrs := map[string]Value{
-		"pii":      {Kind: KindMap, Map: map[string]Value{}},
-		"rollback": {Kind: KindMap, Map: map[string]Value{}},
-		"shutdown": {Kind: KindMap, Map: map[string]Value{}},
-	}
-
-	got, err := ResourceBlockBytes("criblio_group_system_settings", "test", attrs, opts)
-	require.NoError(t, err)
-	assert.NotContains(t, string(got), "pii")
-	assert.NotContains(t, string(got), "rollback")
-	assert.NotContains(t, string(got), "shutdown")
-}

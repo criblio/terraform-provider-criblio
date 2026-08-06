@@ -123,13 +123,16 @@ Optional:
 <a id="nestedatt--api--ssl"></a>
 ### Nested Schema for `api.ssl`
 
-Optional:
+Required:
 
-- `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
 - `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
 - `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
 - `passphrase` (String, Sensitive) Passphrase to decrypt the TLS private key, if encrypted.
 - `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
+
+Optional:
+
+- `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
 
 <a id="nestedatt--apps"></a>
 ### Nested Schema for `apps`
@@ -233,7 +236,7 @@ Required:
 <a id="nestedatt--tls"></a>
 ### Nested Schema for `tls`
 
-Optional:
+Required:
 
 - `default_cipher_list` (String) Cipher suite list to use for TLS connections. <code>DEFAULT</code> means the system default.
 - `default_ecdh_curve` (String) ECDH curve name for TLS key exchange. Use <code>auto</code> to let Node.js choose.
