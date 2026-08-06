@@ -211,7 +211,7 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				Required:      false,
 				Optional:      true,
 				Computed:      true,
-				PlanModifiers: groupSystemSettingsEmptyObjectPlanModifiers(),
+				PlanModifiers: groupSystemSettingsCustomLogoPlanModifiers(),
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
 						Required:    true,

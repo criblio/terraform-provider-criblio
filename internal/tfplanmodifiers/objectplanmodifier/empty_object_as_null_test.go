@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEmptyObjectAsNull(t *testing.T) {
@@ -66,4 +67,42 @@ func TestPreferConfigOrStateWithNullConfig(t *testing.T) {
 	response := &planmodifier.ObjectResponse{PlanValue: request.PlanValue}
 	modifier.PlanModifyObject(context.Background(), request, response)
 	assert.True(t, response.PlanValue.IsUnknown(), "new resource should allow API defaults")
+}
+
+func TestEmptyStringsAsNull(t *testing.T) {
+	objectType := map[string]attr.Type{
+		"enabled":     types.BoolType,
+		"description": types.StringType,
+		"image":       types.StringType,
+	}
+	config := types.ObjectValueMust(objectType, map[string]attr.Value{
+		"enabled":     types.BoolValue(false),
+		"description": types.StringValue(""),
+		"image":       types.StringValue("configured"),
+	})
+	state := types.ObjectValueMust(objectType, map[string]attr.Value{
+		"enabled":     types.BoolValue(false),
+		"description": types.StringNull(),
+		"image":       types.StringNull(),
+	})
+
+	modifier := EmptyStringsAsNull()
+	request := planmodifier.ObjectRequest{
+		ConfigValue: config,
+		PlanValue:   config,
+		State:       tfsdk.State{Raw: tftypes.NewValue(tftypes.String, "existing")},
+		StateValue:  state,
+	}
+	response := &planmodifier.ObjectResponse{PlanValue: request.PlanValue}
+	modifier.PlanModifyObject(context.Background(), request, response)
+	require.False(t, response.Diagnostics.HasError(), "%v", response.Diagnostics)
+
+	attributes := response.PlanValue.Attributes()
+	assert.True(t, attributes["description"].IsNull())
+	assert.Equal(t, "configured", attributes["image"].(types.String).ValueString())
+
+	request.State.Raw = tftypes.NewValue(tftypes.String, nil)
+	response.PlanValue = request.PlanValue
+	modifier.PlanModifyObject(context.Background(), request, response)
+	assert.Equal(t, "", response.PlanValue.Attributes()["description"].(types.String).ValueString(), "create must retain configured empty strings")
 }

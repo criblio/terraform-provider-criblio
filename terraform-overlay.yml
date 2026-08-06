@@ -954,7 +954,7 @@ actions:
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.customLogo"
     update:
       x-terraform-optional-computed: true
-      x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-plan-modifier-hook: groupSystemSettingsCustomLogoPlanModifiers
       x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.pii"
     update:

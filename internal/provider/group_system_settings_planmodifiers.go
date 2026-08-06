@@ -15,6 +15,13 @@ func groupSystemSettingsEmptyObjectPlanModifiers() []planmodifier.Object {
 	}
 }
 
+func groupSystemSettingsCustomLogoPlanModifiers() []planmodifier.Object {
+	return []planmodifier.Object{
+		custom_objectplanmodifier.PreferConfigOrState(),
+		custom_objectplanmodifier.EmptyStringsAsNull(),
+	}
+}
+
 func groupSystemSettingsObjectFromAPIOrPrior(api, prior types.Object) types.Object {
 	if api.IsNull() || api.IsUnknown() {
 		return api
