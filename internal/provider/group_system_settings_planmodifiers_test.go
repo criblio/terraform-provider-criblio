@@ -63,3 +63,30 @@ func TestGroupSystemSettingsObjectFromAPIOrPrior(t *testing.T) {
 	removed := groupSystemSettingsObjectFromAPIOrPrior(types.ObjectNull(objectType), prior)
 	assert.True(t, removed.IsNull(), "removed API object should clear prior state")
 }
+
+func TestGroupSystemSettingsObjectAfterWrite(t *testing.T) {
+	objectType := map[string]attr.Type{
+		"enabled":     types.BoolType,
+		"description": types.StringType,
+	}
+	planned := types.ObjectValueMust(objectType, map[string]attr.Value{
+		"enabled":     types.BoolValue(false),
+		"description": types.StringValue("configured"),
+	})
+
+	assert.True(t, groupSystemSettingsObjectAfterWrite(types.ObjectNull(objectType), planned).Equal(planned))
+
+	partialAPI := types.ObjectValueMust(objectType, map[string]attr.Value{
+		"enabled":     types.BoolValue(true),
+		"description": types.StringNull(),
+	})
+	merged := groupSystemSettingsObjectAfterWrite(partialAPI, planned).Attributes()
+	assert.True(t, merged["enabled"].(types.Bool).ValueBool())
+	assert.Equal(t, "configured", merged["description"].(types.String).ValueString())
+
+	apiDefault := types.ObjectValueMust(objectType, map[string]attr.Value{
+		"enabled":     types.BoolValue(true),
+		"description": types.StringValue("API default"),
+	})
+	assert.True(t, groupSystemSettingsObjectAfterWrite(apiDefault, types.ObjectNull(objectType)).Equal(apiDefault))
+}

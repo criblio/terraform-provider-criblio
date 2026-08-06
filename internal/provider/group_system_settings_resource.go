@@ -647,6 +647,7 @@ func (r *GroupSystemSettingsResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
 	applyGroupSystemSettingsAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -689,6 +690,7 @@ func (r *GroupSystemSettingsResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+	apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)
 	applyGroupSystemSettingsAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }

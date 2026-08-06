@@ -6,7 +6,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,9 +46,24 @@ func TestPreferConfigOrStateWithNullConfig(t *testing.T) {
 
 	modifier := PreferConfigOrState()
 	for _, state := range []types.Object{nullObject, refreshedObject} {
-		request := planmodifier.ObjectRequest{ConfigValue: nullObject, PlanValue: types.ObjectUnknown(objectType), StateValue: state}
+		request := planmodifier.ObjectRequest{
+			ConfigValue: nullObject,
+			PlanValue:   types.ObjectUnknown(objectType),
+			State:       tfsdk.State{Raw: tftypes.NewValue(tftypes.String, "existing")},
+			StateValue:  state,
+		}
 		response := &planmodifier.ObjectResponse{PlanValue: request.PlanValue}
 		modifier.PlanModifyObject(context.Background(), request, response)
 		assert.True(t, response.PlanValue.Equal(state))
 	}
+
+	request := planmodifier.ObjectRequest{
+		ConfigValue: nullObject,
+		PlanValue:   types.ObjectUnknown(objectType),
+		State:       tfsdk.State{Raw: tftypes.NewValue(tftypes.String, nil)},
+		StateValue:  nullObject,
+	}
+	response := &planmodifier.ObjectResponse{PlanValue: request.PlanValue}
+	modifier.PlanModifyObject(context.Background(), request, response)
+	assert.True(t, response.PlanValue.IsUnknown(), "new resource should allow API defaults")
 }

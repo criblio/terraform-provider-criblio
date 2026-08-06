@@ -1259,6 +1259,28 @@ func TestObjectStateMergeHook(t *testing.T) {
 	assertContains(t, content, "state.Config = settingsObjectFromAPIOrPrior(api.Config, state.Config)")
 }
 
+func TestGroupSystemSettingsPreservesPlanAfterWrite(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "group_system_settings",
+		FileStem:   "group_system_settings",
+		TypeName:   "criblio_group_system_settings",
+		StructName: "GroupSystemSettings",
+		Create: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/system/settings/conf",
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/system/settings/conf",
+		},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	if got := strings.Count(content, "apiModel = groupSystemSettingsAPIAfterWrite(apiModel, &model)"); got != 2 {
+		t.Fatalf("after-write merge call count = %d, want 2", got)
+	}
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

@@ -33,6 +33,9 @@ func (m preferConfigOrState) PlanModifyObject(ctx context.Context, req planmodif
 	}
 
 	if req.ConfigValue.IsNull() {
+		if req.State.Raw.IsNull() {
+			return
+		}
 		resp.PlanValue = req.StateValue
 		return
 	}
