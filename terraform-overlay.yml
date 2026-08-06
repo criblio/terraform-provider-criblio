@@ -940,66 +940,82 @@ actions:
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.apps"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.backups"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.customLogo"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.pii"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.proxy"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.rollback"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.shutdown"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.sni"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.sockets"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.support"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.system"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.tls"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.upgradeGroupSettings"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.upgradeSettings"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SystemSettingsConfUpdate.properties.workers"
     update:
       x-terraform-optional-computed: true
       x-terraform-plan-modifier-hook: groupSystemSettingsEmptyObjectPlanModifiers
+      x-terraform-state-merge-hook: groupSystemSettingsObjectFromAPIOrPrior
   - target: "$.components.schemas.SniSettings"
     update:
       oneOf:

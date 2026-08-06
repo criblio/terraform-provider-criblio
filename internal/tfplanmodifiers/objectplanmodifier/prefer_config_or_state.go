@@ -28,14 +28,15 @@ func (m preferConfigOrState) MarkdownDescription(_ context.Context) string {
 }
 
 func (m preferConfigOrState) PlanModifyObject(ctx context.Context, req planmodifier.ObjectRequest, resp *planmodifier.ObjectResponse) {
-	// For new resources (no prior state), let normal flow proceed
-	if req.StateValue.IsUnknown() || req.StateValue.IsNull() {
+	if req.StateValue.IsUnknown() {
 		return
 	}
 
-	// If config is entirely null/unknown, use state (original PreferState behavior)
-	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+	if req.ConfigValue.IsNull() {
 		resp.PlanValue = req.StateValue
+		return
+	}
+	if req.ConfigValue.IsUnknown() || req.StateValue.IsNull() {
 		return
 	}
 

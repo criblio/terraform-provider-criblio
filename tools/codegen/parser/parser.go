@@ -746,6 +746,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			"x-terraform-element-custom-type",
 		),
 		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
+		StateMergeHook:   scalarValue(property, "x-terraform-state-merge-hook"),
 		UseStateForUnknown: boolAnnotation(
 			property,
 			"x-terraform-use-state-for-unknown",

@@ -1238,6 +1238,27 @@ func TestPatternValidator(t *testing.T) {
 	assertContains(t, content, "stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), \"must match pattern ^https?://[a-zA-Z0-9-.]+\")")
 }
 
+func TestObjectStateMergeHook(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "settings",
+		FileStem:   "settings",
+		TypeName:   "criblio_settings",
+		StructName: "Settings",
+		Fields: []parser.FieldDef{{
+			APIName:        "config",
+			TerraformName:  "config",
+			GoName:         "Config",
+			Type:           "object",
+			Optional:       true,
+			Computed:       true,
+			StateMergeHook: "settingsObjectFromAPIOrPrior",
+		}},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, "state.Config = settingsObjectFromAPIOrPrior(api.Config, state.Config)")
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

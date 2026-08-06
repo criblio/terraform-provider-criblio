@@ -721,36 +721,28 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 	if api == nil || state == nil {
 		return
 	}
-	if !api.API.IsNull() && !api.API.IsUnknown() {
-		state.API = api.API
-	}
+	state.API = groupSystemSettingsObjectFromAPIOrPrior(api.API, state.API)
 	if state.API.IsUnknown() {
 		state.API = types.ObjectNull(GroupSystemSettingsAPIFieldAttrTypes())
 	}
 	if len(state.API.AttributeTypes(context.Background())) == 0 {
 		state.API = types.ObjectNull(GroupSystemSettingsAPIFieldAttrTypes())
 	}
-	if !api.Apps.IsNull() && !api.Apps.IsUnknown() {
-		state.Apps = api.Apps
-	}
+	state.Apps = groupSystemSettingsObjectFromAPIOrPrior(api.Apps, state.Apps)
 	if state.Apps.IsUnknown() {
 		state.Apps = types.ObjectNull(GroupSystemSettingsAppsAttrTypes())
 	}
 	if len(state.Apps.AttributeTypes(context.Background())) == 0 {
 		state.Apps = types.ObjectNull(GroupSystemSettingsAppsAttrTypes())
 	}
-	if !api.Backups.IsNull() && !api.Backups.IsUnknown() {
-		state.Backups = api.Backups
-	}
+	state.Backups = groupSystemSettingsObjectFromAPIOrPrior(api.Backups, state.Backups)
 	if state.Backups.IsUnknown() {
 		state.Backups = types.ObjectNull(GroupSystemSettingsBackupsAttrTypes())
 	}
 	if len(state.Backups.AttributeTypes(context.Background())) == 0 {
 		state.Backups = types.ObjectNull(GroupSystemSettingsBackupsAttrTypes())
 	}
-	if !api.CustomLogo.IsNull() && !api.CustomLogo.IsUnknown() {
-		state.CustomLogo = api.CustomLogo
-	}
+	state.CustomLogo = groupSystemSettingsObjectFromAPIOrPrior(api.CustomLogo, state.CustomLogo)
 	if state.CustomLogo.IsUnknown() {
 		state.CustomLogo = types.ObjectNull(GroupSystemSettingsCustomLogoAttrTypes())
 	}
@@ -762,108 +754,84 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 			state.GroupID = api.GroupID
 		}
 	}
-	if !api.Pii.IsNull() && !api.Pii.IsUnknown() {
-		state.Pii = api.Pii
-	}
+	state.Pii = groupSystemSettingsObjectFromAPIOrPrior(api.Pii, state.Pii)
 	if state.Pii.IsUnknown() {
 		state.Pii = types.ObjectNull(GroupSystemSettingsPiiAttrTypes())
 	}
 	if len(state.Pii.AttributeTypes(context.Background())) == 0 {
 		state.Pii = types.ObjectNull(GroupSystemSettingsPiiAttrTypes())
 	}
-	if !api.Proxy.IsNull() && !api.Proxy.IsUnknown() {
-		state.Proxy = api.Proxy
-	}
+	state.Proxy = groupSystemSettingsObjectFromAPIOrPrior(api.Proxy, state.Proxy)
 	if state.Proxy.IsUnknown() {
 		state.Proxy = types.ObjectNull(GroupSystemSettingsProxyAttrTypes())
 	}
 	if len(state.Proxy.AttributeTypes(context.Background())) == 0 {
 		state.Proxy = types.ObjectNull(GroupSystemSettingsProxyAttrTypes())
 	}
-	if !api.Rollback.IsNull() && !api.Rollback.IsUnknown() {
-		state.Rollback = api.Rollback
-	}
+	state.Rollback = groupSystemSettingsObjectFromAPIOrPrior(api.Rollback, state.Rollback)
 	if state.Rollback.IsUnknown() {
 		state.Rollback = types.ObjectNull(GroupSystemSettingsRollbackAttrTypes())
 	}
 	if len(state.Rollback.AttributeTypes(context.Background())) == 0 {
 		state.Rollback = types.ObjectNull(GroupSystemSettingsRollbackAttrTypes())
 	}
-	if !api.Shutdown.IsNull() && !api.Shutdown.IsUnknown() {
-		state.Shutdown = api.Shutdown
-	}
+	state.Shutdown = groupSystemSettingsObjectFromAPIOrPrior(api.Shutdown, state.Shutdown)
 	if state.Shutdown.IsUnknown() {
 		state.Shutdown = types.ObjectNull(GroupSystemSettingsShutdownAttrTypes())
 	}
 	if len(state.Shutdown.AttributeTypes(context.Background())) == 0 {
 		state.Shutdown = types.ObjectNull(GroupSystemSettingsShutdownAttrTypes())
 	}
-	if !api.Sni.IsNull() && !api.Sni.IsUnknown() {
-		state.Sni = api.Sni
-	}
+	state.Sni = groupSystemSettingsObjectFromAPIOrPrior(api.Sni, state.Sni)
 	if state.Sni.IsUnknown() {
 		state.Sni = types.ObjectNull(GroupSystemSettingsSniAttrTypes())
 	}
 	if len(state.Sni.AttributeTypes(context.Background())) == 0 {
 		state.Sni = types.ObjectNull(GroupSystemSettingsSniAttrTypes())
 	}
-	if !api.Sockets.IsNull() && !api.Sockets.IsUnknown() {
-		state.Sockets = api.Sockets
-	}
+	state.Sockets = groupSystemSettingsObjectFromAPIOrPrior(api.Sockets, state.Sockets)
 	if state.Sockets.IsUnknown() {
 		state.Sockets = types.ObjectNull(GroupSystemSettingsSocketsAttrTypes())
 	}
 	if len(state.Sockets.AttributeTypes(context.Background())) == 0 {
 		state.Sockets = types.ObjectNull(GroupSystemSettingsSocketsAttrTypes())
 	}
-	if !api.Support.IsNull() && !api.Support.IsUnknown() {
-		state.Support = api.Support
-	}
+	state.Support = groupSystemSettingsObjectFromAPIOrPrior(api.Support, state.Support)
 	if state.Support.IsUnknown() {
 		state.Support = types.ObjectNull(GroupSystemSettingsSupportAttrTypes())
 	}
 	if len(state.Support.AttributeTypes(context.Background())) == 0 {
 		state.Support = types.ObjectNull(GroupSystemSettingsSupportAttrTypes())
 	}
-	if !api.System.IsNull() && !api.System.IsUnknown() {
-		state.System = api.System
-	}
+	state.System = groupSystemSettingsObjectFromAPIOrPrior(api.System, state.System)
 	if state.System.IsUnknown() {
 		state.System = types.ObjectNull(GroupSystemSettingsSystemAttrTypes())
 	}
 	if len(state.System.AttributeTypes(context.Background())) == 0 {
 		state.System = types.ObjectNull(GroupSystemSettingsSystemAttrTypes())
 	}
-	if !api.TLS.IsNull() && !api.TLS.IsUnknown() {
-		state.TLS = api.TLS
-	}
+	state.TLS = groupSystemSettingsObjectFromAPIOrPrior(api.TLS, state.TLS)
 	if state.TLS.IsUnknown() {
 		state.TLS = types.ObjectNull(GroupSystemSettingsTLSAttrTypes())
 	}
 	if len(state.TLS.AttributeTypes(context.Background())) == 0 {
 		state.TLS = types.ObjectNull(GroupSystemSettingsTLSAttrTypes())
 	}
-	if !api.UpgradeGroupSettings.IsNull() && !api.UpgradeGroupSettings.IsUnknown() {
-		state.UpgradeGroupSettings = api.UpgradeGroupSettings
-	}
+	state.UpgradeGroupSettings = groupSystemSettingsObjectFromAPIOrPrior(api.UpgradeGroupSettings, state.UpgradeGroupSettings)
 	if state.UpgradeGroupSettings.IsUnknown() {
 		state.UpgradeGroupSettings = types.ObjectNull(GroupSystemSettingsUpgradeGroupSettingsAttrTypes())
 	}
 	if len(state.UpgradeGroupSettings.AttributeTypes(context.Background())) == 0 {
 		state.UpgradeGroupSettings = types.ObjectNull(GroupSystemSettingsUpgradeGroupSettingsAttrTypes())
 	}
-	if !api.UpgradeSettings.IsNull() && !api.UpgradeSettings.IsUnknown() {
-		state.UpgradeSettings = api.UpgradeSettings
-	}
+	state.UpgradeSettings = groupSystemSettingsObjectFromAPIOrPrior(api.UpgradeSettings, state.UpgradeSettings)
 	if state.UpgradeSettings.IsUnknown() {
 		state.UpgradeSettings = types.ObjectNull(GroupSystemSettingsUpgradeSettingsAttrTypes())
 	}
 	if len(state.UpgradeSettings.AttributeTypes(context.Background())) == 0 {
 		state.UpgradeSettings = types.ObjectNull(GroupSystemSettingsUpgradeSettingsAttrTypes())
 	}
-	if !api.Workers.IsNull() && !api.Workers.IsUnknown() {
-		state.Workers = api.Workers
-	}
+	state.Workers = groupSystemSettingsObjectFromAPIOrPrior(api.Workers, state.Workers)
 	if state.Workers.IsUnknown() {
 		state.Workers = types.ObjectNull(GroupSystemSettingsWorkersAttrTypes())
 	}

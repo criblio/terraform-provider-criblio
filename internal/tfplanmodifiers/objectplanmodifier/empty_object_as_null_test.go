@@ -36,3 +36,17 @@ func TestEmptyObjectAsNull(t *testing.T) {
 		})
 	}
 }
+
+func TestPreferConfigOrStateWithNullConfig(t *testing.T) {
+	objectType := map[string]attr.Type{"enabled": types.BoolType}
+	nullObject := types.ObjectNull(objectType)
+	refreshedObject := types.ObjectValueMust(objectType, map[string]attr.Value{"enabled": types.BoolValue(true)})
+
+	modifier := PreferConfigOrState()
+	for _, state := range []types.Object{nullObject, refreshedObject} {
+		request := planmodifier.ObjectRequest{ConfigValue: nullObject, PlanValue: types.ObjectUnknown(objectType), StateValue: state}
+		response := &planmodifier.ObjectResponse{PlanValue: request.PlanValue}
+		modifier.PlanModifyObject(context.Background(), request, response)
+		assert.True(t, response.PlanValue.Equal(state))
+	}
+}

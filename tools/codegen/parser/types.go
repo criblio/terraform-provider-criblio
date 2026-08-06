@@ -78,6 +78,7 @@ type FieldDef struct {
 	RequestComputed    bool
 	UpdateField        bool
 	ApplyStrategy      string
+	StateMergeHook     string
 	PlanModifierHook   string
 	UseStateForUnknown bool
 	EmitEmpty          bool

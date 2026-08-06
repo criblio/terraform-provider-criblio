@@ -2105,12 +2105,16 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 	{{- end }}
 {{- else if eq .Type "object" }}
+		{{- if .StateMergeHook }}
+		state.{{ .GoName }} = {{ .StateMergeHook }}(api.{{ .GoName }}, state.{{ .GoName }})
+		{{- else }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}
 		}{{- if and .Computed (not .Optional) }} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = {{ zeroValue . }}
 		}
 	{{- end }}
+		{{- end }}
 {{- else if and .Computed (not .Optional) }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}

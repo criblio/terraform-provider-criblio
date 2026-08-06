@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# GUI Git clients often omit Homebrew directories from PATH.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # Only format paths that are already staged. Formatting the whole tree and re-adding
 # every .go/.tf re-stages unrelated work and can break IDE commits (e.g. batched git add
 # across directories). CI should `git add -A` before invoking this hook when a full-tree
