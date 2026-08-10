@@ -29,6 +29,9 @@ type ResourceBlockOptions struct {
 	// attributes even when empty (empty list is valid). E.g. criblio_project subscriptions, destinations.
 	// Map key = resource type name, value = attribute names.
 	AlwaysEmitEmptyListsFor map[string][]string
+	// AlwaysEmitEmptyMapsFor preserves selected empty object attributes instead
+	// of normalizing them to null, matching APIs that distinguish {} from null.
+	AlwaysEmitEmptyMapsFor map[string][]string
 }
 
 // DefaultResourceBlockOptions returns options suitable for import CLI output:
@@ -43,6 +46,12 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_search_dataset_ruleset":  {"rules"},
 			"criblio_search_datatype_ruleset": {"rules"},
 			"criblio_search_dashboard":        {"elements"},
+		},
+		AlwaysEmitEmptyMapsFor: map[string][]string{
+			"criblio_mapping_ruleset":  {"conf"},
+			"criblio_pipeline":         {"conf"},
+			"criblio_pack_pipeline":    {"conf"},
+			"criblio_project_pipeline": {"conf"},
 		},
 	}
 }
@@ -93,7 +102,7 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 		if skipNull && v.Kind == KindNull {
 			continue
 		}
-		if skipNull && v.Kind == KindMap && len(v.Map) == 0 {
+		if skipNull && v.Kind == KindMap && len(v.Map) == 0 && !attrInList(typeName, k, opts.AlwaysEmitEmptyMapsFor) {
 			continue
 		}
 		if opts != nil && opts.SkipEmptyListAttributes && v.Kind == KindList && len(v.List) == 0 {

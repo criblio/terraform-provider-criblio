@@ -20,6 +20,18 @@ resource "criblio_notification_target" "alerts" {
   }
 }
 
+resource "criblio_notification_target" "slack_alerts" {
+  id = "test_slack_notification_target"
+  slack_target = {
+    id   = "test_slack_notification_target"
+    type = "slack"
+    url  = "https://hooks.slack.com/services/T00000000/B00000000/X00000000"
+    system_fields = [
+      "cribl_host",
+    ]
+  }
+}
+
 # Stream / source condition: high data volume (matches UI advanced settings)
 resource "criblio_notification" "source_high_volume" {
   id        = "test_source_volume_notification"
@@ -43,5 +55,8 @@ resource "criblio_notification" "source_high_volume" {
       value = "`C.vars.example || 'n/a'`"
     },
   ]
-  targets = [criblio_notification_target.alerts.id]
+  targets = [
+    criblio_notification_target.alerts.id,
+    criblio_notification_target.slack_alerts.id,
+  ]
 }

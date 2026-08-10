@@ -244,3 +244,12 @@ func TestResourceBlock_pack_tags_preserves_domain_with_skip_empty_lists(t *testi
 	err = ParseHCL(bytes, "test.tf")
 	assert.NoError(t, err, "pack resource with tags must parse")
 }
+
+func TestResourceBlock_preservesConfiguredEmptyMaps(t *testing.T) {
+	opts := DefaultResourceBlockOptions()
+
+	attrs := map[string]Value{"conf": {Kind: KindMap, Map: map[string]Value{}}}
+	got, err := ResourceBlockBytes("criblio_mapping_ruleset", "test", attrs, opts)
+	require.NoError(t, err)
+	assert.Contains(t, string(got), "conf = {}")
+}

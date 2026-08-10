@@ -64,6 +64,51 @@ func TestListItemIdentifiersIncludesBothDatasetRulesets(t *testing.T) {
 	}, identifiers)
 }
 
+func TestRESTScopesIncludesBothMappingProducts(t *testing.T) {
+	assert.Equal(t, []map[string]string{
+		{"product": "stream"},
+		{"product": "edge"},
+	}, restScopes("/admin/products/{product}/mappings", nil))
+}
+
+func TestShouldSkipRawIDSkipsPackReferencesFromPipelineLists(t *testing.T) {
+	for _, typeName := range []string{"criblio_pipeline", "criblio_project_pipeline"} {
+		t.Run(typeName, func(t *testing.T) {
+			assert.True(t, shouldSkipRawID(typeName, "pack:billing_pipeline", nil))
+			assert.False(t, shouldSkipRawID(typeName, "custom_pipeline", nil))
+		})
+	}
+}
+
+func TestListRESTIdentifiersDiscoversProjectPipelines(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/default/system/projects":
+			_, _ = w.Write([]byte(`{"items":[{"id":"project-a"},{"id":"project-b"}]}`))
+		case "/api/v1/m/default/system/projects/project-a/pipelines":
+			_, _ = w.Write([]byte(`{"items":[{"id":"main"},{"id":"metrics"}]}`))
+		case "/api/v1/m/default/system/projects/project-b/pipelines":
+			_, _ = w.Write([]byte(`{"items":[{"id":"main"}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	ids, perGroup, err := listRESTIdentifiers(context.Background(), criblMockClient(server), registry.Entry{
+		TypeName:     "criblio_project_pipeline",
+		RESTListPath: "/m/{group_id}/system/projects/{project_id}/pipelines",
+	}, []string{"default"})
+	require.NoError(t, err)
+	require.Equal(t, []map[string]string{
+		{"group_id": "default", "project_id": "project-a", "id": "main"},
+		{"group_id": "default", "project_id": "project-a", "id": "metrics"},
+		{"group_id": "default", "project_id": "project-b", "id": "main"},
+	}, ids)
+	assert.Equal(t, map[string]int{"default": 3}, perGroup)
+}
+
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
@@ -162,6 +207,7 @@ func TestSkipGroupScopedSingleton(t *testing.T) {
 	assert.True(t, skipGroupScopedSingleton("criblio_routes", "search"))
 	assert.False(t, skipGroupScopedSingleton("criblio_routes", "default"))
 	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
+	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default"))
 }
 
 func TestIdentifiersFromRawItems_skipsLibCribl(t *testing.T) {

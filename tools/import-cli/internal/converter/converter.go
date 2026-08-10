@@ -227,10 +227,12 @@ func callRESTGetByID(ctx context.Context, client *importclient.Client, e registr
 
 func restPathValues(requestParams map[string]string) map[string]string {
 	return map[string]string{
-		"group_id": requestParams["GroupID"],
-		"id":       requestParams["ID"],
-		"pack":     requestParams["Pack"],
-		"lake_id":  requestParams["LakeID"],
+		"group_id":   requestParams["GroupID"],
+		"id":         requestParams["ID"],
+		"pack":       requestParams["Pack"],
+		"project_id": requestParams["ProjectID"],
+		"lake_id":    requestParams["LakeID"],
+		"product":    requestParams["Product"],
 	}
 }
 

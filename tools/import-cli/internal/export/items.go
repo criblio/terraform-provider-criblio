@@ -41,7 +41,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if flattenItemsToTopLevelTypes[r.TypeName] {
 		flattenItemsListToTopLevel(attrs)
 	}
-	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" {
+	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" || r.TypeName == "criblio_project_pipeline" {
 		ensurePipelineConfForExport(attrs)
 	}
 	// criblio_pack: exports is an install-time parameter (RequiresReplaceIfConfigured). The API does
@@ -170,14 +170,34 @@ func normalizeRoutesForExport(routesVal hcl.Value) hcl.Value {
 
 func ensurePipelineConfForExport(attrs map[string]hcl.Value) {
 	conf, ok := attrs["conf"]
-	if !ok || conf.Kind == hcl.KindNull {
-		attrs["conf"] = hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{
-			"output": {Kind: hcl.KindString, String: "default"},
-		}}
+	if !ok || pipelineConfIsEmpty(conf) {
+		attrs["conf"] = hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{}}
 		return
 	}
 	if conf.Kind != hcl.KindMap {
 		return
+	}
+}
+
+func pipelineConfIsEmpty(conf hcl.Value) bool {
+	return hclValueIsEmpty(conf)
+}
+
+func hclValueIsEmpty(value hcl.Value) bool {
+	switch value.Kind {
+	case hcl.KindNull:
+		return true
+	case hcl.KindList:
+		return len(value.List) == 0
+	case hcl.KindMap:
+		for _, nested := range value.Map {
+			if !hclValueIsEmpty(nested) {
+				return false
+			}
+		}
+		return true
+	default:
+		return false
 	}
 }
 

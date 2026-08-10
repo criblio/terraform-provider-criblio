@@ -1588,6 +1588,9 @@ import (
 	"encoding/json"
 {{- end }}
 	"fmt"
+{{- if needsRegexp . }}
+	"regexp"
+{{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 {{- if needsCustomPlanModifier . "bool" }}
@@ -2162,7 +2165,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- end }}
 {{- end }}
-{{- if or (eq .StructName "Pipeline") (eq .StructName "PackPipeline") }}
+{{- if or (eq .StructName "Pipeline") (eq .StructName "PackPipeline") (eq .StructName "ProjectPipeline") }}
 	if !state.Conf.IsNull() {
 		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: {{ .StructName }}ConfAttrTypes()}); err == nil {
 			state.Conf = normalized.(types.Object)

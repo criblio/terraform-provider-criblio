@@ -13,8 +13,6 @@ func TestNoExportTypes_ContainsExpectedTypes(t *testing.T) {
 		"criblio_group_system_settings":        true,
 		"criblio_key":                          true,
 		"criblio_lakehouse_dataset_connection": true,
-		"criblio_mapping_ruleset":              true,
-		"criblio_search_usage_group":           true,
 		"criblio_workspace":                    true,
 	}
 	for _, typ := range NoExportTypes {
