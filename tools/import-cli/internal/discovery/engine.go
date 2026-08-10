@@ -418,7 +418,7 @@ func shouldSkipRawID(typeName, id string, item map[string]any) bool {
 		return true
 	case (typeName == "criblio_event_breaker_ruleset" || typeName == "criblio_search_macro") && strings.Contains(id, "."):
 		return true
-	case typeName == "criblio_pipeline" && strings.HasPrefix(id, "pack:"):
+	case (typeName == "criblio_pipeline" || typeName == "criblio_project_pipeline") && strings.HasPrefix(id, "pack:"):
 		return true
 	case (typeName == "criblio_destination" || typeName == "criblio_pack_destination") && custom.DefaultDestinationIDs[id]:
 		return true

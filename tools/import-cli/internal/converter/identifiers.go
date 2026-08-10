@@ -10,13 +10,13 @@ import (
 )
 
 // IdentifierParamNames are the request/import param names that map to Terraform
-// model fields (e.g. GroupID, ID, Pack, LakeID). Used to inject required identifiers
+// model fields (e.g. GroupID, ID, Pack, ProjectID, LakeID). Used to inject required identifiers
 // after conversion so models are valid for Terraform and HCL generation.
-var IdentifierParamNames = []string{"GroupID", "ID", "Pack", "LakeID", "Product"}
+var IdentifierParamNames = []string{"GroupID", "ID", "Pack", "ProjectID", "LakeID", "Product"}
 
 // InjectRequiredIdentifiers sets required Terraform identifier fields on the
 // converted model (e.g. id, group_id) from the given identifiers map. Keys should
-// match request param names (e.g. "ID", "GroupID", "Pack"). Only fields that
+// match request param names (e.g. "ID", "GroupID", "Pack", "ProjectID"). Only fields that
 // exist on the model and are types.String are set. This ensures downstream HCL
 // generation receives valid Terraform models with required identifiers populated.
 func InjectRequiredIdentifiers(model interface{}, identifiers map[string]string) error {

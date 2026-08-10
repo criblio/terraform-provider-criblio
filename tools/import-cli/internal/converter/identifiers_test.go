@@ -28,6 +28,20 @@ func TestInjectRequiredIdentifiers(t *testing.T) {
 		assert.Equal(t, "pipeline-abc", model.ID.ValueString())
 	})
 
+	t.Run("sets_project_pipeline_identifiers", func(t *testing.T) {
+		model := &provider.ProjectPipelineResourceModel{}
+		identifiers := map[string]string{
+			"GroupID":   "default",
+			"ProjectID": "project-1",
+			"ID":        "pipeline-1",
+		}
+		err := InjectRequiredIdentifiers(model, identifiers)
+		require.NoError(t, err)
+		assert.Equal(t, "default", model.GroupID.ValueString())
+		assert.Equal(t, "project-1", model.ProjectID.ValueString())
+		assert.Equal(t, "pipeline-1", model.ID.ValueString())
+	})
+
 	t.Run("sets_id_and_product_on_mapping_ruleset_model", func(t *testing.T) {
 		model := &provider.MappingRulesetResourceModel{}
 		identifiers := map[string]string{"Product": "stream", "ID": "default"}

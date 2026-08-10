@@ -71,6 +71,15 @@ func TestRESTScopesIncludesBothMappingProducts(t *testing.T) {
 	}, restScopes("/admin/products/{product}/mappings", nil))
 }
 
+func TestShouldSkipRawIDSkipsPackReferencesFromPipelineLists(t *testing.T) {
+	for _, typeName := range []string{"criblio_pipeline", "criblio_project_pipeline"} {
+		t.Run(typeName, func(t *testing.T) {
+			assert.True(t, shouldSkipRawID(typeName, "pack:billing_pipeline", nil))
+			assert.False(t, shouldSkipRawID(typeName, "custom_pipeline", nil))
+		})
+	}
+}
+
 func TestListRESTIdentifiersDiscoversProjectPipelines(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

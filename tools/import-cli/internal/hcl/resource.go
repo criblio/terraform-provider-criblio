@@ -48,7 +48,10 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_search_dashboard":        {"elements"},
 		},
 		AlwaysEmitEmptyMapsFor: map[string][]string{
-			"criblio_mapping_ruleset": {"conf"},
+			"criblio_mapping_ruleset":  {"conf"},
+			"criblio_pipeline":         {"conf"},
+			"criblio_pack_pipeline":    {"conf"},
+			"criblio_project_pipeline": {"conf"},
 		},
 	}
 }

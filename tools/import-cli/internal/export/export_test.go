@@ -1084,7 +1084,30 @@ func TestEnsurePipelineConfForExport(t *testing.T) {
 
 		ensurePipelineConfForExport(attrs)
 
-		assert.Equal(t, "default", attrs["conf"].Map["output"].String)
+		assert.Empty(t, attrs["conf"].Map)
+		generated, err := hcl.ResourceBlockBytes("criblio_project_pipeline", "passthru", attrs, hcl.DefaultResourceBlockOptions())
+		require.NoError(t, err)
+		assert.Contains(t, string(generated), "conf = {}")
+	})
+	t.Run("creates required conf when API returns an empty object", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{}}}
+
+		ensurePipelineConfForExport(attrs)
+
+		assert.Empty(t, attrs["conf"].Map)
+	})
+	t.Run("creates required conf when API object contains only null and empty values", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
+			"description": {Kind: hcl.KindNull},
+			"functions":   {Kind: hcl.KindList, List: []hcl.Value{}},
+			"groups":      {Kind: hcl.KindMap, Map: map[string]hcl.Value{}},
+			"output":      {Kind: hcl.KindNull},
+			"streamtags":  {Kind: hcl.KindList, List: []hcl.Value{}},
+		}}}
+
+		ensurePipelineConfForExport(attrs)
+
+		assert.Empty(t, attrs["conf"].Map)
 	})
 	t.Run("does not add output to existing conf", func(t *testing.T) {
 		attrs := map[string]hcl.Value{"conf": {Kind: hcl.KindMap, Map: map[string]hcl.Value{
