@@ -142,6 +142,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_source":                       {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/inputs", RESTGetPath: "/m/{group_id}/system/inputs/{id}"},
 	"criblio_destination":                  {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/outputs", RESTGetPath: "/m/{group_id}/system/outputs/{id}"},
 	"criblio_pipeline":                     {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/pipelines", RESTGetPath: "/m/{group_id}/pipelines/{id}"},
+	"criblio_project_pipeline":             {ImportIDFormat: "json:group_id,project_id,id", RESTListPath: "/m/{group_id}/system/projects/{project_id}/pipelines", RESTGetPath: "/m/{group_id}/system/projects/{project_id}/pipelines/{id}"},
 	"criblio_certificate":                  {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/certificates", RESTGetPath: "/m/{group_id}/system/certificates/{id}"},
 	"criblio_cribl_lake_dataset":           {ImportIDFormat: "json:lake_id,id", RESTListPath: "/products/lake/lakes/{lake_id}/datasets", RESTGetPath: "/products/lake/lakes/{lake_id}/datasets/{id}"},
 	"criblio_database_connection":          {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/lib/database-connections", RESTGetPath: "/m/{group_id}/lib/database-connections/{id}"},

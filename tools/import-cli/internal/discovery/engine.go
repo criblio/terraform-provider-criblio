@@ -283,6 +283,26 @@ func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e reg
 		if gid != "" && skipGroupScopedSingleton(e.TypeName, gid) {
 			continue
 		}
+		if pathUsesRESTParam(e.RESTListPath, "project_id") {
+			projectIDs, err := getProjectIDsByGroup(ctx, client, gid)
+			if err != nil {
+				return nil, nil, err
+			}
+			groupCount := 0
+			for _, projectID := range projectIDs {
+				scope["project_id"] = projectID
+				ids, err := listRESTPathIdentifiers(ctx, client, e, scope)
+				if err != nil {
+					return nil, nil, err
+				}
+				groupCount += len(ids)
+				out = append(out, ids...)
+			}
+			if gid != "" {
+				perGroup[gid] = groupCount
+			}
+			continue
+		}
 		if pathUsesRESTParam(e.RESTListPath, "pack") {
 			packIDs, err := getPackIDsByGroup(ctx, client, gid)
 			if err != nil {
@@ -374,7 +394,7 @@ func identifiersFromRawItems(items []json.RawMessage, scope map[string]string, e
 			id = strings.TrimPrefix(id, "pack:")
 		}
 		m := map[string]string{"id": id}
-		for _, key := range []string{"group_id", "lake_id", "pack", "product"} {
+		for _, key := range []string{"group_id", "lake_id", "pack", "product", "project_id"} {
 			if scope[key] != "" {
 				m[key] = scope[key]
 			}
@@ -480,6 +500,27 @@ func getPackIDsByGroup(ctx context.Context, client *importclient.Client, groupID
 		}
 		id := rawString(item, "id", "ID", "name")
 		if id != "" && !custom.SkipPacks[id] {
+			ids = append(ids, id)
+		}
+	}
+	return ids, nil
+}
+
+func getProjectIDsByGroup(ctx context.Context, client *importclient.Client, groupID string) ([]string, error) {
+	items, err := getRESTItems(ctx, client, fmt.Sprintf("/m/%s/system/projects", url.PathEscape(groupID)))
+	if restclient.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	ids := make([]string, 0, len(items))
+	for _, raw := range items {
+		item, err := rawMap(raw)
+		if err != nil {
+			return nil, err
+		}
+		if id := rawString(item, "id", "ID", "name"); id != "" {
 			ids = append(ids, id)
 		}
 	}

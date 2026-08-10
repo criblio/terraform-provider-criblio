@@ -78,6 +78,9 @@ func toRequestParams(idMap map[string]string) map[string]string {
 	if v := idMap["pack"]; v != "" {
 		out["Pack"] = v
 	}
+	if v := idMap["project_id"]; v != "" {
+		out["ProjectID"] = v
+	}
 	if v := idMap["lake_id"]; v != "" {
 		out["LakeID"] = v
 	}

@@ -13,6 +13,7 @@ internal/provider/searchdatatyperuleset_delete.go
 tests/acceptance/lookup_file_test.go
 tests/acceptance/pack_lookups_test.go
 tests/acceptance/pack_test.go
+tests/acceptance/project_pipeline_test.go
 tests/acceptance/custom_banner_test.go
 internal/provider/custombanner_create.go
 internal/provider/custombanner_data_source.go

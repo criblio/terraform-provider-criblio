@@ -41,7 +41,7 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 	if flattenItemsToTopLevelTypes[r.TypeName] {
 		flattenItemsListToTopLevel(attrs)
 	}
-	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" {
+	if r.TypeName == "criblio_pipeline" || r.TypeName == "criblio_pack_pipeline" || r.TypeName == "criblio_project_pipeline" {
 		ensurePipelineConfForExport(attrs)
 	}
 	// criblio_pack: exports is an install-time parameter (RequiresReplaceIfConfigured). The API does

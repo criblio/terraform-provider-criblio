@@ -1535,6 +1535,24 @@ actions:
     update:
       x-terraform-suppress-diff: explicit
 
+  - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: ProjectPipeline
+  - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines.get"
+    update:
+      x-terraform-list: ProjectPipeline
+      x-terraform-list-name: ProjectPipelines
+  - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines/{id}.get"
+    update:
+      x-terraform-read: ProjectPipeline
+  - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines/{id}.patch"
+    update:
+      x-terraform-update: ProjectPipeline
+  - target: "$.paths./m/{groupId}/system/projects/{projectId}/pipelines/{id}.delete"
+    update:
+      x-terraform-delete: ProjectPipeline
+
   - target: "$.paths./m/{groupId}/system/info.get"
     update:
       x-terraform-list: SystemInfo
