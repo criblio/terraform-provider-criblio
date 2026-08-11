@@ -370,11 +370,6 @@ func nodesEqual(a, b *yaml.Node) bool {
 	return bytes.Equal(left.Bytes(), right.Bytes())
 }
 
-func collectCloudOnlyPaths(spec *yaml.Node) ([]string, error) {
-	cloudOnly, _, err := collectAvailabilityPaths(spec)
-	return cloudOnly, err
-}
-
 func collectAvailabilityPaths(spec *yaml.Node) ([]string, []string, error) {
 	paths, ok := mappingValue(documentMapping(spec), "paths")
 	if !ok || paths.Kind != yaml.MappingNode {
@@ -400,10 +395,6 @@ func collectAvailabilityPaths(spec *yaml.Node) ([]string, []string, error) {
 	sort.Strings(cloudOnlyPaths)
 	sort.Strings(onPremOnlyPaths)
 	return cloudOnlyPaths, onPremOnlyPaths, nil
-}
-
-func pathIsCloudOnly(pathItem *yaml.Node) bool {
-	return pathAvailability(pathItem) == "cloud"
 }
 
 func pathAvailability(pathItem *yaml.Node) string {
@@ -432,10 +423,6 @@ func pathAvailability(pathItem *yaml.Node) string {
 		return ""
 	}
 	return availabilityValue
-}
-
-func writeCloudOnlyPaths(filename string, paths []string) error {
-	return writeAvailabilityPaths(filename, paths, nil)
 }
 
 func writeAvailabilityPaths(filename string, cloudOnlyPaths, onPremOnlyPaths []string) error {
