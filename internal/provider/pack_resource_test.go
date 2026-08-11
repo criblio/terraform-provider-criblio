@@ -205,6 +205,58 @@ func TestPreservePackPlanKeepsPlannedItems(t *testing.T) {
 	}
 }
 
+func TestPreservePackPlanResolvesUnknownTags(t *testing.T) {
+	plan := packPlanObjectWithItems(t, packInstallInfo{
+		Author:      types.StringNull(),
+		Description: types.StringNull(),
+		DisplayName: types.StringValue("test-pack-metadata"),
+		ID:          types.StringValue("test-pack-metadata"),
+		Version:     types.StringValue("1.0.0"),
+		Warnings:    jsontypes.NewNormalizedValue("null"),
+	})
+	planValues := plan.Attributes()
+	planValues["tags"] = types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
+		"data_type":  types.ListUnknown(types.StringType),
+		"domain":     types.ListValueMust(types.StringType, []attr.Value{types.StringValue("planned-domain")}),
+		"streamtags": types.ListValueMust(types.StringType, nil),
+		"technology": types.ListUnknown(types.StringType),
+	})
+	plan = types.ObjectValueMust(plan.AttributeTypes(context.Background()), planValues)
+
+	data := &PackResourceModel{Tags: packRequestBodyTagsObjectFromAPI(&packTagsAPI{
+		DataType:   []string{"api-data-type"},
+		Domain:     []string{"api-domain"},
+		Streamtags: []string{"api-streamtag"},
+		Technology: []string{"api-technology"},
+	})}
+
+	preservePackPlan(context.Background(), data, plan)
+
+	var tags packRequestBodyTags
+	if diags := data.Tags.As(context.Background(), &tags, basetypes.ObjectAsOptions{}); diags.HasError() {
+		t.Fatalf("decode preserved tags: %v", diags)
+	}
+	for name, value := range map[string]types.List{
+		"data_type": tags.DataType, "domain": tags.Domain, "streamtags": tags.Streamtags, "technology": tags.Technology,
+	} {
+		if value.IsNull() || value.IsUnknown() {
+			t.Errorf("tags.%s must be known after apply", name)
+		}
+	}
+	if got := stringSliceFromList(tags.DataType); len(got) != 1 || got[0] != "api-data-type" {
+		t.Errorf("data_type = %#v, want API value", got)
+	}
+	if got := stringSliceFromList(tags.Domain); len(got) != 1 || got[0] != "planned-domain" {
+		t.Errorf("domain = %#v, want planned value", got)
+	}
+	if got := stringSliceFromList(tags.Streamtags); len(got) != 0 {
+		t.Errorf("streamtags = %#v, want planned empty list", got)
+	}
+	if got := stringSliceFromList(tags.Technology); len(got) != 1 || got[0] != "api-technology" {
+		t.Errorf("technology = %#v, want API value", got)
+	}
+}
+
 func TestInstallUploadedPackUsesJSONPatchWithShortSource(t *testing.T) {
 	var calls []string
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

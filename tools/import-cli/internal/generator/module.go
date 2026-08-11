@@ -26,6 +26,8 @@ type ResourceItem struct {
 	// LifecycleIgnoreChanges, when non-nil, adds lifecycle { ignore_changes = [...] } to the resource.
 	// Used for criblio_group_system_settings group_id=default (cloud disables API host/port updates).
 	LifecycleIgnoreChanges []string
+	// Migration marks create-only output produced for an on-prem-to-Cloud migration.
+	Migration bool
 }
 
 // ResourceFile is an auxiliary file emitted next to generated Terraform.
@@ -270,11 +272,11 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 }
 
 func writeResourceFiles(fs FileSystem, moduleDir string, items []ResourceItem) error {
-	if !resourceItemsHaveFiles(items) {
-		return nil
-	}
 	if err := fs.RemoveAll(filepath.Join(moduleDir, "files")); err != nil {
 		return fmt.Errorf("remove stale resource files: %w", err)
+	}
+	if !resourceItemsHaveFiles(items) {
+		return nil
 	}
 	written := make(map[string]bool)
 	for _, it := range items {
