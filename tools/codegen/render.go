@@ -208,6 +208,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"needsCustomPlanModifier":          needsCustomPlanModifier,
 		"needsValidator":                   needsValidator,
 		"needsStringValidator":             needsStringValidator,
+		"needsRegexp":                      needsRegexp,
 		"needsCustomStringValidator":       needsCustomStringValidator,
 		"needsCustomJSONValidator":         needsCustomJSONValidator,
 		"planModifierType":                 planModifierType,
@@ -974,7 +975,16 @@ func needsValidator(resource parser.ResourceDef) bool {
 
 func needsStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0 || field.ConflictsWith != "") && field.Type == "string" {
+		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0 || field.Pattern != "" || field.ConflictsWith != "") && field.Type == "string" {
+			return true
+		}
+	}
+	return false
+}
+
+func needsRegexp(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.Pattern != "" && field.Type == "string" {
 			return true
 		}
 	}
@@ -1432,6 +1442,9 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	}
 	if field.NotNull {
 		calls = append(calls, "custom_stringvalidators.NotNull()")
+	}
+	if field.Pattern != "" {
+		calls = append(calls, fmt.Sprintf("stringvalidator.RegexMatches(regexp.MustCompile(%s), %q)", goStringLiteral(field.Pattern), "must match pattern "+field.Pattern))
 	}
 	if field.ValidJSON {
 		calls = append(calls, "custom_validators.IsValidJSON()")

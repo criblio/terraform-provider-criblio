@@ -390,6 +390,23 @@ func TestParseTerraformConflictsWith(t *testing.T) {
 	}
 }
 
+func TestPatternValidatorRequiresOptIn(t *testing.T) {
+	var property yaml.Node
+	if err := yaml.Unmarshal([]byte("pattern: '^https?://example\\.com'\nx-terraform-pattern-validator: true\n"), &property); err != nil {
+		t.Fatalf("parse property: %v", err)
+	}
+	if got := patternValidator(property.Content[0]); got != `^https?://example\.com` {
+		t.Fatalf("pattern validator = %q, want %q", got, `^https?://example\.com`)
+	}
+
+	if err := yaml.Unmarshal([]byte("pattern: '^https?://'\n"), &property); err != nil {
+		t.Fatalf("parse property without opt-in: %v", err)
+	}
+	if got := patternValidator(property.Content[0]); got != "" {
+		t.Fatalf("pattern validator without opt-in = %q, want empty", got)
+	}
+}
+
 func TestParseSearchDatasetCompatibility(t *testing.T) {
 	resources, err := Parse([]byte(`
 openapi: 3.1.0

@@ -61,8 +61,8 @@ func skipExportForGroupFilter(typeName string, idMap map[string]string, groupFil
 	return !allowed[out]
 }
 
-// toRequestParams maps lowercase identifier keys (group_id, id, pack) to
-// request param names (GroupID, ID, Pack) expected by the SDK and converter.
+// toRequestParams maps lowercase identifier keys to request parameter names
+// expected by the converter.
 func toRequestParams(idMap map[string]string) map[string]string {
 	out := make(map[string]string)
 	if v := idMap["group_id"]; v != "" {
@@ -78,8 +78,14 @@ func toRequestParams(idMap map[string]string) map[string]string {
 	if v := idMap["pack"]; v != "" {
 		out["Pack"] = v
 	}
+	if v := idMap["project_id"]; v != "" {
+		out["ProjectID"] = v
+	}
 	if v := idMap["lake_id"]; v != "" {
 		out["LakeID"] = v
+	}
+	if v := idMap["product"]; v != "" {
+		out["Product"] = v
 	}
 	return out
 }

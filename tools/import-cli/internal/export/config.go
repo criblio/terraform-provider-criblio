@@ -63,5 +63,4 @@ var flattenItemsToTopLevelTypes = map[string]bool{
 	"criblio_pack_routes":           true, // same as criblio_routes: first item (id, routes, comments, groups) becomes top-level
 	"criblio_pack_vars":             true, // first item (args, description, id, lib, tags, type, value) becomes top-level
 	"criblio_group_system_settings": true,
-	"criblio_search_usage_group":    true, // API returns list; schema has required top-level rules, items is computed
 }

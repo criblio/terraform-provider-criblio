@@ -101,6 +101,19 @@ func TestRegistry_ByTypeName(t *testing.T) {
 	assert.False(t, ok)
 }
 
+func TestRegistry_MappingRulesetImportMetadata(t *testing.T) {
+	ctx := context.Background()
+	p := provider.New("test")()
+	reg, err := NewFromResources(ctx, p.Resources(ctx), MetadataFromProvider(), nil, nil)
+	require.NoError(t, err)
+
+	entry, ok := reg.ByTypeName("criblio_mapping_ruleset")
+	require.True(t, ok)
+	assert.Equal(t, "json:product,id", entry.ImportIDFormat)
+	assert.Equal(t, "/admin/products/{product}/mappings", entry.RESTListPath)
+	assert.Equal(t, "/admin/products/{product}/mappings/{id}", entry.RESTGetPath)
+}
+
 func TestRegistry_TypeNames_and_Entries_consistent(t *testing.T) {
 	ctx := context.Background()
 	p := provider.New("test")()
