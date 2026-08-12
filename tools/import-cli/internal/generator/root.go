@@ -125,7 +125,7 @@ func rootReadmeBytes(moduleInfos []RootModuleInfo, migration bool) []byte {
 	buf.WriteString("   - **Provider block**: Uncomment placeholders in `providers.tf` and set values (do not commit secrets).\n")
 	buf.WriteString("2. **Initialize Terraform**: `terraform init`\n")
 	if migration {
-		buf.WriteString("3. **Review `migration-report.json`**: Resolve every warning, group mapping, and secret placeholder.\n")
+		buf.WriteString("3. **Review the generated configuration**: Verify group mappings and resolve every secret placeholder.\n")
 		buf.WriteString("4. **Review target plan**: Run `terraform plan`; resources will be created in the target Cloud workspace.\n")
 	} else {
 		buf.WriteString("3. **Review plan**: `terraform plan` (imports will be executed)\n")

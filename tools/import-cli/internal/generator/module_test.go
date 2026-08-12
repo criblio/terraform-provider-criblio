@@ -515,7 +515,7 @@ func TestWriteRootFiles_writesMigrationReadme(t *testing.T) {
 	content, err := os.ReadFile(filepath.Join(tmp, "README.md"))
 	require.NoError(t, err)
 	assert.Contains(t, string(content), "On-Prem to Cloud Migration")
-	assert.Contains(t, string(content), "migration-report.json")
+	assert.Contains(t, string(content), "Review the generated configuration")
 	assert.Contains(t, string(content), "no import blocks")
 }
 

@@ -1,38 +1,22 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
-	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/export"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
-
-const migrationReportFilename = "migration-report.json"
 
 var groupIDPattern = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
 
 type migrationExclusion struct {
 	TypeName string `json:"type"`
 	Reason   string `json:"reason"`
-}
-
-type migrationReport struct {
-	Mode              string               `json:"mode"`
-	ExportedResources int                  `json:"exported_resources"`
-	ExportedByType    map[string]int       `json:"exported_by_type"`
-	Excluded          []migrationExclusion `json:"excluded"`
-	Transforms        []string             `json:"transforms,omitempty"`
-	GroupMappings     map[string]string    `json:"group_mappings,omitempty"`
-	UnresolvedSecrets []string             `json:"unresolved_secrets,omitempty"`
-	DefaultsExcluded  int                  `json:"defaults_excluded,omitempty"`
-	Warnings          []string             `json:"warnings,omitempty"`
 }
 
 func migrationPolicy(reg *registry.Registry) []migrationExclusion {
@@ -173,54 +157,6 @@ func rewriteGroupReferences(attrs map[string]hcl.Value, mappings map[string]stri
 		id.String = targetGroup
 		attrs["id"] = id
 	}
-}
-
-func buildMigrationReport(items []generator.ResourceItem, excluded []migrationExclusion, transforms []string, mappings map[string]string, result *export.ExportResult) migrationReport {
-	report := migrationReport{
-		Mode:              "onprem-to-cloud",
-		ExportedResources: len(items),
-		ExportedByType:    make(map[string]int),
-		Excluded:          excluded,
-		Transforms:        transforms,
-		GroupMappings:     mappings,
-	}
-	secretSet := make(map[string]bool)
-	for _, item := range items {
-		report.ExportedByType[item.TypeName]++
-		for _, name := range hcl.CollectSecretVariableNames(item.Attrs) {
-			secretSet[name] = true
-		}
-	}
-	for name := range secretSet {
-		report.UnresolvedSecrets = append(report.UnresolvedSecrets, name)
-	}
-	sort.Strings(report.UnresolvedSecrets)
-	if result != nil {
-		report.DefaultsExcluded = result.DefaultsSkipped
-		for _, skipped := range result.ListSkipped {
-			if skipped.Count > 0 || skipped.Reason != "list returned 0 identifiers" {
-				report.Warnings = append(report.Warnings, fmt.Sprintf("%s: %s", skipped.TypeName, skipped.Reason))
-			}
-		}
-		report.Warnings = append(report.Warnings, result.ConvertSkipped...)
-	}
-	sort.Strings(report.Warnings)
-	return report
-}
-
-func writeMigrationReport(outputDir string, report migrationReport) error {
-	content, err := json.MarshalIndent(report, "", "  ")
-	if err != nil {
-		return fmt.Errorf("encode migration report: %w", err)
-	}
-	content = append(content, '\n')
-	if err := generator.DefaultFS.MkdirAll(outputDir, 0755); err != nil {
-		return fmt.Errorf("create migration output directory: %w", err)
-	}
-	if err := generator.DefaultFS.WriteFileAtomic(outputDir, migrationReportFilename, content, 0644); err != nil {
-		return fmt.Errorf("write migration report: %w", err)
-	}
-	return nil
 }
 
 func compactStrings(values []string) []string {

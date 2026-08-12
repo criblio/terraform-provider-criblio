@@ -200,25 +200,18 @@ func NewExportCommand() *cobra.Command {
 			includeOverride := export.ParseIncludeDefaultIDs(includeDefaultIDs)
 			exportResult, exportErr := export.ToResourceItems(ctx, apiClient, reg, results, groupIDs, group, parallel, excludeDefaults, includeOverride, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
-			var migrationTransforms []string
 			if onPremToCloud {
 				switch packStrategy {
 				case "archive":
-					packAssets, packErr := export.AttachPackAssets(ctx, apiClient, exportResult.Items)
+					_, packErr := export.AttachPackAssets(ctx, apiClient, exportResult.Items)
 					if packErr != nil {
 						return fmt.Errorf("prepare portable pack assets: %w", packErr)
 					}
 					exportResult.Items, _ = export.RemovePackChildResources(exportResult.Items)
-					if packAssets > 0 {
-						migrationTransforms = append(migrationTransforms, fmt.Sprintf("embedded %d pack archive(s); omitted pack child resources", packAssets))
-					}
 				case "resources":
-					if prepared := export.PreparePackResources(exportResult.Items); prepared > 0 {
-						migrationTransforms = append(migrationTransforms, fmt.Sprintf("created %d empty pack container(s) for pack child resources", prepared))
-					}
+					export.PreparePackResources(exportResult.Items)
 				}
-				groupTransforms, transformErr := prepareOnPremToCloudItems(exportResult.Items, groupMappings)
-				migrationTransforms = append(migrationTransforms, groupTransforms...)
+				_, transformErr := prepareOnPremToCloudItems(exportResult.Items, groupMappings)
 				err = transformErr
 				if err != nil {
 					return err
@@ -228,12 +221,6 @@ func NewExportCommand() *cobra.Command {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())
 			}
 			if len(exportResult.Items) == 0 {
-				if onPremToCloud {
-					report := buildMigrationReport(nil, migrationExcluded, migrationTransforms, groupMappings, exportResult)
-					if err := writeMigrationReport(outputDir, report); err != nil {
-						return err
-					}
-				}
 				if exportErr != nil {
 					return fmt.Errorf("export: %w", exportErr)
 				}
@@ -251,13 +238,6 @@ func NewExportCommand() *cobra.Command {
 				if err := generator.WriteAllModuleDirectoriesByGroup(outputDir, exportResult.Items, opts, progress); err != nil {
 					return fmt.Errorf("write modules: %w", err)
 				}
-			}
-			if onPremToCloud {
-				report := buildMigrationReport(exportResult.Items, migrationExcluded, migrationTransforms, groupMappings, exportResult)
-				if err := writeMigrationReport(outputDir, report); err != nil {
-					return err
-				}
-				fmt.Fprintf(c.OutOrStdout(), "Migration report: %s/%s\n", outputDir, migrationReportFilename)
 			}
 			fmt.Fprintf(c.OutOrStdout(), "Wrote Terraform HCL and import blocks to %s (%d resources)\n", outputDir, len(exportResult.Items))
 			printExportSummary(c, exportResult, verbose, onPrem)

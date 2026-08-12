@@ -2,9 +2,6 @@ package cmd
 
 import (
 	"context"
-	"encoding/json"
-	"os"
-	"path/filepath"
 	"slices"
 	"testing"
 
@@ -95,24 +92,4 @@ func TestParseGroupMappingsRejectsUnsafeGroupIDs(t *testing.T) {
 			require.ErrorContains(t, err, "invalid")
 		})
 	}
-}
-
-func TestWriteMigrationReportIncludesSecretsAndExclusions(t *testing.T) {
-	items := []generator.ResourceItem{{
-		TypeName: "criblio_secret",
-		Attrs: map[string]hcl.Value{
-			"value": {Kind: hcl.KindVariableRef, VarName: "secret_value"},
-		},
-	}}
-	report := buildMigrationReport(items, []migrationExclusion{{TypeName: "criblio_key", Reason: "sensitive"}}, nil, map[string]string{"a": "b"}, nil)
-	outputDir := t.TempDir()
-	require.NoError(t, writeMigrationReport(outputDir, report))
-
-	content, err := os.ReadFile(filepath.Join(outputDir, migrationReportFilename))
-	require.NoError(t, err)
-	var decoded migrationReport
-	require.NoError(t, json.Unmarshal(content, &decoded))
-	assert.Equal(t, 1, decoded.ExportedResources)
-	assert.Equal(t, []string{"secret_value"}, decoded.UnresolvedSecrets)
-	assert.Equal(t, "criblio_key", decoded.Excluded[0].TypeName)
 }
