@@ -17,6 +17,7 @@ import (
 	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -125,8 +126,8 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 									},
 									Validators: []validator.String{
+										stringvalidator.OneOf("aggregate_metrics", "aggregation", "auto_timestamp", "cef", "chain", "clone", "code", "comment", "distinct", "dns_lookup", "drop", "drop_dimensions", "dynamic_sampling", "eval", "event_breaker", "eventstats", "externaldata", "flatten", "foldkeys", "gen_stats", "geoip", "grok", "handlebars", "join", "json_unroll", "lake_export", "limit", "local_search_datatype_parser", "local_search_ruleset_runner", "local_search_schema_mapper", "local_search_time_range_normalizer", "local_search_transformer", "lookup", "mask", "metrics_export", "mv_expand", "mv_pull", "notification_policies", "notifications", "notify", "numerify", "otlp_logs", "otlp_metrics", "otlp_traces", "pack", "pivot", "publish_metrics", "redis", "regex_extract", "regex_filter", "rename", "rollup_metrics", "sampling", "search_engine_export", "send", "sensitive_data_scanner", "serde", "serialize", "sidlookup", "signal_filter", "snmp_trap_serialize", "sort", "store", "suppress", "tee", "trim_timestamp", "union", "unroll", "window", "xml_unroll"),
 										custom_stringvalidators.NotNull(),
-										custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client),
 									},
 								},
 								"description": schema.StringAttribute{

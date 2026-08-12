@@ -830,6 +830,17 @@ func TestDefaultResource(t *testing.T) {
 		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblLogs"}, attrs, noOverride))
 		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblMetrics"}, attrs, noOverride))
 	})
+	t.Run("skip default breaker IDs inside custom packs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"lib": {Kind: hcl.KindString, String: "custom"}}
+		idMap := map[string]string{"id": "CSV Ruleset", "pack": "my-custom-pack"}
+		assert.True(t, DefaultResource("criblio_pack_breakers", idMap, attrs, noOverride))
+	})
+	t.Run("include explicitly requested default breaker inside custom pack", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"lib": {Kind: hcl.KindString, String: "custom"}}
+		idMap := map[string]string{"id": "CSV Ruleset", "pack": "my-custom-pack"}
+		override := ParseIncludeDefaultIDs([]string{"criblio_pack_breakers:CSV Ruleset"})
+		assert.False(t, DefaultResource("criblio_pack_breakers", idMap, attrs, override))
+	})
 	t.Run("skip default lookup file IDs", func(t *testing.T) {
 		attrs := map[string]hcl.Value{}
 		assert.True(t, DefaultResource("criblio_lookup_file", map[string]string{"id": "service_names_port_numbers.csv"}, attrs, noOverride))

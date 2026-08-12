@@ -366,6 +366,7 @@ actions:
         - id
         - conf
       additionalProperties: false
+      x-terraform-discriminator-mapping-validator: true
       properties:
         filter:
           title: Filter
@@ -378,7 +379,6 @@ actions:
           description: Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).
           type: string
           x-terraform-not-null: true
-          x-terraform-pipeline-function-id-validator: true
           x-terraform-optional-computed: true
           x-terraform-suppress-diff: explicit
         description:
@@ -417,6 +417,79 @@ actions:
           type: string
           x-terraform-optional-computed: true
           x-terraform-suppress-diff: explicit
+      discriminator:
+        propertyName: id
+        mapping:
+          aggregate_metrics: "#/components/schemas/PipelineFunctionAggregateMetrics"
+          aggregation: "#/components/schemas/PipelineFunctionAggregation"
+          auto_timestamp: "#/components/schemas/PipelineFunctionAutoTimestamp"
+          cef: "#/components/schemas/PipelineFunctionCef"
+          chain: "#/components/schemas/PipelineFunctionChain"
+          clone: "#/components/schemas/PipelineFunctionClone"
+          code: "#/components/schemas/PipelineFunctionCode"
+          comment: "#/components/schemas/PipelineFunctionComment"
+          distinct: "#/components/schemas/PipelineFunctionDistinct"
+          dns_lookup: "#/components/schemas/PipelineFunctionDnsLookup"
+          drop: "#/components/schemas/PipelineFunctionDrop"
+          drop_dimensions: "#/components/schemas/PipelineFunctionDropDimensions"
+          dynamic_sampling: "#/components/schemas/PipelineFunctionDynamicSampling"
+          eval: "#/components/schemas/PipelineFunctionEval"
+          event_breaker: "#/components/schemas/PipelineFunctionEventBreaker"
+          eventstats: "#/components/schemas/PipelineFunctionEventstats"
+          externaldata: "#/components/schemas/PipelineFunctionExternaldata"
+          flatten: "#/components/schemas/PipelineFunctionFlatten"
+          foldkeys: "#/components/schemas/PipelineFunctionFoldkeys"
+          gen_stats: "#/components/schemas/PipelineFunctionGenStats"
+          geoip: "#/components/schemas/PipelineFunctionGeoip"
+          grok: "#/components/schemas/PipelineFunctionGrok"
+          handlebars: "#/components/schemas/PipelineFunctionHandlebars"
+          join: "#/components/schemas/PipelineFunctionJoin"
+          json_unroll: "#/components/schemas/PipelineFunctionJsonUnroll"
+          lake_export: "#/components/schemas/PipelineFunctionLakeExport"
+          limit: "#/components/schemas/PipelineFunctionLimit"
+          local_search_datatype_parser: "#/components/schemas/PipelineFunctionLocalSearchDatatypeParser"
+          local_search_ruleset_runner: "#/components/schemas/PipelineFunctionLocalSearchRulesetRunner"
+          local_search_schema_mapper: "#/components/schemas/PipelineFunctionLocalSearchSchemaMapper"
+          local_search_time_range_normalizer: "#/components/schemas/PipelineFunctionLocalSearchTimeRangeNormalizer"
+          local_search_transformer: "#/components/schemas/PipelineFunctionLocalSearchTransformer"
+          lookup: "#/components/schemas/PipelineFunctionLookup"
+          mask: "#/components/schemas/PipelineFunctionMask"
+          metrics_export: "#/components/schemas/PipelineFunctionMetricsExport"
+          mv_expand: "#/components/schemas/PipelineFunctionMvExpand"
+          mv_pull: "#/components/schemas/PipelineFunctionMvPull"
+          notification_policies: "#/components/schemas/PipelineFunctionNotificationPolicies"
+          notifications: "#/components/schemas/PipelineFunctionNotifications"
+          notify: "#/components/schemas/PipelineFunctionNotify"
+          numerify: "#/components/schemas/PipelineFunctionNumerify"
+          otlp_logs: "#/components/schemas/PipelineFunctionOtlpLogs"
+          otlp_metrics: "#/components/schemas/PipelineFunctionOtlpMetrics"
+          otlp_traces: "#/components/schemas/PipelineFunctionOtlpTraces"
+          pack: "#/components/schemas/PipelineFunctionPack"
+          pivot: "#/components/schemas/PipelineFunctionPivot"
+          publish_metrics: "#/components/schemas/PipelineFunctionPublishMetrics"
+          redis: "#/components/schemas/PipelineFunctionRedis"
+          regex_extract: "#/components/schemas/PipelineFunctionRegexExtract"
+          regex_filter: "#/components/schemas/PipelineFunctionRegexFilter"
+          rename: "#/components/schemas/PipelineFunctionRename"
+          rollup_metrics: "#/components/schemas/PipelineFunctionRollupMetrics"
+          sampling: "#/components/schemas/PipelineFunctionSampling"
+          search_engine_export: "#/components/schemas/PipelineFunctionSearchEngineExport"
+          send: "#/components/schemas/PipelineFunctionSend"
+          sensitive_data_scanner: "#/components/schemas/PipelineFunctionSensitiveDataScanner"
+          serde: "#/components/schemas/PipelineFunctionSerde"
+          serialize: "#/components/schemas/PipelineFunctionSerialize"
+          sidlookup: "#/components/schemas/PipelineFunctionSidlookup"
+          signal_filter: "#/components/schemas/PipelineFunctionSignalFilter"
+          snmp_trap_serialize: "#/components/schemas/PipelineFunctionSnmpTrapSerialize"
+          sort: "#/components/schemas/PipelineFunctionSort"
+          store: "#/components/schemas/PipelineFunctionStore"
+          suppress: "#/components/schemas/PipelineFunctionSuppress"
+          tee: "#/components/schemas/PipelineFunctionTee"
+          trim_timestamp: "#/components/schemas/PipelineFunctionTrimTimestamp"
+          union: "#/components/schemas/PipelineFunctionUnion"
+          unroll: "#/components/schemas/PipelineFunctionUnroll"
+          window: "#/components/schemas/PipelineFunctionWindow"
+          xml_unroll: "#/components/schemas/PipelineFunctionXmlUnroll"
   - target: "$.components.schemas.Pipeline.properties.id"
     update:
       x-terraform-suppress-diff: explicit

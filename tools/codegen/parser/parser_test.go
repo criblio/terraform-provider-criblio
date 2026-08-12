@@ -2,10 +2,40 @@ package parser
 
 import (
 	"path/filepath"
+	"slices"
 	"testing"
 
 	"go.yaml.in/yaml/v3"
 )
+
+func TestApplyDiscriminatorMappingEnum(t *testing.T) {
+	var schema yaml.Node
+	err := yaml.Unmarshal([]byte(`
+type: object
+x-terraform-discriminator-mapping-validator: true
+properties:
+  id:
+    type: string
+discriminator:
+  propertyName: id
+  mapping:
+    serde: "#/components/schemas/PipelineFunctionSerde"
+    eval: "#/components/schemas/PipelineFunctionEval"
+`), &schema)
+	if err != nil {
+		t.Fatalf("unmarshal schema: %v", err)
+	}
+
+	fields := []FieldDef{{APIName: "id", Type: "string"}}
+	applyDiscriminatorMappingEnum(schema.Content[0], fields)
+
+	if !fields[0].ValidateEnum {
+		t.Fatal("discriminator property enum validation is disabled")
+	}
+	if want := []string{"eval", "serde"}; !slices.Equal(fields[0].Enum, want) {
+		t.Fatalf("enum = %v, want %v", fields[0].Enum, want)
+	}
+}
 
 func TestParseCertificateResource(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))

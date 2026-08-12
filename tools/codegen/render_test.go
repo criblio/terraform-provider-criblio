@@ -1147,13 +1147,12 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 						Description:      "Function configuration as JSON.",
 					},
 					{
-						APIName:            "id",
-						TerraformName:      "id",
-						GoName:             "ID",
-						Type:               "string",
-						NotNull:            true,
-						PipelineFunctionID: true,
-						Description:        "Function ID.",
+						APIName:       "id",
+						TerraformName: "id",
+						GoName:        "ID",
+						Type:          "string",
+						NotNull:       true,
+						Description:   "Function ID.",
 					},
 				},
 				NestedAttrTypes: "PipelineFunctionsAttrTypes",
@@ -1177,6 +1176,7 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 				CustomType:    "jsontypes.NormalizedType{}",
 				ObjectAsJSON:  true,
 				ValidJSON:     true,
+				SuppressDiff:  true,
 				Description:   "Parameters as JSON.",
 			},
 		},
@@ -1187,10 +1187,10 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 	assertContains(t, resourceContent, `"params": schema.StringAttribute{`)
 	assertContains(t, resourceContent, `CustomType: jsontypes.NormalizedType{},`)
 	assertContains(t, resourceContent, `PlanModifiers: pipelineConfPlanModifiers(),`)
+	assertContains(t, resourceContent, `PlanModifiers: []planmodifier.String{`)
 	assertContains(t, resourceContent, `Validators: []validator.String{`)
 	assertContains(t, resourceContent, `custom_stringvalidators.NotNull(),`)
 	assertContains(t, resourceContent, `custom_validators.IsValidJSON(),`)
-	assertContains(t, resourceContent, `custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client),`)
 	assertContains(t, resourceContent, `"groups": schema.MapNestedAttribute{`)
 	assertContains(t, resourceContent, `state.Groups = types.MapNull(types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()})`)
 	assertNotContains(t, resourceContent, `state.Groups = types.MapNull(types.StringType)`)

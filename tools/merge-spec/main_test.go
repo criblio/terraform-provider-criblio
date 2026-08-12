@@ -35,6 +35,12 @@ paths:
       responses:
         "200":
           description: ok
+  /system/scripts:
+    get:
+      x-cribl-availability: onprem
+      responses:
+        "200":
+          description: ok
   /system/certificates:
     post:
       x-cribl-availability: both
@@ -154,6 +160,7 @@ components:
 	cloudOnlyPaths := readFile(t, cloudOnlyOutput)
 	assertContains(t, cloudOnlyPaths, `"/search/datasets": true`)
 	assertContains(t, cloudOnlyPaths, `"/search/jobs": true`)
+	assertContains(t, cloudOnlyPaths, `"/system/scripts": true`)
 	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
 }
 
