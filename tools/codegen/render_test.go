@@ -1141,7 +1141,7 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 						Type:             "object",
 						CustomType:       "jsontypes.NormalizedType{}",
 						ObjectAsJSON:     true,
-						PlanModifierHook: "normalizedJSONPlanModifiers",
+						PlanModifierHook: "pipelineConfPlanModifiers",
 						NotNull:          true,
 						ValidJSON:        true,
 						Description:      "Function configuration as JSON.",
@@ -1186,7 +1186,7 @@ func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
 	assertContains(t, resourceContent, `"conf": schema.StringAttribute{`)
 	assertContains(t, resourceContent, `"params": schema.StringAttribute{`)
 	assertContains(t, resourceContent, `CustomType: jsontypes.NormalizedType{},`)
-	assertContains(t, resourceContent, `PlanModifiers: normalizedJSONPlanModifiers(),`)
+	assertContains(t, resourceContent, `PlanModifiers: pipelineConfPlanModifiers(),`)
 	assertContains(t, resourceContent, `PlanModifiers: []planmodifier.String{`)
 	assertContains(t, resourceContent, `Validators: []validator.String{`)
 	assertContains(t, resourceContent, `custom_stringvalidators.NotNull(),`)

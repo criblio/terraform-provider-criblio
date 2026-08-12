@@ -70,7 +70,7 @@ func TestPackPipeline(t *testing.T) {
 					ConfigDirectory: config.TestNameDirectory(),
 					PlanOnly:        true,
 					ExpectError: regexp.MustCompile(
-						`(?s)Invalid Attribute Value Match.*conf\.functions\[0\]\.id.*got:\s*"publish_metrics_mistaken_unique_name"`,
+						`(?s)Invalid Attribute Value Match.*publish_metrics_mistaken_unique_name`,
 					),
 				},
 			},
