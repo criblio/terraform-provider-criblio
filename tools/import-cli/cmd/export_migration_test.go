@@ -76,6 +76,27 @@ func TestParseGroupMappings(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestParseGroupMappingsRejectsUnsafeGroupIDs(t *testing.T) {
+	tests := []struct {
+		name    string
+		mapping string
+	}{
+		{name: "source traversal", mapping: "../worker=cloud-a"},
+		{name: "target traversal", mapping: "worker-a=../../other-dir"},
+		{name: "source separator", mapping: "workers/east=cloud-a"},
+		{name: "target separator", mapping: `worker-a=cloud\east`},
+		{name: "dot target", mapping: "worker-a=."},
+		{name: "space", mapping: "worker a=cloud-a"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := parseGroupMappings([]string{test.mapping})
+			require.ErrorContains(t, err, "invalid")
+		})
+	}
+}
+
 func TestWriteMigrationReportIncludesSecretsAndExclusions(t *testing.T) {
 	items := []generator.ResourceItem{{
 		TypeName: "criblio_secret",

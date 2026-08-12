@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -14,6 +15,8 @@ import (
 )
 
 const migrationReportFilename = "migration-report.json"
+
+var groupIDPattern = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
 
 type migrationExclusion struct {
 	TypeName string `json:"type"`
@@ -75,6 +78,12 @@ func parseGroupMappings(values []string) (map[string]string, error) {
 		target = strings.TrimSpace(target)
 		if !ok || source == "" || target == "" {
 			return nil, fmt.Errorf("invalid --group-map %q: expected SOURCE=TARGET", value)
+		}
+		if !groupIDPattern.MatchString(source) {
+			return nil, fmt.Errorf("invalid source group %q: group IDs may contain only letters, digits, underscores, and hyphens", source)
+		}
+		if !groupIDPattern.MatchString(target) {
+			return nil, fmt.Errorf("invalid target group %q: group IDs may contain only letters, digits, underscores, and hyphens", target)
 		}
 		if existing, ok := mappings[source]; ok && existing != target {
 			return nil, fmt.Errorf("source group %q maps to both %q and %q", source, existing, target)
