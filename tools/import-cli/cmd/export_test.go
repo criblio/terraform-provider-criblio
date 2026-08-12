@@ -63,6 +63,8 @@ func TestExportCommand_Help_ShowsAllFlags(t *testing.T) {
 	assert.Contains(t, help, "--org-id", "export --help should document --org-id")
 	assert.Contains(t, help, "--workspace-id", "export --help should document --workspace-id")
 	assert.Contains(t, help, "--cloud-domain", "export --help should document --cloud-domain")
+	assert.Contains(t, help, "--onprem-to-cloud", "export --help should document migration mode")
+	assert.Contains(t, help, "--group-map", "export --help should document group mappings")
 
 	// Description of --dry-run (preview only; no file writes; List* only)
 	assert.Contains(t, help, "Preview", "export --help should describe --dry-run (Preview resources)")
@@ -70,6 +72,24 @@ func TestExportCommand_Help_ShowsAllFlags(t *testing.T) {
 	// --include and --exclude filters work as documented
 	assert.Contains(t, help, "include", "export --help should document --include filter")
 	assert.Contains(t, help, "exclude", "export --help should document --exclude filter")
+}
+
+func TestExportCommand_OnPremToCloudRequiresOnPremSource(t *testing.T) {
+	origHome := os.Getenv("HOME")
+	t.Cleanup(func() { _ = os.Setenv("HOME", origHome) })
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	t.Setenv("CRIBL_BEARER_TOKEN", "test-token")
+	t.Setenv("CRIBL_CLIENT_ID", "")
+	t.Setenv("CRIBL_CLIENT_SECRET", "")
+	t.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	t.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	root := cmd.NewRootCommand()
+	root.SetArgs([]string{"export", "--onprem-to-cloud", "--dry-run"})
+	err := root.Execute()
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "requires an on-prem source")
 }
 
 func TestExportCommand_Help_ShowsExampleUsage(t *testing.T) {

@@ -11,6 +11,19 @@ func TestTrimPath(t *testing.T) {
 	}
 }
 
+func TestIsRestrictedCloudEndpoint(t *testing.T) {
+	originalOnPremOnlyPaths := onPremOnlyPaths
+	onPremOnlyPaths = map[string]bool{"/system/scripts/{id}": true}
+	t.Cleanup(func() { onPremOnlyPaths = originalOnPremOnlyPaths })
+
+	if !IsRestrictedCloudEndpoint("/api/v1/m/default/system/scripts/example") {
+		t.Fatal("expected on-prem-only script endpoint to be restricted in Cloud")
+	}
+	if IsRestrictedCloudEndpoint("/m/default/pipelines/example") {
+		t.Fatal("expected pipeline endpoint to be available in Cloud")
+	}
+}
+
 func TestIsGatewayPath(t *testing.T) {
 	gatewayPaths := []struct {
 		path     string

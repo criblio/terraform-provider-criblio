@@ -137,7 +137,7 @@ func isLookupFileType(typeName string) bool {
 }
 
 func defaultLookupFileByID(typeName string, idMap map[string]string, includeOverride IncludeOverride) bool {
-	if !isLookupFileType(typeName) {
+	if typeName != "criblio_lookup_file" {
 		return false
 	}
 	id := idMap["id"]
@@ -210,10 +210,9 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 	case "criblio_event_breaker_ruleset":
 		return custom.DefaultEventBreakerRulesetIDs[id]
 	case "criblio_pack_breakers":
-		if custom.DefaultPackIDs[pack] {
-			return true
-		}
-		return custom.DefaultEventBreakerRulesetIDs[id]
+		// Cloud seeds built-in breaker rulesets when a pack is created. On-prem can
+		// report these pack-scoped copies as lib=custom, so identify them by ID too.
+		return custom.DefaultPackIDs[pack] || custom.DefaultEventBreakerRulesetIDs[id]
 	case "criblio_pack_pipeline":
 		// Only check if the pack itself is a default; pipeline IDs like "main" are valid inside user packs.
 		return custom.DefaultPackIDs[pack]
@@ -229,8 +228,7 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		}
 		return true
 	case "criblio_pack_routes":
-		// Routes are a singleton per group/pack; users modify but don't create them from scratch.
-		return true
+		return custom.DefaultPackIDs[pack]
 	case "criblio_search_dataset_ruleset":
 		return custom.DefaultSearchDatasetRulesetIDs[id]
 	case "criblio_search_datatype_ruleset":

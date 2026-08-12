@@ -161,6 +161,22 @@ jobs:
         run: | 
           make unit-test
 
+  unit_test_repository:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run Remaining Go Tests
+        run: |
+          go list ./... \
+            | grep -Ev '/(tests/acceptance|internal/auth|internal/restclient|tools/import-cli|tools/merge-spec|tools/sync-openapi)($|/)' \
+            | xargs go test -v
+
   unit_test_import_cli:
     runs-on: ubuntu-latest
     steps:

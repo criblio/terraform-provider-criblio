@@ -159,4 +159,15 @@ func init() {
 		"/system/dsd/connections/{connectionId}/scan/status": true,
 		"/system/dsd/templates/connection/cloudformation": true,
 	}
+	onPremOnlyPaths = map[string]bool{
+		"/system/licenses":              true,
+		"/system/licenses/__register__": true,
+		"/system/licenses/usage":        true,
+		"/system/licenses/{id}":         true,
+		"/system/scripts":               true,
+		"/system/scripts/{id}":          true,
+		"/system/users":                 true,
+		"/system/users/{id}":            true,
+		"/system/users/{id}/info":       true,
+	}
 }

@@ -1137,12 +1137,81 @@ func preservePackPlan(ctx context.Context, data *PackResourceModel, plan types.O
 	if !planData.Spec.IsNull() && !planData.Spec.IsUnknown() {
 		data.Spec = planData.Spec
 	}
-	if !planData.Tags.IsNull() && !planData.Tags.IsUnknown() {
-		data.Tags = planData.Tags
-	}
+	data.Tags = preservePackTags(ctx, data.Tags, planData.Tags)
 	if !planData.Version.IsNull() && !planData.Version.IsUnknown() {
 		data.Version = planData.Version
 	}
+}
+
+func preservePackTags(ctx context.Context, apiTags, planTags types.Object) types.Object {
+	if planTags.IsNull() || planTags.IsUnknown() {
+		return concretePackTags(ctx, apiTags)
+	}
+
+	var planned packRequestBodyTags
+	if diags := planTags.As(ctx, &planned, basetypes.ObjectAsOptions{}); diags.HasError() {
+		return concretePackTags(ctx, apiTags)
+	}
+
+	concrete := concretePackTags(ctx, apiTags)
+	var merged packRequestBodyTags
+	if diags := concrete.As(ctx, &merged, basetypes.ObjectAsOptions{}); diags.HasError() {
+		return concrete
+	}
+
+	if !planned.DataType.IsNull() && !planned.DataType.IsUnknown() {
+		merged.DataType = planned.DataType
+	}
+	if !planned.Domain.IsNull() && !planned.Domain.IsUnknown() {
+		merged.Domain = planned.Domain
+	}
+	if !planned.Streamtags.IsNull() && !planned.Streamtags.IsUnknown() {
+		merged.Streamtags = planned.Streamtags
+	}
+	if !planned.Technology.IsNull() && !planned.Technology.IsUnknown() {
+		merged.Technology = planned.Technology
+	}
+
+	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
+		"data_type":  merged.DataType,
+		"domain":     merged.Domain,
+		"streamtags": merged.Streamtags,
+		"technology": merged.Technology,
+	})
+}
+
+func concretePackTags(ctx context.Context, tags types.Object) types.Object {
+	empty := types.ListValueMust(types.StringType, nil)
+	model := packRequestBodyTags{
+		DataType:   empty,
+		Domain:     empty,
+		Streamtags: empty,
+		Technology: empty,
+	}
+	if !tags.IsNull() && !tags.IsUnknown() {
+		var decoded packRequestBodyTags
+		if diags := tags.As(ctx, &decoded, basetypes.ObjectAsOptions{}); !diags.HasError() {
+			if !decoded.DataType.IsNull() && !decoded.DataType.IsUnknown() {
+				model.DataType = decoded.DataType
+			}
+			if !decoded.Domain.IsNull() && !decoded.Domain.IsUnknown() {
+				model.Domain = decoded.Domain
+			}
+			if !decoded.Streamtags.IsNull() && !decoded.Streamtags.IsUnknown() {
+				model.Streamtags = decoded.Streamtags
+			}
+			if !decoded.Technology.IsNull() && !decoded.Technology.IsUnknown() {
+				model.Technology = decoded.Technology
+			}
+		}
+	}
+
+	return types.ObjectValueMust(packRequestBodyTagsAttrTypes(), map[string]attr.Value{
+		"data_type":  model.DataType,
+		"domain":     model.Domain,
+		"streamtags": model.Streamtags,
+		"technology": model.Technology,
+	})
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

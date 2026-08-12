@@ -490,6 +490,35 @@ func TestWriteRootFiles_creates_main_providers_and_import(t *testing.T) {
 	assert.Contains(t, importStr, "to = module.source.criblio_source.s1")
 }
 
+func TestWriteRootFiles_removesStaleImportWhenItemsAreCreateOnly(t *testing.T) {
+	tmp := t.TempDir()
+	stalePath := filepath.Join(tmp, "import.tf")
+	require.NoError(t, os.WriteFile(stalePath, []byte("stale"), 0600))
+
+	items := []ResourceItem{{TypeName: "criblio_pipeline", Name: "p1", GroupID: "default"}}
+	infos := RootModuleInfosFromItems(items)
+	require.NoError(t, WriteRootFiles(tmp, infos, items, false))
+	_, err := os.Stat(stalePath)
+	require.ErrorIs(t, err, os.ErrNotExist)
+}
+
+func TestWriteRootFiles_writesMigrationReadme(t *testing.T) {
+	tmp := t.TempDir()
+	items := []ResourceItem{{
+		TypeName:  "criblio_pipeline",
+		Name:      "p1",
+		GroupID:   "default",
+		Migration: true,
+	}}
+	require.NoError(t, WriteRootFiles(tmp, RootModuleInfosFromItems(items), items, false))
+
+	content, err := os.ReadFile(filepath.Join(tmp, "README.md"))
+	require.NoError(t, err)
+	assert.Contains(t, string(content), "On-Prem to Cloud Migration")
+	assert.Contains(t, string(content), "Review the generated configuration")
+	assert.Contains(t, string(content), "no import blocks")
+}
+
 func TestWriteRootFiles_creates_import_with_module_prefix_by_group(t *testing.T) {
 	tmp := t.TempDir()
 	infos := []RootModuleInfo{
@@ -615,6 +644,50 @@ func TestRootModuleInfosFromItems(t *testing.T) {
 	assert.Equal(t, "./pipeline", infos[0].Path)
 	assert.Equal(t, "source", infos[1].Name)
 	assert.Equal(t, "./source", infos[1].Path)
+}
+
+func TestRootModuleInfosPackChildrenDependOnPack(t *testing.T) {
+	items := []ResourceItem{
+		{TypeName: "criblio_pack", Name: "pack", GroupID: "target"},
+		{TypeName: "criblio_pack_pipeline", Name: "pipeline", GroupID: "target"},
+		{TypeName: "criblio_pack_destination", Name: "destination", GroupID: "target"},
+		{TypeName: "criblio_pack_routes", Name: "routes", GroupID: "target"},
+		{TypeName: "criblio_pack_lookups", Name: "lookup", GroupID: "target"},
+	}
+	infos := RootModuleInfosFromItemsByGroup(items)
+	require.Len(t, infos, 5)
+	for _, info := range infos {
+		if info.Name == "target_pack" {
+			assert.Empty(t, info.DependsOn)
+			continue
+		}
+		if info.Name == "target_pack_routes" {
+			assert.Equal(t, []string{"target_pack", "target_pack_destination", "target_pack_pipeline"}, info.DependsOn)
+			continue
+		}
+		assert.Equal(t, []string{"target_pack"}, info.DependsOn)
+	}
+
+	main := string(rootMainTF(infos))
+	assert.Contains(t, main, "depends_on = [module.target_pack]")
+	assert.Contains(t, main, "depends_on = [module.target_pack, module.target_pack_destination, module.target_pack_pipeline]")
+}
+
+func TestRootModuleInfosPackRoutesDependenciesFlatLayout(t *testing.T) {
+	items := []ResourceItem{
+		{TypeName: "criblio_pack", Name: "pack"},
+		{TypeName: "criblio_pack_pipeline", Name: "pipeline"},
+		{TypeName: "criblio_pack_routes", Name: "routes"},
+	}
+
+	infos := RootModuleInfosFromItems(items)
+	for _, info := range infos {
+		if info.Name == "pack_routes" {
+			assert.Equal(t, []string{"pack", "pack_pipeline"}, info.DependsOn)
+			return
+		}
+	}
+	t.Fatal("pack_routes module info not found")
 }
 
 // TestImportBlocksBytes_resource_address_convention verifies JIRA AC: Terraform

@@ -596,6 +596,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			fields = append(fields, field)
 		}
 	}
+	applyDiscriminatorMappingEnum(schema, fields)
 	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
 		parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
 		if err != nil {
@@ -604,6 +605,35 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 		variants = append(variants, parsed...)
 	}
 	return fields, variants, nil
+}
+
+func applyDiscriminatorMappingEnum(schema *yaml.Node, fields []FieldDef) {
+	if !boolAnnotation(schema, "x-terraform-discriminator-mapping-validator") {
+		return
+	}
+	discriminator, ok := mappingValue(schema, "discriminator")
+	if !ok {
+		return
+	}
+	propertyName := scalarValue(discriminator, "propertyName")
+	mapping, ok := mappingValue(discriminator, "mapping")
+	if propertyName == "" || !ok || mapping.Kind != yaml.MappingNode {
+		return
+	}
+
+	values := make([]string, 0, len(mapping.Content)/2)
+	for index := 0; index < len(mapping.Content); index += 2 {
+		values = append(values, mapping.Content[index].Value)
+	}
+	sort.Strings(values)
+
+	for index := range fields {
+		if fields[index].APIName == propertyName && fields[index].Type == "string" {
+			fields[index].Enum = values
+			fields[index].ValidateEnum = true
+			return
+		}
+	}
 }
 
 func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
@@ -756,13 +786,9 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		ObjectAsJSON: boolAnnotation(property, "x-terraform-object-as-json"),
 		NotNull:      boolAnnotation(property, "x-terraform-not-null"),
 		ValidJSON:    boolAnnotation(property, "x-terraform-valid-json"),
-		PipelineFunctionID: boolAnnotation(
-			property,
-			"x-terraform-pipeline-function-id-validator",
-		),
-		ReadOnly:  boolAnnotation(property, "readOnly"),
-		WriteOnly: boolAnnotation(property, "writeOnly"),
-		Enum:      enumValues(schemaForType),
+		ReadOnly:     boolAnnotation(property, "readOnly"),
+		WriteOnly:    boolAnnotation(property, "writeOnly"),
+		Enum:         enumValues(schemaForType),
 		ValidateEnum: boolAnnotation(
 			property,
 			"x-terraform-enum-validator",

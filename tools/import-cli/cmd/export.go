@@ -2,14 +2,17 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
@@ -59,6 +62,9 @@ func NewExportCommand() *cobra.Command {
 		orgID             string
 		workspaceID       string
 		cloudDomain       string
+		onPremToCloud     bool
+		groupMapValues    []string
+		packStrategy      string
 	)
 	v := viper.New()
 	cfg := config.NewConfig(v)
@@ -68,8 +74,8 @@ func NewExportCommand() *cobra.Command {
 	exp := &cobra.Command{
 		Use:     "export",
 		Short:   "Generate Terraform HCL and import blocks from Cribl resources",
-		Long:    "Reads resources from Cribl and writes Terraform HCL plus import blocks so you can run terraform import.",
-		Example: "  " + appName + " export --dry-run\n  " + appName + " export --server-url https://cribl.example.com --output-dir ./tf",
+		Long:    "Reads resources from Cribl and writes Terraform HCL plus import blocks. With --onprem-to-cloud, writes create-ready Cloud migration configuration and a migration report instead.",
+		Example: "  " + appName + " export --dry-run\n  " + appName + " export --server-url https://cribl.example.com --output-dir ./tf\n  " + appName + " export --onprem-to-cloud --server-url https://cribl.example.com --group-map worker-a=cloud-a --output-dir ./migration",
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := ValidateExportFlags(include, exclude); err != nil {
 				return err
@@ -79,6 +85,23 @@ func NewExportCommand() *cobra.Command {
 			}
 			if err := cfg.ValidateRequired(); err != nil {
 				return err
+			}
+			onPrem := cfg.Get(config.KeyOnpremServerURL) != ""
+			if onPremToCloud && !onPrem {
+				return fmt.Errorf("--onprem-to-cloud requires an on-prem source configured with --server-url or %s", config.EnvOnpremServerURL)
+			}
+			groupMappings, err := parseGroupMappings(groupMapValues)
+			if err != nil {
+				return err
+			}
+			if !onPremToCloud && len(groupMappings) > 0 {
+				return fmt.Errorf("--group-map requires --onprem-to-cloud")
+			}
+			if packStrategy != "resources" && packStrategy != "archive" {
+				return fmt.Errorf("invalid --pack-strategy %q: expected resources or archive", packStrategy)
+			}
+			if !onPremToCloud && c.Flags().Changed("pack-strategy") {
+				return fmt.Errorf("--pack-strategy requires --onprem-to-cloud")
 			}
 			// Suppress API client DEBUG logs unless --verbose is set.
 			if verbose {
@@ -100,9 +123,17 @@ func NewExportCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("build registry: %w", err)
 			}
-			onPrem := cfg.Get(config.KeyOnpremServerURL) != ""
 			excludeMerged := append([]string{}, exclude...)
 			excludeMerged = append(excludeMerged, exclusions.NoExportTypes...)
+			var migrationExcluded []migrationExclusion
+			if onPremToCloud {
+				excludeDefaults = true
+				migrationExcluded = migrationPolicy(reg)
+				migrationExcluded = appendUserMigrationExclusions(migrationExcluded, exclude)
+				for _, excluded := range migrationExcluded {
+					excludeMerged = append(excludeMerged, excluded.TypeName)
+				}
+			}
 			fmt.Fprintln(c.ErrOrStderr(), "Discovering resources...")
 			results, err := discovery.Discover(ctx, apiClient, reg, include, excludeMerged, group, onPrem)
 			if err != nil {
@@ -114,8 +145,9 @@ func NewExportCommand() *cobra.Command {
 				var firstErr error
 				for _, r := range results {
 					if r.Err != nil && firstErr == nil {
-						if onPrem && isOnPremUnsupportedError(r.Err) {
-							continue // skip: expected for on-prem (search, lake, etc. not supported)
+						if onPrem && isContextualDiscoveryError(r.Err, onPremToCloud) {
+							fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (skipped in on-prem context)\n", r.Err)
+							continue
 						}
 						if discovery.IsRecoverableListDecodeError(r.Err) {
 							fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (continuing; list response could not be fully decoded)\n", r.Err)
@@ -134,8 +166,9 @@ func NewExportCommand() *cobra.Command {
 			var firstErr error
 			for _, r := range results {
 				if r.Err != nil {
-					if onPrem && isOnPremUnsupportedError(r.Err) {
-						continue // skip: expected for on-prem
+					if onPrem && isContextualDiscoveryError(r.Err, onPremToCloud) {
+						fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (skipped in on-prem context)\n", r.Err)
+						continue
 					}
 					if discovery.IsRecoverableListDecodeError(r.Err) {
 						fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (continuing; list response could not be fully decoded)\n", r.Err)
@@ -167,6 +200,23 @@ func NewExportCommand() *cobra.Command {
 			includeOverride := export.ParseIncludeDefaultIDs(includeDefaultIDs)
 			exportResult, exportErr := export.ToResourceItems(ctx, apiClient, reg, results, groupIDs, group, parallel, excludeDefaults, includeOverride, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
+			if onPremToCloud {
+				switch packStrategy {
+				case "archive":
+					_, packErr := export.AttachPackAssets(ctx, apiClient, exportResult.Items)
+					if packErr != nil {
+						return fmt.Errorf("prepare portable pack assets: %w", packErr)
+					}
+					exportResult.Items, _ = export.RemovePackChildResources(exportResult.Items)
+				case "resources":
+					export.PreparePackResources(exportResult.Items)
+				}
+				_, transformErr := prepareOnPremToCloudItems(exportResult.Items, groupMappings)
+				err = transformErr
+				if err != nil {
+					return err
+				}
+			}
 			if exportErr != nil {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())
 			}
@@ -205,6 +255,9 @@ func NewExportCommand() *cobra.Command {
 	exp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
 	exp.Flags().BoolVar(&excludeDefaults, "exclude-defaults", false, "Exclude built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs)")
 	exp.Flags().StringSliceVar(&includeDefaultIDs, "include-default-ids", nil, "Resource IDs to include even when --exclude-defaults is set. Use 'id' for any type or 'type:id' for specific type (e.g. criblio_source:in_system_metrics)")
+	exp.Flags().BoolVar(&onPremToCloud, "onprem-to-cloud", false, "Generate create-ready Terraform for migration from an on-prem source to Cloud; excludes defaults and source import blocks")
+	exp.Flags().StringSliceVar(&groupMapValues, "group-map", nil, "Map an on-prem group to a target Cloud group as SOURCE=TARGET; repeat for multiple groups")
+	exp.Flags().StringVar(&packStrategy, "pack-strategy", "resources", "Pack migration strategy: resources creates an empty pack plus pack_* resources; archive installs a portable .crbl and omits pack_* resources")
 
 	exp.Flags().StringVar(&serverURL, "server-url", "", "On-prem base URL")
 	exp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")
@@ -216,6 +269,23 @@ func NewExportCommand() *cobra.Command {
 	_ = cfg.BindPFlag(config.KeyCloudDomain, exp.Flags().Lookup("cloud-domain"))
 
 	return exp
+}
+
+func appendUserMigrationExclusions(excluded []migrationExclusion, userExcluded []string) []migrationExclusion {
+	seen := make(map[string]bool, len(excluded))
+	for _, item := range excluded {
+		seen[item.TypeName] = true
+	}
+	for _, typeName := range userExcluded {
+		typeName = strings.TrimSpace(typeName)
+		if typeName == "" || seen[typeName] {
+			continue
+		}
+		excluded = append(excluded, migrationExclusion{TypeName: typeName, Reason: "excluded by --exclude"})
+		seen[typeName] = true
+	}
+	sort.Slice(excluded, func(i, j int) bool { return excluded[i].TypeName < excluded[j].TypeName })
+	return excluded
 }
 
 // printDryRunPreview prints resource types and counts only. Used for --dry-run.
@@ -417,10 +487,37 @@ func isOnPremUnsupportedError(err error) bool {
 	if err == nil {
 		return false
 	}
-	s := err.Error()
+	var httpErr *restclient.HTTPError
+	if errors.As(err, &httpErr) && httpErr.StatusCode == http.StatusForbidden {
+		return true
+	}
+	s := strings.ToLower(err.Error())
 	return strings.Contains(s, "not supported for on-prem") ||
 		strings.Contains(s, "enterprise feature") ||
-		strings.Contains(s, "Status 403")
+		strings.Contains(s, "status 403") ||
+		strings.Contains(s, "http 403")
+}
+
+// isContextualDiscoveryError reports resource-scoped discovery failures that
+// should be recorded and skipped rather than aborting the entire on-prem scan.
+// Migration mode additionally tolerates endpoints absent from an older source
+// and features disabled by the source license. Authentication and unexpected
+// server failures remain fatal.
+func isContextualDiscoveryError(err error, migration bool) bool {
+	if isOnPremUnsupportedError(err) {
+		return true
+	}
+	if !migration || err == nil {
+		return false
+	}
+	var notFoundErr *restclient.NotFoundError
+	if errors.As(err, &notFoundErr) {
+		return true
+	}
+	s := strings.ToLower(err.Error())
+	return strings.Contains(s, "current license prohibits") ||
+		strings.Contains(s, "license does not permit") ||
+		strings.Contains(s, "feature is not licensed")
 }
 
 // ValidateExportFlags returns an error if include and exclude overlap.
