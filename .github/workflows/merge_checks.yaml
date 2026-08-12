@@ -171,8 +171,11 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
-      - name: Run All Go Tests
-        run: go test -v ./...
+      - name: Run Remaining Go Tests
+        run: |
+          go list ./... \
+            | grep -Ev '/(tests/acceptance|internal/auth|internal/restclient|tools/import-cli|tools/merge-spec|tools/sync-openapi)($|/)' \
+            | xargs go test -v
 
   unit_test_import_cli:
     runs-on: ubuntu-latest
