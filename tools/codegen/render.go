@@ -993,7 +993,7 @@ func needsRegexp(resource parser.ResourceDef) bool {
 
 func needsCustomStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if (field.NotNull || field.PipelineFunctionID) && stringValidatorField(field) {
+		if field.NotNull && stringValidatorField(field) {
 			return true
 		}
 	}
@@ -1385,6 +1385,9 @@ func resourceFields(resource parser.ResourceDef) []parser.FieldDef {
 }
 
 func planModifierType(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "String"
+	}
 	if nestedObject(field) {
 		return "Object"
 	}
@@ -1449,9 +1452,6 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	if field.ValidJSON {
 		calls = append(calls, "custom_validators.IsValidJSON()")
 	}
-	if field.PipelineFunctionID {
-		calls = append(calls, "custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client)")
-	}
 	if field.ConflictsWith != "" {
 		calls = append(calls, fmt.Sprintf("stringvalidator.ConflictsWith(path.MatchRoot(%q))", field.ConflictsWith))
 	}
@@ -1473,6 +1473,9 @@ func stringValidatorField(field parser.FieldDef) bool {
 }
 
 func frameworkPlanModifierKind(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "string"
+	}
 	if nestedObject(field) {
 		return "object"
 	}
@@ -1500,6 +1503,9 @@ func nestedObjectPlanModifierCalls(field parser.FieldDef) []string {
 }
 
 func customPlanModifierKind(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "string"
+	}
 	if nestedObject(field) {
 		return "object"
 	}

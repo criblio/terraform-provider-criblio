@@ -161,6 +161,19 @@ jobs:
         run: | 
           make unit-test
 
+  unit_test_repository:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run All Go Tests
+        run: go test -v ./...
+
   unit_test_import_cli:
     runs-on: ubuntu-latest
     steps:
