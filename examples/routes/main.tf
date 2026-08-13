@@ -19,13 +19,15 @@ resource "criblio_routes" "my_routes" {
 
   routes = [
     {
-      name     = "my_route_1"
-      pipeline = "main"
-      group_id = "mygroup"
+      name        = "my_route_1"
+      pipeline    = "main"
+      group_id    = "mygroup"
+      description = "Route events through the grouped main pipeline"
     },
     {
-      name     = "my_route_2"
-      pipeline = "main"
+      name        = "my_route_2"
+      pipeline    = "main"
+      description = "Route events through the default main pipeline"
     }
   ]
 }
