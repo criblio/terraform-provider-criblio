@@ -56,7 +56,7 @@ Required:
 
 - `comment` (String) Brief description of the Route.
 
-Read-Only:
+Optional:
 
 - `group_id` (String) Unique identifier for the Route Group that the Route is associated with.
 - `id` (String) Unique identifier for the comment.
@@ -72,9 +72,6 @@ Required:
 Optional:
 
 - `description` (String) Brief description of the Route Group.
-
-Read-Only:
-
 - `index` (Integer) Relative position of the Route Group among all Route Groups. Routes are evaluated in ascending order according to the index value of their Route Group.
 
 <a id="nestedatt--routes"></a>
