@@ -29,6 +29,7 @@ var _ = types.String{}
 var _ resource.Resource = &CollectorResource{}
 var _ resource.ResourceWithConfigure = &CollectorResource{}
 var _ resource.ResourceWithImportState = &CollectorResource{}
+var _ resource.ResourceWithUpgradeState = &CollectorResource{}
 
 type CollectorResource struct {
 	client *restclient.Client
@@ -45,6 +46,7 @@ func (r *CollectorResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Version:             1,
 		MarkdownDescription: "Collector Resource",
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
@@ -223,17 +225,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -650,17 +652,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -1536,17 +1538,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -1948,17 +1950,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -2392,17 +2394,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -2732,17 +2734,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -3083,17 +3085,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -3479,17 +3481,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -3857,17 +3859,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,
@@ -4206,17 +4208,17 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional: true,
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Required:    false,

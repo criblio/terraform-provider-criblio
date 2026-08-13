@@ -1168,8 +1168,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1271,8 +1271,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1515,8 +1515,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1620,8 +1620,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1730,8 +1730,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1817,8 +1817,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -1906,8 +1906,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -2008,8 +2008,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -2102,8 +2102,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
@@ -2191,8 +2191,8 @@ Optional:
 - `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
 - `time_range_type` (String)
-- `earliest` (Number) Earliest time to collect data for the selected timezone
-- `latest` (Number) Latest time to collect data for the selected timezone
+- `earliest` (String) Earliest absolute or relative time to collect data for the selected timezone.
+- `latest` (String) Latest absolute or relative time to collect data for the selected timezone.
 - `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
 - `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 - `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.

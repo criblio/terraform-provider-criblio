@@ -151,6 +151,18 @@ actions:
         x-terraform-optional-computed: true
         x-terraform-sensitive: true
         x-terraform-prefer-state: true
+  - target: "$.components.schemas.InputCollectorBase.properties.schedule.properties.run.properties"
+    update:
+      earliest:
+        type: string
+        title: Earliest
+        description: Earliest absolute or relative time to collect data for the selected timezone.
+        example: -10m@m
+      latest:
+        type: string
+        title: Latest
+        description: Latest absolute or relative time to collect data for the selected timezone.
+        example: -9m@m
   - target: "$.components.schemas"
     update:
       InputCollectorFilesystem:

@@ -23,11 +23,16 @@ func addOneOfBlockFromFirstItem(model interface{}, attrs map[string]hcl.Value, o
 	itemMap := firstItemMapFromModel(model, oneOf.ReadOnlyAttr)
 	if len(itemMap) == 0 {
 		switch model.(type) {
-		case *provider.SourceResourceModel, *provider.SourceModel, *provider.PackSourceResourceModel, *provider.PackSourceModel:
+		case *provider.SourceResourceModel, *provider.SourceModel, *provider.PackSourceResourceModel, *provider.PackSourceModel,
+			*provider.CollectorResourceModel, *provider.CollectorModel:
 			return addOneOfFromGeneratedInputBlocks(model, attrs, oneOf)
 		}
 		return nil
 	}
+	return addOneOfBlockFromItemMap(itemMap, attrs, oneOf)
+}
+
+func addOneOfBlockFromItemMap(itemMap map[string]string, attrs map[string]hcl.Value, oneOf *registry.OneOfConfig) error {
 	raw := itemMap[oneOf.DiscriminatorField]
 	var discStr string
 	if err := json.Unmarshal([]byte(raw), &discStr); err != nil {
@@ -172,6 +177,14 @@ func addOneOfFromGeneratedInputBlocks(model interface{}, attrs map[string]hcl.Va
 			return nil
 		}
 		raw := itemMap[oneOf.DiscriminatorField]
+		keysToSkip := oneOf.KeysToSkip
+		if raw == "" && oneOf.NestedDiscriminatorField != "" {
+			raw = resolveNestedDiscriminator(itemMap, oneOf.NestedDiscriminatorField)
+			if raw != "" {
+				itemMap[oneOf.DiscriminatorField] = raw
+				keysToSkip = append(append([]string(nil), keysToSkip...), oneOf.DiscriminatorField)
+			}
+		}
 		if raw == "" {
 			return fmt.Errorf("generated input branch missing discriminator %q", oneOf.DiscriminatorField)
 		}
@@ -194,9 +207,12 @@ func addOneOfFromGeneratedInputBlocks(model interface{}, attrs map[string]hcl.Va
 		} else {
 			alias = oneOf.DiscriminatorAlias
 		}
-		blockName, blockValue, err := hcl.ItemMapToBlock(itemMap, oneOf.DiscriminatorField, oneOf.BlockNamePrefix, oneOf.BlockNameSuffix, oneOf.KeysToSkip, alias)
+		blockName, blockValue, err := hcl.ItemMapToBlock(itemMap, oneOf.DiscriminatorField, oneOf.BlockNamePrefix, oneOf.BlockNameSuffix, keysToSkip, alias)
 		if err != nil {
 			return err
+		}
+		if removeFields, ok := blockMap["remove_fields"]; ok && removeFields.Kind == hcl.KindList && len(removeFields.List) == 0 {
+			blockValue.Map["remove_fields"] = removeFields
 		}
 		if blockName != "" && !blockValue.IsNull() {
 			attrs[blockName] = blockValue

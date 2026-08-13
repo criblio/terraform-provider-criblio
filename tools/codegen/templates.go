@@ -882,6 +882,13 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+{{- if eq .StructName "Collector" }}
+	normalizeCollectorUnionValues(raw)
+	data, err := json.Marshal(raw)
+	if err != nil {
+		return err
+	}
+{{- end }}
 {{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
 	set{{ .StructName }}LegacyItemsFromRaw(m, raw)
 {{- end }}
@@ -1020,6 +1027,28 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- end }}
 	return nil
 }
+
+{{- if eq .StructName "Collector" }}
+func normalizeCollectorUnionValues(raw map[string]any) {
+	if input, ok := raw["input"].(map[string]any); ok {
+		if value, ok := input["throttleRatePerSec"].(float64); ok {
+			input["throttleRatePerSec"] = fmt.Sprintf("%v", value)
+		}
+	}
+	if schedule, ok := raw["schedule"].(map[string]any); ok {
+		if run, ok := schedule["run"].(map[string]any); ok {
+			for _, field := range []string{"earliest", "latest"} {
+				if value, ok := run[field].(float64); ok {
+					run[field] = fmt.Sprintf("%v", value)
+				}
+			}
+		}
+	}
+	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
+		raw["savedState"] = map[string]any{}
+	}
+}
+{{- end }}
 {{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource")) }}
 {{ range .OneOfVariants }}
 type {{ .ModelName }} struct {
@@ -1814,6 +1843,9 @@ var _ = types.String{}
 var _ resource.Resource = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
 var _ resource.ResourceWithImportState = &{{ .StructName }}Resource{}
+{{- if eq .StructName "Collector" }}
+var _ resource.ResourceWithUpgradeState = &{{ .StructName }}Resource{}
+{{- end }}
 
 type {{ .StructName }}Resource struct {
 	client *restclient.Client
@@ -1830,6 +1862,9 @@ func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.Met
 
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		{{- if eq .StructName "Collector" }}
+		Version: 1,
+		{{- end }}
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
