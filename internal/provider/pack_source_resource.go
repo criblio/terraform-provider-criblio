@@ -6,14 +6,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -19381,30 +19387,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -19443,6 +19464,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"preprocess": schema.SingleNestedAttribute{
 						Required: false,
@@ -19475,6 +19499,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -19619,30 +19646,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -19674,6 +19716,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topics": schema.ListAttribute{
@@ -19681,6 +19727,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"group_id": schema.StringAttribute{
@@ -19717,18 +19767,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -19885,48 +19944,72 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -20136,6 +20219,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"rebalance_timeout": schema.Float64Attribute{
 						Required: false,
@@ -20145,6 +20231,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Required: false,
@@ -20154,36 +20243,54 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"max_bytes_per_partition": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000000),
+						},
 					},
 					"max_bytes": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1000000000),
+						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of network errors before the consumer re-creates a socket`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -20328,30 +20435,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -20383,6 +20505,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topics": schema.ListAttribute{
@@ -20390,6 +20516,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"group_id": schema.StringAttribute{
@@ -20414,6 +20544,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"rebalance_timeout": schema.Float64Attribute{
 						Required: false,
@@ -20423,6 +20556,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Required: false,
@@ -20432,6 +20568,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -20477,18 +20616,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -20645,48 +20793,72 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: true,
@@ -20734,6 +20906,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -20746,6 +20922,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -20818,30 +20997,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"max_bytes_per_partition": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000000),
+						},
 					},
 					"max_bytes": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1000000000),
+						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of network errors before the consumer re-creates a socket`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -20977,30 +21171,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -21038,6 +21247,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListAttribute{
 						Required:    false,
@@ -21122,12 +21334,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -21146,24 +21364,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -21188,18 +21418,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"elastic_api": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"splunk_hec_api": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
 						Required:    false,
@@ -21394,30 +21633,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -21455,6 +21709,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -21538,24 +21795,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -21597,6 +21866,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -21772,30 +22044,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -21918,6 +22205,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 for no timeout.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
@@ -21942,24 +22232,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -22004,24 +22306,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -22056,6 +22370,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required:    true,
@@ -22215,30 +22532,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -22276,6 +22608,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -22318,6 +22653,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"metadata": schema.ListNestedAttribute{
@@ -22421,12 +22760,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -22445,24 +22790,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Required:    false,
@@ -22481,6 +22838,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -22509,6 +22869,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
@@ -22529,6 +22893,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"use_fwd_timezone": schema.BoolAttribute{
 						Required:    false,
@@ -22553,6 +22920,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
@@ -22560,6 +22931,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
@@ -22689,30 +23064,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -22756,24 +23146,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 604800),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages to return in a poll request. Azure storage queues never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 32.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"service_period_secs": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The duration (in seconds) which pollers should be validated and restarted if exited`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -22815,18 +23217,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"parquet_chunk_size_mb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum file size for each Parquet chunk`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"parquet_chunk_download_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -23016,30 +23427,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -23077,6 +23503,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -23154,12 +23583,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -23178,24 +23613,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -23220,6 +23667,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required:    false,
@@ -23329,6 +23779,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of headers to remove from the request to proxy`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+									listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+								},
 								ElementType: types.StringType,
 							},
 							"timeout_sec": schema.Float64Attribute{
@@ -23336,6 +23790,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Amount of time, in seconds, to wait for a proxy request to complete before canceling it`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 9007199254740991),
+								},
 							},
 						},
 					},
@@ -23491,30 +23948,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -23546,6 +24018,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
@@ -23619,6 +24095,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"group_id": schema.StringAttribute{
@@ -23655,18 +24135,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -23823,48 +24312,72 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -24008,6 +24521,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"rebalance_timeout": schema.Float64Attribute{
 						Required: false,
@@ -24017,6 +24533,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Required: false,
@@ -24026,36 +24545,54 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"max_bytes_per_partition": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000000),
+						},
 					},
 					"max_bytes": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1000000000),
+						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of network errors before the consumer re-creates a socket`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -24201,30 +24738,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -24262,6 +24814,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -24339,12 +24894,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -24363,24 +24924,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -24405,12 +24978,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"loki_api": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"prometheus_auth": schema.SingleNestedAttribute{
 						Required: false,
@@ -24640,30 +25219,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -24701,6 +25295,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -24778,12 +25375,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -24802,24 +25405,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -24844,6 +25459,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -25024,30 +25642,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -25085,6 +25718,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -25162,12 +25798,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -25186,24 +25828,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -25228,6 +25882,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -25407,30 +26064,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -25462,6 +26134,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Other dimensions to include in events`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						ElementType: types.StringType,
 					},
 					"field_per_metric": schema.BoolAttribute{
@@ -25481,6 +26156,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 60),
+						},
 					},
 					"log_level": schema.StringAttribute{
 						Required: true,
@@ -25498,30 +26176,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -25567,6 +26260,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"record_type": schema.StringAttribute{
@@ -25579,12 +26275,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The port number in the metrics URL for discovered targets`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"name_list": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of DNS names to resolve`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"scrape_protocol": schema.StringAttribute{
@@ -25598,6 +26300,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Path to use when collecting metrics from discovered targets`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/.*`), "must match pattern ^/.*"),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -25640,6 +26345,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 							},
@@ -25680,6 +26389,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -25692,12 +26405,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"http_discovery_url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `URL to fetch target groups from (must be http or https)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern ^https?://"),
+						},
 					},
 					"http_discovery_headers": schema.ListNestedAttribute{
 						Required:    false,
@@ -25867,30 +26586,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -25922,6 +26656,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Other dimensions to include in events`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						ElementType: types.StringType,
 					},
 					"field_per_metric": schema.BoolAttribute{
@@ -25941,12 +26678,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `How often in seconds to scrape targets for metrics.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 60000),
+						},
 					},
 					"persistence": schema.SingleNestedAttribute{
 						Required: false,
@@ -25970,12 +26713,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -26023,6 +26772,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Targets`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"protocol": schema.StringAttribute{
@@ -26041,12 +26793,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `The port number in the metrics URL for discovered targets.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 65535),
+									},
 								},
 								"path": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
 									Description: `Path to use when collecting metrics from discovered targets`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^/.*`), "must match pattern ^/.*"),
+									},
 								},
 							},
 						},
@@ -26061,12 +26819,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The port number in the metrics URL for discovered targets.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"name_list": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of DNS names to resolve`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"scrape_protocol": schema.StringAttribute{
@@ -26079,6 +26843,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Path to use when collecting metrics from discovered targets`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/.*`), "must match pattern ^/.*"),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -26121,6 +26888,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 							},
@@ -26167,6 +26938,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -26179,6 +26954,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"service_monitor_namespace": schema.StringAttribute{
 						Required:    false,
@@ -26235,6 +27013,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `URL to fetch target groups from (must be http or https)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern ^https?://"),
+						},
 					},
 					"http_discovery_headers": schema.ListNestedAttribute{
 						Required:    false,
@@ -26404,30 +27185,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -26476,30 +27272,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout, use 0 to disable`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -26559,6 +27370,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Interval`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 60),
+									},
 								},
 								"log_level": schema.StringAttribute{
 									Required: false,
@@ -26579,6 +27393,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Microsoft 365 events are available for retrieval.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 7200),
+						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
 						Required: false,
@@ -26595,24 +27412,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -26774,30 +27603,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -26846,30 +27690,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout, use 0 to disable`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -26923,6 +27782,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Interval`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 60),
+									},
 								},
 								"log_level": schema.StringAttribute{
 									Required: false,
@@ -26953,24 +27815,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -27132,30 +28006,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -27193,6 +28082,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 60),
+						},
 					},
 					"start_date": schema.StringAttribute{
 						Required:    false,
@@ -27211,6 +28103,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"disable_time_filter": schema.BoolAttribute{
 						Required:    false,
@@ -27229,24 +28124,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -27287,6 +28194,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of times a task can be rescheduled`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"log_level": schema.StringAttribute{
 						Required: false,
@@ -27308,24 +28218,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -27554,30 +28476,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -27615,6 +28552,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 60),
+						},
 					},
 					"start_date": schema.StringAttribute{
 						Required:    false,
@@ -27633,6 +28573,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"disable_time_filter": schema.BoolAttribute{
 						Required:    false,
@@ -27645,6 +28588,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of pages to retrieve per collection task. Set to 0 to retrieve all pages.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required:    false,
@@ -27657,24 +28603,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -27715,6 +28673,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of times a task can be rescheduled`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"log_level": schema.StringAttribute{
 						Required: false,
@@ -27736,24 +28697,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -27788,6 +28761,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27978,30 +28954,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -28033,6 +29024,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topics": schema.ListAttribute{
@@ -28040,6 +29035,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"group_id": schema.StringAttribute{
@@ -28059,48 +29058,72 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -28232,6 +29255,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       If the client sends no heartbeats to the broker before the timeout expires, the broker will remove the client from the group and initiate a rebalance.
       Value must be lower than rebalanceTimeout.
       See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).`,
+						Validators: []validator.Float64{
+							float64validator.Between(6000, 300000),
+						},
 					},
 					"rebalance_timeout": schema.Float64Attribute{
 						Required: false,
@@ -28241,6 +29267,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Maximum allowed time (rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"heartbeat_interval": schema.Float64Attribute{
 						Required: false,
@@ -28250,36 +29279,54 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
       Expected time (heartbeat.interval.ms in Kafka domain) between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
       See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_interval": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"auto_commit_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"max_bytes_per_partition": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000000),
+						},
 					},
 					"max_bytes": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1000000000),
+						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of network errors before the consumer re-creates a socket`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"minimize_duplicates": schema.BoolAttribute{
 						Required:    false,
@@ -28431,30 +29478,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -28486,12 +29548,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The name of the Event Hub to consume from`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"consumer_group": schema.StringAttribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `The consumer group this instance belongs to. Default is '$Default'.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"auth": schema.SingleNestedAttribute{
 						Required: false,
@@ -28593,6 +29661,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 										Optional:    false,
 										Computed:    false,
 										Description: `Azure Blob Storage container used to store checkpoints. Must be 3–63 lowercase alphanumeric characters or hyphens.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9](-?[a-z0-9])*$`), "must match pattern ^[a-z0-9](-?[a-z0-9])*$"),
+											stringvalidator.UTF8LengthBetween(3, 63),
+										},
 									},
 									"auth_type": schema.StringAttribute{
 										Required:    false,
@@ -28670,60 +29742,90 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of events in each batch delivered to the consumer`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"max_wait_time_in_seconds": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a batch of events before delivering a partial batch`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"prefetch_count": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Number of events to prefetch from the service for processing`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"max_retries": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of retries per operation`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"initial_backoff": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial delay before the first retry, in milliseconds`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(300),
+						},
 					},
 					"max_backoff": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum delay between retries, in milliseconds`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(30000),
+						},
 					},
 					"timeout_in_ms": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a request to complete`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1000),
+						},
 					},
 					"connection_initial_backoff": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Initial delay before the first reconnection attempt, in milliseconds`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"connection_max_backoff": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum delay between reconnection attempts, in milliseconds`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"connection_timeout_in_ms": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time to wait for a connection to complete`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -28869,30 +29971,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -28936,6 +30053,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of retry attempts in the event that the command fails`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"schedule_type": schema.StringAttribute{
 						Required:    false,
@@ -28955,6 +30075,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -28989,6 +30112,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Interval between command executions in seconds.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"cron_schedule": schema.StringAttribute{
 						Required:    false,
@@ -29112,30 +30238,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -29173,6 +30314,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListAttribute{
 						Required:    false,
@@ -29257,12 +30401,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -29281,24 +30431,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -29461,30 +30623,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -29569,18 +30746,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `If Destination exerts backpressure, this setting limits how many inbound events Stream will queue for processing before it stops retrieving events`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many streams to pull messages from at one time. Doubling the value doubles the number of messages this Source pulls from the topic (if available), while consuming more CPU and memory. Defaults to 5.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Pull request timeout, in milliseconds`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -29732,30 +30918,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -29930,30 +31131,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -29991,6 +31207,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -30068,24 +31287,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -30271,30 +31502,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -30332,6 +31578,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -30437,12 +31686,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -30461,24 +31716,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -30642,30 +31909,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -30703,6 +31985,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListAttribute{
 						Required:    false,
@@ -30787,12 +32072,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -30811,24 +32102,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -30853,18 +32156,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"elastic_api": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"splunk_hec_api": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+						},
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
 						Required:    false,
@@ -30951,9 +32263,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Computed: false,
 										},
 										"allowed_indexes_at_token": schema.ListAttribute{
-											Required:    false,
-											Optional:    true,
-											Computed:    false,
+											Required: false,
+											Optional: true,
+											Computed: false,
+											Validators: []validator.List{
+												listvalidator.SizeAtLeast(0),
+												listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+											},
 											ElementType: types.StringType,
 										},
 									},
@@ -31100,30 +32416,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -31161,6 +32492,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -31244,24 +32578,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -31436,30 +32782,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -31491,6 +32852,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"host": schema.SingleNestedAttribute{
 						Required: false,
@@ -31728,6 +33092,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Timeout, in seconds, for the Docker API`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"filters": schema.ListNestedAttribute{
 								Required:    false,
@@ -31834,12 +33201,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -31976,30 +33349,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -32031,6 +33419,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between consecutive state collections. Default is 300 seconds (5 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -32237,12 +33628,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -32391,30 +33788,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -32446,6 +33858,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between consecutive metrics collections. Default is 15 secs.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"scrape_kubelet": schema.BoolAttribute{
 						Required:    false,
@@ -32526,12 +33941,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -32668,30 +34089,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -32723,6 +34159,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between checks for new containers. Default is 15 secs.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"rules": schema.ListNestedAttribute{
 						Required:    false,
@@ -32757,6 +34196,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum bytes to buffer while reassembling a single log line. A line that exceeds this size is flushed as-is, either whole or partially. The default is 1048576 (1 MB).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1024),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -32802,12 +34244,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -32828,6 +34276,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"enable_load_balancing": schema.BoolAttribute{
 						Required:    false,
@@ -32957,30 +34408,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -33173,30 +34639,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -33228,6 +34709,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between consecutive metric collections. Default is 10 seconds.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"host": schema.SingleNestedAttribute{
 						Required: false,
@@ -33491,12 +34975,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -33639,30 +35129,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -33754,30 +35259,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 43200),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -33802,6 +35322,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -33814,6 +35338,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"enable_sqsassume_role": schema.BoolAttribute{
 						Required:    false,
@@ -33897,6 +35424,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 						},
 					},
@@ -33905,6 +35435,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"encoding": schema.StringAttribute{
 						Required:    false,
@@ -33935,6 +35468,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"sqsassume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -33947,6 +35484,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -34098,30 +35638,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -34159,6 +35714,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -34236,12 +35794,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -34260,24 +35824,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -34308,12 +35884,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The rate_by_service hint sent to connected tracers as the catch-all sampling rate. Applies to any service/environment not explicitly listed in Per-Service Sampling Rules. 1.0 = keep all traces (default); 0.0 = suggest dropping all.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 1),
+						},
 					},
 					"sampling_rules": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Per-service sampling rate hints. Each row maps to a "service:<s>,env:<e>" key in the rate_by_service response sent to tracers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"service": schema.StringAttribute{
@@ -34321,18 +35903,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `Datadog service name`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"environment": schema.StringAttribute{
 									Required:    true,
 									Optional:    false,
 									Computed:    false,
 									Description: `Datadog environment name (example: prod, staging)`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"rate": schema.Float64Attribute{
 									Required:    true,
 									Optional:    false,
 									Computed:    false,
 									Description: `Sampling rate for this service/environment combination (0.0–1.0)`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 1),
+									},
 								},
 							},
 						},
@@ -34500,30 +36091,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -34555,6 +36161,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Datagens`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"sample": schema.StringAttribute{
@@ -34568,6 +36177,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `Maximum number of events to generate per second per Worker Node. Defaults to 10.`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(1),
+									},
 								},
 							},
 						},
@@ -34716,30 +36328,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -34777,6 +36404,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListAttribute{
 						Required:    false,
@@ -34861,12 +36491,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -34885,24 +36521,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -34934,6 +36582,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -34962,6 +36613,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.`,
+						Validators: []validator.List{
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"allowed_methods": schema.ListAttribute{
@@ -34969,6 +36623,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
+						Validators: []validator.List{
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
@@ -35136,30 +36793,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -35197,6 +36869,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time interval in minutes between consecutive service calls`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 5),
+						},
 					},
 					"shard_expr": schema.StringAttribute{
 						Required:    false,
@@ -35221,12 +36896,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of records per getRecords call`,
+						Validators: []validator.Float64{
+							float64validator.Between(5000, 10000),
+						},
 					},
 					"get_records_limit_total": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of records, across all shards, to pull down at once per Worker Process`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(20000),
+						},
 					},
 					"load_balancing_algorithm": schema.StringAttribute{
 						Required:    false,
@@ -35280,6 +36961,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -35292,6 +36977,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"verify_kplcheck_sums": schema.BoolAttribute{
 						Required:    false,
@@ -35461,30 +37149,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -35667,30 +37370,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -35728,18 +37446,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tcp_port": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"max_buffer_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ip_whitelist_regex": schema.StringAttribute{
 						Required:    false,
@@ -35851,6 +37578,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -35973,30 +37703,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -36088,30 +37833,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 43200),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -36136,6 +37896,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -36148,6 +37912,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"enable_sqsassume_role": schema.BoolAttribute{
 						Required:    false,
@@ -36220,12 +37987,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum file size for each Parquet chunk`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"parquet_chunk_download_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Required: false,
@@ -36243,6 +38016,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 						},
 					},
@@ -36251,6 +38027,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"encoding": schema.StringAttribute{
 						Required:    false,
@@ -36287,6 +38066,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"sqsassume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -36299,6 +38082,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -36445,30 +38231,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -36560,30 +38361,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 43200),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -36608,6 +38424,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -36620,6 +38440,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"enable_sqsassume_role": schema.BoolAttribute{
 						Required:    false,
@@ -36692,12 +38515,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum file size for each Parquet chunk`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"parquet_chunk_download_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Required: false,
@@ -36715,6 +38544,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 						},
 					},
@@ -36723,6 +38555,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"checksum_suffix": schema.StringAttribute{
 						Required:    false,
@@ -36735,6 +38570,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum download size (KB) of each manifest or checksum file. Manifest files larger than this size will not be read.        Defaults to 4096.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"validate_inventory_files": schema.BoolAttribute{
 						Required:    false,
@@ -36765,6 +38603,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"sqsassume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -36777,6 +38619,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -36927,30 +38772,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -36988,6 +38848,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `UDP port to receive SNMP traps on. Defaults to 162.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"snmp_v3_auth": schema.SingleNestedAttribute{
 						Required:    false,
@@ -37012,6 +38875,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `User credentials for receiving v3 traps`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
@@ -37019,6 +38885,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 											Optional:    false,
 											Computed:    false,
 											Description: `V3 name`,
+											Validators: []validator.String{
+												stringvalidator.UTF8LengthAtLeast(1),
+											},
 										},
 										"auth_protocol": schema.StringAttribute{
 											Required: false,
@@ -37052,6 +38921,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of events to buffer when downstream is blocking.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ip_whitelist_regex": schema.StringAttribute{
 						Required:    false,
@@ -37086,6 +38958,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
+						},
 					},
 					"varbinds_with_types": schema.BoolAttribute{
 						Required:    false,
@@ -37221,30 +39096,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -37282,6 +39172,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -37359,30 +39252,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -37437,6 +39345,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Shared secrets to authenticate clients. Supports Bearer tokens and Basic auth. If empty, unauthenticated access is permitted.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
@@ -37450,6 +39361,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Bearer token for Authorization header`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -37490,24 +39405,38 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Select or create a stored text secret`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"username": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
 									Description: `Username`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"password": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
 									Description: `Password`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"credentials_secret": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
 									Description: `Select or create a secret that references your credentials`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -37539,6 +39468,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -37698,30 +39630,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -37759,6 +39706,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -37858,12 +39808,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"shutdown_timeout_ms": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -37986,30 +39942,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -38106,6 +40077,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -38118,18 +40093,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -38158,6 +40142,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -38182,6 +40169,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 				},
 			},
@@ -38298,30 +40288,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -38359,18 +40364,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tcp_port": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"max_buffer_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ip_whitelist_regex": schema.StringAttribute{
 						Required:    false,
@@ -38401,6 +40415,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						ElementType: types.StringType,
 					},
 					"octet_counting": schema.BoolAttribute{
@@ -38432,24 +40449,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -38549,6 +40578,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
+						},
 					},
 					"enable_load_balancing": schema.BoolAttribute{
 						Required:    false,
@@ -38684,30 +40716,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -38745,6 +40792,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between scanning for files`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"filenames": schema.ListAttribute{
 						Required:    false,
@@ -38770,6 +40820,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, before an idle file is closed`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"min_age_dur": schema.StringAttribute{
 						Required:    false,
@@ -38800,6 +40853,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Length of file header bytes to use in hash for unique file identification`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -38841,6 +40897,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -38859,6 +40918,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"suppress_missing_path_errors": schema.BoolAttribute{
 						Required:    false,
@@ -39006,30 +41068,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -39067,6 +41144,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -39150,24 +41230,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -39209,6 +41301,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"enable_header": schema.BoolAttribute{
 						Required:    false,
@@ -39381,30 +41476,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -39442,24 +41552,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_ending_max_wait": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -39501,6 +41623,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"enable_unix_path": schema.BoolAttribute{
 						Required:    false,
@@ -39572,12 +41697,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_data_time": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+								},
 							},
 							"compress": schema.StringAttribute{
 								Required: false,
@@ -39614,6 +41745,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -39826,30 +41960,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -39887,6 +42036,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_method": schema.StringAttribute{
 						Required:    false,
@@ -39983,12 +42135,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -40007,6 +42165,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -40031,6 +42192,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ca_fingerprint": schema.StringAttribute{
 						Required:    false,
@@ -40086,12 +42250,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `Maximum time (in seconds) between endpoint checkins before considering it unavailable`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(1),
+									},
 								},
 								"batch_timeout": schema.Float64Attribute{
 									Required:    true,
 									Optional:    false,
 									Computed:    false,
 									Description: `Interval (in seconds) over which the endpoint should collect events before sending them to Stream`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 								"read_existing_events": schema.BoolAttribute{
 									Required:    false,
@@ -40116,6 +42286,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com`,
+									Validators: []validator.List{
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"locale": schema.StringAttribute{
@@ -40333,30 +42506,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -40388,6 +42576,11 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.UniqueValues(),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"suppress_missing_log_errors": schema.BoolAttribute{
@@ -40419,12 +42612,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between checking for new entries (Applicable for pre-4.8.0 nodes that use Windows Tools)`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"batch_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of events to read in one polling interval. A batch size higher than 500 can cause delays when pulling from multiple event logs. (Applicable for pre-4.8.0 nodes that use Windows Tools)`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -40453,6 +42652,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 134217728),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -40588,30 +42790,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -40643,6 +42860,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Common Log Types and Predicates](https://docs.cribl.io/edge/sources-apple-unified-logs/#examples) for more information.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"read_mode": schema.StringAttribute{
 						Required:    false,
@@ -40794,30 +43014,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -40855,12 +43090,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"max_buffer_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of events to buffer when downstream is blocking.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ip_whitelist_regex": schema.StringAttribute{
 						Required:    false,
@@ -40885,6 +43126,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -41030,30 +43274,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -41091,6 +43350,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time, in seconds, between scanning for journals. `,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"journals": schema.ListAttribute{
 						Required:    true,
@@ -41283,30 +43545,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -41338,6 +43615,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `The Wiz GraphQL API endpoint. Example: https://api.us1.app.wiz.io/graphql`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https:\/\/`), "must match pattern ^https:\\/\\/"),
+						},
 					},
 					"auth_url": schema.StringAttribute{
 						Required:    true,
@@ -41369,6 +43649,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    false,
 									Computed:    false,
 									Description: `The name of the Wiz query`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_\-\s]+$`), "must match pattern ^[a-zA-Z0-9_\\-\\s]+$"),
+									},
 								},
 								"content_description": schema.StringAttribute{
 									Required:    false,
@@ -41435,6 +43718,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Units default to seconds if not specified. Enter 0 for unlimited time.`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+									},
 								},
 								"log_level": schema.StringAttribute{
 									Required: false,
@@ -41446,6 +43732,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Maximum number of pages to retrieve per collection task. Defaults to 0. Set to 0 to retrieve all pages.`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -41455,24 +43744,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -41514,6 +43815,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
 						Required: false,
@@ -41530,24 +43834,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -41709,30 +44025,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -41878,6 +44209,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Maximum number of pages to retrieve per collection task. Set to 0 only when unlimited pagination is required.`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 								"pagination_next_relation_attribute": schema.StringAttribute{
 									Required:    false,
@@ -41914,6 +44248,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+									},
 								},
 								"log_level": schema.StringAttribute{
 									Required:    false,
@@ -41951,6 +44288,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"api_key": schema.StringAttribute{
 						Required:    false,
@@ -41969,18 +44309,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -42025,24 +44374,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -42187,30 +44548,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -42248,6 +44624,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListAttribute{
 						Required:    false,
@@ -42332,12 +44711,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -42356,24 +44741,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"enable_health_check": schema.BoolAttribute{
 						Required:    false,
@@ -42405,6 +44802,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -42433,6 +44833,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all.`,
+						Validators: []validator.List{
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"allowed_methods": schema.ListAttribute{
@@ -42440,6 +44843,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
+						Validators: []validator.List{
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
@@ -42607,30 +45013,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -42668,6 +45089,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"enable_pass_through": schema.BoolAttribute{
 						Required:    false,
@@ -42692,12 +45116,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
+						},
 					},
 					"template_cache_minutes": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"v5_enabled": schema.BoolAttribute{
 						Required:    false,
@@ -42860,30 +45290,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -42975,30 +45420,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 43200),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -43023,6 +45483,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -43035,6 +45499,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"enable_sqsassume_role": schema.BoolAttribute{
 						Required:    false,
@@ -43107,12 +45574,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum file size for each Parquet chunk`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"parquet_chunk_download_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Required: false,
@@ -43130,6 +45603,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 						},
 					},
@@ -43138,6 +45614,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"encoding": schema.StringAttribute{
 						Required:    false,
@@ -43168,6 +45647,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"sqsassume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -43180,6 +45663,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -43331,30 +45817,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -43446,30 +45947,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"max_messages": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"visibility_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 43200),
+						},
 					},
 					"num_receivers": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 43200),
+						},
 					},
 					"skip_on_error": schema.BoolAttribute{
 						Required:    false,
@@ -43494,6 +46010,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -43506,6 +46026,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"enable_sqsassume_role": schema.BoolAttribute{
 						Required:    false,
@@ -43578,12 +46101,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum file size for each Parquet chunk`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"parquet_chunk_download_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 3600),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Required: false,
@@ -43601,6 +46130,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 						},
 					},
@@ -43609,6 +46141,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 20),
+						},
 					},
 					"encoding": schema.StringAttribute{
 						Required:    false,
@@ -43639,6 +46174,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"sqsassume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -43651,6 +46190,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -43802,30 +46344,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -43857,18 +46414,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `ServiceNow instance base URL for Table API requests. Enter a literal URL (http or https and the instance host, for example a hostname ending in .service-now.com) or a Cribl expression that resolves to a URL.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"table_name": schema.StringAttribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `ServiceNow table name to collect from.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"fields": schema.ListAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Field names to return from the Table API (sysparm_fields). Leave empty to return all fields.`,
+						Validators: []validator.List{
+							listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[^*?\[\]]+$`), "must match pattern ^[^*?\\[\\]]+$")),
+						},
 						ElementType: types.StringType,
 					},
 					"order_by_field": schema.StringAttribute{
@@ -43894,12 +46460,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum records per Table API page request (sysparm_limit). Setting a higher value may increase the risk of timeouts.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(1),
+						},
 					},
 					"max_pages": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of pages to retrieve per collection task. Set to 0 to retrieve all pages.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required:    false,
@@ -43918,18 +46490,27 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Cron schedule on which to run this job`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"earliest": schema.StringAttribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `Earliest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"latest": schema.StringAttribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `Latest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"state_tracking": schema.BoolAttribute{
 						Required:    false,
@@ -43947,6 +46528,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
@@ -43959,24 +46543,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -44021,24 +46617,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -44084,6 +46692,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `ServiceNow username for the password grant type`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    false,
@@ -44146,6 +46757,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `ServiceNow OAuth client ID`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`.*\S.*`), "must match pattern .*\\S.*"),
+						},
 					},
 					"client_text_secret": schema.StringAttribute{
 						Required:    false,
@@ -44287,30 +46901,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -44348,6 +46977,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -44390,6 +47022,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"metadata": schema.ListNestedAttribute{
@@ -44493,12 +47129,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -44517,24 +47159,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Required:    false,
@@ -44553,6 +47207,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Zscaler HTTP Event Collector API requests. This input supports the /event endpoint.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -44581,6 +47238,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
@@ -44588,6 +47249,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
@@ -44595,6 +47260,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
@@ -44731,30 +47400,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -44792,6 +47476,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -44834,6 +47521,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"metadata": schema.ListNestedAttribute{
@@ -44938,12 +47629,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -44962,24 +47659,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Required:    false,
@@ -44998,6 +47707,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -45026,6 +47738,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
@@ -45033,6 +47749,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
@@ -45040,6 +47760,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
@@ -45060,6 +47784,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -45183,30 +47910,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -45244,6 +47986,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -45286,6 +48031,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"metadata": schema.ListNestedAttribute{
@@ -45389,12 +48138,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -45413,24 +48168,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Required:    false,
@@ -45449,6 +48216,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Sysdig HTTP Event Collector API requests. This input supports the /event and /raw endpoints.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -45477,6 +48247,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
@@ -45484,6 +48258,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
@@ -45491,6 +48269,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
@@ -45621,30 +48403,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -45682,6 +48479,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -45724,6 +48524,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 									Optional:    true,
 									Computed:    false,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+										listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+									},
 									ElementType: types.StringType,
 								},
 								"metadata": schema.ListNestedAttribute{
@@ -45827,12 +48631,18 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Required:    false,
@@ -45851,24 +48661,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: "How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.",
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
 					},
 					"ip_allowlist_regex": schema.StringAttribute{
 						Required:    false,
@@ -45887,6 +48709,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    false,
 						Computed:    false,
 						Description: `Absolute path on which to listen for the Upwind HTTP Event Collector API requests. This input supports the /event endpoint.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -45915,6 +48740,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_origin": schema.ListAttribute{
@@ -45922,6 +48751,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"access_control_allow_headers": schema.ListAttribute{
@@ -45929,6 +48762,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"emit_token_metrics": schema.BoolAttribute{
@@ -46059,30 +48896,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -46150,6 +49002,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"log_level": schema.StringAttribute{
 						Required: false,
@@ -46161,6 +49016,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum number of log file listing pages to retrieve per run. Set to 0 to retrieve all pages.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"state_tracking": schema.BoolAttribute{
 						Required:    false,
@@ -46173,24 +49031,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -46232,6 +49102,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
 						Required: false,
@@ -46248,24 +49121,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -46305,6 +49190,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `One or more compliance log categories to collect`,
+						Validators: []validator.List{
+							listvalidator.UniqueValues(),
+						},
 						ElementType: types.StringType,
 					},
 					"organization_id": schema.StringAttribute{
@@ -46318,6 +49206,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `One or more compliance log categories to collect`,
+						Validators: []validator.List{
+							listvalidator.UniqueValues(),
+						},
 						ElementType: types.StringType,
 					},
 					"state_update_expression": schema.StringAttribute{
@@ -46454,30 +49345,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -46551,6 +49457,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 							"state_tracking": schema.BoolAttribute{
 								Required:    false,
@@ -46613,6 +49522,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 							"state_tracking": schema.BoolAttribute{
 								Required:    false,
@@ -46675,6 +49587,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 							"state_tracking": schema.BoolAttribute{
 								Required:    false,
@@ -46737,6 +49652,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 							"state_tracking": schema.BoolAttribute{
 								Required:    false,
@@ -46799,6 +49717,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 							"state_tracking": schema.BoolAttribute{
 								Required:    false,
@@ -46849,6 +49770,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 						},
 					},
@@ -46875,6 +49799,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 						},
 					},
@@ -46901,6 +49828,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 						},
 					},
@@ -46927,6 +49857,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+								},
 							},
 						},
 					},
@@ -46935,24 +49868,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -46997,24 +49942,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{
@@ -47159,30 +50116,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
 							},
 							"commit_frequency": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The number of events to send downstream before committing that Stream has read them`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"max_file_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"max_size": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+								},
 							},
 							"path": schema.StringAttribute{
 								Required:    false,
@@ -47250,30 +50222,45 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+[sm]?$`), "must match pattern ^\\d+[sm]?$"),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 2400),
+						},
 					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_missed_keep_alives": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(2),
+						},
 					},
 					"ttl": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
 						Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smh]$`), "must match pattern \\d+[smh]$"),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Required:    false,
@@ -47318,24 +50305,36 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 								Optional:    true,
 								Computed:    false,
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20000),
+								},
 							},
 							"limit": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `The maximum number of times to retry a failed HTTP request`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 20),
+								},
 							},
 							"multiplier": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"codes": schema.ListAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
 								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(1),
+								},
 								ElementType: types.Float64Type,
 							},
 							"enable_header": schema.BoolAttribute{

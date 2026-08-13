@@ -4,15 +4,21 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -74,6 +80,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `Absolute path for Cribl HTTP API requests. Used when type is cribl_http.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+				},
 			},
 			"description": schema.StringAttribute{
 				Required:    false,
@@ -92,6 +101,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `Absolute path for Elasticsearch bulk API requests. Used when type is elastic.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+				},
 			},
 			"host": schema.StringAttribute{
 				Required:    true,
@@ -139,6 +151,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `Absolute path for Prometheus remote write requests. Used when type is prometheus_rw.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern ^/"),
+				},
 			},
 			"splunk_hec_acks": schema.BoolAttribute{
 				Required:    false,
@@ -151,6 +166,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `Absolute path for Splunk HTTP Event Collector (HEC) API requests. Required when type is splunk_hec.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern ^/|^$"),
+				},
 			},
 			"subscriptions": schema.ListNestedAttribute{
 				Required:    false,
@@ -182,18 +200,27 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 							Optional:    false,
 							Computed:    false,
 							Description: `Maximum seconds between endpoint check-ins before marking unavailable.`,
+							Validators: []validator.Float64{
+								float64validator.AtLeast(1),
+							},
 						},
 						"batch_timeout": schema.Float64Attribute{
 							Required:    true,
 							Optional:    false,
 							Computed:    false,
 							Description: `Seconds to collect events before sending to Cribl.`,
+							Validators: []validator.Float64{
+								float64validator.AtLeast(0),
+							},
 						},
 						"targets": schema.ListAttribute{
 							Required:    true,
 							Optional:    false,
 							Computed:    false,
 							Description: `DNS names of endpoints that forward these events.`,
+							Validators: []validator.List{
+								listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+							},
 							ElementType: types.StringType,
 						},
 						"id": schema.StringAttribute{
@@ -241,6 +268,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `TCP listen port when the source type uses a dedicated TCP port.`,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
 			},
 			"tls": schema.SingleNestedAttribute{
 				Required:    false,
@@ -285,6 +315,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `UDP listen port when applicable.`,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
 			},
 		},
 	}

@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"go/format"
 	"os"
 	"slices"
 	"sort"
@@ -444,7 +445,11 @@ func writeAvailabilityPaths(filename string, cloudOnlyPaths, onPremOnlyPaths []s
 	output.WriteString("\t}\n")
 	output.WriteString("}\n")
 
-	if err := os.WriteFile(filename, output.Bytes(), 0644); err != nil {
+	formatted, err := format.Source(output.Bytes())
+	if err != nil {
+		return fmt.Errorf("format cloud-only paths: %v", err)
+	}
+	if err := os.WriteFile(filename, formatted, 0644); err != nil {
 		return fmt.Errorf("write cloud-only paths: %v", err)
 	}
 	return nil

@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -763,6 +765,38 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			}
 		}
 	}
+	pattern, err := patternValidator(property, schemaForType)
+	if err != nil {
+		return FieldDef{}, fmt.Errorf("%s.%s: %v", modelName, apiName, err)
+	}
+	fieldConstraintValues, err := fieldConstraints(fieldType, property, schemaForType)
+	if err != nil {
+		return FieldDef{}, fmt.Errorf("%s.%s: %v", modelName, apiName, err)
+	}
+	var elementPattern string
+	var elementConstraints constraints
+	if fieldType == "array" && fieldElementType == "string" {
+		items, ok := mappingValue(schemaForType, "items")
+		if !ok {
+			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
+		}
+		resolvedItems := items
+		if schemaName := directSchemaRefName(items); schemaName != "" {
+			resolved, found := mappingValue(schemas, schemaName)
+			if !found {
+				return FieldDef{}, fmt.Errorf("array item schema %q not found", schemaName)
+			}
+			resolvedItems = resolved
+		}
+		elementPattern, err = patternValidator(items, resolvedItems)
+		if err != nil {
+			return FieldDef{}, fmt.Errorf("%s.%s items: %v", modelName, apiName, err)
+		}
+		elementConstraints, err = fieldConstraints("string", items, resolvedItems)
+		if err != nil {
+			return FieldDef{}, fmt.Errorf("%s.%s items: %v", modelName, apiName, err)
+		}
+	}
 	field := FieldDef{
 		APIName:       apiName,
 		TerraformName: snake(tfName),
@@ -793,7 +827,17 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			property,
 			"x-terraform-enum-validator",
 		),
-		Pattern: patternValidator(property),
+		Pattern:          pattern,
+		MinLength:        fieldConstraintValues.minLength,
+		MaxLength:        fieldConstraintValues.maxLength,
+		Minimum:          fieldConstraintValues.minimum,
+		Maximum:          fieldConstraintValues.maximum,
+		MinItems:         fieldConstraintValues.minItems,
+		MaxItems:         fieldConstraintValues.maxItems,
+		UniqueItems:      fieldConstraintValues.uniqueItems,
+		ElementPattern:   elementPattern,
+		ElementMinLength: elementConstraints.minLength,
+		ElementMaxLength: elementConstraints.maxLength,
 	}
 	if field.Type == "array" && field.ElementType == "object" {
 		items, ok := mappingValue(schemaForType, "items")
@@ -865,11 +909,125 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 	return field, nil
 }
 
-func patternValidator(property *yaml.Node) string {
-	if !boolAnnotation(property, "x-terraform-pattern-validator") {
-		return ""
+type constraints struct {
+	minLength   *int
+	maxLength   *int
+	minimum     string
+	maximum     string
+	minItems    *int
+	maxItems    *int
+	uniqueItems bool
+}
+
+func fieldConstraints(fieldType string, property, resolvedSchema *yaml.Node) (constraints, error) {
+	var output constraints
+	var err error
+	switch fieldType {
+	case "string":
+		output.minLength, err = integerKeyword(property, resolvedSchema, "minLength")
+		if err != nil {
+			return constraints{}, err
+		}
+		output.maxLength, err = integerKeyword(property, resolvedSchema, "maxLength")
+	case "integer":
+		output.minimum, err = numericKeyword(property, resolvedSchema, "minimum", true)
+		if err != nil {
+			return constraints{}, err
+		}
+		output.maximum, err = numericKeyword(property, resolvedSchema, "maximum", true)
+	case "number":
+		output.minimum, err = numericKeyword(property, resolvedSchema, "minimum", false)
+		if err != nil {
+			return constraints{}, err
+		}
+		output.maximum, err = numericKeyword(property, resolvedSchema, "maximum", false)
+	case "array":
+		output.minItems, err = integerKeyword(property, resolvedSchema, "minItems")
+		if err != nil {
+			return constraints{}, err
+		}
+		output.maxItems, err = integerKeyword(property, resolvedSchema, "maxItems")
+		output.uniqueItems = boolKeyword(property, resolvedSchema, "uniqueItems")
 	}
-	return scalarValue(property, "pattern")
+	if err != nil {
+		return constraints{}, err
+	}
+	return output, nil
+}
+
+func integerKeyword(property, resolvedSchema *yaml.Node, key string) (*int, error) {
+	value, ok := constraintValue(property, resolvedSchema, key)
+	if !ok {
+		return nil, nil
+	}
+	parsed, err := strconv.Atoi(value)
+	if err != nil || parsed < 0 {
+		return nil, fmt.Errorf("OpenAPI %s must be a non-negative integer, got %q", key, value)
+	}
+	return &parsed, nil
+}
+
+func numericKeyword(property, resolvedSchema *yaml.Node, key string, integer bool) (string, error) {
+	value, ok := constraintValue(property, resolvedSchema, key)
+	if !ok {
+		return "", nil
+	}
+	if integer {
+		if _, err := strconv.ParseInt(value, 10, 64); err != nil {
+			return "", fmt.Errorf("OpenAPI %s must be an int64, got %q", key, value)
+		}
+		return value, nil
+	}
+	if _, err := strconv.ParseFloat(value, 64); err != nil {
+		return "", fmt.Errorf("OpenAPI %s must be a float64, got %q", key, value)
+	}
+	return value, nil
+}
+
+func boolKeyword(property, resolvedSchema *yaml.Node, key string) bool {
+	if value, ok := boolValue(property, key); ok {
+		return value
+	}
+	if property != resolvedSchema {
+		value, _ := boolValue(resolvedSchema, key)
+		return value
+	}
+	return false
+}
+
+func constraintValue(property, resolvedSchema *yaml.Node, key string) (string, bool) {
+	if value, ok := mappingValue(property, key); ok && value.Kind == yaml.ScalarNode {
+		return value.Value, true
+	}
+	if property != resolvedSchema {
+		if value, ok := mappingValue(resolvedSchema, key); ok && value.Kind == yaml.ScalarNode {
+			return value.Value, true
+		}
+	}
+	return "", false
+}
+
+func patternValidator(property, resolvedSchema *yaml.Node) (string, error) {
+	if enabled, ok := boolValue(property, "x-terraform-pattern-validator"); ok && !enabled {
+		return "", nil
+	}
+	if property != resolvedSchema {
+		if enabled, ok := boolValue(resolvedSchema, "x-terraform-pattern-validator"); ok && !enabled {
+			return "", nil
+		}
+	}
+
+	pattern := scalarValue(property, "pattern")
+	if pattern == "" && property != resolvedSchema {
+		pattern = scalarValue(resolvedSchema, "pattern")
+	}
+	if pattern == "" {
+		return "", nil
+	}
+	if _, err := regexp.Compile(pattern); err != nil {
+		return "", fmt.Errorf("compile OpenAPI pattern %q: %v", pattern, err)
+	}
+	return pattern, nil
 }
 
 func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
@@ -1406,8 +1564,23 @@ func scalarValue(node *yaml.Node, key string) string {
 }
 
 func boolAnnotation(node *yaml.Node, key string) bool {
+	value, ok := boolValue(node, key)
+	return ok && value
+}
+
+func boolValue(node *yaml.Node, key string) (bool, bool) {
 	value, ok := mappingValue(node, key)
-	return ok && value.Kind == yaml.ScalarNode && value.Value == "true"
+	if !ok || value.Kind != yaml.ScalarNode {
+		return false, false
+	}
+	switch value.Value {
+	case "true":
+		return true, true
+	case "false":
+		return false, true
+	default:
+		return false, false
+	}
 }
 
 func suppressDiffAnnotation(node *yaml.Node) bool {

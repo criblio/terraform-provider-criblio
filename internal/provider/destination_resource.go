@@ -6,14 +6,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -191,18 +197,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 512000),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -223,6 +238,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -275,6 +293,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -282,24 +303,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -320,18 +353,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -417,6 +459,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"load_balanced": schema.BoolAttribute{
 						Required:    false,
@@ -489,6 +534,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -500,24 +548,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -540,6 +600,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -585,6 +648,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"secret_param_name": schema.StringAttribute{
 						Required:    false,
@@ -616,6 +682,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Required:    false,
@@ -678,6 +747,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"refresh_request_params": schema.ListNestedAttribute{
 						Required:    false,
@@ -706,6 +778,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL of a webhook endpoint to send events to, such as http://localhost:10200`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"exclude_self": schema.BoolAttribute{
 						Required:    false,
@@ -718,6 +793,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Webhook URLs`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -725,12 +803,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `URL of a webhook endpoint to send events to, such as http://localhost:10200`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+									},
 								},
 								"weight": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -740,12 +824,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 				},
 			},
@@ -801,18 +891,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)`,
+						Validators: []validator.Float64{
+							float64validator.Between(100, 1000),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -833,6 +932,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -885,6 +987,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -892,24 +997,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -930,18 +1047,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -967,6 +1093,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"secret": schema.StringAttribute{
 						Required:    false,
@@ -992,6 +1121,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Override the refresh endpoint URL if it differs from the Login URL. Defaults to Login URL.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"refresh_request_params": schema.ListNestedAttribute{
 						Required:    false,
@@ -1038,6 +1170,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1109,6 +1244,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -1120,24 +1258,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -1160,6 +1310,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1173,6 +1326,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to send events to. Can be overwritten by an event's __url field.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"dcr_id": schema.StringAttribute{
 						Required:    false,
@@ -1185,6 +1341,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: "Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https:\/\/([a-zA-Z0-9-_\.]+)\.ingest\.monitor\.azure\.com(\/?)$`), "must match pattern ^https:\\/\\/([a-zA-Z0-9-_\\.]+)\\.ingest\\.monitor\\.azure\\.com(\\/?)$"),
+						},
 					},
 					"stream_name": schema.StringAttribute{
 						Required:    false,
@@ -1318,6 +1477,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"octet_count_framing": schema.BoolAttribute{
 						Required:    false,
@@ -1354,6 +1516,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The port to connect to on the provided host`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"exclude_self": schema.BoolAttribute{
 						Required:    false,
@@ -1366,6 +1531,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Set of hosts to load-balance data to`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -1379,6 +1547,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The port to connect to on the provided host`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 								"tls": schema.StringAttribute{
 									Required: false,
@@ -1396,6 +1567,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -1405,18 +1579,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_concurrent_senders": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -1507,12 +1690,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of syslog messages. Make sure this value is less than or equal to the MTU to avoid UDP packet fragmentation.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"udp_dns_resolve_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every message sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"enable_ip_spoofing": schema.BoolAttribute{
 						Required:    false,
@@ -1531,6 +1720,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -1542,24 +1734,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -1582,6 +1786,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1643,6 +1850,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The port to connect to on the provided host`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"nested_fields": schema.StringAttribute{
 						Required: false,
@@ -1654,6 +1864,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -1778,6 +1991,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -1795,6 +2011,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -1806,24 +2025,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -1846,6 +2077,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -1915,18 +2149,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_concurrent_senders": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"nested_fields": schema.StringAttribute{
 						Required: false,
@@ -1938,6 +2181,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -2057,6 +2303,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 60000),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -2074,6 +2323,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -2091,18 +2343,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Clustering site of the indexers from where indexers need to be discovered. In case of single site cluster, it defaults to 'default' site.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`[0-9A-Za-z-._]+`), "must match pattern [0-9A-Za-z-._]+"),
+								},
 							},
 							"master_uri": schema.StringAttribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Full URI of Splunk cluster manager (scheme://host:port). Example: https://managerAddress:8089`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-._]+:[0-9]+$`), "must match pattern ^https?://[a-zA-Z0-9-._]+:[0-9]+$"),
+								},
 							},
 							"refresh_interval_sec": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Time interval, in seconds, between two consecutive indexer list fetches from cluster manager`,
+								Validators: []validator.Float64{
+									float64validator.Between(60, 86400),
+								},
 							},
 							"reject_unauthorized": schema.BoolAttribute{
 								Required:    false,
@@ -2169,6 +2430,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Set of Splunk indexers to load-balance data to.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -2182,6 +2446,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The port to connect to on the provided host`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 								"tls": schema.StringAttribute{
 									Required: false,
@@ -2199,6 +2466,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -2214,6 +2484,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -2225,24 +2498,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -2265,6 +2550,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -2400,18 +2688,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 2097152),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -2432,6 +2729,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -2489,6 +2789,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -2496,24 +2799,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -2534,18 +2849,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -2583,6 +2907,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
@@ -2601,6 +2928,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Splunk HEC Endpoints`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -2608,12 +2938,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+									},
 								},
 								"weight": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -2623,12 +2959,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -2654,6 +2996,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -2665,24 +3010,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -2705,6 +3062,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -2821,18 +3181,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 9000),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -2853,6 +3222,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -2904,6 +3276,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -2911,24 +3286,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -2949,18 +3336,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -3029,6 +3425,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -3040,24 +3439,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -3080,6 +3491,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3152,6 +3566,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -3237,6 +3654,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of minutes before the internally generated authentication token expires, valid values between 1 and 60`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 60),
+						},
 					},
 					"send_header": schema.BoolAttribute{
 						Required:    false,
@@ -3271,6 +3691,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The port to connect to on the provided host`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"exclude_self": schema.BoolAttribute{
 						Required:    false,
@@ -3283,6 +3706,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Set of hosts to load-balance data to`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -3296,6 +3722,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The port to connect to on the provided host`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 								"tls": schema.StringAttribute{
 									Required: false,
@@ -3313,6 +3742,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -3322,18 +3754,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_concurrent_senders": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -3346,6 +3787,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -3357,24 +3801,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -3397,6 +3853,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3477,18 +3936,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -3509,6 +3977,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -3561,6 +4032,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -3568,24 +4042,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -3606,18 +4092,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -3662,6 +4157,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -3673,24 +4171,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -3713,6 +4223,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -3780,18 +4293,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -3812,6 +4334,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -3864,6 +4389,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -3871,24 +4399,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -3909,18 +4449,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -3965,6 +4514,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -3976,24 +4528,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -4016,6 +4580,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -4119,24 +4686,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -4149,6 +4728,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -4225,6 +4807,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -4255,6 +4840,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -4271,12 +4859,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -4289,6 +4883,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -4329,6 +4926,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -4347,6 +4947,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -4407,6 +5010,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -4419,6 +5026,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -4460,6 +5070,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -4472,6 +5085,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -4519,24 +5135,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -4549,6 +5177,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -4625,6 +5256,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -4695,6 +5329,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -4711,12 +5348,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -4729,6 +5372,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -4769,6 +5415,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -4787,6 +5436,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -4865,6 +5517,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"remove_empty_dirs": schema.BoolAttribute{
 						Required:    false,
@@ -4900,24 +5555,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -4930,6 +5597,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -5006,6 +5676,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -5047,6 +5720,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -5063,12 +5739,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -5081,6 +5763,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -5121,6 +5806,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -5139,6 +5827,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"connection_string": schema.StringAttribute{
 						Required:    false,
@@ -5249,18 +5940,29 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: "The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`.",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https://`), "must match pattern ^https://"),
+						},
 					},
 					"database": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Name of the database containing the table where data will be ingested`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\w\s\-\.]+$`), "must match pattern ^[\\w\\s\\-\\.]+$"),
+							stringvalidator.UTF8LengthAtMost(260),
+						},
 					},
 					"table": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Name of the table to ingest data into`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\w\-\.]+$`), "must match pattern ^[\\w\\-\\.]+$"),
+							stringvalidator.UTF8LengthAtMost(1024),
+						},
 					},
 					"validate_database_settings": schema.BoolAttribute{
 						Required:    false,
@@ -5361,6 +6063,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -5377,12 +6082,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -5395,6 +6106,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -5441,6 +6155,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -5465,6 +6182,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"is_mapping_obj": schema.BoolAttribute{
 						Required:    false,
@@ -5483,12 +6203,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Enter the name of a data mapping associated with your target table. Or, if incoming event and target table fields match exactly, you can leave the field empty.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\w\-\.]+$`), "must match pattern ^[\\w\\-\\.]+$"),
+						},
 					},
 					"ingest_url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: "The ingestion service URI for your cluster. Typically, `https://ingest-<cluster>.<region>.kusto.windows.net`.",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https://`), "must match pattern ^https://"),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -5512,30 +6238,45 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
 						Required: false,
@@ -5601,6 +6342,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -5609,6 +6353,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_immediately": schema.BoolAttribute{
 						Required:    false,
@@ -5684,6 +6431,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Key`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^[\w\-\.]+$`), "must match pattern ^[\\w\\-\\.]+$"),
+									},
 								},
 								"value": schema.StringAttribute{
 									Required:    false,
@@ -5699,6 +6449,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -5706,24 +6459,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -5744,18 +6509,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -5770,18 +6544,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 4096),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -5820,6 +6603,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -5831,24 +6617,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -5871,6 +6669,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -5927,6 +6728,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: "The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.",
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(100),
+						},
 					},
 					"resource_id": schema.StringAttribute{
 						Required:    false,
@@ -5939,18 +6743,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required: false,
@@ -5970,6 +6783,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -6022,12 +6838,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The DNS name of the Log API endpoint that sends log data to a Log Analytics workspace in Azure Monitor. Defaults to .ods.opinsights.azure.com. @{product} will add a prefix and suffix to construct a URI in this format: <https://<Workspace_ID><your_DNS_name>/api/logs?api-version=<API version>.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\.[^\/]+$`), "must match pattern ^\\.[^\\/]+$"),
+						},
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -6035,24 +6857,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -6073,18 +6907,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -6122,6 +6965,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -6133,24 +6979,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -6173,6 +7031,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6294,6 +7155,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -6306,18 +7171,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing put requests before blocking.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of each individual record before compression. For uncompressed or non-compressible data 1MB is the max recommended size`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10240),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -6371,6 +7245,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of records to send in a single request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 500),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -6383,6 +7260,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -6394,24 +7274,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -6434,6 +7326,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6496,18 +7391,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -6528,6 +7432,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -6580,6 +7487,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -6587,24 +7497,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -6625,18 +7547,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -6673,6 +7604,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -6684,24 +7618,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -6724,6 +7670,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -6792,6 +7741,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -6815,12 +7768,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"flush_event_count": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events in a batch before forcing a flush`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -6833,48 +7792,72 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -7022,6 +8005,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -7033,24 +8019,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -7073,6 +8071,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -7166,30 +8167,45 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"max_queue_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of queued batches before blocking`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of a single append request. BigQuery limit is 10 MB`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10240),
+						},
 					},
 					"max_in_progress": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of in-progress API requests before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"max_send_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -7213,6 +8229,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -7224,24 +8243,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -7264,6 +8295,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -7332,6 +8366,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -7339,24 +8376,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -7377,18 +8426,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -7415,18 +8473,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1024),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -7447,6 +8514,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -7504,6 +8574,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -7523,6 +8596,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Log Type`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Z0-9_]+$`), "must match pattern ^[A-Z0-9_]+$"),
+									},
 								},
 								"description": schema.StringAttribute{
 									Required:    false,
@@ -7621,6 +8697,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -7632,24 +8711,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -7672,6 +8763,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -7827,24 +8921,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -7857,6 +8963,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -7933,6 +9042,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -7963,6 +9075,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -7979,12 +9094,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -7997,6 +9118,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -8037,6 +9161,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -8055,6 +9182,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -8227,12 +9357,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Max number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -8245,6 +9381,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -8257,12 +9396,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"throttle_rate_req_per_sec": schema.Int64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of requests to limit to per second.`,
+						Validators: []validator.Int64{
+							int64validator.AtMost(2000),
+						},
 					},
 					"request_method_expression": schema.StringAttribute{
 						Required:    false,
@@ -8442,6 +9587,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -8472,6 +9620,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -8483,24 +9634,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -8523,6 +9686,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -8603,6 +9769,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -8637,18 +9806,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body sent to Google Cloud Observability`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -8672,6 +9850,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the sender should ping the peer to keep the connection open`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -8739,6 +9920,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -8769,6 +9953,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -8780,24 +9967,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -8820,6 +10019,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -8917,24 +10119,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of items the Google API should batch before it sends them to the topic.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"batch_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum amount of time, in milliseconds, that the Google API should wait to send a batch (if the Batch size is not reached).`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100000),
+						},
 					},
 					"max_queue_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of queued batches before blocking.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of batches to send.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 256),
+						},
 					},
 					"flush_period": schema.Float64Attribute{
 						Required:    false,
@@ -8947,6 +10161,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of in-progress API requests before backpressure is applied.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -8970,6 +10187,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -8981,24 +10201,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -9021,6 +10253,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -9135,18 +10370,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -9217,6 +10461,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -9225,6 +10472,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"encoded_configuration": schema.StringAttribute{
 						Required:    false,
@@ -9281,6 +10531,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -9299,6 +10552,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -9347,6 +10603,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -9375,12 +10635,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"flush_event_count": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -9410,18 +10676,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -9591,48 +10866,72 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -9868,6 +11167,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -9879,24 +11181,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -9919,6 +11233,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -9974,6 +11291,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
@@ -10069,12 +11390,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"flush_event_count": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -10104,18 +11431,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -10285,48 +11621,72 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required: false,
@@ -10495,6 +11855,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -10506,24 +11869,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -10546,6 +11921,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -10601,6 +11979,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
 						ElementType: types.StringType,
 					},
 					"topic": schema.StringAttribute{
@@ -10629,12 +12011,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"flush_event_count": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -10664,18 +12052,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"request_timeout": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+								Validators: []validator.Float64{
+									float64validator.Between(1000, 60000),
+								},
 							},
 							"max_retries": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 100),
+								},
 							},
 							"auth": schema.SingleNestedAttribute{
 								Required: false,
@@ -10845,48 +12242,72 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -10935,6 +12356,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -10947,6 +12372,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -11061,6 +12489,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -11072,24 +12503,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -11112,6 +12555,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11186,18 +12632,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 102400),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -11218,6 +12673,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -11264,6 +12722,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -11271,24 +12732,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -11309,18 +12782,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -11465,6 +12947,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Bulk API URLs`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -11478,6 +12963,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -11487,12 +12975,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -11505,6 +12999,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -11516,24 +13013,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -11556,6 +13065,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11624,18 +13136,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 102400),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -11656,6 +13177,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -11785,6 +13309,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -11792,24 +13319,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -11830,18 +13369,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -11873,6 +13421,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -11884,24 +13435,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -11924,6 +13487,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -11997,6 +13563,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Fields to add to events from this input`,
+						Validators: []validator.List{
+							listvalidator.SizeAtMost(4),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
@@ -12019,18 +13588,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1024),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -12051,6 +13629,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -12103,6 +13684,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -12110,24 +13694,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -12148,18 +13744,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -12184,6 +13789,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -12195,6 +13803,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -12207,6 +13818,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -12218,24 +13832,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -12258,6 +13884,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -12344,18 +13973,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1024),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -12376,6 +14014,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -12428,6 +14069,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -12435,24 +14079,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -12473,18 +14129,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -12514,6 +14179,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -12526,6 +14194,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -12537,24 +14208,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -12577,6 +14260,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -12646,6 +14332,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"use_v2_api": schema.BoolAttribute{
 						Required:    false,
@@ -12676,18 +14365,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 51200),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -12708,6 +14406,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -12760,6 +14461,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -12767,24 +14471,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -12805,18 +14521,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -12872,6 +14597,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -12883,24 +14611,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -12923,6 +14663,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13065,6 +14808,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -13077,18 +14824,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"max_queue_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of queued batches before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of each individual record before compression. For non compressible data 1MB is the max recommended size`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10240),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -13130,6 +14886,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -13141,24 +14900,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -13181,6 +14952,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13272,6 +15046,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -13284,6 +15061,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -13331,24 +15111,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -13361,6 +15153,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -13437,6 +15232,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -13452,6 +15250,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `MinIO service url (e.g. http://minioHost:9000)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"object_acl": schema.StringAttribute{
 						Required: false,
@@ -13507,6 +15308,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -13523,12 +15327,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -13541,6 +15351,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -13581,6 +15394,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -13599,6 +15415,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -13659,12 +15478,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Destination port.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"mtu": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -13677,6 +15502,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -13689,6 +15517,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -13718,6 +15549,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -13729,24 +15563,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -13769,6 +15615,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -13836,12 +15685,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Destination port.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"mtu": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -13854,6 +15709,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -13866,6 +15724,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -13895,6 +15756,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -13906,24 +15770,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -13946,6 +15822,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14013,12 +15892,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Destination port.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"mtu": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 65535),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -14031,6 +15916,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -14043,6 +15931,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -14072,6 +15963,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -14083,24 +15977,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -14123,6 +16029,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14179,6 +16088,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Event routing rules`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"filter": schema.StringAttribute{
@@ -14322,6 +16234,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -14334,6 +16250,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -14369,6 +16288,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -14380,24 +16302,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -14420,6 +16354,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14547,6 +16484,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -14559,18 +16500,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"max_queue_size": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of queued batches before blocking.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (KB) of batches to send. Per the SQS spec, the max allowed value is 256 KB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 256),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -14583,6 +16533,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of in-progress API requests before backpressure is applied.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 100),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -14618,6 +16571,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -14629,24 +16585,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -14669,6 +16637,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -14724,6 +16695,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `One or more SNMP destinations to forward traps to`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -14737,6 +16711,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Destination port, default is 162`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 							},
 						},
@@ -14746,6 +16723,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"enable_ip_spoofing": schema.BoolAttribute{
 						Required:    false,
@@ -14764,6 +16744,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `MTU in bytes. The actual maximum SNMP Trap payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). Payloads exceeding this limit will be dropped.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -14813,6 +16796,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Sumo Logic HTTP collector URL to which events should be sent`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"custom_source": schema.StringAttribute{
 						Required:    false,
@@ -14837,18 +16823,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1024),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -14869,6 +16864,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -14921,6 +16919,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -14928,24 +16929,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -14966,18 +16979,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -14997,6 +17019,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -15015,6 +17040,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -15026,24 +17054,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -15066,6 +17106,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -15189,18 +17232,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -15221,6 +17273,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15273,6 +17328,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -15280,24 +17338,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -15318,18 +17388,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -15354,6 +17433,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -15377,6 +17459,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -15388,24 +17473,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -15428,6 +17525,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -15497,12 +17597,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern ^https?://"),
+						},
 					},
 					"prometheus_url": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern ^https?://"),
+						},
 					},
 					"message": schema.StringAttribute{
 						Required:    false,
@@ -15520,6 +17626,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
@@ -15636,18 +17745,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -15662,6 +17780,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -15714,6 +17835,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -15721,24 +17845,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -15759,18 +17895,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -15808,6 +17953,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -15819,24 +17967,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -15859,6 +18019,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -15915,6 +18078,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The endpoint to send logs to`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"message": schema.StringAttribute{
 						Required:    false,
@@ -15932,6 +18098,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
@@ -15959,18 +18128,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Defaults to 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -15985,6 +18163,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -16037,6 +18218,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -16044,24 +18228,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -16082,18 +18278,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -16119,6 +18324,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -16175,6 +18383,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -16186,24 +18397,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -16226,6 +18449,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16282,6 +18508,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https://aps-workspaces(?:-fips)?\.([a-z0-9]+(?:-[a-z0-9]+)*)\.(?:amazonaws\.com|api\.aws)/workspaces/ws-[A-Za-z0-9-]+/api/v1/remote_write$`), "must match pattern ^https://aps-workspaces(?:-fips)?\\.([a-z0-9]+(?:-[a-z0-9]+)*)\\.(?:amazonaws\\.com|api\\.aws)/workspaces/ws-[A-Za-z0-9-]+/api/v1/remote_write$"),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -16320,6 +18549,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -16332,6 +18565,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"metric_rename_expr": schema.StringAttribute{
 						Required:    false,
@@ -16356,24 +18592,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed size, in KB, of the request body. The 1 MB cap is intentional and protects against data that compresses poorly, since oversized requests fail with a non-retryable 413.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 1024),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -16426,6 +18674,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -16433,24 +18684,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -16471,18 +18734,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -16526,6 +18798,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -16537,24 +18812,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -16577,6 +18864,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16632,6 +18922,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The endpoint to send metrics to`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"metric_rename_expr": schema.StringAttribute{
 						Required:    false,
@@ -16656,18 +18949,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -16682,6 +18984,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -16734,6 +19039,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -16741,24 +19049,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -16779,18 +19099,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -16834,6 +19163,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -16845,24 +19177,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -16885,6 +19229,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -16947,6 +19294,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: "ID used to sign Remote Write requests (for example, `aps` for Amazon Managed Service for Prometheus)",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z][a-z0-9]*(-[a-z0-9]+)*$`), "must match pattern ^[a-z][a-z0-9]*(-[a-z0-9]+)*$"),
+						},
 					},
 					"enable_assume_role": schema.BoolAttribute{
 						Required:    false,
@@ -16959,6 +19309,10 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -16971,6 +19325,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 				},
 			},
@@ -17032,12 +19389,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"max_data_time": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+						},
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -17160,6 +19523,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -17194,18 +19560,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -17229,6 +19604,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the sender should ping the peer to keep the connection open`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"keep_alive": schema.BoolAttribute{
 						Required:    false,
@@ -17284,6 +19662,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"secret_param_name": schema.StringAttribute{
 						Required:    false,
@@ -17314,6 +19695,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Required:    false,
@@ -17407,6 +19791,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -17414,24 +19801,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -17452,18 +19851,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -17545,6 +19953,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -17556,24 +19967,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -17596,6 +20019,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -17675,6 +20101,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"protocol": schema.StringAttribute{
 						Required: false,
@@ -17714,6 +20143,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -17748,12 +20180,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -17777,6 +20215,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the sender should ping the peer to keep the connection open`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"keep_alive": schema.BoolAttribute{
 						Required:    false,
@@ -17843,6 +20284,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -17850,24 +20294,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -17888,18 +20344,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -17981,6 +20446,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -17992,24 +20460,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -18032,6 +20512,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18119,6 +20602,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -18126,24 +20612,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -18164,18 +20662,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -18196,18 +20703,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 6144),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -18228,6 +20744,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -18290,6 +20809,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -18301,6 +20823,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -18313,6 +20838,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -18324,24 +20852,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -18364,6 +20904,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18449,6 +20992,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Required: false,
@@ -18534,6 +21080,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of minutes before the internally generated authentication token expires, valid values between 1 and 60`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 60),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Required:    false,
@@ -18592,6 +21141,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The port to connect to on the provided host`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
 					},
 					"exclude_self": schema.BoolAttribute{
 						Required:    false,
@@ -18604,6 +21156,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Set of hosts to load-balance data to`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -18617,6 +21172,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The port to connect to on the provided host`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 								"tls": schema.StringAttribute{
 									Required: false,
@@ -18634,6 +21192,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -18643,18 +21204,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"max_concurrent_senders": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -18667,6 +21237,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -18678,24 +21251,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -18718,6 +21303,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -18847,6 +21435,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 60),
+						},
 					},
 					"exclude_fields": schema.ListAttribute{
 						Required:    false,
@@ -18865,18 +21456,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -18891,6 +21491,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -18937,12 +21540,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -18950,24 +21559,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -18988,18 +21609,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -19053,6 +21683,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
@@ -19071,6 +21704,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Cribl Worker endpoints`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -19078,12 +21714,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+									},
 								},
 								"weight": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -19093,12 +21735,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -19111,6 +21759,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -19122,24 +21773,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -19162,6 +21825,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -19291,6 +21957,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 60),
+						},
 					},
 					"exclude_fields": schema.ListAttribute{
 						Required:    false,
@@ -19309,18 +21978,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required: false,
@@ -19335,6 +22013,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -19381,12 +22062,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+						},
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -19394,24 +22081,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -19432,18 +22131,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -19503,6 +22211,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"exclude_self": schema.BoolAttribute{
 						Required:    false,
@@ -19515,6 +22226,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Cribl Worker endpoints`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"url": schema.StringAttribute{
@@ -19522,12 +22236,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+									},
 								},
 								"weight": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -19537,12 +22257,18 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Required:    false,
@@ -19555,6 +22281,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -19566,24 +22295,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -19606,6 +22347,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -19662,24 +22406,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 32768),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -19700,6 +22456,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -19762,6 +22521,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -19769,24 +22531,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -19807,18 +22581,27 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -19863,6 +22646,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -19874,24 +22660,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -19914,6 +22712,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -19971,24 +22772,36 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Computed: true,
 						Description: `URL provided from a CrowdStrike data connector. 
 Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"concurrency": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 32768),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -20009,6 +22822,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -20071,6 +22887,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -20078,24 +22897,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -20116,18 +22947,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -20172,6 +23012,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -20183,24 +23026,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -20223,6 +23078,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -20291,6 +23149,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -20303,6 +23165,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -20344,6 +23209,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -20356,6 +23224,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -20397,24 +23268,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -20427,6 +23310,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -20503,6 +23389,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -20580,6 +23469,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -20596,12 +23488,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -20614,6 +23512,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -20654,6 +23555,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -20672,6 +23576,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -20732,6 +23639,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amazon Resource Name (ARN) of the role to assume`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -20744,6 +23655,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -20779,6 +23693,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -20791,6 +23708,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -20821,24 +23741,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -20851,6 +23783,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -20927,6 +23862,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -20991,12 +23929,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -21009,6 +23953,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -21067,6 +24014,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -21079,6 +24029,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"deadletter_path": schema.StringAttribute{
 						Required:    false,
@@ -21091,6 +24044,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -21170,24 +24126,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -21200,6 +24168,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -21276,6 +24247,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -21305,11 +24279,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1000),
+						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -21338,6 +24318,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -21354,12 +24337,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -21372,6 +24361,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -21412,6 +24404,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -21430,6 +24425,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -21485,12 +24483,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+(\.\d+)?\s*(?:[kmgKMG](b|B))?$`), "must match pattern ^\\d+(\\.\\d+)?\\s*(?:[kmgKMG](b|B))?$"),
+						},
 					},
 					"max_data_time": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`\d+[smhd]$`), "must match pattern \\d+[smhd]$"),
+						},
 					},
 					"compress": schema.StringAttribute{
 						Required: false,
@@ -21574,6 +24578,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`), "must match pattern ^[a-zA-Z_][0-9a-zA-Z_]*$"),
+						},
 					},
 					"format": schema.StringAttribute{
 						Required: false,
@@ -21656,18 +24663,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 25600),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -21688,6 +24704,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -21740,6 +24759,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -21747,24 +24769,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -21785,18 +24819,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -21865,6 +24908,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Fields to exclude from sending to ClickHouse`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(0)),
+						},
 						ElementType: types.StringType,
 					},
 					"describe_table": schema.StringAttribute{
@@ -21912,6 +24959,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -21923,24 +24973,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -21963,6 +25025,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -22036,6 +25101,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`), "must match pattern ^[a-zA-Z_][0-9a-zA-Z_]*$"),
+						},
 					},
 					"format": schema.StringAttribute{
 						Required: false,
@@ -22118,18 +25186,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 25600),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -22150,6 +25227,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -22202,6 +25282,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -22209,24 +25292,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -22247,18 +25342,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -22327,6 +25431,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Fields to exclude from sending to ClickHouse`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(0)),
+						},
 						ElementType: types.StringType,
 					},
 					"describe_table": schema.StringAttribute{
@@ -22374,6 +25482,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -22385,24 +25496,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -22425,6 +25548,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -22498,6 +25624,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`), "must match pattern ^[a-zA-Z_][0-9a-zA-Z_]*$"),
+						},
 					},
 					"format": schema.StringAttribute{
 						Required:    false,
@@ -22582,18 +25711,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 25600),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -22614,6 +25752,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -22666,6 +25807,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -22673,24 +25817,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -22711,18 +25867,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -22844,6 +26009,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Fields to exclude from sending`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(0)),
+						},
 						ElementType: types.StringType,
 					},
 					"describe_table": schema.StringAttribute{
@@ -22891,6 +26060,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -22902,24 +26074,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -22942,6 +26126,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -23004,18 +26191,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(100, 10000),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -23036,6 +26232,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -23088,6 +26287,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -23095,24 +26297,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -23133,18 +26347,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -23159,6 +26382,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of requests to limit to per second`,
+						Validators: []validator.Int64{
+							int64validator.AtMost(2000),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -23170,6 +26396,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -23182,6 +26411,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Required:    false,
@@ -23200,6 +26432,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `XSIAM Endpoints`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"weight": schema.Float64Attribute{
@@ -23207,6 +26442,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -23216,12 +26454,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"load_balance_stats_period_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How far back in time to keep traffic stats for load balancing purposes`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(10),
+						},
 					},
 					"token": schema.StringAttribute{
 						Required:    false,
@@ -23247,6 +26491,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -23258,24 +26505,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -23298,6 +26557,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -23353,6 +26615,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `One or more NetFlow Destinations to forward events to`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"host": schema.StringAttribute{
@@ -23366,6 +26631,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `Destination port, default is 2055`,
+									Validators: []validator.Float64{
+										float64validator.AtMost(65535),
+									},
 								},
 							},
 						},
@@ -23375,6 +26643,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 86400),
+						},
 					},
 					"enable_ip_spoofing": schema.BoolAttribute{
 						Required:    false,
@@ -23393,6 +26664,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `MTU in bytes. The actual maximum NetFlow payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). For example, with the default MTU of 1500, the max payload is 1472 bytes for IPv4. Payloads exceeding this limit will be dropped.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -23453,18 +26727,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 5000),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 50000),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -23485,6 +26768,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -23537,6 +26823,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -23544,24 +26833,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -23582,18 +26883,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -23637,6 +26947,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -23655,6 +26968,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -23666,24 +26982,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -23706,6 +27034,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -23744,6 +27075,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to send events to. Can be overwritten by an event's __url field.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 				},
 			},
@@ -23838,6 +27172,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -23872,18 +27209,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size (in KB) of the request body. The maximum payload size is 4 MB. If this limit is exceeded, the entire OTLP message is dropped`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 4096),
+						},
 					},
 					"timeout_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -23907,6 +27253,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How often the sender should ping the peer to keep the connection open`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"keep_alive": schema.BoolAttribute{
 						Required:    false,
@@ -23991,6 +27340,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -23998,24 +27350,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -24036,18 +27400,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -24068,6 +27441,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -24079,24 +27455,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -24119,6 +27507,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -24175,18 +27566,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1024, 2097152),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -24207,6 +27607,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -24258,6 +27661,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -24265,24 +27671,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -24303,18 +27721,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -24365,6 +27792,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Base URL of the endpoint used to send events to, such as https://<Your-S1-Tenant>.sentinelone.net. Must begin with http:// or https://, can include a port number, and no trailing slashes. Matches pattern: ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$`), "must match pattern ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$"),
+						},
 					},
 					"host_expression": schema.StringAttribute{
 						Required:    false,
@@ -24461,6 +27891,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -24472,24 +27905,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -24512,6 +27957,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -24580,6 +28028,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -24587,24 +28038,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -24625,18 +28088,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -24657,18 +28129,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 4096),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -24689,6 +28170,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -24746,6 +28230,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"ingestion_method": schema.StringAttribute{
 						Required:    false,
@@ -24816,6 +28303,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Chronicle API service endpoint. If empty, defaults to the Region-specific endpoint. Otherwise, it must point to a Chronicle API-compatible endpoint. (Example: https://custom-endpoint.googleapis.com)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -24846,6 +28336,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -24857,24 +28350,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -24897,6 +28402,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -25000,24 +28508,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 1800),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1800),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -25030,6 +28550,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -25106,6 +28629,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -25162,6 +28688,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(30),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -25190,6 +28719,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -25206,12 +28738,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -25224,6 +28762,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -25264,6 +28805,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -25282,6 +28826,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -25393,18 +28940,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of ongoing requests before blocking`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 32),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed size of each batch. With compression enabled (default), batches are zstd-compressed before sending. Snowflake has observed a ~4 MB limit on the compressed wire size.`,
+						Validators: []validator.Float64{
+							float64validator.Between(64, 10240),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events per request. Default is 0 (unlimited, size-gated only).`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"compress": schema.BoolAttribute{
 						Required:    false,
@@ -25425,6 +28981,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 9007199254740991),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -25471,12 +29030,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Timeout in seconds for token exchange, channel open/close, and hostname discovery. Defaults to 30 seconds.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300),
+						},
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"http_status": schema.Float64Attribute{
@@ -25484,24 +29049,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 									Optional:    true,
 									Computed:    true,
 									Description: `The HTTP response status code that will trigger retries`,
+									Validators: []validator.Float64{
+										float64validator.Between(100, 599),
+									},
 								},
 								"initial_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+									Validators: []validator.Float64{
+										float64validator.Between(0, 600000),
+									},
 								},
 								"backoff_rate": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+									Validators: []validator.Float64{
+										float64validator.Between(1, 20),
+									},
 								},
 								"max_backoff": schema.Float64Attribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+									Validators: []validator.Float64{
+										float64validator.Between(10000, 180000),
+									},
 								},
 							},
 						},
@@ -25522,18 +29099,27 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								Validators: []validator.Float64{
+									float64validator.Between(0, 600000),
+								},
 							},
 							"backoff_rate": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 20),
+								},
 							},
 							"max_backoff": schema.Float64Attribute{
 								Required:    false,
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								Validators: []validator.Float64{
+									float64validator.Between(10000, 180000),
+								},
 							},
 						},
 					},
@@ -25565,6 +29151,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -25576,24 +29165,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -25616,6 +29217,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -25688,12 +29292,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 					"flush_event_count": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events in a batch before forcing a flush`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10000),
+						},
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Required:    false,
@@ -25706,48 +29316,72 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for a connection to complete successfully`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to a request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"max_retries": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+						Validators: []validator.Float64{
+							float64validator.Between(0, 100),
+						},
 					},
 					"max_back_off": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+						Validators: []validator.Float64{
+							float64validator.Between(30000, 180000),
+						},
 					},
 					"initial_backoff": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+						Validators: []validator.Float64{
+							float64validator.Between(300, 600000),
+						},
 					},
 					"backoff_rate": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+						Validators: []validator.Float64{
+							float64validator.Between(2, 20),
+						},
 					},
 					"authentication_timeout": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 3600000),
+						},
 					},
 					"reauthentication_threshold": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1000, 1800000),
+						},
 					},
 					"sasl": schema.SingleNestedAttribute{
 						Required:    false,
@@ -25883,6 +29517,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_mode": schema.StringAttribute{
 						Required: false,
@@ -25894,24 +29531,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
+						Validators: []validator.Float64{
+							float64validator.Between(42, 1000),
+						},
 					},
 					"pq_max_backpressure_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_max_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_path": schema.StringAttribute{
 						Required:    false,
@@ -25934,6 +29583,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 10MB.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern ^\\d+\\s*(?:\\w{2})?$"),
+						},
 					},
 					"pq_controls": schema.MapAttribute{
 						Required:    false,
@@ -26019,6 +29671,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -26031,6 +29686,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -26078,24 +29736,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -26108,6 +29778,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -26184,6 +29857,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -26199,6 +29875,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"storage_class": schema.StringAttribute{
 						Required: false,
@@ -26243,6 +29922,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -26259,12 +29941,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -26277,6 +29965,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -26317,6 +30008,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -26335,6 +30029,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -26419,6 +30116,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -26431,6 +30131,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -26478,24 +30181,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -26508,6 +30223,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -26584,6 +30302,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -26592,6 +30313,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Nutanix Objects S3-compatible endpoint URL (example: https://objects.nutanix.local)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -26626,6 +30350,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -26642,12 +30369,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -26660,6 +30393,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -26700,6 +30436,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -26718,6 +30457,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -26796,6 +30538,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -26808,6 +30553,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -26855,24 +30603,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -26885,6 +30645,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -26961,6 +30724,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -26969,6 +30735,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Storj S3-compatible gateway endpoint URL (example: https://gateway.storjshare.io)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27003,6 +30772,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -27019,12 +30791,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -27037,6 +30815,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -27077,6 +30858,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -27095,6 +30879,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -27173,6 +30960,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -27185,6 +30975,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -27232,24 +31025,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -27262,6 +31067,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -27338,6 +31146,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -27346,6 +31157,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `AlphaSOC S3-compatible endpoint URL (example: https://s3.alphasoc.net)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27380,6 +31194,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -27396,12 +31213,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -27414,6 +31237,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -27454,6 +31280,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -27472,6 +31301,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -27556,6 +31388,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -27568,6 +31403,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -27615,24 +31453,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -27645,6 +31495,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -27721,6 +31574,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -27734,6 +31590,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Dell PowerScale OneFS S3-compatible endpoint URL (example: https://powerscale.example.com:9021)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27768,6 +31627,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -27784,12 +31646,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -27802,6 +31670,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -27842,6 +31713,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -27860,6 +31734,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -27909,6 +31786,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Cloudian HyperStore S3-compatible endpoint URL (example: https://s3.hyperstore.example.com)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -27950,6 +31830,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -27962,6 +31845,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -28009,24 +31895,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -28039,6 +31937,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -28115,6 +32016,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -28172,6 +32076,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -28188,12 +32095,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -28206,6 +32119,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -28246,6 +32162,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -28264,6 +32183,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -28348,6 +32270,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -28360,6 +32285,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -28407,24 +32335,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -28437,6 +32377,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -28513,6 +32456,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -28521,6 +32467,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Scality RING S3-compatible endpoint URL (example: https://s3.scality.example.com)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -28555,6 +32504,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -28571,12 +32523,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -28589,6 +32547,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -28629,6 +32590,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -28647,6 +32611,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -28726,6 +32693,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -28738,6 +32708,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -28785,24 +32758,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -28815,6 +32800,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -28891,6 +32879,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -28904,6 +32895,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: "Alibaba OSS S3-compatible endpoint URL. Examples: public `https://s3.oss-{region}.aliyuncs.com`, internal `https://s3.oss-{region}-internal.aliyuncs.com`",
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"enable_assume_role": schema.BoolAttribute{
 						Required:    false,
@@ -28916,12 +32910,19 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+						Validators: []validator.Float64{
+							float64validator.Between(900, 43200),
+						},
 					},
 					"assume_role_arn": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `ARN of the RAM role to assume. Format: acs:ram::<account-id>:role/<role-name>. Example: acs:ram::123456789:role/OSSAccessRole`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^acs:`), "must match pattern ^acs:"),
+							stringvalidator.UTF8LengthAtLeast(20),
+						},
 					},
 					"assume_role_external_id": schema.StringAttribute{
 						Required:    false,
@@ -28962,6 +32963,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -28978,12 +32982,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -28996,6 +33006,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -29036,6 +33049,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -29054,6 +33070,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},
@@ -29103,6 +33122,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern ^https?://.*"),
+						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Required: false,
@@ -29138,6 +33160,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 10),
+						},
 					},
 					"verify_permissions": schema.BoolAttribute{
 						Required:    false,
@@ -29150,6 +33175,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 4200),
+						},
 					},
 					"stage_path": schema.StringAttribute{
 						Required:    false,
@@ -29197,24 +33225,36 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 1024),
+						},
 					},
 					"max_file_open_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(5, 86400),
+						},
 					},
 					"max_open_files": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 2000),
+						},
 					},
 					"header_line": schema.StringAttribute{
 						Required:    false,
@@ -29227,6 +33267,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Buffer size used to write to a file`,
+						Validators: []validator.Float64{
+							float64validator.Between(16, 4096),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Required: false,
@@ -29303,6 +33346,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Optional:    true,
 								Computed:    true,
 								Description: `Minimum interval between reconciliation runs`,
+								Validators: []validator.Float64{
+									float64validator.Between(5, 1440),
+								},
 							},
 						},
 					},
@@ -29339,6 +33385,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"parquet_version": schema.StringAttribute{
 						Required: false,
@@ -29355,12 +33404,18 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 67108864),
+						},
 					},
 					"parquet_page_size": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$`), "must match pattern ^\\d+\\s*(?:[kK][bB]|[mM][bB]|[gG][bB]|[tT][bB])?$"),
+						},
 					},
 					"should_log_invalid_rows": schema.BoolAttribute{
 						Required:    false,
@@ -29373,6 +33428,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
@@ -29413,6 +33471,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `How frequently, in seconds, to clean up empty directories`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 86400),
+						},
 					},
 					"directory_batch_size": schema.Float64Attribute{
 						Required:    false,
@@ -29431,6 +33492,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
 					},
 				},
 			},

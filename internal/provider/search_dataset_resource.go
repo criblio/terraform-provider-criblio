@@ -7,6 +7,8 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -269,6 +271,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `AWS inventory or API endpoints to include when querying this Dataset.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"regions": schema.ListAttribute{
@@ -276,6 +281,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `AWS regions to query for the enabled endpoints.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -463,6 +471,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Azure Dataset endpoints to include.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"subscription_ids": schema.ListAttribute{
@@ -470,6 +481,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Azure subscription identifiers scoped to the Dataset.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -657,30 +671,45 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Azure Data Explorer cluster hostname or name.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"database": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Database name.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"location": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Azure region code for the cluster.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"table": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Table name.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Column holding event time.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field_contents": schema.StringAttribute{
 						Required: false,
@@ -872,12 +901,18 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Index name.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Field that contains the event timestamp.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -1064,6 +1099,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Configurations for all endpoints included in the dataset.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"endpoint_name": schema.StringAttribute{
@@ -1640,12 +1678,18 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Table name or KQL query to use as the data source.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Column holding event time.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field_contents": schema.StringAttribute{
 						Required: false,
@@ -2211,12 +2255,18 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Index name.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Field that contains the event timestamp.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -2957,18 +3007,27 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `ClickHouse database that contains the table or view.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"table": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Table name, view name, or SQL query to use as the data source for the Dataset.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Column that contains the event timestamp.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -4398,6 +4457,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Google Cloud Storage (GCS) bucket name. Supports templating.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"extra_paths": schema.ListNestedAttribute{
 						Required:    false,
@@ -4411,6 +4473,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 									Optional:    true,
 									Computed:    true,
 									Description: `Google Cloud Storage (GCS) bucket name. Supports templating.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"filter": schema.StringAttribute{
 									Required:    false,
@@ -4462,6 +4527,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Storage classes to include when listing objects.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 						ElementType: types.StringType,
 					},
 					"breaker_rulesets": schema.ListAttribute{
@@ -4643,6 +4711,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Target number of samples per series.`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 11000),
+						},
 					},
 					"metric_name_pattern": schema.StringAttribute{
 						Required:    false,
@@ -5165,36 +5236,54 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Database name in Snowflake.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"role": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Snowflake role assumed when executing queries for the Dataset.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"schema": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Schema name in Snowflake.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"table": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Table, view or SQL query for Snowflake statement.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"timestamp_field": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Column that contains the event timestamp.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"warehouse": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Warehouse name in Snowflake.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,

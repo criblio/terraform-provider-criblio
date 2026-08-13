@@ -9,6 +9,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -52,6 +53,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+				},
 			},
 			"type": schema.StringAttribute{
 				Required:    false,
@@ -68,6 +72,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique ID for this notification target`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -89,6 +96,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to send the webhook to`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.+`), "must match pattern ^https?://.+"),
+						},
 					},
 					"format": schema.StringAttribute{
 						Required:    false,
@@ -136,6 +146,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique ID for this notification target`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -192,6 +205,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique ID for this notification target`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -227,6 +243,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique ID for this notification target`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -332,6 +351,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique ID for this notification target`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -359,6 +381,9 @@ func (r *NotificationTargetResource) Schema(_ context.Context, _ resource.Schema
 						Optional:    true,
 						Computed:    true,
 						Description: `SMTP server port`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 65535),
+						},
 					},
 					"from": schema.StringAttribute{
 						Required:    false,

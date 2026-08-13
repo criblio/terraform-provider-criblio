@@ -1757,6 +1757,15 @@ import (
 {{- if needsStringValidator . }}
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 {{- end }}
+{{- if needsInt64Validator . }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+{{- end }}
+{{- if needsFloat64Validator . }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+{{- end }}
+{{- if needsListValidator . }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+{{- end }}
 {{- if needsResourceAttr . }}
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 {{- end }}

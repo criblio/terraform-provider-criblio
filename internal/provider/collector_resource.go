@@ -6,14 +6,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -156,6 +161,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -185,6 +193,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -197,6 +208,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -232,12 +246,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -309,6 +329,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -346,6 +369,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -442,6 +468,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1800),
+										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
 										Required: false,
@@ -559,6 +588,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -588,6 +620,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -600,6 +635,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -635,12 +673,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -712,6 +756,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -749,6 +796,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -988,6 +1038,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1800),
+										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
 										Required: false,
@@ -1421,6 +1474,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -1450,6 +1506,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -1462,6 +1521,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -1497,12 +1559,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -1574,6 +1642,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -1611,6 +1682,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -1737,6 +1811,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
 									},
 								},
 							},
@@ -1809,6 +1886,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -1838,6 +1918,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -1850,6 +1933,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -1885,12 +1971,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -1962,6 +2054,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -1999,6 +2094,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -2115,6 +2213,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
 									},
 									"include_metadata": schema.BoolAttribute{
 										Required:    false,
@@ -2229,6 +2330,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -2258,6 +2362,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -2270,6 +2377,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -2305,12 +2415,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -2382,6 +2498,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -2419,6 +2538,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -2548,6 +2670,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -2577,6 +2702,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -2589,6 +2717,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -2624,12 +2755,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -2701,6 +2838,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -2738,6 +2878,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -2878,6 +3021,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -2907,6 +3053,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -2919,6 +3068,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -2954,12 +3106,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -3031,6 +3189,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -3068,6 +3229,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -3178,6 +3342,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
 									},
 								},
 							},
@@ -3250,6 +3417,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -3279,6 +3449,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -3291,6 +3464,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -3326,12 +3502,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -3403,6 +3585,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -3440,6 +3625,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -3512,6 +3700,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Required: false,
 										Optional: true,
 										Computed: true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1800),
+										},
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Required: false,
@@ -3604,6 +3795,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -3633,6 +3827,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -3645,6 +3842,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -3680,12 +3880,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -3757,6 +3963,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -3794,6 +4003,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -3932,6 +4144,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `The maximum number of instances of this scheduled job that may be running at any time`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
 							},
 							"skippable": schema.BoolAttribute{
 								Required:    false,
@@ -3961,6 +4176,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of times a task can be rescheduled`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
 									},
 									"log_level": schema.StringAttribute{
 										Required:    false,
@@ -3973,6 +4191,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern \\d+[sm]?$"),
+										},
 									},
 									"mode": schema.StringAttribute{
 										Required:    false,
@@ -4008,12 +4229,18 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"max_task_size": schema.StringAttribute{
 										Required:    false,
 										Optional:    true,
 										Computed:    true,
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern ^((\\d*\\.?\\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$"),
+										},
 									},
 									"time_warning": schema.MapAttribute{
 										Required:    false,
@@ -4085,6 +4312,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Required:    false,
@@ -4122,6 +4352,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 								Optional:    true,
 								Computed:    true,
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern ^[\\d.]+(\\s[KMGTPEZYkmgtpezy][Bb])?$"),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Required:    false,
@@ -4223,6 +4456,9 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 										Optional:    true,
 										Computed:    true,
 										Description: `Maximum number of metadata files to batch before recording as results.`,
+										Validators: []validator.Int64{
+											int64validator.AtLeast(1),
+										},
 									},
 								},
 							},

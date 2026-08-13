@@ -420,20 +420,123 @@ func TestParseTerraformConflictsWith(t *testing.T) {
 	}
 }
 
-func TestPatternValidatorRequiresOptIn(t *testing.T) {
+func TestPatternValidator(t *testing.T) {
 	var property yaml.Node
-	if err := yaml.Unmarshal([]byte("pattern: '^https?://example\\.com'\nx-terraform-pattern-validator: true\n"), &property); err != nil {
+	if err := yaml.Unmarshal([]byte("pattern: '^https?://example\\.com'\n"), &property); err != nil {
 		t.Fatalf("parse property: %v", err)
 	}
-	if got := patternValidator(property.Content[0]); got != `^https?://example\.com` {
+	got, err := patternValidator(property.Content[0], property.Content[0])
+	if err != nil {
+		t.Fatalf("pattern validator: %v", err)
+	}
+	if got != `^https?://example\.com` {
 		t.Fatalf("pattern validator = %q, want %q", got, `^https?://example\.com`)
 	}
 
-	if err := yaml.Unmarshal([]byte("pattern: '^https?://'\n"), &property); err != nil {
-		t.Fatalf("parse property without opt-in: %v", err)
+	if err := yaml.Unmarshal([]byte("pattern: '^https?://'\nx-terraform-pattern-validator: false\n"), &property); err != nil {
+		t.Fatalf("parse opted-out property: %v", err)
 	}
-	if got := patternValidator(property.Content[0]); got != "" {
-		t.Fatalf("pattern validator without opt-in = %q, want empty", got)
+	got, err = patternValidator(property.Content[0], property.Content[0])
+	if err != nil {
+		t.Fatalf("opted-out pattern validator: %v", err)
+	}
+	if got != "" {
+		t.Fatalf("opted-out pattern validator = %q, want empty", got)
+	}
+}
+
+func TestPatternValidatorResolvesReferencedSchema(t *testing.T) {
+	var property yaml.Node
+	if err := yaml.Unmarshal([]byte("$ref: '#/components/schemas/Identifier'\n"), &property); err != nil {
+		t.Fatalf("parse property: %v", err)
+	}
+	var schema yaml.Node
+	if err := yaml.Unmarshal([]byte("type: string\npattern: '^[a-z0-9_-]+$'\n"), &schema); err != nil {
+		t.Fatalf("parse schema: %v", err)
+	}
+
+	got, err := patternValidator(property.Content[0], schema.Content[0])
+	if err != nil {
+		t.Fatalf("pattern validator: %v", err)
+	}
+	if got != `^[a-z0-9_-]+$` {
+		t.Fatalf("pattern validator = %q, want %q", got, `^[a-z0-9_-]+$`)
+	}
+}
+
+func TestPatternValidatorRejectsUnsupportedPattern(t *testing.T) {
+	var property yaml.Node
+	if err := yaml.Unmarshal([]byte("pattern: '^(?!internal).+$'\n"), &property); err != nil {
+		t.Fatalf("parse property: %v", err)
+	}
+
+	_, err := patternValidator(property.Content[0], property.Content[0])
+	if err == nil {
+		t.Fatal("pattern validator accepted unsupported lookahead")
+	}
+}
+
+func TestFieldConstraints(t *testing.T) {
+	tests := []struct {
+		name      string
+		fieldType string
+		schema    string
+		check     func(t *testing.T, got constraints)
+	}{
+		{
+			name:      "string length",
+			fieldType: "string",
+			schema:    "type: string\nminLength: 2\nmaxLength: 12\n",
+			check: func(t *testing.T, got constraints) {
+				if got.minLength == nil || *got.minLength != 2 || got.maxLength == nil || *got.maxLength != 12 {
+					t.Fatalf("length constraints = %#v", got)
+				}
+			},
+		},
+		{
+			name:      "integer range",
+			fieldType: "integer",
+			schema:    "type: integer\nminimum: -1\nmaximum: 42\n",
+			check: func(t *testing.T, got constraints) {
+				if got.minimum != "-1" || got.maximum != "42" {
+					t.Fatalf("integer constraints = %#v", got)
+				}
+			},
+		},
+		{
+			name:      "number range",
+			fieldType: "number",
+			schema:    "type: number\nminimum: 0.5\nmaximum: 9.5\n",
+			check: func(t *testing.T, got constraints) {
+				if got.minimum != "0.5" || got.maximum != "9.5" {
+					t.Fatalf("number constraints = %#v", got)
+				}
+			},
+		},
+		{
+			name:      "array cardinality",
+			fieldType: "array",
+			schema:    "type: array\nminItems: 1\nmaxItems: 3\nuniqueItems: true\n",
+			check: func(t *testing.T, got constraints) {
+				if got.minItems == nil || *got.minItems != 1 || got.maxItems == nil || *got.maxItems != 3 || !got.uniqueItems {
+					t.Fatalf("array constraints = %#v", got)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var schema yaml.Node
+			if err := yaml.Unmarshal([]byte(tt.schema), &schema); err != nil {
+				t.Fatalf("parse schema: %v", err)
+			}
+			got, err := fieldConstraints(tt.fieldType, schema.Content[0], schema.Content[0])
+			if err != nil {
+				t.Fatalf("field constraints: %v", err)
+			}
+			tt.check(t, got)
+		})
 	}
 }
 

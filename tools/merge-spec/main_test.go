@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go/format"
 	"os"
 	"path/filepath"
 	"strings"
@@ -158,10 +159,29 @@ components:
 	assertArrayItemsType(t, outputNode, "$.paths./m/{groupId}/system/strings.get.responses.200.content.application/json.schema", "string")
 
 	cloudOnlyPaths := readFile(t, cloudOnlyOutput)
-	assertContains(t, cloudOnlyPaths, `"/search/datasets": true`)
-	assertContains(t, cloudOnlyPaths, `"/search/jobs": true`)
-	assertContains(t, cloudOnlyPaths, `"/system/scripts": true`)
-	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
+	assertContains(t, cloudOnlyPaths, `"/search/datasets"`)
+	assertContains(t, cloudOnlyPaths, `"/search/jobs"`)
+	assertContains(t, cloudOnlyPaths, `"/system/scripts"`)
+	assertNotContains(t, cloudOnlyPaths, `"/system/certificates"`)
+}
+
+func TestWriteAvailabilityPathsFormatsGeneratedGo(t *testing.T) {
+	filename := filepath.Join(t.TempDir(), "cloud_only_paths.go")
+	if err := writeAvailabilityPaths(filename, []string{"/short", "/a/much/longer/path"}, []string{"/onprem"}); err != nil {
+		t.Fatalf("write availability paths: %v", err)
+	}
+
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		t.Fatalf("read availability paths: %v", err)
+	}
+	formatted, err := format.Source(content)
+	if err != nil {
+		t.Fatalf("format generated source: %v", err)
+	}
+	if string(content) != string(formatted) {
+		t.Fatal("generated availability paths are not gofmt-formatted")
+	}
 }
 
 func TestLookupTargetSupportsSequenceIndexes(t *testing.T) {

@@ -1238,6 +1238,37 @@ func TestPatternValidator(t *testing.T) {
 	assertContains(t, content, "stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), \"must match pattern ^https?://[a-zA-Z0-9-.]+\")")
 }
 
+func TestOpenAPIConstraintValidators(t *testing.T) {
+	minLength, maxLength := 2, 12
+	minItems, maxItems := 1, 3
+	elementMinLength := 1
+	resource := parser.ResourceDef{
+		Name:       "constraints",
+		FileStem:   "constraints",
+		TypeName:   "criblio_constraints",
+		StructName: "Constraints",
+		Fields: []parser.FieldDef{
+			{TerraformName: "name", GoName: "Name", Type: "string", Optional: true, MinLength: &minLength, MaxLength: &maxLength},
+			{TerraformName: "count", GoName: "Count", Type: "integer", Optional: true, Minimum: "1", Maximum: "10"},
+			{TerraformName: "ratio", GoName: "Ratio", Type: "number", Optional: true, Minimum: "0.25"},
+			{TerraformName: "items", GoName: "Items", Type: "array", ElementType: "string", Optional: true, MinItems: &minItems, MaxItems: &maxItems, UniqueItems: true, ElementPattern: `^[a-z]+$`, ElementMinLength: &elementMinLength},
+		},
+	}
+
+	content := renderTemplate(t, "resource", resource)
+	assertContains(t, content, `"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"`)
+	assertContains(t, content, `"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"`)
+	assertContains(t, content, `"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"`)
+	assertContains(t, content, `"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"`)
+	assertContains(t, content, "stringvalidator.UTF8LengthBetween(2, 12)")
+	assertContains(t, content, "int64validator.Between(1, 10)")
+	assertContains(t, content, "float64validator.AtLeast(0.25)")
+	assertContains(t, content, "listvalidator.SizeBetween(1, 3)")
+	assertContains(t, content, "listvalidator.UniqueValues()")
+	assertContains(t, content, "listvalidator.ValueStringsAre(stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z]+$`)")
+	assertContains(t, content, "stringvalidator.UTF8LengthAtLeast(1)")
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

@@ -208,12 +208,18 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"needsCustomPlanModifier":          needsCustomPlanModifier,
 		"needsValidator":                   needsValidator,
 		"needsStringValidator":             needsStringValidator,
+		"needsInt64Validator":              needsInt64Validator,
+		"needsFloat64Validator":            needsFloat64Validator,
+		"needsListValidator":               needsListValidator,
 		"needsRegexp":                      needsRegexp,
 		"needsCustomStringValidator":       needsCustomStringValidator,
 		"needsCustomJSONValidator":         needsCustomJSONValidator,
 		"planModifierType":                 planModifierType,
 		"planModifierCalls":                planModifierCalls,
 		"stringValidatorCalls":             stringValidatorCalls,
+		"int64ValidatorCalls":              int64ValidatorCalls,
+		"float64ValidatorCalls":            float64ValidatorCalls,
+		"listValidatorCalls":               listValidatorCalls,
 		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
 		"schemaAttributes":                 schemaAttributes,
 		"oneOfSchemaAttributes":            oneOfSchemaAttributes,
@@ -709,6 +715,15 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		}
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	}
+	if calls := int64ValidatorCalls(field); len(calls) > 0 {
+		writeValidatorCalls(output, indent, "Int64", calls)
+	}
+	if calls := float64ValidatorCalls(field); len(calls) > 0 {
+		writeValidatorCalls(output, indent, "Float64", calls)
+	}
+	if calls := listValidatorCalls(field); len(calls) > 0 {
+		writeValidatorCalls(output, indent, "List", calls)
+	}
 	if nestedObjectList(field) {
 		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
 		if calls := nestedObjectPlanModifierCalls(field); len(calls) > 0 {
@@ -743,6 +758,14 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func writeValidatorCalls(output *strings.Builder, indent, kind string, calls []string) {
+	fmt.Fprintf(output, "%s\tValidators: []validator.%s{\n", indent, kind)
+	for _, call := range calls {
+		fmt.Fprintf(output, "%s\t\t%s,\n", indent, call)
+	}
+	fmt.Fprintf(output, "%s\t},\n", indent)
 }
 
 func writeOneOfSchemaAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string, optional bool) {
@@ -966,7 +989,34 @@ func needsResourceAttr(resource parser.ResourceDef) bool {
 
 func needsValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if len(stringValidatorCalls(field)) > 0 {
+		if len(stringValidatorCalls(field)) > 0 || len(int64ValidatorCalls(field)) > 0 || len(float64ValidatorCalls(field)) > 0 || len(listValidatorCalls(field)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func needsInt64Validator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if len(int64ValidatorCalls(field)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func needsFloat64Validator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if len(float64ValidatorCalls(field)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func needsListValidator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if len(listValidatorCalls(field)) > 0 {
 			return true
 		}
 	}
@@ -975,7 +1025,7 @@ func needsValidator(resource parser.ResourceDef) bool {
 
 func needsStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if (field.FixedValue != "" || field.ValidateEnum && len(field.Enum) > 0 || field.Pattern != "" || field.ConflictsWith != "") && field.Type == "string" {
+		if len(stringValidatorCalls(field)) > 0 || len(elementStringValidatorCalls(field)) > 0 {
 			return true
 		}
 	}
@@ -984,7 +1034,7 @@ func needsStringValidator(resource parser.ResourceDef) bool {
 
 func needsRegexp(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if field.Pattern != "" && field.Type == "string" {
+		if field.Pattern != "" && field.Type == "string" || field.ElementPattern != "" && field.Type == "array" {
 			return true
 		}
 	}
@@ -1449,11 +1499,84 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	if field.Pattern != "" {
 		calls = append(calls, fmt.Sprintf("stringvalidator.RegexMatches(regexp.MustCompile(%s), %q)", goStringLiteral(field.Pattern), "must match pattern "+field.Pattern))
 	}
+	if field.MinLength != nil && field.MaxLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthBetween(%d, %d)", *field.MinLength, *field.MaxLength))
+	} else if field.MinLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthAtLeast(%d)", *field.MinLength))
+	} else if field.MaxLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthAtMost(%d)", *field.MaxLength))
+	}
 	if field.ValidJSON {
 		calls = append(calls, "custom_validators.IsValidJSON()")
 	}
 	if field.ConflictsWith != "" {
 		calls = append(calls, fmt.Sprintf("stringvalidator.ConflictsWith(path.MatchRoot(%q))", field.ConflictsWith))
+	}
+	return calls
+}
+
+func int64ValidatorCalls(field parser.FieldDef) []string {
+	if field.Type != "integer" {
+		return nil
+	}
+	return rangeValidatorCalls("int64validator", field.Minimum, field.Maximum)
+}
+
+func float64ValidatorCalls(field parser.FieldDef) []string {
+	if field.Type != "number" {
+		return nil
+	}
+	return rangeValidatorCalls("float64validator", field.Minimum, field.Maximum)
+}
+
+func rangeValidatorCalls(packageName, minimum, maximum string) []string {
+	if minimum != "" && maximum != "" {
+		return []string{fmt.Sprintf("%s.Between(%s, %s)", packageName, minimum, maximum)}
+	}
+	if minimum != "" {
+		return []string{fmt.Sprintf("%s.AtLeast(%s)", packageName, minimum)}
+	}
+	if maximum != "" {
+		return []string{fmt.Sprintf("%s.AtMost(%s)", packageName, maximum)}
+	}
+	return nil
+}
+
+func listValidatorCalls(field parser.FieldDef) []string {
+	if field.Type != "array" {
+		return nil
+	}
+	var calls []string
+	if field.MinItems != nil && field.MaxItems != nil {
+		calls = append(calls, fmt.Sprintf("listvalidator.SizeBetween(%d, %d)", *field.MinItems, *field.MaxItems))
+	} else if field.MinItems != nil {
+		calls = append(calls, fmt.Sprintf("listvalidator.SizeAtLeast(%d)", *field.MinItems))
+	} else if field.MaxItems != nil {
+		calls = append(calls, fmt.Sprintf("listvalidator.SizeAtMost(%d)", *field.MaxItems))
+	}
+	if field.UniqueItems {
+		calls = append(calls, "listvalidator.UniqueValues()")
+	}
+	if elementCalls := elementStringValidatorCalls(field); len(elementCalls) > 0 {
+		calls = append(calls, fmt.Sprintf("listvalidator.ValueStringsAre(%s)", strings.Join(elementCalls, ", ")))
+	}
+	return calls
+}
+
+func elementStringValidatorCalls(field parser.FieldDef) []string {
+	if field.Type != "array" || field.ElementType != "string" {
+		return nil
+	}
+	var calls []string
+	if field.ElementPattern != "" {
+		calls = append(calls, fmt.Sprintf("stringvalidator.RegexMatches(regexp.MustCompile(%s), %q)", goStringLiteral(field.ElementPattern), "must match pattern "+field.ElementPattern))
+	}
+	if field.ElementMinLength != nil && field.ElementMaxLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthBetween(%d, %d)", *field.ElementMinLength, *field.ElementMaxLength))
+	} else if field.ElementMinLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthAtLeast(%d)", *field.ElementMinLength))
+	} else if field.ElementMaxLength != nil {
+		calls = append(calls, fmt.Sprintf("stringvalidator.UTF8LengthAtMost(%d)", *field.ElementMaxLength))
 	}
 	return calls
 }
