@@ -17,6 +17,7 @@ import (
 	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -65,6 +66,9 @@ func (r *PackPipelineResource) Schema(_ context.Context, _ resource.SchemaReques
 						Description: `Timeout (in milliseconds) for asynchronous Pipeline functions.`,
 						PlanModifiers: []planmodifier.Int64{
 							custom_int64planmodifier.SuppressDiff(custom_int64planmodifier.ExplicitSuppress),
+						},
+						Validators: []validator.Int64{
+							int64validator.Between(0, 10000),
 						},
 					},
 					"output": schema.StringAttribute{

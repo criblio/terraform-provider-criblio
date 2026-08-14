@@ -2,6 +2,7 @@ package export
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -599,6 +600,43 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 		err := addOneOfBlockFromFirstItem(model, attrs, cfg)
 		assert.ErrorIs(t, err, ErrUnsupportedOneOfType)
 	})
+}
+
+func TestAddCollectorOneOfFromGeneratedModel(t *testing.T) {
+	cfg := &registry.OneOfConfig{
+		DiscriminatorField:       "type",
+		NestedDiscriminatorField: "collector.type",
+		BlockNamePrefix:          "input_collector_",
+		SupportedBlockNames:      []string{"input_collector_rest"},
+	}
+	raw := json.RawMessage(`{
+		"id":"test_collect",
+		"type":"collection",
+		"ttl":"15h",
+		"collector":{"type":"rest","conf":{"collectUrl":"https://example.com"}},
+		"input":{"type":"collection","throttleRatePerSec":0},
+		"schedule":{"run":{"earliest":"-10m@m","latest":"-9m@m","maxTaskReschedule":60}},
+		"removeFields":[],
+		"savedState":[]
+	}`)
+	entry := registry.Entry{TypeName: "criblio_collector", ModelTypeName: "CollectorResourceModel", OneOf: cfg}
+	model, err := converter.ConvertRawItemWithIdentifiers(entry, raw, map[string]string{"GroupID": "worker-group", "ID": "test_collect"})
+	require.NoError(t, err)
+	attrs := map[string]hcl.Value{}
+
+	err = addOneOfBlockFromFirstItem(model, attrs, cfg)
+	require.NoError(t, err)
+	rest := attrs["input_collector_rest"]
+	require.Equal(t, hcl.KindMap, rest.Kind)
+	assert.NotContains(t, rest.Map, "type")
+	assert.Equal(t, "0", rest.Map["input"].Map["throttle_rate_per_sec"].String)
+	assert.Equal(t, "https://example.com", rest.Map["collector"].Map["conf"].Map["collect_url"].String)
+	run := rest.Map["schedule"].Map["run"]
+	assert.Equal(t, "-10m@m", run.Map["earliest"].String)
+	assert.Equal(t, "-9m@m", run.Map["latest"].String)
+	assert.Equal(t, float64(60), run.Map["max_task_reschedule"].Number)
+	assert.Equal(t, hcl.KindList, rest.Map["remove_fields"].Kind)
+	assert.Empty(t, rest.Map["remove_fields"].List)
 }
 
 func TestAddOneOfBlockFromFirstItem_generatedSourceInputBlock(t *testing.T) {

@@ -21,7 +21,7 @@ func TestDatabaseConnection(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: databaseConnectionConfig("MySQL database connection example", "test", 60),
+					Config: databaseConnectionConfig("MySQL database connection example", "test", 30000),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "id", "my_databaseconnection"),
 						resource.TestCheckResourceAttr(resourceName, "description", "MySQL database connection example"),
@@ -33,15 +33,15 @@ func TestDatabaseConnection(t *testing.T) {
 					),
 				},
 				{
-					Config: databaseConnectionConfig("Updated MySQL database connection example", "updated", 90),
+					Config: databaseConnectionConfig("Updated MySQL database connection example", "updated", 45000),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "Updated MySQL database connection example"),
 						resource.TestCheckResourceAttr(resourceName, "tags", "updated"),
-						resource.TestCheckResourceAttr(resourceName, "request_timeout", "90"),
+						resource.TestCheckResourceAttr(resourceName, "request_timeout", "45000"),
 					),
 				},
 				{
-					Config:   databaseConnectionConfig("Updated MySQL database connection example", "updated", 90),
+					Config:   databaseConnectionConfig("Updated MySQL database connection example", "updated", 45000),
 					PlanOnly: true,
 				},
 				{

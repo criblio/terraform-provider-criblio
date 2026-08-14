@@ -122,8 +122,8 @@ type InputCollectorSplunkScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -138,8 +138,8 @@ type InputCollectorSplunkScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -155,8 +155,8 @@ func InputCollectorSplunkScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -375,8 +375,8 @@ type InputCollectorRestScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -391,8 +391,8 @@ type InputCollectorRestScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -408,8 +408,8 @@ func InputCollectorRestScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -981,8 +981,8 @@ type InputCollectorS3ScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -997,8 +997,8 @@ type InputCollectorS3ScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -1014,8 +1014,8 @@ func InputCollectorS3ScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -1233,8 +1233,8 @@ type InputCollectorAzureBlobScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -1249,8 +1249,8 @@ type InputCollectorAzureBlobScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -1266,8 +1266,8 @@ func InputCollectorAzureBlobScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -1500,8 +1500,8 @@ type InputCollectorCriblLakeScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -1516,8 +1516,8 @@ type InputCollectorCriblLakeScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -1533,8 +1533,8 @@ func InputCollectorCriblLakeScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -1705,8 +1705,8 @@ type InputCollectorDatabaseScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -1721,8 +1721,8 @@ type InputCollectorDatabaseScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -1738,8 +1738,8 @@ func InputCollectorDatabaseScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -1916,8 +1916,8 @@ type InputCollectorGCSScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -1932,8 +1932,8 @@ type InputCollectorGCSScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -1949,8 +1949,8 @@ func InputCollectorGCSScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -2159,8 +2159,8 @@ type InputCollectorHealthCheckScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -2175,8 +2175,8 @@ type InputCollectorHealthCheckScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -2192,8 +2192,8 @@ func InputCollectorHealthCheckScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -2385,8 +2385,8 @@ type InputCollectorScriptScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -2401,8 +2401,8 @@ type InputCollectorScriptScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -2418,8 +2418,8 @@ func InputCollectorScriptScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -2596,8 +2596,8 @@ type InputCollectorFilesystemScheduleRunModel struct {
 	JobTimeout             types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	Mode                   types.String  `tfsdk:"mode" json:"mode,omitempty"`
 	TimeRangeType          types.String  `tfsdk:"time_range_type" json:"timeRangeType,omitempty"`
-	Earliest               types.Float64 `tfsdk:"earliest" json:"earliest,omitempty"`
-	Latest                 types.Float64 `tfsdk:"latest" json:"latest,omitempty"`
+	Earliest               types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
+	Latest                 types.String  `tfsdk:"latest" json:"latest,omitempty"`
 	Expression             types.String  `tfsdk:"expression" json:"expression,omitempty"`
 	MinTaskSize            types.String  `tfsdk:"min_task_size" json:"minTaskSize,omitempty"`
 	MaxTaskSize            types.String  `tfsdk:"max_task_size" json:"maxTaskSize,omitempty"`
@@ -2612,8 +2612,8 @@ type InputCollectorFilesystemScheduleRunAPIModel struct {
 	JobTimeout             *string           `json:"jobTimeout,omitempty"`
 	Mode                   *string           `json:"mode,omitempty"`
 	TimeRangeType          *string           `json:"timeRangeType,omitempty"`
-	Earliest               *float64          `json:"earliest,omitempty"`
-	Latest                 *float64          `json:"latest,omitempty"`
+	Earliest               *string           `json:"earliest,omitempty"`
+	Latest                 *string           `json:"latest,omitempty"`
 	Expression             *string           `json:"expression,omitempty"`
 	MinTaskSize            *string           `json:"minTaskSize,omitempty"`
 	MaxTaskSize            *string           `json:"maxTaskSize,omitempty"`
@@ -2629,8 +2629,8 @@ func InputCollectorFilesystemScheduleRunAttrTypes() map[string]attr.Type {
 		"job_timeout":              types.StringType,
 		"mode":                     types.StringType,
 		"time_range_type":          types.StringType,
-		"earliest":                 types.Float64Type,
-		"latest":                   types.Float64Type,
+		"earliest":                 types.StringType,
+		"latest":                   types.StringType,
 		"expression":               types.StringType,
 		"min_task_size":            types.StringType,
 		"max_task_size":            types.StringType,
@@ -3148,6 +3148,11 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	normalizeCollectorUnionValues(raw)
+	data, err := json.Marshal(raw)
+	if err != nil {
+		return err
+	}
 	var input CollectorAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
@@ -3240,6 +3245,25 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+func normalizeCollectorUnionValues(raw map[string]any) {
+	if input, ok := raw["input"].(map[string]any); ok {
+		if value, ok := input["throttleRatePerSec"].(float64); ok {
+			input["throttleRatePerSec"] = fmt.Sprintf("%v", value)
+		}
+	}
+	if schedule, ok := raw["schedule"].(map[string]any); ok {
+		if run, ok := schedule["run"].(map[string]any); ok {
+			for _, field := range []string{"earliest", "latest"} {
+				if value, ok := run[field].(float64); ok {
+					run[field] = fmt.Sprintf("%v", value)
+				}
+			}
+		}
+	}
+	if savedState, ok := raw["savedState"].([]any); ok && len(savedState) == 0 {
+		raw["savedState"] = map[string]any{}
+	}
 }
 
 type InputCollectorSplunkModel struct {

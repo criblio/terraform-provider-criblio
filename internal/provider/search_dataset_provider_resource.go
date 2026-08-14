@@ -4,15 +4,18 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -74,6 +77,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -160,6 +167,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -187,6 +198,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `IAM role ARN to assume when using automatic credentials.`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^arn:`), "must match pattern ^arn:"),
+										stringvalidator.UTF8LengthAtLeast(20),
+									},
 								},
 								"assume_role_external_id": schema.StringAttribute{
 									Required:    false,
@@ -218,6 +233,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -232,6 +250,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -259,6 +281,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Azure AD application (client) ID for API access.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"client_secret": schema.StringAttribute{
 									Required:    false,
@@ -266,18 +291,27 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Computed:    true,
 									Sensitive:   true,
 									Description: `Azure AD application client secret.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"name": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"tenant_id": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Azure AD tenant ID that owns the application registration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -292,6 +326,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -319,12 +357,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `JSON key downloaded from Google Cloud Console for a service account that can call GCP APIs.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -339,6 +383,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -366,18 +414,27 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `JSON key material for a Google Workspace domain-wide delegated service account.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"subject": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Admin user email address that the service account impersonates for Reports API access.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -392,6 +449,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -419,6 +480,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Application (client) ID registered in Entra ID.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"client_secret": schema.StringAttribute{
 									Required:    false,
@@ -426,18 +490,27 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Computed:    true,
 									Sensitive:   true,
 									Description: `Client secret for the registered application.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"name": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"tenant_id": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Microsoft Entra ID (Azure AD) tenant ID.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -452,6 +525,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -479,18 +556,27 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `API token used to authorize Okta API requests.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"domain_endpoint": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Hostname of the Okta org URL.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"name": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -505,6 +591,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -532,6 +622,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `OAuth client ID from the Tailscale API credentials.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"client_secret": schema.StringAttribute{
 									Required:    false,
@@ -539,12 +632,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Computed:    true,
 									Sensitive:   true,
 									Description: `OAuth client secret from the Tailscale API credentials.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"name": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -559,6 +658,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -586,12 +689,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Optional:    true,
 									Computed:    true,
 									Description: `Zoom account identifier tied to these credentials.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"client_id": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `OAuth client ID from the Zoom Marketplace app.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"client_secret": schema.StringAttribute{
 									Required:    false,
@@ -599,12 +708,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 									Computed:    true,
 									Sensitive:   true,
 									Description: `OAuth client secret from the Zoom Marketplace app.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 								"name": schema.StringAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
 									Description: `Display name that identifies the account configuration.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
@@ -619,6 +734,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -639,12 +758,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `The Tenant ID of the authorized application`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"client_id": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The Client ID (also known as Secret ID) of the authorized application`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"client_secret": schema.StringAttribute{
 						Required:    false,
@@ -652,6 +777,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Computed:    true,
 						Sensitive:   true,
 						Description: `The Client Secret of the authorized application`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 				},
 			},
@@ -663,6 +791,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -683,18 +815,27 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `The Snowflake account identifier, in the format <orgname>-<account_name>`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"username": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The Snowflake user for key pair authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"priv_key": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"passphrase": schema.StringAttribute{
 						Required:    false,
@@ -725,6 +866,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -745,6 +890,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `The ClickHouse username for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"password": schema.StringAttribute{
 						Required:    false,
@@ -752,12 +900,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Computed:    true,
 						Sensitive:   true,
 						Description: `The ClickHouse user password for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 				},
 			},
@@ -769,6 +923,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -789,6 +947,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Prometheus API endpoint URL. Example: https://prometheus.goats.biz`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.+`), "must match pattern ^https?://.+"),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Required: false,
@@ -831,6 +992,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -851,6 +1016,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `OpenSearch username for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"password": schema.StringAttribute{
 						Required:    false,
@@ -858,12 +1026,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Computed:    true,
 						Sensitive:   true,
 						Description: `OpenSearch password for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 				},
 			},
@@ -875,6 +1049,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -895,6 +1073,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Elasticsearch username for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"password": schema.StringAttribute{
 						Required:    false,
@@ -902,12 +1083,18 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Computed:    true,
 						Sensitive:   true,
 						Description: `Elasticsearch password for authentication`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Elasticsearch API endpoint URL`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 				},
 			},
@@ -919,6 +1106,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -941,6 +1132,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1057,6 +1252,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1082,6 +1281,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1107,6 +1310,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1132,6 +1339,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1157,6 +1368,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1189,6 +1404,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Storage account connection string`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"sas_configs": schema.ListNestedAttribute{
 						Required:    false,
@@ -1236,6 +1454,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Computed:    true,
 						Sensitive:   true,
 						Description: `Azure AD application client secret`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 				},
 			},
@@ -1247,6 +1468,10 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the provider`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
+							stringvalidator.UTF8LengthAtMost(512),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required: false,
@@ -1267,6 +1492,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Optional:    true,
 						Computed:    true,
 						Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"endpoint": schema.StringAttribute{
 						Required:    false,

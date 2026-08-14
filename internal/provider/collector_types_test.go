@@ -134,3 +134,46 @@ func TestCollectorModelUnmarshalHealthCheckAlias(t *testing.T) {
 		t.Fatalf("InputCollectorHealthCheck was not selected")
 	}
 }
+
+func TestCollectorModelUnmarshalRelativeScheduleRange(t *testing.T) {
+	var model CollectorModel
+	err := json.Unmarshal([]byte(`{
+		"id":"rest-collector",
+		"type":"collection",
+		"collector":{"type":"rest","conf":{"collectUrl":"https://example.com"}},
+		"schedule":{"run":{"earliest":"-10m@m","latest":"-9m@m"}}
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	if model.InputCollectorRest == nil {
+		t.Fatal("InputCollectorRest was not selected")
+	}
+	run := model.InputCollectorRest.Schedule.Attributes()["run"].(types.Object).Attributes()
+	if got := run["earliest"].(types.String).ValueString(); got != "-10m@m" {
+		t.Fatalf("earliest = %q", got)
+	}
+	if got := run["latest"].(types.String).ValueString(); got != "-9m@m" {
+		t.Fatalf("latest = %q", got)
+	}
+}
+
+func TestCollectorModelUnmarshalNumericScheduleRangeAsStrings(t *testing.T) {
+	var model CollectorModel
+	err := json.Unmarshal([]byte(`{
+		"id":"rest-collector",
+		"type":"collection",
+		"collector":{"type":"rest","conf":{"collectUrl":"https://example.com"}},
+		"schedule":{"run":{"earliest":-10,"latest":0}}
+	}`), &model)
+	if err != nil {
+		t.Fatalf("UnmarshalJSON returned error: %v", err)
+	}
+	run := model.InputCollectorRest.Schedule.Attributes()["run"].(types.Object).Attributes()
+	if got := run["earliest"].(types.String).ValueString(); got != "-10" {
+		t.Fatalf("earliest = %q", got)
+	}
+	if got := run["latest"].(types.String).ValueString(); got != "0" {
+		t.Fatalf("latest = %q", got)
+	}
+}

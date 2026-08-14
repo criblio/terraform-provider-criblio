@@ -6,15 +6,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -66,6 +69,9 @@ func (r *ParquetSchemaResource) Schema(_ context.Context, _ resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+				},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern ^[a-zA-Z0-9_-]+$"),
 				},
 			},
 			"schema": schema.StringAttribute{

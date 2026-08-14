@@ -16,6 +16,21 @@ schema_imports:
       - SmtpTarget
 
 actions:
+  # Go's RE2 engine does not support the negative lookahead used by these
+  # OpenAPI array-element patterns. Keep the upstream constraint without
+  # generating a weaker Terraform validator.
+  - target: "$.components.schemas.FunctionConfSchemaFlatten.properties.fields.items"
+    update:
+      x-terraform-pattern-validator: false
+  - target: "$.components.schemas.FunctionConfSchemaMask.properties.fields.items"
+    update:
+      x-terraform-pattern-validator: false
+  - target: "$.components.schemas.FunctionConfSchemaSensitiveDataScanner.properties.fields.items"
+    update:
+      x-terraform-pattern-validator: false
+  - target: "$.components.schemas.FunctionConfSchemaSensitiveDataScanner.properties.excludeFields.items"
+    update:
+      x-terraform-pattern-validator: false
   - target: "$.paths./m/{groupId}/lib/jobs.post"
     update:
       x-terraform-resource: true
@@ -136,6 +151,18 @@ actions:
         x-terraform-optional-computed: true
         x-terraform-sensitive: true
         x-terraform-prefer-state: true
+  - target: "$.components.schemas.InputCollectorBase.properties.schedule.properties.run.properties"
+    update:
+      earliest:
+        type: string
+        title: Earliest
+        description: Earliest absolute or relative time to collect data for the selected timezone.
+        example: -10m@m
+      latest:
+        type: string
+        title: Latest
+        description: Latest absolute or relative time to collect data for the selected timezone.
+        example: -9m@m
   - target: "$.components.schemas"
     update:
       InputCollectorFilesystem:
@@ -2962,7 +2989,6 @@ actions:
   - target: "$.components.schemas.SlackTarget.properties.url"
     update:
       pattern: '^https?://[a-zA-Z0-9-.]+'
-      x-terraform-pattern-validator: true
   - target: "$.components.schemas.WebhookTarget.properties.systemFields"
     update:
       x-terraform-suppress-diff: explicit

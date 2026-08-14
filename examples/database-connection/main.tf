@@ -11,7 +11,7 @@ resource "criblio_database_connection" "my_databaseconnection" {
   connection_string  = "mysql://user:password@localhost:3306/mydb"
   connection_timeout = 1000
   password           = "test"
-  request_timeout    = 60
+  request_timeout    = 30000
   tags               = "test"
   user               = "test"
 }

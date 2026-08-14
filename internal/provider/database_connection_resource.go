@@ -6,15 +6,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -68,6 +72,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Optional:    true,
 				Computed:    false,
 				Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 60000),
+				},
 			},
 			"creds_secrets": schema.StringAttribute{
 				Required:    false,
@@ -106,6 +113,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_\\-]+$`), "must match pattern ^[a-zA-Z0-9_\\\\-]+$"),
+				},
 			},
 			"items": schema.ListNestedAttribute{
 				Required:    false,
@@ -139,6 +149,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Optional:    true,
 							Computed:    false,
 							Description: `Maximum time (in milliseconds) to wait when establishing the database connection.`,
+							Validators: []validator.Int64{
+								int64validator.Between(1000, 60000),
+							},
 						},
 						"creds_secrets": schema.StringAttribute{
 							Required:    false,
@@ -167,6 +180,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							PlanModifiers: []planmodifier.String{
 								custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 							},
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_\\-]+$`), "must match pattern ^[a-zA-Z0-9_\\\\-]+$"),
+							},
 						},
 						"password": schema.StringAttribute{
 							Required:    false,
@@ -180,6 +196,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 							Optional:    true,
 							Computed:    false,
 							Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+							Validators: []validator.Int64{
+								int64validator.AtLeast(1000),
+							},
 						},
 						"tags": schema.StringAttribute{
 							Required:    false,
@@ -282,6 +301,9 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Optional:    true,
 				Computed:    false,
 				Description: `Maximum time (in milliseconds) to wait for a database query to complete. Applies to SQL Server connections only.`,
+				Validators: []validator.Int64{
+					int64validator.AtLeast(1000),
+				},
 			},
 			"tags": schema.StringAttribute{
 				Required:    false,

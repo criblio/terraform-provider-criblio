@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/int64planmodifier"
@@ -13,11 +14,14 @@ import (
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -70,6 +74,9 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern ^[a-zA-Z0-9\\-_ ]+$"),
+				},
 			},
 			"lib": schema.StringAttribute{
 				Required:    false,
@@ -87,6 +94,9 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 				Description: `The  minimum number of characters in _raw to determine which rule to use`,
 				PlanModifiers: []planmodifier.Int64{
 					custom_int64planmodifier.SuppressDiff(custom_int64planmodifier.ExplicitSuppress),
+				},
+				Validators: []validator.Int64{
+					int64validator.Between(50, 100000),
 				},
 			},
 			"rules": schema.ListNestedAttribute{
@@ -143,6 +153,9 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 									Optional:    true,
 									Computed:    false,
 									Description: `Number of characters from the start of the event to search for a timestamp.`,
+									Validators: []validator.Int64{
+										int64validator.AtLeast(2),
+									},
 								},
 								"format": schema.StringAttribute{
 									Required:    false,
@@ -175,6 +188,9 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Optional:    true,
 							Computed:    false,
 							Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 134217728),
+							},
 						},
 						"fields": schema.ListNestedAttribute{
 							Required:    false,

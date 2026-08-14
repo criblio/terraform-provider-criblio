@@ -86,6 +86,16 @@ type FieldDef struct {
 	Enum               []string
 	ValidateEnum       bool
 	Pattern            string
+	MinLength          *int
+	MaxLength          *int
+	Minimum            string
+	Maximum            string
+	MinItems           *int
+	MaxItems           *int
+	UniqueItems        bool
+	ElementPattern     string
+	ElementMinLength   *int
+	ElementMaxLength   *int
 	ConflictsWith      string
 	Fields             []FieldDef
 	ObjectAsJSON       bool

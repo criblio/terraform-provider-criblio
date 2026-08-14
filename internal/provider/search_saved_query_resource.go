@@ -8,11 +8,14 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/tfplanmodifiers/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -393,6 +396,9 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 											Optional:    true,
 											Computed:    false,
 											Description: `Opacity of the area fill, from 0 (transparent) to 1 (opaque).`,
+											Validators: []validator.Float64{
+												float64validator.Between(0, 1),
+											},
 										},
 										"shadow_blur": schema.Int64Attribute{
 											Required:    false,
@@ -754,12 +760,18 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Optional:    true,
 						Computed:    false,
 						Description: `Percentage of the scheduling interval to use as a random jitter window. Spreads scheduled search execution times to reduce load spikes. Valid range is 0-50. Set to 0 to disable jitter. If not set, uses the global scheduled search jitter configuration.`,
+						Validators: []validator.Int64{
+							int64validator.Between(0, 50),
+						},
 					},
 					"keep_last_n": schema.Int64Attribute{
 						Required:    true,
 						Optional:    false,
 						Computed:    false,
 						Description: `Minimum number of past execution artifacts to retain. Older artifacts are purged periodically. Default is <code>2</code>.`,
+						Validators: []validator.Int64{
+							int64validator.Between(1, 1000),
+						},
 					},
 					"notifications": schema.SingleNestedAttribute{
 						Required:    false,

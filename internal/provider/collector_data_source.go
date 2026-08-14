@@ -136,13 +136,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -402,13 +402,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -965,13 +965,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -1224,13 +1224,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -1505,13 +1505,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -1719,13 +1719,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -1940,13 +1940,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -2189,13 +2189,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -2424,13 +2424,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
@@ -2643,13 +2643,13 @@ func (d *CollectorDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 									"time_range_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"earliest": schema.Float64Attribute{
+									"earliest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Earliest time to collect data for the selected timezone`,
+										Description: `Earliest absolute or relative time to collect data for the selected timezone.`,
 									},
-									"latest": schema.Float64Attribute{
+									"latest": schema.StringAttribute{
 										Computed:    true,
-										Description: `Latest time to collect data for the selected timezone`,
+										Description: `Latest absolute or relative time to collect data for the selected timezone.`,
 									},
 									"expression": schema.StringAttribute{
 										Computed:    true,
