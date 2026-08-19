@@ -164,16 +164,16 @@ func TestCollectorModelUnmarshalNumericScheduleRangeAsStrings(t *testing.T) {
 		"id":"rest-collector",
 		"type":"collection",
 		"collector":{"type":"rest","conf":{"collectUrl":"https://example.com"}},
-		"schedule":{"run":{"earliest":-10,"latest":0}}
+		"schedule":{"run":{"earliest":1700000000,"latest":-10.5}}
 	}`), &model)
 	if err != nil {
 		t.Fatalf("UnmarshalJSON returned error: %v", err)
 	}
 	run := model.InputCollectorRest.Schedule.Attributes()["run"].(types.Object).Attributes()
-	if got := run["earliest"].(types.String).ValueString(); got != "-10" {
+	if got := run["earliest"].(types.String).ValueString(); got != "1700000000" {
 		t.Fatalf("earliest = %q", got)
 	}
-	if got := run["latest"].(types.String).ValueString(); got != "0" {
+	if got := run["latest"].(types.String).ValueString(); got != "-10.5" {
 		t.Fatalf("latest = %q", got)
 	}
 }

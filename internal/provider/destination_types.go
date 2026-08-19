@@ -7886,6 +7886,9 @@ func (m OutputDefaultModel) terraformPayload() (map[string]any, error) {
 		}
 		output["defaultId"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "default"
+	}
 	return output, nil
 }
 
@@ -8604,6 +8607,9 @@ func (m OutputWebhookModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert load_balance_stats_period_sec to API value: %v", err)
 		}
 		output["loadBalanceStatsPeriodSec"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "webhook"
 	}
 	return output, nil
 }
@@ -9792,6 +9798,9 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 		}
 		output["streamName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sentinel"
+	}
 	return output, nil
 }
 
@@ -10394,6 +10403,9 @@ func (m OutputDevnullModel) terraformPayload() (map[string]any, error) {
 		}
 		output["streamtags"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "devnull"
+	}
 	return output, nil
 }
 
@@ -10851,6 +10863,9 @@ func (m OutputSyslogModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "syslog"
 	}
 	return output, nil
 }
@@ -11580,6 +11595,9 @@ func (m OutputSplunkModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk"
+	}
 	return output, nil
 }
 
@@ -12298,6 +12316,9 @@ func (m OutputSplunkLbModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk_lb"
 	}
 	return output, nil
 }
@@ -13117,6 +13138,9 @@ func (m OutputSplunkHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk_hec"
+	}
 	return output, nil
 }
 
@@ -13926,6 +13950,9 @@ func (m OutputWizHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "wiz_hec"
+	}
 	return output, nil
 }
 
@@ -14663,6 +14690,9 @@ func (m OutputTcpjsonModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "tcpjson"
+	}
 	return output, nil
 }
 
@@ -15373,6 +15403,9 @@ func (m OutputWavefrontModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "wavefront"
+	}
 	return output, nil
 }
 
@@ -16073,6 +16106,9 @@ func (m OutputSignalfxModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "signalfx"
 	}
 	return output, nil
 }
@@ -16828,6 +16864,9 @@ func (m OutputFilesystemModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "filesystem"
 	}
 	return output, nil
 }
@@ -17817,6 +17856,9 @@ func (m OutputS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "s3"
 	}
 	return output, nil
 }
@@ -18932,6 +18974,9 @@ func (m OutputAzureBlobModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert certificate to API value: %v", err)
 		}
 		output["certificate"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_blob"
 	}
 	return output, nil
 }
@@ -20246,6 +20291,9 @@ func (m OutputAzureDataExplorerModel) terraformPayload() (map[string]any, error)
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_data_explorer"
+	}
 	return output, nil
 }
 
@@ -21406,6 +21454,9 @@ func (m OutputAzureLogsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["keypairSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_logs"
+	}
 	return output, nil
 }
 
@@ -22152,6 +22203,9 @@ func (m OutputKinesisModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kinesis"
+	}
 	return output, nil
 }
 
@@ -22871,6 +22925,9 @@ func (m OutputHoneycombModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "honeycomb"
+	}
 	return output, nil
 }
 
@@ -23563,6 +23620,9 @@ func (m OutputAzureEventhubModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_eventhub"
+	}
 	return output, nil
 }
 
@@ -24191,6 +24251,9 @@ func (m OutputGoogleBigqueryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_bigquery"
 	}
 	return output, nil
 }
@@ -24937,6 +25000,9 @@ func (m OutputGoogleChronicleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_chronicle"
 	}
 	return output, nil
 }
@@ -25908,6 +25974,9 @@ func (m OutputGoogleCloudStorageModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert aws_secret to API value: %v", err)
 		}
 		output["awsSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_cloud_storage"
 	}
 	return output, nil
 }
@@ -27060,6 +27129,9 @@ func (m OutputGoogleCloudLoggingModel) terraformPayload() (map[string]any, error
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_cloud_logging"
+	}
 	return output, nil
 }
 
@@ -28040,6 +28112,9 @@ func (m OutputGoogleCloudObservabilityModel) terraformPayload() (map[string]any,
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_cloud_observability"
+	}
 	return output, nil
 }
 
@@ -28687,6 +28762,9 @@ func (m OutputGooglePubsubModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_pubsub"
+	}
 	return output, nil
 }
 
@@ -29333,6 +29411,9 @@ func (m OutputExabeamModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "exabeam"
 	}
 	return output, nil
 }
@@ -30052,6 +30133,9 @@ func (m OutputKafkaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kafka"
 	}
 	return output, nil
 }
@@ -30807,6 +30891,9 @@ func (m OutputConfluentCloudModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "confluent_cloud"
 	}
 	return output, nil
 }
@@ -31661,6 +31748,9 @@ func (m OutputMskModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "msk"
 	}
 	return output, nil
 }
@@ -32588,6 +32678,9 @@ func (m OutputElasticModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "elastic"
+	}
 	return output, nil
 }
 
@@ -33397,6 +33490,9 @@ func (m OutputElasticCloudModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "elastic_cloud"
+	}
 	return output, nil
 }
 
@@ -34151,6 +34247,9 @@ func (m OutputNewrelicModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "newrelic"
 	}
 	return output, nil
 }
@@ -34924,6 +35023,9 @@ func (m OutputNewrelicEventsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "newrelic_events"
 	}
 	return output, nil
 }
@@ -35743,6 +35845,9 @@ func (m OutputInfluxdbModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "influxdb"
+	}
 	return output, nil
 }
 
@@ -36524,6 +36629,9 @@ func (m OutputCloudwatchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cloudwatch"
 	}
 	return output, nil
 }
@@ -37406,6 +37514,9 @@ func (m OutputMinioModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "minio"
+	}
 	return output, nil
 }
 
@@ -38215,6 +38326,9 @@ func (m OutputStatsdModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "statsd"
+	}
 	return output, nil
 }
 
@@ -38753,6 +38867,9 @@ func (m OutputStatsdExtModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "statsd_ext"
 	}
 	return output, nil
 }
@@ -39293,6 +39410,9 @@ func (m OutputGraphiteModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "graphite"
+	}
 	return output, nil
 }
 
@@ -39642,6 +39762,9 @@ func (m OutputRouterModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "router"
 	}
 	return output, nil
 }
@@ -40046,6 +40169,9 @@ func (m OutputSnsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sns"
 	}
 	return output, nil
 }
@@ -40748,6 +40874,9 @@ func (m OutputSqsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sqs"
+	}
 	return output, nil
 }
 
@@ -41233,6 +41362,9 @@ func (m OutputSnmpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRecordSize"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "snmp"
+	}
 	return output, nil
 }
 
@@ -41699,6 +41831,9 @@ func (m OutputSumoLogicModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sumo_logic"
 	}
 	return output, nil
 }
@@ -42517,6 +42652,9 @@ func (m OutputDatadogModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "datadog"
 	}
 	return output, nil
 }
@@ -43363,6 +43501,9 @@ func (m OutputGrafanaCloudModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "grafana_cloud"
+	}
 	return output, nil
 }
 
@@ -44171,6 +44312,9 @@ func (m OutputLokiModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "loki"
 	}
 	return output, nil
 }
@@ -45016,6 +45160,9 @@ func (m OutputAmazonManagedPrometheusModel) terraformPayload() (map[string]any, 
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "amazon_managed_prometheus"
 	}
 	return output, nil
 }
@@ -45916,6 +46063,9 @@ func (m OutputPrometheusModel) terraformPayload() (map[string]any, error) {
 		}
 		output["durationSeconds"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "prometheus"
+	}
 	return output, nil
 }
 
@@ -46526,6 +46676,9 @@ func (m OutputRingModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "ring"
 	}
 	return output, nil
 }
@@ -47218,6 +47371,9 @@ func (m OutputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "open_telemetry"
 	}
 	return output, nil
 }
@@ -48226,6 +48382,9 @@ func (m OutputServiceNowModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "service_now"
+	}
 	return output, nil
 }
 
@@ -49089,6 +49248,9 @@ func (m OutputDatasetModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "dataset"
+	}
 	return output, nil
 }
 
@@ -49844,6 +50006,9 @@ func (m OutputCriblTcpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_tcp"
+	}
 	return output, nil
 }
 
@@ -50598,6 +50763,9 @@ func (m OutputCriblHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_http"
 	}
 	return output, nil
 }
@@ -51426,6 +51594,9 @@ func (m OutputCriblSearchEngineModel) terraformPayload() (map[string]any, error)
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_search_engine"
+	}
 	return output, nil
 }
 
@@ -52199,6 +52370,9 @@ func (m OutputHumioHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "humio_hec"
+	}
 	return output, nil
 }
 
@@ -52917,6 +53091,9 @@ func (m OutputCrowdstrikeNextGenSiemModel) terraformPayload() (map[string]any, e
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "crowdstrike_next_gen_siem"
 	}
 	return output, nil
 }
@@ -53861,6 +54038,9 @@ func (m OutputDlS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "dl_s3"
 	}
 	return output, nil
 }
@@ -54995,6 +55175,9 @@ func (m OutputSecurityLakeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "security_lake"
+	}
 	return output, nil
 }
 
@@ -55975,6 +56158,9 @@ func (m OutputCriblLakeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_lake"
+	}
 	return output, nil
 }
 
@@ -56522,6 +56708,9 @@ func (m OutputDiskSpoolModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "disk_spool"
 	}
 	return output, nil
 }
@@ -57115,6 +57304,9 @@ func (m OutputClickHouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "click_house"
 	}
 	return output, nil
 }
@@ -58068,6 +58260,9 @@ func (m OutputCustomerMetricsStorageModel) terraformPayload() (map[string]any, e
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "customer_metrics_storage"
 	}
 	return output, nil
 }
@@ -59031,6 +59226,9 @@ func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "local_search_storage"
+	}
 	return output, nil
 }
 
@@ -59930,6 +60128,9 @@ func (m OutputXsiamModel) terraformPayload() (map[string]any, error) {
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "xsiam"
+	}
 	return output, nil
 }
 
@@ -60450,6 +60651,9 @@ func (m OutputNetflowModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_record_size to API value: %v", err)
 		}
 		output["maxRecordSize"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "netflow"
 	}
 	return output, nil
 }
@@ -60980,6 +61184,9 @@ func (m OutputDynatraceHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert url to API value: %v", err)
 		}
 		output["url"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "dynatrace_http"
 	}
 	return output, nil
 }
@@ -61852,6 +62059,9 @@ func (m OutputDynatraceOtlpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "dynatrace_otlp"
 	}
 	return output, nil
 }
@@ -62788,6 +62998,9 @@ func (m OutputSentinelOneAiSiemModel) terraformPayload() (map[string]any, error)
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sentinel_one_ai_siem"
+	}
 	return output, nil
 }
 
@@ -63713,6 +63926,9 @@ func (m OutputChronicleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "chronicle"
 	}
 	return output, nil
 }
@@ -64640,6 +64856,9 @@ func (m OutputDatabricksModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "databricks"
+	}
 	return output, nil
 }
 
@@ -65521,6 +65740,9 @@ func (m OutputSnowflakeStreamingModel) terraformPayload() (map[string]any, error
 		}
 		output["pqControls"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "snowflake_streaming"
+	}
 	return output, nil
 }
 
@@ -66257,6 +66479,9 @@ func (m OutputMicrosoftFabricModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert pq_controls to API value: %v", err)
 		}
 		output["pqControls"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "microsoft_fabric"
 	}
 	return output, nil
 }
@@ -67111,6 +67336,9 @@ func (m OutputCloudflareR2Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cloudflare_r2"
 	}
 	return output, nil
 }
@@ -68119,6 +68347,9 @@ func (m OutputNutanixObjectsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "nutanix_objects"
+	}
 	return output, nil
 }
 
@@ -69099,6 +69330,9 @@ func (m OutputStorjS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "storj_s3"
+	}
 	return output, nil
 }
 
@@ -70069,6 +70303,9 @@ func (m OutputAlphasocS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "alphasoc_s3"
 	}
 	return output, nil
 }
@@ -71058,6 +71295,9 @@ func (m OutputDellS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "dell_s3"
 	}
 	return output, nil
 }
@@ -72093,6 +72333,9 @@ func (m OutputCloudianS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cloudian_s3"
+	}
 	return output, nil
 }
 
@@ -73117,6 +73360,9 @@ func (m OutputScalityS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "scality_s3"
 	}
 	return output, nil
 }
@@ -74143,6 +74389,9 @@ func (m OutputAlibabaCloudS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["maxRetryNum"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "alibaba_cloud_s3"
+	}
 	return output, nil
 }
 
@@ -75158,6 +75407,9 @@ func (m OutputIbmCloudS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_retry_num to API value: %v", err)
 		}
 		output["maxRetryNum"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "ibm_cloud_s3"
 	}
 	return output, nil
 }

@@ -131,6 +131,21 @@ func TestParseOneOfVariants(t *testing.T) {
 		t.Fatalf("variant count = %d", len(destination.OneOfVariants))
 	}
 	azure := variantByName(t, destination.OneOfVariants, "OutputAzureBlob")
+	if azure.DiscriminatorField != "kind" || azure.DiscriminatorValue != "azure" {
+		t.Fatalf("Azure discriminator = %q:%q, want kind:azure", azure.DiscriminatorField, azure.DiscriminatorValue)
+	}
+	kindField := fieldByTFName(t, azure.Fields, "kind")
+	if kindField.Required || !kindField.Optional || !kindField.Computed || !kindField.ValidateEnum {
+		t.Fatalf("Azure kind flags = required:%v optional:%v computed:%v validateEnum:%v", kindField.Required, kindField.Optional, kindField.Computed, kindField.ValidateEnum)
+	}
+	elastic := variantByName(t, destination.OneOfVariants, "OutputElastic")
+	if elastic.DiscriminatorValue != "elastic" {
+		t.Fatalf("Elastic mapped discriminator = %q, want elastic", elastic.DiscriminatorValue)
+	}
+	elasticKind := fieldByTFName(t, elastic.Fields, "kind")
+	if len(elasticKind.Enum) != 1 || elasticKind.Enum[0] != "elastic" || !elasticKind.ValidateEnum {
+		t.Fatalf("Elastic kind enum = %#v, validateEnum:%v", elasticKind.Enum, elasticKind.ValidateEnum)
+	}
 	accountKey := fieldByTFName(t, azure.Fields, "account_key")
 	if accountKey.ApplyStrategy != "stringFromAPIOrPrior" {
 		t.Fatalf("account_key strategy = %q", accountKey.ApplyStrategy)

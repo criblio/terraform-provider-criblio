@@ -3052,6 +3052,9 @@ func (m DatasetAmazonSecurityLakeModel) terraformPayload() (map[string]any, erro
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "amazon_security_lake"
+	}
 	return output, nil
 }
 
@@ -3302,6 +3305,9 @@ func (m DatasetAPIAwsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_aws"
 	}
 	return output, nil
 }
@@ -3571,6 +3577,9 @@ func (m DatasetAPIAzureModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_azure"
 	}
 	return output, nil
 }
@@ -3877,6 +3886,9 @@ func (m DatasetAPIAzureDataExplorerModel) terraformPayload() (map[string]any, er
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_azure_data_explorer"
+	}
 	return output, nil
 }
 
@@ -4182,6 +4194,9 @@ func (m DatasetAPIElasticsearchModel) terraformPayload() (map[string]any, error)
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_elasticsearch"
+	}
 	return output, nil
 }
 
@@ -4442,6 +4457,9 @@ func (m DatasetAPIGcpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_gcp"
+	}
 	return output, nil
 }
 
@@ -4693,6 +4711,9 @@ func (m DatasetAPIGoogleWorkspaceModel) terraformPayload() (map[string]any, erro
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_google_workspace"
+	}
 	return output, nil
 }
 
@@ -4943,6 +4964,9 @@ func (m DatasetAPIHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_http"
 	}
 	return output, nil
 }
@@ -5213,6 +5237,9 @@ func (m DatasetAPILogAnalyticsModel) terraformPayload() (map[string]any, error) 
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_log_analytics"
+	}
 	return output, nil
 }
 
@@ -5482,6 +5509,9 @@ func (m DatasetAPIMsgraphModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_msgraph"
+	}
 	return output, nil
 }
 
@@ -5732,6 +5762,9 @@ func (m DatasetAPIOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_okta"
 	}
 	return output, nil
 }
@@ -5993,6 +6026,9 @@ func (m DatasetAPIOpensearchModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_opensearch"
+	}
 	return output, nil
 }
 
@@ -6253,6 +6289,9 @@ func (m DatasetAPITailscaleModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_tailscale"
+	}
 	return output, nil
 }
 
@@ -6504,6 +6543,9 @@ func (m DatasetAPIZoomModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_zoom"
+	}
 	return output, nil
 }
 
@@ -6745,6 +6787,9 @@ func (m DatasetAzureBlobModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_blob"
 	}
 	return output, nil
 }
@@ -7005,6 +7050,9 @@ func (m DatasetClickhouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "clickhouse"
 	}
 	return output, nil
 }
@@ -7293,6 +7341,9 @@ func (m DatasetCriblEdgeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_edge"
+	}
 	return output, nil
 }
 
@@ -7553,6 +7604,9 @@ func (m DatasetCriblLakeModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_lake"
+	}
 	return output, nil
 }
 
@@ -7803,6 +7857,9 @@ func (m DatasetCriblLeaderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_leader"
 	}
 	return output, nil
 }
@@ -8055,6 +8112,9 @@ func (m DatasetCriblLocalModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_local"
+	}
 	return output, nil
 }
 
@@ -8296,6 +8356,9 @@ func (m DatasetCriblMetaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_meta"
 	}
 	return output, nil
 }
@@ -8655,6 +8718,9 @@ func (m DatasetCriblSearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert is_favorited to API value: %v", err)
 		}
 		output["isFavorited"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_search"
 	}
 	return output, nil
 }
@@ -9060,6 +9126,9 @@ func (m DatasetGcsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["viewName"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "gcs"
+	}
 	return output, nil
 }
 
@@ -9373,6 +9442,9 @@ func (m DatasetPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "prometheus"
 	}
 	return output, nil
 }
@@ -9705,6 +9777,9 @@ func (m DatasetS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert storage_classes to API value: %v", err)
 		}
 		output["storageClasses"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "s3"
 	}
 	return output, nil
 }
@@ -10064,6 +10139,9 @@ func (m DatasetSnowflakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert view_name to API value: %v", err)
 		}
 		output["viewName"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "snowflake"
 	}
 	return output, nil
 }

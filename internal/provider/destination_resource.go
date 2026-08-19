@@ -99,6 +99,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("default"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -148,6 +151,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("webhook"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -853,6 +859,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sentinel"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1367,6 +1376,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("devnull"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1409,6 +1421,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("syslog"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -1812,6 +1827,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2117,6 +2135,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_lb"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -2590,6 +2611,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_hec"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3089,6 +3113,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wiz_hec"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3517,6 +3544,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("tcpjson"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -3893,6 +3923,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wavefront"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -4250,6 +4283,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("signalfx"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -4607,6 +4643,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("filesystem"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -4966,6 +5005,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5455,6 +5497,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_blob"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -5908,6 +5953,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_data_explorer"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -6696,6 +6744,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_logs"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7075,6 +7126,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kinesis"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7353,6 +7407,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("honeycomb"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -7709,6 +7766,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_eventhub"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8098,6 +8158,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_bigquery"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8322,6 +8385,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_chronicle"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -8790,6 +8856,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_cloud_storage"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -9221,6 +9290,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_cloud_logging"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -9713,6 +9785,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_cloud_observability"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -10045,6 +10120,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_pubsub"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -10280,6 +10358,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("exabeam"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -10571,6 +10652,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kafka"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11259,6 +11343,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("confluent_cloud"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -11947,6 +12034,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("msk"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -12582,6 +12672,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("elastic"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13092,6 +13185,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("elastic_cloud"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13514,6 +13610,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("newrelic"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -13924,6 +14023,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("newrelic_events"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14300,6 +14402,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("influxdb"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14722,6 +14827,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cloudwatch"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -14979,6 +15087,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("minio"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15435,6 +15546,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("statsd"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15642,6 +15756,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("statsd_ext"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -15849,6 +15966,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("graphite"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16056,6 +16176,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("router"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16142,6 +16265,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sns"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16380,6 +16506,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sqs"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16663,6 +16792,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("snmp"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -16764,6 +16896,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sumo_logic"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17133,6 +17268,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("datadog"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -17565,6 +17703,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("grafana_cloud"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18046,6 +18187,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("loki"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18476,6 +18620,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("amazon_managed_prometheus"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -18890,6 +19037,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19345,6 +19495,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("ring"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -19440,6 +19593,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("open_telemetry"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20046,6 +20202,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("service_now"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20539,6 +20698,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("dataset"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -20943,6 +21105,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_tcp"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21330,6 +21495,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_http"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -21852,6 +22020,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_search_engine"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22374,6 +22545,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("humio_hec"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -22739,6 +22913,9 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("crowdstrike_next_gen_siem"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23105,6 +23282,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("dl_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -23595,6 +23775,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("security_lake"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24064,6 +24247,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_lake"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24445,6 +24631,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("disk_spool"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -24529,6 +24718,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("click_house"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25052,6 +25244,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("customer_metrics_storage"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -25575,6 +25770,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("local_search_storage"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26153,6 +26351,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("xsiam"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26583,6 +26784,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("netflow"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -26684,6 +26888,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("dynatrace_http"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27095,6 +27302,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("dynatrace_otlp"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27534,6 +27744,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sentinel_one_ai_siem"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -27984,6 +28197,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("chronicle"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -28429,6 +28645,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("databricks"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -28846,6 +29065,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("snowflake_streaming"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -29244,6 +29466,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("microsoft_fabric"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -29610,6 +29835,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cloudflare_r2"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30049,6 +30277,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("nutanix_objects"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30477,6 +30708,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("storj_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -30899,6 +31133,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("alphasoc_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -31321,6 +31558,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("dell_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -31754,6 +31994,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cloudian_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -32203,6 +32446,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("scality_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -32631,6 +32877,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("alibaba_cloud_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,
@@ -33090,6 +33339,9 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("ibm_cloud_s3"),
+						},
 					},
 					"pipeline": schema.StringAttribute{
 						Required:    false,

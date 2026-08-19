@@ -966,6 +966,9 @@ func (m APIHttpProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["authenticationMethod"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_http"
+	}
 	return output, nil
 }
 
@@ -1064,6 +1067,9 @@ func (m APIAwsProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["accountConfigs"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_aws"
+	}
 	return output, nil
 }
 
@@ -1152,6 +1158,9 @@ func (m APIAzureProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert account_configs to API value: %v", err)
 		}
 		output["accountConfigs"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_azure"
 	}
 	return output, nil
 }
@@ -1242,6 +1251,9 @@ func (m APIGcpProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["accountConfigs"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_gcp"
+	}
 	return output, nil
 }
 
@@ -1330,6 +1342,9 @@ func (m APIGoogleWorkspaceProviderModel) terraformPayload() (map[string]any, err
 			return nil, fmt.Errorf("convert account_configs to API value: %v", err)
 		}
 		output["accountConfigs"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_google_workspace"
 	}
 	return output, nil
 }
@@ -1420,6 +1435,9 @@ func (m APIMsGraphProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["accountConfigs"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_msgraph"
+	}
 	return output, nil
 }
 
@@ -1508,6 +1526,9 @@ func (m APIOktaProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert account_configs to API value: %v", err)
 		}
 		output["accountConfigs"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_okta"
 	}
 	return output, nil
 }
@@ -1598,6 +1619,9 @@ func (m APITailscaleProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["accountConfigs"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_tailscale"
+	}
 	return output, nil
 }
 
@@ -1686,6 +1710,9 @@ func (m APIZoomProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert account_configs to API value: %v", err)
 		}
 		output["accountConfigs"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_zoom"
 	}
 	return output, nil
 }
@@ -1793,6 +1820,9 @@ func (m APIAzureDataExplorerProviderModel) terraformPayload() (map[string]any, e
 			return nil, fmt.Errorf("convert client_secret to API value: %v", err)
 		}
 		output["clientSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_azure_data_explorer"
 	}
 	return output, nil
 }
@@ -1946,6 +1976,9 @@ func (m SnowflakeProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["endpoint"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "snowflake"
+	}
 	return output, nil
 }
 
@@ -2097,6 +2130,9 @@ func (m ClickHouseProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
 		}
 		output["endpoint"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "clickhouse"
 	}
 	return output, nil
 }
@@ -2250,6 +2286,9 @@ func (m PrometheusProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["maxConcurrency"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "prometheus"
+	}
 	return output, nil
 }
 
@@ -2402,6 +2441,9 @@ func (m APIOpenSearchProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["endpoint"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_opensearch"
+	}
 	return output, nil
 }
 
@@ -2527,6 +2569,9 @@ func (m APIElasticSearchProviderModel) terraformPayload() (map[string]any, error
 		}
 		output["endpoint"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "api_elasticsearch"
+	}
 	return output, nil
 }
 
@@ -2624,6 +2669,9 @@ func (m AwsSecurityLakeProviderModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "amazon_security_lake"
 	}
 	return output, nil
 }
@@ -2831,6 +2879,9 @@ func (m S3ProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["enableAbacTagging"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "s3"
+	}
 	return output, nil
 }
 
@@ -3037,6 +3088,9 @@ func (m CriblLeaderProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_leader"
+	}
 	return output, nil
 }
 
@@ -3107,6 +3161,9 @@ func (m CriblSearchProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_search"
 	}
 	return output, nil
 }
@@ -3179,6 +3236,9 @@ func (m MetaProviderModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_meta"
+	}
 	return output, nil
 }
 
@@ -3249,6 +3309,9 @@ func (m EdgeProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_edge"
 	}
 	return output, nil
 }
@@ -3392,6 +3455,9 @@ func (m AzureBlobProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert client_secret to API value: %v", err)
 		}
 		output["clientSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_blob"
 	}
 	return output, nil
 }
@@ -3553,6 +3619,9 @@ func (m GcsProviderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert endpoint to API value: %v", err)
 		}
 		output["endpoint"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "gcs"
 	}
 	return output, nil
 }

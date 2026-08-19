@@ -12,6 +12,9 @@ import (
 {{- if eq .StructName "Routes" }}
 	"sort"
 {{- end }}
+{{- if eq .StructName "Collector" }}
+	"strconv"
+{{- end }}
 	"strings"
 	"unicode"
 
@@ -1032,14 +1035,14 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 func normalizeCollectorUnionValues(raw map[string]any) {
 	if input, ok := raw["input"].(map[string]any); ok {
 		if value, ok := input["throttleRatePerSec"].(float64); ok {
-			input["throttleRatePerSec"] = fmt.Sprintf("%v", value)
+			input["throttleRatePerSec"] = strconv.FormatFloat(value, 'f', -1, 64)
 		}
 	}
 	if schedule, ok := raw["schedule"].(map[string]any); ok {
 		if run, ok := schedule["run"].(map[string]any); ok {
 			for _, field := range []string{"earliest", "latest"} {
 				if value, ok := run[field].(float64); ok {
-					run[field] = fmt.Sprintf("%v", value)
+					run[field] = strconv.FormatFloat(value, 'f', -1, 64)
 				}
 			}
 		}
@@ -1080,6 +1083,11 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 		output["{{ .APIName }}"] = value
 	}
 {{- end }}
+{{- with directDiscriminatorField . }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = "{{ index .Enum 0 }}"
+	}
+{{- end }}
 	return output, nil
 }
 
@@ -1115,9 +1123,16 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 			return value
 		}
 	}
+	{{- range directDiscriminatorAPINames .OneOfVariants }}
+	if value, ok := input["{{ . }}"].(string); ok {
+		return value
+	}
+	{{- end }}
+	{{- if needsLegacyTypeDiscriminator .OneOfVariants }}
 	if value, ok := input["type"].(string); ok {
 		return value
 	}
+	{{- end }}
 {{- if eq .StructName "SearchDataset" }}
 	if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {
 		return "cribl_search"

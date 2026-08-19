@@ -376,6 +376,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	makeDirectDiscriminatorsOptionalComputed(resource.OneOfVariants)
 	if resource.StructName == "Collector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
@@ -403,6 +404,26 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		if field.TerraformName == "conf" {
 			makeMappingRulesetFunctionDefaultsOptional(field)
+		}
+	}
+}
+
+func makeDirectDiscriminatorsOptionalComputed(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		variant := &variants[variantIndex]
+		if variant.DiscriminatorField == "" || variant.DiscriminatorValue == "" {
+			continue
+		}
+		for fieldIndex := range variant.Fields {
+			field := &variant.Fields[fieldIndex]
+			if field.APIName != variant.DiscriminatorField || len(field.Enum) != 1 || field.Enum[0] != variant.DiscriminatorValue {
+				continue
+			}
+			field.Required = false
+			field.Optional = true
+			field.Computed = true
+			field.OptionalComputed = true
+			field.ValidateEnum = true
 		}
 	}
 }
@@ -582,7 +603,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			}
 
 			if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-				parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
+				parsed, err := parseOneOfVariants(modelName, property, schemas)
 				if err != nil {
 					return nil, nil, err
 				}
@@ -600,7 +621,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 	}
 	applyDiscriminatorMappingEnum(schema, fields)
 	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-		parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
+		parsed, err := parseOneOfVariants(modelName, schema, schemas)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -638,7 +659,17 @@ func applyDiscriminatorMappingEnum(schema *yaml.Node, fields []FieldDef) {
 	}
 }
 
-func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+	oneOf, ok := mappingValue(unionSchema, "oneOf")
+	if !ok || oneOf.Kind != yaml.SequenceNode {
+		return nil, nil
+	}
+	discriminatorField := ""
+	var discriminator *yaml.Node
+	if node, ok := mappingValue(unionSchema, "discriminator"); ok {
+		discriminator = node
+		discriminatorField = scalarValue(discriminator, "propertyName")
+	}
 	var variants []OneOfVariantDef
 	for _, variantRef := range oneOf.Content {
 		schemaName := schemaRefName(variantRef)
@@ -661,13 +692,19 @@ func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]On
 		if exportName(schemaName) == exportName(parentModelName) {
 			modelName = exportName(schemaName) + "VariantModel"
 		}
+		discriminatorValue := discriminatorValue(variantFields, discriminatorField)
+		if discriminatorValue == "" && discriminator != nil {
+			discriminatorValue = discriminatorMappingValue(discriminator, schemaName)
+		}
+		setDiscriminatorFieldEnum(variantFields, discriminatorField, discriminatorValue)
 		variants = append(variants, OneOfVariantDef{
 			APIName:            schemaName,
 			TerraformName:      snake(tfName),
 			GoName:             exportName(schemaName),
 			ModelName:          modelName,
 			SchemaName:         schemaName,
-			DiscriminatorValue: discriminatorValue(variantFields),
+			DiscriminatorField: discriminatorField,
+			DiscriminatorValue: discriminatorValue,
 			Fields:             variantFields,
 		})
 	}
@@ -1055,9 +1092,12 @@ func enumValues(property *yaml.Node) []string {
 	return values
 }
 
-func discriminatorValue(fields []FieldDef) string {
+func discriminatorValue(fields []FieldDef, discriminatorField string) string {
+	if discriminatorField == "" {
+		discriminatorField = "type"
+	}
 	for _, field := range fields {
-		if field.APIName == "type" && len(field.Enum) == 1 {
+		if field.APIName == discriminatorField && len(field.Enum) == 1 {
 			return field.Enum[0]
 		}
 		if field.APIName != "collector" {
@@ -1070,6 +1110,33 @@ func discriminatorValue(fields []FieldDef) string {
 		}
 	}
 	return ""
+}
+
+func discriminatorMappingValue(discriminator *yaml.Node, schemaName string) string {
+	mapping, ok := mappingValue(discriminator, "mapping")
+	if !ok || mapping.Kind != yaml.MappingNode {
+		return ""
+	}
+	for index := 0; index < len(mapping.Content); index += 2 {
+		ref := mapping.Content[index+1].Value
+		if refName := ref[strings.LastIndex(ref, "/")+1:]; refName == schemaName {
+			return mapping.Content[index].Value
+		}
+	}
+	return ""
+}
+
+func setDiscriminatorFieldEnum(fields []FieldDef, discriminatorField, value string) {
+	if discriminatorField == "" || value == "" {
+		return
+	}
+	for index := range fields {
+		if fields[index].APIName != discriminatorField || fields[index].Type != "string" {
+			continue
+		}
+		fields[index].Enum = []string{value}
+		return
+	}
 }
 
 func nestedModelPrefix(modelName, fieldName string) string {

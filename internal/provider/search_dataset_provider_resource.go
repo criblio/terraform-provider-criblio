@@ -86,6 +86,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_http"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -176,6 +179,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_aws"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -259,6 +265,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_azure"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -335,6 +344,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_gcp"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -392,6 +404,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_google_workspace"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -458,6 +473,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_msgraph"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -534,6 +552,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_okta"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -600,6 +621,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_tailscale"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -667,6 +691,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_zoom"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -743,6 +770,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_azure_data_explorer"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -800,6 +830,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("snowflake"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -875,6 +908,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("clickhouse"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -932,6 +968,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1001,6 +1040,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_opensearch"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1058,6 +1100,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("api_elasticsearch"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1115,6 +1160,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("amazon_security_lake"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1141,6 +1189,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1261,6 +1312,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_leader"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1290,6 +1344,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_search"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1319,6 +1376,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_meta"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1348,6 +1408,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_edge"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1377,6 +1440,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_blob"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -1477,6 +1543,9 @@ func (r *SearchDatasetProviderResource) Schema(_ context.Context, _ resource.Sch
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("gcs"),
+						},
 					},
 					"description": schema.StringAttribute{
 						Required:    false,

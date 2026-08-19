@@ -19283,10 +19283,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("collection"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -19543,9 +19546,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kafka"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -20332,9 +20338,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("msk"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21067,10 +21076,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21530,9 +21542,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21940,10 +21955,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_search"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -22428,10 +22446,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -22961,9 +22982,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_blob"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -23323,10 +23347,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("elastic"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -23845,9 +23872,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("confluent_cloud"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -24634,10 +24664,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("grafana"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25115,10 +25148,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("loki"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25538,10 +25574,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus_rw"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25961,9 +26000,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -26482,10 +26524,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("edge_prometheus"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27081,10 +27126,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_mgmt"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27499,10 +27547,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_service"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27902,10 +27953,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_msg_trace"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -28372,10 +28426,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("microsoft_graph"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -28850,10 +28907,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("eventhub"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -29374,10 +29434,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("eventhub_amqp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -29867,10 +29930,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("exec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30134,10 +30200,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("firehose"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30520,9 +30589,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_pubsub"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30814,10 +30886,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31028,9 +31103,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_tcp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31398,10 +31476,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31805,10 +31886,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_lake_http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -32313,9 +32397,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("tcpjson"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -32678,10 +32765,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("system_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33245,10 +33335,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("system_state"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33684,10 +33777,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33985,10 +34081,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -34304,10 +34403,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_events"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -34535,10 +34637,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("windows_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35025,10 +35130,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("crowdstrike"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35534,10 +35642,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("datadog_agent"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35987,10 +36098,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("datagen"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -36224,10 +36338,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("http_raw"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -36690,9 +36807,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kinesis"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37045,10 +37165,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("criblmetrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37266,10 +37389,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37600,9 +37726,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38127,10 +38256,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3_inventory"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38669,9 +38801,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("snmp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38992,10 +39127,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("open_telemetry"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -39526,10 +39664,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("model_driven_telemetry"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -39839,9 +39980,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sqs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40185,9 +40329,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("syslog"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40612,10 +40759,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("file"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40964,10 +41114,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("tcp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -41372,10 +41525,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("appscope"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -41856,10 +42012,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wef"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42402,10 +42561,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("win_event_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42686,10 +42848,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("apple_unified_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42910,10 +43075,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("raw_udp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43170,10 +43338,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("journal_files"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43441,10 +43612,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wiz"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43921,10 +44095,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("openai"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -44444,10 +44621,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wiz_webhook"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -44910,9 +45090,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("netflow"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -45187,9 +45370,12 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required: false,
+						Optional: true,
+						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("security_lake"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -45713,10 +45899,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("bedrock_s3"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -46240,10 +46429,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("servicenow_table"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -46797,10 +46989,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("zscaler_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -47296,10 +47491,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cloudflare_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -47806,10 +48004,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sysdig_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -48299,10 +48500,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("upwind_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -48792,10 +48996,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("openai_compliance_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -49241,10 +49448,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("anthropic_compliance"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -50012,10 +50222,13 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
-						Computed:    false,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("okta"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -50763,12 +50976,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCollection.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCollection.Type.IsNull() || state.InputCollection.Type.IsUnknown())) {
-			if !api.InputCollection.Type.IsNull() && !api.InputCollection.Type.IsUnknown() {
-				state.InputCollection.Type = api.InputCollection.Type
-			} else if state.InputCollection.Type.IsNull() || state.InputCollection.Type.IsUnknown() {
-				state.InputCollection.Type = types.StringNull()
-			}
+		if !api.InputCollection.Type.IsNull() && !api.InputCollection.Type.IsUnknown() {
+			state.InputCollection.Type = api.InputCollection.Type
+		} else if state.InputCollection.Type.IsNull() || state.InputCollection.Type.IsUnknown() {
+			state.InputCollection.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCollection.Disabled.IsNull() || state.InputCollection.Disabled.IsUnknown())) {
 			if !api.InputCollection.Disabled.IsNull() && !api.InputCollection.Disabled.IsUnknown() {
@@ -50912,12 +51123,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKafka.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Type.IsNull() || state.InputKafka.Type.IsUnknown())) {
-			if !api.InputKafka.Type.IsNull() && !api.InputKafka.Type.IsUnknown() {
-				state.InputKafka.Type = api.InputKafka.Type
-			} else if state.InputKafka.Type.IsNull() || state.InputKafka.Type.IsUnknown() {
-				state.InputKafka.Type = types.StringNull()
-			}
+		if !api.InputKafka.Type.IsNull() && !api.InputKafka.Type.IsUnknown() {
+			state.InputKafka.Type = api.InputKafka.Type
+		} else if state.InputKafka.Type.IsNull() || state.InputKafka.Type.IsUnknown() {
+			state.InputKafka.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKafka.Disabled.IsNull() || state.InputKafka.Disabled.IsUnknown())) {
 			if !api.InputKafka.Disabled.IsNull() && !api.InputKafka.Disabled.IsUnknown() {
@@ -51203,12 +51412,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputMsk.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Type.IsNull() || state.InputMsk.Type.IsUnknown())) {
-			if !api.InputMsk.Type.IsNull() && !api.InputMsk.Type.IsUnknown() {
-				state.InputMsk.Type = api.InputMsk.Type
-			} else if state.InputMsk.Type.IsNull() || state.InputMsk.Type.IsUnknown() {
-				state.InputMsk.Type = types.StringNull()
-			}
+		if !api.InputMsk.Type.IsNull() && !api.InputMsk.Type.IsUnknown() {
+			state.InputMsk.Type = api.InputMsk.Type
+		} else if state.InputMsk.Type.IsNull() || state.InputMsk.Type.IsUnknown() {
+			state.InputMsk.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMsk.Disabled.IsNull() || state.InputMsk.Disabled.IsUnknown())) {
 			if !api.InputMsk.Disabled.IsNull() && !api.InputMsk.Disabled.IsUnknown() {
@@ -51568,12 +51775,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputHttp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Type.IsNull() || state.InputHttp.Type.IsUnknown())) {
-			if !api.InputHttp.Type.IsNull() && !api.InputHttp.Type.IsUnknown() {
-				state.InputHttp.Type = api.InputHttp.Type
-			} else if state.InputHttp.Type.IsNull() || state.InputHttp.Type.IsUnknown() {
-				state.InputHttp.Type = types.StringNull()
-			}
+		if !api.InputHttp.Type.IsNull() && !api.InputHttp.Type.IsUnknown() {
+			state.InputHttp.Type = api.InputHttp.Type
+		} else if state.InputHttp.Type.IsNull() || state.InputHttp.Type.IsUnknown() {
+			state.InputHttp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.Disabled.IsNull() || state.InputHttp.Disabled.IsUnknown())) {
 			if !api.InputHttp.Disabled.IsNull() && !api.InputHttp.Disabled.IsUnknown() {
@@ -51834,12 +52039,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSplunk.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.Type.IsNull() || state.InputSplunk.Type.IsUnknown())) {
-			if !api.InputSplunk.Type.IsNull() && !api.InputSplunk.Type.IsUnknown() {
-				state.InputSplunk.Type = api.InputSplunk.Type
-			} else if state.InputSplunk.Type.IsNull() || state.InputSplunk.Type.IsUnknown() {
-				state.InputSplunk.Type = types.StringNull()
-			}
+		if !api.InputSplunk.Type.IsNull() && !api.InputSplunk.Type.IsUnknown() {
+			state.InputSplunk.Type = api.InputSplunk.Type
+		} else if state.InputSplunk.Type.IsNull() || state.InputSplunk.Type.IsUnknown() {
+			state.InputSplunk.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunk.Disabled.IsNull() || state.InputSplunk.Disabled.IsUnknown())) {
 			if !api.InputSplunk.Disabled.IsNull() && !api.InputSplunk.Disabled.IsUnknown() {
@@ -52079,12 +52282,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSplunkSearch.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.Type.IsNull() || state.InputSplunkSearch.Type.IsUnknown())) {
-			if !api.InputSplunkSearch.Type.IsNull() && !api.InputSplunkSearch.Type.IsUnknown() {
-				state.InputSplunkSearch.Type = api.InputSplunkSearch.Type
-			} else if state.InputSplunkSearch.Type.IsNull() || state.InputSplunkSearch.Type.IsUnknown() {
-				state.InputSplunkSearch.Type = types.StringNull()
-			}
+		if !api.InputSplunkSearch.Type.IsNull() && !api.InputSplunkSearch.Type.IsUnknown() {
+			state.InputSplunkSearch.Type = api.InputSplunkSearch.Type
+		} else if state.InputSplunkSearch.Type.IsNull() || state.InputSplunkSearch.Type.IsUnknown() {
+			state.InputSplunkSearch.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkSearch.Disabled.IsNull() || state.InputSplunkSearch.Disabled.IsUnknown())) {
 			if !api.InputSplunkSearch.Disabled.IsNull() && !api.InputSplunkSearch.Disabled.IsUnknown() {
@@ -52406,12 +52607,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSplunkHec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.Type.IsNull() || state.InputSplunkHec.Type.IsUnknown())) {
-			if !api.InputSplunkHec.Type.IsNull() && !api.InputSplunkHec.Type.IsUnknown() {
-				state.InputSplunkHec.Type = api.InputSplunkHec.Type
-			} else if state.InputSplunkHec.Type.IsNull() || state.InputSplunkHec.Type.IsUnknown() {
-				state.InputSplunkHec.Type = types.StringNull()
-			}
+		if !api.InputSplunkHec.Type.IsNull() && !api.InputSplunkHec.Type.IsUnknown() {
+			state.InputSplunkHec.Type = api.InputSplunkHec.Type
+		} else if state.InputSplunkHec.Type.IsNull() || state.InputSplunkHec.Type.IsUnknown() {
+			state.InputSplunkHec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.Disabled.IsNull() || state.InputSplunkHec.Disabled.IsUnknown())) {
 			if !api.InputSplunkHec.Disabled.IsNull() && !api.InputSplunkHec.Disabled.IsUnknown() {
@@ -52716,12 +52915,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputAzureBlob.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.Type.IsNull() || state.InputAzureBlob.Type.IsUnknown())) {
-			if !api.InputAzureBlob.Type.IsNull() && !api.InputAzureBlob.Type.IsUnknown() {
-				state.InputAzureBlob.Type = api.InputAzureBlob.Type
-			} else if state.InputAzureBlob.Type.IsNull() || state.InputAzureBlob.Type.IsUnknown() {
-				state.InputAzureBlob.Type = types.StringNull()
-			}
+		if !api.InputAzureBlob.Type.IsNull() && !api.InputAzureBlob.Type.IsUnknown() {
+			state.InputAzureBlob.Type = api.InputAzureBlob.Type
+		} else if state.InputAzureBlob.Type.IsNull() || state.InputAzureBlob.Type.IsUnknown() {
+			state.InputAzureBlob.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAzureBlob.Disabled.IsNull() || state.InputAzureBlob.Disabled.IsUnknown())) {
 			if !api.InputAzureBlob.Disabled.IsNull() && !api.InputAzureBlob.Disabled.IsUnknown() {
@@ -52984,12 +53181,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputElastic.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Type.IsNull() || state.InputElastic.Type.IsUnknown())) {
-			if !api.InputElastic.Type.IsNull() && !api.InputElastic.Type.IsUnknown() {
-				state.InputElastic.Type = api.InputElastic.Type
-			} else if state.InputElastic.Type.IsNull() || state.InputElastic.Type.IsUnknown() {
-				state.InputElastic.Type = types.StringNull()
-			}
+		if !api.InputElastic.Type.IsNull() && !api.InputElastic.Type.IsUnknown() {
+			state.InputElastic.Type = api.InputElastic.Type
+		} else if state.InputElastic.Type.IsNull() || state.InputElastic.Type.IsUnknown() {
+			state.InputElastic.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.Disabled.IsNull() || state.InputElastic.Disabled.IsUnknown())) {
 			if !api.InputElastic.Disabled.IsNull() && !api.InputElastic.Disabled.IsUnknown() {
@@ -53281,12 +53476,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputConfluentCloud.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Type.IsNull() || state.InputConfluentCloud.Type.IsUnknown())) {
-			if !api.InputConfluentCloud.Type.IsNull() && !api.InputConfluentCloud.Type.IsUnknown() {
-				state.InputConfluentCloud.Type = api.InputConfluentCloud.Type
-			} else if state.InputConfluentCloud.Type.IsNull() || state.InputConfluentCloud.Type.IsUnknown() {
-				state.InputConfluentCloud.Type = types.StringNull()
-			}
+		if !api.InputConfluentCloud.Type.IsNull() && !api.InputConfluentCloud.Type.IsUnknown() {
+			state.InputConfluentCloud.Type = api.InputConfluentCloud.Type
+		} else if state.InputConfluentCloud.Type.IsNull() || state.InputConfluentCloud.Type.IsUnknown() {
+			state.InputConfluentCloud.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputConfluentCloud.Disabled.IsNull() || state.InputConfluentCloud.Disabled.IsUnknown())) {
 			if !api.InputConfluentCloud.Disabled.IsNull() && !api.InputConfluentCloud.Disabled.IsUnknown() {
@@ -53572,12 +53765,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputGrafana.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Type.IsNull() || state.InputGrafana.Type.IsUnknown())) {
-			if !api.InputGrafana.Type.IsNull() && !api.InputGrafana.Type.IsUnknown() {
-				state.InputGrafana.Type = api.InputGrafana.Type
-			} else if state.InputGrafana.Type.IsNull() || state.InputGrafana.Type.IsUnknown() {
-				state.InputGrafana.Type = types.StringNull()
-			}
+		if !api.InputGrafana.Type.IsNull() && !api.InputGrafana.Type.IsUnknown() {
+			state.InputGrafana.Type = api.InputGrafana.Type
+		} else if state.InputGrafana.Type.IsNull() || state.InputGrafana.Type.IsUnknown() {
+			state.InputGrafana.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.Disabled.IsNull() || state.InputGrafana.Disabled.IsUnknown())) {
 			if !api.InputGrafana.Disabled.IsNull() && !api.InputGrafana.Disabled.IsUnknown() {
@@ -53822,12 +54013,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputLoki.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Type.IsNull() || state.InputLoki.Type.IsUnknown())) {
-			if !api.InputLoki.Type.IsNull() && !api.InputLoki.Type.IsUnknown() {
-				state.InputLoki.Type = api.InputLoki.Type
-			} else if state.InputLoki.Type.IsNull() || state.InputLoki.Type.IsUnknown() {
-				state.InputLoki.Type = types.StringNull()
-			}
+		if !api.InputLoki.Type.IsNull() && !api.InputLoki.Type.IsUnknown() {
+			state.InputLoki.Type = api.InputLoki.Type
+		} else if state.InputLoki.Type.IsNull() || state.InputLoki.Type.IsUnknown() {
+			state.InputLoki.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.Disabled.IsNull() || state.InputLoki.Disabled.IsUnknown())) {
 			if !api.InputLoki.Disabled.IsNull() && !api.InputLoki.Disabled.IsUnknown() {
@@ -54087,12 +54276,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputPrometheusRw.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Type.IsNull() || state.InputPrometheusRw.Type.IsUnknown())) {
-			if !api.InputPrometheusRw.Type.IsNull() && !api.InputPrometheusRw.Type.IsUnknown() {
-				state.InputPrometheusRw.Type = api.InputPrometheusRw.Type
-			} else if state.InputPrometheusRw.Type.IsNull() || state.InputPrometheusRw.Type.IsUnknown() {
-				state.InputPrometheusRw.Type = types.StringNull()
-			}
+		if !api.InputPrometheusRw.Type.IsNull() && !api.InputPrometheusRw.Type.IsUnknown() {
+			state.InputPrometheusRw.Type = api.InputPrometheusRw.Type
+		} else if state.InputPrometheusRw.Type.IsNull() || state.InputPrometheusRw.Type.IsUnknown() {
+			state.InputPrometheusRw.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.Disabled.IsNull() || state.InputPrometheusRw.Disabled.IsUnknown())) {
 			if !api.InputPrometheusRw.Disabled.IsNull() && !api.InputPrometheusRw.Disabled.IsUnknown() {
@@ -54352,12 +54539,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputPrometheus.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.Type.IsNull() || state.InputPrometheus.Type.IsUnknown())) {
-			if !api.InputPrometheus.Type.IsNull() && !api.InputPrometheus.Type.IsUnknown() {
-				state.InputPrometheus.Type = api.InputPrometheus.Type
-			} else if state.InputPrometheus.Type.IsNull() || state.InputPrometheus.Type.IsUnknown() {
-				state.InputPrometheus.Type = types.StringNull()
-			}
+		if !api.InputPrometheus.Type.IsNull() && !api.InputPrometheus.Type.IsUnknown() {
+			state.InputPrometheus.Type = api.InputPrometheus.Type
+		} else if state.InputPrometheus.Type.IsNull() || state.InputPrometheus.Type.IsUnknown() {
+			state.InputPrometheus.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheus.Disabled.IsNull() || state.InputPrometheus.Disabled.IsUnknown())) {
 			if !api.InputPrometheus.Disabled.IsNull() && !api.InputPrometheus.Disabled.IsUnknown() {
@@ -54759,12 +54944,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputEdgePrometheus.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Type.IsNull() || state.InputEdgePrometheus.Type.IsUnknown())) {
-			if !api.InputEdgePrometheus.Type.IsNull() && !api.InputEdgePrometheus.Type.IsUnknown() {
-				state.InputEdgePrometheus.Type = api.InputEdgePrometheus.Type
-			} else if state.InputEdgePrometheus.Type.IsNull() || state.InputEdgePrometheus.Type.IsUnknown() {
-				state.InputEdgePrometheus.Type = types.StringNull()
-			}
+		if !api.InputEdgePrometheus.Type.IsNull() && !api.InputEdgePrometheus.Type.IsUnknown() {
+			state.InputEdgePrometheus.Type = api.InputEdgePrometheus.Type
+		} else if state.InputEdgePrometheus.Type.IsNull() || state.InputEdgePrometheus.Type.IsUnknown() {
+			state.InputEdgePrometheus.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEdgePrometheus.Disabled.IsNull() || state.InputEdgePrometheus.Disabled.IsUnknown())) {
 			if !api.InputEdgePrometheus.Disabled.IsNull() && !api.InputEdgePrometheus.Disabled.IsUnknown() {
@@ -55176,12 +55359,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOffice365Mgmt.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.Type.IsNull() || state.InputOffice365Mgmt.Type.IsUnknown())) {
-			if !api.InputOffice365Mgmt.Type.IsNull() && !api.InputOffice365Mgmt.Type.IsUnknown() {
-				state.InputOffice365Mgmt.Type = api.InputOffice365Mgmt.Type
-			} else if state.InputOffice365Mgmt.Type.IsNull() || state.InputOffice365Mgmt.Type.IsUnknown() {
-				state.InputOffice365Mgmt.Type = types.StringNull()
-			}
+		if !api.InputOffice365Mgmt.Type.IsNull() && !api.InputOffice365Mgmt.Type.IsUnknown() {
+			state.InputOffice365Mgmt.Type = api.InputOffice365Mgmt.Type
+		} else if state.InputOffice365Mgmt.Type.IsNull() || state.InputOffice365Mgmt.Type.IsUnknown() {
+			state.InputOffice365Mgmt.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Mgmt.Disabled.IsNull() || state.InputOffice365Mgmt.Disabled.IsUnknown())) {
 			if !api.InputOffice365Mgmt.Disabled.IsNull() && !api.InputOffice365Mgmt.Disabled.IsUnknown() {
@@ -55411,12 +55592,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOffice365Service.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.Type.IsNull() || state.InputOffice365Service.Type.IsUnknown())) {
-			if !api.InputOffice365Service.Type.IsNull() && !api.InputOffice365Service.Type.IsUnknown() {
-				state.InputOffice365Service.Type = api.InputOffice365Service.Type
-			} else if state.InputOffice365Service.Type.IsNull() || state.InputOffice365Service.Type.IsUnknown() {
-				state.InputOffice365Service.Type = types.StringNull()
-			}
+		if !api.InputOffice365Service.Type.IsNull() && !api.InputOffice365Service.Type.IsUnknown() {
+			state.InputOffice365Service.Type = api.InputOffice365Service.Type
+		} else if state.InputOffice365Service.Type.IsNull() || state.InputOffice365Service.Type.IsUnknown() {
+			state.InputOffice365Service.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365Service.Disabled.IsNull() || state.InputOffice365Service.Disabled.IsUnknown())) {
 			if !api.InputOffice365Service.Disabled.IsNull() && !api.InputOffice365Service.Disabled.IsUnknown() {
@@ -55632,12 +55811,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOffice365MsgTrace.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.Type.IsNull() || state.InputOffice365MsgTrace.Type.IsUnknown())) {
-			if !api.InputOffice365MsgTrace.Type.IsNull() && !api.InputOffice365MsgTrace.Type.IsUnknown() {
-				state.InputOffice365MsgTrace.Type = api.InputOffice365MsgTrace.Type
-			} else if state.InputOffice365MsgTrace.Type.IsNull() || state.InputOffice365MsgTrace.Type.IsUnknown() {
-				state.InputOffice365MsgTrace.Type = types.StringNull()
-			}
+		if !api.InputOffice365MsgTrace.Type.IsNull() && !api.InputOffice365MsgTrace.Type.IsUnknown() {
+			state.InputOffice365MsgTrace.Type = api.InputOffice365MsgTrace.Type
+		} else if state.InputOffice365MsgTrace.Type.IsNull() || state.InputOffice365MsgTrace.Type.IsUnknown() {
+			state.InputOffice365MsgTrace.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOffice365MsgTrace.Disabled.IsNull() || state.InputOffice365MsgTrace.Disabled.IsUnknown())) {
 			if !api.InputOffice365MsgTrace.Disabled.IsNull() && !api.InputOffice365MsgTrace.Disabled.IsUnknown() {
@@ -55935,12 +56112,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputMicrosoftGraph.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.Type.IsNull() || state.InputMicrosoftGraph.Type.IsUnknown())) {
-			if !api.InputMicrosoftGraph.Type.IsNull() && !api.InputMicrosoftGraph.Type.IsUnknown() {
-				state.InputMicrosoftGraph.Type = api.InputMicrosoftGraph.Type
-			} else if state.InputMicrosoftGraph.Type.IsNull() || state.InputMicrosoftGraph.Type.IsUnknown() {
-				state.InputMicrosoftGraph.Type = types.StringNull()
-			}
+		if !api.InputMicrosoftGraph.Type.IsNull() && !api.InputMicrosoftGraph.Type.IsUnknown() {
+			state.InputMicrosoftGraph.Type = api.InputMicrosoftGraph.Type
+		} else if state.InputMicrosoftGraph.Type.IsNull() || state.InputMicrosoftGraph.Type.IsUnknown() {
+			state.InputMicrosoftGraph.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMicrosoftGraph.Disabled.IsNull() || state.InputMicrosoftGraph.Disabled.IsUnknown())) {
 			if !api.InputMicrosoftGraph.Disabled.IsNull() && !api.InputMicrosoftGraph.Disabled.IsUnknown() {
@@ -56241,12 +56416,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputEventhub.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Type.IsNull() || state.InputEventhub.Type.IsUnknown())) {
-			if !api.InputEventhub.Type.IsNull() && !api.InputEventhub.Type.IsUnknown() {
-				state.InputEventhub.Type = api.InputEventhub.Type
-			} else if state.InputEventhub.Type.IsNull() || state.InputEventhub.Type.IsUnknown() {
-				state.InputEventhub.Type = types.StringNull()
-			}
+		if !api.InputEventhub.Type.IsNull() && !api.InputEventhub.Type.IsUnknown() {
+			state.InputEventhub.Type = api.InputEventhub.Type
+		} else if state.InputEventhub.Type.IsNull() || state.InputEventhub.Type.IsUnknown() {
+			state.InputEventhub.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhub.Disabled.IsNull() || state.InputEventhub.Disabled.IsUnknown())) {
 			if !api.InputEventhub.Disabled.IsNull() && !api.InputEventhub.Disabled.IsUnknown() {
@@ -56529,12 +56702,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputEventhubAmqp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Type.IsNull() || state.InputEventhubAmqp.Type.IsUnknown())) {
-			if !api.InputEventhubAmqp.Type.IsNull() && !api.InputEventhubAmqp.Type.IsUnknown() {
-				state.InputEventhubAmqp.Type = api.InputEventhubAmqp.Type
-			} else if state.InputEventhubAmqp.Type.IsNull() || state.InputEventhubAmqp.Type.IsUnknown() {
-				state.InputEventhubAmqp.Type = types.StringNull()
-			}
+		if !api.InputEventhubAmqp.Type.IsNull() && !api.InputEventhubAmqp.Type.IsUnknown() {
+			state.InputEventhubAmqp.Type = api.InputEventhubAmqp.Type
+		} else if state.InputEventhubAmqp.Type.IsNull() || state.InputEventhubAmqp.Type.IsUnknown() {
+			state.InputEventhubAmqp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputEventhubAmqp.Disabled.IsNull() || state.InputEventhubAmqp.Disabled.IsUnknown())) {
 			if !api.InputEventhubAmqp.Disabled.IsNull() && !api.InputEventhubAmqp.Disabled.IsUnknown() {
@@ -56755,12 +56926,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputExec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputExec.Type.IsNull() || state.InputExec.Type.IsUnknown())) {
-			if !api.InputExec.Type.IsNull() && !api.InputExec.Type.IsUnknown() {
-				state.InputExec.Type = api.InputExec.Type
-			} else if state.InputExec.Type.IsNull() || state.InputExec.Type.IsUnknown() {
-				state.InputExec.Type = types.StringNull()
-			}
+		if !api.InputExec.Type.IsNull() && !api.InputExec.Type.IsUnknown() {
+			state.InputExec.Type = api.InputExec.Type
+		} else if state.InputExec.Type.IsNull() || state.InputExec.Type.IsUnknown() {
+			state.InputExec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputExec.Disabled.IsNull() || state.InputExec.Disabled.IsUnknown())) {
 			if !api.InputExec.Disabled.IsNull() && !api.InputExec.Disabled.IsUnknown() {
@@ -56929,12 +57098,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputFirehose.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Type.IsNull() || state.InputFirehose.Type.IsUnknown())) {
-			if !api.InputFirehose.Type.IsNull() && !api.InputFirehose.Type.IsUnknown() {
-				state.InputFirehose.Type = api.InputFirehose.Type
-			} else if state.InputFirehose.Type.IsNull() || state.InputFirehose.Type.IsUnknown() {
-				state.InputFirehose.Type = types.StringNull()
-			}
+		if !api.InputFirehose.Type.IsNull() && !api.InputFirehose.Type.IsUnknown() {
+			state.InputFirehose.Type = api.InputFirehose.Type
+		} else if state.InputFirehose.Type.IsNull() || state.InputFirehose.Type.IsUnknown() {
+			state.InputFirehose.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.Disabled.IsNull() || state.InputFirehose.Disabled.IsUnknown())) {
 			if !api.InputFirehose.Disabled.IsNull() && !api.InputFirehose.Disabled.IsUnknown() {
@@ -57155,12 +57322,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputGooglePubsub.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.Type.IsNull() || state.InputGooglePubsub.Type.IsUnknown())) {
-			if !api.InputGooglePubsub.Type.IsNull() && !api.InputGooglePubsub.Type.IsUnknown() {
-				state.InputGooglePubsub.Type = api.InputGooglePubsub.Type
-			} else if state.InputGooglePubsub.Type.IsNull() || state.InputGooglePubsub.Type.IsUnknown() {
-				state.InputGooglePubsub.Type = types.StringNull()
-			}
+		if !api.InputGooglePubsub.Type.IsNull() && !api.InputGooglePubsub.Type.IsUnknown() {
+			state.InputGooglePubsub.Type = api.InputGooglePubsub.Type
+		} else if state.InputGooglePubsub.Type.IsNull() || state.InputGooglePubsub.Type.IsUnknown() {
+			state.InputGooglePubsub.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGooglePubsub.Disabled.IsNull() || state.InputGooglePubsub.Disabled.IsUnknown())) {
 			if !api.InputGooglePubsub.Disabled.IsNull() && !api.InputGooglePubsub.Disabled.IsUnknown() {
@@ -57361,12 +57526,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCribl.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Type.IsNull() || state.InputCribl.Type.IsUnknown())) {
-			if !api.InputCribl.Type.IsNull() && !api.InputCribl.Type.IsUnknown() {
-				state.InputCribl.Type = api.InputCribl.Type
-			} else if state.InputCribl.Type.IsNull() || state.InputCribl.Type.IsUnknown() {
-				state.InputCribl.Type = types.StringNull()
-			}
+		if !api.InputCribl.Type.IsNull() && !api.InputCribl.Type.IsUnknown() {
+			state.InputCribl.Type = api.InputCribl.Type
+		} else if state.InputCribl.Type.IsNull() || state.InputCribl.Type.IsUnknown() {
+			state.InputCribl.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCribl.Disabled.IsNull() || state.InputCribl.Disabled.IsUnknown())) {
 			if !api.InputCribl.Disabled.IsNull() && !api.InputCribl.Disabled.IsUnknown() {
@@ -57483,12 +57646,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCriblTcp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Type.IsNull() || state.InputCriblTcp.Type.IsUnknown())) {
-			if !api.InputCriblTcp.Type.IsNull() && !api.InputCriblTcp.Type.IsUnknown() {
-				state.InputCriblTcp.Type = api.InputCriblTcp.Type
-			} else if state.InputCriblTcp.Type.IsNull() || state.InputCriblTcp.Type.IsUnknown() {
-				state.InputCriblTcp.Type = types.StringNull()
-			}
+		if !api.InputCriblTcp.Type.IsNull() && !api.InputCriblTcp.Type.IsUnknown() {
+			state.InputCriblTcp.Type = api.InputCriblTcp.Type
+		} else if state.InputCriblTcp.Type.IsNull() || state.InputCriblTcp.Type.IsUnknown() {
+			state.InputCriblTcp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblTcp.Disabled.IsNull() || state.InputCriblTcp.Disabled.IsUnknown())) {
 			if !api.InputCriblTcp.Disabled.IsNull() && !api.InputCriblTcp.Disabled.IsUnknown() {
@@ -57676,12 +57837,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCriblHttp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Type.IsNull() || state.InputCriblHttp.Type.IsUnknown())) {
-			if !api.InputCriblHttp.Type.IsNull() && !api.InputCriblHttp.Type.IsUnknown() {
-				state.InputCriblHttp.Type = api.InputCriblHttp.Type
-			} else if state.InputCriblHttp.Type.IsNull() || state.InputCriblHttp.Type.IsUnknown() {
-				state.InputCriblHttp.Type = types.StringNull()
-			}
+		if !api.InputCriblHttp.Type.IsNull() && !api.InputCriblHttp.Type.IsUnknown() {
+			state.InputCriblHttp.Type = api.InputCriblHttp.Type
+		} else if state.InputCriblHttp.Type.IsNull() || state.InputCriblHttp.Type.IsUnknown() {
+			state.InputCriblHttp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.Disabled.IsNull() || state.InputCriblHttp.Disabled.IsUnknown())) {
 			if !api.InputCriblHttp.Disabled.IsNull() && !api.InputCriblHttp.Disabled.IsUnknown() {
@@ -57904,12 +58063,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCriblLakeHttp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Type.IsNull() || state.InputCriblLakeHttp.Type.IsUnknown())) {
-			if !api.InputCriblLakeHttp.Type.IsNull() && !api.InputCriblLakeHttp.Type.IsUnknown() {
-				state.InputCriblLakeHttp.Type = api.InputCriblLakeHttp.Type
-			} else if state.InputCriblLakeHttp.Type.IsNull() || state.InputCriblLakeHttp.Type.IsUnknown() {
-				state.InputCriblLakeHttp.Type = types.StringNull()
-			}
+		if !api.InputCriblLakeHttp.Type.IsNull() && !api.InputCriblLakeHttp.Type.IsUnknown() {
+			state.InputCriblLakeHttp.Type = api.InputCriblLakeHttp.Type
+		} else if state.InputCriblLakeHttp.Type.IsNull() || state.InputCriblLakeHttp.Type.IsUnknown() {
+			state.InputCriblLakeHttp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.Disabled.IsNull() || state.InputCriblLakeHttp.Disabled.IsUnknown())) {
 			if !api.InputCriblLakeHttp.Disabled.IsNull() && !api.InputCriblLakeHttp.Disabled.IsUnknown() {
@@ -58170,12 +58327,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputTcpjson.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.Type.IsNull() || state.InputTcpjson.Type.IsUnknown())) {
-			if !api.InputTcpjson.Type.IsNull() && !api.InputTcpjson.Type.IsUnknown() {
-				state.InputTcpjson.Type = api.InputTcpjson.Type
-			} else if state.InputTcpjson.Type.IsNull() || state.InputTcpjson.Type.IsUnknown() {
-				state.InputTcpjson.Type = types.StringNull()
-			}
+		if !api.InputTcpjson.Type.IsNull() && !api.InputTcpjson.Type.IsUnknown() {
+			state.InputTcpjson.Type = api.InputTcpjson.Type
+		} else if state.InputTcpjson.Type.IsNull() || state.InputTcpjson.Type.IsUnknown() {
+			state.InputTcpjson.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcpjson.Disabled.IsNull() || state.InputTcpjson.Disabled.IsUnknown())) {
 			if !api.InputTcpjson.Disabled.IsNull() && !api.InputTcpjson.Disabled.IsUnknown() {
@@ -58379,12 +58534,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSystemMetrics.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Type.IsNull() || state.InputSystemMetrics.Type.IsUnknown())) {
-			if !api.InputSystemMetrics.Type.IsNull() && !api.InputSystemMetrics.Type.IsUnknown() {
-				state.InputSystemMetrics.Type = api.InputSystemMetrics.Type
-			} else if state.InputSystemMetrics.Type.IsNull() || state.InputSystemMetrics.Type.IsUnknown() {
-				state.InputSystemMetrics.Type = types.StringNull()
-			}
+		if !api.InputSystemMetrics.Type.IsNull() && !api.InputSystemMetrics.Type.IsUnknown() {
+			state.InputSystemMetrics.Type = api.InputSystemMetrics.Type
+		} else if state.InputSystemMetrics.Type.IsNull() || state.InputSystemMetrics.Type.IsUnknown() {
+			state.InputSystemMetrics.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemMetrics.Disabled.IsNull() || state.InputSystemMetrics.Disabled.IsUnknown())) {
 			if !api.InputSystemMetrics.Disabled.IsNull() && !api.InputSystemMetrics.Disabled.IsUnknown() {
@@ -58551,12 +58704,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSystemState.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Type.IsNull() || state.InputSystemState.Type.IsUnknown())) {
-			if !api.InputSystemState.Type.IsNull() && !api.InputSystemState.Type.IsUnknown() {
-				state.InputSystemState.Type = api.InputSystemState.Type
-			} else if state.InputSystemState.Type.IsNull() || state.InputSystemState.Type.IsUnknown() {
-				state.InputSystemState.Type = types.StringNull()
-			}
+		if !api.InputSystemState.Type.IsNull() && !api.InputSystemState.Type.IsUnknown() {
+			state.InputSystemState.Type = api.InputSystemState.Type
+		} else if state.InputSystemState.Type.IsNull() || state.InputSystemState.Type.IsUnknown() {
+			state.InputSystemState.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSystemState.Disabled.IsNull() || state.InputSystemState.Disabled.IsUnknown())) {
 			if !api.InputSystemState.Disabled.IsNull() && !api.InputSystemState.Disabled.IsUnknown() {
@@ -58707,12 +58858,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKubeMetrics.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Type.IsNull() || state.InputKubeMetrics.Type.IsUnknown())) {
-			if !api.InputKubeMetrics.Type.IsNull() && !api.InputKubeMetrics.Type.IsUnknown() {
-				state.InputKubeMetrics.Type = api.InputKubeMetrics.Type
-			} else if state.InputKubeMetrics.Type.IsNull() || state.InputKubeMetrics.Type.IsUnknown() {
-				state.InputKubeMetrics.Type = types.StringNull()
-			}
+		if !api.InputKubeMetrics.Type.IsNull() && !api.InputKubeMetrics.Type.IsUnknown() {
+			state.InputKubeMetrics.Type = api.InputKubeMetrics.Type
+		} else if state.InputKubeMetrics.Type.IsNull() || state.InputKubeMetrics.Type.IsUnknown() {
+			state.InputKubeMetrics.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeMetrics.Disabled.IsNull() || state.InputKubeMetrics.Disabled.IsUnknown())) {
 			if !api.InputKubeMetrics.Disabled.IsNull() && !api.InputKubeMetrics.Disabled.IsUnknown() {
@@ -58865,12 +59014,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKubeLogs.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Type.IsNull() || state.InputKubeLogs.Type.IsUnknown())) {
-			if !api.InputKubeLogs.Type.IsNull() && !api.InputKubeLogs.Type.IsUnknown() {
-				state.InputKubeLogs.Type = api.InputKubeLogs.Type
-			} else if state.InputKubeLogs.Type.IsNull() || state.InputKubeLogs.Type.IsUnknown() {
-				state.InputKubeLogs.Type = types.StringNull()
-			}
+		if !api.InputKubeLogs.Type.IsNull() && !api.InputKubeLogs.Type.IsUnknown() {
+			state.InputKubeLogs.Type = api.InputKubeLogs.Type
+		} else if state.InputKubeLogs.Type.IsNull() || state.InputKubeLogs.Type.IsUnknown() {
+			state.InputKubeLogs.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeLogs.Disabled.IsNull() || state.InputKubeLogs.Disabled.IsUnknown())) {
 			if !api.InputKubeLogs.Disabled.IsNull() && !api.InputKubeLogs.Disabled.IsUnknown() {
@@ -59047,12 +59194,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKubeEvents.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Type.IsNull() || state.InputKubeEvents.Type.IsUnknown())) {
-			if !api.InputKubeEvents.Type.IsNull() && !api.InputKubeEvents.Type.IsUnknown() {
-				state.InputKubeEvents.Type = api.InputKubeEvents.Type
-			} else if state.InputKubeEvents.Type.IsNull() || state.InputKubeEvents.Type.IsUnknown() {
-				state.InputKubeEvents.Type = types.StringNull()
-			}
+		if !api.InputKubeEvents.Type.IsNull() && !api.InputKubeEvents.Type.IsUnknown() {
+			state.InputKubeEvents.Type = api.InputKubeEvents.Type
+		} else if state.InputKubeEvents.Type.IsNull() || state.InputKubeEvents.Type.IsUnknown() {
+			state.InputKubeEvents.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKubeEvents.Disabled.IsNull() || state.InputKubeEvents.Disabled.IsUnknown())) {
 			if !api.InputKubeEvents.Disabled.IsNull() && !api.InputKubeEvents.Disabled.IsUnknown() {
@@ -59174,12 +59319,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWindowsMetrics.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Type.IsNull() || state.InputWindowsMetrics.Type.IsUnknown())) {
-			if !api.InputWindowsMetrics.Type.IsNull() && !api.InputWindowsMetrics.Type.IsUnknown() {
-				state.InputWindowsMetrics.Type = api.InputWindowsMetrics.Type
-			} else if state.InputWindowsMetrics.Type.IsNull() || state.InputWindowsMetrics.Type.IsUnknown() {
-				state.InputWindowsMetrics.Type = types.StringNull()
-			}
+		if !api.InputWindowsMetrics.Type.IsNull() && !api.InputWindowsMetrics.Type.IsUnknown() {
+			state.InputWindowsMetrics.Type = api.InputWindowsMetrics.Type
+		} else if state.InputWindowsMetrics.Type.IsNull() || state.InputWindowsMetrics.Type.IsUnknown() {
+			state.InputWindowsMetrics.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWindowsMetrics.Disabled.IsNull() || state.InputWindowsMetrics.Disabled.IsUnknown())) {
 			if !api.InputWindowsMetrics.Disabled.IsNull() && !api.InputWindowsMetrics.Disabled.IsUnknown() {
@@ -59343,12 +59486,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCrowdstrike.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Type.IsNull() || state.InputCrowdstrike.Type.IsUnknown())) {
-			if !api.InputCrowdstrike.Type.IsNull() && !api.InputCrowdstrike.Type.IsUnknown() {
-				state.InputCrowdstrike.Type = api.InputCrowdstrike.Type
-			} else if state.InputCrowdstrike.Type.IsNull() || state.InputCrowdstrike.Type.IsUnknown() {
-				state.InputCrowdstrike.Type = types.StringNull()
-			}
+		if !api.InputCrowdstrike.Type.IsNull() && !api.InputCrowdstrike.Type.IsUnknown() {
+			state.InputCrowdstrike.Type = api.InputCrowdstrike.Type
+		} else if state.InputCrowdstrike.Type.IsNull() || state.InputCrowdstrike.Type.IsUnknown() {
+			state.InputCrowdstrike.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCrowdstrike.Disabled.IsNull() || state.InputCrowdstrike.Disabled.IsUnknown())) {
 			if !api.InputCrowdstrike.Disabled.IsNull() && !api.InputCrowdstrike.Disabled.IsUnknown() {
@@ -59740,12 +59881,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputDatadogAgent.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Type.IsNull() || state.InputDatadogAgent.Type.IsUnknown())) {
-			if !api.InputDatadogAgent.Type.IsNull() && !api.InputDatadogAgent.Type.IsUnknown() {
-				state.InputDatadogAgent.Type = api.InputDatadogAgent.Type
-			} else if state.InputDatadogAgent.Type.IsNull() || state.InputDatadogAgent.Type.IsUnknown() {
-				state.InputDatadogAgent.Type = types.StringNull()
-			}
+		if !api.InputDatadogAgent.Type.IsNull() && !api.InputDatadogAgent.Type.IsUnknown() {
+			state.InputDatadogAgent.Type = api.InputDatadogAgent.Type
+		} else if state.InputDatadogAgent.Type.IsNull() || state.InputDatadogAgent.Type.IsUnknown() {
+			state.InputDatadogAgent.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.Disabled.IsNull() || state.InputDatadogAgent.Disabled.IsUnknown())) {
 			if !api.InputDatadogAgent.Disabled.IsNull() && !api.InputDatadogAgent.Disabled.IsUnknown() {
@@ -59992,12 +60131,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputDatagen.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Type.IsNull() || state.InputDatagen.Type.IsUnknown())) {
-			if !api.InputDatagen.Type.IsNull() && !api.InputDatagen.Type.IsUnknown() {
-				state.InputDatagen.Type = api.InputDatagen.Type
-			} else if state.InputDatagen.Type.IsNull() || state.InputDatagen.Type.IsUnknown() {
-				state.InputDatagen.Type = types.StringNull()
-			}
+		if !api.InputDatagen.Type.IsNull() && !api.InputDatagen.Type.IsUnknown() {
+			state.InputDatagen.Type = api.InputDatagen.Type
+		} else if state.InputDatagen.Type.IsNull() || state.InputDatagen.Type.IsUnknown() {
+			state.InputDatagen.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatagen.Disabled.IsNull() || state.InputDatagen.Disabled.IsUnknown())) {
 			if !api.InputDatagen.Disabled.IsNull() && !api.InputDatagen.Disabled.IsUnknown() {
@@ -60119,12 +60256,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputHttpRaw.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Type.IsNull() || state.InputHttpRaw.Type.IsUnknown())) {
-			if !api.InputHttpRaw.Type.IsNull() && !api.InputHttpRaw.Type.IsUnknown() {
-				state.InputHttpRaw.Type = api.InputHttpRaw.Type
-			} else if state.InputHttpRaw.Type.IsNull() || state.InputHttpRaw.Type.IsUnknown() {
-				state.InputHttpRaw.Type = types.StringNull()
-			}
+		if !api.InputHttpRaw.Type.IsNull() && !api.InputHttpRaw.Type.IsUnknown() {
+			state.InputHttpRaw.Type = api.InputHttpRaw.Type
+		} else if state.InputHttpRaw.Type.IsNull() || state.InputHttpRaw.Type.IsUnknown() {
+			state.InputHttpRaw.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Disabled.IsNull() || state.InputHttpRaw.Disabled.IsUnknown())) {
 			if !api.InputHttpRaw.Disabled.IsNull() && !api.InputHttpRaw.Disabled.IsUnknown() {
@@ -60394,12 +60529,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputKinesis.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.Type.IsNull() || state.InputKinesis.Type.IsUnknown())) {
-			if !api.InputKinesis.Type.IsNull() && !api.InputKinesis.Type.IsUnknown() {
-				state.InputKinesis.Type = api.InputKinesis.Type
-			} else if state.InputKinesis.Type.IsNull() || state.InputKinesis.Type.IsUnknown() {
-				state.InputKinesis.Type = types.StringNull()
-			}
+		if !api.InputKinesis.Type.IsNull() && !api.InputKinesis.Type.IsUnknown() {
+			state.InputKinesis.Type = api.InputKinesis.Type
+		} else if state.InputKinesis.Type.IsNull() || state.InputKinesis.Type.IsUnknown() {
+			state.InputKinesis.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputKinesis.Disabled.IsNull() || state.InputKinesis.Disabled.IsUnknown())) {
 			if !api.InputKinesis.Disabled.IsNull() && !api.InputKinesis.Disabled.IsUnknown() {
@@ -60663,12 +60796,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCriblmetrics.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Type.IsNull() || state.InputCriblmetrics.Type.IsUnknown())) {
-			if !api.InputCriblmetrics.Type.IsNull() && !api.InputCriblmetrics.Type.IsUnknown() {
-				state.InputCriblmetrics.Type = api.InputCriblmetrics.Type
-			} else if state.InputCriblmetrics.Type.IsNull() || state.InputCriblmetrics.Type.IsUnknown() {
-				state.InputCriblmetrics.Type = types.StringNull()
-			}
+		if !api.InputCriblmetrics.Type.IsNull() && !api.InputCriblmetrics.Type.IsUnknown() {
+			state.InputCriblmetrics.Type = api.InputCriblmetrics.Type
+		} else if state.InputCriblmetrics.Type.IsNull() || state.InputCriblmetrics.Type.IsUnknown() {
+			state.InputCriblmetrics.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblmetrics.Disabled.IsNull() || state.InputCriblmetrics.Disabled.IsUnknown())) {
 			if !api.InputCriblmetrics.Disabled.IsNull() && !api.InputCriblmetrics.Disabled.IsUnknown() {
@@ -60792,12 +60923,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputMetrics.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Type.IsNull() || state.InputMetrics.Type.IsUnknown())) {
-			if !api.InputMetrics.Type.IsNull() && !api.InputMetrics.Type.IsUnknown() {
-				state.InputMetrics.Type = api.InputMetrics.Type
-			} else if state.InputMetrics.Type.IsNull() || state.InputMetrics.Type.IsUnknown() {
-				state.InputMetrics.Type = types.StringNull()
-			}
+		if !api.InputMetrics.Type.IsNull() && !api.InputMetrics.Type.IsUnknown() {
+			state.InputMetrics.Type = api.InputMetrics.Type
+		} else if state.InputMetrics.Type.IsNull() || state.InputMetrics.Type.IsUnknown() {
+			state.InputMetrics.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputMetrics.Disabled.IsNull() || state.InputMetrics.Disabled.IsUnknown())) {
 			if !api.InputMetrics.Disabled.IsNull() && !api.InputMetrics.Disabled.IsUnknown() {
@@ -60966,12 +61095,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputS3.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputS3.Type.IsNull() || state.InputS3.Type.IsUnknown())) {
-			if !api.InputS3.Type.IsNull() && !api.InputS3.Type.IsUnknown() {
-				state.InputS3.Type = api.InputS3.Type
-			} else if state.InputS3.Type.IsNull() || state.InputS3.Type.IsUnknown() {
-				state.InputS3.Type = types.StringNull()
-			}
+		if !api.InputS3.Type.IsNull() && !api.InputS3.Type.IsUnknown() {
+			state.InputS3.Type = api.InputS3.Type
+		} else if state.InputS3.Type.IsNull() || state.InputS3.Type.IsUnknown() {
+			state.InputS3.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3.Disabled.IsNull() || state.InputS3.Disabled.IsUnknown())) {
 			if !api.InputS3.Disabled.IsNull() && !api.InputS3.Disabled.IsUnknown() {
@@ -61377,12 +61504,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputS3Inventory.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Type.IsNull() || state.InputS3Inventory.Type.IsUnknown())) {
-			if !api.InputS3Inventory.Type.IsNull() && !api.InputS3Inventory.Type.IsUnknown() {
-				state.InputS3Inventory.Type = api.InputS3Inventory.Type
-			} else if state.InputS3Inventory.Type.IsNull() || state.InputS3Inventory.Type.IsUnknown() {
-				state.InputS3Inventory.Type = types.StringNull()
-			}
+		if !api.InputS3Inventory.Type.IsNull() && !api.InputS3Inventory.Type.IsUnknown() {
+			state.InputS3Inventory.Type = api.InputS3Inventory.Type
+		} else if state.InputS3Inventory.Type.IsNull() || state.InputS3Inventory.Type.IsUnknown() {
+			state.InputS3Inventory.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputS3Inventory.Disabled.IsNull() || state.InputS3Inventory.Disabled.IsUnknown())) {
 			if !api.InputS3Inventory.Disabled.IsNull() && !api.InputS3Inventory.Disabled.IsUnknown() {
@@ -61802,12 +61927,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSnmp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.Type.IsNull() || state.InputSnmp.Type.IsUnknown())) {
-			if !api.InputSnmp.Type.IsNull() && !api.InputSnmp.Type.IsUnknown() {
-				state.InputSnmp.Type = api.InputSnmp.Type
-			} else if state.InputSnmp.Type.IsNull() || state.InputSnmp.Type.IsUnknown() {
-				state.InputSnmp.Type = types.StringNull()
-			}
+		if !api.InputSnmp.Type.IsNull() && !api.InputSnmp.Type.IsUnknown() {
+			state.InputSnmp.Type = api.InputSnmp.Type
+		} else if state.InputSnmp.Type.IsNull() || state.InputSnmp.Type.IsUnknown() {
+			state.InputSnmp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSnmp.Disabled.IsNull() || state.InputSnmp.Disabled.IsUnknown())) {
 			if !api.InputSnmp.Disabled.IsNull() && !api.InputSnmp.Disabled.IsUnknown() {
@@ -61976,12 +62099,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOpenTelemetry.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Type.IsNull() || state.InputOpenTelemetry.Type.IsUnknown())) {
-			if !api.InputOpenTelemetry.Type.IsNull() && !api.InputOpenTelemetry.Type.IsUnknown() {
-				state.InputOpenTelemetry.Type = api.InputOpenTelemetry.Type
-			} else if state.InputOpenTelemetry.Type.IsNull() || state.InputOpenTelemetry.Type.IsUnknown() {
-				state.InputOpenTelemetry.Type = types.StringNull()
-			}
+		if !api.InputOpenTelemetry.Type.IsNull() && !api.InputOpenTelemetry.Type.IsUnknown() {
+			state.InputOpenTelemetry.Type = api.InputOpenTelemetry.Type
+		} else if state.InputOpenTelemetry.Type.IsNull() || state.InputOpenTelemetry.Type.IsUnknown() {
+			state.InputOpenTelemetry.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.Disabled.IsNull() || state.InputOpenTelemetry.Disabled.IsUnknown())) {
 			if !api.InputOpenTelemetry.Disabled.IsNull() && !api.InputOpenTelemetry.Disabled.IsUnknown() {
@@ -62267,12 +62388,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputModelDrivenTelemetry.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Type.IsNull() || state.InputModelDrivenTelemetry.Type.IsUnknown())) {
-			if !api.InputModelDrivenTelemetry.Type.IsNull() && !api.InputModelDrivenTelemetry.Type.IsUnknown() {
-				state.InputModelDrivenTelemetry.Type = api.InputModelDrivenTelemetry.Type
-			} else if state.InputModelDrivenTelemetry.Type.IsNull() || state.InputModelDrivenTelemetry.Type.IsUnknown() {
-				state.InputModelDrivenTelemetry.Type = types.StringNull()
-			}
+		if !api.InputModelDrivenTelemetry.Type.IsNull() && !api.InputModelDrivenTelemetry.Type.IsUnknown() {
+			state.InputModelDrivenTelemetry.Type = api.InputModelDrivenTelemetry.Type
+		} else if state.InputModelDrivenTelemetry.Type.IsNull() || state.InputModelDrivenTelemetry.Type.IsUnknown() {
+			state.InputModelDrivenTelemetry.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputModelDrivenTelemetry.Disabled.IsNull() || state.InputModelDrivenTelemetry.Disabled.IsUnknown())) {
 			if !api.InputModelDrivenTelemetry.Disabled.IsNull() && !api.InputModelDrivenTelemetry.Disabled.IsUnknown() {
@@ -62420,12 +62539,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSqs.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSqs.Type.IsNull() || state.InputSqs.Type.IsUnknown())) {
-			if !api.InputSqs.Type.IsNull() && !api.InputSqs.Type.IsUnknown() {
-				state.InputSqs.Type = api.InputSqs.Type
-			} else if state.InputSqs.Type.IsNull() || state.InputSqs.Type.IsUnknown() {
-				state.InputSqs.Type = types.StringNull()
-			}
+		if !api.InputSqs.Type.IsNull() && !api.InputSqs.Type.IsUnknown() {
+			state.InputSqs.Type = api.InputSqs.Type
+		} else if state.InputSqs.Type.IsNull() || state.InputSqs.Type.IsUnknown() {
+			state.InputSqs.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSqs.Disabled.IsNull() || state.InputSqs.Disabled.IsUnknown())) {
 			if !api.InputSqs.Disabled.IsNull() && !api.InputSqs.Disabled.IsUnknown() {
@@ -62675,12 +62792,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSyslog.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Type.IsNull() || state.InputSyslog.Type.IsUnknown())) {
-			if !api.InputSyslog.Type.IsNull() && !api.InputSyslog.Type.IsUnknown() {
-				state.InputSyslog.Type = api.InputSyslog.Type
-			} else if state.InputSyslog.Type.IsNull() || state.InputSyslog.Type.IsUnknown() {
-				state.InputSyslog.Type = types.StringNull()
-			}
+		if !api.InputSyslog.Type.IsNull() && !api.InputSyslog.Type.IsUnknown() {
+			state.InputSyslog.Type = api.InputSyslog.Type
+		} else if state.InputSyslog.Type.IsNull() || state.InputSyslog.Type.IsUnknown() {
+			state.InputSyslog.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSyslog.Disabled.IsNull() || state.InputSyslog.Disabled.IsUnknown())) {
 			if !api.InputSyslog.Disabled.IsNull() && !api.InputSyslog.Disabled.IsUnknown() {
@@ -62943,12 +63058,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputFile.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputFile.Type.IsNull() || state.InputFile.Type.IsUnknown())) {
-			if !api.InputFile.Type.IsNull() && !api.InputFile.Type.IsUnknown() {
-				state.InputFile.Type = api.InputFile.Type
-			} else if state.InputFile.Type.IsNull() || state.InputFile.Type.IsUnknown() {
-				state.InputFile.Type = types.StringNull()
-			}
+		if !api.InputFile.Type.IsNull() && !api.InputFile.Type.IsUnknown() {
+			state.InputFile.Type = api.InputFile.Type
+		} else if state.InputFile.Type.IsNull() || state.InputFile.Type.IsUnknown() {
+			state.InputFile.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFile.Disabled.IsNull() || state.InputFile.Disabled.IsUnknown())) {
 			if !api.InputFile.Disabled.IsNull() && !api.InputFile.Disabled.IsUnknown() {
@@ -63211,12 +63324,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputTcp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Type.IsNull() || state.InputTcp.Type.IsUnknown())) {
-			if !api.InputTcp.Type.IsNull() && !api.InputTcp.Type.IsUnknown() {
-				state.InputTcp.Type = api.InputTcp.Type
-			} else if state.InputTcp.Type.IsNull() || state.InputTcp.Type.IsUnknown() {
-				state.InputTcp.Type = types.StringNull()
-			}
+		if !api.InputTcp.Type.IsNull() && !api.InputTcp.Type.IsUnknown() {
+			state.InputTcp.Type = api.InputTcp.Type
+		} else if state.InputTcp.Type.IsNull() || state.InputTcp.Type.IsUnknown() {
+			state.InputTcp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputTcp.Disabled.IsNull() || state.InputTcp.Disabled.IsUnknown())) {
 			if !api.InputTcp.Disabled.IsNull() && !api.InputTcp.Disabled.IsUnknown() {
@@ -63447,12 +63558,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputAppscope.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.Type.IsNull() || state.InputAppscope.Type.IsUnknown())) {
-			if !api.InputAppscope.Type.IsNull() && !api.InputAppscope.Type.IsUnknown() {
-				state.InputAppscope.Type = api.InputAppscope.Type
-			} else if state.InputAppscope.Type.IsNull() || state.InputAppscope.Type.IsUnknown() {
-				state.InputAppscope.Type = types.StringNull()
-			}
+		if !api.InputAppscope.Type.IsNull() && !api.InputAppscope.Type.IsUnknown() {
+			state.InputAppscope.Type = api.InputAppscope.Type
+		} else if state.InputAppscope.Type.IsNull() || state.InputAppscope.Type.IsUnknown() {
+			state.InputAppscope.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppscope.Disabled.IsNull() || state.InputAppscope.Disabled.IsUnknown())) {
 			if !api.InputAppscope.Disabled.IsNull() && !api.InputAppscope.Disabled.IsUnknown() {
@@ -63707,12 +63816,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWef.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputWef.Type.IsNull() || state.InputWef.Type.IsUnknown())) {
-			if !api.InputWef.Type.IsNull() && !api.InputWef.Type.IsUnknown() {
-				state.InputWef.Type = api.InputWef.Type
-			} else if state.InputWef.Type.IsNull() || state.InputWef.Type.IsUnknown() {
-				state.InputWef.Type = types.StringNull()
-			}
+		if !api.InputWef.Type.IsNull() && !api.InputWef.Type.IsUnknown() {
+			state.InputWef.Type = api.InputWef.Type
+		} else if state.InputWef.Type.IsNull() || state.InputWef.Type.IsUnknown() {
+			state.InputWef.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.Disabled.IsNull() || state.InputWef.Disabled.IsUnknown())) {
 			if !api.InputWef.Disabled.IsNull() && !api.InputWef.Disabled.IsUnknown() {
@@ -63963,12 +64070,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWinEventLogs.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.Type.IsNull() || state.InputWinEventLogs.Type.IsUnknown())) {
-			if !api.InputWinEventLogs.Type.IsNull() && !api.InputWinEventLogs.Type.IsUnknown() {
-				state.InputWinEventLogs.Type = api.InputWinEventLogs.Type
-			} else if state.InputWinEventLogs.Type.IsNull() || state.InputWinEventLogs.Type.IsUnknown() {
-				state.InputWinEventLogs.Type = types.StringNull()
-			}
+		if !api.InputWinEventLogs.Type.IsNull() && !api.InputWinEventLogs.Type.IsUnknown() {
+			state.InputWinEventLogs.Type = api.InputWinEventLogs.Type
+		} else if state.InputWinEventLogs.Type.IsNull() || state.InputWinEventLogs.Type.IsUnknown() {
+			state.InputWinEventLogs.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWinEventLogs.Disabled.IsNull() || state.InputWinEventLogs.Disabled.IsUnknown())) {
 			if !api.InputWinEventLogs.Disabled.IsNull() && !api.InputWinEventLogs.Disabled.IsUnknown() {
@@ -64151,12 +64256,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputAppleUnifiedLogs.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Type.IsNull() || state.InputAppleUnifiedLogs.Type.IsUnknown())) {
-			if !api.InputAppleUnifiedLogs.Type.IsNull() && !api.InputAppleUnifiedLogs.Type.IsUnknown() {
-				state.InputAppleUnifiedLogs.Type = api.InputAppleUnifiedLogs.Type
-			} else if state.InputAppleUnifiedLogs.Type.IsNull() || state.InputAppleUnifiedLogs.Type.IsUnknown() {
-				state.InputAppleUnifiedLogs.Type = types.StringNull()
-			}
+		if !api.InputAppleUnifiedLogs.Type.IsNull() && !api.InputAppleUnifiedLogs.Type.IsUnknown() {
+			state.InputAppleUnifiedLogs.Type = api.InputAppleUnifiedLogs.Type
+		} else if state.InputAppleUnifiedLogs.Type.IsNull() || state.InputAppleUnifiedLogs.Type.IsUnknown() {
+			state.InputAppleUnifiedLogs.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAppleUnifiedLogs.Disabled.IsNull() || state.InputAppleUnifiedLogs.Disabled.IsUnknown())) {
 			if !api.InputAppleUnifiedLogs.Disabled.IsNull() && !api.InputAppleUnifiedLogs.Disabled.IsUnknown() {
@@ -64280,12 +64383,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputRawUdp.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Type.IsNull() || state.InputRawUdp.Type.IsUnknown())) {
-			if !api.InputRawUdp.Type.IsNull() && !api.InputRawUdp.Type.IsUnknown() {
-				state.InputRawUdp.Type = api.InputRawUdp.Type
-			} else if state.InputRawUdp.Type.IsNull() || state.InputRawUdp.Type.IsUnknown() {
-				state.InputRawUdp.Type = types.StringNull()
-			}
+		if !api.InputRawUdp.Type.IsNull() && !api.InputRawUdp.Type.IsUnknown() {
+			state.InputRawUdp.Type = api.InputRawUdp.Type
+		} else if state.InputRawUdp.Type.IsNull() || state.InputRawUdp.Type.IsUnknown() {
+			state.InputRawUdp.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputRawUdp.Disabled.IsNull() || state.InputRawUdp.Disabled.IsUnknown())) {
 			if !api.InputRawUdp.Disabled.IsNull() && !api.InputRawUdp.Disabled.IsUnknown() {
@@ -64444,12 +64545,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputJournalFiles.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Type.IsNull() || state.InputJournalFiles.Type.IsUnknown())) {
-			if !api.InputJournalFiles.Type.IsNull() && !api.InputJournalFiles.Type.IsUnknown() {
-				state.InputJournalFiles.Type = api.InputJournalFiles.Type
-			} else if state.InputJournalFiles.Type.IsNull() || state.InputJournalFiles.Type.IsUnknown() {
-				state.InputJournalFiles.Type = types.StringNull()
-			}
+		if !api.InputJournalFiles.Type.IsNull() && !api.InputJournalFiles.Type.IsUnknown() {
+			state.InputJournalFiles.Type = api.InputJournalFiles.Type
+		} else if state.InputJournalFiles.Type.IsNull() || state.InputJournalFiles.Type.IsUnknown() {
+			state.InputJournalFiles.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputJournalFiles.Disabled.IsNull() || state.InputJournalFiles.Disabled.IsUnknown())) {
 			if !api.InputJournalFiles.Disabled.IsNull() && !api.InputJournalFiles.Disabled.IsUnknown() {
@@ -64616,12 +64715,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWiz.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputWiz.Type.IsNull() || state.InputWiz.Type.IsUnknown())) {
-			if !api.InputWiz.Type.IsNull() && !api.InputWiz.Type.IsUnknown() {
-				state.InputWiz.Type = api.InputWiz.Type
-			} else if state.InputWiz.Type.IsNull() || state.InputWiz.Type.IsUnknown() {
-				state.InputWiz.Type = types.StringNull()
-			}
+		if !api.InputWiz.Type.IsNull() && !api.InputWiz.Type.IsUnknown() {
+			state.InputWiz.Type = api.InputWiz.Type
+		} else if state.InputWiz.Type.IsNull() || state.InputWiz.Type.IsUnknown() {
+			state.InputWiz.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWiz.Disabled.IsNull() || state.InputWiz.Disabled.IsUnknown())) {
 			if !api.InputWiz.Disabled.IsNull() && !api.InputWiz.Disabled.IsUnknown() {
@@ -64854,12 +64951,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOpenai.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.Type.IsNull() || state.InputOpenai.Type.IsUnknown())) {
-			if !api.InputOpenai.Type.IsNull() && !api.InputOpenai.Type.IsUnknown() {
-				state.InputOpenai.Type = api.InputOpenai.Type
-			} else if state.InputOpenai.Type.IsNull() || state.InputOpenai.Type.IsUnknown() {
-				state.InputOpenai.Type = types.StringNull()
-			}
+		if !api.InputOpenai.Type.IsNull() && !api.InputOpenai.Type.IsUnknown() {
+			state.InputOpenai.Type = api.InputOpenai.Type
+		} else if state.InputOpenai.Type.IsNull() || state.InputOpenai.Type.IsUnknown() {
+			state.InputOpenai.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenai.Disabled.IsNull() || state.InputOpenai.Disabled.IsUnknown())) {
 			if !api.InputOpenai.Disabled.IsNull() && !api.InputOpenai.Disabled.IsUnknown() {
@@ -65054,12 +65149,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputWizWebhook.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Type.IsNull() || state.InputWizWebhook.Type.IsUnknown())) {
-			if !api.InputWizWebhook.Type.IsNull() && !api.InputWizWebhook.Type.IsUnknown() {
-				state.InputWizWebhook.Type = api.InputWizWebhook.Type
-			} else if state.InputWizWebhook.Type.IsNull() || state.InputWizWebhook.Type.IsUnknown() {
-				state.InputWizWebhook.Type = types.StringNull()
-			}
+		if !api.InputWizWebhook.Type.IsNull() && !api.InputWizWebhook.Type.IsUnknown() {
+			state.InputWizWebhook.Type = api.InputWizWebhook.Type
+		} else if state.InputWizWebhook.Type.IsNull() || state.InputWizWebhook.Type.IsUnknown() {
+			state.InputWizWebhook.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.Disabled.IsNull() || state.InputWizWebhook.Disabled.IsUnknown())) {
 			if !api.InputWizWebhook.Disabled.IsNull() && !api.InputWizWebhook.Disabled.IsUnknown() {
@@ -65329,12 +65422,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputNetflow.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Type.IsNull() || state.InputNetflow.Type.IsUnknown())) {
-			if !api.InputNetflow.Type.IsNull() && !api.InputNetflow.Type.IsUnknown() {
-				state.InputNetflow.Type = api.InputNetflow.Type
-			} else if state.InputNetflow.Type.IsNull() || state.InputNetflow.Type.IsUnknown() {
-				state.InputNetflow.Type = types.StringNull()
-			}
+		if !api.InputNetflow.Type.IsNull() && !api.InputNetflow.Type.IsUnknown() {
+			state.InputNetflow.Type = api.InputNetflow.Type
+		} else if state.InputNetflow.Type.IsNull() || state.InputNetflow.Type.IsUnknown() {
+			state.InputNetflow.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputNetflow.Disabled.IsNull() || state.InputNetflow.Disabled.IsUnknown())) {
 			if !api.InputNetflow.Disabled.IsNull() && !api.InputNetflow.Disabled.IsUnknown() {
@@ -65514,12 +65605,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSecurityLake.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Type.IsNull() || state.InputSecurityLake.Type.IsUnknown())) {
-			if !api.InputSecurityLake.Type.IsNull() && !api.InputSecurityLake.Type.IsUnknown() {
-				state.InputSecurityLake.Type = api.InputSecurityLake.Type
-			} else if state.InputSecurityLake.Type.IsNull() || state.InputSecurityLake.Type.IsUnknown() {
-				state.InputSecurityLake.Type = types.StringNull()
-			}
+		if !api.InputSecurityLake.Type.IsNull() && !api.InputSecurityLake.Type.IsUnknown() {
+			state.InputSecurityLake.Type = api.InputSecurityLake.Type
+		} else if state.InputSecurityLake.Type.IsNull() || state.InputSecurityLake.Type.IsUnknown() {
+			state.InputSecurityLake.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSecurityLake.Disabled.IsNull() || state.InputSecurityLake.Disabled.IsUnknown())) {
 			if !api.InputSecurityLake.Disabled.IsNull() && !api.InputSecurityLake.Disabled.IsUnknown() {
@@ -65925,12 +66014,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputBedrockS3.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Type.IsNull() || state.InputBedrockS3.Type.IsUnknown())) {
-			if !api.InputBedrockS3.Type.IsNull() && !api.InputBedrockS3.Type.IsUnknown() {
-				state.InputBedrockS3.Type = api.InputBedrockS3.Type
-			} else if state.InputBedrockS3.Type.IsNull() || state.InputBedrockS3.Type.IsUnknown() {
-				state.InputBedrockS3.Type = types.StringNull()
-			}
+		if !api.InputBedrockS3.Type.IsNull() && !api.InputBedrockS3.Type.IsUnknown() {
+			state.InputBedrockS3.Type = api.InputBedrockS3.Type
+		} else if state.InputBedrockS3.Type.IsNull() || state.InputBedrockS3.Type.IsUnknown() {
+			state.InputBedrockS3.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputBedrockS3.Disabled.IsNull() || state.InputBedrockS3.Disabled.IsUnknown())) {
 			if !api.InputBedrockS3.Disabled.IsNull() && !api.InputBedrockS3.Disabled.IsUnknown() {
@@ -66336,12 +66423,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputServicenowTable.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Type.IsNull() || state.InputServicenowTable.Type.IsUnknown())) {
-			if !api.InputServicenowTable.Type.IsNull() && !api.InputServicenowTable.Type.IsUnknown() {
-				state.InputServicenowTable.Type = api.InputServicenowTable.Type
-			} else if state.InputServicenowTable.Type.IsNull() || state.InputServicenowTable.Type.IsUnknown() {
-				state.InputServicenowTable.Type = types.StringNull()
-			}
+		if !api.InputServicenowTable.Type.IsNull() && !api.InputServicenowTable.Type.IsUnknown() {
+			state.InputServicenowTable.Type = api.InputServicenowTable.Type
+		} else if state.InputServicenowTable.Type.IsNull() || state.InputServicenowTable.Type.IsUnknown() {
+			state.InputServicenowTable.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputServicenowTable.Disabled.IsNull() || state.InputServicenowTable.Disabled.IsUnknown())) {
 			if !api.InputServicenowTable.Disabled.IsNull() && !api.InputServicenowTable.Disabled.IsUnknown() {
@@ -66712,12 +66797,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputZscalerHec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Type.IsNull() || state.InputZscalerHec.Type.IsUnknown())) {
-			if !api.InputZscalerHec.Type.IsNull() && !api.InputZscalerHec.Type.IsUnknown() {
-				state.InputZscalerHec.Type = api.InputZscalerHec.Type
-			} else if state.InputZscalerHec.Type.IsNull() || state.InputZscalerHec.Type.IsUnknown() {
-				state.InputZscalerHec.Type = types.StringNull()
-			}
+		if !api.InputZscalerHec.Type.IsNull() && !api.InputZscalerHec.Type.IsUnknown() {
+			state.InputZscalerHec.Type = api.InputZscalerHec.Type
+		} else if state.InputZscalerHec.Type.IsNull() || state.InputZscalerHec.Type.IsUnknown() {
+			state.InputZscalerHec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.Disabled.IsNull() || state.InputZscalerHec.Disabled.IsUnknown())) {
 			if !api.InputZscalerHec.Disabled.IsNull() && !api.InputZscalerHec.Disabled.IsUnknown() {
@@ -66984,12 +67067,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputCloudflareHec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Type.IsNull() || state.InputCloudflareHec.Type.IsUnknown())) {
-			if !api.InputCloudflareHec.Type.IsNull() && !api.InputCloudflareHec.Type.IsUnknown() {
-				state.InputCloudflareHec.Type = api.InputCloudflareHec.Type
-			} else if state.InputCloudflareHec.Type.IsNull() || state.InputCloudflareHec.Type.IsUnknown() {
-				state.InputCloudflareHec.Type = types.StringNull()
-			}
+		if !api.InputCloudflareHec.Type.IsNull() && !api.InputCloudflareHec.Type.IsUnknown() {
+			state.InputCloudflareHec.Type = api.InputCloudflareHec.Type
+		} else if state.InputCloudflareHec.Type.IsNull() || state.InputCloudflareHec.Type.IsUnknown() {
+			state.InputCloudflareHec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.Disabled.IsNull() || state.InputCloudflareHec.Disabled.IsUnknown())) {
 			if !api.InputCloudflareHec.Disabled.IsNull() && !api.InputCloudflareHec.Disabled.IsUnknown() {
@@ -67266,12 +67347,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputSysdigHec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Type.IsNull() || state.InputSysdigHec.Type.IsUnknown())) {
-			if !api.InputSysdigHec.Type.IsNull() && !api.InputSysdigHec.Type.IsUnknown() {
-				state.InputSysdigHec.Type = api.InputSysdigHec.Type
-			} else if state.InputSysdigHec.Type.IsNull() || state.InputSysdigHec.Type.IsUnknown() {
-				state.InputSysdigHec.Type = types.StringNull()
-			}
+		if !api.InputSysdigHec.Type.IsNull() && !api.InputSysdigHec.Type.IsUnknown() {
+			state.InputSysdigHec.Type = api.InputSysdigHec.Type
+		} else if state.InputSysdigHec.Type.IsNull() || state.InputSysdigHec.Type.IsUnknown() {
+			state.InputSysdigHec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.Disabled.IsNull() || state.InputSysdigHec.Disabled.IsUnknown())) {
 			if !api.InputSysdigHec.Disabled.IsNull() && !api.InputSysdigHec.Disabled.IsUnknown() {
@@ -67531,12 +67610,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputUpwindHec.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Type.IsNull() || state.InputUpwindHec.Type.IsUnknown())) {
-			if !api.InputUpwindHec.Type.IsNull() && !api.InputUpwindHec.Type.IsUnknown() {
-				state.InputUpwindHec.Type = api.InputUpwindHec.Type
-			} else if state.InputUpwindHec.Type.IsNull() || state.InputUpwindHec.Type.IsUnknown() {
-				state.InputUpwindHec.Type = types.StringNull()
-			}
+		if !api.InputUpwindHec.Type.IsNull() && !api.InputUpwindHec.Type.IsUnknown() {
+			state.InputUpwindHec.Type = api.InputUpwindHec.Type
+		} else if state.InputUpwindHec.Type.IsNull() || state.InputUpwindHec.Type.IsUnknown() {
+			state.InputUpwindHec.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.Disabled.IsNull() || state.InputUpwindHec.Disabled.IsUnknown())) {
 			if !api.InputUpwindHec.Disabled.IsNull() && !api.InputUpwindHec.Disabled.IsUnknown() {
@@ -67796,12 +67873,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOpenaiComplianceLogs.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.Type.IsNull() || state.InputOpenaiComplianceLogs.Type.IsUnknown())) {
-			if !api.InputOpenaiComplianceLogs.Type.IsNull() && !api.InputOpenaiComplianceLogs.Type.IsUnknown() {
-				state.InputOpenaiComplianceLogs.Type = api.InputOpenaiComplianceLogs.Type
-			} else if state.InputOpenaiComplianceLogs.Type.IsNull() || state.InputOpenaiComplianceLogs.Type.IsUnknown() {
-				state.InputOpenaiComplianceLogs.Type = types.StringNull()
-			}
+		if !api.InputOpenaiComplianceLogs.Type.IsNull() && !api.InputOpenaiComplianceLogs.Type.IsUnknown() {
+			state.InputOpenaiComplianceLogs.Type = api.InputOpenaiComplianceLogs.Type
+		} else if state.InputOpenaiComplianceLogs.Type.IsNull() || state.InputOpenaiComplianceLogs.Type.IsUnknown() {
+			state.InputOpenaiComplianceLogs.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenaiComplianceLogs.Disabled.IsNull() || state.InputOpenaiComplianceLogs.Disabled.IsUnknown())) {
 			if !api.InputOpenaiComplianceLogs.Disabled.IsNull() && !api.InputOpenaiComplianceLogs.Disabled.IsUnknown() {
@@ -68098,12 +68173,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputAnthropicCompliance.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Type.IsNull() || state.InputAnthropicCompliance.Type.IsUnknown())) {
-			if !api.InputAnthropicCompliance.Type.IsNull() && !api.InputAnthropicCompliance.Type.IsUnknown() {
-				state.InputAnthropicCompliance.Type = api.InputAnthropicCompliance.Type
-			} else if state.InputAnthropicCompliance.Type.IsNull() || state.InputAnthropicCompliance.Type.IsUnknown() {
-				state.InputAnthropicCompliance.Type = types.StringNull()
-			}
+		if !api.InputAnthropicCompliance.Type.IsNull() && !api.InputAnthropicCompliance.Type.IsUnknown() {
+			state.InputAnthropicCompliance.Type = api.InputAnthropicCompliance.Type
+		} else if state.InputAnthropicCompliance.Type.IsNull() || state.InputAnthropicCompliance.Type.IsUnknown() {
+			state.InputAnthropicCompliance.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.Disabled.IsNull() || state.InputAnthropicCompliance.Disabled.IsUnknown())) {
 			if !api.InputAnthropicCompliance.Disabled.IsNull() && !api.InputAnthropicCompliance.Disabled.IsUnknown() {
@@ -68362,12 +68435,10 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 				state.InputOkta.ID = types.StringNull()
 			}
 		}
-		if !preserveInputs || (fillMissingInputs && (state.InputOkta.Type.IsNull() || state.InputOkta.Type.IsUnknown())) {
-			if !api.InputOkta.Type.IsNull() && !api.InputOkta.Type.IsUnknown() {
-				state.InputOkta.Type = api.InputOkta.Type
-			} else if state.InputOkta.Type.IsNull() || state.InputOkta.Type.IsUnknown() {
-				state.InputOkta.Type = types.StringNull()
-			}
+		if !api.InputOkta.Type.IsNull() && !api.InputOkta.Type.IsUnknown() {
+			state.InputOkta.Type = api.InputOkta.Type
+		} else if state.InputOkta.Type.IsNull() || state.InputOkta.Type.IsUnknown() {
+			state.InputOkta.Type = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.Disabled.IsNull() || state.InputOkta.Disabled.IsUnknown())) {
 			if !api.InputOkta.Disabled.IsNull() && !api.InputOkta.Disabled.IsUnknown() {

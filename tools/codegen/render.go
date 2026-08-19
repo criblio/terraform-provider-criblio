@@ -254,6 +254,9 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
 		"noDiscriminatorVariants":          noDiscriminatorVariants,
 		"discriminatorCaseValues":          discriminatorCaseValues,
+		"directDiscriminatorField":         directDiscriminatorField,
+		"directDiscriminatorAPINames":      directDiscriminatorAPINames,
+		"needsLegacyTypeDiscriminator":     needsLegacyTypeDiscriminator,
 		"variantAPINames":                  variantAPINames,
 		"variantRequiredAPINames":          variantRequiredAPINames,
 		"goStringSliceLiteral":             goStringSliceLiteral,
@@ -1354,6 +1357,39 @@ func discriminatorCaseValues(resource parser.ResourceDef, variant parser.OneOfVa
 		}
 	}
 	return values
+}
+
+func directDiscriminatorField(variant parser.OneOfVariantDef) *parser.FieldDef {
+	for _, field := range variant.Fields {
+		if field.APIName == variant.DiscriminatorField && len(field.Enum) == 1 && field.Enum[0] == variant.DiscriminatorValue {
+			return &field
+		}
+	}
+	return nil
+}
+
+func directDiscriminatorAPINames(variants []parser.OneOfVariantDef) []string {
+	seen := map[string]bool{}
+	var names []string
+	for _, variant := range variants {
+		field := directDiscriminatorField(variant)
+		if field == nil || seen[field.APIName] {
+			continue
+		}
+		seen[field.APIName] = true
+		names = append(names, field.APIName)
+	}
+	sort.Strings(names)
+	return names
+}
+
+func needsLegacyTypeDiscriminator(variants []parser.OneOfVariantDef) bool {
+	for _, name := range directDiscriminatorAPINames(variants) {
+		if name == "type" {
+			return false
+		}
+	}
+	return true
 }
 
 func variantRequiredAPINames(variant parser.OneOfVariantDef) []string {
