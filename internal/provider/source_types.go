@@ -13746,6 +13746,9 @@ func (m InputCollectionModel) terraformPayload() (map[string]any, error) {
 		}
 		output["output"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "collection"
+	}
 	return output, nil
 }
 
@@ -14239,6 +14242,9 @@ func (m InputKafkaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kafka"
 	}
 	return output, nil
 }
@@ -15004,6 +15010,9 @@ func (m InputMskModel) terraformPayload() (map[string]any, error) {
 		}
 		output["awsSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "msk"
+	}
 	return output, nil
 }
 
@@ -15741,6 +15750,9 @@ func (m InputHttpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "http"
+	}
 	return output, nil
 }
 
@@ -16324,6 +16336,9 @@ func (m InputSplunkModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert compress to API value: %v", err)
 		}
 		output["compress"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk"
 	}
 	return output, nil
 }
@@ -16980,6 +16995,9 @@ func (m InputSplunkSearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk_search"
 	}
 	return output, nil
 }
@@ -17709,6 +17727,9 @@ func (m InputSplunkHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "splunk_hec"
+	}
 	return output, nil
 }
 
@@ -18374,6 +18395,9 @@ func (m InputAzureBlobModel) terraformPayload() (map[string]any, error) {
 		}
 		output["certificate"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "azure_blob"
+	}
 	return output, nil
 }
 
@@ -19029,6 +19053,9 @@ func (m InputElasticModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert custom_apiversion to API value: %v", err)
 		}
 		output["customAPIVersion"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "elastic"
 	}
 	return output, nil
 }
@@ -19704,6 +19731,9 @@ func (m InputConfluentCloudModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "confluent_cloud"
+	}
 	return output, nil
 }
 
@@ -20324,6 +20354,9 @@ func (m InputGrafanaModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "grafana"
+	}
 	return output, nil
 }
 
@@ -20925,6 +20958,9 @@ func (m InputLokiModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "loki"
 	}
 	return output, nil
 }
@@ -21554,6 +21590,9 @@ func (m InputPrometheusRwModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "prometheus_rw"
 	}
 	return output, nil
 }
@@ -22345,6 +22384,9 @@ func (m InputPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert credentials_secret to API value: %v", err)
 		}
 		output["credentialsSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "prometheus"
 	}
 	return output, nil
 }
@@ -23299,6 +23341,9 @@ func (m InputEdgePrometheusModel) terraformPayload() (map[string]any, error) {
 		}
 		output["credentialsSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "edge_prometheus"
+	}
 	return output, nil
 }
 
@@ -24045,6 +24090,9 @@ func (m InputOffice365MgmtModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "office365_mgmt"
+	}
 	return output, nil
 }
 
@@ -24565,6 +24613,9 @@ func (m InputOffice365ServiceModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "office365_service"
 	}
 	return output, nil
 }
@@ -25176,6 +25227,9 @@ func (m InputOffice365MsgTraceModel) terraformPayload() (map[string]any, error) 
 			return nil, fmt.Errorf("convert cert_options to API value: %v", err)
 		}
 		output["certOptions"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "office365_msg_trace"
 	}
 	return output, nil
 }
@@ -25896,6 +25950,9 @@ func (m InputMicrosoftGraphModel) terraformPayload() (map[string]any, error) {
 		}
 		output["certOptions"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "microsoft_graph"
+	}
 	return output, nil
 }
 
@@ -26588,6 +26645,9 @@ func (m InputEventhubModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "eventhub"
+	}
 	return output, nil
 }
 
@@ -27181,6 +27241,9 @@ func (m InputEventhubAmqpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "eventhub_amqp"
+	}
 	return output, nil
 }
 
@@ -27639,6 +27702,9 @@ func (m InputExecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["cronSchedule"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "exec"
+	}
 	return output, nil
 }
 
@@ -28096,6 +28162,9 @@ func (m InputFirehoseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "firehose"
 	}
 	return output, nil
 }
@@ -28600,6 +28669,9 @@ func (m InputGooglePubsubModel) terraformPayload() (map[string]any, error) {
 		}
 		output["orderedDelivery"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "google_pubsub"
+	}
 	return output, nil
 }
 
@@ -28977,6 +29049,9 @@ func (m InputCriblModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl"
+	}
 	return output, nil
 }
 
@@ -29326,6 +29401,9 @@ func (m InputCriblTcpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_tcp"
 	}
 	return output, nil
 }
@@ -29802,6 +29880,9 @@ func (m InputCriblHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_http"
 	}
 	return output, nil
 }
@@ -30369,6 +30450,9 @@ func (m InputCriblLakeHttpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cribl_lake_http"
+	}
 	return output, nil
 }
 
@@ -30917,6 +31001,9 @@ func (m InputTcpjsonModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "tcpjson"
+	}
 	return output, nil
 }
 
@@ -31339,6 +31426,9 @@ func (m InputSystemMetricsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "system_metrics"
+	}
 	return output, nil
 }
 
@@ -31689,6 +31779,9 @@ func (m InputSystemStateModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "system_state"
+	}
 	return output, nil
 }
 
@@ -32029,6 +32122,9 @@ func (m InputKubeMetricsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kube_metrics"
 	}
 	return output, nil
 }
@@ -32398,6 +32494,9 @@ func (m InputKubeLogsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kube_logs"
+	}
 	return output, nil
 }
 
@@ -32730,6 +32829,9 @@ func (m InputKubeEventsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kube_events"
+	}
 	return output, nil
 }
 
@@ -33043,6 +33145,9 @@ func (m InputWindowsMetricsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "windows_metrics"
 	}
 	return output, nil
 }
@@ -33699,6 +33804,9 @@ func (m InputCrowdstrikeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert processed_tag_value to API value: %v", err)
 		}
 		output["processedTagValue"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "crowdstrike"
 	}
 	return output, nil
 }
@@ -34464,6 +34572,9 @@ func (m InputDatadogAgentModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "datadog_agent"
+	}
 	return output, nil
 }
 
@@ -34885,6 +34996,9 @@ func (m InputDatagenModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "datagen"
 	}
 	return output, nil
 }
@@ -35325,6 +35439,9 @@ func (m InputHttpRawModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "http_raw"
 	}
 	return output, nil
 }
@@ -35955,6 +36072,9 @@ func (m InputKinesisModel) terraformPayload() (map[string]any, error) {
 		}
 		output["awsSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "kinesis"
+	}
 	return output, nil
 }
 
@@ -36422,6 +36542,9 @@ func (m InputCriblmetricsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "criblmetrics"
+	}
 	return output, nil
 }
 
@@ -36762,6 +36885,9 @@ func (m InputMetricsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "metrics"
 	}
 	return output, nil
 }
@@ -37454,6 +37580,9 @@ func (m InputS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert processed_tag_value to API value: %v", err)
 		}
 		output["processedTagValue"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "s3"
 	}
 	return output, nil
 }
@@ -38462,6 +38591,9 @@ func (m InputS3InventoryModel) terraformPayload() (map[string]any, error) {
 		}
 		output["processedTagValue"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "s3_inventory"
+	}
 	return output, nil
 }
 
@@ -39172,6 +39304,9 @@ func (m InputSnmpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "snmp"
+	}
 	return output, nil
 }
 
@@ -39711,6 +39846,9 @@ func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 		}
 		output["extractLogs"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "open_telemetry"
+	}
 	return output, nil
 }
 
@@ -40223,6 +40361,9 @@ func (m InputModelDrivenTelemetryModel) terraformPayload() (map[string]any, erro
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "model_driven_telemetry"
+	}
 	return output, nil
 }
 
@@ -40698,6 +40839,9 @@ func (m InputSqsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert num_receivers to API value: %v", err)
 		}
 		output["numReceivers"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sqs"
 	}
 	return output, nil
 }
@@ -41318,6 +41462,9 @@ func (m InputSyslogModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert enable_enhanced_proxy_header_parsing to API value: %v", err)
 		}
 		output["enableEnhancedProxyHeaderParsing"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "syslog"
 	}
 	return output, nil
 }
@@ -41948,6 +42095,9 @@ func (m InputFileModel) terraformPayload() (map[string]any, error) {
 		}
 		output["includeUnidentifiableBinary"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "file"
+	}
 	return output, nil
 }
 
@@ -42532,6 +42682,9 @@ func (m InputTcpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["textSecret"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "tcp"
+	}
 	return output, nil
 }
 
@@ -43097,6 +43250,9 @@ func (m InputAppscopeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "appscope"
 	}
 	return output, nil
 }
@@ -43691,6 +43847,9 @@ func (m InputWefModel) terraformPayload() (map[string]any, error) {
 		}
 		output["logFingerprintMismatch"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "wef"
+	}
 	return output, nil
 }
 
@@ -44203,6 +44362,9 @@ func (m InputWinEventLogsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["disableXmlRendering"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "win_event_logs"
+	}
 	return output, nil
 }
 
@@ -44562,6 +44724,9 @@ func (m InputAppleUnifiedLogsModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "apple_unified_logs"
+	}
 	return output, nil
 }
 
@@ -44893,6 +45058,9 @@ func (m InputRawUdpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "raw_udp"
 	}
 	return output, nil
 }
@@ -45270,6 +45438,9 @@ func (m InputJournalFilesModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "journal_files"
 	}
 	return output, nil
 }
@@ -45728,6 +45899,9 @@ func (m InputWizModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert text_secret to API value: %v", err)
 		}
 		output["textSecret"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "wiz"
 	}
 	return output, nil
 }
@@ -46222,6 +46396,9 @@ func (m InputOpenaiModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "openai"
 	}
 	return output, nil
 }
@@ -46753,6 +46930,9 @@ func (m InputWizWebhookModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "wiz_webhook"
+	}
 	return output, nil
 }
 
@@ -47273,6 +47453,9 @@ func (m InputNetflowModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "netflow"
 	}
 	return output, nil
 }
@@ -47983,6 +48166,9 @@ func (m InputSecurityLakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert processed_tag_value to API value: %v", err)
 		}
 		output["processedTagValue"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "security_lake"
 	}
 	return output, nil
 }
@@ -48973,6 +49159,9 @@ func (m InputBedrockS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["processedTagValue"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "bedrock_s3"
+	}
 	return output, nil
 }
 
@@ -49908,6 +50097,9 @@ func (m InputServicenowTableModel) terraformPayload() (map[string]any, error) {
 		}
 		output["manageState"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "servicenow_table"
+	}
 	return output, nil
 }
 
@@ -50654,6 +50846,9 @@ func (m InputZscalerHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "zscaler_hec"
+	}
 	return output, nil
 }
 
@@ -51274,6 +51469,9 @@ func (m InputCloudflareHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "cloudflare_hec"
+	}
 	return output, nil
 }
 
@@ -51885,6 +52083,9 @@ func (m InputSysdigHecModel) terraformPayload() (map[string]any, error) {
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "sysdig_hec"
+	}
 	return output, nil
 }
 
@@ -52477,6 +52678,9 @@ func (m InputUpwindHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "upwind_hec"
 	}
 	return output, nil
 }
@@ -53125,6 +53329,9 @@ func (m InputOpenaiComplianceLogsModel) terraformPayload() (map[string]any, erro
 		}
 		output["manageState"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "openai_compliance_logs"
+	}
 	return output, nil
 }
 
@@ -53754,6 +53961,9 @@ func (m InputAnthropicComplianceModel) terraformPayload() (map[string]any, error
 		}
 		output["description"] = value
 	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "anthropic_compliance"
+	}
 	return output, nil
 }
 
@@ -54274,6 +54484,9 @@ func (m InputOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
+	}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "okta"
 	}
 	return output, nil
 }

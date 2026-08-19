@@ -131,6 +131,13 @@ func TestParseOneOfVariants(t *testing.T) {
 		t.Fatalf("variant count = %d", len(destination.OneOfVariants))
 	}
 	azure := variantByName(t, destination.OneOfVariants, "OutputAzureBlob")
+	if azure.DiscriminatorField != "type" || azure.DiscriminatorValue != "azure_blob" {
+		t.Fatalf("Azure discriminator = %q:%q, want type:azure_blob", azure.DiscriminatorField, azure.DiscriminatorValue)
+	}
+	typeField := fieldByTFName(t, azure.Fields, "type")
+	if typeField.Required || !typeField.Optional || !typeField.Computed {
+		t.Fatalf("Azure type flags = required:%v optional:%v computed:%v", typeField.Required, typeField.Optional, typeField.Computed)
+	}
 	accountKey := fieldByTFName(t, azure.Fields, "account_key")
 	if accountKey.ApplyStrategy != "stringFromAPIOrPrior" {
 		t.Fatalf("account_key strategy = %q", accountKey.ApplyStrategy)

@@ -296,9 +296,11 @@ func TestRenderedSnippets(t *testing.T) {
 	discriminatorTypes := renderTemplate(t, "types", parser.ResourceDef{
 		StructName: "Destination",
 		OneOfVariants: []parser.OneOfVariantDef{{
-			GoName:        "OutputChronicle",
-			ModelName:     "OutputChronicleModel",
-			TerraformName: "output_chronicle",
+			GoName:             "OutputChronicle",
+			ModelName:          "OutputChronicleModel",
+			TerraformName:      "output_chronicle",
+			DiscriminatorField: "type",
+			DiscriminatorValue: "chronicle",
 			Fields: []parser.FieldDef{{
 				APIName:       "type",
 				TerraformName: "type",

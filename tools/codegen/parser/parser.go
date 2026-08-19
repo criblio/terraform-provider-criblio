@@ -376,6 +376,7 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	makeDirectDiscriminatorsOptionalComputed(resource.OneOfVariants)
 	if resource.StructName == "Collector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
@@ -403,6 +404,25 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		if field.TerraformName == "conf" {
 			makeMappingRulesetFunctionDefaultsOptional(field)
+		}
+	}
+}
+
+func makeDirectDiscriminatorsOptionalComputed(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		variant := &variants[variantIndex]
+		if variant.DiscriminatorField == "" || variant.DiscriminatorValue == "" {
+			continue
+		}
+		for fieldIndex := range variant.Fields {
+			field := &variant.Fields[fieldIndex]
+			if field.APIName != variant.DiscriminatorField || len(field.Enum) != 1 || field.Enum[0] != variant.DiscriminatorValue {
+				continue
+			}
+			field.Required = false
+			field.Optional = true
+			field.Computed = true
+			field.OptionalComputed = true
 		}
 	}
 }
@@ -582,7 +602,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			}
 
 			if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-				parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
+				parsed, err := parseOneOfVariants(modelName, property, schemas)
 				if err != nil {
 					return nil, nil, err
 				}
@@ -600,7 +620,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 	}
 	applyDiscriminatorMappingEnum(schema, fields)
 	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-		parsed, err := parseOneOfVariants(modelName, oneOf, schemas)
+		parsed, err := parseOneOfVariants(modelName, schema, schemas)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -638,7 +658,15 @@ func applyDiscriminatorMappingEnum(schema *yaml.Node, fields []FieldDef) {
 	}
 }
 
-func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+	oneOf, ok := mappingValue(unionSchema, "oneOf")
+	if !ok || oneOf.Kind != yaml.SequenceNode {
+		return nil, nil
+	}
+	discriminatorField := ""
+	if discriminator, ok := mappingValue(unionSchema, "discriminator"); ok {
+		discriminatorField = scalarValue(discriminator, "propertyName")
+	}
 	var variants []OneOfVariantDef
 	for _, variantRef := range oneOf.Content {
 		schemaName := schemaRefName(variantRef)
@@ -667,6 +695,7 @@ func parseOneOfVariants(parentModelName string, oneOf, schemas *yaml.Node) ([]On
 			GoName:             exportName(schemaName),
 			ModelName:          modelName,
 			SchemaName:         schemaName,
+			DiscriminatorField: discriminatorField,
 			DiscriminatorValue: discriminatorValue(variantFields),
 			Fields:             variantFields,
 		})

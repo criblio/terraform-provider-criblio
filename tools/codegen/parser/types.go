@@ -110,6 +110,7 @@ type OneOfVariantDef struct {
 	GoName             string
 	ModelName          string
 	SchemaName         string
+	DiscriminatorField string
 	DiscriminatorValue string
 	Fields             []FieldDef
 }

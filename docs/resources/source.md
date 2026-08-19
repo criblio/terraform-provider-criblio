@@ -351,13 +351,10 @@ resource "criblio_source" "my_source" {
 <a id="nestedatt--input_collection"></a>
 ### Nested Schema for `input_collection`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process results
 - `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
@@ -379,13 +376,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -435,7 +432,6 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `aws_authentication_method` (String)
@@ -444,6 +440,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -502,13 +499,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -544,13 +541,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -583,7 +580,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `search_head` (String) Search head base URL. Can be an expression. Default is https://localhost:8089.
 - `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'
 - `cron_schedule` (String) A cron schedule on which to run this job
@@ -594,6 +590,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -633,7 +630,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.
@@ -641,6 +637,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -680,12 +677,12 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -723,7 +720,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `elastic_api` (String) Absolute path on which to listen for Elasticsearch API requests. Defaults to /. _bulk will be appended automatically. For example, /myPath becomes /myPath/_bulk. Requests can then be made to either /myPath/_bulk or /myPath/<myIndexName>/_bulk. Other entries are faked as success.
@@ -731,6 +727,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -769,13 +766,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -825,13 +822,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -865,7 +862,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.
@@ -873,6 +869,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -908,7 +905,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `prometheus_api` (String) Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.
@@ -916,6 +912,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -951,13 +948,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `interval` (Number) How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.
 - `log_level` (String)
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1012,13 +1009,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `discovery_type` (String) Target discovery mechanism. Use static to manually enter a list of targets.
 - `interval` (Number) How often in seconds to scrape targets for metrics.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1077,7 +1074,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `plan_type` (String)
 - `tenant_id` (String) Microsoft 365 Azure Tenant ID
 - `app_id` (String) Microsoft 365 Azure Application ID
@@ -1085,6 +1081,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1115,13 +1112,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `tenant_id` (String) Microsoft 365 Azure Tenant ID
 - `app_id` (String) Microsoft 365 Azure Application ID
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1151,13 +1148,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `url` (String) URL to use when retrieving report data.
 - `interval` (Integer) How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1199,13 +1196,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `url` (String) Microsoft Graph API endpoint URL. (ex. https://graph.microsoft.com/v1.0/admin/exchange/tracing/messageTraces)
 - `interval` (Integer) How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1247,13 +1244,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
 - `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1302,13 +1299,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `consumer_group` (String) The consumer group this instance belongs to. Default is '$Default'.
 - `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub_amqp--checkpointing))
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1339,12 +1336,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `command` (String) Command to execute; supports Bourne shell (or CMD on Windows) syntax
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) Disabled
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1369,13 +1366,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1406,13 +1403,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `topic_name` (String) ID of the topic to receive events from. When Monitor subscription is enabled, any value may be entered.
 - `subscription_name` (String) ID of the subscription to use when receiving events. When Monitor subscription is enabled, the fully qualified subscription name must be entered. Example: projects/myProject/subscriptions/mySubscription
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1439,13 +1436,10 @@ Optional:
 <a id="nestedatt--input_cribl"></a>
 ### Nested Schema for `input_cribl`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1464,13 +1458,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1496,13 +1490,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1533,13 +1527,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1575,13 +1569,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1608,13 +1602,10 @@ Optional:
 <a id="nestedatt--input_system_metrics"></a>
 ### Nested Schema for `input_system_metrics`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1636,13 +1627,10 @@ Optional:
 <a id="nestedatt--input_system_state"></a>
 ### Nested Schema for `input_system_state`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1663,13 +1651,10 @@ Optional:
 <a id="nestedatt--input_kube_metrics"></a>
 ### Nested Schema for `input_kube_metrics`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1690,13 +1675,10 @@ Optional:
 <a id="nestedatt--input_kube_logs"></a>
 ### Nested Schema for `input_kube_logs`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1720,13 +1702,10 @@ Optional:
 <a id="nestedatt--input_kube_events"></a>
 ### Nested Schema for `input_kube_events`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1743,13 +1722,10 @@ Optional:
 <a id="nestedatt--input_windows_metrics"></a>
 ### Nested Schema for `input_windows_metrics`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1773,12 +1749,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1834,13 +1810,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1874,12 +1850,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `samples` (Attributes List) Datagens (see [below for nested schema](#nestedatt--input_datagen--samples))
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1897,13 +1873,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1939,13 +1915,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `stream_name` (String) Kinesis Data Stream to read data from
 - `region` (String) Region where the Kinesis stream is located
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -1981,13 +1957,10 @@ Optional:
 <a id="nestedatt--input_criblmetrics"></a>
 ### Nested Schema for `input_criblmetrics`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2007,12 +1980,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2037,12 +2010,12 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2100,12 +2073,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2165,13 +2138,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 - `port` (Number) UDP port to receive SNMP traps on. Defaults to 162.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2195,13 +2168,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2241,13 +2214,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2268,13 +2241,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `queue_type` (String) The queue type used (or created)
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2310,12 +2283,12 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2351,13 +2324,10 @@ Optional:
 <a id="nestedatt--input_file"></a>
 ### Nested Schema for `input_file`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2396,13 +2366,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2432,13 +2402,10 @@ Optional:
 <a id="nestedatt--input_appscope"></a>
 ### Nested Schema for `input_appscope`
 
-Required:
-
-- `type` (String) Connector type identifier.
-
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2475,7 +2442,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--input_wef--subscriptions))
@@ -2483,6 +2449,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2516,12 +2483,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `log_names` (List of String) Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2548,12 +2515,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `predicate` (String) String to filter log entries, in NSPredicate format (e.g., subsystem == "com.apple.security" or process == "kernel"). See [Common Log Types and Predicates](https://docs.cribl.io/edge/sources-apple-unified-logs/#examples) for more information.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2572,13 +2539,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2601,13 +2568,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `path` (String) Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID.
 - `journals` (List of String) The full path of discovered journals are matched against this wildcard list.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2630,7 +2597,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `endpoint` (String) The Wiz GraphQL API endpoint. Example: https://api.us1.app.wiz.io/graphql
 - `auth_url` (String) The authentication URL to generate an OAuth token
 - `client_id` (String) The client ID of the Wiz application
@@ -2639,6 +2605,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2668,13 +2635,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `content_config` (Attributes List) Content Types (see [below for nested schema](#nestedatt--input_openai--content_config))
 - `text_secret` (String) Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2701,13 +2668,13 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2743,13 +2710,13 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 - `port` (Number) Port to listen on
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2775,12 +2742,12 @@ Optional:
 
 Required:
 
-- `type` (String)
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String)
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2838,12 +2805,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2901,7 +2868,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `instance` (String) ServiceNow instance base URL for Table API requests. Enter a literal URL (http or https and the instance host, for example a hostname ending in .service-now.com) or a Cribl expression that resolves to a URL.
 - `table_name` (String) ServiceNow table name to collect from.
 - `cron_schedule` (String) Cron schedule on which to run this job
@@ -2911,6 +2877,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2958,7 +2925,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `hec_api` (String) Absolute path on which to listen for the Zscaler HTTP Event Collector API requests. This input supports the /event endpoint.
@@ -2966,6 +2932,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3000,7 +2967,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
@@ -3008,6 +2974,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3043,7 +3010,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `hec_api` (String) Absolute path on which to listen for the Sysdig HTTP Event Collector API requests. This input supports the /event and /raw endpoints.
@@ -3051,6 +3017,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3084,7 +3051,6 @@ Optional:
 
 Required:
 
-- `type` (String) Source type identifier.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `port` (Number) Port to listen on
 - `hec_api` (String) Absolute path on which to listen for the Upwind HTTP Event Collector API requests. This input supports the /event endpoint.
@@ -3092,6 +3058,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Source type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3125,7 +3092,6 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `text_secret` (String) Select or create a stored text secret
 - `account_type` (String) Account type
 - `cron_schedule` (String) Cron schedule
@@ -3133,6 +3099,7 @@ Required:
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3172,12 +3139,12 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `text_secret` (String) Select or create a stored Anthropic API key
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -3211,13 +3178,13 @@ Optional:
 
 Required:
 
-- `type` (String) Connector type identifier.
 - `okta_domain` (String) Your Okta domain (example: your-org). Do not include .okta.com, https://, or trailing slashes.
 - `text_secret` (String) Select or create a stored text secret
 
 Optional:
 
 - `id` (String) Unique ID for this input
+- `type` (String) Connector type identifier.
 - `disabled` (Boolean) If true, the Source is disabled and will not collect data.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.

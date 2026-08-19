@@ -1083,9 +1083,9 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 		output["{{ .APIName }}"] = value
 	}
 {{- end }}
-{{- with directDiscriminatorValue $ . }}
-	if _, ok := output["type"]; !ok {
-		output["type"] = "{{ . }}"
+{{- with directDiscriminatorField . }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = "{{ index .Enum 0 }}"
 	}
 {{- end }}
 	return output, nil
@@ -1123,9 +1123,16 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 			return value
 		}
 	}
+	{{- range directDiscriminatorAPINames .OneOfVariants }}
+	if value, ok := input["{{ . }}"].(string); ok {
+		return value
+	}
+	{{- end }}
+	{{- if needsLegacyTypeDiscriminator .OneOfVariants }}
 	if value, ok := input["type"].(string); ok {
 		return value
 	}
+	{{- end }}
 {{- if eq .StructName "SearchDataset" }}
 	if provider, ok := input["provider"].(string); ok && provider == "lakehouse" {
 		return "cribl_search"
