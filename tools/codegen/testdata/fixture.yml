@@ -334,14 +334,18 @@ components:
             - $ref: "#/components/schemas/OutputElastic"
             - $ref: "#/components/schemas/OutputS3"
           discriminator:
-            propertyName: type
+            propertyName: kind
+            mapping:
+              azure: "#/components/schemas/OutputAzureBlob"
+              elastic: "#/components/schemas/OutputElastic"
+              s3: "#/components/schemas/OutputS3"
     OutputAzureBlob:
       type: object
-      required: [type]
+      required: [kind]
       properties:
-        type:
+        kind:
           type: string
-          const: azure_blob
+          const: azure
         accountKey:
           type: string
           x-terraform-sensitive: true
@@ -354,20 +358,18 @@ components:
           type: string
     OutputElastic:
       type: object
-      required: [type]
+      required: [kind]
       properties:
-        type:
+        kind:
           type: string
-          const: elastic
         url:
           type: string
     OutputS3:
       type: object
-      required: [type]
+      required: [kind]
       properties:
-        type:
+        kind:
           type: string
-          const: s3
         bucket:
           type: string
     KeyMetadataEntity:

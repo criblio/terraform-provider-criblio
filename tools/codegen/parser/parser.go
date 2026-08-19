@@ -665,7 +665,9 @@ func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node)
 		return nil, nil
 	}
 	discriminatorField := ""
-	if discriminator, ok := mappingValue(unionSchema, "discriminator"); ok {
+	var discriminator *yaml.Node
+	if node, ok := mappingValue(unionSchema, "discriminator"); ok {
+		discriminator = node
 		discriminatorField = scalarValue(discriminator, "propertyName")
 	}
 	var variants []OneOfVariantDef
@@ -690,6 +692,11 @@ func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node)
 		if exportName(schemaName) == exportName(parentModelName) {
 			modelName = exportName(schemaName) + "VariantModel"
 		}
+		discriminatorValue := discriminatorValue(variantFields, discriminatorField)
+		if discriminatorValue == "" && discriminator != nil {
+			discriminatorValue = discriminatorMappingValue(discriminator, schemaName)
+		}
+		setDiscriminatorFieldEnum(variantFields, discriminatorField, discriminatorValue)
 		variants = append(variants, OneOfVariantDef{
 			APIName:            schemaName,
 			TerraformName:      snake(tfName),
@@ -697,7 +704,7 @@ func parseOneOfVariants(parentModelName string, unionSchema, schemas *yaml.Node)
 			ModelName:          modelName,
 			SchemaName:         schemaName,
 			DiscriminatorField: discriminatorField,
-			DiscriminatorValue: discriminatorValue(variantFields),
+			DiscriminatorValue: discriminatorValue,
 			Fields:             variantFields,
 		})
 	}
@@ -1085,9 +1092,12 @@ func enumValues(property *yaml.Node) []string {
 	return values
 }
 
-func discriminatorValue(fields []FieldDef) string {
+func discriminatorValue(fields []FieldDef, discriminatorField string) string {
+	if discriminatorField == "" {
+		discriminatorField = "type"
+	}
 	for _, field := range fields {
-		if field.APIName == "type" && len(field.Enum) == 1 {
+		if field.APIName == discriminatorField && len(field.Enum) == 1 {
 			return field.Enum[0]
 		}
 		if field.APIName != "collector" {
@@ -1100,6 +1110,33 @@ func discriminatorValue(fields []FieldDef) string {
 		}
 	}
 	return ""
+}
+
+func discriminatorMappingValue(discriminator *yaml.Node, schemaName string) string {
+	mapping, ok := mappingValue(discriminator, "mapping")
+	if !ok || mapping.Kind != yaml.MappingNode {
+		return ""
+	}
+	for index := 0; index < len(mapping.Content); index += 2 {
+		ref := mapping.Content[index+1].Value
+		if refName := ref[strings.LastIndex(ref, "/")+1:]; refName == schemaName {
+			return mapping.Content[index].Value
+		}
+	}
+	return ""
+}
+
+func setDiscriminatorFieldEnum(fields []FieldDef, discriminatorField, value string) {
+	if discriminatorField == "" || value == "" {
+		return
+	}
+	for index := range fields {
+		if fields[index].APIName != discriminatorField || fields[index].Type != "string" {
+			continue
+		}
+		fields[index].Enum = []string{value}
+		return
+	}
 }
 
 func nestedModelPrefix(modelName, fieldName string) string {
