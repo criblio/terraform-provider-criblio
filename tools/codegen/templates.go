@@ -12,6 +12,9 @@ import (
 {{- if eq .StructName "Routes" }}
 	"sort"
 {{- end }}
+{{- if eq .StructName "Collector" }}
+	"strconv"
+{{- end }}
 	"strings"
 	"unicode"
 
@@ -1032,14 +1035,14 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 func normalizeCollectorUnionValues(raw map[string]any) {
 	if input, ok := raw["input"].(map[string]any); ok {
 		if value, ok := input["throttleRatePerSec"].(float64); ok {
-			input["throttleRatePerSec"] = fmt.Sprintf("%v", value)
+			input["throttleRatePerSec"] = strconv.FormatFloat(value, 'f', -1, 64)
 		}
 	}
 	if schedule, ok := raw["schedule"].(map[string]any); ok {
 		if run, ok := schedule["run"].(map[string]any); ok {
 			for _, field := range []string{"earliest", "latest"} {
 				if value, ok := run[field].(float64); ok {
-					run[field] = fmt.Sprintf("%v", value)
+					run[field] = strconv.FormatFloat(value, 'f', -1, 64)
 				}
 			}
 		}
@@ -1078,6 +1081,11 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
 		output["{{ .APIName }}"] = value
+	}
+{{- end }}
+{{- with directDiscriminatorValue $ . }}
+	if _, ok := output["type"]; !ok {
+		output["type"] = "{{ . }}"
 	}
 {{- end }}
 	return output, nil

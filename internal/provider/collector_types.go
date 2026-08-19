@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -3249,14 +3250,14 @@ func (m *CollectorModel) UnmarshalJSON(data []byte) error {
 func normalizeCollectorUnionValues(raw map[string]any) {
 	if input, ok := raw["input"].(map[string]any); ok {
 		if value, ok := input["throttleRatePerSec"].(float64); ok {
-			input["throttleRatePerSec"] = fmt.Sprintf("%v", value)
+			input["throttleRatePerSec"] = strconv.FormatFloat(value, 'f', -1, 64)
 		}
 	}
 	if schedule, ok := raw["schedule"].(map[string]any); ok {
 		if run, ok := schedule["run"].(map[string]any); ok {
 			for _, field := range []string{"earliest", "latest"} {
 				if value, ok := run[field].(float64); ok {
-					run[field] = fmt.Sprintf("%v", value)
+					run[field] = strconv.FormatFloat(value, 'f', -1, 64)
 				}
 			}
 		}

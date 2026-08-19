@@ -254,6 +254,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
 		"noDiscriminatorVariants":          noDiscriminatorVariants,
 		"discriminatorCaseValues":          discriminatorCaseValues,
+		"directDiscriminatorValue":         directDiscriminatorValue,
 		"variantAPINames":                  variantAPINames,
 		"variantRequiredAPINames":          variantRequiredAPINames,
 		"goStringSliceLiteral":             goStringSliceLiteral,
@@ -1354,6 +1355,18 @@ func discriminatorCaseValues(resource parser.ResourceDef, variant parser.OneOfVa
 		}
 	}
 	return values
+}
+
+func directDiscriminatorValue(resource parser.ResourceDef, variant parser.OneOfVariantDef) string {
+	if resource.StructName != "Destination" {
+		return ""
+	}
+	for _, field := range variant.Fields {
+		if field.APIName == "type" && len(field.Enum) == 1 {
+			return field.Enum[0]
+		}
+	}
+	return ""
 }
 
 func variantRequiredAPINames(variant parser.OneOfVariantDef) []string {

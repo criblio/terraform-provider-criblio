@@ -35,6 +35,26 @@ func TestDestinationMicrosoftFabricSASLUsesClientIDAPIKey(t *testing.T) {
 	}
 }
 
+func TestDestinationMarshalJSONInfersChronicleType(t *testing.T) {
+	payload, err := json.Marshal(DestinationModel{
+		ID: types.StringValue("secops_chronicle"),
+		OutputChronicle: &OutputChronicleModel{
+			Type: types.StringNull(),
+		},
+	})
+	if err != nil {
+		t.Fatalf("marshal Chronicle destination: %v", err)
+	}
+
+	var output map[string]any
+	if err := json.Unmarshal(payload, &output); err != nil {
+		t.Fatalf("unmarshal Chronicle destination payload: %v", err)
+	}
+	if got := output["type"]; got != "chronicle" {
+		t.Fatalf("type = %#v, want chronicle; payload=%s", got, payload)
+	}
+}
+
 func TestDestinationMicrosoftFabricSASLReadsClientIDAPIKey(t *testing.T) {
 	value, err := DestinationAPIValueToTerraformValue(
 		map[string]any{

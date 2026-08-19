@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -67,7 +68,7 @@ func upgradeCollectorStateJSON(raw []byte) ([]byte, error) {
 		}
 		for _, field := range []string{"earliest", "latest"} {
 			if number, ok := run[field].(float64); ok {
-				run[field] = fmt.Sprintf("%v", number)
+				run[field] = strconv.FormatFloat(number, 'f', -1, 64)
 			}
 		}
 	}

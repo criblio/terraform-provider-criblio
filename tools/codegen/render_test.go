@@ -293,6 +293,23 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationTypes, "OutputAzureBlob *OutputAzureBlobModel")
 	assertContains(t, destinationTypes, "OutputElastic *OutputElasticModel")
 	assertContains(t, destinationTypes, "OutputS3 *OutputS3Model")
+	discriminatorTypes := renderTemplate(t, "types", parser.ResourceDef{
+		StructName: "Destination",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:        "OutputChronicle",
+			ModelName:     "OutputChronicleModel",
+			TerraformName: "output_chronicle",
+			Fields: []parser.FieldDef{{
+				APIName:       "type",
+				TerraformName: "type",
+				GoName:        "Type",
+				Type:          "string",
+				Enum:          []string{"chronicle"},
+			}},
+		}},
+	})
+	assertContains(t, discriminatorTypes, `if _, ok := output["type"]; !ok {`)
+	assertContains(t, discriminatorTypes, `output["type"] = "chronicle"`)
 
 	destinationResource := renderTemplate(t, "resource", destination)
 	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil")
