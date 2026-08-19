@@ -19287,6 +19287,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("collection"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -19546,6 +19549,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kafka"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -20335,6 +20341,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("msk"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21071,6 +21080,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21533,6 +21545,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -21944,6 +21959,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_search"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -22432,6 +22450,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("splunk_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -22964,6 +22985,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("azure_blob"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -23327,6 +23351,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("elastic"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -23848,6 +23875,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("confluent_cloud"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -24638,6 +24668,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("grafana"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25119,6 +25152,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("loki"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25542,6 +25578,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus_rw"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -25964,6 +26003,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("prometheus"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -26486,6 +26528,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("edge_prometheus"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27085,6 +27130,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_mgmt"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27503,6 +27551,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_service"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -27906,6 +27957,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("office365_msg_trace"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -28376,6 +28430,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("microsoft_graph"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -28854,6 +28911,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("eventhub"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -29378,6 +29438,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("eventhub_amqp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -29871,6 +29934,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("exec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30138,6 +30204,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("firehose"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30523,6 +30592,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("google_pubsub"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -30818,6 +30890,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31031,6 +31106,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_tcp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31402,6 +31480,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -31809,6 +31890,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cribl_lake_http"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -32316,6 +32400,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("tcpjson"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -32682,6 +32769,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("system_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33249,6 +33339,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("system_state"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33688,6 +33781,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -33989,6 +34085,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -34308,6 +34407,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kube_events"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -34539,6 +34641,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("windows_metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35029,6 +35134,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("crowdstrike"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35538,6 +35646,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("datadog_agent"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -35991,6 +36102,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("datagen"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -36228,6 +36342,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("http_raw"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -36693,6 +36810,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("kinesis"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37049,6 +37169,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("criblmetrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37270,6 +37393,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("metrics"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -37603,6 +37729,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38131,6 +38260,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("s3_inventory"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38672,6 +38804,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("snmp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -38996,6 +39131,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("open_telemetry"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -39530,6 +39668,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("model_driven_telemetry"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -39842,6 +39983,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sqs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40188,6 +40332,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("syslog"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40616,6 +40763,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("file"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -40968,6 +41118,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("tcp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -41376,6 +41529,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("appscope"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -41860,6 +42016,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wef"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42406,6 +42565,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("win_event_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42690,6 +42852,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("apple_unified_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -42914,6 +43079,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("raw_udp"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43174,6 +43342,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("journal_files"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43445,6 +43616,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wiz"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -43925,6 +44099,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("openai"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -44448,6 +44625,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("wiz_webhook"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -44913,6 +45093,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("netflow"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -45190,6 +45373,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Required: false,
 						Optional: true,
 						Computed: true,
+						Validators: []validator.String{
+							stringvalidator.OneOf("security_lake"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -45717,6 +45903,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("bedrock_s3"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -46244,6 +46433,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("servicenow_table"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -46801,6 +46993,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("zscaler_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -47300,6 +47495,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("cloudflare_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -47810,6 +48008,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("sysdig_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -48303,6 +48504,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Source type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("upwind_hec"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -48796,6 +49000,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("openai_compliance_logs"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -49245,6 +49452,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("anthropic_compliance"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,
@@ -50016,6 +50226,9 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:    true,
 						Computed:    true,
 						Description: `Connector type identifier.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("okta"),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    false,

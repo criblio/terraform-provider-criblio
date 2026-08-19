@@ -423,6 +423,7 @@ func makeDirectDiscriminatorsOptionalComputed(variants []OneOfVariantDef) {
 			field.Optional = true
 			field.Computed = true
 			field.OptionalComputed = true
+			field.ValidateEnum = true
 		}
 	}
 }
