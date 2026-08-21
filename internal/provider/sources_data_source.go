@@ -10328,7 +10328,7 @@ func (d *SourcesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 								},
 								"sampling_rules": schema.ListNestedAttribute{
 									Computed:    true,
-									Description: `Per-service sampling rate hints. Each row maps to a "service:<s>,env:<e>" key in the rate_by_service response sent to tracers.`,
+									Description: `Per-service sampling rate hints. Each row maps to a "service:SERVICE,env:ENVIRONMENT" key in the rate_by_service response sent to tracers.`,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"service": schema.StringAttribute{
