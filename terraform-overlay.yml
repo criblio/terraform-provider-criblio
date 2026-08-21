@@ -16,6 +16,11 @@ schema_imports:
       - SmtpTarget
 
 actions:
+  # Avoid raw <s> and <e> placeholders, which Markdown renders as unclosed HTML
+  # tags and causes subsequent Registry documentation to appear struck through.
+  - target: "$.components.schemas.InputDatadogAgent.properties.samplingRules"
+    update:
+      description: 'Per-service sampling rate hints. Each row maps to a "service:SERVICE,env:ENVIRONMENT" key in the rate_by_service response sent to tracers.'
   # Go's RE2 engine does not support the negative lookahead used by these
   # OpenAPI array-element patterns. Keep the upstream constraint without
   # generating a weaker Terraform validator.

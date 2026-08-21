@@ -1744,7 +1744,7 @@ Optional:
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `extract_metrics` (Boolean) Extract each incoming metric to multiple events, one per data point. Recommended when sending metrics to a statsd-type output. If sending metrics to DatadogHQ or any destination that accepts arbitrary JSON, leave disabled.
 - `sampling_rate` (Number) The rate_by_service hint sent to connected tracers as the catch-all sampling rate. Applies to any service/environment not explicitly listed in Per-Service Sampling Rules. 1.0 = keep all traces (default); 0.0 = suggest dropping all.
-- `sampling_rules` (Attributes List) Per-service sampling rate hints. Each row maps to a "service:<s>,env:<e>" key in the rate_by_service response sent to tracers. (see [below for nested schema](#nestedatt--input_datadog_agent--sampling_rules))
+- `sampling_rules` (Attributes List) Per-service sampling rate hints. Each row maps to a "service:SERVICE,env:ENVIRONMENT" key in the rate_by_service response sent to tracers. (see [below for nested schema](#nestedatt--input_datadog_agent--sampling_rules))
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_datadog_agent--metadata))
 - `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--proxy_mode))
 - `description` (String) Optional description for this configuration.
