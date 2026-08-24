@@ -287,6 +287,9 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 						Optional:    true,
 						Computed:    true,
 						Description: `Filesystem or cloud path to the certificate PEM.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    true,
@@ -299,12 +302,18 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 						Optional:    true,
 						Computed:    true,
 						Description: `Minimum TLS protocol version.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"priv_key_path": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
 						Description: `Filesystem or cloud path to the private key PEM.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 				},
 			},

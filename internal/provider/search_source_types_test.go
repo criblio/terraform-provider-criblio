@@ -60,5 +60,8 @@ func TestSearchSourceTLSFieldsAcceptAPIDefaults(t *testing.T) {
 		if !attribute.Optional || !attribute.Computed {
 			t.Fatalf("%s Optional=%t Computed=%t, want both true", name, attribute.Optional, attribute.Computed)
 		}
+		if len(attribute.PlanModifiers) != 1 {
+			t.Fatalf("%s has %d plan modifiers, want UseStateForUnknown", name, len(attribute.PlanModifiers))
+		}
 	}
 }

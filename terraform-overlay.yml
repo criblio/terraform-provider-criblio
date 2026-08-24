@@ -3358,12 +3358,15 @@ actions:
   - target: "$.components.schemas.TLSConfig.properties.certPath"
     update:
       x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
   - target: "$.components.schemas.TLSConfig.properties.minVersion"
     update:
       x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
   - target: "$.components.schemas.TLSConfig.properties.privKeyPath"
     update:
       x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
   - target: "$.components.schemas.LocalSearchSource.properties.port"
     update:
       x-terraform-optional-computed: true
