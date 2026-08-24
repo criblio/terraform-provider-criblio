@@ -148,6 +148,7 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 								Required:    false,
 								Optional:    true,
 								Computed:    false,
+								Sensitive:   true,
 								Description: `Passphrase to decrypt the TLS private key, if encrypted.`,
 							},
 							"priv_key_path": schema.StringAttribute{

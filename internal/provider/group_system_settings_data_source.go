@@ -121,6 +121,7 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 										},
 										"passphrase": schema.StringAttribute{
 											Computed:    true,
+											Sensitive:   true,
 											Description: `Passphrase to decrypt the TLS private key, if encrypted.`,
 										},
 										"priv_key_path": schema.StringAttribute{

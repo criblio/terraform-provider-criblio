@@ -125,7 +125,7 @@ Optional:
 - `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
 - `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
 - `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
-- `passphrase` (String) Passphrase to decrypt the TLS private key, if encrypted.
+- `passphrase` (String, Sensitive) Passphrase to decrypt the TLS private key, if encrypted.
 - `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
 
 <a id="nestedatt--apps"></a>
