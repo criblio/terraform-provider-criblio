@@ -29,7 +29,7 @@ resource "criblio_parser_lib_entry" "my_parser_lib_entry" {
 
 - `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the Parser.
-- `type` (String) Parser or formatter type to use
+- `type` (String) Parser or formatter type to use.
 
 ### Optional
 

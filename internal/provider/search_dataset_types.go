@@ -2942,6 +2942,7 @@ type DatasetAmazonSecurityLakeModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -2958,6 +2959,7 @@ func DatasetAmazonSecurityLakeModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetAmazonSecurityLakeMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -3016,6 +3018,13 @@ func (m DatasetAmazonSecurityLakeModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -3122,6 +3131,15 @@ func (m *DatasetAmazonSecurityLakeModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetAmazonSecurityLakeMetadataAttrTypes()})
 		if err != nil {
@@ -3180,6 +3198,7 @@ type DatasetAPIAwsModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -3198,6 +3217,7 @@ func DatasetAPIAwsModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiAwsMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -3270,6 +3290,13 @@ func (m DatasetAPIAwsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -3394,6 +3421,15 @@ func (m *DatasetAPIAwsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiAwsMetadataAttrTypes()})
 		if err != nil {
@@ -3452,6 +3488,7 @@ type DatasetAPIAzureModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -3470,6 +3507,7 @@ func DatasetAPIAzureModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiAzureMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -3542,6 +3580,13 @@ func (m DatasetAPIAzureModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -3666,6 +3711,15 @@ func (m *DatasetAPIAzureModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiAzureMetadataAttrTypes()})
 		if err != nil {
@@ -3728,6 +3782,7 @@ type DatasetAPIAzureDataExplorerModel struct {
 	ExcludeInternalFields  types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                 types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                     types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy              types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata               types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID             types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion          types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -3750,6 +3805,7 @@ func DatasetAPIAzureDataExplorerModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields":  types.BoolType,
 		"filter":                   types.StringType,
 		"id":                       types.StringType,
+		"managed_by":               types.StringType,
 		"metadata":                 types.ObjectType{AttrTypes: DatasetApiAzureDataExplorerMetadataAttrTypes()},
 		"provider_id":              types.StringType,
 		"search_version":           types.StringType,
@@ -3850,6 +3906,13 @@ func (m DatasetAPIAzureDataExplorerModel) terraformPayload() (map[string]any, er
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -4010,6 +4073,15 @@ func (m *DatasetAPIAzureDataExplorerModel) unmarshalPayload(input map[string]any
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiAzureDataExplorerMetadataAttrTypes()})
 		if err != nil {
@@ -4068,6 +4140,7 @@ type DatasetAPIElasticsearchModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -4086,6 +4159,7 @@ func DatasetAPIElasticsearchModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiElasticsearchMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -4158,6 +4232,13 @@ func (m DatasetAPIElasticsearchModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -4282,6 +4363,15 @@ func (m *DatasetAPIElasticsearchModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiElasticsearchMetadataAttrTypes()})
 		if err != nil {
@@ -4339,6 +4429,7 @@ type DatasetAPIGcpModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -4356,6 +4447,7 @@ func DatasetAPIGcpModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiGcpMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -4421,6 +4513,13 @@ func (m DatasetAPIGcpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -4536,6 +4635,15 @@ func (m *DatasetAPIGcpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiGcpMetadataAttrTypes()})
 		if err != nil {
@@ -4593,6 +4701,7 @@ type DatasetAPIGoogleWorkspaceModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -4610,6 +4719,7 @@ func DatasetAPIGoogleWorkspaceModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiGoogleWorkspaceMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -4675,6 +4785,13 @@ func (m DatasetAPIGoogleWorkspaceModel) terraformPayload() (map[string]any, erro
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -4790,6 +4907,15 @@ func (m *DatasetAPIGoogleWorkspaceModel) unmarshalPayload(input map[string]any) 
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiGoogleWorkspaceMetadataAttrTypes()})
 		if err != nil {
@@ -4847,6 +4973,7 @@ type DatasetAPIHttpModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -4864,6 +4991,7 @@ func DatasetAPIHttpModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiHttpMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -4929,6 +5057,13 @@ func (m DatasetAPIHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -5044,6 +5179,15 @@ func (m *DatasetAPIHttpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiHttpMetadataAttrTypes()})
 		if err != nil {
@@ -5103,6 +5247,7 @@ type DatasetAPILogAnalyticsModel struct {
 	ExcludeInternalFields  types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                 types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                     types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy              types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata               types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID             types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion          types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -5122,6 +5267,7 @@ func DatasetAPILogAnalyticsModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields":  types.BoolType,
 		"filter":                   types.StringType,
 		"id":                       types.StringType,
+		"managed_by":               types.StringType,
 		"metadata":                 types.ObjectType{AttrTypes: DatasetApiLogAnalyticsMetadataAttrTypes()},
 		"provider_id":              types.StringType,
 		"search_version":           types.StringType,
@@ -5201,6 +5347,13 @@ func (m DatasetAPILogAnalyticsModel) terraformPayload() (map[string]any, error) 
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -5334,6 +5487,15 @@ func (m *DatasetAPILogAnalyticsModel) unmarshalPayload(input map[string]any) err
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiLogAnalyticsMetadataAttrTypes()})
 		if err != nil {
@@ -5391,6 +5553,7 @@ type DatasetAPIMsgraphModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -5408,6 +5571,7 @@ func DatasetAPIMsgraphModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiMsgraphMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -5473,6 +5637,13 @@ func (m DatasetAPIMsgraphModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -5588,6 +5759,15 @@ func (m *DatasetAPIMsgraphModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiMsgraphMetadataAttrTypes()})
 		if err != nil {
@@ -5645,6 +5825,7 @@ type DatasetAPIOktaModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -5662,6 +5843,7 @@ func DatasetAPIOktaModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiOktaMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -5727,6 +5909,13 @@ func (m DatasetAPIOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -5842,6 +6031,15 @@ func (m *DatasetAPIOktaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiOktaMetadataAttrTypes()})
 		if err != nil {
@@ -5900,6 +6098,7 @@ type DatasetAPIOpensearchModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -5918,6 +6117,7 @@ func DatasetAPIOpensearchModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiOpensearchMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -5990,6 +6190,13 @@ func (m DatasetAPIOpensearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -6114,6 +6321,15 @@ func (m *DatasetAPIOpensearchModel) unmarshalPayload(input map[string]any) error
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiOpensearchMetadataAttrTypes()})
 		if err != nil {
@@ -6171,6 +6387,7 @@ type DatasetAPITailscaleModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -6188,6 +6405,7 @@ func DatasetAPITailscaleModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiTailscaleMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -6253,6 +6471,13 @@ func (m DatasetAPITailscaleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -6368,6 +6593,15 @@ func (m *DatasetAPITailscaleModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiTailscaleMetadataAttrTypes()})
 		if err != nil {
@@ -6425,6 +6659,7 @@ type DatasetAPIZoomModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -6442,6 +6677,7 @@ func DatasetAPIZoomModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetApiZoomMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -6507,6 +6743,13 @@ func (m DatasetAPIZoomModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -6622,6 +6865,15 @@ func (m *DatasetAPIZoomModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetApiZoomMetadataAttrTypes()})
 		if err != nil {
@@ -6678,6 +6930,7 @@ type DatasetAzureBlobModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -6694,6 +6947,7 @@ func DatasetAzureBlobModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetAzureBlobMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -6752,6 +7006,13 @@ func (m DatasetAzureBlobModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -6858,6 +7119,15 @@ func (m *DatasetAzureBlobModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetAzureBlobMetadataAttrTypes()})
 		if err != nil {
@@ -6917,6 +7187,7 @@ type DatasetClickhouseModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -6936,6 +7207,7 @@ func DatasetClickhouseModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetClickhouseMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -7015,6 +7287,13 @@ func (m DatasetClickhouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -7148,6 +7427,15 @@ func (m *DatasetClickhouseModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetClickhouseMetadataAttrTypes()})
 		if err != nil {
@@ -7207,6 +7495,7 @@ type DatasetCriblEdgeModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -7226,6 +7515,7 @@ func DatasetCriblEdgeModelAttrTypes() map[string]attr.Type {
 		"description":             types.StringType,
 		"exclude_internal_fields": types.BoolType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetCriblEdgeMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -7305,6 +7595,13 @@ func (m DatasetCriblEdgeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -7438,6 +7735,15 @@ func (m *DatasetCriblEdgeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblEdgeMetadataAttrTypes()})
 		if err != nil {
@@ -7494,6 +7800,7 @@ type DatasetCriblLakeModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -7510,6 +7817,7 @@ func DatasetCriblLakeModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLakeMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -7568,6 +7876,13 @@ func (m DatasetCriblLakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -7674,6 +7989,15 @@ func (m *DatasetCriblLakeModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblLakeMetadataAttrTypes()})
 		if err != nil {
@@ -7732,6 +8056,7 @@ type DatasetCriblLeaderModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -7750,6 +8075,7 @@ func DatasetCriblLeaderModelAttrTypes() map[string]attr.Type {
 		"description":             types.StringType,
 		"exclude_internal_fields": types.BoolType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLeaderMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -7822,6 +8148,13 @@ func (m DatasetCriblLeaderModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -7946,6 +8279,15 @@ func (m *DatasetCriblLeaderModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblLeaderMetadataAttrTypes()})
 		if err != nil {
@@ -8002,6 +8344,7 @@ type DatasetCriblLocalModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -8018,6 +8361,7 @@ func DatasetCriblLocalModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLocalMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -8076,6 +8420,13 @@ func (m DatasetCriblLocalModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -8182,6 +8533,15 @@ func (m *DatasetCriblLocalModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblLocalMetadataAttrTypes()})
 		if err != nil {
@@ -8239,6 +8599,7 @@ type DatasetCriblMetaModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -8256,6 +8617,7 @@ func DatasetCriblMetaModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetCriblMetaMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -8321,6 +8683,13 @@ func (m DatasetCriblMetaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -8436,6 +8805,15 @@ func (m *DatasetCriblMetaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblMetaMetadataAttrTypes()})
 		if err != nil {
@@ -8492,6 +8870,7 @@ type DatasetCriblSearchModel struct {
 	ExcludeInternalFields     types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                    types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                        types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy                 types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata                  types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID                types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion             types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -8521,6 +8900,7 @@ func DatasetCriblSearchModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields":      types.BoolType,
 		"filter":                       types.StringType,
 		"id":                           types.StringType,
+		"managed_by":                   types.StringType,
 		"metadata":                     types.ObjectType{AttrTypes: DatasetCriblSearchMetadataAttrTypes()},
 		"provider_id":                  types.StringType,
 		"search_version":               types.StringType,
@@ -8592,6 +8972,13 @@ func (m DatasetCriblSearchModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -8789,6 +9176,15 @@ func (m *DatasetCriblSearchModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetCriblSearchMetadataAttrTypes()})
 		if err != nil {
@@ -8968,6 +9364,7 @@ type DatasetGcsModel struct {
 	Description           types.String `tfsdk:"description" json:"description,omitempty"`
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -8990,6 +9387,7 @@ func DatasetGcsModelAttrTypes() map[string]attr.Type {
 		"description":             types.StringType,
 		"exclude_internal_fields": types.BoolType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetGcsMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -9090,6 +9488,13 @@ func (m DatasetGcsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -9250,6 +9655,15 @@ func (m *DatasetGcsModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetGcsMetadataAttrTypes()})
 		if err != nil {
@@ -9309,6 +9723,7 @@ type DatasetPrometheusModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -9328,6 +9743,7 @@ func DatasetPrometheusModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetPrometheusMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -9407,6 +9823,13 @@ func (m DatasetPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -9540,6 +9963,15 @@ func (m *DatasetPrometheusModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetPrometheusMetadataAttrTypes()})
 		if err != nil {
@@ -9596,6 +10028,7 @@ type DatasetS3Model struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -9620,6 +10053,7 @@ func DatasetS3ModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetS3MetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -9686,6 +10120,13 @@ func (m DatasetS3Model) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -9848,6 +10289,15 @@ func (m *DatasetS3Model) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.ID = types.StringNull()
 	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetS3MetadataAttrTypes()})
 		if err != nil {
@@ -9982,6 +10432,7 @@ type DatasetSnowflakeModel struct {
 	ExcludeInternalFields types.Bool   `tfsdk:"exclude_internal_fields" json:"excludeInternalFields,omitempty"`
 	Filter                types.String `tfsdk:"filter" json:"filter,omitempty"`
 	ID                    types.String `tfsdk:"id" json:"id,omitempty"`
+	ManagedBy             types.String `tfsdk:"managed_by" json:"managedBy,omitempty"`
 	Metadata              types.Object `tfsdk:"metadata" json:"metadata,omitempty"`
 	ProviderID            types.String `tfsdk:"provider_id" json:"provider,omitempty"`
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
@@ -10004,6 +10455,7 @@ func DatasetSnowflakeModelAttrTypes() map[string]attr.Type {
 		"exclude_internal_fields": types.BoolType,
 		"filter":                  types.StringType,
 		"id":                      types.StringType,
+		"managed_by":              types.StringType,
 		"metadata":                types.ObjectType{AttrTypes: DatasetSnowflakeMetadataAttrTypes()},
 		"provider_id":             types.StringType,
 		"search_version":          types.StringType,
@@ -10104,6 +10556,13 @@ func (m DatasetSnowflakeModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
+	}
+	if !m.ManagedBy.IsNull() && !m.ManagedBy.IsUnknown() {
+		value, err := SearchDatasetTerraformValueToJSON(m.ManagedBy)
+		if err != nil {
+			return nil, fmt.Errorf("convert managed_by to API value: %v", err)
+		}
+		output["managedBy"] = value
 	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := SearchDatasetTerraformValueToJSON(m.Metadata)
@@ -10263,6 +10722,15 @@ func (m *DatasetSnowflakeModel) unmarshalPayload(input map[string]any) error {
 		m.ID = value.(types.String)
 	} else {
 		m.ID = types.StringNull()
+	}
+	if item, ok := input["managedBy"]; ok {
+		value, err := SearchDatasetAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert managedBy from API value: %v", err)
+		}
+		m.ManagedBy = value.(types.String)
+	} else {
+		m.ManagedBy = types.StringNull()
 	}
 	if item, ok := input["metadata"]; ok {
 		value, err := SearchDatasetAPIValueToTerraformValue(item, types.ObjectType{AttrTypes: DatasetSnowflakeMetadataAttrTypes()})

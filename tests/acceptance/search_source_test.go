@@ -26,6 +26,11 @@ func TestSearchSource(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "type", "cribl_http"),
 						resource.TestCheckResourceAttr(resourceName, "description", "test search source"),
 						resource.TestCheckResourceAttr(resourceName, "disabled", "false"),
+						resource.TestCheckResourceAttr(resourceName, "auth_tokens.0.enabled", "true"),
+						resource.TestCheckResourceAttr(resourceName, "auth_tokens.0.token", "test_search_source_auth_token"),
+						resource.TestCheckResourceAttr(resourceName, "tls.cert_path", "$CRIBL_CLOUD_CRT"),
+						resource.TestCheckResourceAttr(resourceName, "tls.min_version", "TLSv1.2"),
+						resource.TestCheckResourceAttr(resourceName, "tls.priv_key_path", "$CRIBL_CLOUD_KEY"),
 					),
 				},
 				{
@@ -50,7 +55,15 @@ func TestSearchSource(t *testing.T) {
 }
 
 func searchSourceConfig(description string, port int) string {
-	return `resource "criblio_search_source" "my_searchsource" {
+	return `resource "criblio_secret" "search_source_token" {
+  description = "Search source acceptance-test token"
+  group_id    = "default_search"
+  id          = "test_search_source_auth_token"
+  secret_type = "text"
+  value       = "test-search-source-token-value"
+}
+
+resource "criblio_search_source" "my_searchsource" {
   cribl_api   = "/cribl/_bulk"
   description = "` + description + `"
   disabled    = false
@@ -59,8 +72,16 @@ func searchSourceConfig(description string, port int) string {
   port        = ` + fmt.Sprint(port) + `
   type        = "cribl_http"
 
+  auth_tokens = [
+    {
+      description = "Search source acceptance-test token"
+      enabled     = true
+      token       = criblio_secret.search_source_token.id
+    }
+  ]
+
   tls = {
-    disabled = true
+    disabled = false
   }
 }
 `

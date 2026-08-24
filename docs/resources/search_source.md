@@ -42,7 +42,7 @@ resource "criblio_search_source" "my_search_source" {
 - `description` (String) Optional description shown in configuration UIs.
 - `disabled` (Boolean) When true, the source does not accept new connections.
 - `elastic_api` (String) Absolute path for Elasticsearch bulk API requests. Used when type is elastic.
-- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--metadata))
+- `metadata` (Attributes List) Fields to add to events from the Source. Can be a static value or a JavaScript expression. Useful for enriching events with additional context, such as environment or custom identifiers. (see [below for nested schema](#nestedatt--metadata))
 - `port` (Integer) TCP port when the source type uses a single port field.
 - `prometheus_api` (String) Absolute path for Prometheus remote write requests. Used when type is prometheus_rw.
 - `splunk_hec_acks` (Boolean) When true, enable Splunk HEC acknowledgements. Used when type is splunk_hec.
@@ -57,7 +57,7 @@ resource "criblio_search_source" "my_search_source" {
 
 Required:
 
-- `token` (String) Secret token string clients must present.
+- `token` (String, Sensitive) Secret token clients must present.
 
 Optional:
 
@@ -69,8 +69,8 @@ Optional:
 
 Required:
 
-- `name` (String)
-- `value` (String)
+- `name` (String) Field name to stamp onto the emitted event.
+- `value` (String) Value for the field. Can be a static string or a JavaScript expression.
 
 <a id="nestedatt--subscriptions"></a>
 ### Nested Schema for `subscriptions`

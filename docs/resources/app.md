@@ -38,6 +38,7 @@ resource "criblio_app" "my_app" {
 - `min_log_stream_version` (String) Minimum Cribl Stream version required by this app.
 - `source` (String) The source of the app: a URL, uploaded filename, or git+ URL. If omitted, the provider generates and uploads a minimal App scaffold. Apps are supported only in Cribl.Cloud.
 - `spec` (String) Schema spec version for the app.
+- `tags` (Attributes) (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Semantic version of the app.
 
 <a id="nestedatt--cribl"></a>
@@ -48,6 +49,13 @@ Optional:
 - `type` (String) Cribl package type. Always "app" for apps.
 - `create_app_script_version` (String) Version of the create-app scaffold that generated this app.
 - `hidden` (Boolean) When <code>true</code>, the app is installed but hidden from the Apps list UI.
+
+<a id="nestedatt--tags"></a>
+### Nested Schema for `tags`
+
+Optional:
+
+- `product` (List of String) Cribl products supported by the app.
 
 ## Import
 

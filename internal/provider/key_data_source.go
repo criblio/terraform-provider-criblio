@@ -37,23 +37,23 @@ func (d *KeyDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 		Attributes: map[string]schema.Attribute{
 			"algorithm": schema.StringAttribute{
 				Computed:    true,
-				Description: `Encryption algorithm`,
+				Description: `Encryption algorithm used by the encryption key.`,
 			},
 			"created": schema.Float64Attribute{
 				Computed:    true,
-				Description: `Creation time`,
+				Description: `Timestamp (in Unix time) when the encryption key was created.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
-				Description: `Description`,
+				Description: `Brief description of the encryption key.`,
 			},
 			"expires": schema.Float64Attribute{
 				Computed:    true,
-				Description: `Expiration time`,
+				Description: `Timestamp (in Unix time) when the encryption key expires.`,
 			},
 			"group": schema.StringAttribute{
 				Computed:    true,
-				Description: `Name of the Worker Group/Fleet that created this key`,
+				Description: `Name of the Worker Group or Fleet that created this encryption key.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -61,11 +61,11 @@ func (d *KeyDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Key ID`,
+				Description: `Unique identifier for the encryption key.`,
 			},
 			"iv_size": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Length of the initialization vector, in bytes`,
+				Description: `Length of the initialization vector, in bytes.`,
 			},
 			"key_id": schema.StringAttribute{
 				Computed:    true,
@@ -73,11 +73,11 @@ func (d *KeyDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 			},
 			"keyclass": schema.Float64Attribute{
 				Computed:    true,
-				Description: `Key class`,
+				Description: `Numeric class of the encryption key used for key selection and rotation.`,
 			},
 			"kms": schema.StringAttribute{
 				Computed:    true,
-				Description: `KMS for this key`,
+				Description: `Key management service that stores or provides the encryption key.`,
 			},
 			"use_iv": schema.BoolAttribute{
 				Computed:    true,

@@ -49,31 +49,31 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `Encryption algorithm`,
+				Description: `Encryption algorithm used by the encryption key.`,
 			},
 			"created": schema.Float64Attribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Creation time`,
+				Description: `Timestamp (in Unix time) when the encryption key was created.`,
 			},
 			"description": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Description`,
+				Description: `Brief description of the encryption key.`,
 			},
 			"expires": schema.Float64Attribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Expiration time`,
+				Description: `Timestamp (in Unix time) when the encryption key expires.`,
 			},
 			"group": schema.StringAttribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
-				Description: `Name of the Worker Group/Fleet that created this key`,
+				Description: `Name of the Worker Group or Fleet that created this encryption key.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -88,7 +88,7 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Key ID`,
+				Description: `Unique identifier for the encryption key.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
@@ -98,7 +98,7 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `Length of the initialization vector, in bytes`,
+				Description: `Length of the initialization vector, in bytes.`,
 			},
 			"key_id": schema.StringAttribute{
 				Required:    false,
@@ -110,7 +110,7 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `Key class`,
+				Description: `Numeric class of the encryption key used for key selection and rotation.`,
 				Validators: []validator.Float64{
 					float64validator.AtLeast(0),
 				},
@@ -119,7 +119,7 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Description: `KMS for this key`,
+				Description: `Key management service that stores or provides the encryption key.`,
 			},
 			"use_iv": schema.BoolAttribute{
 				Required:    false,

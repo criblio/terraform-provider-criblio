@@ -88,6 +88,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -107,6 +108,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_aws_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -126,6 +128,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_azure_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -142,13 +145,14 @@ Optional:
 - `location` (String) Azure region code for the cluster.
 - `table` (String) Table name.
 - `timestamp_field` (String) Column holding event time.
-- `timestamp_field_contents` (String)
+- `timestamp_field_contents` (String) Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -168,6 +172,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_elastic_search_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -186,6 +191,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_gcp_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -204,6 +210,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_google_workspace_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -222,6 +229,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--apihttp_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -235,13 +243,14 @@ Optional:
 
 - `table` (String) Table name or KQL query to use as the data source.
 - `timestamp_field` (String) Column holding event time.
-- `timestamp_field_contents` (String)
+- `timestamp_field_contents` (String) Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.
 - `breaker_rulesets` (List of String) Event breaker rulesets that are applied when reading events from the Dataset.
 - `cache_connection_info` (Attributes) Lakehouse cache connection metadata. Present when the Dataset uses an accelerated Lakehouse cache. (see [below for nested schema](#nestedatt--dataset_api_log_analytics--cache_connection_info))
 - `description` (String) Brief description of the Dataset.
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--dataset_api_log_analytics--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -260,6 +269,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -278,6 +288,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_okta_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -297,6 +308,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_open_search_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -315,6 +327,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_tailscale_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -333,6 +346,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--api_zoom_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -350,6 +364,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--azure_blob_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -370,6 +385,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--click_house_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -390,6 +406,7 @@ Optional:
 - `description` (String) Brief description of the Dataset.
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--edge_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -407,6 +424,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--cribl_lake_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -426,6 +444,7 @@ Optional:
 - `description` (String) Brief description of the Dataset.
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -443,6 +462,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--cribl_local_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -461,6 +481,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--meta_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -478,6 +499,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--cribl_search_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -514,6 +536,7 @@ Optional:
 - `description` (String) Brief description of the Dataset.
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--gcs_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -534,6 +557,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--prometheus_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -551,6 +575,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--s3_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.
@@ -582,6 +607,7 @@ Optional:
 - `exclude_internal_fields` (Boolean) When true, internal fields such as are omitted from results, timeline generation is skipped, and time-picker filtering is ignored.
 - `filter` (String) Filter expression that is evaluated against each object path to determine inclusion.
 - `id` (String) Unique identifier for the Dataset.
+- `managed_by` (String) Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.
 - `metadata` (Attributes) Dataset acceleration and metadata collection configuration. (see [below for nested schema](#nestedatt--snowflake_dataset--metadata))
 - `provider_id` (String) Identifier for the Dataset Provider that the Dataset uses.
 - `search_version` (String) Search execution version for the Dataset.

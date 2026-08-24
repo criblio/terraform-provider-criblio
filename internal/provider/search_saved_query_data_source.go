@@ -44,7 +44,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						Description: `If <code>true</code>, apply color thresholds to the chart values.`,
 					},
 					"axis": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Axis field mappings for X and Y axes.`,
 						Attributes: map[string]schema.Attribute{
 							"x_axis": schema.StringAttribute{
 								Computed:    true,
@@ -75,7 +76,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						Description: `If <code>true</code>, reverse the color palette order.`,
 					},
 					"color_thresholds": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Color threshold configuration for conditional coloring.`,
 						Attributes: map[string]schema.Attribute{
 							"thresholds": schema.ListNestedAttribute{
 								Computed:    true,
@@ -96,7 +98,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						},
 					},
 					"custom_data": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Custom data transformation and display options.`,
 						Attributes: map[string]schema.Attribute{
 							"connect_nulls": schema.StringAttribute{
 								Computed:    true,
@@ -170,7 +173,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						Description: `Display label for single-value counters.`,
 					},
 					"legend": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Legend display settings.`,
 						Attributes: map[string]schema.Attribute{
 							"position": schema.StringAttribute{
 								Computed:    true,
@@ -188,7 +192,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						},
 					},
 					"map_details": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Geo-map chart configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"latitude_field": schema.StringAttribute{
 								Computed:    true,
@@ -344,14 +349,16 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						Description: `Default chart type for all series.`,
 					},
 					"x_axis": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `X-axis configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"data_field": schema.StringAttribute{
 								Computed:    true,
 								Description: `Field name for the X-axis data.`,
 							},
 							"format": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Numeric format for axis labels.`,
 								Attributes: map[string]schema.Attribute{
 									"format": schema.StringAttribute{
 										Computed:    true,
@@ -398,7 +405,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 						},
 					},
 					"y_axis": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Y-axis configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"data_field": schema.ListAttribute{
 								Computed:    true,
@@ -406,7 +414,8 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 								ElementType: types.StringType,
 							},
 							"format": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Numeric format for axis labels.`,
 								Attributes: map[string]schema.Attribute{
 									"format": schema.StringAttribute{
 										Computed:    true,

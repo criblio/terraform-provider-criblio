@@ -80,12 +80,17 @@ func (d *SearchEngineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.`,
 			},
+			"metrics_dataset_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `The <code>id</code> of the Cribl-managed customer-metrics Dataset linked to this engine, resolved by ownership (not by name). Absent when the engine has no metrics Dataset we own.`,
+			},
 			"metrics_last_published_at": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.`,
 			},
 			"status": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Provisioning lifecycle status of the lakehouse engine.`,
 			},
 			"tier_size": schema.StringAttribute{
 				Computed:    true,

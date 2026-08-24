@@ -44,7 +44,7 @@ resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
 
 ### Required
 
-- `product` (String) The name of the Cribl product that contains the Mapping Ruleset.
+- `product` (String) Name of the Cribl product that contains the Mapping Ruleset.
 
 ### Optional
 

@@ -41,9 +41,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 		MarkdownDescription: "GroupSystemSettings Resource",
 		Attributes: map[string]schema.Attribute{
 			"api": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `API server configuration for the Cribl instance.`,
 				Attributes: map[string]schema.Attribute{
 					"base_url": schema.StringAttribute{
 						Required:    false,
@@ -58,8 +59,8 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						Description: `If <code>true</code>, disable the API response cache. Otherwise, <code>false</code>.`,
 					},
 					"disabled": schema.BoolAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `If <code>true</code>, the API server is disabled. Otherwise, <code>false</code>.`,
 					},
@@ -71,8 +72,8 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						ElementType: types.StringType,
 					},
 					"host": schema.StringAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Hostname or IP address the API server listens on.`,
 					},
@@ -95,8 +96,8 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						Description: `Rate limit for login attempts. Value is a string such as <code>100/min</code>.`,
 					},
 					"port": schema.Int64Attribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Port number the API server listens on.`,
 					},
@@ -120,9 +121,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						ElementType: types.StringType,
 					},
 					"ssl": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS configuration for the API server.`,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Required:    false,
@@ -131,27 +133,26 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 								Description: `Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.`,
 							},
 							"cert_path": schema.StringAttribute{
-								Required:    true,
-								Optional:    false,
+								Required:    false,
+								Optional:    true,
 								Computed:    false,
 								Description: `Filesystem path to the PEM-encoded TLS certificate.`,
 							},
 							"disabled": schema.BoolAttribute{
-								Required:    true,
-								Optional:    false,
+								Required:    false,
+								Optional:    true,
 								Computed:    false,
 								Description: `If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.`,
 							},
 							"passphrase": schema.StringAttribute{
-								Required:    true,
-								Optional:    false,
+								Required:    false,
+								Optional:    true,
 								Computed:    false,
-								Sensitive:   true,
 								Description: `Passphrase to decrypt the TLS private key, if encrypted.`,
 							},
 							"priv_key_path": schema.StringAttribute{
-								Required:    true,
-								Optional:    false,
+								Required:    false,
+								Optional:    true,
 								Computed:    false,
 								Description: `Filesystem path to the PEM-encoded TLS private key.`,
 							},
@@ -172,13 +173,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"apps": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `App configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `If <code>true</code>, enable Apps. Otherwise, <code>false</code>.`,
 					},
@@ -205,13 +207,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"custom_logo": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Custom logo configuration for the Cribl UI login page and navigation bar.`,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `If <code>true</code>, display the custom logo in the UI. Otherwise, <code>false</code>.`,
 					},
@@ -253,13 +256,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"proxy": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `HTTP proxy configuration for outbound connections.`,
 				Attributes: map[string]schema.Attribute{
 					"use_env_vars": schema.BoolAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `If <code>true</code>, use proxy settings from environment variables (<code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>NO_PROXY</code>). Otherwise, <code>false</code>.`,
 					},
@@ -292,13 +296,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"shutdown": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Graceful shutdown configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"drain_timeout": schema.Int64Attribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Maximum time in milliseconds to wait for in-flight events to drain before forcing a shutdown.`,
 					},
@@ -318,9 +323,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"sockets": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Unix domain socket configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"directory": schema.StringAttribute{
 						Required:    false,
@@ -331,9 +337,10 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"support": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Support and diagnostics settings.`,
 				Attributes: map[string]schema.Attribute{
 					"feature_flag_overrides": schema.ListNestedAttribute{
 						Required:    false,
@@ -343,14 +350,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"disabled": schema.BoolAttribute{
-									Required:    true,
-									Optional:    false,
+									Required:    false,
+									Optional:    true,
 									Computed:    false,
 									Description: `If <code>true</code>, the feature flag is disabled. Otherwise, <code>false</code>.`,
 								},
 								"flag_id": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
+									Required:    false,
+									Optional:    true,
 									Computed:    false,
 									Description: `Unique identifier of the feature flag to override.`,
 								},
@@ -372,20 +379,22 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"system": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `System-level operational settings for the Cribl instance.`,
 				Attributes: map[string]schema.Attribute{
 					"intercom": schema.BoolAttribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `If <code>true</code>, enable Intercom integration for in-product messaging. Otherwise, <code>false</code>.`,
 					},
 					"upgrade": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Upgrade permission policy: <code>api</code> to allow upgrades from the UI or API or <code>false</code> to disable.`,
 					},
 				},
 			},
@@ -505,6 +514,12 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 							},
 						},
 					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `If <code>false</code>, skip TLS certificate validation when downloading upgrade packages. Defaults to <code>true</code> (validate). Set to <code>false</code> only when a trusted TLS-inspecting proxy is in use (insecure).`,
+					},
 					"upgrade_source": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -514,13 +529,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"workers": schema.SingleNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Worker Process configuration.`,
 				Attributes: map[string]schema.Attribute{
 					"count": schema.Int64Attribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Number of Worker Processes to spawn. Set to <code>0</code> to use the number of available CPU cores.`,
 					},
@@ -537,14 +553,14 @@ func (r *GroupSystemSettingsResource) Schema(_ context.Context, _ resource.Schem
 						Description: `CPU load percentage threshold above which new connections are throttled.`,
 					},
 					"memory": schema.Int64Attribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.`,
 					},
 					"minimum": schema.Int64Attribute{
-						Required:    true,
-						Optional:    false,
+						Required:    false,
+						Optional:    true,
 						Computed:    false,
 						Description: `Minimum number of Worker Processes to keep running.`,
 					},

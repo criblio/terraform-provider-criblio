@@ -111,6 +111,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -242,6 +246,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -375,6 +383,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -466,7 +478,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Description: `Column holding event time.`,
 					},
 					"timestamp_field_contents": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -519,6 +532,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -649,6 +666,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -788,6 +809,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -914,6 +939,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1042,6 +1071,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -1121,7 +1154,8 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Description: `Column holding event time.`,
 					},
 					"timestamp_field_contents": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Computed:    true,
@@ -1174,6 +1208,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1302,6 +1340,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -1428,6 +1470,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1559,6 +1605,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -1685,6 +1735,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1813,6 +1867,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -1934,6 +1992,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2068,6 +2130,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2204,6 +2270,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -2325,6 +2395,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2468,6 +2542,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -2589,6 +2667,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -2717,6 +2799,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -2838,6 +2924,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -3081,6 +3171,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -3215,6 +3309,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
 						Description: `Dataset acceleration and metadata collection configuration.`,
@@ -3336,6 +3434,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -3582,6 +3684,10 @@ func (d *SearchDatasetDataSource) Schema(_ context.Context, _ datasource.SchemaR
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Computed:    true,

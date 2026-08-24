@@ -93,7 +93,7 @@ func (r *ParserLibEntryResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `Parser or formatter type to use`,
+				Description: `Parser or formatter type to use.`,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},

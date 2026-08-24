@@ -16,7 +16,7 @@ GlobalVar Resource
 resource "criblio_global_var" "my_global_var" {
   args = [
     {
-      type = "number"
+      type = "any"
       name = "rate"
     }
   ]

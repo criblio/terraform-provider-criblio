@@ -31,6 +31,7 @@ resource "criblio_search_engine" "my_search_engine" {
 ### Optional
 
 - `description` (String) Brief description of the lakehouse engine.
+- `metrics_dataset_id` (String) The <code>id</code> of the Cribl-managed customer-metrics Dataset linked to this engine, resolved by ownership (not by name). Absent when the engine has no metrics Dataset we own.
 
 ### Read-Only
 
@@ -43,7 +44,7 @@ resource "criblio_search_engine" "my_search_engine" {
 - `is_storage_deprovisioned` (Boolean) If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned up after termination.
 - `last_provisioned_ms` (Integer) Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.
 - `metrics_last_published_at` (Integer) Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.
-- `status` (String)
+- `status` (String) Provisioning lifecycle status of the lakehouse engine.
 
 ## Import
 

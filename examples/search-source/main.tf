@@ -1,19 +1,29 @@
 locals {
   # Base port — increment per resource so each listener is unique.
-  p = 31100
+  p = 10201
 }
 
 resource "criblio_search_source" "cribl_http" {
-  description = "Cribl HTTP ingest (example)"
+  description = "AI production Cribl HTTP ingest"
   disabled    = false
   host        = "0.0.0.0"
-  id          = "example_in_cribl_http"
+  id          = "aiprod_search_http"
   port        = local.p + 0
   type        = "cribl_http"
 
   cribl_api = "/cribl/_bulk"
+
+  auth_tokens = [
+    {
+      description = "AI production search HTTP token"
+      enabled     = true
+      token       = "aiprod_search_http_auth_token"
+    }
+  ]
+
   tls = {
-    disabled = true
+    # min_version is intentionally omitted; Cribl defaults it to TLSv1.2.
+    disabled = false
   }
 }
 

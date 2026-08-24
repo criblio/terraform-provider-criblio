@@ -427,6 +427,7 @@ type GroupSystemSettingsUpgradeSettingsModel struct {
 	DisableAutomaticUpgrade     types.Bool   `tfsdk:"disable_automatic_upgrade" json:"disableAutomaticUpgrade,omitempty"`
 	EnableLegacyEdgeUpgrade     types.Bool   `tfsdk:"enable_legacy_edge_upgrade" json:"enableLegacyEdgeUpgrade,omitempty"`
 	PackageURLs                 types.List   `tfsdk:"package_urls" json:"packageUrls,omitempty"`
+	RejectUnauthorized          types.Bool   `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	UpgradeSource               types.String `tfsdk:"upgrade_source" json:"upgradeSource,omitempty"`
 }
 
@@ -435,6 +436,7 @@ type GroupSystemSettingsUpgradeSettingsAPIModel struct {
 	DisableAutomaticUpgrade     *bool   `json:"disableAutomaticUpgrade,omitempty"`
 	EnableLegacyEdgeUpgrade     *bool   `json:"enableLegacyEdgeUpgrade,omitempty"`
 	PackageURLs                 any     `json:"packageUrls,omitempty"`
+	RejectUnauthorized          *bool   `json:"rejectUnauthorized,omitempty"`
 	UpgradeSource               *string `json:"upgradeSource,omitempty"`
 }
 
@@ -444,6 +446,7 @@ func GroupSystemSettingsUpgradeSettingsAttrTypes() map[string]attr.Type {
 		"disable_automatic_upgrade":      types.BoolType,
 		"enable_legacy_edge_upgrade":     types.BoolType,
 		"package_urls":                   types.ListType{ElemType: types.ObjectType{AttrTypes: GroupSystemSettingsUpgradeSettingsPackageURLsAttrTypes()}},
+		"reject_unauthorized":            types.BoolType,
 		"upgrade_source":                 types.StringType,
 	}
 }

@@ -425,7 +425,8 @@ func (d *InstanceSettingsDataSource) Schema(_ context.Context, _ datasource.Sche
 									},
 								},
 								"mode": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Distribution mode of the Cribl instance.`,
 								},
 								"reported_deployment_id": schema.StringAttribute{
 									Computed:    true,

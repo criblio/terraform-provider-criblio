@@ -79,65 +79,59 @@ resource "criblio_group_system_settings" "my_group_system_settings" {
 
 ### Optional
 
-- `api` (Attributes) (see [below for nested schema](#nestedatt--api))
-- `apps` (Attributes) (see [below for nested schema](#nestedatt--apps))
+- `api` (Attributes) API server configuration for the Cribl instance. (see [below for nested schema](#nestedatt--api))
+- `apps` (Attributes) App configuration. (see [below for nested schema](#nestedatt--apps))
 - `backups` (Attributes) Configuration backup settings, including storage location and retention period. (see [below for nested schema](#nestedatt--backups))
-- `custom_logo` (Attributes) (see [below for nested schema](#nestedatt--custom_logo))
+- `custom_logo` (Attributes) Custom logo configuration for the Cribl UI login page and navigation bar. (see [below for nested schema](#nestedatt--custom_logo))
 - `pii` (Attributes) Personally identifiable information (PII) detection configuration. (see [below for nested schema](#nestedatt--pii))
-- `proxy` (Attributes) (see [below for nested schema](#nestedatt--proxy))
+- `proxy` (Attributes) HTTP proxy configuration for outbound connections. (see [below for nested schema](#nestedatt--proxy))
 - `rollback` (Attributes) Automatic rollback settings applied when an upgrade fails. (see [below for nested schema](#nestedatt--rollback))
-- `shutdown` (Attributes) (see [below for nested schema](#nestedatt--shutdown))
+- `shutdown` (Attributes) Graceful shutdown configuration. (see [below for nested schema](#nestedatt--shutdown))
 - `sni` (Attributes) Server Name Indication (SNI) routing configuration. (see [below for nested schema](#nestedatt--sni))
-- `sockets` (Attributes) (see [below for nested schema](#nestedatt--sockets))
-- `support` (Attributes) (see [below for nested schema](#nestedatt--support))
-- `system` (Attributes) (see [below for nested schema](#nestedatt--system))
+- `sockets` (Attributes) Unix domain socket configuration. (see [below for nested schema](#nestedatt--sockets))
+- `support` (Attributes) Support and diagnostics settings. (see [below for nested schema](#nestedatt--support))
+- `system` (Attributes) System-level operational settings for the Cribl instance. (see [below for nested schema](#nestedatt--system))
 - `tls` (Attributes) Global TLS/SSL settings applied to all outbound connections that do not specify their own TLS configuration. (see [below for nested schema](#nestedatt--tls))
 - `upgrade_group_settings` (Attributes) Rolling upgrade group settings that control how many nodes are upgraded at a time. (see [below for nested schema](#nestedatt--upgrade_group_settings))
 - `upgrade_settings` (Attributes) Automatic upgrade scheduling and package source configuration. (see [below for nested schema](#nestedatt--upgrade_settings))
-- `workers` (Attributes) (see [below for nested schema](#nestedatt--workers))
+- `workers` (Attributes) Worker Process configuration. (see [below for nested schema](#nestedatt--workers))
 
 <a id="nestedatt--api"></a>
 ### Nested Schema for `api`
-
-Required:
-
-- `disabled` (Boolean) If <code>true</code>, the API server is disabled. Otherwise, <code>false</code>.
-- `host` (String) Hostname or IP address the API server listens on.
-- `port` (Integer) Port number the API server listens on.
 
 Optional:
 
 - `base_url` (String) Base URL for the API server. Used when the server is behind a reverse proxy.
 - `disable_api_cache` (Boolean) If <code>true</code>, disable the API response cache. Otherwise, <code>false</code>.
+- `disabled` (Boolean) If <code>true</code>, the API server is disabled. Otherwise, <code>false</code>.
 - `headers` (Map of String) Custom HTTP response headers to include in every API response.
+- `host` (String) Hostname or IP address the API server listens on.
 - `idle_session_ttl` (Integer) Idle session timeout in seconds. Sessions are invalidated after the specified seconds of inactivity.
 - `listen_on_port` (Boolean) If <code>true</code>, bind to the configured port as the server listen port. Otherwise, <code>false</code>.
 - `login_rate_limit` (String) Rate limit for login attempts. Value is a string such as <code>100/min</code>.
+- `port` (Integer) Port number the API server listens on.
 - `protocol` (String) API protocol: <code>http</code> or <code>https</code>.
 - `scripts` (Boolean) If <code>true</code>, enable JavaScript scripting support in the API. Otherwise, <code>false</code>.
 - `sensitive_fields` (List of String) List of field names whose values are redacted in API responses and logs.
-- `ssl` (Attributes) (see [below for nested schema](#nestedatt--api--ssl))
+- `ssl` (Attributes) TLS configuration for the API server. (see [below for nested schema](#nestedatt--api--ssl))
 - `sso_rate_limit` (String) Rate limit for SSO authentication attempts. Value is a string such as <code>100/min</code>.
 - `worker_remote_access` (Boolean) If <code>true</code>, enable remote access (teleporting) to Worker Processes via the API. Otherwise, <code>false</code>.
 
 <a id="nestedatt--api--ssl"></a>
 ### Nested Schema for `api.ssl`
 
-Required:
-
-- `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
-- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
-- `passphrase` (String, Sensitive) Passphrase to decrypt the TLS private key, if encrypted.
-- `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
-
 Optional:
 
 - `ca_path` (String) Filesystem path to the PEM-encoded Certificate Authority (CA) certificate for client authentication.
+- `cert_path` (String) Filesystem path to the PEM-encoded TLS certificate.
+- `disabled` (Boolean) If <code>true</code>, TLS is disabled for the API server. Otherwise, <code>false</code>.
+- `passphrase` (String) Passphrase to decrypt the TLS private key, if encrypted.
+- `priv_key_path` (String) Filesystem path to the PEM-encoded TLS private key.
 
 <a id="nestedatt--apps"></a>
 ### Nested Schema for `apps`
 
-Required:
+Optional:
 
 - `enabled` (Boolean) If <code>true</code>, enable Apps. Otherwise, <code>false</code>.
 
@@ -152,12 +146,9 @@ Required:
 <a id="nestedatt--custom_logo"></a>
 ### Nested Schema for `custom_logo`
 
-Required:
-
-- `enabled` (Boolean) If <code>true</code>, display the custom logo in the UI. Otherwise, <code>false</code>.
-
 Optional:
 
+- `enabled` (Boolean) If <code>true</code>, display the custom logo in the UI. Otherwise, <code>false</code>.
 - `logo_description` (String) Description text displayed alongside the custom logo.
 - `logo_image` (String) Custom logo image as a base64-encoded data URI (PNG or JPEG, maximum 2 MB).
 
@@ -171,7 +162,7 @@ Required:
 <a id="nestedatt--proxy"></a>
 ### Nested Schema for `proxy`
 
-Required:
+Optional:
 
 - `use_env_vars` (Boolean) If <code>true</code>, use proxy settings from environment variables (<code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>NO_PROXY</code>). Otherwise, <code>false</code>.
 
@@ -190,7 +181,7 @@ Optional:
 <a id="nestedatt--shutdown"></a>
 ### Nested Schema for `shutdown`
 
-Required:
+Optional:
 
 - `drain_timeout` (Integer) Maximum time in milliseconds to wait for in-flight events to drain before forcing a shutdown.
 
@@ -220,7 +211,7 @@ Optional:
 <a id="nestedatt--support--feature_flag_overrides"></a>
 ### Nested Schema for `support.feature_flag_overrides`
 
-Required:
+Optional:
 
 - `disabled` (Boolean) If <code>true</code>, the feature flag is disabled. Otherwise, <code>false</code>.
 - `flag_id` (String) Unique identifier of the feature flag to override.
@@ -228,10 +219,10 @@ Required:
 <a id="nestedatt--system"></a>
 ### Nested Schema for `system`
 
-Required:
+Optional:
 
 - `intercom` (Boolean) If <code>true</code>, enable Intercom integration for in-product messaging. Otherwise, <code>false</code>.
-- `upgrade` (String)
+- `upgrade` (String) Upgrade permission policy: <code>api</code> to allow upgrades from the UI or API or <code>false</code> to disable.
 
 <a id="nestedatt--tls"></a>
 ### Nested Schema for `tls`
@@ -263,6 +254,7 @@ Optional:
 - `disable_automatic_upgrade` (Boolean) If <code>true</code>, automatic upgrades are disabled. Otherwise, <code>false</code>.
 - `enable_legacy_edge_upgrade` (Boolean) If <code>true</code>, enable the legacy upgrade flow for Edge Nodes. Otherwise, <code>false</code>.
 - `package_urls` (Attributes List) List of custom package URLs to use for manual upgrades. (see [below for nested schema](#nestedatt--upgrade_settings--package_urls))
+- `reject_unauthorized` (Boolean) If <code>false</code>, skip TLS certificate validation when downloading upgrade packages. Defaults to <code>true</code> (validate). Set to <code>false</code> only when a trusted TLS-inspecting proxy is in use (insecure).
 - `upgrade_source` (String) Upgrade source: <code>cribl</code> for official Cribl packages or <code>custom</code> for a custom package URL.
 
 <a id="nestedatt--upgrade_settings--package_urls"></a>
@@ -279,16 +271,13 @@ Optional:
 <a id="nestedatt--workers"></a>
 ### Nested Schema for `workers`
 
-Required:
-
-- `count` (Integer) Number of Worker Processes to spawn. Set to <code>0</code> to use the number of available CPU cores.
-- `memory` (Integer) Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.
-- `minimum` (Integer) Minimum number of Worker Processes to keep running.
-
 Optional:
 
+- `count` (Integer) Number of Worker Processes to spawn. Set to <code>0</code> to use the number of available CPU cores.
 - `enable_heap_snapshots` (Boolean) If <code>true</code>, enable V8 heap snapshot generation on out-of-memory errors. Otherwise, <code>false</code>.
 - `load_throttle_perc` (Integer) CPU load percentage threshold above which new connections are throttled.
+- `memory` (Integer) Maximum memory (in MB) per Worker Process. Set to <code>0</code> for no limit.
+- `minimum` (Integer) Minimum number of Worker Processes to keep running.
 - `restart_unresponsive_processes` (Boolean) If <code>true</code>, automatically restart Worker Processes that become unresponsive. Otherwise, <code>false</code>.
 - `startup_max_conns` (Integer) Maximum number of connections to accept during Worker Process startup before throttling begins.
 - `startup_throttle_timeout` (Integer) Timeout in milliseconds to wait for Worker Processes to reach idle before ending the startup throttle period.
