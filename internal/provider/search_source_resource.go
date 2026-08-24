@@ -70,7 +70,8 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 							Required:    true,
 							Optional:    false,
 							Computed:    false,
-							Description: `Secret token string clients must present.`,
+							Sensitive:   true,
+							Description: `Secret token clients must present.`,
 						},
 					},
 				},
@@ -122,20 +123,23 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"metadata": schema.ListNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Fields to add to events from the Source. Can be a static value or a JavaScript expression. Useful for enriching events with additional context, such as environment or custom identifiers.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Field name to stamp onto the emitted event.`,
 						},
 						"value": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Value for the field. Can be a static string or a JavaScript expression.`,
 						},
 					},
 				},
@@ -281,8 +285,11 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 					"cert_path": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
-						Computed:    false,
+						Computed:    true,
 						Description: `Filesystem or cloud path to the certificate PEM.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Required:    true,
@@ -293,14 +300,20 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 					"min_version": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
-						Computed:    false,
+						Computed:    true,
 						Description: `Minimum TLS protocol version.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"priv_key_path": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
-						Computed:    false,
+						Computed:    true,
 						Description: `Filesystem or cloud path to the private key PEM.`,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 				},
 			},

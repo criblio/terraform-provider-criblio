@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -25,6 +26,8 @@ const (
 	maxDocsSize = 10 << 20
 	maxSpecSize = 100 << 20
 )
+
+var slackWebhookURL = regexp.MustCompile(`https://hooks\.slack\.com/services/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+`)
 
 type config struct {
 	source  string
@@ -74,6 +77,7 @@ func syncOpenAPI(ctx context.Context, cfg config) (string, int, error) {
 	if err != nil {
 		return "", 0, err
 	}
+	spec = sanitizeSensitiveExamples(spec)
 	if err := validateOpenAPI(spec); err != nil {
 		return "", 0, err
 	}
@@ -81,6 +85,10 @@ func syncOpenAPI(ctx context.Context, cfg config) (string, int, error) {
 		return "", 0, err
 	}
 	return resolved, len(spec), nil
+}
+
+func sanitizeSensitiveExamples(spec []byte) []byte {
+	return slackWebhookURL.ReplaceAllLiteral(spec, []byte("https://example.invalid/slack-webhook"))
 }
 
 func loadSpec(ctx context.Context, cfg config) ([]byte, string, error) {

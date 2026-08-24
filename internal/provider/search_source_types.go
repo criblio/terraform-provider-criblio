@@ -99,13 +99,13 @@ type SearchSourceAPIModel struct {
 type SearchSourceAuthTokensModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	Enabled     types.Bool   `tfsdk:"enabled" json:"enabled,omitempty"`
-	Token       types.String `tfsdk:"token" json:"token,omitempty"`
+	Token       types.String `tfsdk:"token" json:"tokenSecret,omitempty"`
 }
 
 type SearchSourceAuthTokensAPIModel struct {
 	Description *string `json:"description,omitempty"`
 	Enabled     *bool   `json:"enabled,omitempty"`
-	Token       *string `json:"token,omitempty"`
+	Token       *string `json:"tokenSecret,omitempty"`
 }
 
 func SearchSourceAuthTokensAttrTypes() map[string]attr.Type {
@@ -287,6 +287,8 @@ func SearchSourceTerraformNameToAPIName(name string) string {
 		return prefix + "prometheusAPI"
 	case "splunk_hec_api":
 		return prefix + "splunkHecAPI"
+	case "token":
+		return prefix + "tokenSecret"
 	}
 	var output strings.Builder
 	upperNext := false

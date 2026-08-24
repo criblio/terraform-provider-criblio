@@ -57,9 +57,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Description: `If <code>true</code>, apply color thresholds to the chart values.`,
 					},
 					"axis": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Axis field mappings for X and Y axes.`,
 						Attributes: map[string]schema.Attribute{
 							"x_axis": schema.StringAttribute{
 								Required:    false,
@@ -102,9 +103,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Description: `If <code>true</code>, reverse the color palette order.`,
 					},
 					"color_thresholds": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Color threshold configuration for conditional coloring.`,
 						Attributes: map[string]schema.Attribute{
 							"thresholds": schema.ListNestedAttribute{
 								Required:    true,
@@ -131,9 +133,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						},
 					},
 					"custom_data": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Custom data transformation and display options.`,
 						Attributes: map[string]schema.Attribute{
 							"connect_nulls": schema.StringAttribute{
 								Required:    false,
@@ -241,9 +244,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Description: `Display label for single-value counters.`,
 					},
 					"legend": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Legend display settings.`,
 						Attributes: map[string]schema.Attribute{
 							"position": schema.StringAttribute{
 								Required:    false,
@@ -267,9 +271,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						},
 					},
 					"map_details": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Geo-map chart configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"latitude_field": schema.StringAttribute{
 								Required:    false,
@@ -498,9 +503,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						Description: `Default chart type for all series.`,
 					},
 					"x_axis": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `X-axis configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"data_field": schema.StringAttribute{
 								Required:    false,
@@ -509,9 +515,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 								Description: `Field name for the X-axis data.`,
 							},
 							"format": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Numeric format for axis labels.`,
 								Attributes: map[string]schema.Attribute{
 									"format": schema.StringAttribute{
 										Required:    true,
@@ -578,9 +585,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 						},
 					},
 					"y_axis": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Y-axis configuration.`,
 						Attributes: map[string]schema.Attribute{
 							"data_field": schema.ListAttribute{
 								Required:    false,
@@ -590,9 +598,10 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 								ElementType: types.StringType,
 							},
 							"format": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Numeric format for axis labels.`,
 								Attributes: map[string]schema.Attribute{
 									"format": schema.StringAttribute{
 										Required:    true,

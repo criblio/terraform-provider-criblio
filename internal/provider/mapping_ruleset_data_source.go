@@ -105,7 +105,7 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 			},
 			"product": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the Cribl product that contains the Mapping Ruleset.`,
+				Description: `Name of the Cribl product that contains the Mapping Ruleset.`,
 			},
 		},
 	}

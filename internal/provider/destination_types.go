@@ -7975,6 +7975,7 @@ type OutputWebhookModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -8050,6 +8051,7 @@ func OutputWebhookModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWebhookExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -8215,6 +8217,13 @@ func (m OutputWebhookModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -8750,6 +8759,15 @@ func (m *OutputWebhookModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -9271,6 +9289,7 @@ type OutputSentinelModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -9334,6 +9353,7 @@ func OutputSentinelModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -9475,6 +9495,13 @@ func (m OutputSentinelModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -9921,6 +9948,15 @@ func (m *OutputSentinelModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -12720,6 +12756,7 @@ type OutputSplunkHecModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -12771,6 +12808,7 @@ func OutputSplunkHecModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSplunkHecExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -12906,6 +12944,13 @@ func (m OutputSplunkHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -13271,6 +13316,15 @@ func (m *OutputSplunkHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -13585,6 +13639,7 @@ type OutputWizHecModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -13630,6 +13685,7 @@ func OutputWizHecModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWizHecExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -13753,6 +13809,13 @@ func (m OutputWizHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -14073,6 +14136,15 @@ func (m *OutputWizHecModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -15066,6 +15138,7 @@ type OutputWavefrontModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -15108,6 +15181,7 @@ func OutputWavefrontModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputWavefrontExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -15234,6 +15308,13 @@ func (m OutputWavefrontModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -15536,6 +15617,15 @@ func (m *OutputWavefrontModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -15770,6 +15860,7 @@ type OutputSignalfxModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -15812,6 +15903,7 @@ func OutputSignalfxModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSignalfxExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -15938,6 +16030,13 @@ func (m OutputSignalfxModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -16239,6 +16338,15 @@ func (m *OutputSignalfxModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -19578,6 +19686,7 @@ type OutputAzureDataExplorerModel struct {
 	Concurrency                   types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	MaxPayloadSizeKB              types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	MaxPayloadEvents              types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -19668,6 +19777,7 @@ func OutputAzureDataExplorerModelAttrTypes() map[string]attr.Type {
 		"concurrency":                       types.Float64Type,
 		"max_payload_size_kb":               types.Float64Type,
 		"max_payload_events":                types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"reject_unauthorized":               types.BoolType,
 		"use_round_robin_dns":               types.BoolType,
@@ -20178,6 +20288,13 @@ func (m OutputAzureDataExplorerModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert max_payload_events to API value: %v", err)
 		}
 		output["maxPayloadEvents"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -20928,6 +21045,15 @@ func (m *OutputAzureDataExplorerModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.MaxPayloadEvents = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -21090,6 +21216,7 @@ type OutputAzureLogsModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -21135,6 +21262,7 @@ func OutputAzureLogsModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAzureLogsExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -21264,6 +21392,13 @@ func (m OutputAzureLogsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -21586,6 +21721,15 @@ func (m *OutputAzureLogsModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -22587,6 +22731,7 @@ type OutputHoneycombModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -22629,6 +22774,7 @@ func OutputHoneycombModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHoneycombExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -22749,6 +22895,13 @@ func (m OutputHoneycombModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -23048,6 +23201,15 @@ func (m *OutputHoneycombModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -24561,6 +24723,7 @@ type OutputGoogleChronicleModel struct {
 	Compress                        types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                      types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec           types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                  types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders                types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode        types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -24615,6 +24778,7 @@ func OutputGoogleChronicleModelAttrTypes() map[string]attr.Type {
 		"compress":                           types.BoolType,
 		"reject_unauthorized":                types.BoolType,
 		"timeout_sec":                        types.Float64Type,
+		"max_connection_reuse_sec":           types.Float64Type,
 		"flush_period_sec":                   types.Float64Type,
 		"extra_http_headers":                 types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleChronicleExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":        types.StringType,
@@ -24783,6 +24947,13 @@ func (m OutputGoogleChronicleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -25178,6 +25349,15 @@ func (m *OutputGoogleChronicleModel) unmarshalPayload(input map[string]any) erro
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -27780,12 +27960,14 @@ type OutputGoogleCloudObservabilityModel struct {
 	OtlpVersion              types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
 	Endpoint                 types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
 	GoogleAuthMethod         types.String  `tfsdk:"google_auth_method" json:"googleAuthMethod,omitempty"`
+	PreserveNativeAnyValue   types.Bool    `tfsdk:"preserve_native_any_value" json:"preserveNativeAnyValue,omitempty"`
 	Metadata                 types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
 	DynamicHeadersEnabled    types.Bool    `tfsdk:"dynamic_headers_enabled" json:"dynamicHeadersEnabled,omitempty"`
 	DynamicHeadersField      types.String  `tfsdk:"dynamic_headers_field" json:"dynamicHeadersField,omitempty"`
 	Concurrency              types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	MaxPayloadSizeKB         types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	TimeoutSec               types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec    types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec           types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	FailedRequestLoggingMode types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
 	ConnectionTimeout        types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
@@ -27821,12 +28003,14 @@ func OutputGoogleCloudObservabilityModelAttrTypes() map[string]attr.Type {
 		"otlp_version":                types.StringType,
 		"endpoint":                    types.StringType,
 		"google_auth_method":          types.StringType,
+		"preserve_native_any_value":   types.BoolType,
 		"metadata":                    types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}},
 		"dynamic_headers_enabled":     types.BoolType,
 		"dynamic_headers_field":       types.StringType,
 		"concurrency":                 types.Float64Type,
 		"max_payload_size_kb":         types.Float64Type,
 		"timeout_sec":                 types.Float64Type,
+		"max_connection_reuse_sec":    types.Float64Type,
 		"flush_period_sec":            types.Float64Type,
 		"failed_request_logging_mode": types.StringType,
 		"connection_timeout":          types.Float64Type,
@@ -27923,6 +28107,13 @@ func (m OutputGoogleCloudObservabilityModel) terraformPayload() (map[string]any,
 		}
 		output["googleAuthMethod"] = value
 	}
+	if !m.PreserveNativeAnyValue.IsNull() && !m.PreserveNativeAnyValue.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PreserveNativeAnyValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert preserve_native_any_value to API value: %v", err)
+		}
+		output["preserveNativeAnyValue"] = value
+	}
 	if !m.Metadata.IsNull() && !m.Metadata.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Metadata)
 		if err != nil {
@@ -27964,6 +28155,13 @@ func (m OutputGoogleCloudObservabilityModel) terraformPayload() (map[string]any,
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -28209,6 +28407,15 @@ func (m *OutputGoogleCloudObservabilityModel) unmarshalPayload(input map[string]
 	} else {
 		m.GoogleAuthMethod = types.StringNull()
 	}
+	if item, ok := input["preserveNativeAnyValue"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert preserveNativeAnyValue from API value: %v", err)
+		}
+		m.PreserveNativeAnyValue = value.(types.Bool)
+	} else {
+		m.PreserveNativeAnyValue = types.BoolNull()
+	}
 	if item, ok := input["metadata"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGoogleCloudObservabilityMetadataAttrTypes()}})
 		if err != nil {
@@ -28262,6 +28469,15 @@ func (m *OutputGoogleCloudObservabilityModel) unmarshalPayload(input map[string]
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -32243,6 +32459,7 @@ type OutputElasticModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -32296,6 +32513,7 @@ func OutputElasticModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -32439,6 +32657,13 @@ func (m OutputElasticModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -32820,6 +33045,15 @@ func (m *OutputElasticModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -33144,6 +33378,7 @@ type OutputElasticCloudModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -33187,6 +33422,7 @@ func OutputElasticCloudModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputElasticCloudExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -33314,6 +33550,13 @@ func (m OutputElasticCloudModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -33623,6 +33866,15 @@ func (m *OutputElasticCloudModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -33868,6 +34120,7 @@ type OutputNewrelicModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -33915,6 +34168,7 @@ func OutputNewrelicModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -34058,6 +34312,13 @@ func (m OutputNewrelicModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -34399,6 +34660,15 @@ func (m *OutputNewrelicModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -34661,6 +34931,7 @@ type OutputNewrelicEventsModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -34706,6 +34977,7 @@ func OutputNewrelicEventsModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputNewrelicEventsExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -34841,6 +35113,13 @@ func (m OutputNewrelicEventsModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -35166,6 +35445,15 @@ func (m *OutputNewrelicEventsModel) unmarshalPayload(input map[string]any) error
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -35421,6 +35709,7 @@ type OutputInfluxdbModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -35473,6 +35762,7 @@ func OutputInfluxdbModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputInfluxdbExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -35627,6 +35917,13 @@ func (m OutputInfluxdbModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -36004,6 +36301,15 @@ func (m *OutputInfluxdbModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -41488,6 +41794,7 @@ type OutputSumoLogicModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -41531,6 +41838,7 @@ func OutputSumoLogicModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSumoLogicExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -41670,6 +41978,13 @@ func (m OutputSumoLogicModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -41983,6 +42298,15 @@ func (m *OutputSumoLogicModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -42217,6 +42541,7 @@ type OutputDatadogModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -42271,6 +42596,7 @@ func OutputDatadogModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatadogExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -42463,6 +42789,13 @@ func (m OutputDatadogModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -42867,6 +43200,15 @@ func (m *OutputDatadogModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -43133,6 +43475,7 @@ type OutputGrafanaCloudModel struct {
 	MaxPayloadEvents              types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -43179,6 +43522,7 @@ func OutputGrafanaCloudModelAttrTypes() map[string]attr.Type {
 		"max_payload_events":                types.Float64Type,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputGrafanaCloudExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -43339,6 +43683,13 @@ func (m OutputGrafanaCloudModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -43679,6 +44030,15 @@ func (m *OutputGrafanaCloudModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -43906,6 +44266,7 @@ type OutputLokiModel struct {
 	MaxPayloadEvents              types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -43956,6 +44317,7 @@ func OutputLokiModelAttrTypes() map[string]attr.Type {
 		"max_payload_events":                types.Float64Type,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLokiExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -44102,6 +44464,13 @@ func (m OutputLokiModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -44464,6 +44833,15 @@ func (m *OutputLokiModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -44760,6 +45138,7 @@ type OutputAmazonManagedPrometheusModel struct {
 	MaxPayloadSizeKB                   types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	MaxPayloadEvents                   types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	TimeoutSec                         types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec              types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                     types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders                   types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns                   types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -44810,6 +45189,7 @@ func OutputAmazonManagedPrometheusModelAttrTypes() map[string]attr.Type {
 		"max_payload_size_kb":                    types.Float64Type,
 		"max_payload_events":                     types.Float64Type,
 		"timeout_sec":                            types.Float64Type,
+		"max_connection_reuse_sec":               types.Float64Type,
 		"flush_period_sec":                       types.Float64Type,
 		"extra_http_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputAmazonManagedPrometheusExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":                    types.BoolType,
@@ -44992,6 +45372,13 @@ func (m OutputAmazonManagedPrometheusModel) terraformPayload() (map[string]any, 
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -45366,6 +45753,15 @@ func (m *OutputAmazonManagedPrometheusModel) unmarshalPayload(input map[string]a
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -45601,6 +45997,7 @@ type OutputPrometheusModel struct {
 	MaxPayloadEvents                   types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	RejectUnauthorized                 types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                         types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec              types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                     types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders                   types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns                   types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -45657,6 +46054,7 @@ func OutputPrometheusModelAttrTypes() map[string]attr.Type {
 		"max_payload_events":                     types.Float64Type,
 		"reject_unauthorized":                    types.BoolType,
 		"timeout_sec":                            types.Float64Type,
+		"max_connection_reuse_sec":               types.Float64Type,
 		"flush_period_sec":                       types.Float64Type,
 		"extra_http_headers":                     types.ListType{ElemType: types.ObjectType{AttrTypes: OutputPrometheusExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":                    types.BoolType,
@@ -45803,6 +46201,13 @@ func (m OutputPrometheusModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -46204,6 +46609,15 @@ func (m *OutputPrometheusModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -46823,6 +47237,7 @@ type OutputOpenTelemetryModel struct {
 	Protocol                      types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
 	Endpoint                      types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
 	OtlpVersion                   types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
+	PreserveNativeAnyValue        types.Bool    `tfsdk:"preserve_native_any_value" json:"preserveNativeAnyValue,omitempty"`
 	Compress                      types.String  `tfsdk:"compress" json:"compress,omitempty"`
 	HttpCompress                  types.String  `tfsdk:"http_compress" json:"httpCompress,omitempty"`
 	AuthType                      types.String  `tfsdk:"auth_type" json:"authType,omitempty"`
@@ -46835,6 +47250,7 @@ type OutputOpenTelemetryModel struct {
 	Concurrency                   types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	MaxPayloadSizeKB              types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
 	ConnectionTimeout             types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
@@ -46888,6 +47304,7 @@ func OutputOpenTelemetryModelAttrTypes() map[string]attr.Type {
 		"protocol":                          types.StringType,
 		"endpoint":                          types.StringType,
 		"otlp_version":                      types.StringType,
+		"preserve_native_any_value":         types.BoolType,
 		"compress":                          types.StringType,
 		"http_compress":                     types.StringType,
 		"auth_type":                         types.StringType,
@@ -46900,6 +47317,7 @@ func OutputOpenTelemetryModelAttrTypes() map[string]attr.Type {
 		"concurrency":                       types.Float64Type,
 		"max_payload_size_kb":               types.Float64Type,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"failed_request_logging_mode":       types.StringType,
 		"connection_timeout":                types.Float64Type,
@@ -47008,6 +47426,13 @@ func (m OutputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 		}
 		output["otlpVersion"] = value
 	}
+	if !m.PreserveNativeAnyValue.IsNull() && !m.PreserveNativeAnyValue.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PreserveNativeAnyValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert preserve_native_any_value to API value: %v", err)
+		}
+		output["preserveNativeAnyValue"] = value
+	}
 	if !m.Compress.IsNull() && !m.Compress.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Compress)
 		if err != nil {
@@ -47091,6 +47516,13 @@ func (m OutputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -47460,6 +47892,15 @@ func (m *OutputOpenTelemetryModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.OtlpVersion = types.StringNull()
 	}
+	if item, ok := input["preserveNativeAnyValue"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert preserveNativeAnyValue from API value: %v", err)
+		}
+		m.PreserveNativeAnyValue = value.(types.Bool)
+	} else {
+		m.PreserveNativeAnyValue = types.BoolNull()
+	}
 	if item, ok := input["compress"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -47567,6 +48008,15 @@ func (m *OutputOpenTelemetryModel) unmarshalPayload(input map[string]any) error 
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -47944,6 +48394,7 @@ type OutputServiceNowModel struct {
 	OtlpVersion                   types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
 	MaxPayloadSizeKB              types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	Protocol                      types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
+	PreserveNativeAnyValue        types.Bool    `tfsdk:"preserve_native_any_value" json:"preserveNativeAnyValue,omitempty"`
 	Compress                      types.String  `tfsdk:"compress" json:"compress,omitempty"`
 	HttpCompress                  types.String  `tfsdk:"http_compress" json:"httpCompress,omitempty"`
 	HttpTracesEndpointOverride    types.String  `tfsdk:"http_traces_endpoint_override" json:"httpTracesEndpointOverride,omitempty"`
@@ -47954,6 +48405,7 @@ type OutputServiceNowModel struct {
 	DynamicHeadersField           types.String  `tfsdk:"dynamic_headers_field" json:"dynamicHeadersField,omitempty"`
 	Concurrency                   types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
 	ConnectionTimeout             types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
@@ -47997,6 +48449,7 @@ func OutputServiceNowModelAttrTypes() map[string]attr.Type {
 		"otlp_version":                      types.StringType,
 		"max_payload_size_kb":               types.Float64Type,
 		"protocol":                          types.StringType,
+		"preserve_native_any_value":         types.BoolType,
 		"compress":                          types.StringType,
 		"http_compress":                     types.StringType,
 		"http_traces_endpoint_override":     types.StringType,
@@ -48007,6 +48460,7 @@ func OutputServiceNowModelAttrTypes() map[string]attr.Type {
 		"dynamic_headers_field":             types.StringType,
 		"concurrency":                       types.Float64Type,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"failed_request_logging_mode":       types.StringType,
 		"connection_timeout":                types.Float64Type,
@@ -48123,6 +48577,13 @@ func (m OutputServiceNowModel) terraformPayload() (map[string]any, error) {
 		}
 		output["protocol"] = value
 	}
+	if !m.PreserveNativeAnyValue.IsNull() && !m.PreserveNativeAnyValue.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PreserveNativeAnyValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert preserve_native_any_value to API value: %v", err)
+		}
+		output["preserveNativeAnyValue"] = value
+	}
 	if !m.Compress.IsNull() && !m.Compress.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Compress)
 		if err != nil {
@@ -48192,6 +48653,13 @@ func (m OutputServiceNowModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -48497,6 +48965,15 @@ func (m *OutputServiceNowModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.Protocol = types.StringNull()
 	}
+	if item, ok := input["preserveNativeAnyValue"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert preserveNativeAnyValue from API value: %v", err)
+		}
+		m.PreserveNativeAnyValue = value.(types.Bool)
+	} else {
+		m.PreserveNativeAnyValue = types.BoolNull()
+	}
 	if item, ok := input["compress"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -48586,6 +49063,15 @@ func (m *OutputServiceNowModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -48855,6 +49341,7 @@ type OutputDatasetModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -48904,6 +49391,7 @@ func OutputDatasetModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDatasetExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -49079,6 +49567,13 @@ func (m OutputDatasetModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -49443,6 +49938,15 @@ func (m *OutputDatasetModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -50366,6 +50870,7 @@ type OutputCriblHttpModel struct {
 	MaxPayloadEvents              types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -50415,6 +50920,7 @@ func OutputCriblHttpModelAttrTypes() map[string]attr.Type {
 		"max_payload_events":                types.Float64Type,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblHttpExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -50560,6 +51066,13 @@ func (m OutputCriblHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -50915,6 +51428,15 @@ func (m *OutputCriblHttpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -51196,6 +51718,7 @@ type OutputCriblSearchEngineModel struct {
 	MaxPayloadEvents              types.Float64 `tfsdk:"max_payload_events" json:"maxPayloadEvents,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -51245,6 +51768,7 @@ func OutputCriblSearchEngineModelAttrTypes() map[string]attr.Type {
 		"max_payload_events":                types.Float64Type,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCriblSearchEngineExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -51390,6 +51914,13 @@ func (m OutputCriblSearchEngineModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -51745,6 +52276,15 @@ func (m *OutputCriblSearchEngineModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -52023,6 +52563,7 @@ type OutputHumioHecModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -52066,6 +52607,7 @@ func OutputHumioHecModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputHumioHecExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -52187,6 +52729,13 @@ func (m OutputHumioHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -52494,6 +53043,15 @@ func (m *OutputHumioHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -52745,6 +53303,7 @@ type OutputCrowdstrikeNextGenSiemModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -52788,6 +53347,7 @@ func OutputCrowdstrikeNextGenSiemModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCrowdstrikeNextGenSiemExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -52909,6 +53469,13 @@ func (m OutputCrowdstrikeNextGenSiemModel) terraformPayload() (map[string]any, e
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -53215,6 +53782,15 @@ func (m *OutputCrowdstrikeNextGenSiemModel) unmarshalPayload(input map[string]an
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -56848,6 +57424,7 @@ type OutputClickHouseModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -56904,6 +57481,7 @@ func OutputClickHouseModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputClickHouseExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -57080,6 +57658,13 @@ func (m OutputClickHouseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -57492,6 +58077,15 @@ func (m *OutputClickHouseModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -57804,6 +58398,7 @@ type OutputCustomerMetricsStorageModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -57860,6 +58455,7 @@ func OutputCustomerMetricsStorageModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputCustomerMetricsStorageExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -58036,6 +58632,13 @@ func (m OutputCustomerMetricsStorageModel) terraformPayload() (map[string]any, e
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -58448,6 +59051,15 @@ func (m *OutputCustomerMetricsStorageModel) unmarshalPayload(input map[string]an
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -58760,6 +59372,7 @@ type OutputLocalSearchStorageModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -58817,6 +59430,7 @@ func OutputLocalSearchStorageModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputLocalSearchStorageExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -58994,6 +59608,13 @@ func (m OutputLocalSearchStorageModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -59413,6 +60034,15 @@ func (m *OutputLocalSearchStorageModel) unmarshalPayload(input map[string]any) e
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -59727,6 +60357,7 @@ type OutputXsiamModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -59776,6 +60407,7 @@ func OutputXsiamModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputXsiamExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -59903,6 +60535,13 @@ func (m OutputXsiamModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -60251,6 +60890,15 @@ func (m *OutputXsiamModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -60776,6 +61424,7 @@ type OutputDynatraceHttpModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	UseRoundRobinDns              types.Bool    `tfsdk:"use_round_robin_dns" json:"useRoundRobinDns,omitempty"`
@@ -60826,6 +61475,7 @@ func OutputDynatraceHttpModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputDynatraceHttpExtraHttpHeadersAttrTypes()}},
 		"use_round_robin_dns":               types.BoolType,
@@ -60960,6 +61610,13 @@ func (m OutputDynatraceHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -61318,6 +61975,15 @@ func (m *OutputDynatraceHttpModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -61619,6 +62285,7 @@ type OutputDynatraceOtlpModel struct {
 	Protocol                      types.String  `tfsdk:"protocol" json:"protocol,omitempty"`
 	Endpoint                      types.String  `tfsdk:"endpoint" json:"endpoint,omitempty"`
 	OtlpVersion                   types.String  `tfsdk:"otlp_version" json:"otlpVersion,omitempty"`
+	PreserveNativeAnyValue        types.Bool    `tfsdk:"preserve_native_any_value" json:"preserveNativeAnyValue,omitempty"`
 	Compress                      types.String  `tfsdk:"compress" json:"compress,omitempty"`
 	HttpCompress                  types.String  `tfsdk:"http_compress" json:"httpCompress,omitempty"`
 	HttpTracesEndpointOverride    types.String  `tfsdk:"http_traces_endpoint_override" json:"httpTracesEndpointOverride,omitempty"`
@@ -61630,6 +62297,7 @@ type OutputDynatraceOtlpModel struct {
 	Concurrency                   types.Float64 `tfsdk:"concurrency" json:"concurrency,omitempty"`
 	MaxPayloadSizeKB              types.Float64 `tfsdk:"max_payload_size_kb" json:"maxPayloadSizeKB,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
 	ConnectionTimeout             types.Float64 `tfsdk:"connection_timeout" json:"connectionTimeout,omitempty"`
@@ -61672,6 +62340,7 @@ func OutputDynatraceOtlpModelAttrTypes() map[string]attr.Type {
 		"protocol":                          types.StringType,
 		"endpoint":                          types.StringType,
 		"otlp_version":                      types.StringType,
+		"preserve_native_any_value":         types.BoolType,
 		"compress":                          types.StringType,
 		"http_compress":                     types.StringType,
 		"http_traces_endpoint_override":     types.StringType,
@@ -61683,6 +62352,7 @@ func OutputDynatraceOtlpModelAttrTypes() map[string]attr.Type {
 		"concurrency":                       types.Float64Type,
 		"max_payload_size_kb":               types.Float64Type,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"failed_request_logging_mode":       types.StringType,
 		"connection_timeout":                types.Float64Type,
@@ -61780,6 +62450,13 @@ func (m OutputDynatraceOtlpModel) terraformPayload() (map[string]any, error) {
 		}
 		output["otlpVersion"] = value
 	}
+	if !m.PreserveNativeAnyValue.IsNull() && !m.PreserveNativeAnyValue.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.PreserveNativeAnyValue)
+		if err != nil {
+			return nil, fmt.Errorf("convert preserve_native_any_value to API value: %v", err)
+		}
+		output["preserveNativeAnyValue"] = value
+	}
 	if !m.Compress.IsNull() && !m.Compress.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.Compress)
 		if err != nil {
@@ -61856,6 +62533,13 @@ func (m OutputDynatraceOtlpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -62148,6 +62832,15 @@ func (m *OutputDynatraceOtlpModel) unmarshalPayload(input map[string]any) error 
 	} else {
 		m.OtlpVersion = types.StringNull()
 	}
+	if item, ok := input["preserveNativeAnyValue"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert preserveNativeAnyValue from API value: %v", err)
+		}
+		m.PreserveNativeAnyValue = value.(types.Bool)
+	} else {
+		m.PreserveNativeAnyValue = types.BoolNull()
+	}
 	if item, ok := input["compress"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.StringType)
 		if err != nil {
@@ -62246,6 +62939,15 @@ func (m *OutputDynatraceOtlpModel) unmarshalPayload(input map[string]any) error 
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -62524,6 +63226,7 @@ type OutputSentinelOneAiSiemModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -62581,6 +63284,7 @@ func OutputSentinelOneAiSiemModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSentinelOneAiSiemExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -62710,6 +63414,13 @@ func (m OutputSentinelOneAiSiemModel) terraformPayload() (map[string]any, error)
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -63113,6 +63824,15 @@ func (m *OutputSentinelOneAiSiemModel) unmarshalPayload(input map[string]any) er
 	} else {
 		m.TimeoutSec = types.Float64Null()
 	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
+	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -63504,6 +64224,7 @@ type OutputChronicleModel struct {
 	Compress                        types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized              types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                      types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec           types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                  types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders                types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode        types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -63556,6 +64277,7 @@ func OutputChronicleModelAttrTypes() map[string]attr.Type {
 		"compress":                           types.BoolType,
 		"reject_unauthorized":                types.BoolType,
 		"timeout_sec":                        types.Float64Type,
+		"max_connection_reuse_sec":           types.Float64Type,
 		"flush_period_sec":                   types.Float64Type,
 		"extra_http_headers":                 types.ListType{ElemType: types.ObjectType{AttrTypes: OutputChronicleExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":        types.StringType,
@@ -63716,6 +64438,13 @@ func (m OutputChronicleModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -64095,6 +64824,15 @@ func (m *OutputChronicleModel) unmarshalPayload(input map[string]any) error {
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
@@ -65365,6 +66103,7 @@ type OutputSnowflakeStreamingModel struct {
 	Compress                      types.Bool    `tfsdk:"compress" json:"compress,omitempty"`
 	RejectUnauthorized            types.Bool    `tfsdk:"reject_unauthorized" json:"rejectUnauthorized,omitempty"`
 	TimeoutSec                    types.Float64 `tfsdk:"timeout_sec" json:"timeoutSec,omitempty"`
+	MaxConnectionReuseSec         types.Float64 `tfsdk:"max_connection_reuse_sec" json:"maxConnectionReuseSec,omitempty"`
 	FlushPeriodSec                types.Float64 `tfsdk:"flush_period_sec" json:"flushPeriodSec,omitempty"`
 	ExtraHttpHeaders              types.List    `tfsdk:"extra_http_headers" json:"extraHttpHeaders,omitempty"`
 	FailedRequestLoggingMode      types.String  `tfsdk:"failed_request_logging_mode" json:"failedRequestLoggingMode,omitempty"`
@@ -65412,6 +66151,7 @@ func OutputSnowflakeStreamingModelAttrTypes() map[string]attr.Type {
 		"compress":                          types.BoolType,
 		"reject_unauthorized":               types.BoolType,
 		"timeout_sec":                       types.Float64Type,
+		"max_connection_reuse_sec":          types.Float64Type,
 		"flush_period_sec":                  types.Float64Type,
 		"extra_http_headers":                types.ListType{ElemType: types.ObjectType{AttrTypes: OutputSnowflakeStreamingExtraHttpHeadersAttrTypes()}},
 		"failed_request_logging_mode":       types.StringType,
@@ -65585,6 +66325,13 @@ func (m OutputSnowflakeStreamingModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert timeout_sec to API value: %v", err)
 		}
 		output["timeoutSec"] = value
+	}
+	if !m.MaxConnectionReuseSec.IsNull() && !m.MaxConnectionReuseSec.IsUnknown() {
+		value, err := DestinationTerraformValueToJSON(m.MaxConnectionReuseSec)
+		if err != nil {
+			return nil, fmt.Errorf("convert max_connection_reuse_sec to API value: %v", err)
+		}
+		output["maxConnectionReuseSec"] = value
 	}
 	if !m.FlushPeriodSec.IsNull() && !m.FlushPeriodSec.IsUnknown() {
 		value, err := DestinationTerraformValueToJSON(m.FlushPeriodSec)
@@ -65935,6 +66682,15 @@ func (m *OutputSnowflakeStreamingModel) unmarshalPayload(input map[string]any) e
 		m.TimeoutSec = value.(types.Float64)
 	} else {
 		m.TimeoutSec = types.Float64Null()
+	}
+	if item, ok := input["maxConnectionReuseSec"]; ok {
+		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert maxConnectionReuseSec from API value: %v", err)
+		}
+		m.MaxConnectionReuseSec = value.(types.Float64)
+	} else {
+		m.MaxConnectionReuseSec = types.Float64Null()
 	}
 	if item, ok := input["flushPeriodSec"]; ok {
 		value, err := DestinationAPIValueToTerraformValue(item, types.Float64Type)

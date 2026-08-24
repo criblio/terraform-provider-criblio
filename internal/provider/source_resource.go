@@ -80,7 +80,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
-									Description: `Connector type identifier.`,
+									Description: `Resource type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -108,7 +108,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -121,6 +122,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -144,7 +149,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -171,10 +177,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -193,7 +201,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -244,7 +253,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -272,7 +282,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -285,6 +296,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -308,7 +323,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -335,10 +351,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -366,7 +384,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message`,
 								},
 								"kafka_schema_registry": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Kafka Schema Registry Authentication`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -389,7 +408,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 										},
 										"auth": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Credentials to use when authenticating with the schema registry`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -445,7 +465,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											},
 										},
 										"tls": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `TLS settings (client side)`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -481,10 +502,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum TLS version`,
 												},
 												"max_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Maximum TLS version`,
 												},
 											},
 										},
@@ -523,7 +546,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 								},
 								"sasl": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -538,14 +562,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
 										},
 										"credentials_secret": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select or create a secret that references your credentials`,
 										},
 										"mechanism": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `SASL mechanism`,
 										},
 										"keytab_location": schema.StringAttribute{
 											Computed:    true,
@@ -613,7 +639,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (client side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -649,10 +676,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -729,7 +758,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -757,7 +787,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -770,6 +801,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -793,7 +828,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -820,10 +856,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -890,7 +928,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"kafka_schema_registry": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Kafka Schema Registry Authentication`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -913,7 +952,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 										},
 										"auth": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Credentials to use when authenticating with the schema registry`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -969,7 +1009,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											},
 										},
 										"tls": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `TLS settings (client side)`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -1005,10 +1046,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum TLS version`,
 												},
 												"max_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Maximum TLS version`,
 												},
 											},
 										},
@@ -1047,7 +1090,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -1086,7 +1130,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (client side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -1122,10 +1167,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -1200,7 +1247,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -1213,6 +1261,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -1236,7 +1288,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -1263,10 +1316,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -1289,7 +1344,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -1328,10 +1384,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -1350,6 +1408,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -1457,7 +1518,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -1485,7 +1547,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -1498,6 +1561,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -1521,7 +1588,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -1548,10 +1616,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -1569,7 +1639,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -1608,10 +1679,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -1743,7 +1816,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -1756,6 +1830,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -1779,7 +1857,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -1806,10 +1885,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -1843,7 +1924,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `REST API used to create a search`,
 								},
 								"output_mode": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Format of the returned output`,
 								},
 								"endpoint_params": schema.ListNestedAttribute{
 									Computed:    true,
@@ -1937,7 +2019,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -2046,7 +2129,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -2059,6 +2143,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -2082,7 +2170,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -2109,10 +2198,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -2135,7 +2226,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -2178,7 +2270,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -2217,10 +2310,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -2239,6 +2334,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -2342,7 +2440,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -2370,7 +2469,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -2383,6 +2483,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -2406,7 +2510,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -2433,10 +2538,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -2507,7 +2614,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication method`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -2593,7 +2701,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -2606,6 +2715,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -2629,7 +2742,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -2656,10 +2770,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -2677,7 +2793,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -2716,10 +2833,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -2738,6 +2857,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -2888,7 +3010,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -2916,7 +3039,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -2929,6 +3053,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -2952,7 +3080,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -2979,10 +3108,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -2997,7 +3128,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (client side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3033,10 +3165,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Passphrase to use to decrypt private key`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -3054,7 +3188,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message`,
 								},
 								"kafka_schema_registry": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Kafka Schema Registry Authentication`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3077,7 +3212,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 										},
 										"auth": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Credentials to use when authenticating with the schema registry`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -3133,7 +3269,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											},
 										},
 										"tls": schema.SingleNestedAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `TLS settings (client side)`,
 											Attributes: map[string]schema.Attribute{
 												"disabled": schema.BoolAttribute{
 													Computed:    true,
@@ -3169,10 +3306,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 													Description: `Passphrase to use to decrypt private key`,
 												},
 												"min_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Minimum TLS version`,
 												},
 												"max_version": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Maximum TLS version`,
 												},
 											},
 										},
@@ -3211,7 +3350,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 								},
 								"sasl": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3226,14 +3366,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Password`,
 										},
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
 										},
 										"credentials_secret": schema.StringAttribute{
 											Computed:    true,
 											Description: `Select or create a secret that references your credentials`,
 										},
 										"mechanism": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `SASL mechanism`,
 										},
 										"keytab_location": schema.StringAttribute{
 											Computed:    true,
@@ -3402,7 +3544,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -3415,6 +3558,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -3438,7 +3585,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -3465,10 +3613,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -3486,7 +3636,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3525,10 +3676,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -3547,6 +3700,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -3588,7 +3744,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Remote Write authentication type`,
 										},
 										"username": schema.StringAttribute{
 											Computed:    true,
@@ -3616,7 +3773,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Loki logs authentication type`,
 										},
 										"username": schema.StringAttribute{
 											Computed:    true,
@@ -3699,7 +3857,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -3712,6 +3871,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -3735,7 +3898,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -3762,10 +3926,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -3783,7 +3949,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -3822,10 +3989,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -3844,6 +4013,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -3878,7 +4050,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Loki logs authentication type`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -3959,7 +4132,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -3972,6 +4146,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -3995,7 +4173,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -4022,10 +4201,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -4043,7 +4224,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -4082,10 +4264,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -4104,6 +4288,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -4138,7 +4325,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Remote Write authentication type`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -4190,7 +4378,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -4218,7 +4407,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -4231,6 +4421,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -4254,7 +4448,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -4281,10 +4476,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -4311,7 +4508,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
 								},
 								"log_level": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Collector runtime log level`,
 								},
 								"reject_unauthorized": schema.BoolAttribute{
 									Computed:    true,
@@ -4358,7 +4556,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enter credentials directly, or select a stored secret`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -4370,7 +4569,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"record_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `DNS record type to resolve`,
 								},
 								"scrape_port": schema.Float64Attribute{
 									Computed:    true,
@@ -4390,7 +4590,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Path to use when collecting metrics from discovered targets`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
@@ -4532,7 +4733,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -4545,6 +4747,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -4568,7 +4774,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -4595,10 +4802,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -4629,7 +4838,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable`,
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Disk Spooling`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -4648,7 +4858,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format. Default is gzip.`,
 										},
 									},
 								},
@@ -4682,7 +4893,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"protocol": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Protocol to use when collecting metrics`,
 											},
 											"host": schema.StringAttribute{
 												Computed:    true,
@@ -4700,7 +4912,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"record_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `DNS record type to resolve`,
 								},
 								"scrape_port": schema.Float64Attribute{
 									Computed:    true,
@@ -4712,14 +4925,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"scrape_protocol": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Protocol to use when collecting metrics`,
 								},
 								"scrape_path": schema.StringAttribute{
 									Computed:    true,
 									Description: `Path to use when collecting metrics from discovered targets`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_api_key": schema.StringAttribute{
 									Computed:    true,
@@ -4901,7 +5116,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -4914,6 +5130,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -4937,7 +5157,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -4964,10 +5185,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -4977,7 +5200,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"plan_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -5049,7 +5273,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Interval`,
 											},
 											"log_level": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Collector runtime Log Level`,
 											},
 											"enabled": schema.BoolAttribute{
 												Computed:    true,
@@ -5066,7 +5291,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -5100,7 +5326,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enter client secret directly, or select a stored secret`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -5153,7 +5380,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -5166,6 +5394,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -5189,7 +5421,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -5216,10 +5449,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -5229,7 +5464,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"plan_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -5297,7 +5533,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Interval`,
 											},
 											"log_level": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Collector runtime Log Level`,
 											},
 											"enabled": schema.BoolAttribute{
 												Computed:    true,
@@ -5310,7 +5547,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -5344,7 +5582,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enter client secret directly, or select a stored secret`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -5397,7 +5636,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -5410,6 +5650,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -5433,7 +5677,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -5460,10 +5705,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -5545,13 +5792,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Maximum number of times a task can be rescheduled`,
 								},
 								"log_level": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -5617,7 +5866,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Resource to pass in the OAuth request parameter.`,
 								},
 								"plan_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -5683,7 +5933,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -5696,6 +5947,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -5719,7 +5974,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -5746,10 +6002,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -5835,13 +6093,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Maximum number of times a task can be rescheduled`,
 								},
 								"log_level": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Log Level (verbosity) for collection runtime behavior.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -5971,7 +6231,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -5984,6 +6245,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -6007,7 +6272,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -6034,10 +6300,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -6097,14 +6365,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 								},
 								"sasl": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
 											Description: `Disabled`,
 										},
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enter password directly, or select a stored secret`,
 										},
 										"password": schema.StringAttribute{
 											Computed:    true,
@@ -6115,14 +6385,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Select or create a stored text secret`,
 										},
 										"mechanism": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `SASL mechanism`,
 										},
 										"username": schema.StringAttribute{
 											Computed:    true,
 											Description: `The username for authentication. For Event Hubs, this should always be $ConnectionString.`,
 										},
 										"client_secret_auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Authentication method`,
 										},
 										"client_secret": schema.StringAttribute{
 											Computed:    true,
@@ -6146,7 +6418,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Computed: true,
 										},
 										"oauth_endpoint": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Endpoint used to acquire authentication tokens from Azure`,
 										},
 										"client_id": schema.StringAttribute{
 											Computed:    true,
@@ -6163,7 +6436,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (client side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -6280,7 +6554,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -6293,6 +6568,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -6316,7 +6595,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -6343,10 +6623,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -6375,7 +6657,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Select or create a stored text secret`,
 										},
 										"client_secret_auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Authentication method`,
 										},
 										"client_text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -6403,7 +6686,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											},
 										},
 										"oauth_endpoint": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Endpoint used to acquire authentication tokens from Azure`,
 										},
 										"client_id": schema.StringAttribute{
 											Computed:    true,
@@ -6578,7 +6862,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -6591,6 +6876,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -6614,7 +6903,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -6641,10 +6931,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -6745,7 +7037,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -6758,6 +7051,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -6781,7 +7078,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -6808,10 +7106,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -6834,7 +7134,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -6873,10 +7174,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -6895,6 +7198,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -6954,7 +7260,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -6982,7 +7289,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -6995,6 +7303,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -7018,7 +7330,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -7045,10 +7358,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -7082,7 +7397,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.`,
 								},
 								"google_auth_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
 								},
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
@@ -7167,7 +7483,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -7180,6 +7497,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -7203,7 +7524,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -7230,10 +7552,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -7275,7 +7599,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -7303,7 +7628,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -7316,6 +7642,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -7339,7 +7669,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -7366,10 +7697,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -7387,7 +7720,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -7426,10 +7760,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -7536,7 +7872,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -7549,6 +7886,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -7572,7 +7913,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -7599,10 +7941,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -7640,7 +7984,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -7679,10 +8024,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -7701,6 +8048,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -7789,7 +8139,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -7802,6 +8153,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -7825,7 +8180,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -7852,10 +8208,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -7878,7 +8236,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -7917,10 +8276,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -7939,6 +8300,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -8073,7 +8437,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -8101,7 +8466,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -8114,6 +8480,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -8137,7 +8507,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -8164,10 +8535,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -8185,7 +8558,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -8224,10 +8598,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -8276,7 +8652,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Load balance traffic across all Worker Processes`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -8329,7 +8706,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -8342,6 +8720,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -8365,7 +8747,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -8392,10 +8775,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -8412,7 +8797,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
 											Computed: true,
@@ -8601,7 +8987,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Select the level of detail for GPU metrics`,
 										},
 										"per_gpu": schema.BoolAttribute{
 											Computed:    true,
@@ -8650,7 +9037,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format`,
 										},
 										"dest_path": schema.StringAttribute{
 											Computed:    true,
@@ -8701,7 +9089,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -8714,6 +9103,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -8737,7 +9130,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -8764,10 +9158,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -8931,7 +9327,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format`,
 										},
 										"dest_path": schema.StringAttribute{
 											Computed:    true,
@@ -8990,7 +9387,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -9003,6 +9401,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -9026,7 +9428,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -9053,10 +9456,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -9130,7 +9535,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format`,
 										},
 										"dest_path": schema.StringAttribute{
 											Computed:    true,
@@ -9181,7 +9587,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -9194,6 +9601,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -9217,7 +9628,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -9244,10 +9656,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -9301,7 +9715,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"persistence": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Disk Spooling`,
 									Attributes: map[string]schema.Attribute{
 										"enable": schema.BoolAttribute{
 											Computed:    true,
@@ -9320,7 +9735,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format. Default is gzip.`,
 										},
 									},
 								},
@@ -9380,7 +9796,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -9393,6 +9810,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -9416,7 +9837,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -9443,10 +9865,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -9530,7 +9954,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -9543,6 +9968,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -9566,7 +9995,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -9593,10 +10023,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -9613,7 +10045,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Select level of detail for host metrics`,
 										},
 										"custom": schema.SingleNestedAttribute{
 											Computed: true,
@@ -9746,7 +10179,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Select the level of detail for GPU metrics`,
 										},
 										"per_gpu": schema.BoolAttribute{
 											Computed:    true,
@@ -9795,7 +10229,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format`,
 										},
 										"dest_path": schema.StringAttribute{
 											Computed:    true,
@@ -9850,7 +10285,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -9863,6 +10299,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -9886,7 +10326,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -9913,10 +10354,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -9938,7 +10381,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -10022,7 +10466,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Use the same settings for S3 and SQS`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -10101,7 +10546,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"sqsaws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use IAM roles`,
 								},
 								"sqsaws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -10161,7 +10607,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -10174,6 +10621,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -10197,7 +10648,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -10224,10 +10676,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -10245,7 +10699,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -10284,10 +10739,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -10306,6 +10763,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -10435,7 +10895,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -10448,6 +10909,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -10471,7 +10936,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -10498,10 +10964,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -10585,7 +11053,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -10598,6 +11067,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -10621,7 +11094,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -10648,10 +11122,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -10674,7 +11150,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -10713,10 +11190,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -10735,6 +11214,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -10831,6 +11313,34 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										},
 									},
 								},
+								"access_control_allow_origin": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers.`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_methods": schema.ListAttribute{
+									Computed:    true,
+									Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight.`,
+									ElementType: types.StringType,
+								},
+								"access_control_expose_headers": schema.ListAttribute{
+									Computed:    true,
+									Description: `Headers the browser is allowed to access from the response`,
+									ElementType: types.StringType,
+								},
+								"access_control_allow_credentials": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Include credentials in cross-origin requests. Cannot be used with wildcard origins.`,
+								},
+								"access_control_max_age": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long browsers should cache the preflight response`,
+								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional description for this configuration.`,
@@ -10845,7 +11355,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -10873,7 +11384,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -10886,6 +11398,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -10909,7 +11425,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -10936,10 +11453,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -10981,7 +11500,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The load-balancing algorithm to use for spreading out shards across Workers and Worker Processes`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -11094,7 +11614,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -11107,6 +11628,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -11130,7 +11655,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -11157,10 +11683,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -11236,7 +11764,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -11249,6 +11778,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -11272,7 +11805,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -11299,10 +11833,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -11336,7 +11872,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11375,10 +11912,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -11416,7 +11955,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -11444,7 +11984,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -11457,6 +11998,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -11480,7 +12025,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -11507,10 +12053,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -11532,7 +12080,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -11616,7 +12165,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Use the same settings for S3 and SQS`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -11707,7 +12257,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"sqsaws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use IAM roles`,
 								},
 								"sqsaws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -11764,7 +12315,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -11777,6 +12329,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -11800,7 +12356,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -11827,10 +12384,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -11852,7 +12411,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -11936,7 +12496,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Use the same settings for S3 and SQS`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -12031,7 +12592,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"sqsaws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use IAM roles`,
 								},
 								"sqsaws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -12062,7 +12624,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -12090,7 +12653,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -12103,6 +12667,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -12126,7 +12694,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -12153,10 +12722,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -12195,14 +12766,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 														Description: `V3 name`,
 													},
 													"auth_protocol": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Authentication protocol`,
 													},
 													"auth_key": schema.StringAttribute{
 														Computed:    true,
 														Description: `V3 authentication key`,
 													},
 													"priv_protocol": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Privacy protocol`,
 													},
 													"priv_key": schema.StringAttribute{
 														Computed:    true,
@@ -12292,7 +12865,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -12305,6 +12879,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -12328,7 +12906,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -12355,10 +12934,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -12376,7 +12957,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -12415,10 +12997,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -12429,6 +13013,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"max_requests_per_socket": schema.Int64Attribute{
 									Computed:    true,
 									Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"request_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -12617,7 +13204,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -12630,6 +13218,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -12653,7 +13245,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -12680,10 +13273,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -12701,7 +13296,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -12740,10 +13336,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -12785,7 +13383,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -12813,7 +13412,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -12826,6 +13426,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -12849,7 +13453,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -12876,10 +13481,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -12905,7 +13512,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Create queue if it does not exist`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -12997,7 +13605,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -13025,7 +13634,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -13038,6 +13648,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -13061,7 +13675,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -13088,10 +13703,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -13170,7 +13787,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13209,10 +13827,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -13287,7 +13907,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -13300,6 +13921,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -13323,7 +13948,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -13350,10 +13976,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -13405,7 +14033,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"hash_len": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Length of file header bytes to use in hash for unique file identification`,
+									Description: `Length of file header bytes to use in hash for unique file identification. Values above 16384 may cause issues with re-ingesting files.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed:    true,
@@ -13507,7 +14135,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -13520,6 +14149,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -13543,7 +14176,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -13570,10 +14204,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -13591,7 +14227,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13630,10 +14267,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -13691,7 +14330,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Client will pass the header record with every new connection. The header can contain an authToken, and an object with a list of fields and values to add to every event. These fields can be used to simplify Event Breaker selection, routing, etc. Header has this format, and must be followed by a newline: { "authToken" : "myToken", "fields": { "field1": "value1", "field2": "value2" } }`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -13717,7 +14357,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -13762,7 +14403,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -13775,6 +14417,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -13798,7 +14444,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -13825,10 +14472,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -13940,7 +14589,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Data compression format`,
 										},
 										"dest_path": schema.StringAttribute{
 											Computed:    true,
@@ -13949,7 +14599,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -13964,7 +14615,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Port to listen on`,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -14003,10 +14655,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -14065,7 +14719,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -14078,6 +14733,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -14101,7 +14760,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -14128,10 +14788,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -14193,10 +14855,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 										"ocsp_check": schema.BoolAttribute{
 											Computed:    true,
@@ -14223,6 +14887,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"keep_alive_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -14412,7 +15079,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -14425,6 +15093,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -14448,7 +15120,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -14475,10 +15148,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -14587,7 +15262,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -14600,6 +15276,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -14623,7 +15303,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -14650,10 +15331,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -14729,7 +15412,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -14742,6 +15426,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -14765,7 +15453,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -14792,10 +15481,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -14891,7 +15582,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -14904,6 +15596,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -14927,7 +15623,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -14954,10 +15651,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -15066,7 +15765,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -15079,6 +15779,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -15102,7 +15806,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -15129,10 +15834,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -15211,7 +15918,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Units default to seconds if not specified. Enter 0 for unlimited time.`,
 											},
 											"log_level": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Collector runtime log level`,
 											},
 											"max_pages": schema.Float64Attribute{
 												Computed:    true,
@@ -15269,7 +15977,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -15303,7 +16012,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"auth_type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Enter client secret directly, or select a stored secret`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -15356,7 +16066,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -15369,6 +16080,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -15392,7 +16107,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -15419,10 +16135,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -15608,7 +16326,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -15684,7 +16403,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -15697,6 +16417,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -15720,7 +16444,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -15747,10 +16472,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -15773,7 +16500,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -15812,10 +16540,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -15834,6 +16564,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -15944,7 +16677,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -15972,7 +16706,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -15985,6 +16720,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -16008,7 +16747,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -16035,10 +16775,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -16117,7 +16859,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Unique ID for this input`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Connector type identifier.`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
@@ -16145,7 +16888,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -16158,6 +16902,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -16181,7 +16929,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -16208,10 +16957,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -16233,7 +16984,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -16317,7 +17069,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Use the same settings for S3 and SQS`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -16404,7 +17157,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"sqsaws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use IAM roles`,
 								},
 								"sqsaws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -16464,7 +17218,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -16477,6 +17232,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -16500,7 +17259,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -16527,10 +17287,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -16552,7 +17314,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 								},
 								"aws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -16636,7 +17399,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Use the same settings for S3 and SQS`,
 								},
 								"preprocess": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -16723,7 +17487,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 								},
 								"sqsaws_authentication_method": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Choose Auto to use IAM roles`,
 								},
 								"sqsaws_secret": schema.StringAttribute{
 									Computed:    true,
@@ -16783,7 +17548,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -16796,6 +17562,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -16819,7 +17589,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -16846,10 +17617,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -16916,7 +17689,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Track collection progress between consecutive scheduled executions`,
 								},
 								"log_level": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Collector runtime log level`,
 								},
 								"request_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -16966,7 +17740,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -17114,7 +17889,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -17127,6 +17903,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -17150,7 +17930,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -17177,10 +17958,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -17203,7 +17986,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -17246,7 +18030,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -17285,10 +18070,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -17307,6 +18094,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -17373,7 +18163,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 								"hec_acks": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Whether HEC acknowledgements are enabled. Always true for Zscaler sources.`,
+									Description: `Whether to enable Zscaler HEC acknowledgements`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -17418,7 +18208,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -17431,6 +18222,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -17454,7 +18249,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -17481,10 +18277,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -17507,7 +18305,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Select Secret to use a text secret to authenticate`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -17590,10 +18389,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -17612,6 +18413,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -17728,7 +18532,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -17741,6 +18546,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -17764,7 +18573,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -17791,10 +18601,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -17817,7 +18629,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Select Secret to use a text secret to authenticate`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -17860,7 +18673,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -17899,10 +18713,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -17921,6 +18737,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -18028,7 +18847,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -18041,6 +18861,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -18064,7 +18888,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -18091,10 +18916,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -18117,7 +18944,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"auth_type": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Select Secret to use a text secret to authenticate`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -18160,7 +18988,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"tls": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS settings (server side)`,
 									Attributes: map[string]schema.Attribute{
 										"disabled": schema.BoolAttribute{
 											Computed:    true,
@@ -18199,10 +19028,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
 										"min_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Minimum TLS version`,
 										},
 										"max_version": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Maximum TLS version`,
 										},
 									},
 								},
@@ -18221,6 +19052,9 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
+								},
+								"capture_headers_warning": schema.StringAttribute{
+									Computed: true,
 								},
 								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
@@ -18328,7 +19162,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -18341,6 +19176,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -18364,7 +19203,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -18391,10 +19231,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -18432,7 +19274,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 								},
 								"log_level": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Collector runtime log level`,
 								},
 								"max_pages": schema.Float64Attribute{
 									Computed:    true,
@@ -18491,7 +19334,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -18597,7 +19441,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -18610,6 +19455,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -18633,7 +19482,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -18660,10 +19510,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -18966,6 +19818,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed:    true,
 									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 								},
+								"breaker_rulesets": schema.ListAttribute{
+									Computed:    true,
+									Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+									ElementType: types.StringType,
+								},
+								"stale_channel_flush_ms": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
 									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
@@ -19002,7 +19863,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -19078,7 +19940,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									ElementType: types.StringType,
 								},
 								"cribl_source_provenance": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 									Attributes: map[string]schema.Attribute{
 										"origin": schema.StringAttribute{
 											Computed:    true,
@@ -19091,6 +19954,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										"source_arn": schema.StringAttribute{
 											Computed:    true,
 											Description: `ARN of the AWS resource that produces the logs.`,
+										},
+										"account_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
 										},
 									},
 								},
@@ -19114,7 +19981,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"mode": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
 											Computed:    true,
@@ -19141,10 +20009,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"on_backpressure": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 										},
 										"pq_controls": schema.MapAttribute{
 											Computed:    true,
@@ -19176,6 +20046,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								"latest": schema.StringAttribute{
 									Computed:    true,
 									Description: `Latest time for data collection, relative to now`,
+								},
+								"manage_state": schema.MapAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
 								},
 								"job_timeout": schema.StringAttribute{
 									Computed:    true,
@@ -19221,7 +20095,8 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
 										},
 										"interval": schema.Float64Attribute{
 											Computed:    true,
@@ -19277,7 +20152,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    true,
-						Description: `Connector type identifier.`,
+						Description: `Resource type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("collection"),
 						},
@@ -19320,9 +20195,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -19341,6 +20217,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -19372,9 +20257,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -19428,14 +20314,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -19463,9 +20351,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -19537,9 +20426,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("kafka"),
 						},
@@ -19582,9 +20472,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -19603,6 +20494,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -19634,9 +20534,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -19690,14 +20591,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -19743,9 +20646,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message`,
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -19787,9 +20691,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"auth": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    true,
@@ -19869,9 +20774,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    false,
@@ -19923,14 +20829,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -20009,9 +20917,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -20032,9 +20941,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Required:    false,
@@ -20043,9 +20953,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"mechanism": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `SASL mechanism`,
 							},
 							"keytab_location": schema.StringAttribute{
 								Required:    false,
@@ -20141,9 +21052,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -20195,14 +21107,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -20329,9 +21243,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("msk"),
 						},
@@ -20374,9 +21289,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -20395,6 +21311,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -20426,9 +21351,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -20482,14 +21408,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -20595,9 +21523,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -20639,9 +21568,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"auth": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    true,
@@ -20721,9 +21651,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    false,
@@ -20775,14 +21706,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -20861,9 +21794,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -20927,9 +21861,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -20981,14 +21916,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -21113,9 +22050,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -21134,6 +22072,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -21165,9 +22112,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -21221,14 +22169,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -21262,9 +22212,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -21321,14 +22272,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -21361,6 +22314,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -21533,9 +22491,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("splunk"),
 						},
@@ -21578,9 +22537,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -21599,6 +22559,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -21630,9 +22599,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -21686,14 +22656,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -21720,9 +22692,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -21779,14 +22752,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -21992,9 +22967,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -22013,6 +22989,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -22044,9 +23029,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -22100,14 +23086,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -22155,9 +23143,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `REST API used to create a search`,
 					},
 					"output_mode": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Format of the returned output`,
 					},
 					"endpoint_params": schema.ListNestedAttribute{
 						Required:    false,
@@ -22306,9 +23295,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -22483,9 +23473,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -22504,6 +23495,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -22535,9 +23535,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -22591,14 +23592,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -22632,9 +23635,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -22697,9 +23701,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -22756,14 +23761,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -22796,6 +23803,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -22973,9 +23985,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("azure_blob"),
 						},
@@ -23018,9 +24031,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -23039,6 +24053,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -23070,9 +24093,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -23126,14 +24150,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -23255,9 +24281,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication method`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -23384,9 +24411,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -23405,6 +24433,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -23436,9 +24473,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -23492,14 +24530,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -23526,9 +24566,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -23585,14 +24626,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -23625,6 +24668,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -23863,9 +24911,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("confluent_cloud"),
 						},
@@ -23908,9 +24957,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -23929,6 +24979,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -23960,9 +25019,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -24016,14 +25076,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -24046,9 +25108,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -24100,14 +25163,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -24135,9 +25200,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message`,
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -24179,9 +25245,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"auth": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    true,
@@ -24261,9 +25328,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Required:    false,
@@ -24315,14 +25383,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Required: false,
-										Optional: true,
-										Computed: false,
+										Required:    false,
+										Optional:    true,
+										Computed:    false,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -24401,9 +25471,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -24424,9 +25495,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Required:    false,
@@ -24435,9 +25507,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"mechanism": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `SASL mechanism`,
 							},
 							"keytab_location": schema.StringAttribute{
 								Required:    false,
@@ -24701,9 +25774,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -24722,6 +25796,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -24753,9 +25836,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -24809,14 +25893,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -24843,9 +25929,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -24902,14 +25989,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -24942,6 +26031,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -25021,9 +26115,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Remote Write authentication type`,
 							},
 							"username": schema.StringAttribute{
 								Required:    false,
@@ -25063,9 +26158,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Loki logs authentication type`,
 							},
 							"username": schema.StringAttribute{
 								Required:    false,
@@ -25185,9 +26281,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -25206,6 +26303,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -25237,9 +26343,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -25293,14 +26400,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -25327,9 +26436,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -25386,14 +26496,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -25426,6 +26538,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -25491,9 +26608,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Loki logs authentication type`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -25611,9 +26729,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -25632,6 +26751,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -25663,9 +26791,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -25719,14 +26848,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -25753,9 +26884,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -25812,14 +26944,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -25852,6 +26986,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -25917,9 +27056,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Remote Write authentication type`,
 					},
 					"metadata": schema.ListNestedAttribute{
 						Required:    false,
@@ -25991,9 +27131,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("prometheus"),
 						},
@@ -26036,9 +27177,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -26057,6 +27199,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -26088,9 +27239,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -26144,14 +27296,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -26194,9 +27348,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"log_level": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Collector runtime log level`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Required:    false,
@@ -26278,9 +27433,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enter credentials directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -26299,9 +27455,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"record_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `DNS record type to resolve`,
 					},
 					"scrape_port": schema.Float64Attribute{
 						Required:    false,
@@ -26338,9 +27495,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -26561,9 +27719,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -26582,6 +27741,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -26613,9 +27781,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -26669,14 +27838,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -26728,9 +27899,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Disk Spooling`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -26763,9 +27935,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format. Default is gzip.`,
 							},
 						},
 					},
@@ -26814,9 +27987,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"protocol": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Protocol to use when collecting metrics`,
 								},
 								"host": schema.StringAttribute{
 									Required:    true,
@@ -26846,9 +28020,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"record_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `DNS record type to resolve`,
 					},
 					"scrape_port": schema.Float64Attribute{
 						Required:    false,
@@ -26870,9 +28045,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"scrape_protocol": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Protocol to use when collecting metrics`,
 					},
 					"scrape_path": schema.StringAttribute{
 						Required:    false,
@@ -26884,9 +28060,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_api_key": schema.StringAttribute{
 						Required:    false,
@@ -27163,9 +28340,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -27184,6 +28362,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -27215,9 +28402,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -27271,14 +28459,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -27290,9 +28480,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"plan_type": schema.StringAttribute{
-						Required: true,
-						Optional: false,
-						Computed: false,
+						Required:    true,
+						Optional:    false,
+						Computed:    false,
+						Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Required:    true,
@@ -27414,9 +28605,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Collector runtime Log Level`,
 								},
 								"enabled": schema.BoolAttribute{
 									Required:    false,
@@ -27442,9 +28634,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -27504,9 +28697,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enter client secret directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27584,9 +28778,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -27605,6 +28800,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -27636,9 +28840,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -27692,14 +28897,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -27711,9 +28918,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"plan_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Required:    true,
@@ -27829,9 +29037,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Collector runtime Log Level`,
 								},
 								"enabled": schema.BoolAttribute{
 									Required:    false,
@@ -27848,9 +29057,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -27910,9 +29120,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enter client secret directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -27990,9 +29201,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -28011,6 +29223,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -28042,9 +29263,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -28098,14 +29320,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -28244,9 +29468,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"log_level": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Log Level (verbosity) for collection runtime behavior.`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
 						Required: false,
@@ -28254,9 +29479,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -28364,9 +29590,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Resource to pass in the OAuth request parameter.`,
 					},
 					"plan_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Microsoft 365 subscription plan for your organization, typically Microsoft 365 Enterprise`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    false,
@@ -28463,9 +29690,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -28484,6 +29712,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -28515,9 +29752,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -28571,14 +29809,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -28726,9 +29966,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"log_level": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Log Level (verbosity) for collection runtime behavior.`,
 					},
 					"retry_rules": schema.SingleNestedAttribute{
 						Required: false,
@@ -28736,9 +29977,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -28944,9 +30186,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -28965,6 +30208,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -28996,9 +30248,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -29052,14 +30305,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -29177,9 +30432,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -29188,9 +30444,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Enter password directly, or select a stored secret`,
 							},
 							"password": schema.StringAttribute{
 								Required:    false,
@@ -29205,9 +30462,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Select or create a stored text secret`,
 							},
 							"mechanism": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `SASL mechanism`,
 							},
 							"username": schema.StringAttribute{
 								Required:    false,
@@ -29216,9 +30474,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The username for authentication. For Event Hubs, this should always be $ConnectionString.`,
 							},
 							"client_secret_auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Authentication method`,
 							},
 							"client_secret": schema.StringAttribute{
 								Required:    false,
@@ -29254,9 +30513,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Computed: false,
 							},
 							"oauth_endpoint": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Endpoint used to acquire authentication tokens from Azure`,
 							},
 							"client_id": schema.StringAttribute{
 								Required:    false,
@@ -29279,9 +30539,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -29471,9 +30732,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -29492,6 +30754,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -29523,9 +30794,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -29579,14 +30851,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -29633,9 +30907,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Select or create a stored text secret`,
 							},
 							"client_secret_auth_type": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Authentication method`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Required:    false,
@@ -29675,9 +30950,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"oauth_endpoint": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Endpoint used to acquire authentication tokens from Azure`,
 							},
 							"client_id": schema.StringAttribute{
 								Required:    false,
@@ -29967,9 +31243,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -29988,6 +31265,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -30019,9 +31305,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -30075,14 +31362,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -30237,9 +31526,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -30258,6 +31548,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -30289,9 +31588,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -30345,14 +31645,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -30386,9 +31688,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -30445,14 +31748,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -30485,6 +31790,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -30580,9 +31890,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("google_pubsub"),
 						},
@@ -30625,9 +31936,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -30646,6 +31958,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -30677,9 +31998,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -30733,14 +32055,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -30788,9 +32112,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.`,
 					},
 					"google_auth_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Required:    false,
@@ -30923,9 +32248,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -30944,6 +32270,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -30975,9 +32310,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -31031,14 +32367,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -31094,9 +32432,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("cribl_tcp"),
 						},
@@ -31139,9 +32478,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -31160,6 +32500,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -31191,9 +32540,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -31247,14 +32597,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -31281,9 +32633,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -31340,14 +32693,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -31513,9 +32868,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -31534,6 +32890,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -31565,9 +32930,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -31621,14 +32987,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -31683,9 +33051,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -31742,14 +33111,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -31782,6 +33153,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -31923,9 +33299,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -31944,6 +33321,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -31975,9 +33361,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -32031,14 +33418,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -32072,9 +33461,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -32131,14 +33521,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -32171,6 +33563,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -32388,9 +33785,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("tcpjson"),
 						},
@@ -32433,9 +33831,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -32454,6 +33853,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -32485,9 +33893,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -32541,14 +33950,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -32575,9 +33986,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -32634,14 +34046,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -32722,9 +34136,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Load balance traffic across all Worker Processes`,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -32802,9 +34217,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -32823,6 +34239,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -32854,9 +34279,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -32910,14 +34336,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -32943,9 +34371,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Select level of detail for host metrics`,
 							},
 							"custom": schema.SingleNestedAttribute{
 								Required: false,
@@ -33219,9 +34648,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Select the level of detail for GPU metrics`,
 							},
 							"per_gpu": schema.BoolAttribute{
 								Required:    false,
@@ -33296,9 +34726,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format`,
 							},
 							"dest_path": schema.StringAttribute{
 								Required:    false,
@@ -33372,9 +34803,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -33393,6 +34825,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -33424,9 +34865,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -33480,14 +34922,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -33726,9 +35170,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format`,
 							},
 							"dest_path": schema.StringAttribute{
 								Required:    false,
@@ -33814,9 +35259,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -33835,6 +35281,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -33866,9 +35321,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -33922,14 +35378,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -34042,9 +35500,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format`,
 							},
 							"dest_path": schema.StringAttribute{
 								Required:    false,
@@ -34118,9 +35577,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -34139,6 +35599,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -34170,9 +35639,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -34226,14 +35696,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -34313,9 +35785,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"persistence": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Disk Spooling`,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
 								Required:    false,
@@ -34348,9 +35821,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format. Default is gzip.`,
 							},
 						},
 					},
@@ -34440,9 +35914,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -34461,6 +35936,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -34492,9 +35976,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -34548,14 +36033,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -34674,9 +36161,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -34695,6 +36183,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -34726,9 +36223,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -34782,14 +36280,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -34815,9 +36315,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Select level of detail for host metrics`,
 							},
 							"custom": schema.SingleNestedAttribute{
 								Required: false,
@@ -35008,9 +36509,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Select the level of detail for GPU metrics`,
 							},
 							"per_gpu": schema.BoolAttribute{
 								Required:    false,
@@ -35085,9 +36587,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format`,
 							},
 							"dest_path": schema.StringAttribute{
 								Required:    false,
@@ -35167,9 +36670,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -35188,6 +36692,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -35219,9 +36732,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -35275,14 +36789,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -35312,9 +36828,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -35460,9 +36977,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Use the same settings for S3 and SQS`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -35588,9 +37106,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use IAM roles`,
 					},
 					"sqsaws_secret": schema.StringAttribute{
 						Required:    false,
@@ -35679,9 +37198,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -35700,6 +37220,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -35731,9 +37260,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -35787,14 +37317,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -35821,9 +37353,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -35880,14 +37413,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -35920,6 +37455,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -36135,9 +37675,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -36156,6 +37697,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -36187,9 +37737,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -36243,14 +37794,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -36375,9 +37928,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -36396,6 +37950,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -36427,9 +37990,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -36483,14 +38047,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -36524,9 +38090,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -36583,14 +38150,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -36623,6 +38192,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -36780,6 +38354,65 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 							},
 						},
 					},
+					"access_control_allow_origin": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP origins allowed to send CORS requests (example: https://pivot.claude.ai). Supports wildcards. Leave empty to disable CORS. Note: IP allowlist/denylist rules are applied before CORS.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP headers echoed in Access-Control-Allow-Headers on preflight. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_methods": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `HTTP methods echoed in Access-Control-Allow-Methods on preflight.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_expose_headers": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Headers the browser is allowed to access from the response`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+							listvalidator.ValueStringsAre(stringvalidator.UTF8LengthAtLeast(1)),
+						},
+						ElementType: types.StringType,
+					},
+					"access_control_allow_credentials": schema.BoolAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Include credentials in cross-origin requests. Cannot be used with wildcard origins.`,
+					},
+					"access_control_max_age": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long browsers should cache the preflight response`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
 					"description": schema.StringAttribute{
 						Required:    false,
 						Optional:    true,
@@ -36798,9 +38431,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("kinesis"),
 						},
@@ -36843,9 +38477,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -36864,6 +38499,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -36895,9 +38539,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -36951,14 +38596,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -37027,9 +38674,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `The load-balancing algorithm to use for spreading out shards across Workers and Worker Processes`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -37202,9 +38850,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -37223,6 +38872,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -37254,9 +38912,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -37310,14 +38969,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -37426,9 +39087,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -37447,6 +39109,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -37478,9 +39149,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -37534,14 +39206,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -37598,9 +39272,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -37657,14 +39332,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -37717,9 +39394,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("s3"),
 						},
@@ -37762,9 +39440,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -37783,6 +39462,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -37814,9 +39502,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -37870,14 +39559,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -37907,9 +39598,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -38055,9 +39747,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Use the same settings for S3 and SQS`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -38207,9 +39900,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use IAM roles`,
 					},
 					"sqsaws_secret": schema.StringAttribute{
 						Required:    false,
@@ -38293,9 +39987,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -38314,6 +40009,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -38345,9 +40049,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -38401,14 +40106,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -38438,9 +40145,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -38586,9 +40294,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Use the same settings for S3 and SQS`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -38747,9 +40456,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use IAM roles`,
 					},
 					"sqsaws_secret": schema.StringAttribute{
 						Required:    false,
@@ -38792,9 +40502,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("snmp"),
 						},
@@ -38837,9 +40548,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -38858,6 +40570,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -38889,9 +40610,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -38945,14 +40667,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -39016,9 +40740,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											},
 										},
 										"auth_protocol": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Authentication protocol`,
 										},
 										"auth_key": schema.StringAttribute{
 											Required:    false,
@@ -39027,9 +40752,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 											Description: `V3 authentication key`,
 										},
 										"priv_protocol": schema.StringAttribute{
-											Required: false,
-											Optional: true,
-											Computed: false,
+											Required:    false,
+											Optional:    true,
+											Computed:    false,
+											Description: `Privacy protocol`,
 										},
 										"priv_key": schema.StringAttribute{
 											Required:    false,
@@ -39164,9 +40890,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -39185,6 +40912,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -39216,9 +40952,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -39272,14 +41009,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -39306,9 +41045,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -39365,14 +41105,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -39393,6 +41135,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Validators: []validator.Int64{
 							int64validator.AtLeast(0),
 						},
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -39701,9 +41448,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -39722,6 +41470,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -39753,9 +41510,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -39809,14 +41567,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -39843,9 +41603,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -39902,14 +41663,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -39971,9 +41734,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("sqs"),
 						},
@@ -40016,9 +41780,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -40037,6 +41802,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -40068,9 +41842,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -40124,14 +41899,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -40167,9 +41944,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Create queue if it does not exist`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -40320,9 +42098,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("syslog"),
 						},
@@ -40365,9 +42144,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -40386,6 +42166,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -40417,9 +42206,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -40473,14 +42263,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -40619,9 +42411,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -40678,14 +42471,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -40796,9 +42591,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -40817,6 +42613,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -40848,9 +42653,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -40904,14 +42710,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -40993,7 +42801,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Length of file header bytes to use in hash for unique file identification`,
+						Description: `Length of file header bytes to use in hash for unique file identification. Values above 16384 may cause issues with re-ingesting files.`,
 						Validators: []validator.Float64{
 							float64validator.AtLeast(1),
 						},
@@ -41151,9 +42959,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -41172,6 +42981,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -41203,9 +43021,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -41259,14 +43078,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -41293,9 +43114,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -41352,14 +43174,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -41456,9 +43280,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Client will pass the header record with every new connection. The header can contain an authToken, and an object with a list of fields and values to add to every event. These fields can be used to simplify Event Breaker selection, routing, etc. Header has this format, and must be followed by a newline: { "authToken" : "myToken", "fields": { "field1": "value1", "field2": "value2" } }`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -41494,9 +43319,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"text_secret": schema.StringAttribute{
 						Required:    false,
@@ -41562,9 +43388,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -41583,6 +43410,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -41614,9 +43450,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -41670,14 +43507,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -41858,9 +43697,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								},
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Data compression format`,
 							},
 							"dest_path": schema.StringAttribute{
 								Required:    false,
@@ -41871,9 +43711,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -41897,9 +43738,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -41956,14 +43798,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -42049,9 +43893,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -42070,6 +43915,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -42101,9 +43955,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -42157,14 +44012,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -42257,14 +44114,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 							"ocsp_check": schema.BoolAttribute{
 								Required:    false,
@@ -42309,6 +44168,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"keep_alive_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -42598,9 +44462,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -42619,6 +44484,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -42650,9 +44524,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -42706,14 +44581,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -42885,9 +44762,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -42906,6 +44784,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -42937,9 +44824,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -42993,14 +44881,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -43112,9 +45002,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -43133,6 +45024,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -43164,9 +45064,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -43220,14 +45121,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -43375,9 +45278,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -43396,6 +45300,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -43427,9 +45340,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -43483,14 +45397,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -43649,9 +45565,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -43670,6 +45587,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -43701,9 +45627,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -43757,14 +45684,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -43888,9 +45817,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Collector runtime log level`,
 								},
 								"max_pages": schema.Float64Attribute{
 									Required:    false,
@@ -43990,9 +45920,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -44052,9 +45983,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Enter client secret directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -44132,9 +46064,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -44153,6 +46086,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -44184,9 +46126,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -44240,14 +46183,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -44533,9 +46478,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -44658,9 +46604,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -44679,6 +46626,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -44710,9 +46666,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -44766,14 +46723,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -44807,9 +46766,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -44866,14 +46826,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -44906,6 +46868,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -45081,9 +47048,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("netflow"),
 						},
@@ -45126,9 +47094,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -45147,6 +47116,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -45178,9 +47156,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -45234,14 +47213,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -45361,9 +47342,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Unique ID for this input`,
 					},
 					"type": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf("security_lake"),
 						},
@@ -45406,9 +47388,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -45427,6 +47410,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -45458,9 +47450,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -45514,14 +47507,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -45551,9 +47546,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -45699,9 +47695,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Use the same settings for S3 and SQS`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -45845,9 +47842,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use IAM roles`,
 					},
 					"sqsaws_secret": schema.StringAttribute{
 						Required:    false,
@@ -45936,9 +47934,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -45957,6 +47956,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -45988,9 +47996,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -46044,14 +48053,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -46081,9 +48092,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Required:    false,
@@ -46229,9 +48241,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Use the same settings for S3 and SQS`,
 					},
 					"preprocess": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Optional preprocessing step that pipes collected data through an external command before ingestion.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    true,
@@ -46375,9 +48388,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"sqsaws_authentication_method": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Choose Auto to use IAM roles`,
 					},
 					"sqsaws_secret": schema.StringAttribute{
 						Required:    false,
@@ -46466,9 +48480,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -46487,6 +48502,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -46518,9 +48542,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -46574,14 +48599,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -46702,9 +48729,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Description: `Track collection progress between consecutive scheduled executions`,
 					},
 					"log_level": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Collector runtime log level`,
 					},
 					"request_timeout": schema.Float64Attribute{
 						Required:    false,
@@ -46791,9 +48819,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -47026,9 +49055,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -47047,6 +49077,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -47078,9 +49117,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -47134,14 +49174,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -47175,9 +49217,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -47240,9 +49283,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -47299,14 +49343,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -47339,6 +49385,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -47462,7 +49513,7 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Required:    false,
 						Optional:    true,
 						Computed:    false,
-						Description: `Whether HEC acknowledgements are enabled. Always true for Zscaler sources.`,
+						Description: `Whether to enable Zscaler HEC acknowledgements`,
 					},
 					"description": schema.StringAttribute{
 						Required:    false,
@@ -47528,9 +49579,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -47549,6 +49601,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -47580,9 +49641,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -47636,14 +49698,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -47677,9 +49741,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select Secret to use a text secret to authenticate`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -47802,14 +49867,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -47842,6 +49909,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -48041,9 +50113,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -48062,6 +50135,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -48093,9 +50175,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -48149,14 +50232,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -48190,9 +50275,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select Secret to use a text secret to authenticate`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -48255,9 +50341,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -48314,14 +50401,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -48354,6 +50443,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -48537,9 +50631,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -48558,6 +50653,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -48589,9 +50693,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -48645,14 +50750,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -48686,9 +50793,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auth_type": schema.StringAttribute{
-									Required: false,
-									Optional: true,
-									Computed: false,
+									Required:    false,
+									Optional:    true,
+									Computed:    false,
+									Description: `Select Secret to use a text secret to authenticate`,
 								},
 								"token_secret": schema.StringAttribute{
 									Required:    false,
@@ -48751,9 +50859,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `TLS settings (server side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Required:    false,
@@ -48810,14 +50919,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 							},
 							"min_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -48850,6 +50961,11 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Add request headers to events, in the __headers field`,
+					},
+					"capture_headers_warning": schema.StringAttribute{
+						Required: false,
+						Optional: false,
+						Computed: true,
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Required:    false,
@@ -49033,9 +51149,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -49054,6 +51171,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -49085,9 +51211,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -49141,14 +51268,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -49205,9 +51334,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						},
 					},
 					"log_level": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Collector runtime log level`,
 					},
 					"max_pages": schema.Float64Attribute{
 						Required:    false,
@@ -49310,9 +51440,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -49485,9 +51616,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -49506,6 +51638,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -49537,9 +51678,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -49593,14 +51735,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -50073,6 +52217,22 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 							float64validator.Between(0, 2400),
 						},
 					},
+					"breaker_rulesets": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						ElementType: types.StringType,
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
+					},
 					"keep_alive_time": schema.Float64Attribute{
 						Required:    false,
 						Optional:    true,
@@ -50134,9 +52294,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -50259,9 +52420,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						ElementType: types.StringType,
 					},
 					"cribl_source_provenance": schema.SingleNestedAttribute{
-						Required: false,
-						Optional: true,
-						Computed: false,
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Read-only metadata that records how the Source was created. Preserved on update when omitted from the request body. Cannot be set on create.`,
 						Attributes: map[string]schema.Attribute{
 							"origin": schema.StringAttribute{
 								Required:    false,
@@ -50280,6 +52442,15 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Optional:    true,
 								Computed:    false,
 								Description: `ARN of the AWS resource that produces the logs.`,
+							},
+							"account_id": schema.StringAttribute{
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Cloud tenant or scope id the Source was configured for (for example an AWS account id, GCP project or folder id, or Azure subscription or resource group id).`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtLeast(1),
+								},
 							},
 						},
 					},
@@ -50311,9 +52482,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"mode": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `With Smart mode (deprecated), PQ will write events to the filesystem only when it detects backpressure from the processing engine. Smart mode will have no new development starting July 2026, followed by End of Support and feature removal (auto-migrating to Always On) in January 2027. We recommend using Always On mode instead. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 							},
 							"max_buffer_size_bytes": schema.StringAttribute{
 								Required:    false,
@@ -50367,14 +52539,16 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 							},
 							"compress": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Codec to use to compress the persisted data`,
 							},
 							"on_backpressure": schema.StringAttribute{
-								Required: false,
-								Optional: true,
-								Computed: false,
+								Required:    false,
+								Optional:    true,
+								Computed:    false,
+								Description: `Whether to block or drop events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 							},
 							"pq_controls": schema.MapAttribute{
 								Required:    false,
@@ -50420,6 +52594,12 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Optional:    true,
 						Computed:    false,
 						Description: `Latest time for data collection, relative to now`,
+					},
+					"manage_state": schema.MapAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						ElementType: types.StringType,
 					},
 					"job_timeout": schema.StringAttribute{
 						Required:    false,
@@ -50500,9 +52680,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 						Computed: false,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required:    true,
+								Optional:    false,
+								Computed:    false,
+								Description: `The algorithm to use when performing HTTP retries`,
 							},
 							"interval": schema.Float64Attribute{
 								Required:    false,
@@ -51898,6 +54079,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttp.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputHttp.CaptureHeadersWarning.IsNull() && !api.InputHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputHttp.CaptureHeadersWarning = api.InputHttp.CaptureHeadersWarning
+		} else if state.InputHttp.CaptureHeadersWarning.IsNull() || state.InputHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputHttp.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttp.ActivityLogSampleRate.IsNull() || state.InputHttp.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputHttp.ActivityLogSampleRate.IsNull() && !api.InputHttp.ActivityLogSampleRate.IsUnknown() {
 				state.InputHttp.ActivityLogSampleRate = api.InputHttp.ActivityLogSampleRate
@@ -52732,6 +54918,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSplunkHec.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputSplunkHec.CaptureHeadersWarning.IsNull() && !api.InputSplunkHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputSplunkHec.CaptureHeadersWarning = api.InputSplunkHec.CaptureHeadersWarning
+		} else if state.InputSplunkHec.CaptureHeadersWarning.IsNull() || state.InputSplunkHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputSplunkHec.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSplunkHec.ActivityLogSampleRate.IsNull() || state.InputSplunkHec.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputSplunkHec.ActivityLogSampleRate.IsNull() && !api.InputSplunkHec.ActivityLogSampleRate.IsUnknown() {
 				state.InputSplunkHec.ActivityLogSampleRate = api.InputSplunkHec.ActivityLogSampleRate
@@ -53293,6 +55484,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputElastic.CaptureHeaders.IsNull() || state.InputElastic.CaptureHeaders.IsUnknown() {
 				state.InputElastic.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputElastic.CaptureHeadersWarning.IsNull() && !api.InputElastic.CaptureHeadersWarning.IsUnknown() {
+			state.InputElastic.CaptureHeadersWarning = api.InputElastic.CaptureHeadersWarning
+		} else if state.InputElastic.CaptureHeadersWarning.IsNull() || state.InputElastic.CaptureHeadersWarning.IsUnknown() {
+			state.InputElastic.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputElastic.ActivityLogSampleRate.IsNull() || state.InputElastic.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputElastic.ActivityLogSampleRate.IsNull() && !api.InputElastic.ActivityLogSampleRate.IsUnknown() {
@@ -53878,6 +56074,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputGrafana.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputGrafana.CaptureHeadersWarning.IsNull() && !api.InputGrafana.CaptureHeadersWarning.IsUnknown() {
+			state.InputGrafana.CaptureHeadersWarning = api.InputGrafana.CaptureHeadersWarning
+		} else if state.InputGrafana.CaptureHeadersWarning.IsNull() || state.InputGrafana.CaptureHeadersWarning.IsUnknown() {
+			state.InputGrafana.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputGrafana.ActivityLogSampleRate.IsNull() || state.InputGrafana.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputGrafana.ActivityLogSampleRate.IsNull() && !api.InputGrafana.ActivityLogSampleRate.IsUnknown() {
 				state.InputGrafana.ActivityLogSampleRate = api.InputGrafana.ActivityLogSampleRate
@@ -54125,6 +56326,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputLoki.CaptureHeaders.IsNull() || state.InputLoki.CaptureHeaders.IsUnknown() {
 				state.InputLoki.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputLoki.CaptureHeadersWarning.IsNull() && !api.InputLoki.CaptureHeadersWarning.IsUnknown() {
+			state.InputLoki.CaptureHeadersWarning = api.InputLoki.CaptureHeadersWarning
+		} else if state.InputLoki.CaptureHeadersWarning.IsNull() || state.InputLoki.CaptureHeadersWarning.IsUnknown() {
+			state.InputLoki.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputLoki.ActivityLogSampleRate.IsNull() || state.InputLoki.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputLoki.ActivityLogSampleRate.IsNull() && !api.InputLoki.ActivityLogSampleRate.IsUnknown() {
@@ -54388,6 +56594,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputPrometheusRw.CaptureHeaders.IsNull() || state.InputPrometheusRw.CaptureHeaders.IsUnknown() {
 				state.InputPrometheusRw.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputPrometheusRw.CaptureHeadersWarning.IsNull() && !api.InputPrometheusRw.CaptureHeadersWarning.IsUnknown() {
+			state.InputPrometheusRw.CaptureHeadersWarning = api.InputPrometheusRw.CaptureHeadersWarning
+		} else if state.InputPrometheusRw.CaptureHeadersWarning.IsNull() || state.InputPrometheusRw.CaptureHeadersWarning.IsUnknown() {
+			state.InputPrometheusRw.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputPrometheusRw.ActivityLogSampleRate.IsNull() || state.InputPrometheusRw.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputPrometheusRw.ActivityLogSampleRate.IsNull() && !api.InputPrometheusRw.ActivityLogSampleRate.IsUnknown() {
@@ -57221,6 +59432,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputFirehose.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputFirehose.CaptureHeadersWarning.IsNull() && !api.InputFirehose.CaptureHeadersWarning.IsUnknown() {
+			state.InputFirehose.CaptureHeadersWarning = api.InputFirehose.CaptureHeadersWarning
+		} else if state.InputFirehose.CaptureHeadersWarning.IsNull() || state.InputFirehose.CaptureHeadersWarning.IsUnknown() {
+			state.InputFirehose.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputFirehose.ActivityLogSampleRate.IsNull() || state.InputFirehose.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputFirehose.ActivityLogSampleRate.IsNull() && !api.InputFirehose.ActivityLogSampleRate.IsUnknown() {
 				state.InputFirehose.ActivityLogSampleRate = api.InputFirehose.ActivityLogSampleRate
@@ -57962,6 +60178,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputCriblHttp.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputCriblHttp.CaptureHeadersWarning.IsNull() && !api.InputCriblHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputCriblHttp.CaptureHeadersWarning = api.InputCriblHttp.CaptureHeadersWarning
+		} else if state.InputCriblHttp.CaptureHeadersWarning.IsNull() || state.InputCriblHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputCriblHttp.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblHttp.ActivityLogSampleRate.IsNull() || state.InputCriblHttp.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputCriblHttp.ActivityLogSampleRate.IsNull() && !api.InputCriblHttp.ActivityLogSampleRate.IsUnknown() {
 				state.InputCriblHttp.ActivityLogSampleRate = api.InputCriblHttp.ActivityLogSampleRate
@@ -58185,6 +60406,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCriblLakeHttp.CaptureHeaders.IsNull() || state.InputCriblLakeHttp.CaptureHeaders.IsUnknown() {
 				state.InputCriblLakeHttp.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputCriblLakeHttp.CaptureHeadersWarning.IsNull() && !api.InputCriblLakeHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputCriblLakeHttp.CaptureHeadersWarning = api.InputCriblLakeHttp.CaptureHeadersWarning
+		} else if state.InputCriblLakeHttp.CaptureHeadersWarning.IsNull() || state.InputCriblLakeHttp.CaptureHeadersWarning.IsUnknown() {
+			state.InputCriblLakeHttp.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCriblLakeHttp.ActivityLogSampleRate.IsNull() || state.InputCriblLakeHttp.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputCriblLakeHttp.ActivityLogSampleRate.IsNull() && !api.InputCriblLakeHttp.ActivityLogSampleRate.IsUnknown() {
@@ -59994,6 +62220,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputDatadogAgent.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputDatadogAgent.CaptureHeadersWarning.IsNull() && !api.InputDatadogAgent.CaptureHeadersWarning.IsUnknown() {
+			state.InputDatadogAgent.CaptureHeadersWarning = api.InputDatadogAgent.CaptureHeadersWarning
+		} else if state.InputDatadogAgent.CaptureHeadersWarning.IsNull() || state.InputDatadogAgent.CaptureHeadersWarning.IsUnknown() {
+			state.InputDatadogAgent.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputDatadogAgent.ActivityLogSampleRate.IsNull() || state.InputDatadogAgent.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputDatadogAgent.ActivityLogSampleRate.IsNull() && !api.InputDatadogAgent.ActivityLogSampleRate.IsUnknown() {
 				state.InputDatadogAgent.ActivityLogSampleRate = api.InputDatadogAgent.ActivityLogSampleRate
@@ -60379,6 +62610,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputHttpRaw.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputHttpRaw.CaptureHeadersWarning.IsNull() && !api.InputHttpRaw.CaptureHeadersWarning.IsUnknown() {
+			state.InputHttpRaw.CaptureHeadersWarning = api.InputHttpRaw.CaptureHeadersWarning
+		} else if state.InputHttpRaw.CaptureHeadersWarning.IsNull() || state.InputHttpRaw.CaptureHeadersWarning.IsUnknown() {
+			state.InputHttpRaw.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.ActivityLogSampleRate.IsNull() || state.InputHttpRaw.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputHttpRaw.ActivityLogSampleRate.IsNull() && !api.InputHttpRaw.ActivityLogSampleRate.IsUnknown() {
 				state.InputHttpRaw.ActivityLogSampleRate = api.InputHttpRaw.ActivityLogSampleRate
@@ -60488,6 +62724,60 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			state.InputHttpRaw.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()})
 		} else if len(state.InputHttpRaw.AuthTokensExt.Elements()) == 0 {
 			state.InputHttpRaw.AuthTokensExt = types.ListValueMust(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()}, nil)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlAllowOrigin.IsNull() || state.InputHttpRaw.AccessControlAllowOrigin.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlAllowOrigin.IsNull() && !api.InputHttpRaw.AccessControlAllowOrigin.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowOrigin = api.InputHttpRaw.AccessControlAllowOrigin
+			} else if state.InputHttpRaw.AccessControlAllowOrigin.IsNull() || state.InputHttpRaw.AccessControlAllowOrigin.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowOrigin = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputHttpRaw.AccessControlAllowOrigin.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AccessControlAllowOrigin = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlAllowHeaders.IsNull() || state.InputHttpRaw.AccessControlAllowHeaders.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlAllowHeaders.IsNull() && !api.InputHttpRaw.AccessControlAllowHeaders.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowHeaders = api.InputHttpRaw.AccessControlAllowHeaders
+			} else if state.InputHttpRaw.AccessControlAllowHeaders.IsNull() || state.InputHttpRaw.AccessControlAllowHeaders.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputHttpRaw.AccessControlAllowHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AccessControlAllowHeaders = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlAllowMethods.IsNull() || state.InputHttpRaw.AccessControlAllowMethods.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlAllowMethods.IsNull() && !api.InputHttpRaw.AccessControlAllowMethods.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowMethods = api.InputHttpRaw.AccessControlAllowMethods
+			} else if state.InputHttpRaw.AccessControlAllowMethods.IsNull() || state.InputHttpRaw.AccessControlAllowMethods.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowMethods = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputHttpRaw.AccessControlAllowMethods.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AccessControlAllowMethods = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlExposeHeaders.IsNull() || state.InputHttpRaw.AccessControlExposeHeaders.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlExposeHeaders.IsNull() && !api.InputHttpRaw.AccessControlExposeHeaders.IsUnknown() {
+				state.InputHttpRaw.AccessControlExposeHeaders = api.InputHttpRaw.AccessControlExposeHeaders
+			} else if state.InputHttpRaw.AccessControlExposeHeaders.IsNull() || state.InputHttpRaw.AccessControlExposeHeaders.IsUnknown() {
+				state.InputHttpRaw.AccessControlExposeHeaders = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputHttpRaw.AccessControlExposeHeaders.ElementType(context.Background()); elementType == nil {
+			state.InputHttpRaw.AccessControlExposeHeaders = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlAllowCredentials.IsNull() || state.InputHttpRaw.AccessControlAllowCredentials.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlAllowCredentials.IsNull() && !api.InputHttpRaw.AccessControlAllowCredentials.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowCredentials = api.InputHttpRaw.AccessControlAllowCredentials
+			} else if state.InputHttpRaw.AccessControlAllowCredentials.IsNull() || state.InputHttpRaw.AccessControlAllowCredentials.IsUnknown() {
+				state.InputHttpRaw.AccessControlAllowCredentials = types.BoolNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.AccessControlMaxAge.IsNull() || state.InputHttpRaw.AccessControlMaxAge.IsUnknown())) {
+			if !api.InputHttpRaw.AccessControlMaxAge.IsNull() && !api.InputHttpRaw.AccessControlMaxAge.IsUnknown() {
+				state.InputHttpRaw.AccessControlMaxAge = api.InputHttpRaw.AccessControlMaxAge
+			} else if state.InputHttpRaw.AccessControlMaxAge.IsNull() || state.InputHttpRaw.AccessControlMaxAge.IsUnknown() {
+				state.InputHttpRaw.AccessControlMaxAge = types.Float64Null()
+			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputHttpRaw.Description.IsNull() || state.InputHttpRaw.Description.IsUnknown())) {
 			if !api.InputHttpRaw.Description.IsNull() && !api.InputHttpRaw.Description.IsUnknown() {
@@ -62197,6 +64487,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputOpenTelemetry.MaxRequestsPerSocket.IsNull() || state.InputOpenTelemetry.MaxRequestsPerSocket.IsUnknown() {
 				state.InputOpenTelemetry.MaxRequestsPerSocket = types.Int64Null()
 			}
+		}
+		if !api.InputOpenTelemetry.CaptureHeadersWarning.IsNull() && !api.InputOpenTelemetry.CaptureHeadersWarning.IsUnknown() {
+			state.InputOpenTelemetry.CaptureHeadersWarning = api.InputOpenTelemetry.CaptureHeadersWarning
+		} else if state.InputOpenTelemetry.CaptureHeadersWarning.IsNull() || state.InputOpenTelemetry.CaptureHeadersWarning.IsUnknown() {
+			state.InputOpenTelemetry.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOpenTelemetry.RequestTimeout.IsNull() || state.InputOpenTelemetry.RequestTimeout.IsUnknown())) {
 			if !api.InputOpenTelemetry.RequestTimeout.IsNull() && !api.InputOpenTelemetry.RequestTimeout.IsUnknown() {
@@ -63936,6 +66231,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputWef.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputWef.CaptureHeadersWarning.IsNull() && !api.InputWef.CaptureHeadersWarning.IsUnknown() {
+			state.InputWef.CaptureHeadersWarning = api.InputWef.CaptureHeadersWarning
+		} else if state.InputWef.CaptureHeadersWarning.IsNull() || state.InputWef.CaptureHeadersWarning.IsUnknown() {
+			state.InputWef.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWef.KeepAliveTimeout.IsNull() || state.InputWef.KeepAliveTimeout.IsUnknown())) {
 			if !api.InputWef.KeepAliveTimeout.IsNull() && !api.InputWef.KeepAliveTimeout.IsUnknown() {
 				state.InputWef.KeepAliveTimeout = api.InputWef.KeepAliveTimeout
@@ -65271,6 +67571,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputWizWebhook.CaptureHeaders.IsNull() || state.InputWizWebhook.CaptureHeaders.IsUnknown() {
 				state.InputWizWebhook.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputWizWebhook.CaptureHeadersWarning.IsNull() && !api.InputWizWebhook.CaptureHeadersWarning.IsUnknown() {
+			state.InputWizWebhook.CaptureHeadersWarning = api.InputWizWebhook.CaptureHeadersWarning
+		} else if state.InputWizWebhook.CaptureHeadersWarning.IsNull() || state.InputWizWebhook.CaptureHeadersWarning.IsUnknown() {
+			state.InputWizWebhook.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputWizWebhook.ActivityLogSampleRate.IsNull() || state.InputWizWebhook.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputWizWebhook.ActivityLogSampleRate.IsNull() && !api.InputWizWebhook.ActivityLogSampleRate.IsUnknown() {
@@ -66922,6 +69227,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputZscalerHec.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputZscalerHec.CaptureHeadersWarning.IsNull() && !api.InputZscalerHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputZscalerHec.CaptureHeadersWarning = api.InputZscalerHec.CaptureHeadersWarning
+		} else if state.InputZscalerHec.CaptureHeadersWarning.IsNull() || state.InputZscalerHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputZscalerHec.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputZscalerHec.ActivityLogSampleRate.IsNull() || state.InputZscalerHec.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputZscalerHec.ActivityLogSampleRate.IsNull() && !api.InputZscalerHec.ActivityLogSampleRate.IsUnknown() {
 				state.InputZscalerHec.ActivityLogSampleRate = api.InputZscalerHec.ActivityLogSampleRate
@@ -67191,6 +69501,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputCloudflareHec.CaptureHeaders.IsNull() || state.InputCloudflareHec.CaptureHeaders.IsUnknown() {
 				state.InputCloudflareHec.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputCloudflareHec.CaptureHeadersWarning.IsNull() && !api.InputCloudflareHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputCloudflareHec.CaptureHeadersWarning = api.InputCloudflareHec.CaptureHeadersWarning
+		} else if state.InputCloudflareHec.CaptureHeadersWarning.IsNull() || state.InputCloudflareHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputCloudflareHec.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputCloudflareHec.ActivityLogSampleRate.IsNull() || state.InputCloudflareHec.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputCloudflareHec.ActivityLogSampleRate.IsNull() && !api.InputCloudflareHec.ActivityLogSampleRate.IsUnknown() {
@@ -67472,6 +69787,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputSysdigHec.CaptureHeaders = types.BoolNull()
 			}
 		}
+		if !api.InputSysdigHec.CaptureHeadersWarning.IsNull() && !api.InputSysdigHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputSysdigHec.CaptureHeadersWarning = api.InputSysdigHec.CaptureHeadersWarning
+		} else if state.InputSysdigHec.CaptureHeadersWarning.IsNull() || state.InputSysdigHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputSysdigHec.CaptureHeadersWarning = types.StringNull()
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputSysdigHec.ActivityLogSampleRate.IsNull() || state.InputSysdigHec.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputSysdigHec.ActivityLogSampleRate.IsNull() && !api.InputSysdigHec.ActivityLogSampleRate.IsUnknown() {
 				state.InputSysdigHec.ActivityLogSampleRate = api.InputSysdigHec.ActivityLogSampleRate
@@ -67734,6 +70054,11 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 			} else if state.InputUpwindHec.CaptureHeaders.IsNull() || state.InputUpwindHec.CaptureHeaders.IsUnknown() {
 				state.InputUpwindHec.CaptureHeaders = types.BoolNull()
 			}
+		}
+		if !api.InputUpwindHec.CaptureHeadersWarning.IsNull() && !api.InputUpwindHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputUpwindHec.CaptureHeadersWarning = api.InputUpwindHec.CaptureHeadersWarning
+		} else if state.InputUpwindHec.CaptureHeadersWarning.IsNull() || state.InputUpwindHec.CaptureHeadersWarning.IsUnknown() {
+			state.InputUpwindHec.CaptureHeadersWarning = types.StringNull()
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputUpwindHec.ActivityLogSampleRate.IsNull() || state.InputUpwindHec.ActivityLogSampleRate.IsUnknown())) {
 			if !api.InputUpwindHec.ActivityLogSampleRate.IsNull() && !api.InputUpwindHec.ActivityLogSampleRate.IsUnknown() {
@@ -68345,6 +70670,23 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputAnthropicCompliance.RequestTimeout = types.Float64Null()
 			}
 		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.BreakerRulesets.IsNull() || state.InputAnthropicCompliance.BreakerRulesets.IsUnknown())) {
+			if !api.InputAnthropicCompliance.BreakerRulesets.IsNull() && !api.InputAnthropicCompliance.BreakerRulesets.IsUnknown() {
+				state.InputAnthropicCompliance.BreakerRulesets = api.InputAnthropicCompliance.BreakerRulesets
+			} else if state.InputAnthropicCompliance.BreakerRulesets.IsNull() || state.InputAnthropicCompliance.BreakerRulesets.IsUnknown() {
+				state.InputAnthropicCompliance.BreakerRulesets = types.ListNull(types.StringType)
+			}
+		}
+		if elementType := state.InputAnthropicCompliance.BreakerRulesets.ElementType(context.Background()); elementType == nil {
+			state.InputAnthropicCompliance.BreakerRulesets = types.ListNull(types.StringType)
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.StaleChannelFlushMs.IsNull() || state.InputAnthropicCompliance.StaleChannelFlushMs.IsUnknown())) {
+			if !api.InputAnthropicCompliance.StaleChannelFlushMs.IsNull() && !api.InputAnthropicCompliance.StaleChannelFlushMs.IsUnknown() {
+				state.InputAnthropicCompliance.StaleChannelFlushMs = api.InputAnthropicCompliance.StaleChannelFlushMs
+			} else if state.InputAnthropicCompliance.StaleChannelFlushMs.IsNull() || state.InputAnthropicCompliance.StaleChannelFlushMs.IsUnknown() {
+				state.InputAnthropicCompliance.StaleChannelFlushMs = types.Float64Null()
+			}
+		}
 		if !preserveInputs || (fillMissingInputs && (state.InputAnthropicCompliance.KeepAliveTime.IsNull() || state.InputAnthropicCompliance.KeepAliveTime.IsUnknown())) {
 			if !api.InputAnthropicCompliance.KeepAliveTime.IsNull() && !api.InputAnthropicCompliance.KeepAliveTime.IsUnknown() {
 				state.InputAnthropicCompliance.KeepAliveTime = api.InputAnthropicCompliance.KeepAliveTime
@@ -68536,6 +70878,13 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 				state.InputOkta.Latest = api.InputOkta.Latest
 			} else if state.InputOkta.Latest.IsNull() || state.InputOkta.Latest.IsUnknown() {
 				state.InputOkta.Latest = types.StringNull()
+			}
+		}
+		if !preserveInputs || (fillMissingInputs && (state.InputOkta.ManageState.IsNull() || state.InputOkta.ManageState.IsUnknown())) {
+			if !api.InputOkta.ManageState.IsNull() && !api.InputOkta.ManageState.IsUnknown() {
+				state.InputOkta.ManageState = api.InputOkta.ManageState
+			} else if state.InputOkta.ManageState.IsNull() || state.InputOkta.ManageState.IsUnknown() {
+				state.InputOkta.ManageState = types.MapNull(types.StringType)
 			}
 		}
 		if !preserveInputs || (fillMissingInputs && (state.InputOkta.JobTimeout.IsNull() || state.InputOkta.JobTimeout.IsUnknown())) {

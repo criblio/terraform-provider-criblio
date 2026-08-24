@@ -50,7 +50,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"api": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `API server configuration for the Cribl instance.`,
 							Attributes: map[string]schema.Attribute{
 								"base_url": schema.StringAttribute{
 									Computed:    true,
@@ -103,7 +104,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 									ElementType: types.StringType,
 								},
 								"ssl": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `TLS configuration for the API server.`,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
 											Computed:    true,
@@ -139,7 +141,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"apps": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `App configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"enabled": schema.BoolAttribute{
 									Computed:    true,
@@ -162,7 +165,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"custom_logo": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Custom logo configuration for the Cribl UI login page and navigation bar.`,
 							Attributes: map[string]schema.Attribute{
 								"enabled": schema.BoolAttribute{
 									Computed:    true,
@@ -189,7 +193,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"proxy": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `HTTP proxy configuration for outbound connections.`,
 							Attributes: map[string]schema.Attribute{
 								"use_env_vars": schema.BoolAttribute{
 									Computed:    true,
@@ -216,7 +221,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"shutdown": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Graceful shutdown configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"drain_timeout": schema.Int64Attribute{
 									Computed:    true,
@@ -234,7 +240,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"sockets": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unix domain socket configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"directory": schema.StringAttribute{
 									Computed:    true,
@@ -243,7 +250,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"support": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Support and diagnostics settings.`,
 							Attributes: map[string]schema.Attribute{
 								"feature_flag_overrides": schema.ListNestedAttribute{
 									Computed:    true,
@@ -272,14 +280,16 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"system": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `System-level operational settings for the Cribl instance.`,
 							Attributes: map[string]schema.Attribute{
 								"intercom": schema.BoolAttribute{
 									Computed:    true,
 									Description: `If <code>true</code>, enable Intercom integration for in-product messaging. Otherwise, <code>false</code>.`,
 								},
 								"upgrade": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Upgrade permission policy: <code>api</code> to allow upgrades from the UI or API or <code>false</code> to disable.`,
 								},
 							},
 						},
@@ -363,6 +373,10 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 										},
 									},
 								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>false</code>, skip TLS certificate validation when downloading upgrade packages. Defaults to <code>true</code> (validate). Set to <code>false</code> only when a trusted TLS-inspecting proxy is in use (insecure).`,
+								},
 								"upgrade_source": schema.StringAttribute{
 									Computed:    true,
 									Description: `Upgrade source: <code>cribl</code> for official Cribl packages or <code>custom</code> for a custom package URL.`,
@@ -370,7 +384,8 @@ func (d *GroupSystemSettingsDataSource) Schema(_ context.Context, _ datasource.S
 							},
 						},
 						"workers": schema.SingleNestedAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Worker Process configuration.`,
 							Attributes: map[string]schema.Attribute{
 								"count": schema.Int64Attribute{
 									Computed:    true,

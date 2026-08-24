@@ -125,7 +125,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The method to use when sending events`,
 					},
 					"format": schema.StringAttribute{
 						Computed:    true,
@@ -161,6 +162,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -186,7 +191,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -243,14 +249,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
 						Description: `Authentication method to use for the HTTP request`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -282,10 +290,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -342,7 +352,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -365,10 +376,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -579,6 +592,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -604,7 +621,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -661,7 +679,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -768,7 +787,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -791,10 +811,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -862,7 +884,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -952,7 +975,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `The port to connect to on the provided host`,
 								},
 								"tls": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to inherit TLS configs from group setting or disable TLS`,
 								},
 								"servername": schema.StringAttribute{
 									Computed:    true,
@@ -986,7 +1010,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1023,15 +1048,18 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"max_record_size": schema.Float64Attribute{
 						Computed:    true,
@@ -1054,7 +1082,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -1077,10 +1106,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -1101,7 +1132,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -1130,7 +1162,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The port to connect to on the provided host`,
 					},
 					"nested_fields": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to serialize nested fields into index-time fields`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -1145,7 +1178,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1182,10 +1216,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -1202,13 +1238,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Use to troubleshoot issues with sending data`,
 					},
 					"max_s2_sversion": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The highest S2S protocol version to advertise during handshake`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -1219,7 +1258,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -1230,7 +1270,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -1253,10 +1294,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -1320,7 +1363,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
 					},
 					"nested_fields": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to serialize nested fields into index-time fields`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -1335,7 +1379,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1372,10 +1417,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -1392,10 +1439,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Use to troubleshoot issues with sending data`,
 					},
 					"max_s2_sversion": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The highest S2S protocol version to advertise during handshake`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"indexer_discovery": schema.BoolAttribute{
 						Computed:    true,
@@ -1406,7 +1455,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -1417,7 +1467,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.`,
 					},
 					"indexer_discovery_configs": schema.SingleNestedAttribute{
 						Computed:    true,
@@ -1445,7 +1496,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"auth_type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 										},
 										"auth_token": schema.StringAttribute{
 											Computed:    true,
@@ -1460,7 +1512,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								},
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 							},
 							"auth_token": schema.StringAttribute{
 								Computed:    true,
@@ -1491,7 +1544,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `The port to connect to on the provided host`,
 								},
 								"tls": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to inherit TLS configs from group setting or disable TLS`,
 								},
 								"servername": schema.StringAttribute{
 									Computed:    true,
@@ -1513,7 +1567,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -1536,10 +1591,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -1595,7 +1652,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1627,10 +1685,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -1660,6 +1720,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -1681,7 +1745,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -1693,7 +1758,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Output metrics in multiple-metric format, supported in Splunk 8.0 and above to allow multiple metrics in a single event.`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -1753,7 +1819,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -1813,7 +1880,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -1836,10 +1904,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -1882,7 +1952,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1914,10 +1985,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -1947,6 +2020,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -1968,7 +2045,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -1976,7 +2054,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -2044,7 +2123,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Wiz Defend Source type`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -2068,7 +2148,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -2091,10 +2172,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -2115,7 +2198,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -2140,7 +2224,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Use load-balanced destinations`,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending`,
 					},
 					"log_failed_requests": schema.BoolAttribute{
 						Computed:    true,
@@ -2151,7 +2236,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -2188,10 +2274,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -2212,10 +2300,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Upon connection, send a header-like record containing the auth token and other metadata.This record will not contain an actual event – only subsequent records will.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -2247,7 +2337,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `The port to connect to on the provided host`,
 								},
 								"tls": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to inherit TLS configs from group setting or disable TLS`,
 								},
 								"servername": schema.StringAttribute{
 									Computed:    true,
@@ -2281,7 +2372,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -2304,10 +2396,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -2359,7 +2453,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"domain": schema.StringAttribute{
 						Computed:    true,
@@ -2391,6 +2486,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -2416,7 +2515,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -2473,7 +2573,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -2497,7 +2598,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -2520,10 +2622,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -2566,7 +2670,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"realm": schema.StringAttribute{
 						Computed:    true,
@@ -2598,6 +2703,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -2623,7 +2732,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -2680,7 +2790,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -2704,7 +2815,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -2727,10 +2839,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -2793,7 +2907,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -2828,14 +2943,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -2867,7 +2984,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -2884,10 +3002,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -2898,10 +3018,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -2969,7 +3091,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -3010,7 +3133,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -3061,7 +3185,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -3096,14 +3221,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -3135,7 +3262,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -3153,13 +3281,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -3178,10 +3309,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -3192,10 +3325,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -3263,7 +3398,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -3316,7 +3452,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -3351,14 +3488,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -3390,7 +3529,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -3403,7 +3543,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method`,
 					},
 					"storage_class": schema.StringAttribute{
 						Computed:    true,
@@ -3414,10 +3555,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -3428,10 +3571,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -3582,7 +3727,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Ingestion mode`,
 					},
 					"oauth_endpoint": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Endpoint used to acquire authentication tokens from Azure`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Computed:    true,
@@ -3623,13 +3769,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -3640,10 +3789,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -3726,7 +3877,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: "The ingestion service URI for your cluster. Typically, `https://ingest-<cluster>.<region>.kusto.windows.net`.",
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"stage_path": schema.StringAttribute{
 						Computed:    true,
@@ -3757,7 +3909,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of parts to upload in parallel per file`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"add_id_to_stage_path": schema.BoolAttribute{
 						Computed:    true,
@@ -3789,7 +3942,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -3926,6 +4080,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -3953,7 +4111,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -3976,10 +4135,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -4054,6 +4215,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -4079,7 +4244,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -4140,7 +4306,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -4159,7 +4326,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -4182,10 +4350,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -4218,7 +4388,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -4243,7 +4414,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Kinesis stream name to send events to.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -4307,7 +4479,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Batch events into a single record as NDJSON`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -4334,7 +4507,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -4357,10 +4531,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -4432,6 +4608,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -4457,7 +4637,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -4514,10 +4695,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enter API key directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -4532,7 +4715,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -4555,10 +4739,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -4618,10 +4804,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.`,
 					},
 					"ack": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Control the number of required acknowledgments`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use to serialize events before writing to the Event Hubs Kafka brokers`,
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -4668,14 +4856,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
 								Description: `Disabled`,
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Enter password directly, or select a stored secret`,
 							},
 							"password": schema.StringAttribute{
 								Computed:    true,
@@ -4687,14 +4877,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Select or create a stored text secret`,
 							},
 							"mechanism": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `SASL mechanism`,
 							},
 							"username": schema.StringAttribute{
 								Computed:    true,
 								Description: `The username for authentication. For Event Hubs, this should always be $ConnectionString.`,
 							},
 							"client_secret_auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication method`,
 							},
 							"client_secret": schema.StringAttribute{
 								Computed:    true,
@@ -4720,7 +4912,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Sensitive: true,
 							},
 							"oauth_endpoint": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Endpoint used to acquire authentication tokens from Azure`,
 							},
 							"client_id": schema.StringAttribute{
 								Computed:    true,
@@ -4737,7 +4930,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -4750,7 +4944,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -4765,7 +4960,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -4788,10 +4984,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -4879,7 +5077,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum retries per batch for retryable failures (transient, rate-limit, unknown) before dropping. 0 (default) retries indefinitely.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -4894,7 +5093,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -4917,10 +5117,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -5053,6 +5255,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -5074,7 +5280,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -5086,7 +5293,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5174,7 +5382,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -5197,10 +5406,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -5271,10 +5482,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Disable if you can access files within the bucket but not the bucket itself`,
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -5297,7 +5510,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -5332,14 +5546,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -5371,7 +5587,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -5388,10 +5605,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -5402,10 +5621,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -5568,7 +5789,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression to compute the value of the insert ID field.`,
 					},
 					"google_auth_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Computed:    true,
@@ -5720,7 +5942,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `A JavaScript expression that evaluates to the the sampling decision of the span associated with the log entry. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5747,7 +5970,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -5770,10 +5994,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -5831,6 +6057,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Choose Auto to use Google Application Default Credentials (ADC). Choose Secret to select or create a stored secret that references Google service account credentials.`,
 					},
+					"preserve_native_any_value": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
+					},
 					"metadata": schema.ListNestedAttribute{
 						Computed:    true,
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
@@ -5867,12 +6097,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -5883,7 +6118,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `How often the sender should ping the peer to keep the connection open`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -5916,10 +6152,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -5928,7 +6166,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Use to keep outgoing data points within GCO request limits. For metrics, combine with the OTLP Metrics function batchSize.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -5948,7 +6187,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -5971,10 +6211,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -5995,7 +6237,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -6032,7 +6275,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.`,
 					},
 					"google_auth_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Computed:    true,
@@ -6068,7 +6312,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The maximum number of in-progress API requests before backpressure is applied.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -6083,7 +6328,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -6106,10 +6352,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -6168,10 +6416,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Google Cloud Storage service endpoint`,
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -6202,14 +6452,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -6237,7 +6489,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6313,7 +6566,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -6343,13 +6597,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
 					},
 					"ack": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Control the number of required acknowledgments.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use to serialize events before writing to Kafka.`,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending to Kafka`,
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -6364,7 +6621,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6387,7 +6645,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 							},
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6443,7 +6702,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6480,10 +6740,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -6530,7 +6792,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6546,14 +6809,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"mechanism": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `SASL mechanism`,
 							},
 							"keytab_location": schema.StringAttribute{
 								Computed:    true,
@@ -6621,7 +6886,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6658,15 +6924,18 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -6689,7 +6958,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -6712,10 +6982,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -6736,7 +7008,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -6762,7 +7035,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6799,10 +7073,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -6811,13 +7087,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
 					},
 					"ack": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Control the number of required acknowledgments.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use to serialize events before writing to Kafka.`,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending to Kafka`,
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -6832,7 +7111,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -6855,7 +7135,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 							},
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6911,7 +7192,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -6948,10 +7230,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -6998,7 +7282,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 					},
 					"sasl": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -7014,14 +7299,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"mechanism": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `SASL mechanism`,
 							},
 							"keytab_location": schema.StringAttribute{
 								Computed:    true,
@@ -7089,7 +7376,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -7112,7 +7400,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -7135,10 +7424,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -7159,7 +7450,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -7189,13 +7481,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
 					},
 					"ack": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Control the number of required acknowledgments.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use to serialize events before writing to Kafka.`,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending to Kafka`,
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -7210,7 +7505,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
 					},
 					"kafka_schema_registry": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Kafka Schema Registry Authentication`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -7233,7 +7529,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
 							},
 							"auth": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Credentials to use when authenticating with the schema registry`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -7289,7 +7586,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								},
 							},
 							"tls": schema.SingleNestedAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `TLS settings (client side)`,
 								Attributes: map[string]schema.Attribute{
 									"disabled": schema.BoolAttribute{
 										Computed:    true,
@@ -7326,10 +7624,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 										Description: `Passphrase to use to decrypt private key`,
 									},
 									"min_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Minimum TLS version`,
 									},
 									"max_version": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Maximum TLS version`,
 									},
 								},
 							},
@@ -7376,7 +7676,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -7416,7 +7717,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -7453,15 +7755,18 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -7492,7 +7797,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -7515,10 +7821,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -7598,6 +7906,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -7619,7 +7931,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -7708,7 +8021,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
@@ -7745,7 +8059,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -7796,7 +8111,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -7819,10 +8135,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -7898,6 +8216,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -7919,7 +8241,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -7959,7 +8282,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Password`,
 							},
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Enter credentials directly, or select a stored secret`,
 							},
 							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
@@ -8033,7 +8357,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -8048,7 +8373,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -8071,10 +8397,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -8117,7 +8445,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Which New Relic region endpoint to use.`,
 					},
 					"log_type": schema.StringAttribute{
 						Computed:    true,
@@ -8169,6 +8498,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -8194,7 +8527,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -8251,10 +8585,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enter API key directly, or select a stored secret`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -8276,7 +8612,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -8299,10 +8636,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -8354,7 +8693,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"region": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Which New Relic region endpoint to use.`,
 					},
 					"account_id": schema.StringAttribute{
 						Computed:    true,
@@ -8390,6 +8730,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -8415,7 +8759,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -8472,10 +8817,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enter API key directly, or select a stored secret`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -8493,7 +8840,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -8516,10 +8864,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -8616,6 +8966,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -8641,7 +8995,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -8698,7 +9053,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -8729,7 +9085,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -8752,10 +9109,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -8828,7 +9187,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -8880,7 +9240,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -8903,7 +9264,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -8926,10 +9288,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -8972,7 +9336,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -9023,7 +9388,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -9058,14 +9424,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -9097,7 +9465,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -9119,13 +9488,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `MinIO service url (e.g. http://minioHost:9000)`,
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -9140,10 +9512,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -9154,10 +9528,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -9247,7 +9623,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Protocol to use when communicating with the destination.`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -9286,7 +9663,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -9297,7 +9675,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -9320,10 +9699,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -9366,7 +9747,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Protocol to use when communicating with the destination.`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -9405,7 +9787,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -9416,7 +9799,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -9439,10 +9823,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -9485,7 +9871,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Protocol to use when communicating with the destination.`,
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -9524,7 +9911,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"pq_strict_ordering": schema.BoolAttribute{
 						Computed:    true,
@@ -9535,7 +9923,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -9558,10 +9947,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -9675,7 +10066,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -9715,7 +10107,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -9738,7 +10131,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -9761,10 +10155,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -9785,7 +10181,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -9826,7 +10223,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Create queue if it does not exist.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -9882,7 +10280,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The maximum number of in-progress API requests before backpressure is applied.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -9905,7 +10304,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -9928,10 +10328,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -9952,7 +10354,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -10077,6 +10480,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -10102,7 +10509,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -10159,7 +10567,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -10178,7 +10587,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -10201,10 +10611,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -10317,6 +10729,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -10342,7 +10758,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -10399,10 +10816,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enter API key directly, or select a stored secret`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -10424,7 +10843,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -10447,10 +10867,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -10514,7 +10936,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
 					},
 					"message_format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
 					},
 					"labels": schema.ListNestedAttribute{
 						Computed:    true,
@@ -10540,7 +10963,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication type`,
 							},
 							"token": schema.StringAttribute{
 								Computed:    true,
@@ -10570,7 +10994,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication type`,
 							},
 							"token": schema.StringAttribute{
 								Computed:    true,
@@ -10618,6 +11043,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
@@ -10643,7 +11072,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -10700,7 +11130,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -10719,7 +11150,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -10742,10 +11174,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -10796,7 +11230,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
 					},
 					"message_format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
 					},
 					"labels": schema.ListNestedAttribute{
 						Computed:    true,
@@ -10815,7 +11250,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Computed:    true,
@@ -10838,6 +11274,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 					"timeout_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
 					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -10864,7 +11304,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -10925,7 +11366,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Add per-event HTTP headers from the __headers field to outgoing requests. Events with different headers are batched and sent separately.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -10970,7 +11412,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -10993,10 +11436,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -11043,7 +11488,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The Amazon Managed Service for Prometheus remote_write endpoint`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret_key": schema.StringAttribute{
 						Computed:    true,
@@ -11104,6 +11550,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -11129,7 +11579,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -11186,7 +11637,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -11209,7 +11661,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -11232,10 +11685,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -11256,7 +11711,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -11314,6 +11770,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -11339,7 +11799,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -11396,7 +11857,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -11419,7 +11881,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -11442,10 +11905,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -11479,7 +11944,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Select or create a stored text secret`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"aws_secret": schema.StringAttribute{
 						Computed:    true,
@@ -11557,14 +12023,16 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format`,
 					},
 					"dest_path": schema.StringAttribute{
 						Computed:    true,
 						Description: `Path to use to write metrics. Defaults to $CRIBL_HOME/state/<id>`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -11602,7 +12070,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select a transport option for OpenTelemetry`,
 					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
@@ -11612,11 +12081,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
 					},
+					"preserve_native_any_value": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
+					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"http_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -11670,12 +12145,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -11690,7 +12170,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Disable to close the connection immediately after sending the outgoing request`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -11855,7 +12336,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -11888,10 +12370,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -11904,7 +12388,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -11927,10 +12412,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -11985,20 +12472,28 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Auth token name`,
 					},
 					"otlp_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum size, in KB, of the request body`,
 					},
 					"protocol": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select a transport option for OpenTelemetry`,
+					},
+					"preserve_native_any_value": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"http_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"http_traces_endpoint_override": schema.StringAttribute{
 						Computed:    true,
@@ -12044,12 +12539,17 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -12064,7 +12564,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Disable to close the connection immediately after sending the outgoing request`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -12151,7 +12652,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -12184,10 +12686,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -12200,7 +12704,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -12223,10 +12728,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -12368,6 +12875,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -12393,7 +12904,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -12401,10 +12913,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enter API key directly, or select a stored secret`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -12426,7 +12940,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -12449,10 +12964,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -12482,7 +12999,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -12507,7 +13025,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Use load-balanced destinations`,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending`,
 					},
 					"log_failed_requests": schema.BoolAttribute{
 						Computed:    true,
@@ -12518,7 +13037,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -12555,10 +13075,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -12600,7 +13122,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -12632,7 +13155,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 									Description: `The port to connect to on the provided host`,
 								},
 								"tls": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Whether to inherit TLS configs from group setting or disable TLS`,
 								},
 								"servername": schema.StringAttribute{
 									Computed:    true,
@@ -12666,7 +13190,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -12689,10 +13214,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -12739,7 +13266,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -12776,10 +13304,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -12793,7 +13323,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Computed:    true,
@@ -12817,6 +13348,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -12838,7 +13373,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -12919,7 +13455,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -12970,7 +13507,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -12993,10 +13531,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -13043,7 +13583,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -13080,10 +13621,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -13097,7 +13640,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"compression": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the data before sending`,
 					},
 					"concurrency": schema.Float64Attribute{
 						Computed:    true,
@@ -13121,6 +13665,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -13142,7 +13690,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -13223,7 +13772,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"use_round_robin_dns": schema.BoolAttribute{
 						Computed:    true,
@@ -13274,7 +13824,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -13297,10 +13848,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -13372,6 +13925,10 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -13397,7 +13954,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -13405,10 +13963,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						ElementType: types.StringType,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: "When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.",
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -13460,7 +14020,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -13484,7 +14045,8 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -13507,10 +14069,12 @@ func (d *PackDestinationDataSource) Schema(_ context.Context, _ datasource.Schem
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -13583,6 +14147,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -13608,7 +14176,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -13616,10 +14185,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: "When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.",
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -13671,7 +14242,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -13695,7 +14267,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -13718,10 +14291,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -13784,7 +14359,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -13831,7 +14407,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Remove empty staging directories after moving files`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -13866,14 +14443,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -13905,7 +14484,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -13923,13 +14503,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: "Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)",
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -13953,10 +14536,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -13967,10 +14552,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -14038,7 +14625,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -14079,7 +14667,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -14150,14 +14739,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -14189,7 +14780,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -14207,13 +14799,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Secret key`,
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -14232,10 +14827,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -14385,14 +14982,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -14424,7 +15023,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -14461,10 +15061,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -14475,10 +15077,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -14580,7 +15184,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format. Default is gzip.`,
 					},
 					"partition_expr": schema.StringAttribute{
 						Computed:    true,
@@ -14626,7 +15231,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -14637,17 +15243,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
 					},
 					"mapping_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How event fields are mapped to ClickHouse columns`,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -14679,10 +15288,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -14712,6 +15323,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -14737,7 +15352,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -14802,7 +15418,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Log the most recent event that fails to match the table schema`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -14867,7 +15484,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -14890,10 +15508,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -14940,7 +15560,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -14951,17 +15572,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
 					},
 					"mapping_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How event fields are mapped to ClickHouse columns`,
 					},
 					"async_inserts": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Collect data into batches for later processing on the ClickHouse server. Disable to write to a ClickHouse table immediately. Cribl sends the configured value with every insert (<code>async_insert=1</code> or <code>async_insert=0</code>) so behavior is consistent across ClickHouse versions, including 26.3 LTS and later, where async inserts are enabled by default on the server.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -14993,10 +15617,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -15026,6 +15652,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -15051,7 +15681,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -15116,7 +15747,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Log the most recent event that fails to match the table schema`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -15181,7 +15813,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -15204,10 +15837,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -15254,7 +15889,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `URL of the database instance. Example: http://localhost:8123/`,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication type`,
 					},
 					"database": schema.StringAttribute{
 						Computed:    true,
@@ -15277,7 +15913,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Collect data into batches for later processing. Disable to write to a table immediately.`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -15309,10 +15946,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Passphrase to use to decrypt private key`,
 							},
 							"min_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Minimum TLS version`,
 							},
 							"max_version": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum TLS version`,
 							},
 						},
 					},
@@ -15342,6 +15981,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -15367,7 +16010,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -15432,7 +16076,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Log the most recent event that fails to match the table schema`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"stats_destination": schema.SingleNestedAttribute{
 						Computed: true,
@@ -15530,7 +16175,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -15553,10 +16199,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -15628,6 +16276,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -15649,7 +16301,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -15714,7 +16367,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Maximum number of requests to limit to per second`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -15774,7 +16428,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -15797,10 +16452,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -15821,7 +16478,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Unique ID for this output`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Connector type identifier.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Computed:    true,
@@ -15905,7 +16563,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The method to use when sending events`,
 					},
 					"keep_alive": schema.BoolAttribute{
 						Computed:    true,
@@ -15937,6 +16596,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -15962,7 +16625,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -16019,7 +16683,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -16054,7 +16719,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -16077,10 +16743,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -16152,13 +16820,20 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)`,
 					},
 					"otlp_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
+					},
+					"preserve_native_any_value": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Values already in OTLP AnyValue form (e.g. {string_value: "..."}) are serialized directly instead of being wrapped as key-value maps`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"http_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
 					},
 					"http_traces_endpoint_override": schema.StringAttribute{
 						Computed:    true,
@@ -16208,12 +16883,17 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"connection_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -16240,7 +16920,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Api-Token name`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -16335,7 +17016,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -16358,10 +17040,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -16429,6 +17113,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -16450,7 +17138,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -16458,7 +17147,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"auth_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
 					},
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed:    true,
@@ -16518,7 +17208,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -16602,7 +17293,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -16625,10 +17317,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -16757,6 +17451,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -16778,7 +17476,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -16790,7 +17489,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -16865,7 +17565,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -16888,10 +17589,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -16954,7 +17657,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -16989,14 +17693,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -17028,7 +17734,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -17081,10 +17788,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Optional description for this configuration.`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -17095,10 +17804,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -17255,6 +17966,10 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Computed:    true,
 						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
 					},
+					"max_connection_reuse_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `How long, in seconds, to reuse a keep-alive connection after its first use before forcing it closed. Set to 0 to disable the time-based close and reuse connections for as long as the destination server permits.`,
+					},
 					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
@@ -17276,7 +17991,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -17337,7 +18053,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -17352,7 +18069,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -17375,10 +18093,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -17425,10 +18145,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Topic name from Fabric Eventstream's endpoint`,
 					},
 					"ack": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Control the number of required acknowledgments`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format to use to serialize events before writing to the Event Hubs Kafka brokers`,
 					},
 					"max_record_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -17483,7 +18205,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Disabled`,
 							},
 							"mechanism": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `SASL mechanism`,
 							},
 							"username": schema.StringAttribute{
 								Computed:    true,
@@ -17494,7 +18217,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Description: `Select or create a stored text secret corresponding to the SASL JASS Password Primary or Password Secondary`,
 							},
 							"client_secret_auth_type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Authentication method`,
 							},
 							"client_text_secret": schema.StringAttribute{
 								Computed:    true,
@@ -17515,7 +18239,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 								Sensitive: true,
 							},
 							"oauth_endpoint": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Endpoint used to acquire authentication tokens from Azure`,
 							},
 							"client_id": schema.StringAttribute{
 								Computed:    true,
@@ -17532,7 +18257,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `TLS settings (client side)`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -17545,7 +18271,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"bootstrap_server": schema.StringAttribute{
 						Computed:    true,
@@ -17564,7 +18291,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
 					},
 					"pq_mode": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
 					},
 					"pq_max_buffer_size": schema.Float64Attribute{
 						Computed:    true,
@@ -17587,10 +18315,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
 					},
 					"pq_compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
 					},
 					"pq_on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
 					},
 					"pq_max_buffer_size_bytes": schema.StringAttribute{
 						Computed:    true,
@@ -17633,7 +18363,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS authentication method. Choose Auto to use IAM roles.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -17680,7 +18411,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -17715,14 +18447,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -17754,7 +18488,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -17776,10 +18511,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"description": schema.StringAttribute{
 						Computed:    true,
@@ -17790,10 +18527,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -17804,10 +18543,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -17897,7 +18638,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -17948,7 +18690,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -17983,14 +18726,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -18022,7 +18767,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -18047,10 +18793,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -18061,10 +18809,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -18154,7 +18904,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -18201,7 +18952,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -18236,14 +18988,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -18275,7 +19029,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -18300,10 +19055,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -18314,10 +19071,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -18407,7 +19166,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -18454,7 +19214,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -18489,14 +19250,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -18528,7 +19291,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -18553,10 +19317,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -18567,10 +19333,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -18660,7 +19428,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -18711,7 +19480,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -18746,14 +19516,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -18785,7 +19557,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -18798,7 +19571,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
@@ -18813,10 +19587,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -18827,10 +19603,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -18924,7 +19702,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Cloudian HyperStore S3-compatible endpoint URL (example: https://s3.hyperstore.example.com)`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -18975,7 +19754,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -19010,14 +19790,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -19049,7 +19831,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -19062,13 +19845,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"storage_class": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Storage class to select for uploaded objects`,
 					},
 					"server_side_encryption": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Server-side encryption to use for uploaded objects`,
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -19083,10 +19869,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -19097,10 +19885,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -19190,7 +19980,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						ElementType: types.StringType,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -19241,7 +20032,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -19276,14 +20068,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -19315,7 +20109,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -19340,10 +20135,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -19354,10 +20151,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -19495,7 +20294,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -19530,14 +20330,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -19569,7 +20371,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -19582,7 +20385,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"object_acl": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
@@ -19613,10 +20417,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -19627,10 +20433,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,
@@ -19724,7 +20532,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `IBM Cloud Object Storage S3-compatible endpoint URL (example: https://s3.us-south.cloud-object-storage.appdomain.cloud)`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Authentication method.`,
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
@@ -19771,7 +20580,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
 					},
 					"format": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Format of the output data`,
 					},
 					"base_file_name": schema.StringAttribute{
 						Computed:    true,
@@ -19806,14 +20616,16 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Buffer size used to write to a file`,
 					},
 					"on_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
 					},
 					"deadletter_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
 					},
 					"on_disk_full_backpressure": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
 					},
 					"force_close_on_shutdown": schema.BoolAttribute{
 						Computed:    true,
@@ -19845,7 +20657,8 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						},
 					},
 					"orphans": schema.SingleNestedAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Orphan file recovery`,
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -19866,10 +20679,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `Select or create a stored secret that references your access key and secret key`,
 					},
 					"compress": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Data compression format to apply to HTTP content before it is delivered`,
 					},
 					"compression_level": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Compression level to apply before moving files to final destination`,
 					},
 					"automatic_schema": schema.BoolAttribute{
 						Computed:    true,
@@ -19880,10 +20695,12 @@ Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/
 						Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
 					},
 					"parquet_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Determines which data types are supported and how they are represented`,
 					},
 					"parquet_data_page_version": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
 					},
 					"parquet_row_group_length": schema.Float64Attribute{
 						Computed:    true,

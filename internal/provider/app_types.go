@@ -27,6 +27,7 @@ type AppModel struct {
 	MinLogStreamVersion types.String `tfsdk:"min_log_stream_version" json:"minLogStreamVersion,omitempty"`
 	Source              types.String `tfsdk:"source" json:"source,omitempty"`
 	Spec                types.String `tfsdk:"spec" json:"spec,omitempty"`
+	Tags                types.Object `tfsdk:"tags" json:"tags,omitempty"`
 	Version             types.String `tfsdk:"version" json:"version,omitempty"`
 }
 
@@ -41,6 +42,7 @@ type AppResourceModel struct {
 	MinLogStreamVersion types.String `tfsdk:"min_log_stream_version" json:"minLogStreamVersion,omitempty"`
 	Source              types.String `tfsdk:"source" json:"source,omitempty"`
 	Spec                types.String `tfsdk:"spec" json:"spec,omitempty"`
+	Tags                types.Object `tfsdk:"tags" json:"tags,omitempty"`
 	Version             types.String `tfsdk:"version" json:"version,omitempty"`
 }
 
@@ -55,6 +57,7 @@ type AppDataSourceModel struct {
 	MinLogStreamVersion types.String `tfsdk:"min_log_stream_version" json:"minLogStreamVersion,omitempty"`
 	Source              types.String `tfsdk:"source" json:"source,omitempty"`
 	Spec                types.String `tfsdk:"spec" json:"spec,omitempty"`
+	Tags                types.Object `tfsdk:"tags" json:"tags,omitempty"`
 	Version             types.String `tfsdk:"version" json:"version,omitempty"`
 }
 
@@ -69,6 +72,7 @@ type AppAPIModel struct {
 	MinLogStreamVersion *string `json:"minLogStreamVersion,omitempty"`
 	Source              *string `json:"source,omitempty"`
 	Spec                *string `json:"spec,omitempty"`
+	Tags                any     `json:"tags,omitempty"`
 	Version             *string `json:"version,omitempty"`
 }
 
@@ -89,6 +93,20 @@ func AppCriblAttrTypes() map[string]attr.Type {
 		"type":                      types.StringType,
 		"create_app_script_version": types.StringType,
 		"hidden":                    types.BoolType,
+	}
+}
+
+type AppTagsModel struct {
+	Product types.List `tfsdk:"product" json:"product,omitempty"`
+}
+
+type AppTagsAPIModel struct {
+	Product []string `json:"product,omitempty"`
+}
+
+func AppTagsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"product": types.ListType{ElemType: types.StringType},
 	}
 }
 
@@ -368,6 +386,13 @@ func (m AppModel) MarshalJSON() ([]byte, error) {
 		}
 		output["spec"] = value
 	}
+	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
+		value, err := AppTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
+	}
 	if !m.Version.IsNull() && !m.Version.IsUnknown() {
 		value, err := AppTerraformValueToJSON(m.Version)
 		if err != nil {
@@ -454,6 +479,15 @@ func (m *AppModel) UnmarshalJSON(data []byte) error {
 		m.Spec = types.StringValue(*input.Spec)
 	} else {
 		m.Spec = types.StringNull()
+	}
+	if input.Tags != nil {
+		value, err := AppAPIValueToTerraformValue(input.Tags, types.ObjectType{AttrTypes: AppTagsAttrTypes()})
+		if err != nil {
+			return fmt.Errorf("convert tags from API value: %v", err)
+		}
+		m.Tags = value.(types.Object)
+	} else {
+		m.Tags = types.ObjectNull(AppTagsAttrTypes())
 	}
 	if input.Version != nil {
 		m.Version = types.StringValue(*input.Version)

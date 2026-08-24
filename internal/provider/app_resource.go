@@ -163,6 +163,20 @@ func (r *AppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"tags": schema.SingleNestedAttribute{
+				Required: false,
+				Optional: true,
+				Computed: false,
+				Attributes: map[string]schema.Attribute{
+					"product": schema.ListAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    false,
+						Description: `Cribl products supported by the app.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
 			"version": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
@@ -285,6 +299,9 @@ func isAppImportState(state *AppModel) bool {
 	if !state.Force.IsNull() && !state.Force.IsUnknown() {
 		return false
 	}
+	if !state.Tags.IsNull() && !state.Tags.IsUnknown() {
+		return false
+	}
 	return true
 }
 
@@ -351,6 +368,14 @@ func applyAppAPIToState(api *AppModel, state *AppModel, preserveInputs bool, fil
 	}
 	if state.Spec.IsUnknown() {
 		state.Spec = types.StringNull()
+	}
+	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
+		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
+			state.Tags = api.Tags
+		}
+	}
+	if len(state.Tags.AttributeTypes(context.Background())) == 0 {
+		state.Tags = types.ObjectNull(AppTagsAttrTypes())
 	}
 	if !api.Version.IsNull() && !api.Version.IsUnknown() {
 		state.Version = api.Version

@@ -332,12 +332,14 @@ type InputCollectionCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCollectionCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCollectionCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -345,6 +347,7 @@ func InputCollectionCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -447,12 +450,14 @@ type InputKafkaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputKafkaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputKafkaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -460,6 +465,7 @@ func InputKafkaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -807,12 +813,14 @@ type InputMskCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputMskCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputMskCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -820,6 +828,7 @@ func InputMskCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1074,12 +1083,14 @@ type InputHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1087,6 +1098,7 @@ func InputHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1250,12 +1262,14 @@ type InputSplunkCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSplunkCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSplunkCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1263,6 +1277,7 @@ func InputSplunkCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1406,12 +1421,14 @@ type InputSplunkSearchCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSplunkSearchCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSplunkSearchCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1419,6 +1436,7 @@ func InputSplunkSearchCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1570,12 +1588,14 @@ type InputSplunkHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSplunkHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSplunkHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1583,6 +1603,7 @@ func InputSplunkHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1758,12 +1779,14 @@ type InputAzureBlobCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputAzureBlobCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputAzureBlobCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1771,6 +1794,7 @@ func InputAzureBlobCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -1867,12 +1891,14 @@ type InputElasticCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputElasticCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputElasticCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -1880,6 +1906,7 @@ func InputElasticCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -2061,12 +2088,14 @@ type InputConfluentCloudCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputConfluentCloudCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputConfluentCloudCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2074,6 +2103,7 @@ func InputConfluentCloudCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -2421,12 +2451,14 @@ type InputGrafanaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputGrafanaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputGrafanaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2434,6 +2466,7 @@ func InputGrafanaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -2618,12 +2651,14 @@ type InputLokiCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputLokiCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputLokiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2631,6 +2666,7 @@ func InputLokiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -2757,12 +2793,14 @@ type InputPrometheusRwCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputPrometheusRwCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputPrometheusRwCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2770,6 +2808,7 @@ func InputPrometheusRwCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -2896,12 +2935,14 @@ type InputPrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputPrometheusCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputPrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -2909,6 +2950,7 @@ func InputPrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3025,12 +3067,14 @@ type InputEdgePrometheusCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputEdgePrometheusCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputEdgePrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3038,6 +3082,7 @@ func InputEdgePrometheusCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3220,12 +3265,14 @@ type InputOffice365MgmtCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOffice365MgmtCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOffice365MgmtCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3233,6 +3280,7 @@ func InputOffice365MgmtCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3376,12 +3424,14 @@ type InputOffice365ServiceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOffice365ServiceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOffice365ServiceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3389,6 +3439,7 @@ func InputOffice365ServiceCriblSourceProvenanceAttrTypes() map[string]attr.Type 
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3532,12 +3583,14 @@ type InputOffice365MsgTraceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOffice365MsgTraceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOffice365MsgTraceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3545,6 +3598,7 @@ func InputOffice365MsgTraceCriblSourceProvenanceAttrTypes() map[string]attr.Type
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3685,12 +3739,14 @@ type InputMicrosoftGraphCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputMicrosoftGraphCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputMicrosoftGraphCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3698,6 +3754,7 @@ func InputMicrosoftGraphCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -3838,12 +3895,14 @@ type InputEventhubCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputEventhubCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputEventhubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -3851,6 +3910,7 @@ func InputEventhubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4012,12 +4072,14 @@ type InputEventhubAmqpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputEventhubAmqpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputEventhubAmqpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4025,6 +4087,7 @@ func InputEventhubAmqpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4237,12 +4300,14 @@ type InputExecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputExecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputExecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4250,6 +4315,7 @@ func InputExecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4332,12 +4398,14 @@ type InputFirehoseCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputFirehoseCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputFirehoseCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4345,6 +4413,7 @@ func InputFirehoseCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4471,12 +4540,14 @@ type InputGooglePubsubCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputGooglePubsubCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputGooglePubsubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4484,6 +4555,7 @@ func InputGooglePubsubCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4566,12 +4638,14 @@ type InputCriblCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCriblCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCriblCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4579,6 +4653,7 @@ func InputCriblCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4661,12 +4736,14 @@ type InputCriblTcpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCriblTcpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCriblTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4674,6 +4751,7 @@ func InputCriblTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4820,12 +4898,14 @@ type InputCriblHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCriblHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCriblHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4833,6 +4913,7 @@ func InputCriblHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -4979,12 +5060,14 @@ type InputCriblLakeHttpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCriblLakeHttpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCriblLakeHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -4992,6 +5075,7 @@ func InputCriblLakeHttpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -5198,12 +5282,14 @@ type InputTcpjsonCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputTcpjsonCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputTcpjsonCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5211,6 +5297,7 @@ func InputTcpjsonCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -5337,12 +5424,14 @@ type InputSystemMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSystemMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSystemMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5350,6 +5439,7 @@ func InputSystemMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -5719,12 +5809,14 @@ type InputSystemStateCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSystemStateCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSystemStateCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -5732,6 +5824,7 @@ func InputSystemStateCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6041,12 +6134,14 @@ type InputKubeMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputKubeMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputKubeMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6054,6 +6149,7 @@ func InputKubeMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6182,12 +6278,14 @@ type InputKubeLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputKubeLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputKubeLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6195,6 +6293,7 @@ func InputKubeLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6320,12 +6419,14 @@ type InputKubeEventsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputKubeEventsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputKubeEventsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6333,6 +6434,7 @@ func InputKubeEventsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6432,12 +6534,14 @@ type InputWindowsMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputWindowsMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputWindowsMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6445,6 +6549,7 @@ func InputWindowsMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6759,12 +6864,14 @@ type InputCrowdstrikeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCrowdstrikeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCrowdstrikeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6772,6 +6879,7 @@ func InputCrowdstrikeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -6891,12 +6999,14 @@ type InputDatadogAgentCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputDatadogAgentCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputDatadogAgentCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -6904,6 +7014,7 @@ func InputDatadogAgentCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7067,12 +7178,14 @@ type InputDatagenCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputDatagenCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputDatagenCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7080,6 +7193,7 @@ func InputDatagenCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7179,12 +7293,14 @@ type InputHttpRawCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputHttpRawCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputHttpRawCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7192,6 +7308,7 @@ func InputHttpRawCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7355,12 +7472,14 @@ type InputKinesisCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputKinesisCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputKinesisCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7368,6 +7487,7 @@ func InputKinesisCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7450,12 +7570,14 @@ type InputCriblmetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCriblmetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCriblmetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7463,6 +7585,7 @@ func InputCriblmetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7545,12 +7668,14 @@ type InputMetricsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputMetricsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7558,6 +7683,7 @@ func InputMetricsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7684,12 +7810,14 @@ type InputS3CriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputS3CriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7697,6 +7825,7 @@ func InputS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7816,12 +7945,14 @@ type InputS3InventoryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputS3InventoryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputS3InventoryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7829,6 +7960,7 @@ func InputS3InventoryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -7948,12 +8080,14 @@ type InputSnmpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSnmpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSnmpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -7961,6 +8095,7 @@ func InputSnmpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8089,12 +8224,14 @@ type InputOpenTelemetryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOpenTelemetryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOpenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8102,6 +8239,7 @@ func InputOpenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8283,12 +8421,14 @@ type InputModelDrivenTelemetryCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputModelDrivenTelemetryCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8296,6 +8436,7 @@ func InputModelDrivenTelemetryCriblSourceProvenanceAttrTypes() map[string]attr.T
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8422,12 +8563,14 @@ type InputSqsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSqsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSqsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8435,6 +8578,7 @@ func InputSqsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8517,12 +8661,14 @@ type InputSyslogCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSyslogCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSyslogCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8530,6 +8676,7 @@ func InputSyslogCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8656,12 +8803,14 @@ type InputFileCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputFileCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputFileCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8669,6 +8818,7 @@ func InputFileCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8751,12 +8901,14 @@ type InputTcpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputTcpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8764,6 +8916,7 @@ func InputTcpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -8910,12 +9063,14 @@ type InputAppscopeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputAppscopeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputAppscopeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -8923,6 +9078,7 @@ func InputAppscopeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9115,12 +9271,14 @@ type InputWefCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputWefCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputWefCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9128,6 +9286,7 @@ func InputWefCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9347,12 +9506,14 @@ type InputWinEventLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputWinEventLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputWinEventLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9360,6 +9521,7 @@ func InputWinEventLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9442,12 +9604,14 @@ type InputAppleUnifiedLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputAppleUnifiedLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9455,6 +9619,7 @@ func InputAppleUnifiedLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type 
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9537,12 +9702,14 @@ type InputRawUdpCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputRawUdpCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputRawUdpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9550,6 +9717,7 @@ func InputRawUdpCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9632,12 +9800,14 @@ type InputJournalFilesCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputJournalFilesCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputJournalFilesCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9645,6 +9815,7 @@ func InputJournalFilesCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9744,12 +9915,14 @@ type InputWizCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputWizCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputWizCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9757,6 +9930,7 @@ func InputWizCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -9927,12 +10101,14 @@ type InputOpenaiCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOpenaiCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOpenaiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -9940,6 +10116,7 @@ func InputOpenaiCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10168,12 +10345,14 @@ type InputWizWebhookCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputWizWebhookCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputWizWebhookCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10181,6 +10360,7 @@ func InputWizWebhookCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10344,12 +10524,14 @@ type InputNetflowCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputNetflowCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputNetflowCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10357,6 +10539,7 @@ func InputNetflowCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10439,12 +10622,14 @@ type InputSecurityLakeCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSecurityLakeCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSecurityLakeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10452,6 +10637,7 @@ func InputSecurityLakeCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10571,12 +10757,14 @@ type InputBedrockS3CriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputBedrockS3CriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputBedrockS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10584,6 +10772,7 @@ func InputBedrockS3CriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10703,12 +10892,14 @@ type InputServicenowTableCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputServicenowTableCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputServicenowTableCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10716,6 +10907,7 @@ func InputServicenowTableCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -10867,12 +11059,14 @@ type InputZscalerHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputZscalerHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputZscalerHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -10880,6 +11074,7 @@ func InputZscalerHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -11055,12 +11250,14 @@ type InputCloudflareHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputCloudflareHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputCloudflareHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11068,6 +11265,7 @@ func InputCloudflareHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -11243,12 +11441,14 @@ type InputSysdigHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputSysdigHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputSysdigHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11256,6 +11456,7 @@ func InputSysdigHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -11431,12 +11632,14 @@ type InputUpwindHecCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputUpwindHecCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputUpwindHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11444,6 +11647,7 @@ func InputUpwindHecCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -11619,12 +11823,14 @@ type InputOpenaiComplianceLogsCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOpenaiComplianceLogsCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11632,6 +11838,7 @@ func InputOpenaiComplianceLogsCriblSourceProvenanceAttrTypes() map[string]attr.T
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -11749,12 +11956,14 @@ type InputAnthropicComplianceCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputAnthropicComplianceCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputAnthropicComplianceCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -11762,6 +11971,7 @@ func InputAnthropicComplianceCriblSourceProvenanceAttrTypes() map[string]attr.Ty
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -12149,12 +12359,14 @@ type InputOktaCriblSourceProvenanceModel struct {
 	Origin         types.String `tfsdk:"origin" json:"origin,omitempty"`
 	DestinationArn types.String `tfsdk:"destination_arn" json:"destinationArn,omitempty"`
 	SourceArn      types.String `tfsdk:"source_arn" json:"sourceArn,omitempty"`
+	AccountID      types.String `tfsdk:"account_id" json:"accountId,omitempty"`
 }
 
 type InputOktaCriblSourceProvenanceAPIModel struct {
 	Origin         *string `json:"origin,omitempty"`
 	DestinationArn *string `json:"destinationArn,omitempty"`
 	SourceArn      *string `json:"sourceArn,omitempty"`
+	AccountID      *string `json:"accountId,omitempty"`
 }
 
 func InputOktaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
@@ -12162,6 +12374,7 @@ func InputOktaCriblSourceProvenanceAttrTypes() map[string]attr.Type {
 		"origin":          types.StringType,
 		"destination_arn": types.StringType,
 		"source_arn":      types.StringType,
+		"account_id":      types.StringType,
 	}
 }
 
@@ -15463,6 +15676,7 @@ type InputHttpModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -15500,6 +15714,7 @@ func InputHttpModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -15651,6 +15866,13 @@ func (m InputHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -15927,6 +16149,15 @@ func (m *InputHttpModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -17395,6 +17626,7 @@ type InputSplunkHecModel struct {
 	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -17437,6 +17669,7 @@ func InputSplunkHecModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":      types.Int64Type,
 		"enable_proxy_header":          types.BoolType,
 		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
 		"activity_log_sample_rate":     types.Float64Type,
 		"request_timeout":              types.Float64Type,
 		"socket_timeout":               types.Float64Type,
@@ -17593,6 +17826,13 @@ func (m InputSplunkHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -17904,6 +18144,15 @@ func (m *InputSplunkHecModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -18730,6 +18979,7 @@ type InputElasticModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -18771,6 +19021,7 @@ func InputElasticModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -18920,6 +19171,13 @@ func (m InputElasticModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -19222,6 +19480,15 @@ func (m *InputElasticModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -20084,6 +20351,7 @@ type InputGrafanaModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -20119,6 +20387,7 @@ func InputGrafanaModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -20262,6 +20531,13 @@ func (m InputGrafanaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -20523,6 +20799,15 @@ func (m *InputGrafanaModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -20662,6 +20947,7 @@ type InputLokiModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -20700,6 +20986,7 @@ func InputLokiModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -20846,6 +21133,13 @@ func (m InputLokiModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -21128,6 +21422,15 @@ func (m *InputLokiModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -21294,6 +21597,7 @@ type InputPrometheusRwModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -21332,6 +21636,7 @@ func InputPrometheusRwModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -21478,6 +21783,13 @@ func (m InputPrometheusRwModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -21759,6 +22071,15 @@ func (m *InputPrometheusRwModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -27921,6 +28242,7 @@ type InputFirehoseModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -27953,6 +28275,7 @@ func InputFirehoseModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -28099,6 +28422,13 @@ func (m InputFirehoseModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -28340,6 +28670,15 @@ func (m *InputFirehoseModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -29639,6 +29978,7 @@ type InputCriblHttpModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -29671,6 +30011,7 @@ func InputCriblHttpModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -29817,6 +30158,13 @@ func (m InputCriblHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -30059,6 +30407,15 @@ func (m *InputCriblHttpModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -30163,6 +30520,7 @@ type InputCriblLakeHttpModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -30200,6 +30558,7 @@ func InputCriblLakeHttpModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -30351,6 +30710,13 @@ func (m InputCriblLakeHttpModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -30627,6 +30993,15 @@ func (m *InputCriblLakeHttpModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -34302,6 +34677,7 @@ type InputDatadogAgentModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -34337,6 +34713,7 @@ func InputDatadogAgentModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -34480,6 +34857,13 @@ func (m InputDatadogAgentModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -34740,6 +35124,15 @@ func (m *InputDatadogAgentModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -35134,76 +35527,90 @@ func (m *InputDatagenModel) unmarshalPayload(input map[string]any) error {
 }
 
 type InputHttpRawModel struct {
-	ID                    types.String  `tfsdk:"id" json:"id,omitempty"`
-	Type                  types.String  `tfsdk:"type" json:"type,omitempty"`
-	Disabled              types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	Pipeline              types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
-	SendToRoutes          types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
-	Environment           types.String  `tfsdk:"environment" json:"environment,omitempty"`
-	PqEnabled             types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
-	Streamtags            types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	CriblSourceProvenance types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
-	Connections           types.List    `tfsdk:"connections" json:"connections,omitempty"`
-	Pq                    types.Object  `tfsdk:"pq" json:"pq,omitempty"`
-	Host                  types.String  `tfsdk:"host" json:"host,omitempty"`
-	Port                  types.Float64 `tfsdk:"port" json:"port,omitempty"`
-	AuthTokens            types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
-	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
-	MaxActiveReq          types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
-	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
-	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
-	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
-	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
-	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
-	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
-	KeepAliveTimeout      types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
-	EnableHealthCheck     types.Bool    `tfsdk:"enable_health_check" json:"enableHealthCheck,omitempty"`
-	IpAllowlistRegex      types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
-	IpDenylistRegex       types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
-	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
-	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
-	Metadata              types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
-	AllowedPaths          types.List    `tfsdk:"allowed_paths" json:"allowedPaths,omitempty"`
-	AllowedMethods        types.List    `tfsdk:"allowed_methods" json:"allowedMethods,omitempty"`
-	AuthTokensExt         types.List    `tfsdk:"auth_tokens_ext" json:"authTokensExt,omitempty"`
-	Description           types.String  `tfsdk:"description" json:"description,omitempty"`
+	ID                            types.String  `tfsdk:"id" json:"id,omitempty"`
+	Type                          types.String  `tfsdk:"type" json:"type,omitempty"`
+	Disabled                      types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	Pipeline                      types.String  `tfsdk:"pipeline" json:"pipeline,omitempty"`
+	SendToRoutes                  types.Bool    `tfsdk:"send_to_routes" json:"sendToRoutes,omitempty"`
+	Environment                   types.String  `tfsdk:"environment" json:"environment,omitempty"`
+	PqEnabled                     types.Bool    `tfsdk:"pq_enabled" json:"pqEnabled,omitempty"`
+	Streamtags                    types.List    `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	CriblSourceProvenance         types.Object  `tfsdk:"cribl_source_provenance" json:"criblSourceProvenance,omitempty"`
+	Connections                   types.List    `tfsdk:"connections" json:"connections,omitempty"`
+	Pq                            types.Object  `tfsdk:"pq" json:"pq,omitempty"`
+	Host                          types.String  `tfsdk:"host" json:"host,omitempty"`
+	Port                          types.Float64 `tfsdk:"port" json:"port,omitempty"`
+	AuthTokens                    types.List    `tfsdk:"auth_tokens" json:"authTokens,omitempty"`
+	TLS                           types.Object  `tfsdk:"tls" json:"tls,omitempty"`
+	MaxActiveReq                  types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
+	MaxRequestsPerSocket          types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	EnableProxyHeader             types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
+	CaptureHeaders                types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning         types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
+	ActivityLogSampleRate         types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
+	RequestTimeout                types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	SocketTimeout                 types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
+	KeepAliveTimeout              types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
+	EnableHealthCheck             types.Bool    `tfsdk:"enable_health_check" json:"enableHealthCheck,omitempty"`
+	IpAllowlistRegex              types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
+	IpDenylistRegex               types.String  `tfsdk:"ip_denylist_regex" json:"ipDenylistRegex,omitempty"`
+	BreakerRulesets               types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs           types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
+	Metadata                      types.List    `tfsdk:"metadata" json:"metadata,omitempty"`
+	AllowedPaths                  types.List    `tfsdk:"allowed_paths" json:"allowedPaths,omitempty"`
+	AllowedMethods                types.List    `tfsdk:"allowed_methods" json:"allowedMethods,omitempty"`
+	AuthTokensExt                 types.List    `tfsdk:"auth_tokens_ext" json:"authTokensExt,omitempty"`
+	AccessControlAllowOrigin      types.List    `tfsdk:"access_control_allow_origin" json:"accessControlAllowOrigin,omitempty"`
+	AccessControlAllowHeaders     types.List    `tfsdk:"access_control_allow_headers" json:"accessControlAllowHeaders,omitempty"`
+	AccessControlAllowMethods     types.List    `tfsdk:"access_control_allow_methods" json:"accessControlAllowMethods,omitempty"`
+	AccessControlExposeHeaders    types.List    `tfsdk:"access_control_expose_headers" json:"accessControlExposeHeaders,omitempty"`
+	AccessControlAllowCredentials types.Bool    `tfsdk:"access_control_allow_credentials" json:"accessControlAllowCredentials,omitempty"`
+	AccessControlMaxAge           types.Float64 `tfsdk:"access_control_max_age" json:"accessControlMaxAge,omitempty"`
+	Description                   types.String  `tfsdk:"description" json:"description,omitempty"`
 }
 
 func InputHttpRawModelAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"id":                       types.StringType,
-		"type":                     types.StringType,
-		"disabled":                 types.BoolType,
-		"pipeline":                 types.StringType,
-		"send_to_routes":           types.BoolType,
-		"environment":              types.StringType,
-		"pq_enabled":               types.BoolType,
-		"streamtags":               types.ListType{ElemType: types.StringType},
-		"cribl_source_provenance":  types.ObjectType{AttrTypes: InputHttpRawCriblSourceProvenanceAttrTypes()},
-		"connections":              types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()}},
-		"pq":                       types.ObjectType{AttrTypes: InputHttpRawPqAttrTypes()},
-		"host":                     types.StringType,
-		"port":                     types.Float64Type,
-		"auth_tokens":              types.ListType{ElemType: types.StringType},
-		"tls":                      types.ObjectType{AttrTypes: InputHttpRawTLSAttrTypes()},
-		"max_active_req":           types.Float64Type,
-		"max_requests_per_socket":  types.Int64Type,
-		"enable_proxy_header":      types.BoolType,
-		"capture_headers":          types.BoolType,
-		"activity_log_sample_rate": types.Float64Type,
-		"request_timeout":          types.Float64Type,
-		"socket_timeout":           types.Float64Type,
-		"keep_alive_timeout":       types.Float64Type,
-		"enable_health_check":      types.BoolType,
-		"ip_allowlist_regex":       types.StringType,
-		"ip_denylist_regex":        types.StringType,
-		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
-		"stale_channel_flush_ms":   types.Float64Type,
-		"metadata":                 types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}},
-		"allowed_paths":            types.ListType{ElemType: types.StringType},
-		"allowed_methods":          types.ListType{ElemType: types.StringType},
-		"auth_tokens_ext":          types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()}},
-		"description":              types.StringType,
+		"id":                               types.StringType,
+		"type":                             types.StringType,
+		"disabled":                         types.BoolType,
+		"pipeline":                         types.StringType,
+		"send_to_routes":                   types.BoolType,
+		"environment":                      types.StringType,
+		"pq_enabled":                       types.BoolType,
+		"streamtags":                       types.ListType{ElemType: types.StringType},
+		"cribl_source_provenance":          types.ObjectType{AttrTypes: InputHttpRawCriblSourceProvenanceAttrTypes()},
+		"connections":                      types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawConnectionsAttrTypes()}},
+		"pq":                               types.ObjectType{AttrTypes: InputHttpRawPqAttrTypes()},
+		"host":                             types.StringType,
+		"port":                             types.Float64Type,
+		"auth_tokens":                      types.ListType{ElemType: types.StringType},
+		"tls":                              types.ObjectType{AttrTypes: InputHttpRawTLSAttrTypes()},
+		"max_active_req":                   types.Float64Type,
+		"max_requests_per_socket":          types.Int64Type,
+		"enable_proxy_header":              types.BoolType,
+		"capture_headers":                  types.BoolType,
+		"capture_headers_warning":          types.StringType,
+		"activity_log_sample_rate":         types.Float64Type,
+		"request_timeout":                  types.Float64Type,
+		"socket_timeout":                   types.Float64Type,
+		"keep_alive_timeout":               types.Float64Type,
+		"enable_health_check":              types.BoolType,
+		"ip_allowlist_regex":               types.StringType,
+		"ip_denylist_regex":                types.StringType,
+		"breaker_rulesets":                 types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":           types.Float64Type,
+		"metadata":                         types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawMetadataAttrTypes()}},
+		"allowed_paths":                    types.ListType{ElemType: types.StringType},
+		"allowed_methods":                  types.ListType{ElemType: types.StringType},
+		"auth_tokens_ext":                  types.ListType{ElemType: types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()}},
+		"access_control_allow_origin":      types.ListType{ElemType: types.StringType},
+		"access_control_allow_headers":     types.ListType{ElemType: types.StringType},
+		"access_control_allow_methods":     types.ListType{ElemType: types.StringType},
+		"access_control_expose_headers":    types.ListType{ElemType: types.StringType},
+		"access_control_allow_credentials": types.BoolType,
+		"access_control_max_age":           types.Float64Type,
+		"description":                      types.StringType,
 	}
 }
 
@@ -35342,6 +35749,13 @@ func (m InputHttpRawModel) terraformPayload() (map[string]any, error) {
 		}
 		output["captureHeaders"] = value
 	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
+	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
 		if err != nil {
@@ -35432,6 +35846,48 @@ func (m InputHttpRawModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert auth_tokens_ext to API value: %v", err)
 		}
 		output["authTokensExt"] = value
+	}
+	if !m.AccessControlAllowOrigin.IsNull() && !m.AccessControlAllowOrigin.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowOrigin)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_origin to API value: %v", err)
+		}
+		output["accessControlAllowOrigin"] = value
+	}
+	if !m.AccessControlAllowHeaders.IsNull() && !m.AccessControlAllowHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_headers to API value: %v", err)
+		}
+		output["accessControlAllowHeaders"] = value
+	}
+	if !m.AccessControlAllowMethods.IsNull() && !m.AccessControlAllowMethods.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowMethods)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_methods to API value: %v", err)
+		}
+		output["accessControlAllowMethods"] = value
+	}
+	if !m.AccessControlExposeHeaders.IsNull() && !m.AccessControlExposeHeaders.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlExposeHeaders)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_expose_headers to API value: %v", err)
+		}
+		output["accessControlExposeHeaders"] = value
+	}
+	if !m.AccessControlAllowCredentials.IsNull() && !m.AccessControlAllowCredentials.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlAllowCredentials)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_allow_credentials to API value: %v", err)
+		}
+		output["accessControlAllowCredentials"] = value
+	}
+	if !m.AccessControlMaxAge.IsNull() && !m.AccessControlMaxAge.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.AccessControlMaxAge)
+		if err != nil {
+			return nil, fmt.Errorf("convert access_control_max_age to API value: %v", err)
+		}
+		output["accessControlMaxAge"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.Description)
@@ -35618,6 +36074,15 @@ func (m *InputHttpRawModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -35734,6 +36199,60 @@ func (m *InputHttpRawModel) unmarshalPayload(input map[string]any) error {
 		m.AuthTokensExt = value.(types.List)
 	} else {
 		m.AuthTokensExt = types.ListNull(types.ObjectType{AttrTypes: InputHttpRawAuthTokensExtAttrTypes()})
+	}
+	if item, ok := input["accessControlAllowOrigin"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowOrigin from API value: %v", err)
+		}
+		m.AccessControlAllowOrigin = value.(types.List)
+	} else {
+		m.AccessControlAllowOrigin = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowHeaders from API value: %v", err)
+		}
+		m.AccessControlAllowHeaders = value.(types.List)
+	} else {
+		m.AccessControlAllowHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowMethods"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowMethods from API value: %v", err)
+		}
+		m.AccessControlAllowMethods = value.(types.List)
+	} else {
+		m.AccessControlAllowMethods = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlExposeHeaders"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert accessControlExposeHeaders from API value: %v", err)
+		}
+		m.AccessControlExposeHeaders = value.(types.List)
+	} else {
+		m.AccessControlExposeHeaders = types.ListNull(types.StringType)
+	}
+	if item, ok := input["accessControlAllowCredentials"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.BoolType)
+		if err != nil {
+			return fmt.Errorf("convert accessControlAllowCredentials from API value: %v", err)
+		}
+		m.AccessControlAllowCredentials = value.(types.Bool)
+	} else {
+		m.AccessControlAllowCredentials = types.BoolNull()
+	}
+	if item, ok := input["accessControlMaxAge"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert accessControlMaxAge from API value: %v", err)
+		}
+		m.AccessControlMaxAge = value.(types.Float64)
+	} else {
+		m.AccessControlMaxAge = types.Float64Null()
 	}
 	if item, ok := input["description"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
@@ -39520,6 +40039,7 @@ type InputOpenTelemetryModel struct {
 	TLS                   types.Object  `tfsdk:"tls" json:"tls,omitempty"`
 	MaxActiveReq          types.Float64 `tfsdk:"max_active_req" json:"maxActiveReq,omitempty"`
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
 	KeepAliveTimeout      types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
@@ -39561,6 +40081,7 @@ func InputOpenTelemetryModelAttrTypes() map[string]attr.Type {
 		"tls":                     types.ObjectType{AttrTypes: InputOpenTelemetryTLSAttrTypes()},
 		"max_active_req":          types.Float64Type,
 		"max_requests_per_socket": types.Int64Type,
+		"capture_headers_warning": types.StringType,
 		"request_timeout":         types.Float64Type,
 		"socket_timeout":          types.Float64Type,
 		"keep_alive_timeout":      types.Float64Type,
@@ -39698,6 +40219,13 @@ func (m InputOpenTelemetryModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert max_requests_per_socket to API value: %v", err)
 		}
 		output["maxRequestsPerSocket"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.RequestTimeout.IsNull() && !m.RequestTimeout.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.RequestTimeout)
@@ -39996,6 +40524,15 @@ func (m *InputOpenTelemetryModel) unmarshalPayload(input map[string]any) error {
 		m.MaxRequestsPerSocket = value.(types.Int64)
 	} else {
 		m.MaxRequestsPerSocket = types.Int64Null()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["requestTimeout"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -43569,6 +44106,7 @@ type InputWefModel struct {
 	MaxRequestsPerSocket   types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader      types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders         types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning  types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	KeepAliveTimeout       types.Float64 `tfsdk:"keep_alive_timeout" json:"keepAliveTimeout,omitempty"`
 	EnableHealthCheck      types.Bool    `tfsdk:"enable_health_check" json:"enableHealthCheck,omitempty"`
 	IpAllowlistRegex       types.String  `tfsdk:"ip_allowlist_regex" json:"ipAllowlistRegex,omitempty"`
@@ -43605,6 +44143,7 @@ func InputWefModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":   types.Int64Type,
 		"enable_proxy_header":       types.BoolType,
 		"capture_headers":           types.BoolType,
+		"capture_headers_warning":   types.StringType,
 		"keep_alive_timeout":        types.Float64Type,
 		"enable_health_check":       types.BoolType,
 		"ip_allowlist_regex":        types.StringType,
@@ -43755,6 +44294,13 @@ func (m InputWefModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.KeepAliveTimeout.IsNull() && !m.KeepAliveTimeout.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.KeepAliveTimeout)
@@ -44024,6 +44570,15 @@ func (m *InputWefModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["keepAliveTimeout"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -46643,6 +47198,7 @@ type InputWizWebhookModel struct {
 	MaxRequestsPerSocket  types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader     types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders        types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout         types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -46680,6 +47236,7 @@ func InputWizWebhookModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":  types.Int64Type,
 		"enable_proxy_header":      types.BoolType,
 		"capture_headers":          types.BoolType,
+		"capture_headers_warning":  types.StringType,
 		"activity_log_sample_rate": types.Float64Type,
 		"request_timeout":          types.Float64Type,
 		"socket_timeout":           types.Float64Type,
@@ -46831,6 +47388,13 @@ func (m InputWizWebhookModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -47107,6 +47671,15 @@ func (m *InputWizWebhookModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -50559,6 +51132,7 @@ type InputZscalerHecModel struct {
 	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -50596,6 +51170,7 @@ func InputZscalerHecModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":      types.Int64Type,
 		"enable_proxy_header":          types.BoolType,
 		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
 		"activity_log_sample_rate":     types.Float64Type,
 		"request_timeout":              types.Float64Type,
 		"socket_timeout":               types.Float64Type,
@@ -50747,6 +51322,13 @@ func (m InputZscalerHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -51024,6 +51606,15 @@ func (m *InputZscalerHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -51173,6 +51764,7 @@ type InputCloudflareHecModel struct {
 	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -51211,6 +51803,7 @@ func InputCloudflareHecModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":      types.Int64Type,
 		"enable_proxy_header":          types.BoolType,
 		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
 		"activity_log_sample_rate":     types.Float64Type,
 		"request_timeout":              types.Float64Type,
 		"socket_timeout":               types.Float64Type,
@@ -51363,6 +51956,13 @@ func (m InputCloudflareHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -51647,6 +52247,15 @@ func (m *InputCloudflareHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -51805,6 +52414,7 @@ type InputSysdigHecModel struct {
 	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -51841,6 +52451,7 @@ func InputSysdigHecModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":      types.Int64Type,
 		"enable_proxy_header":          types.BoolType,
 		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
 		"activity_log_sample_rate":     types.Float64Type,
 		"request_timeout":              types.Float64Type,
 		"socket_timeout":               types.Float64Type,
@@ -51991,6 +52602,13 @@ func (m InputSysdigHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -52261,6 +52879,15 @@ func (m *InputSysdigHecModel) unmarshalPayload(input map[string]any) error {
 	} else {
 		m.CaptureHeaders = types.BoolNull()
 	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
+	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -52401,6 +53028,7 @@ type InputUpwindHecModel struct {
 	MaxRequestsPerSocket      types.Int64   `tfsdk:"max_requests_per_socket" json:"maxRequestsPerSocket,omitempty"`
 	EnableProxyHeader         types.Bool    `tfsdk:"enable_proxy_header" json:"enableProxyHeader,omitempty"`
 	CaptureHeaders            types.Bool    `tfsdk:"capture_headers" json:"captureHeaders,omitempty"`
+	CaptureHeadersWarning     types.String  `tfsdk:"capture_headers_warning" json:"captureHeadersWarning,omitempty"`
 	ActivityLogSampleRate     types.Float64 `tfsdk:"activity_log_sample_rate" json:"activityLogSampleRate,omitempty"`
 	RequestTimeout            types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	SocketTimeout             types.Float64 `tfsdk:"socket_timeout" json:"socketTimeout,omitempty"`
@@ -52437,6 +53065,7 @@ func InputUpwindHecModelAttrTypes() map[string]attr.Type {
 		"max_requests_per_socket":      types.Int64Type,
 		"enable_proxy_header":          types.BoolType,
 		"capture_headers":              types.BoolType,
+		"capture_headers_warning":      types.StringType,
 		"activity_log_sample_rate":     types.Float64Type,
 		"request_timeout":              types.Float64Type,
 		"socket_timeout":               types.Float64Type,
@@ -52587,6 +53216,13 @@ func (m InputUpwindHecModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert capture_headers to API value: %v", err)
 		}
 		output["captureHeaders"] = value
+	}
+	if !m.CaptureHeadersWarning.IsNull() && !m.CaptureHeadersWarning.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.CaptureHeadersWarning)
+		if err != nil {
+			return nil, fmt.Errorf("convert capture_headers_warning to API value: %v", err)
+		}
+		output["captureHeadersWarning"] = value
 	}
 	if !m.ActivityLogSampleRate.IsNull() && !m.ActivityLogSampleRate.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.ActivityLogSampleRate)
@@ -52856,6 +53492,15 @@ func (m *InputUpwindHecModel) unmarshalPayload(input map[string]any) error {
 		m.CaptureHeaders = value.(types.Bool)
 	} else {
 		m.CaptureHeaders = types.BoolNull()
+	}
+	if item, ok := input["captureHeadersWarning"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.StringType)
+		if err != nil {
+			return fmt.Errorf("convert captureHeadersWarning from API value: %v", err)
+		}
+		m.CaptureHeadersWarning = value.(types.String)
+	} else {
+		m.CaptureHeadersWarning = types.StringNull()
 	}
 	if item, ok := input["activityLogSampleRate"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
@@ -53705,6 +54350,8 @@ type InputAnthropicComplianceModel struct {
 	OrgUsers              types.Object  `tfsdk:"org_users" json:"org_users,omitempty"`
 	OrgRoles              types.Object  `tfsdk:"org_roles" json:"org_roles,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
+	BreakerRulesets       types.List    `tfsdk:"breaker_rulesets" json:"breakerRulesets,omitempty"`
+	StaleChannelFlushMs   types.Float64 `tfsdk:"stale_channel_flush_ms" json:"staleChannelFlushMs,omitempty"`
 	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
 	MaxMissedKeepAlives   types.Float64 `tfsdk:"max_missed_keep_alives" json:"maxMissedKeepAlives,omitempty"`
 	Ttl                   types.String  `tfsdk:"ttl" json:"ttl,omitempty"`
@@ -53739,6 +54386,8 @@ func InputAnthropicComplianceModelAttrTypes() map[string]attr.Type {
 		"org_users":               types.ObjectType{AttrTypes: InputAnthropicComplianceOrgUsersAttrTypes()},
 		"org_roles":               types.ObjectType{AttrTypes: InputAnthropicComplianceOrgRolesAttrTypes()},
 		"request_timeout":         types.Float64Type,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"stale_channel_flush_ms":  types.Float64Type,
 		"keep_alive_time":         types.Float64Type,
 		"max_missed_keep_alives":  types.Float64Type,
 		"ttl":                     types.StringType,
@@ -53911,6 +54560,20 @@ func (m InputAnthropicComplianceModel) terraformPayload() (map[string]any, error
 			return nil, fmt.Errorf("convert request_timeout to API value: %v", err)
 		}
 		output["requestTimeout"] = value
+	}
+	if !m.BreakerRulesets.IsNull() && !m.BreakerRulesets.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.BreakerRulesets)
+		if err != nil {
+			return nil, fmt.Errorf("convert breaker_rulesets to API value: %v", err)
+		}
+		output["breakerRulesets"] = value
+	}
+	if !m.StaleChannelFlushMs.IsNull() && !m.StaleChannelFlushMs.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.StaleChannelFlushMs)
+		if err != nil {
+			return nil, fmt.Errorf("convert stale_channel_flush_ms to API value: %v", err)
+		}
+		output["staleChannelFlushMs"] = value
 	}
 	if !m.KeepAliveTime.IsNull() && !m.KeepAliveTime.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.KeepAliveTime)
@@ -54175,6 +54838,24 @@ func (m *InputAnthropicComplianceModel) unmarshalPayload(input map[string]any) e
 	} else {
 		m.RequestTimeout = types.Float64Null()
 	}
+	if item, ok := input["breakerRulesets"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.ListType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert breakerRulesets from API value: %v", err)
+		}
+		m.BreakerRulesets = value.(types.List)
+	} else {
+		m.BreakerRulesets = types.ListNull(types.StringType)
+	}
+	if item, ok := input["staleChannelFlushMs"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
+		if err != nil {
+			return fmt.Errorf("convert staleChannelFlushMs from API value: %v", err)
+		}
+		m.StaleChannelFlushMs = value.(types.Float64)
+	} else {
+		m.StaleChannelFlushMs = types.Float64Null()
+	}
 	if item, ok := input["keepAliveTime"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.Float64Type)
 		if err != nil {
@@ -54259,6 +54940,7 @@ type InputOktaModel struct {
 	CronSchedule          types.String  `tfsdk:"cron_schedule" json:"cronSchedule,omitempty"`
 	Earliest              types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
 	Latest                types.String  `tfsdk:"latest" json:"latest,omitempty"`
+	ManageState           types.Map     `tfsdk:"manage_state" json:"manageState,omitempty"`
 	JobTimeout            types.String  `tfsdk:"job_timeout" json:"jobTimeout,omitempty"`
 	RequestTimeout        types.Float64 `tfsdk:"request_timeout" json:"requestTimeout,omitempty"`
 	KeepAliveTime         types.Float64 `tfsdk:"keep_alive_time" json:"keepAliveTime,omitempty"`
@@ -54289,6 +54971,7 @@ func InputOktaModelAttrTypes() map[string]attr.Type {
 		"cron_schedule":           types.StringType,
 		"earliest":                types.StringType,
 		"latest":                  types.StringType,
+		"manage_state":            types.MapType{ElemType: types.StringType},
 		"job_timeout":             types.StringType,
 		"request_timeout":         types.Float64Type,
 		"keep_alive_time":         types.Float64Type,
@@ -54421,6 +55104,13 @@ func (m InputOktaModel) terraformPayload() (map[string]any, error) {
 			return nil, fmt.Errorf("convert latest to API value: %v", err)
 		}
 		output["latest"] = value
+	}
+	if !m.ManageState.IsNull() && !m.ManageState.IsUnknown() {
+		value, err := SourceTerraformValueToJSON(m.ManageState)
+		if err != nil {
+			return nil, fmt.Errorf("convert manage_state to API value: %v", err)
+		}
+		output["manageState"] = value
 	}
 	if !m.JobTimeout.IsNull() && !m.JobTimeout.IsUnknown() {
 		value, err := SourceTerraformValueToJSON(m.JobTimeout)
@@ -54644,6 +55334,15 @@ func (m *InputOktaModel) unmarshalPayload(input map[string]any) error {
 		m.Latest = value.(types.String)
 	} else {
 		m.Latest = types.StringNull()
+	}
+	if item, ok := input["manageState"]; ok {
+		value, err := SourceAPIValueToTerraformValue(item, types.MapType{ElemType: types.StringType})
+		if err != nil {
+			return fmt.Errorf("convert manageState from API value: %v", err)
+		}
+		m.ManageState = value.(types.Map)
+	} else {
+		m.ManageState = types.MapNull(types.StringType)
 	}
 	if item, ok := input["jobTimeout"]; ok {
 		value, err := SourceAPIValueToTerraformValue(item, types.StringType)

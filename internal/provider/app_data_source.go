@@ -88,6 +88,16 @@ func (d *AppDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 				Computed:    true,
 				Description: `Schema spec version for the app.`,
 			},
+			"tags": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"product": schema.ListAttribute{
+						Computed:    true,
+						Description: `Cribl products supported by the app.`,
+						ElementType: types.StringType,
+					},
+				},
+			},
 			"version": schema.StringAttribute{
 				Computed:    true,
 				Description: `Semantic version of the app.`,

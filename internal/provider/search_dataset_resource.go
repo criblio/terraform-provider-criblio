@@ -162,6 +162,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -361,6 +367,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -562,6 +574,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -712,9 +730,10 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						},
 					},
 					"timestamp_field_contents": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -791,6 +810,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -989,6 +1014,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -1195,6 +1226,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1381,6 +1418,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -1569,6 +1612,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -1692,9 +1741,10 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						},
 					},
 					"timestamp_field_contents": schema.StringAttribute{
-						Required: false,
-						Optional: true,
-						Computed: true,
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Format or interpretation of the configured timestamp field's contents, such as a Kusto datetime.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Required:    false,
@@ -1771,6 +1821,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -1959,6 +2015,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2145,6 +2207,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -2344,6 +2412,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2530,6 +2604,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -2718,6 +2798,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -2897,6 +2983,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -3105,6 +3197,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3304,6 +3402,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3483,6 +3587,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -3692,6 +3802,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -3871,6 +3987,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -4059,6 +4181,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -4238,6 +4366,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -4602,6 +4736,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -4803,6 +4943,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -4982,6 +5128,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Optional:    true,
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
+					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
 					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
@@ -5361,6 +5513,12 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 						Computed:    true,
 						Description: `Unique identifier for the Dataset.`,
 					},
+					"managed_by": schema.StringAttribute{
+						Required:    false,
+						Optional:    true,
+						Computed:    true,
+						Description: `Marker identifying the internal system that manages this Dataset, when applicable. Absent on user-created Datasets.`,
+					},
 					"metadata": schema.SingleNestedAttribute{
 						Required:    false,
 						Optional:    true,
@@ -5724,6 +5882,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAmazonSecurityLake.ID.IsNull() || state.DatasetAmazonSecurityLake.ID.IsUnknown() {
 			state.DatasetAmazonSecurityLake.ID = types.StringNull()
 		}
+		if !api.DatasetAmazonSecurityLake.ManagedBy.IsNull() && !api.DatasetAmazonSecurityLake.ManagedBy.IsUnknown() {
+			state.DatasetAmazonSecurityLake.ManagedBy = api.DatasetAmazonSecurityLake.ManagedBy
+		} else if state.DatasetAmazonSecurityLake.ManagedBy.IsNull() || state.DatasetAmazonSecurityLake.ManagedBy.IsUnknown() {
+			state.DatasetAmazonSecurityLake.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAmazonSecurityLake.Metadata.IsNull() && !api.DatasetAmazonSecurityLake.Metadata.IsUnknown() {
 			state.DatasetAmazonSecurityLake.Metadata = api.DatasetAmazonSecurityLake.Metadata
 		} else if state.DatasetAmazonSecurityLake.Metadata.IsNull() || state.DatasetAmazonSecurityLake.Metadata.IsUnknown() {
@@ -5814,6 +5977,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAws.ID.IsNull() || state.DatasetAPIAws.ID.IsUnknown() {
 			state.DatasetAPIAws.ID = types.StringNull()
 		}
+		if !api.DatasetAPIAws.ManagedBy.IsNull() && !api.DatasetAPIAws.ManagedBy.IsUnknown() {
+			state.DatasetAPIAws.ManagedBy = api.DatasetAPIAws.ManagedBy
+		} else if state.DatasetAPIAws.ManagedBy.IsNull() || state.DatasetAPIAws.ManagedBy.IsUnknown() {
+			state.DatasetAPIAws.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIAws.Metadata.IsNull() && !api.DatasetAPIAws.Metadata.IsUnknown() {
 			state.DatasetAPIAws.Metadata = api.DatasetAPIAws.Metadata
 		} else if state.DatasetAPIAws.Metadata.IsNull() || state.DatasetAPIAws.Metadata.IsUnknown() {
@@ -5903,6 +6071,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIAzure.ID = api.DatasetAPIAzure.ID
 		} else if state.DatasetAPIAzure.ID.IsNull() || state.DatasetAPIAzure.ID.IsUnknown() {
 			state.DatasetAPIAzure.ID = types.StringNull()
+		}
+		if !api.DatasetAPIAzure.ManagedBy.IsNull() && !api.DatasetAPIAzure.ManagedBy.IsUnknown() {
+			state.DatasetAPIAzure.ManagedBy = api.DatasetAPIAzure.ManagedBy
+		} else if state.DatasetAPIAzure.ManagedBy.IsNull() || state.DatasetAPIAzure.ManagedBy.IsUnknown() {
+			state.DatasetAPIAzure.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAPIAzure.Metadata.IsNull() && !api.DatasetAPIAzure.Metadata.IsUnknown() {
 			state.DatasetAPIAzure.Metadata = api.DatasetAPIAzure.Metadata
@@ -6008,6 +6181,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIAzureDataExplorer.ID.IsNull() || state.DatasetAPIAzureDataExplorer.ID.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.ID = types.StringNull()
 		}
+		if !api.DatasetAPIAzureDataExplorer.ManagedBy.IsNull() && !api.DatasetAPIAzureDataExplorer.ManagedBy.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.ManagedBy = api.DatasetAPIAzureDataExplorer.ManagedBy
+		} else if state.DatasetAPIAzureDataExplorer.ManagedBy.IsNull() || state.DatasetAPIAzureDataExplorer.ManagedBy.IsUnknown() {
+			state.DatasetAPIAzureDataExplorer.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIAzureDataExplorer.Metadata.IsNull() && !api.DatasetAPIAzureDataExplorer.Metadata.IsUnknown() {
 			state.DatasetAPIAzureDataExplorer.Metadata = api.DatasetAPIAzureDataExplorer.Metadata
 		} else if state.DatasetAPIAzureDataExplorer.Metadata.IsNull() || state.DatasetAPIAzureDataExplorer.Metadata.IsUnknown() {
@@ -6091,6 +6269,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIElasticsearch.ID = api.DatasetAPIElasticsearch.ID
 		} else if state.DatasetAPIElasticsearch.ID.IsNull() || state.DatasetAPIElasticsearch.ID.IsUnknown() {
 			state.DatasetAPIElasticsearch.ID = types.StringNull()
+		}
+		if !api.DatasetAPIElasticsearch.ManagedBy.IsNull() && !api.DatasetAPIElasticsearch.ManagedBy.IsUnknown() {
+			state.DatasetAPIElasticsearch.ManagedBy = api.DatasetAPIElasticsearch.ManagedBy
+		} else if state.DatasetAPIElasticsearch.ManagedBy.IsNull() || state.DatasetAPIElasticsearch.ManagedBy.IsUnknown() {
+			state.DatasetAPIElasticsearch.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAPIElasticsearch.Metadata.IsNull() && !api.DatasetAPIElasticsearch.Metadata.IsUnknown() {
 			state.DatasetAPIElasticsearch.Metadata = api.DatasetAPIElasticsearch.Metadata
@@ -6176,6 +6359,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGcp.ID.IsNull() || state.DatasetAPIGcp.ID.IsUnknown() {
 			state.DatasetAPIGcp.ID = types.StringNull()
 		}
+		if !api.DatasetAPIGcp.ManagedBy.IsNull() && !api.DatasetAPIGcp.ManagedBy.IsUnknown() {
+			state.DatasetAPIGcp.ManagedBy = api.DatasetAPIGcp.ManagedBy
+		} else if state.DatasetAPIGcp.ManagedBy.IsNull() || state.DatasetAPIGcp.ManagedBy.IsUnknown() {
+			state.DatasetAPIGcp.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIGcp.Metadata.IsNull() && !api.DatasetAPIGcp.Metadata.IsUnknown() {
 			state.DatasetAPIGcp.Metadata = api.DatasetAPIGcp.Metadata
 		} else if state.DatasetAPIGcp.Metadata.IsNull() || state.DatasetAPIGcp.Metadata.IsUnknown() {
@@ -6258,6 +6446,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIGoogleWorkspace.ID.IsNull() || state.DatasetAPIGoogleWorkspace.ID.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.ID = types.StringNull()
 		}
+		if !api.DatasetAPIGoogleWorkspace.ManagedBy.IsNull() && !api.DatasetAPIGoogleWorkspace.ManagedBy.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.ManagedBy = api.DatasetAPIGoogleWorkspace.ManagedBy
+		} else if state.DatasetAPIGoogleWorkspace.ManagedBy.IsNull() || state.DatasetAPIGoogleWorkspace.ManagedBy.IsUnknown() {
+			state.DatasetAPIGoogleWorkspace.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIGoogleWorkspace.Metadata.IsNull() && !api.DatasetAPIGoogleWorkspace.Metadata.IsUnknown() {
 			state.DatasetAPIGoogleWorkspace.Metadata = api.DatasetAPIGoogleWorkspace.Metadata
 		} else if state.DatasetAPIGoogleWorkspace.Metadata.IsNull() || state.DatasetAPIGoogleWorkspace.Metadata.IsUnknown() {
@@ -6339,6 +6532,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIHttp.ID = api.DatasetAPIHttp.ID
 		} else if state.DatasetAPIHttp.ID.IsNull() || state.DatasetAPIHttp.ID.IsUnknown() {
 			state.DatasetAPIHttp.ID = types.StringNull()
+		}
+		if !api.DatasetAPIHttp.ManagedBy.IsNull() && !api.DatasetAPIHttp.ManagedBy.IsUnknown() {
+			state.DatasetAPIHttp.ManagedBy = api.DatasetAPIHttp.ManagedBy
+		} else if state.DatasetAPIHttp.ManagedBy.IsNull() || state.DatasetAPIHttp.ManagedBy.IsUnknown() {
+			state.DatasetAPIHttp.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAPIHttp.Metadata.IsNull() && !api.DatasetAPIHttp.Metadata.IsUnknown() {
 			state.DatasetAPIHttp.Metadata = api.DatasetAPIHttp.Metadata
@@ -6429,6 +6627,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPILogAnalytics.ID.IsNull() || state.DatasetAPILogAnalytics.ID.IsUnknown() {
 			state.DatasetAPILogAnalytics.ID = types.StringNull()
 		}
+		if !api.DatasetAPILogAnalytics.ManagedBy.IsNull() && !api.DatasetAPILogAnalytics.ManagedBy.IsUnknown() {
+			state.DatasetAPILogAnalytics.ManagedBy = api.DatasetAPILogAnalytics.ManagedBy
+		} else if state.DatasetAPILogAnalytics.ManagedBy.IsNull() || state.DatasetAPILogAnalytics.ManagedBy.IsUnknown() {
+			state.DatasetAPILogAnalytics.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPILogAnalytics.Metadata.IsNull() && !api.DatasetAPILogAnalytics.Metadata.IsUnknown() {
 			state.DatasetAPILogAnalytics.Metadata = api.DatasetAPILogAnalytics.Metadata
 		} else if state.DatasetAPILogAnalytics.Metadata.IsNull() || state.DatasetAPILogAnalytics.Metadata.IsUnknown() {
@@ -6511,6 +6714,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIMsgraph.ID.IsNull() || state.DatasetAPIMsgraph.ID.IsUnknown() {
 			state.DatasetAPIMsgraph.ID = types.StringNull()
 		}
+		if !api.DatasetAPIMsgraph.ManagedBy.IsNull() && !api.DatasetAPIMsgraph.ManagedBy.IsUnknown() {
+			state.DatasetAPIMsgraph.ManagedBy = api.DatasetAPIMsgraph.ManagedBy
+		} else if state.DatasetAPIMsgraph.ManagedBy.IsNull() || state.DatasetAPIMsgraph.ManagedBy.IsUnknown() {
+			state.DatasetAPIMsgraph.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIMsgraph.Metadata.IsNull() && !api.DatasetAPIMsgraph.Metadata.IsUnknown() {
 			state.DatasetAPIMsgraph.Metadata = api.DatasetAPIMsgraph.Metadata
 		} else if state.DatasetAPIMsgraph.Metadata.IsNull() || state.DatasetAPIMsgraph.Metadata.IsUnknown() {
@@ -6592,6 +6800,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPIOkta.ID = api.DatasetAPIOkta.ID
 		} else if state.DatasetAPIOkta.ID.IsNull() || state.DatasetAPIOkta.ID.IsUnknown() {
 			state.DatasetAPIOkta.ID = types.StringNull()
+		}
+		if !api.DatasetAPIOkta.ManagedBy.IsNull() && !api.DatasetAPIOkta.ManagedBy.IsUnknown() {
+			state.DatasetAPIOkta.ManagedBy = api.DatasetAPIOkta.ManagedBy
+		} else if state.DatasetAPIOkta.ManagedBy.IsNull() || state.DatasetAPIOkta.ManagedBy.IsUnknown() {
+			state.DatasetAPIOkta.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAPIOkta.Metadata.IsNull() && !api.DatasetAPIOkta.Metadata.IsUnknown() {
 			state.DatasetAPIOkta.Metadata = api.DatasetAPIOkta.Metadata
@@ -6677,6 +6890,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIOpensearch.ID.IsNull() || state.DatasetAPIOpensearch.ID.IsUnknown() {
 			state.DatasetAPIOpensearch.ID = types.StringNull()
 		}
+		if !api.DatasetAPIOpensearch.ManagedBy.IsNull() && !api.DatasetAPIOpensearch.ManagedBy.IsUnknown() {
+			state.DatasetAPIOpensearch.ManagedBy = api.DatasetAPIOpensearch.ManagedBy
+		} else if state.DatasetAPIOpensearch.ManagedBy.IsNull() || state.DatasetAPIOpensearch.ManagedBy.IsUnknown() {
+			state.DatasetAPIOpensearch.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIOpensearch.Metadata.IsNull() && !api.DatasetAPIOpensearch.Metadata.IsUnknown() {
 			state.DatasetAPIOpensearch.Metadata = api.DatasetAPIOpensearch.Metadata
 		} else if state.DatasetAPIOpensearch.Metadata.IsNull() || state.DatasetAPIOpensearch.Metadata.IsUnknown() {
@@ -6758,6 +6976,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAPITailscale.ID = api.DatasetAPITailscale.ID
 		} else if state.DatasetAPITailscale.ID.IsNull() || state.DatasetAPITailscale.ID.IsUnknown() {
 			state.DatasetAPITailscale.ID = types.StringNull()
+		}
+		if !api.DatasetAPITailscale.ManagedBy.IsNull() && !api.DatasetAPITailscale.ManagedBy.IsUnknown() {
+			state.DatasetAPITailscale.ManagedBy = api.DatasetAPITailscale.ManagedBy
+		} else if state.DatasetAPITailscale.ManagedBy.IsNull() || state.DatasetAPITailscale.ManagedBy.IsUnknown() {
+			state.DatasetAPITailscale.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAPITailscale.Metadata.IsNull() && !api.DatasetAPITailscale.Metadata.IsUnknown() {
 			state.DatasetAPITailscale.Metadata = api.DatasetAPITailscale.Metadata
@@ -6841,6 +7064,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetAPIZoom.ID.IsNull() || state.DatasetAPIZoom.ID.IsUnknown() {
 			state.DatasetAPIZoom.ID = types.StringNull()
 		}
+		if !api.DatasetAPIZoom.ManagedBy.IsNull() && !api.DatasetAPIZoom.ManagedBy.IsUnknown() {
+			state.DatasetAPIZoom.ManagedBy = api.DatasetAPIZoom.ManagedBy
+		} else if state.DatasetAPIZoom.ManagedBy.IsNull() || state.DatasetAPIZoom.ManagedBy.IsUnknown() {
+			state.DatasetAPIZoom.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetAPIZoom.Metadata.IsNull() && !api.DatasetAPIZoom.Metadata.IsUnknown() {
 			state.DatasetAPIZoom.Metadata = api.DatasetAPIZoom.Metadata
 		} else if state.DatasetAPIZoom.Metadata.IsNull() || state.DatasetAPIZoom.Metadata.IsUnknown() {
@@ -6914,6 +7142,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetAzureBlob.ID = api.DatasetAzureBlob.ID
 		} else if state.DatasetAzureBlob.ID.IsNull() || state.DatasetAzureBlob.ID.IsUnknown() {
 			state.DatasetAzureBlob.ID = types.StringNull()
+		}
+		if !api.DatasetAzureBlob.ManagedBy.IsNull() && !api.DatasetAzureBlob.ManagedBy.IsUnknown() {
+			state.DatasetAzureBlob.ManagedBy = api.DatasetAzureBlob.ManagedBy
+		} else if state.DatasetAzureBlob.ManagedBy.IsNull() || state.DatasetAzureBlob.ManagedBy.IsUnknown() {
+			state.DatasetAzureBlob.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetAzureBlob.Metadata.IsNull() && !api.DatasetAzureBlob.Metadata.IsUnknown() {
 			state.DatasetAzureBlob.Metadata = api.DatasetAzureBlob.Metadata
@@ -7003,6 +7236,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetClickhouse.ID = api.DatasetClickhouse.ID
 		} else if state.DatasetClickhouse.ID.IsNull() || state.DatasetClickhouse.ID.IsUnknown() {
 			state.DatasetClickhouse.ID = types.StringNull()
+		}
+		if !api.DatasetClickhouse.ManagedBy.IsNull() && !api.DatasetClickhouse.ManagedBy.IsUnknown() {
+			state.DatasetClickhouse.ManagedBy = api.DatasetClickhouse.ManagedBy
+		} else if state.DatasetClickhouse.ManagedBy.IsNull() || state.DatasetClickhouse.ManagedBy.IsUnknown() {
+			state.DatasetClickhouse.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetClickhouse.Metadata.IsNull() && !api.DatasetClickhouse.Metadata.IsUnknown() {
 			state.DatasetClickhouse.Metadata = api.DatasetClickhouse.Metadata
@@ -7096,6 +7334,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblEdge.ID.IsNull() || state.DatasetCriblEdge.ID.IsUnknown() {
 			state.DatasetCriblEdge.ID = types.StringNull()
 		}
+		if !api.DatasetCriblEdge.ManagedBy.IsNull() && !api.DatasetCriblEdge.ManagedBy.IsUnknown() {
+			state.DatasetCriblEdge.ManagedBy = api.DatasetCriblEdge.ManagedBy
+		} else if state.DatasetCriblEdge.ManagedBy.IsNull() || state.DatasetCriblEdge.ManagedBy.IsUnknown() {
+			state.DatasetCriblEdge.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetCriblEdge.Metadata.IsNull() && !api.DatasetCriblEdge.Metadata.IsUnknown() {
 			state.DatasetCriblEdge.Metadata = api.DatasetCriblEdge.Metadata
 		} else if state.DatasetCriblEdge.Metadata.IsNull() || state.DatasetCriblEdge.Metadata.IsUnknown() {
@@ -7169,6 +7412,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblLake.ID = api.DatasetCriblLake.ID
 		} else if state.DatasetCriblLake.ID.IsNull() || state.DatasetCriblLake.ID.IsUnknown() {
 			state.DatasetCriblLake.ID = types.StringNull()
+		}
+		if !api.DatasetCriblLake.ManagedBy.IsNull() && !api.DatasetCriblLake.ManagedBy.IsUnknown() {
+			state.DatasetCriblLake.ManagedBy = api.DatasetCriblLake.ManagedBy
+		} else if state.DatasetCriblLake.ManagedBy.IsNull() || state.DatasetCriblLake.ManagedBy.IsUnknown() {
+			state.DatasetCriblLake.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetCriblLake.Metadata.IsNull() && !api.DatasetCriblLake.Metadata.IsUnknown() {
 			state.DatasetCriblLake.Metadata = api.DatasetCriblLake.Metadata
@@ -7259,6 +7507,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblLeader.ID.IsNull() || state.DatasetCriblLeader.ID.IsUnknown() {
 			state.DatasetCriblLeader.ID = types.StringNull()
 		}
+		if !api.DatasetCriblLeader.ManagedBy.IsNull() && !api.DatasetCriblLeader.ManagedBy.IsUnknown() {
+			state.DatasetCriblLeader.ManagedBy = api.DatasetCriblLeader.ManagedBy
+		} else if state.DatasetCriblLeader.ManagedBy.IsNull() || state.DatasetCriblLeader.ManagedBy.IsUnknown() {
+			state.DatasetCriblLeader.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetCriblLeader.Metadata.IsNull() && !api.DatasetCriblLeader.Metadata.IsUnknown() {
 			state.DatasetCriblLeader.Metadata = api.DatasetCriblLeader.Metadata
 		} else if state.DatasetCriblLeader.Metadata.IsNull() || state.DatasetCriblLeader.Metadata.IsUnknown() {
@@ -7332,6 +7585,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblLocal.ID = api.DatasetCriblLocal.ID
 		} else if state.DatasetCriblLocal.ID.IsNull() || state.DatasetCriblLocal.ID.IsUnknown() {
 			state.DatasetCriblLocal.ID = types.StringNull()
+		}
+		if !api.DatasetCriblLocal.ManagedBy.IsNull() && !api.DatasetCriblLocal.ManagedBy.IsUnknown() {
+			state.DatasetCriblLocal.ManagedBy = api.DatasetCriblLocal.ManagedBy
+		} else if state.DatasetCriblLocal.ManagedBy.IsNull() || state.DatasetCriblLocal.ManagedBy.IsUnknown() {
+			state.DatasetCriblLocal.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetCriblLocal.Metadata.IsNull() && !api.DatasetCriblLocal.Metadata.IsUnknown() {
 			state.DatasetCriblLocal.Metadata = api.DatasetCriblLocal.Metadata
@@ -7415,6 +7673,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetCriblMeta.ID.IsNull() || state.DatasetCriblMeta.ID.IsUnknown() {
 			state.DatasetCriblMeta.ID = types.StringNull()
 		}
+		if !api.DatasetCriblMeta.ManagedBy.IsNull() && !api.DatasetCriblMeta.ManagedBy.IsUnknown() {
+			state.DatasetCriblMeta.ManagedBy = api.DatasetCriblMeta.ManagedBy
+		} else if state.DatasetCriblMeta.ManagedBy.IsNull() || state.DatasetCriblMeta.ManagedBy.IsUnknown() {
+			state.DatasetCriblMeta.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetCriblMeta.Metadata.IsNull() && !api.DatasetCriblMeta.Metadata.IsUnknown() {
 			state.DatasetCriblMeta.Metadata = api.DatasetCriblMeta.Metadata
 		} else if state.DatasetCriblMeta.Metadata.IsNull() || state.DatasetCriblMeta.Metadata.IsUnknown() {
@@ -7488,6 +7751,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetCriblSearch.ID = api.DatasetCriblSearch.ID
 		} else if state.DatasetCriblSearch.ID.IsNull() || state.DatasetCriblSearch.ID.IsUnknown() {
 			state.DatasetCriblSearch.ID = types.StringNull()
+		}
+		if !api.DatasetCriblSearch.ManagedBy.IsNull() && !api.DatasetCriblSearch.ManagedBy.IsUnknown() {
+			state.DatasetCriblSearch.ManagedBy = api.DatasetCriblSearch.ManagedBy
+		} else if state.DatasetCriblSearch.ManagedBy.IsNull() || state.DatasetCriblSearch.ManagedBy.IsUnknown() {
+			state.DatasetCriblSearch.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetCriblSearch.Metadata.IsNull() && !api.DatasetCriblSearch.Metadata.IsUnknown() {
 			state.DatasetCriblSearch.Metadata = api.DatasetCriblSearch.Metadata
@@ -7677,6 +7945,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetGcs.ID.IsNull() || state.DatasetGcs.ID.IsUnknown() {
 			state.DatasetGcs.ID = types.StringNull()
 		}
+		if !api.DatasetGcs.ManagedBy.IsNull() && !api.DatasetGcs.ManagedBy.IsUnknown() {
+			state.DatasetGcs.ManagedBy = api.DatasetGcs.ManagedBy
+		} else if state.DatasetGcs.ManagedBy.IsNull() || state.DatasetGcs.ManagedBy.IsUnknown() {
+			state.DatasetGcs.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetGcs.Metadata.IsNull() && !api.DatasetGcs.Metadata.IsUnknown() {
 			state.DatasetGcs.Metadata = api.DatasetGcs.Metadata
 		} else if state.DatasetGcs.Metadata.IsNull() || state.DatasetGcs.Metadata.IsUnknown() {
@@ -7766,6 +8039,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 		} else if state.DatasetPrometheus.ID.IsNull() || state.DatasetPrometheus.ID.IsUnknown() {
 			state.DatasetPrometheus.ID = types.StringNull()
 		}
+		if !api.DatasetPrometheus.ManagedBy.IsNull() && !api.DatasetPrometheus.ManagedBy.IsUnknown() {
+			state.DatasetPrometheus.ManagedBy = api.DatasetPrometheus.ManagedBy
+		} else if state.DatasetPrometheus.ManagedBy.IsNull() || state.DatasetPrometheus.ManagedBy.IsUnknown() {
+			state.DatasetPrometheus.ManagedBy = types.StringNull()
+		}
 		if !api.DatasetPrometheus.Metadata.IsNull() && !api.DatasetPrometheus.Metadata.IsUnknown() {
 			state.DatasetPrometheus.Metadata = api.DatasetPrometheus.Metadata
 		} else if state.DatasetPrometheus.Metadata.IsNull() || state.DatasetPrometheus.Metadata.IsUnknown() {
@@ -7839,6 +8117,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetS3.ID = api.DatasetS3.ID
 		} else if state.DatasetS3.ID.IsNull() || state.DatasetS3.ID.IsUnknown() {
 			state.DatasetS3.ID = types.StringNull()
+		}
+		if !api.DatasetS3.ManagedBy.IsNull() && !api.DatasetS3.ManagedBy.IsUnknown() {
+			state.DatasetS3.ManagedBy = api.DatasetS3.ManagedBy
+		} else if state.DatasetS3.ManagedBy.IsNull() || state.DatasetS3.ManagedBy.IsUnknown() {
+			state.DatasetS3.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetS3.Metadata.IsNull() && !api.DatasetS3.Metadata.IsUnknown() {
 			state.DatasetS3.Metadata = api.DatasetS3.Metadata
@@ -7996,6 +8279,11 @@ func applySearchDatasetAPIToState(api *SearchDatasetModel, state *SearchDatasetM
 			state.DatasetSnowflake.ID = api.DatasetSnowflake.ID
 		} else if state.DatasetSnowflake.ID.IsNull() || state.DatasetSnowflake.ID.IsUnknown() {
 			state.DatasetSnowflake.ID = types.StringNull()
+		}
+		if !api.DatasetSnowflake.ManagedBy.IsNull() && !api.DatasetSnowflake.ManagedBy.IsUnknown() {
+			state.DatasetSnowflake.ManagedBy = api.DatasetSnowflake.ManagedBy
+		} else if state.DatasetSnowflake.ManagedBy.IsNull() || state.DatasetSnowflake.ManagedBy.IsUnknown() {
+			state.DatasetSnowflake.ManagedBy = types.StringNull()
 		}
 		if !api.DatasetSnowflake.Metadata.IsNull() && !api.DatasetSnowflake.Metadata.IsUnknown() {
 			state.DatasetSnowflake.Metadata = api.DatasetSnowflake.Metadata

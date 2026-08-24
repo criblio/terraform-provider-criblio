@@ -30,7 +30,7 @@ resource "criblio_secret" "my_secret" {
 
 - `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the secret.
-- `secret_type` (String)
+- `secret_type` (String) Type of the secret. Use <code>text</code> for an arbitrary value, <code>keypair</code> for an API key and secret key, or <code>credentials</code> for a username and password.
 
 ### Optional
 

@@ -96,7 +96,8 @@ func (d *SystemInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 							Description: `Filesystem path to the Cribl configuration directory.`,
 						},
 						"dist_mode": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Distribution mode of the Cribl instance.`,
 						},
 						"env": schema.MapAttribute{
 							Computed:    true,

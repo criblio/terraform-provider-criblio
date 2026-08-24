@@ -102,9 +102,10 @@ func (r *SecretResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 				Description: `Secret key. Required when <code>secretType</code> is <code>keypair</code>.`,
 			},
 			"secret_type": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required:    true,
+				Optional:    false,
+				Computed:    false,
+				Description: `Type of the secret. Use <code>text</code> for an arbitrary value, <code>keypair</code> for an API key and secret key, or <code>credentials</code> for a username and password.`,
 			},
 			"tags": schema.StringAttribute{
 				Required:    false,

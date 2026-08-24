@@ -89,12 +89,17 @@ func (d *SearchEnginesDataSource) Schema(_ context.Context, _ datasource.SchemaR
 							Computed:    true,
 							Description: `Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.`,
 						},
+						"metrics_dataset_id": schema.StringAttribute{
+							Computed:    true,
+							Description: `The <code>id</code> of the Cribl-managed customer-metrics Dataset linked to this engine, resolved by ownership (not by name). Absent when the engine has no metrics Dataset we own.`,
+						},
 						"metrics_last_published_at": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.`,
 						},
 						"status": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Provisioning lifecycle status of the lakehouse engine.`,
 						},
 						"tier_size": schema.StringAttribute{
 							Computed:    true,
@@ -137,7 +142,7 @@ func (d *SearchEnginesDataSource) Read(ctx context.Context, req datasource.ReadR
 	if items != nil {
 		values = make([]attr.Value, 0, len(*items))
 		for _, item := range *items {
-			values = append(values, types.ObjectValueMust(SearchEnginesItemAttrTypes(), map[string]attr.Value{"active_workflow": item.ActiveWorkflow, "datasets": item.Datasets, "deletion_started_at": item.DeletionStartedAt, "description": item.Description, "effective_status": item.EffectiveStatus, "engine_type": item.EngineType, "has_main": item.HasMain, "id": item.ID, "is_compute_deprovisioned": item.IsComputeDeprovisioned, "is_storage_deprovisioned": item.IsStorageDeprovisioned, "last_provisioned_ms": item.LastProvisionedMs, "metrics_last_published_at": item.MetricsLastPublishedAt, "status": item.Status, "tier_size": item.TierSize}))
+			values = append(values, types.ObjectValueMust(SearchEnginesItemAttrTypes(), map[string]attr.Value{"active_workflow": item.ActiveWorkflow, "datasets": item.Datasets, "deletion_started_at": item.DeletionStartedAt, "description": item.Description, "effective_status": item.EffectiveStatus, "engine_type": item.EngineType, "has_main": item.HasMain, "id": item.ID, "is_compute_deprovisioned": item.IsComputeDeprovisioned, "is_storage_deprovisioned": item.IsStorageDeprovisioned, "last_provisioned_ms": item.LastProvisionedMs, "metrics_dataset_id": item.MetricsDatasetID, "metrics_last_published_at": item.MetricsLastPublishedAt, "status": item.Status, "tier_size": item.TierSize}))
 		}
 	}
 	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: SearchEnginesItemAttrTypes()}, values)
@@ -157,6 +162,7 @@ func SearchEnginesItemAttrTypes() map[string]attr.Type {
 		"is_compute_deprovisioned":  types.BoolType,
 		"is_storage_deprovisioned":  types.BoolType,
 		"last_provisioned_ms":       types.Int64Type,
+		"metrics_dataset_id":        types.StringType,
 		"metrics_last_published_at": types.Int64Type,
 		"status":                    types.StringType,
 		"tier_size":                 types.StringType,

@@ -1035,6 +1035,10 @@ actions:
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
+  - target: "$.components.schemas.SystemSettingsConfUpdate.properties.api.properties.ssl.properties.passphrase"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
   - target: "$.components.schemas.SniSettings"
     update:
       oneOf:
@@ -3337,6 +3341,36 @@ actions:
   - target: "$.components.schemas.LocalSearchSource.properties.authTokens"
     update:
       x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.authTokens.items"
+    replace:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Optional label for this token.
+        enabled:
+          type: boolean
+          description: When false, the token is rejected.
+        tokenSecret:
+          type: string
+          description: Secret token clients must present.
+          x-terraform-name: token
+          x-terraform-sensitive: true
+          x-terraform-prefer-state: true
+      required:
+        - tokenSecret
+  - target: "$.components.schemas.TLSConfig.properties.certPath"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+  - target: "$.components.schemas.TLSConfig.properties.minVersion"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
+  - target: "$.components.schemas.TLSConfig.properties.privKeyPath"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-use-state-for-unknown: true
   - target: "$.components.schemas.LocalSearchSource.properties.port"
     update:
       x-terraform-optional-computed: true

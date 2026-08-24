@@ -57,7 +57,7 @@ func (d *ParserLibEntryDataSource) Schema(_ context.Context, _ datasource.Schema
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Parser or formatter type to use`,
+				Description: `Parser or formatter type to use.`,
 			},
 		},
 	}

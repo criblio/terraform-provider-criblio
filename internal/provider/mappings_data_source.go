@@ -42,7 +42,7 @@ func (d *MappingsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 		Attributes: map[string]schema.Attribute{
 			"product": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the Cribl product to list the Mapping Rulesets for.`,
+				Description: `Name of the Cribl product that contains the Mapping Rulesets.`,
 			},
 
 			"items": schema.ListNestedAttribute{

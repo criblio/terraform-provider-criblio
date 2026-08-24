@@ -14,6 +14,16 @@ const validSpec = `openapi: 3.0.2
 paths: {}
 `
 
+func TestSanitizeSensitiveExamples(t *testing.T) {
+	input := []byte("url: https://" + "hooks.slack.com/services/" + "T00000000/B00000000/exampleSecretToken\n")
+	want := "url: https://example.invalid/slack-webhook\n"
+
+	got := sanitizeSensitiveExamples(input)
+	if string(got) != want {
+		t.Fatalf("sanitizeSensitiveExamples() = %q, want %q", got, want)
+	}
+}
+
 func TestParseVersionsMap(t *testing.T) {
 	html := `<script>var tagMappings,apiTitle,versions={"v4.18.0":"https://example.test/4.18.yml","v4.17.1":"https://example.test/4.17.yml"};window.location.pathname</script>`
 

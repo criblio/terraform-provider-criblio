@@ -31,22 +31,22 @@ resource "criblio_key" "my_key" {
 ### Required
 
 - `group_id` (String) Worker group ID.
-- `id` (String) Key ID
+- `id` (String) Unique identifier for the encryption key.
 
 ### Optional
 
-- `algorithm` (String) Encryption algorithm
-- `description` (String) Description
-- `expires` (Number) Expiration time
-- `iv_size` (Integer) Length of the initialization vector, in bytes
-- `keyclass` (Number) Key class
-- `kms` (String) KMS for this key
+- `algorithm` (String) Encryption algorithm used by the encryption key.
+- `description` (String) Brief description of the encryption key.
+- `expires` (Number) Timestamp (in Unix time) when the encryption key expires.
+- `iv_size` (Integer) Length of the initialization vector, in bytes.
+- `keyclass` (Number) Numeric class of the encryption key used for key selection and rotation.
+- `kms` (String) Key management service that stores or provides the encryption key.
 - `use_iv` (Boolean) Seed encryption with a [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) to make the key more random and unique. Must be enabled with the aes-256-gcm algorithm.
 
 ### Read-Only
 
-- `created` (Number) Creation time
-- `group` (String) Name of the Worker Group/Fleet that created this key
+- `created` (Number) Timestamp (in Unix time) when the encryption key was created.
+- `group` (String) Name of the Worker Group or Fleet that created this encryption key.
 - `key_id` (String) API-assigned key ID returned by Cribl.
 
 ## Import

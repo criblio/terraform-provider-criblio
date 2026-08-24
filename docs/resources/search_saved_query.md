@@ -60,16 +60,16 @@ resource "criblio_search_saved_query" "my_search_saved_query" {
 Optional:
 
 - `apply_threshold` (Boolean) If <code>true</code>, apply color thresholds to the chart values.
-- `axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--axis))
+- `axis` (Attributes) Axis field mappings for X and Y axes. (see [below for nested schema](#nestedatt--chart_config--axis))
 - `color` (String) CSS color value for single-value counters.
 - `color_palette` (Integer) Index of the color palette to apply to the chart.
 - `color_palette_reversed` (Boolean) If <code>true</code>, reverse the color palette order.
-- `color_thresholds` (Attributes) (see [below for nested schema](#nestedatt--chart_config--color_thresholds))
-- `custom_data` (Attributes) (see [below for nested schema](#nestedatt--chart_config--custom_data))
+- `color_thresholds` (Attributes) Color threshold configuration for conditional coloring. (see [below for nested schema](#nestedatt--chart_config--color_thresholds))
+- `custom_data` (Attributes) Custom data transformation and display options. (see [below for nested schema](#nestedatt--chart_config--custom_data))
 - `decimals` (Integer) Number of decimal places for numeric display.
 - `label` (String) Display label for single-value counters.
-- `legend` (Attributes) (see [below for nested schema](#nestedatt--chart_config--legend))
-- `map_details` (Attributes) (see [below for nested schema](#nestedatt--chart_config--map_details))
+- `legend` (Attributes) Legend display settings. (see [below for nested schema](#nestedatt--chart_config--legend))
+- `map_details` (Attributes) Geo-map chart configuration. (see [below for nested schema](#nestedatt--chart_config--map_details))
 - `on_click_action` (Attributes) Action to perform when a user clicks on the chart. (see [below for nested schema](#nestedatt--chart_config--on_click_action))
 - `prefix` (String) String prepended to the displayed value.
 - `separator` (Boolean) If <code>true</code>, apply thousands separators to numeric values.
@@ -79,8 +79,8 @@ Optional:
 - `style` (Boolean) If <code>true</code>, apply custom styling to the chart.
 - `suffix` (String) String appended to the displayed value.
 - `type` (String) Default chart type for all series.
-- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--x_axis))
-- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--chart_config--y_axis))
+- `x_axis` (Attributes) X-axis configuration. (see [below for nested schema](#nestedatt--chart_config--x_axis))
+- `y_axis` (Attributes) Y-axis configuration. (see [below for nested schema](#nestedatt--chart_config--y_axis))
 
 <a id="nestedatt--chart_config--axis"></a>
 ### Nested Schema for `chart_config.axis`
@@ -195,7 +195,7 @@ Optional:
 Optional:
 
 - `data_field` (String) Field name for the X-axis data.
-- `format` (Attributes) (see [below for nested schema](#nestedatt--chart_config--x_axis--format))
+- `format` (Attributes) Numeric format for axis labels. (see [below for nested schema](#nestedatt--chart_config--x_axis--format))
 - `inverse` (Boolean) If <code>true</code>, reverse the axis direction.
 - `label_interval` (String) Interval strategy for axis label spacing.
 - `label_orientation` (Integer) Label rotation angle in degrees.
@@ -222,7 +222,7 @@ Optional:
 Optional:
 
 - `data_field` (List of String) Field names for the Y-axis data.
-- `format` (Attributes) (see [below for nested schema](#nestedatt--chart_config--y_axis--format))
+- `format` (Attributes) Numeric format for axis labels. (see [below for nested schema](#nestedatt--chart_config--y_axis--format))
 - `interval` (Number) Fixed interval between axis tick marks.
 - `max` (Number) Maximum value for the axis range.
 - `min` (Number) Minimum value for the axis range.

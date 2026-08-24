@@ -28,6 +28,7 @@ type SearchEngineModel struct {
 	IsComputeDeprovisioned types.Bool   `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool   `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64  `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MetricsDatasetID       types.String `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64  `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
 	Status                 types.String `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String `tfsdk:"tier_size" json:"tierSize,omitempty"`
@@ -45,6 +46,7 @@ type SearchEngineResourceModel struct {
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool     `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64    `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MetricsDatasetID       types.String   `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64    `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
 	Status                 types.String   `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String   `tfsdk:"tier_size" json:"tierSize,omitempty"`
@@ -62,6 +64,7 @@ type SearchEngineDataSourceModel struct {
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned types.Bool     `tfsdk:"is_storage_deprovisioned" json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      types.Int64    `tfsdk:"last_provisioned_ms" json:"lastProvisionedMs,omitempty"`
+	MetricsDatasetID       types.String   `tfsdk:"metrics_dataset_id" json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt types.Int64    `tfsdk:"metrics_last_published_at" json:"metricsLastPublishedAt,omitempty"`
 	Status                 types.String   `tfsdk:"status" json:"status,omitempty"`
 	TierSize               types.String   `tfsdk:"tier_size" json:"tierSize,omitempty"`
@@ -79,6 +82,7 @@ type SearchEngineAPIModel struct {
 	IsComputeDeprovisioned *bool    `json:"isComputeDeprovisioned,omitempty"`
 	IsStorageDeprovisioned *bool    `json:"isStorageDeprovisioned,omitempty"`
 	LastProvisionedMs      *int64   `json:"lastProvisionedMs,omitempty"`
+	MetricsDatasetID       *string  `json:"metricsDatasetId,omitempty"`
 	MetricsLastPublishedAt *int64   `json:"metricsLastPublishedAt,omitempty"`
 	Status                 *string  `json:"status,omitempty"`
 	TierSize               *string  `json:"tierSize,omitempty"`
@@ -311,6 +315,13 @@ func (m SearchEngineModel) MarshalJSON() ([]byte, error) {
 		}
 		output["id"] = value
 	}
+	if !m.MetricsDatasetID.IsNull() && !m.MetricsDatasetID.IsUnknown() {
+		value, err := SearchEngineTerraformValueToJSON(m.MetricsDatasetID)
+		if err != nil {
+			return nil, fmt.Errorf("convert metrics_dataset_id to API value: %v", err)
+		}
+		output["metricsDatasetId"] = value
+	}
 	if !m.TierSize.IsNull() && !m.TierSize.IsUnknown() {
 		value, err := SearchEngineTerraformValueToJSON(m.TierSize)
 		if err != nil {
@@ -384,6 +395,11 @@ func (m *SearchEngineModel) UnmarshalJSON(data []byte) error {
 		m.LastProvisionedMs = types.Int64Value(*input.LastProvisionedMs)
 	} else {
 		m.LastProvisionedMs = types.Int64Null()
+	}
+	if input.MetricsDatasetID != nil {
+		m.MetricsDatasetID = types.StringValue(*input.MetricsDatasetID)
+	} else {
+		m.MetricsDatasetID = types.StringNull()
 	}
 	if input.MetricsLastPublishedAt != nil {
 		m.MetricsLastPublishedAt = types.Int64Value(*input.MetricsLastPublishedAt)

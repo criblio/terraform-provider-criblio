@@ -160,7 +160,7 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:    true,
 				Optional:    false,
 				Computed:    false,
-				Description: `The name of the Cribl product that contains the Mapping Ruleset.`,
+				Description: `Name of the Cribl product that contains the Mapping Ruleset.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

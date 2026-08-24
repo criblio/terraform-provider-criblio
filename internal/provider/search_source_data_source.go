@@ -50,7 +50,8 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						},
 						"token": schema.StringAttribute{
 							Computed:    true,
-							Description: `Secret token string clients must present.`,
+							Sensitive:   true,
+							Description: `Secret token clients must present.`,
 						},
 					},
 				},
@@ -80,14 +81,17 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Description: `Source configuration id.`,
 			},
 			"metadata": schema.ListNestedAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Fields to add to events from the Source. Can be a static value or a JavaScript expression. Useful for enriching events with additional context, such as environment or custom identifiers.`,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Field name to stamp onto the emitted event.`,
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Value for the field. Can be a static string or a JavaScript expression.`,
 						},
 					},
 				},

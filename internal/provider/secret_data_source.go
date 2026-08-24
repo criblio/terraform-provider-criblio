@@ -71,7 +71,8 @@ func (d *SecretDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 				Description: `Secret key. Required when <code>secretType</code> is <code>keypair</code>.`,
 			},
 			"secret_type": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Type of the secret. Use <code>text</code> for an arbitrary value, <code>keypair</code> for an API key and secret key, or <code>credentials</code> for a username and password.`,
 			},
 			"tags": schema.StringAttribute{
 				Computed:    true,
