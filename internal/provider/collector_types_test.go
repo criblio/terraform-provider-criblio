@@ -69,6 +69,97 @@ func TestCollectorMarshalJSONIncludesSavedJobType(t *testing.T) {
 	if got["id"] != "rest-api-demo-collector" {
 		t.Fatalf("expected collector id in body, got %#v in %s", got["id"], data)
 	}
+	input, ok := got["input"].(map[string]any)
+	if !ok || input["type"] != "collection" {
+		t.Fatalf("expected default collection input in body, got %#v in %s", got["input"], data)
+	}
+}
+
+func TestCollectorMarshalJSONDefaultsInputForEveryVariant(t *testing.T) {
+	tests := map[string]CollectorModel{
+		"splunk":       {InputCollectorSplunk: &InputCollectorSplunkModel{}},
+		"rest":         {InputCollectorRest: &InputCollectorRestModel{}},
+		"s3":           {InputCollectorS3: &InputCollectorS3Model{}},
+		"azure_blob":   {InputCollectorAzureBlob: &InputCollectorAzureBlobModel{}},
+		"cribl_lake":   {InputCollectorCriblLake: &InputCollectorCriblLakeModel{}},
+		"database":     {InputCollectorDatabase: &InputCollectorDatabaseModel{}},
+		"gcs":          {InputCollectorGCS: &InputCollectorGCSModel{}},
+		"health_check": {InputCollectorHealthCheck: &InputCollectorHealthCheckModel{}},
+		"script":       {InputCollectorScript: &InputCollectorScriptModel{}},
+		"filesystem":   {InputCollectorFilesystem: &InputCollectorFilesystemModel{}},
+	}
+
+	for name, model := range tests {
+		t.Run(name, func(t *testing.T) {
+			data, err := json.Marshal(model)
+			if err != nil {
+				t.Fatalf("json.Marshal returned error: %v", err)
+			}
+			var body map[string]any
+			if err := json.Unmarshal(data, &body); err != nil {
+				t.Fatalf("json.Unmarshal returned error: %v", err)
+			}
+			input, ok := body["input"].(map[string]any)
+			if !ok || input["type"] != "collection" {
+				t.Fatalf("expected default collection input, got %#v in %s", body["input"], data)
+			}
+		})
+	}
+}
+
+func TestCollectorMarshalJSONCompletesPartialInputAndPreservesFields(t *testing.T) {
+	inputValues := make(map[string]attr.Value, len(InputCollectorRestInputAttrTypes()))
+	for name, typ := range InputCollectorRestInputAttrTypes() {
+		value, err := CollectorTerraformNullValue(typ)
+		if err != nil {
+			t.Fatalf("null value for %s: %v", name, err)
+		}
+		inputValues[name] = value
+	}
+	inputValues["pipeline"] = types.StringValue("main")
+
+	model := CollectorModel{InputCollectorRest: &InputCollectorRestModel{
+		Input: types.ObjectValueMust(InputCollectorRestInputAttrTypes(), inputValues),
+	}}
+	data, err := json.Marshal(model)
+	if err != nil {
+		t.Fatalf("json.Marshal returned error: %v", err)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(data, &body); err != nil {
+		t.Fatalf("json.Unmarshal returned error: %v", err)
+	}
+	input := body["input"].(map[string]any)
+	if input["type"] != "collection" || input["pipeline"] != "main" {
+		t.Fatalf("expected completed input preserving pipeline, got %#v", input)
+	}
+}
+
+func TestCollectorMarshalJSONCompletesEmptyS3Input(t *testing.T) {
+	inputValues := make(map[string]attr.Value, len(InputCollectorS3InputAttrTypes()))
+	for name, typ := range InputCollectorS3InputAttrTypes() {
+		value, err := CollectorTerraformNullValue(typ)
+		if err != nil {
+			t.Fatalf("null value for %s: %v", name, err)
+		}
+		inputValues[name] = value
+	}
+
+	model := CollectorModel{InputCollectorS3: &InputCollectorS3Model{
+		Input: types.ObjectValueMust(InputCollectorS3InputAttrTypes(), inputValues),
+	}}
+	data, err := json.Marshal(model)
+	if err != nil {
+		t.Fatalf("json.Marshal returned error: %v", err)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(data, &body); err != nil {
+		t.Fatalf("json.Unmarshal returned error: %v", err)
+	}
+	input := body["input"].(map[string]any)
+	if len(input) != 1 || input["type"] != "collection" {
+		t.Fatalf("expected minimal collection input, got %#v", input)
+	}
 }
 
 func TestCollectorModelUnmarshalGoogleCloudStorageAlias(t *testing.T) {

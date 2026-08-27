@@ -116,6 +116,12 @@ actions:
   - target: "$.components.schemas.InputCollectorBase.properties.type"
     update:
       x-terraform-ignore: true
+  - target: "$.components.schemas.InputCollectorBase.properties.input"
+    update:
+      description: 'Input configuration for a collection job. Set type to "collection".'
+  - target: "$.components.schemas.InputCollectorBase.properties.input.properties.type"
+    update:
+      x-terraform-enum-validator: true
   - target: "$.components.schemas.InputCollectorAzureBlob.allOf.1.properties.collector.properties"
     update:
       destructive:

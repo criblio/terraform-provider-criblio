@@ -37,6 +37,102 @@ func ValueToCty(v Value) (cty.Value, error) {
 	return ctyReplaceUnknownWithNullForHCL(out)
 }
 
+// pruneNullCollectionPlaceholders removes null values introduced while cty
+// homogenizes sibling objects. Null object attributes and null list elements
+// are omitted from generated Terraform configuration.
+func pruneNullCollectionPlaceholders(v cty.Value, pruneEmptyCollections bool) cty.Value {
+	if !v.IsKnown() {
+		return v
+	}
+	if v.IsNull() {
+		return v
+	}
+	if v.Type().IsObjectType() || v.Type().IsMapType() {
+		values := make(map[string]cty.Value)
+		iterator := v.ElementIterator()
+		for iterator.Next() {
+			key, child := iterator.Element()
+			child = pruneNullCollectionPlaceholders(child, pruneEmptyCollections)
+			if child.IsNull() || (pruneEmptyCollections && isEmptyCtySequence(child)) {
+				continue
+			}
+			values[key.AsString()] = child
+		}
+		if v.Type().IsMapType() {
+			if len(values) == 0 {
+				return cty.MapValEmpty(v.Type().ElementType())
+			}
+			if ctyMapValuesHaveSameType(values) {
+				return cty.MapVal(values)
+			}
+			return cty.ObjectVal(values)
+		}
+		return cty.ObjectVal(values)
+	}
+	if v.Type().IsListType() || v.Type().IsTupleType() || v.Type().IsSetType() {
+		values := make([]cty.Value, 0, v.LengthInt())
+		iterator := v.ElementIterator()
+		for iterator.Next() {
+			_, child := iterator.Element()
+			child = pruneNullCollectionPlaceholders(child, pruneEmptyCollections)
+			if child.IsNull() {
+				continue
+			}
+			values = append(values, child)
+		}
+		if len(values) == 0 {
+			if v.Type().IsListType() {
+				return cty.ListValEmpty(v.Type().ElementType())
+			}
+			if v.Type().IsSetType() {
+				return cty.SetValEmpty(v.Type().ElementType())
+			}
+			return cty.EmptyTupleVal
+		}
+		if v.Type().IsSetType() {
+			if allSameType(values) {
+				return cty.SetVal(values)
+			}
+			return cty.TupleVal(values)
+		}
+		if v.Type().IsTupleType() {
+			return cty.TupleVal(values)
+		}
+		if cty.CanListVal(values) {
+			return cty.ListVal(values)
+		}
+		return cty.TupleVal(values)
+	}
+	return v
+}
+
+func ctyMapValuesHaveSameType(values map[string]cty.Value) bool {
+	var firstType cty.Type
+	first := true
+	for _, value := range values {
+		if first {
+			firstType = value.Type()
+			first = false
+			continue
+		}
+		if !value.Type().Equals(firstType) {
+			return false
+		}
+	}
+	return true
+}
+
+func isEmptyCtySequence(v cty.Value) bool {
+	if !v.IsKnown() || v.IsNull() {
+		return false
+	}
+	typeOfValue := v.Type()
+	if !typeOfValue.IsListType() && !typeOfValue.IsSetType() && !typeOfValue.IsTupleType() {
+		return false
+	}
+	return v.LengthInt() == 0
+}
+
 func valueToCtyInner(v Value) (cty.Value, error) {
 	switch v.Kind {
 	case KindNull:
@@ -600,18 +696,15 @@ func pruneDefaultValueTimerangeEarliestLatest(inner cty.Value) (cty.Value, error
 	return out, nil
 }
 
-// normalizeAndPruneList normalizes list-of-maps (union keys), prunes nulls, and re-normalizes.
+// normalizeAndPruneList normalizes list-of-maps without changing null values.
 // cty requires all list elements to have the same type; optional/omitted attributes cause object types to differ.
 func normalizeAndPruneList(v Value) Value {
-	v = normalizeListOfMaps(v)
-	v = PruneNulls(v)
-	v = normalizeListOfMaps(v)
-	return v
+	return normalizeListOfMaps(v)
 }
 
-// listToCtyElems converts each list element to cty.Value. Do not call PruneNulls here:
-// normalizeAndPruneList already aligned keys across elements with explicit nulls; pruning
-// again drops union branches and yields inconsistent object types per element (cty.ListVal panics).
+// listToCtyElems converts each list element to cty.Value. Do not prune nulls here:
+// normalizeAndPruneList aligned keys across elements with explicit nulls; pruning them
+// drops union branches and yields inconsistent object types per element.
 func listToCtyElems(list []Value) ([]cty.Value, error) {
 	elems := make([]cty.Value, 0, len(list))
 	for i, el := range list {

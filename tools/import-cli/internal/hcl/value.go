@@ -137,10 +137,42 @@ func PruneNulls(v Value) Value {
 		}
 		return Value{Kind: KindMap, Map: out}
 	}
-	// KindList: prune each element, keep list length (do not drop null elements).
 	list := make([]Value, len(v.List))
 	for i, el := range v.List {
 		list[i] = PruneNulls(el)
+	}
+	return Value{Kind: KindList, List: list}
+}
+
+// PruneNullPlaceholders removes null map entries, null list elements, and list
+// objects that become empty after their null fields are removed. It is intended
+// for exporter output where null placeholders are not valid configuration.
+func PruneNullPlaceholders(v Value) Value {
+	if v.Kind != KindMap && v.Kind != KindList {
+		return v
+	}
+	if v.Kind == KindMap {
+		out := make(map[string]Value, len(v.Map))
+		for key, child := range v.Map {
+			if child.Kind == KindNull {
+				continue
+			}
+			pruned := PruneNullPlaceholders(child)
+			if child.Kind == KindList && len(child.List) > 0 && pruned.Kind == KindList && len(pruned.List) == 0 {
+				continue
+			}
+			out[key] = pruned
+		}
+		return Value{Kind: KindMap, Map: out}
+	}
+	list := make([]Value, 0, len(v.List))
+	for _, child := range v.List {
+		wasNonEmptyMap := child.Kind == KindMap && len(child.Map) > 0
+		child = PruneNullPlaceholders(child)
+		if child.Kind == KindNull || (wasNonEmptyMap && child.Kind == KindMap && len(child.Map) == 0) {
+			continue
+		}
+		list = append(list, child)
 	}
 	return Value{Kind: KindList, List: list}
 }

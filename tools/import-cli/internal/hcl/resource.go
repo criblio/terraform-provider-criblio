@@ -97,7 +97,7 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 			v = PruneEmptyLists(v)
 		}
 		if skipNull {
-			v = PruneNulls(v)
+			v = PruneNullPlaceholders(v)
 		}
 		if skipNull && v.Kind == KindNull {
 			continue
@@ -113,6 +113,10 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 		ctyVal, err := ValueToCty(v)
 		if err != nil {
 			return nil, fmt.Errorf("attribute %q: %w", k, err)
+		}
+		if skipNull {
+			pruneEmptyCollections := opts.SkipEmptyListAttributes && !attrInList(typeName, k, opts.SkipPruneEmptyListsFor)
+			ctyVal = pruneNullCollectionPlaceholders(ctyVal, pruneEmptyCollections)
 		}
 		if typeName == "criblio_search_dashboard" && k == "elements" {
 			ctyVal, err = PruneSearchDashboardElementsCty(ctyVal)

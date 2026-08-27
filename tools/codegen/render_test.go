@@ -1103,6 +1103,11 @@ func TestCollectorMarshalIncludesSavedJobType(t *testing.T) {
 		FileStem:   "collector",
 		TypeName:   "criblio_collector",
 		StructName: "Collector",
+		OneOfVariants: []parser.OneOfVariantDef{{
+			GoName:        "InputCollectorRest",
+			TerraformName: "input_collector_rest",
+			ModelName:     "InputCollectorRestModel",
+		}},
 		Fields: []parser.FieldDef{
 			{
 				APIName:       "id",
@@ -1122,6 +1127,8 @@ func TestCollectorMarshalIncludesSavedJobType(t *testing.T) {
 	got := string(content)
 
 	assertContains(t, got, `output["type"] = "collection"`)
+	assertContains(t, got, `input, ok := output["input"].(map[string]any)`)
+	assertContains(t, got, `input["type"] = "collection"`)
 }
 
 func TestPrimitiveArrayFieldsPreserveElementTypes(t *testing.T) {

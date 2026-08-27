@@ -667,6 +667,55 @@ func TestReplaceSecretValuesWithVariableRefs_masks_all_extra_http_headers(t *tes
 	assert.Equal(t, "X-google-api-key", header0.Map["name"].String, "header name value should be unchanged")
 }
 
+func TestPruneNullPlaceholdersRemovesInvalidListPlaceholders(t *testing.T) {
+	value := Value{
+		Kind: KindMap,
+		Map: map[string]Value{
+			"metadata": {
+				Kind: KindList,
+				List: []Value{
+					{Kind: KindNull},
+					{Kind: KindMap, Map: map[string]Value{
+						"name":  {Kind: KindNull},
+						"value": {Kind: KindNull},
+					}},
+					{Kind: KindMap, Map: map[string]Value{
+						"name":  {Kind: KindString, String: "index"},
+						"value": {Kind: KindString, String: "'main'"},
+					}},
+				},
+			},
+			"allowed_indexes_at_token": {
+				Kind: KindList,
+				List: []Value{{Kind: KindNull}},
+			},
+		},
+	}
+
+	pruned := PruneNullPlaceholders(value)
+
+	metadata := pruned.Map["metadata"]
+	require.Len(t, metadata.List, 1)
+	assert.Equal(t, "index", metadata.List[0].Map["name"].String)
+	assert.Empty(t, pruned.Map["allowed_indexes_at_token"].List)
+}
+
+func TestPruneNullPlaceholdersPreservesGenuinelyEmptyCollections(t *testing.T) {
+	value := Value{Kind: KindMap, Map: map[string]Value{
+		"empty_list": {Kind: KindList, List: []Value{}},
+		"objects": {Kind: KindList, List: []Value{
+			{Kind: KindMap, Map: map[string]Value{}},
+		}},
+	}}
+
+	pruned := PruneNullPlaceholders(value)
+
+	require.Contains(t, pruned.Map, "empty_list")
+	assert.Empty(t, pruned.Map["empty_list"].List)
+	require.Len(t, pruned.Map["objects"].List, 1)
+	assert.Empty(t, pruned.Map["objects"].List[0].Map)
+}
+
 func TestPruneEmptyLists_filters_urls_with_empty_url(t *testing.T) {
 	// Simulate what ModelToValue produces for output_webhook with empty urls
 	// When loadBalanced=false, the model contains urls: [{url: "", weight: 1}]

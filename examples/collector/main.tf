@@ -263,6 +263,30 @@ resource "criblio_collector" "rest_api_collector_discovery_http" {
   }
 }
 
+resource "criblio_collector" "s3" {
+  id       = "TestS3Collector"
+  group_id = "default"
+  input_collector_s3 = {
+    id         = "TestS3Collector"
+    streamtags = ["terraform"]
+    input = {
+      type = "collection"
+    }
+    collector = {
+      type = "s3"
+      conf = {
+        aws_authentication_method = "auto"
+        bucket                    = "test-bucket"
+        recurse                   = true
+        max_batch_size            = 10
+        verify_permissions        = true
+        reuse_connections         = true
+        enable_assume_role        = false
+      }
+    }
+  }
+}
+
 /*
 resource "criblio_collector" "rest_conf_update_test" {
   group_id = "default"

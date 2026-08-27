@@ -37,6 +37,31 @@ discriminator:
 	}
 }
 
+func TestMakeCollectorVariantsOptionalComputedPreservesRequiredInput(t *testing.T) {
+	variants := []OneOfVariantDef{{
+		Fields: []FieldDef{
+			{TerraformName: "id", Required: true},
+			{TerraformName: "input", Type: "object", Required: true},
+			{TerraformName: "collector", Type: "object", Required: true},
+		},
+	}}
+
+	makeCollectorVariantsOptionalComputed(variants)
+
+	id := fieldByTFName(t, variants[0].Fields, "id")
+	if id.Required || !id.Optional || !id.Computed {
+		t.Fatalf("id flags = required:%v optional:%v computed:%v", id.Required, id.Optional, id.Computed)
+	}
+	input := fieldByTFName(t, variants[0].Fields, "input")
+	if !input.Required || input.Optional || input.Computed || input.OptionalComputed {
+		t.Fatalf("input flags = required:%v optional:%v computed:%v optionalComputed:%v", input.Required, input.Optional, input.Computed, input.OptionalComputed)
+	}
+	collector := fieldByTFName(t, variants[0].Fields, "collector")
+	if collector.Required || !collector.Optional || !collector.Computed {
+		t.Fatalf("collector flags = required:%v optional:%v computed:%v", collector.Required, collector.Optional, collector.Computed)
+	}
+}
+
 func TestParseCertificateResource(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

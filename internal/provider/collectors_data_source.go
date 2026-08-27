@@ -196,7 +196,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -462,7 +463,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -1025,7 +1027,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -1284,7 +1287,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -1565,7 +1569,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -1779,7 +1784,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -2000,7 +2006,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -2249,7 +2256,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -2484,7 +2492,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
@@ -2703,7 +2712,8 @@ func (d *CollectorsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 									Description: `If enabled, tasks are created and run by the same Worker Node`,
 								},
 								"input": schema.SingleNestedAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Input configuration for a collection job. Set type to "collection".`,
 									Attributes: map[string]schema.Attribute{
 										"type": schema.StringAttribute{
 											Computed: true,
