@@ -26,7 +26,8 @@ resource "criblio_collector" "s3" {
     }
   }
 }`,
-			PlanOnly: true,
+			PlanOnly:           true,
+			ExpectNonEmptyPlan: true,
 		}},
 	})
 }
@@ -53,7 +54,8 @@ resource "criblio_collector" "s3" {
     }
   }
 }`,
-			PlanOnly: true,
+			PlanOnly:           true,
+			ExpectNonEmptyPlan: true,
 		}},
 	})
 }
@@ -106,7 +108,8 @@ resource "criblio_collector" "rest" {
     }
   }
 }`,
-			PlanOnly: true,
+			PlanOnly:           true,
+			ExpectNonEmptyPlan: true,
 		}},
 	})
 }
