@@ -31,7 +31,7 @@ resource "criblio_pack_source" "my_packsource" {
     pipeline = "my_pipeline"
     port     = 7592
     pq = {
-      commit_frequency = 7
+      commit_frequency = 42
       compress         = "none"
       max_buffer_size  = 51
       max_file_size    = "100 MB"
@@ -107,7 +107,7 @@ resource "criblio_pack_source" "my_packsource_syslog" {
     octet_counting = false
     pipeline       = "my_pipeline"
     pq = {
-      commit_frequency = 7
+      commit_frequency = 42
       compress         = "none"
       max_buffer_size  = 51
       max_file_size    = "100 MB"
