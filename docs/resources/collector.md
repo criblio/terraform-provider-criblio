@@ -980,7 +980,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_splunk--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
 
 <a id="nestedatt--input_collector_rest"></a>
@@ -998,7 +998,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_rest--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector))
 
 <a id="nestedatt--input_collector_s3"></a>
@@ -1016,7 +1016,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_s3--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector))
 
 <a id="nestedatt--input_collector_azure_blob"></a>
@@ -1034,7 +1034,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
 
 <a id="nestedatt--input_collector_cribl_lake"></a>
@@ -1052,7 +1052,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
 
 <a id="nestedatt--input_collector_database"></a>
@@ -1070,7 +1070,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_database--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector))
 
 <a id="nestedatt--input_collector_gcs"></a>
@@ -1088,7 +1088,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_gcs--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
 
 <a id="nestedatt--input_collector_health_check"></a>
@@ -1106,7 +1106,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_health_check--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
 
 <a id="nestedatt--input_collector_script"></a>
@@ -1124,7 +1124,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_script--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector))
 
 <a id="nestedatt--input_collector_filesystem"></a>
@@ -1142,7 +1142,7 @@ Optional:
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_filesystem--schedule))
 - `streamtags` (List of String) Tags for filtering and grouping
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
-- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_filesystem--input))
+- `input` (Attributes) Input configuration for a collection job. Set type to "collection". (see [below for nested schema](#nestedatt--input_collector_filesystem--input))
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_filesystem--collector))
 
 <a id="nestedatt--input_collector_splunk--schedule"></a>

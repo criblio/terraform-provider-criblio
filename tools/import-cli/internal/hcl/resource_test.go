@@ -80,6 +80,43 @@ func TestResourceBlock_list_and_null(t *testing.T) {
 	assert.Contains(t, string(bytes), "tags")
 }
 
+func TestResourceBlockPrunesNullElementsFromNestedSiblingLists(t *testing.T) {
+	validMetadata := Value{Kind: KindMap, Map: map[string]Value{
+		"name":  {Kind: KindString, String: "my"},
+		"value": {Kind: KindString, String: `"name"`},
+	}}
+	attrs := map[string]Value{
+		"input_splunk_hec": {Kind: KindMap, Map: map[string]Value{
+			"auth_tokens": {Kind: KindList, List: []Value{
+				{Kind: KindMap, Map: map[string]Value{
+					"metadata":                 {Kind: KindList, List: []Value{validMetadata}},
+					"allowed_indexes_at_token": {Kind: KindList, List: []Value{{Kind: KindString, String: "main"}}},
+				}},
+				{Kind: KindMap, Map: map[string]Value{
+					"metadata":                 {Kind: KindList, List: []Value{{Kind: KindNull}}},
+					"allowed_indexes_at_token": {Kind: KindList, List: []Value{{Kind: KindNull}}},
+					"description":              {Kind: KindString, String: "fve"},
+					"token_secret":             {Kind: KindNull},
+				}},
+				{Kind: KindMap, Map: map[string]Value{
+					"metadata":                 {Kind: KindList, List: []Value{{Kind: KindNull}}},
+					"allowed_indexes_at_token": {Kind: KindList, List: []Value{{Kind: KindString, String: "myindex"}, {Kind: KindString, String: "anotherindex"}}},
+					"description":              {Kind: KindNull},
+					"token_secret":             {Kind: KindNull},
+				}},
+			}},
+		}},
+	}
+
+	generated, err := ResourceBlockBytes("criblio_source", "hec", attrs, DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	source := string(generated)
+	assert.NotContains(t, source, "null")
+	assert.Contains(t, source, `name  = "my"`)
+	assert.Equal(t, 1, strings.Count(source, "metadata"))
+	assert.Equal(t, 2, strings.Count(source, "allowed_indexes_at_token"))
+}
+
 func TestResourceBlock_skip_null_option(t *testing.T) {
 	attrs := map[string]Value{
 		"id":       {Kind: KindString, String: "x"},
@@ -252,4 +289,39 @@ func TestResourceBlock_preservesConfiguredEmptyMaps(t *testing.T) {
 	got, err := ResourceBlockBytes("criblio_mapping_ruleset", "test", attrs, opts)
 	require.NoError(t, err)
 	assert.Contains(t, string(got), "conf = {}")
+}
+
+func TestResourceBlockRendersPrunedHeterogeneousObjectsAsValidHCL(t *testing.T) {
+	attrs := map[string]Value{
+		"items": {Kind: KindList, List: []Value{
+			{Kind: KindMap, Map: map[string]Value{
+				"left":  {Kind: KindString, String: "value"},
+				"right": {Kind: KindNull},
+			}},
+			{Kind: KindMap, Map: map[string]Value{
+				"left":  {Kind: KindNull},
+				"right": {Kind: KindString, String: "value"},
+			}},
+		}},
+	}
+
+	got, err := ResourceBlockBytes("criblio_example", "test", attrs, DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	require.NoError(t, ParseHCL(got, "test.tf"))
+	assert.NotContains(t, string(got), "null")
+	assert.Contains(t, string(got), `left = "value"`)
+	assert.Contains(t, string(got), `right = "value"`)
+}
+
+func TestResourceBlockAlwaysEmitsConfiguredEmptyLists(t *testing.T) {
+	attrs := map[string]Value{
+		"subscriptions": {Kind: KindList, List: []Value{}},
+		"destinations":  {Kind: KindList, List: []Value{}},
+	}
+
+	got, err := ResourceBlockBytes("criblio_project", "test", attrs, DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	require.NoError(t, ParseHCL(got, "test.tf"))
+	assert.Contains(t, string(got), "subscriptions = []")
+	assert.Contains(t, string(got), "destinations  = []")
 }

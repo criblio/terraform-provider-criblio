@@ -3385,6 +3385,12 @@ func (m InputCollectorSplunkModel) terraformPayload() (map[string]any, error) {
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -3618,6 +3624,12 @@ func (m InputCollectorRestModel) terraformPayload() (map[string]any, error) {
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -3851,6 +3863,12 @@ func (m InputCollectorS3Model) terraformPayload() (map[string]any, error) {
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -4084,6 +4102,12 @@ func (m InputCollectorAzureBlobModel) terraformPayload() (map[string]any, error)
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -4317,6 +4341,12 @@ func (m InputCollectorCriblLakeModel) terraformPayload() (map[string]any, error)
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -4550,6 +4580,12 @@ func (m InputCollectorDatabaseModel) terraformPayload() (map[string]any, error) 
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -4783,6 +4819,12 @@ func (m InputCollectorGCSModel) terraformPayload() (map[string]any, error) {
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -5016,6 +5058,12 @@ func (m InputCollectorHealthCheckModel) terraformPayload() (map[string]any, erro
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -5249,6 +5297,12 @@ func (m InputCollectorScriptModel) terraformPayload() (map[string]any, error) {
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 
@@ -5482,6 +5536,12 @@ func (m InputCollectorFilesystemModel) terraformPayload() (map[string]any, error
 		}
 		output["collector"] = value
 	}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
 	return output, nil
 }
 

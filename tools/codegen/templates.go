@@ -1088,6 +1088,14 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 		output["{{ .APIName }}"] = "{{ index .Enum 0 }}"
 	}
 {{- end }}
+{{- if eq $.StructName "Collector" }}
+	input, ok := output["input"].(map[string]any)
+	if !ok {
+		input = map[string]any{}
+	}
+	input["type"] = "collection"
+	output["input"] = input
+{{- end }}
 	return output, nil
 }
 

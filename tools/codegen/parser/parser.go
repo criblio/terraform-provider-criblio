@@ -504,7 +504,26 @@ func renameProviderField(fields []FieldDef) {
 
 func makeCollectorVariantsOptionalComputed(variants []OneOfVariantDef) {
 	for variantIndex := range variants {
+		inputRequired := false
+		for _, field := range variants[variantIndex].Fields {
+			if field.TerraformName == "input" && field.Required {
+				inputRequired = true
+				break
+			}
+		}
 		makeFieldsOptionalComputed(variants[variantIndex].Fields)
+		if inputRequired {
+			for fieldIndex := range variants[variantIndex].Fields {
+				field := &variants[variantIndex].Fields[fieldIndex]
+				if field.TerraformName == "input" {
+					field.Required = true
+					field.Optional = false
+					field.Computed = false
+					field.OptionalComputed = false
+					break
+				}
+			}
+		}
 		addCollectorPlanModifierHooks(variants[variantIndex].Fields)
 	}
 }

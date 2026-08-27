@@ -312,12 +312,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -739,12 +743,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -1625,12 +1633,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -2037,12 +2049,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -2481,12 +2497,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -2821,12 +2841,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -3172,12 +3196,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -3568,12 +3596,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -3946,12 +3978,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,
@@ -4295,12 +4331,16 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 						Required:      false,
 						Optional:      true,
 						Computed:      true,
+						Description:   `Input configuration for a collection job. Set type to "collection".`,
 						PlanModifiers: collectorPreferConfigOrStatePlanModifiers(),
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Required: false,
 								Optional: true,
 								Computed: true,
+								Validators: []validator.String{
+									stringvalidator.OneOf("collection"),
+								},
 							},
 							"breaker_rulesets": schema.ListAttribute{
 								Required:    false,

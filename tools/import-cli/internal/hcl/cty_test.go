@@ -8,6 +8,69 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
+func TestPruneNullCollectionPlaceholdersPreservesEmptyCollectionsAndTypes(t *testing.T) {
+	input := cty.ObjectVal(map[string]cty.Value{
+		"empty_list": cty.ListValEmpty(cty.String),
+		"empty_map":  cty.MapValEmpty(cty.String),
+		"null_value": cty.NullVal(cty.String),
+		"set": cty.SetVal([]cty.Value{
+			cty.StringVal("kept"),
+			cty.NullVal(cty.String),
+		}),
+	})
+
+	got := pruneNullCollectionPlaceholders(input, false)
+
+	require.True(t, got.Type().HasAttribute("empty_list"))
+	require.True(t, got.GetAttr("empty_list").Type().IsListType())
+	require.True(t, got.Type().HasAttribute("empty_map"))
+	require.True(t, got.GetAttr("empty_map").Type().IsMapType())
+	require.False(t, got.Type().HasAttribute("null_value"))
+	require.True(t, got.GetAttr("set").Type().IsSetType())
+	require.Equal(t, 1, got.GetAttr("set").LengthInt())
+}
+
+func TestPruneNullCollectionPlaceholdersHandlesHeterogeneousMapAndSet(t *testing.T) {
+	left := cty.ObjectVal(map[string]cty.Value{
+		"left":  cty.StringVal("value"),
+		"right": cty.NullVal(cty.String),
+	})
+	right := cty.ObjectVal(map[string]cty.Value{
+		"left":  cty.NullVal(cty.String),
+		"right": cty.StringVal("value"),
+	})
+	input := cty.ObjectVal(map[string]cty.Value{
+		"map": cty.MapVal(map[string]cty.Value{"a": left, "b": right}),
+		"set": cty.SetVal([]cty.Value{left, right}),
+	})
+
+	var got cty.Value
+	require.NotPanics(t, func() {
+		got = pruneNullCollectionPlaceholders(input, false)
+	})
+	require.True(t, got.GetAttr("map").Type().IsObjectType())
+	require.True(t, got.GetAttr("set").Type().IsTupleType())
+}
+
+func TestValueToCtyPreservesNullListElements(t *testing.T) {
+	got, err := ValueToCty(Value{Kind: KindList, List: []Value{
+		{Kind: KindString, String: "before"},
+		{Kind: KindNull},
+		{Kind: KindString, String: "after"},
+	}})
+	require.NoError(t, err)
+	require.Equal(t, 3, got.LengthInt())
+	require.True(t, got.Index(cty.NumberIntVal(1)).IsNull())
+
+	objects, err := ValueToCty(Value{Kind: KindList, List: []Value{{
+		Kind: KindMap,
+		Map:  map[string]Value{"optional": {Kind: KindNull}},
+	}}})
+	require.NoError(t, err)
+	require.True(t, objects.Index(cty.NumberIntVal(0)).Type().HasAttribute("optional"))
+	require.True(t, objects.Index(cty.NumberIntVal(0)).GetAttr("optional").IsNull())
+}
+
 // Regression: search dashboard elements are a list of one-of maps (e.g. dashboard_element_input
 // vs dashboard_element_visualization). normalizeListOfMaps adds null for absent branches;
 // an extra PruneNulls on each element before ValueToCty removed those nulls and caused
