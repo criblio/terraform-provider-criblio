@@ -2449,9 +2449,11 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- end }}
 {{- else if eq .ApplyStrategy "preferState" }}
-		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+		if !preserveInputs || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() || (fillMissingInputs && state.{{ $variant.GoName }}.{{ .GoName }}.IsNull()) {
 			if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 				state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+			} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+				state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 			}
 		}
 {{- else }}

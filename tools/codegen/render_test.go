@@ -823,7 +823,8 @@ func TestOneOfPreferStatePreservesConfiguredValue(t *testing.T) {
 	}
 
 	content := renderTemplate(t, "resource", resource)
-	assertContains(t, content, "if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown()))")
+	assertContains(t, content, "if !preserveInputs || state.OutputRouter.Rules.IsUnknown() || (fillMissingInputs && state.OutputRouter.Rules.IsNull())")
+	assertContains(t, content, "} else if state.OutputRouter.Rules.IsUnknown() {")
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
