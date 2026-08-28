@@ -44893,9 +44893,11 @@ func applyPackDestinationAPIToState(api *PackDestinationModel, state *PackDestin
 		if elementType := state.OutputRouter.Streamtags.ElementType(context.Background()); elementType == nil {
 			state.OutputRouter.Streamtags = types.ListNull(types.StringType)
 		}
-		if !preserveInputs || (fillMissingInputs && (state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown())) {
+		if !preserveInputs || state.OutputRouter.Rules.IsUnknown() || (fillMissingInputs && state.OutputRouter.Rules.IsNull()) {
 			if !api.OutputRouter.Rules.IsNull() && !api.OutputRouter.Rules.IsUnknown() {
 				state.OutputRouter.Rules = api.OutputRouter.Rules
+			} else if state.OutputRouter.Rules.IsUnknown() {
+				state.OutputRouter.Rules = types.ListNull(types.ObjectType{AttrTypes: OutputRouterRulesAttrTypes()})
 			}
 		}
 		if state.OutputRouter.Rules.IsNull() || state.OutputRouter.Rules.IsUnknown() {
