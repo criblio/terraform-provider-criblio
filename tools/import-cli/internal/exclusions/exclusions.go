@@ -27,8 +27,17 @@ var SkipExportIDs = map[string]map[string]bool{
 		"default": true, // read-only in Pack context
 		"devnull": true, // read-only in Pack context
 	},
+	"criblio_pack_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
+	},
 	"criblio_pack_source": {
 		"test_pack_source": true, // provider marshal fails: union type Input all fields null
+	},
+	"criblio_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
+	},
+	"criblio_project_pipeline": {
+		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
 	},
 	"criblio_source": {
 		"in_syslog":         true, // provider marshal fails: union type Input all fields null

@@ -768,6 +768,9 @@ func TestSkipResourceByID(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"id": "in_syslog"}))
 		assert.True(t, skipResourceByID("criblio_group", map[string]string{"group_id": "search", "product": "stream"}))
+		assert.True(t, skipResourceByID("criblio_pipeline", map[string]string{"id": "metrics_ingest"}))
+		assert.True(t, skipResourceByID("criblio_pack_pipeline", map[string]string{"id": "metrics_ingest", "pack": "custom-pack"}))
+		assert.True(t, skipResourceByID("criblio_project_pipeline", map[string]string{"id": "metrics_ingest", "project_id": "custom-project"}))
 	})
 	t.Run("skip non singleton resource when id equals group_id", func(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default"}
