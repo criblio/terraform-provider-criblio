@@ -118,7 +118,7 @@ func NewExportCommand() *cobra.Command {
 			if verbose {
 				printResolvedConfig(c, cfg)
 			}
-			ctx := context.Background()
+			ctx := c.Context()
 			reg, err := buildRegistry(ctx)
 			if err != nil {
 				return fmt.Errorf("build registry: %w", err)

@@ -9,7 +9,7 @@ commit history, and tag-to-tag diffs.
 ## [Unreleased]
 
 ### Fixed
-- Retried HTTP 429 responses using the server-provided `Retry-After` delay, including Config Helper admission throttling during bulk group and fleet operations.
+- Retried HTTP 429 responses using server-provided `Retry-After` delays up to 60 seconds, including Config Helper admission throttling during bulk group and fleet operations, while preserving command cancellation and bounding cumulative import CLI retry waits.
 
 ## [1.25.55] - 2026-08-19
 

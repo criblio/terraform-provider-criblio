@@ -23,10 +23,11 @@ import (
 
 const (
 	apiRetryMax           = 3
-	apiRetryAfterMaxDelay = 5 * time.Minute
+	apiRetryAfterMaxDelay = time.Minute
 )
 
 var errRetryAfterExceedsLimit = errors.New("Retry-After exceeds maximum delay")
+var errRetryWaitBudgetExhausted = errors.New("retry wait budget exhausted")
 
 var (
 	apiRetryWaitMin = 500 * time.Millisecond
@@ -43,6 +44,7 @@ type Config struct {
 	BearerToken         string
 	HTTPClient          *http.Client
 	UserAgent           string
+	RetryWaitBudget     time.Duration
 }
 
 // Client sends authenticated requests to Cribl APIs.
@@ -53,6 +55,7 @@ type Client struct {
 	bearerToken         string
 	httpClient          *http.Client
 	userAgent           string
+	retryWaitBudget     time.Duration
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
@@ -105,6 +108,7 @@ func New(config Config) *Client {
 		bearerToken:         config.BearerToken,
 		httpClient:          httpClient,
 		userAgent:           agent,
+		retryWaitBudget:     config.RetryWaitBudget,
 	}
 }
 
@@ -228,12 +232,16 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
+	var retryWaitUsed time.Duration
 	for attempt := 0; ; attempt++ {
 		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
 			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
-				if err := waitBeforeAPIRetry(ctx, attempt, ""); err != nil {
-					return nil, err
+				if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, ""); waitErr != nil {
+					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
+						return nil, err
+					}
+					return nil, waitErr
 				}
 				continue
 			}
@@ -245,8 +253,11 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			responseBody, statusCode, responseHeader, _, err = c.send(ctx, method, path, contentType, body)
 			if err != nil {
 				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
-					if err := waitBeforeAPIRetry(ctx, attempt, ""); err != nil {
-						return nil, err
+					if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, ""); waitErr != nil {
+						if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
+							return nil, err
+						}
+						return nil, waitErr
 					}
 					continue
 				}
@@ -260,11 +271,11 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		}
 		if shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt) {
 			retryAfter := ""
-			if responseHeader != nil {
+			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
 			}
-			if waitErr := waitBeforeAPIRetry(ctx, attempt, retryAfter); waitErr != nil {
-				if errors.Is(waitErr, errRetryAfterExceedsLimit) {
+			if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, retryAfter); waitErr != nil {
+				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 					return responseBody, err
 				}
 				return nil, waitErr
@@ -431,7 +442,7 @@ func responseBodyHasTransientError(body []byte) bool {
 		strings.Contains(message, "socket hang up")
 }
 
-func waitBeforeAPIRetry(ctx context.Context, attempt int, retryAfter string) error {
+func waitBeforeAPIRetry(ctx context.Context, client *Client, retryWaitUsed *time.Duration, attempt int, retryAfter string) error {
 	wait, ok := retryAfterDelay(retryAfter, time.Now())
 	if !ok {
 		wait = apiRetryWaitMin << attempt
@@ -442,11 +453,17 @@ func waitBeforeAPIRetry(ctx context.Context, attempt int, retryAfter string) err
 	if wait > apiRetryAfterMaxDelay {
 		return errRetryAfterExceedsLimit
 	}
+	if client != nil && client.retryWaitBudget > 0 && retryWaitUsed != nil && wait > client.retryWaitBudget-*retryWaitUsed {
+		return errRetryWaitBudgetExhausted
+	}
 	timer := time.NewTimer(wait)
 	defer timer.Stop()
 
 	select {
 	case <-timer.C:
+		if retryWaitUsed != nil {
+			*retryWaitUsed += wait
+		}
 		return nil
 	case <-ctx.Done():
 		return ctx.Err()

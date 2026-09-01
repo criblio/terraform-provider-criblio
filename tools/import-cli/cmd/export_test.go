@@ -2,6 +2,8 @@ package cmd_test
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -172,6 +174,34 @@ func TestExportCommand_ValidConfigInitializesClient(t *testing.T) {
 	assert.Contains(t, stderr, "Preview:", "dry-run should print preview header")
 	assert.Contains(t, stderr, "Total:", "dry-run should print total line")
 	assert.Contains(t, stderr, "criblio_", "dry-run should list at least one resource type")
+}
+
+func TestExportCommand_PropagatesCancellation(t *testing.T) {
+	requestStarted := make(chan struct{}, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestStarted <- struct{}{}
+		w.Header().Set("Retry-After", "60")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("CRIBL_ONPREM_SERVER_URL", server.URL)
+	t.Setenv("CRIBL_BEARER_TOKEN", "test-token")
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go func() {
+		<-requestStarted
+		cancel()
+	}()
+
+	root := cmd.NewRootCommand()
+	root.SetArgs([]string{"export", "--server-url", server.URL, "--dry-run", "--include", "criblio_group"})
+	err := root.ExecuteContext(ctx)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("export error = %v, expected context cancellation", err)
+	}
 }
 
 // TestExportCommand_DryRun_IncludeFilter verifies --include limits output to listed resource types.

@@ -541,24 +541,106 @@ func TestRetryAfterWaitHonorsContextCancellation(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	if err := waitBeforeAPIRetry(ctx, 0, "60"); !errors.Is(err, context.Canceled) {
+	if err := waitBeforeAPIRetry(ctx, nil, nil, 0, "60"); !errors.Is(err, context.Canceled) {
 		t.Fatalf("waitBeforeAPIRetry error = %v, expected context cancellation", err)
 	}
 }
 
 func TestRetryAfterOverLimitDoesNotWait(t *testing.T) {
 	values := []string{
-		"301",
+		"61",
 		"9999999999",
 		"18446744073709551616",
 	}
 	for _, value := range values {
 		t.Run(value, func(t *testing.T) {
-			err := waitBeforeAPIRetry(context.Background(), 0, value)
+			err := waitBeforeAPIRetry(context.Background(), nil, nil, 0, value)
 			if !errors.Is(err, errRetryAfterExceedsLimit) {
 				t.Fatalf("waitBeforeAPIRetry error = %v, expected maximum delay error", err)
 			}
 		})
+	}
+}
+
+func TestRetryWaitBudgetReturnsOriginalResponse(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "1")
+		http.Error(w, "admission throttled", http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:         server.URL,
+		BearerToken:     "test-token",
+		RetryWaitBudget: time.Nanosecond,
+	})
+	_, err := Get[testItem](context.Background(), client, "/any/endpoint")
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("Get error = %v, expected original HTTP 429", err)
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected no retry", requestCount)
+	}
+}
+
+func TestRetryWaitBudgetResetsForEachRequest(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCounts := make(map[string]int)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCounts[r.URL.Path]++
+		if requestCounts[r.URL.Path] == 1 {
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:         server.URL,
+		BearerToken:     "test-token",
+		RetryWaitBudget: time.Millisecond,
+	})
+	for _, path := range []string{"/first", "/second"} {
+		if _, err := Get[testItem](context.Background(), client, path); err != nil {
+			t.Fatalf("Get(%q) returned error: %v", path, err)
+		}
+		if requestCounts["/api/v1"+path] != 2 {
+			t.Fatalf("request count for %q = %d, expected 2", path, requestCounts["/api/v1"+path])
+		}
+	}
+}
+
+func TestServiceUnavailableIgnoresRetryAfter(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		if requestCount == 1 {
+			w.Header().Set("Retry-After", "60")
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	started := time.Now()
+	if _, err := Get[testItem](context.Background(), client, "/any/endpoint"); err != nil {
+		t.Fatalf("Get returned error: %v", err)
+	}
+	if elapsed := time.Since(started); elapsed >= time.Second {
+		t.Fatalf("503 retry took %s, expected exponential fallback rather than Retry-After", elapsed)
 	}
 }
 
