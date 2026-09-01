@@ -8,10 +8,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
@@ -19,7 +21,12 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/useragent"
 )
 
-const apiRetryMax = 3
+const (
+	apiRetryMax           = 3
+	apiRetryAfterMaxDelay = 5 * time.Minute
+)
+
+var errRetryAfterExceedsLimit = errors.New("Retry-After exceeds maximum delay")
 
 var (
 	apiRetryWaitMin = 500 * time.Millisecond
@@ -222,10 +229,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 	}
 
 	for attempt := 0; ; attempt++ {
-		responseBody, statusCode, token, err := c.send(ctx, method, path, contentType, body)
+		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
-			if shouldRetryAPIRequest(method, 0, nil, err, attempt) {
-				if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
+			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
+				if err := waitBeforeAPIRetry(ctx, attempt, ""); err != nil {
 					return nil, err
 				}
 				continue
@@ -235,10 +242,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 
 		if statusCode == http.StatusUnauthorized && c.bearerToken == "" && os.Getenv("CRIBL_BEARER_TOKEN") == "" && c.credentials != nil {
 			auth.InvalidateTokenValue(c.credentials, token)
-			responseBody, statusCode, _, err = c.send(ctx, method, path, contentType, body)
+			responseBody, statusCode, responseHeader, _, err = c.send(ctx, method, path, contentType, body)
 			if err != nil {
-				if shouldRetryAPIRequest(method, 0, nil, err, attempt) {
-					if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
+				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
+					if err := waitBeforeAPIRetry(ctx, attempt, ""); err != nil {
 						return nil, err
 					}
 					continue
@@ -251,9 +258,16 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		if err == nil {
 			return responseBody, nil
 		}
-		if shouldRetryAPIRequest(method, statusCode, responseBody, nil, attempt) {
-			if err := waitBeforeAPIRetry(ctx, attempt); err != nil {
-				return nil, err
+		if shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt) {
+			retryAfter := ""
+			if responseHeader != nil {
+				retryAfter = responseHeader.Get("Retry-After")
+			}
+			if waitErr := waitBeforeAPIRetry(ctx, attempt, retryAfter); waitErr != nil {
+				if errors.Is(waitErr, errRetryAfterExceedsLimit) {
+					return responseBody, err
+				}
+				return nil, waitErr
 			}
 			continue
 		}
@@ -261,10 +275,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 	}
 }
 
-func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, string, error) {
+func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, http.Header, string, error) {
 	requestURL, err := c.requestURL(path)
 	if err != nil {
-		return nil, 0, "", err
+		return nil, 0, nil, "", err
 	}
 
 	var reader io.Reader
@@ -274,7 +288,7 @@ func (c *Client) send(ctx context.Context, method, path, contentType string, bod
 
 	req, err := http.NewRequestWithContext(ctx, method, requestURL, reader)
 	if err != nil {
-		return nil, 0, "", fmt.Errorf("failed to create request: %v", err)
+		return nil, 0, nil, "", fmt.Errorf("failed to create request: %v", err)
 	}
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
@@ -286,22 +300,22 @@ func (c *Client) send(ctx context.Context, method, path, contentType string, bod
 
 	token, err := c.token(ctx)
 	if err != nil {
-		return nil, 0, "", fmt.Errorf("failed to authenticate for %s %s: %v", method, path, err)
+		return nil, 0, nil, "", fmt.Errorf("failed to authenticate for %s %s: %v", method, path, err)
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, 0, "", fmt.Errorf("failed to send request: %v", err)
+		return nil, 0, nil, "", fmt.Errorf("failed to send request: %v", err)
 	}
 	defer resp.Body.Close()
 
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, 0, "", fmt.Errorf("failed to read response body: %v", err)
+		return nil, 0, nil, "", fmt.Errorf("failed to read response body: %v", err)
 	}
 
-	return responseBody, resp.StatusCode, token, nil
+	return responseBody, resp.StatusCode, resp.Header, token, nil
 }
 
 func (c *Client) requestURL(path string) (string, error) {
@@ -354,8 +368,14 @@ func responseError(path string, statusCode int, body []byte) error {
 	}
 }
 
-func shouldRetryAPIRequest(method string, statusCode int, body []byte, err error, attempt int) bool {
-	if attempt >= apiRetryMax || !isRetryableAPIMethod(method) {
+func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err error, attempt int) bool {
+	if attempt >= apiRetryMax {
+		return false
+	}
+	if statusCode == http.StatusTooManyRequests {
+		return isIdempotentAPIMethod(method) || isConfigHelperAdmissionPath(method, path)
+	}
+	if !isRetryableAPIMethod(method) {
 		return false
 	}
 	if err != nil {
@@ -364,13 +384,40 @@ func shouldRetryAPIRequest(method string, statusCode int, body []byte, err error
 			strings.Contains(message, "failed to read response body")
 	}
 	switch statusCode {
-	case http.StatusRequestTimeout, http.StatusTooManyRequests, http.StatusBadGateway, http.StatusServiceUnavailable, http.StatusGatewayTimeout:
+	case http.StatusRequestTimeout, http.StatusBadGateway, http.StatusServiceUnavailable, http.StatusGatewayTimeout:
 		return true
 	case http.StatusInternalServerError:
 		return responseBodyHasTransientError(body)
 	default:
 		return false
 	}
+}
+
+func isIdempotentAPIMethod(method string) bool {
+	switch method {
+	case http.MethodGet, http.MethodHead, http.MethodPut, http.MethodDelete, http.MethodOptions:
+		return true
+	default:
+		return false
+	}
+}
+
+func isConfigHelperAdmissionPath(method, path string) bool {
+	cleanPath := strings.SplitN(auth.TrimPath(path), "?", 2)[0]
+	parts := strings.Split(strings.Trim(cleanPath, "/"), "/")
+
+	if method == http.MethodPost {
+		if len(parts) == 2 && parts[0] == "master" && parts[1] == "groups" {
+			return true
+		}
+		if len(parts) == 3 && parts[0] == "products" && parts[2] == "groups" {
+			return true
+		}
+	}
+	if len(parts) >= 2 && parts[0] == "m" {
+		return true
+	}
+	return len(parts) >= 4 && parts[0] == "a" && parts[2] == "m"
 }
 
 func isRetryableAPIMethod(method string) bool {
@@ -384,10 +431,16 @@ func responseBodyHasTransientError(body []byte) bool {
 		strings.Contains(message, "socket hang up")
 }
 
-func waitBeforeAPIRetry(ctx context.Context, attempt int) error {
-	wait := apiRetryWaitMin << attempt
-	if wait > apiRetryWaitMax {
-		wait = apiRetryWaitMax
+func waitBeforeAPIRetry(ctx context.Context, attempt int, retryAfter string) error {
+	wait, ok := retryAfterDelay(retryAfter, time.Now())
+	if !ok {
+		wait = apiRetryWaitMin << attempt
+		if wait > apiRetryWaitMax {
+			wait = apiRetryWaitMax
+		}
+	}
+	if wait > apiRetryAfterMaxDelay {
+		return errRetryAfterExceedsLimit
 	}
 	timer := time.NewTimer(wait)
 	defer timer.Stop()
@@ -398,6 +451,42 @@ func waitBeforeAPIRetry(ctx context.Context, attempt int) error {
 	case <-ctx.Done():
 		return ctx.Err()
 	}
+}
+
+func retryAfterDelay(value string, now time.Time) (time.Duration, bool) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return 0, false
+	}
+	if isDecimalDigits(value) {
+		seconds, err := strconv.ParseUint(value, 10, 64)
+		if err != nil {
+			return apiRetryAfterMaxDelay + time.Nanosecond, true
+		}
+		if seconds > uint64(math.MaxInt64/int64(time.Second)) {
+			return apiRetryAfterMaxDelay + time.Nanosecond, true
+		}
+		return time.Duration(seconds) * time.Second, true
+	}
+
+	retryAt, err := http.ParseTime(value)
+	if err != nil {
+		return 0, false
+	}
+	delay := retryAt.Sub(now)
+	if delay < 0 {
+		delay = 0
+	}
+	return delay, true
+}
+
+func isDecimalDigits(value string) bool {
+	for i := range len(value) {
+		if value[i] < '0' || value[i] > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 func decodeResponse[T any](path string, body []byte) (*T, error) {

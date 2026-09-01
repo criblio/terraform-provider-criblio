@@ -397,6 +397,249 @@ func TestPostDoesNotRetryTransientECONNRESETResponse(t *testing.T) {
 	}
 }
 
+func TestReplaySafeRequestsRetryTooManyRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	tests := []struct {
+		name   string
+		method string
+		path   string
+	}{
+		{name: "generic GET", method: http.MethodGet, path: "/any/endpoint"},
+		{name: "generic PUT", method: http.MethodPut, path: "/any/endpoint"},
+		{name: "generic DELETE", method: http.MethodDelete, path: "/any/endpoint"},
+		{name: "product group POST", method: http.MethodPost, path: "/products/stream/groups"},
+		{name: "legacy group POST", method: http.MethodPost, path: "/master/groups"},
+		{name: "fleet PATCH", method: http.MethodPatch, path: "/m/fleet-id/pipelines/id"},
+		{name: "app fleet POST", method: http.MethodPost, path: "/a/app-id/m/fleet-id/sources"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requestCount++
+				if r.Method != test.method {
+					t.Errorf("method = %q, expected %q", r.Method, test.method)
+				}
+				if test.method != http.MethodGet && test.method != http.MethodDelete {
+					body, err := io.ReadAll(r.Body)
+					if err != nil {
+						t.Errorf("failed to read body: %v", err)
+					}
+					if string(body) != `{"name":"request"}` {
+						t.Errorf("body = %q, expected request body", body)
+					}
+				}
+				if requestCount == 1 {
+					w.Header().Set("Retry-After", "0")
+					w.WriteHeader(http.StatusTooManyRequests)
+					return
+				}
+				writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+			}))
+			defer server.Close()
+
+			client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+			if _, err := do(context.Background(), client, test.method, test.path, "application/json", []byte(`{"name":"request"}`)); err != nil {
+				t.Fatalf("%s returned error: %v", test.method, err)
+			}
+			if requestCount != 2 {
+				t.Fatalf("request count = %d, expected 2", requestCount)
+			}
+		})
+	}
+}
+
+func TestUnsafePostDoesNotRetryTooManyRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	_, err := Post[testItem, testItem](context.Background(), client, "/unrelated", testItem{Name: "request"})
+	if err == nil {
+		t.Fatal("Post returned nil error, expected HTTP 429")
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
+func TestFleetUploadRetriesTooManyRequestsWithBody(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		file, header, err := r.FormFile("file")
+		if err != nil {
+			t.Errorf("missing upload file: %v", err)
+			return
+		}
+		defer file.Close()
+		body, err := io.ReadAll(file)
+		if err != nil {
+			t.Errorf("failed to read upload body: %v", err)
+			return
+		}
+		if header.Filename != "lookup.csv" || string(body) != "a,b\n" {
+			t.Errorf("upload = (%q, %q), expected lookup.csv content", header.Filename, body)
+		}
+		if requestCount == 1 {
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	if err := Upload(context.Background(), client, "/m/fleet-id/system/lookups", "lookup.csv", []byte("a,b\n")); err != nil {
+		t.Fatalf("Upload returned error: %v", err)
+	}
+	if requestCount != 2 {
+		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestRetryAfterDelay(t *testing.T) {
+	now := time.Date(2026, time.September, 1, 12, 0, 0, 0, time.UTC)
+	tests := []struct {
+		name  string
+		value string
+		want  time.Duration
+		ok    bool
+	}{
+		{name: "seconds", value: "15", want: 15 * time.Second, ok: true},
+		{name: "HTTP date", value: now.Add(45 * time.Second).Format(http.TimeFormat), want: 45 * time.Second, ok: true},
+		{name: "past HTTP date", value: now.Add(-time.Second).Format(http.TimeFormat), want: 0, ok: true},
+		{name: "missing", value: "", ok: false},
+		{name: "invalid", value: "later", ok: false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, ok := retryAfterDelay(test.value, now)
+			if ok != test.ok || got != test.want {
+				t.Fatalf("retryAfterDelay(%q) = (%s, %t), expected (%s, %t)", test.value, got, ok, test.want, test.ok)
+			}
+		})
+	}
+}
+
+func TestRetryAfterWaitHonorsContextCancellation(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	if err := waitBeforeAPIRetry(ctx, 0, "60"); !errors.Is(err, context.Canceled) {
+		t.Fatalf("waitBeforeAPIRetry error = %v, expected context cancellation", err)
+	}
+}
+
+func TestRetryAfterOverLimitDoesNotWait(t *testing.T) {
+	values := []string{
+		"301",
+		"9999999999",
+		"18446744073709551616",
+	}
+	for _, value := range values {
+		t.Run(value, func(t *testing.T) {
+			err := waitBeforeAPIRetry(context.Background(), 0, value)
+			if !errors.Is(err, errRetryAfterExceedsLimit) {
+				t.Fatalf("waitBeforeAPIRetry error = %v, expected maximum delay error", err)
+			}
+		})
+	}
+}
+
+func TestOverflowingRetryAfterReturnsOriginalResponse(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "18446744073709551616")
+		http.Error(w, "admission throttled", http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	_, err := Get[testItem](context.Background(), client, "/any/endpoint")
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("Get error = %v, expected original HTTP 429", err)
+	}
+	if !strings.Contains(httpErr.Body, "admission throttled") {
+		t.Fatalf("HTTP error body = %q, expected original response body", httpErr.Body)
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected no retry", requestCount)
+	}
+}
+
+func TestRetryWaitsAtLeastRetryAfter(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	requestTimes := make([]time.Time, 0, 2)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestTimes = append(requestTimes, time.Now())
+		if len(requestTimes) == 1 {
+			w.Header().Set("Retry-After", "1")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	if _, err := Post[testItem, testItem](context.Background(), client, "/products/stream/groups", testItem{Name: "request"}); err != nil {
+		t.Fatalf("Post returned error: %v", err)
+	}
+	if len(requestTimes) != 2 {
+		t.Fatalf("request count = %d, expected 2", len(requestTimes))
+	}
+	if elapsed := requestTimes[1].Sub(requestTimes[0]); elapsed < time.Second {
+		t.Fatalf("retry occurred after %s, expected at least 1s", elapsed)
+	}
+}
+
+func TestTooManyRequestsStopsAfterRetryLimit(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
+	_, err := Post[testItem, testItem](context.Background(), client, "/products/stream/groups", testItem{Name: "request"})
+	if err == nil {
+		t.Fatal("Post returned nil error, expected HTTP 429")
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("Post error = %v, expected HTTP 429", err)
+	}
+	if requestCount != apiRetryMax+1 {
+		t.Fatalf("request count = %d, expected %d", requestCount, apiRetryMax+1)
+	}
+}
+
 func TestGatewayRouting(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 
