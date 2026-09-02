@@ -20,7 +20,9 @@ func TestCommitAndDeploy(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_commit.my_commit", "message", "test"),
 						resource.TestCheckResourceAttr("criblio_commit.my_commit", "group", "default"),
+						resource.TestCheckResourceAttrSet("criblio_commit.my_commit", "items.0.commit"),
 						resource.TestCheckResourceAttr("criblio_deploy.my_deploy", "id", "default"),
+						resource.TestCheckResourceAttrPair("criblio_deploy.my_deploy", "version", "criblio_commit.my_commit", "items.0.commit"),
 					),
 				},
 				{

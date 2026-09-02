@@ -108,6 +108,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
+			resource.ActionResponse = boolAnnotation(operation, "x-terraform-action-response")
 			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
@@ -747,6 +748,9 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.Optional = true
 		field.OptionalComputed = true
 	}
+	if boolAnnotation(property, "x-terraform-computed-recursive") {
+		makeFieldsComputed(field.Fields)
+	}
 	if boolAnnotation(property, "writeOnly") {
 		field.Sensitive = true
 		field.PreferState = true
@@ -789,6 +793,17 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.ApplyStrategy = "stringFromAPIOrPrior"
 	} else if field.PreferState {
 		field.ApplyStrategy = "preferState"
+	}
+}
+
+func makeFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		field.Required = false
+		field.Optional = false
+		field.Computed = true
+		field.OptionalComputed = false
+		makeFieldsComputed(field.Fields)
 	}
 }
 

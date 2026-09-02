@@ -590,6 +590,18 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, noReadClient, "restclient.PatchNoResponse(ctx, a.client")
 	assertNotContains(t, noReadClient, "response envelope")
 
+	actionResponse := parser.ResourceDef{
+		StructName:     "Commit",
+		Action:         true,
+		ActionResponse: true,
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/version/commit",
+		},
+	}
+	actionResponseClient := renderTemplate(t, "client", actionResponse)
+	assertContains(t, actionResponseClient, "return restclient.PostFullResponse[CommitModel, CommitModel]")
+
 	mappingRulesetResource = renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
 

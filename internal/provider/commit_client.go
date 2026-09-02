@@ -16,8 +16,7 @@ func newCommitAPI(client *restclient.Client) CommitAPI {
 }
 
 func (a CommitAPI) Create(ctx context.Context, model CommitModel) (*CommitModel, error) {
-	_, err := restclient.Post[CommitModel, any](ctx, a.client, "/version/commit", model)
-	return &model, err
+	return restclient.PostFullResponse[CommitModel, CommitModel](ctx, a.client, "/version/commit", model)
 }
 
 func (a CommitAPI) Read(ctx context.Context, model CommitModel) (*CommitModel, error) {

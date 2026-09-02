@@ -448,6 +448,56 @@ components:
 	}
 }
 
+func TestParseActionResponse(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /version/commit:
+    post:
+      x-terraform-resource: true
+      x-terraform-resource-name: Commit
+      x-terraform-action: true
+      x-terraform-action-response: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Commit"
+components:
+  schemas:
+    Commit:
+      type: object
+      properties:
+        message:
+          type: string
+        items:
+          type: array
+          x-terraform-computed: true
+          x-terraform-computed-recursive: true
+          items:
+            type: object
+            required: [commit]
+            properties:
+              commit:
+                type: string
+      required:
+        - message
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	commit := resourceByName(t, resources, "Commit")
+	if !commit.Action || !commit.ActionResponse {
+		t.Fatalf("action flags = action:%v response:%v", commit.Action, commit.ActionResponse)
+	}
+	items := fieldByTFName(t, commit.Fields, "items")
+	createdCommit := fieldByTFName(t, items.Fields, "commit")
+	if !createdCommit.Computed || createdCommit.Required || createdCommit.Optional {
+		t.Fatalf("nested commit flags = required:%v optional:%v computed:%v", createdCommit.Required, createdCommit.Optional, createdCommit.Computed)
+	}
+}
+
 func TestParseTerraformConflictsWith(t *testing.T) {
 	field := FieldDef{}
 	var property yaml.Node

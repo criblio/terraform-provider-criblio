@@ -20,6 +20,7 @@ type ResourceDef struct {
 	OneOfVariants  []OneOfVariantDef
 	Outputs        []OutputFile
 	Action         bool
+	ActionResponse bool
 	NoRead         bool
 }
 

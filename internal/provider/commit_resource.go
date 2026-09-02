@@ -69,6 +69,125 @@ func (r *CommitResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
+			"items": schema.ListNestedAttribute{
+				Required:    false,
+				Optional:    false,
+				Computed:    true,
+				Description: `The commits created by this action.`,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"author": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    false,
+							Computed:    true,
+							Description: `Author of the Git commit, including email and display name.`,
+							Attributes: map[string]schema.Attribute{
+								"email": schema.StringAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Email address of the commit author.`,
+								},
+								"name": schema.StringAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Display name of the commit author.`,
+								},
+							},
+						},
+						"branch": schema.StringAttribute{
+							Required:    false,
+							Optional:    false,
+							Computed:    true,
+							Description: `Name of the Git branch the commit was made on.`,
+						},
+						"commit": schema.StringAttribute{
+							Required:    false,
+							Optional:    false,
+							Computed:    true,
+							Description: `Full SHA-1 hash of the new commit.`,
+						},
+						"files": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    false,
+							Computed:    true,
+							Description: `Files affected by the commit, grouped by change type.`,
+							Attributes: map[string]schema.Attribute{
+								"created": schema.ListAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Array of file paths that were created in the commit.`,
+									ElementType: types.StringType,
+								},
+								"deleted": schema.ListAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Array of file paths that were deleted in the commit.`,
+									ElementType: types.StringType,
+								},
+								"modified": schema.ListAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Array of file paths that were modified in the commit.`,
+									ElementType: types.StringType,
+								},
+								"renamed": schema.ListNestedAttribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Array of file rename operations, each containing the original path and the new path.`,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"from": schema.StringAttribute{
+												Required:    false,
+												Optional:    false,
+												Computed:    true,
+												Description: `Original file path before the rename.`,
+											},
+											"to": schema.StringAttribute{
+												Required:    false,
+												Optional:    false,
+												Computed:    true,
+												Description: `New file path after the rename.`,
+											},
+										},
+									},
+								},
+							},
+						},
+						"summary": schema.SingleNestedAttribute{
+							Required:    false,
+							Optional:    false,
+							Computed:    true,
+							Description: `Summary of line changes in the commit.`,
+							Attributes: map[string]schema.Attribute{
+								"changes": schema.Int64Attribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Total number of lines changed (insertions plus deletions).`,
+								},
+								"deletions": schema.Int64Attribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Number of lines deleted.`,
+								},
+								"insertions": schema.Int64Attribute{
+									Required:    false,
+									Optional:    false,
+									Computed:    true,
+									Description: `Number of lines inserted.`,
+								},
+							},
+						},
+					},
+				},
+			},
 			"message": schema.StringAttribute{
 				Required:    true,
 				Optional:    false,
@@ -193,6 +312,16 @@ func applyCommitAPIToState(api *CommitModel, state *CommitModel, preserveInputs 
 		if !api.Group.IsNull() && !api.Group.IsUnknown() {
 			state.Group = api.Group
 		}
+	}
+	if !api.Items.IsNull() && !api.Items.IsUnknown() {
+		state.Items = api.Items
+	} else if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = types.ListValueMust(types.ObjectType{AttrTypes: CommitItemsAttrTypes()}, nil)
+	}
+	if state.Items.IsNull() || state.Items.IsUnknown() {
+		state.Items = types.ListNull(types.ObjectType{AttrTypes: CommitItemsAttrTypes()})
+	} else if len(state.Items.Elements()) == 0 {
+		state.Items = types.ListValueMust(types.ObjectType{AttrTypes: CommitItemsAttrTypes()}, nil)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Message.IsNull() || state.Message.IsUnknown())) {
 		if !api.Message.IsNull() && !api.Message.IsUnknown() {

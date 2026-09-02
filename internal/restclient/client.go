@@ -135,6 +135,16 @@ func Post[Req, Resp any](ctx context.Context, c *Client, path string, body Req) 
 	return decodeResponse[Resp](path, responseBody)
 }
 
+// PostFullResponse sends a POST request and decodes the complete JSON response
+// without unwrapping an items envelope.
+func PostFullResponse[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
+	responseBody, err := doJSON(ctx, c, http.MethodPost, path, body)
+	if err != nil {
+		return nil, err
+	}
+	return decodeFullResponse[Resp](responseBody)
+}
+
 // PostNoResponse sends a POST request with a JSON body and ignores the response body.
 func PostNoResponse[Req any](ctx context.Context, c *Client, path string, body Req) error {
 	_, err := doJSON(ctx, c, http.MethodPost, path, body)
@@ -150,6 +160,16 @@ func Patch[Req, Resp any](ctx context.Context, c *Client, path string, body Req)
 	return decodeResponse[Resp](path, responseBody)
 }
 
+// PatchFullResponse sends a PATCH request and decodes the complete JSON response
+// without unwrapping an items envelope.
+func PatchFullResponse[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
+	responseBody, err := doJSON(ctx, c, http.MethodPatch, path, body)
+	if err != nil {
+		return nil, err
+	}
+	return decodeFullResponse[Resp](responseBody)
+}
+
 // PatchNoResponse sends a PATCH request with a JSON body and ignores the response body.
 func PatchNoResponse[Req any](ctx context.Context, c *Client, path string, body Req) error {
 	_, err := doJSON(ctx, c, http.MethodPatch, path, body)
@@ -163,6 +183,16 @@ func Put[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (
 		return nil, err
 	}
 	return decodeResponse[Resp](path, responseBody)
+}
+
+// PutFullResponse sends a PUT request and decodes the complete JSON response
+// without unwrapping an items envelope.
+func PutFullResponse[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
+	responseBody, err := doJSON(ctx, c, http.MethodPut, path, body)
+	if err != nil {
+		return nil, err
+	}
+	return decodeFullResponse[Resp](responseBody)
 }
 
 // PutNoResponse sends a PUT request with a JSON body and ignores the response body.
@@ -522,6 +552,17 @@ func decodeResponse[T any](path string, body []byte) (*T, error) {
 		return decodeEnvelope[T](path, body)
 	}
 
+	var output T
+	if err := json.Unmarshal(body, &output); err != nil {
+		return nil, fmt.Errorf("failed to decode response: %v", err)
+	}
+	return &output, nil
+}
+
+func decodeFullResponse[T any](body []byte) (*T, error) {
+	if len(bytes.TrimSpace(body)) == 0 {
+		return nil, nil
+	}
 	var output T
 	if err := json.Unmarshal(body, &output); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %v", err)
