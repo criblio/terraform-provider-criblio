@@ -71,6 +71,7 @@ type Client struct {
 
 type admissionRetryFlight struct {
 	done      chan struct{}
+	deadline  time.Time
 	succeeded bool
 }
 
@@ -297,8 +298,17 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		}
 	}()
 	for attempt := 0; ; attempt++ {
-		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
+		requestCtx := ctx
+		cancelRequest := func() {}
+		if admissionOwner {
+			requestCtx, cancelRequest = context.WithDeadline(ctx, admissionDeadline)
+		}
+		responseBody, statusCode, responseHeader, token, err := c.send(requestCtx, method, path, contentType, body)
+		cancelRequest()
 		if err != nil {
+			if admissionOwner && !time.Now().Before(admissionDeadline) {
+				return nil, err
+			}
 			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
 				if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
@@ -351,23 +361,30 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			c.configHelperRetryTimeout > 0
 		if admissionRetry && admissionFlight == nil {
 			var owner bool
-			admissionFlight, owner = c.joinAdmissionRetry()
+			admissionFlight, owner = c.joinAdmissionRetry(c.configHelperRetryTimeout)
 			if !owner {
+				waitCtx, cancel := context.WithDeadline(ctx, admissionFlight.deadline)
 				select {
 				case <-admissionFlight.done:
+					cancel()
 					if admissionFlight.succeeded {
 						admissionFlight = nil
 						continue
 					}
 					return responseBody, err
-				case <-ctx.Done():
-					return nil, ctx.Err()
+				case <-waitCtx.Done():
+					waitErr := waitCtx.Err()
+					cancel()
+					if errors.Is(waitErr, context.DeadlineExceeded) && ctx.Err() == nil {
+						return responseBody, err
+					}
+					return nil, waitErr
 				}
 			}
 			admissionOwner = true
 		}
 		if admissionRetry && admissionDeadline.IsZero() {
-			admissionDeadline = time.Now().Add(c.configHelperRetryTimeout)
+			admissionDeadline = admissionFlight.deadline
 		}
 		shouldRetry := shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax)
 		if admissionRetry && time.Now().Before(admissionDeadline) {
@@ -400,14 +417,17 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 	}
 }
 
-func (c *Client) joinAdmissionRetry() (*admissionRetryFlight, bool) {
+func (c *Client) joinAdmissionRetry(timeout time.Duration) (*admissionRetryFlight, bool) {
 	c.admissionMu.Lock()
 	defer c.admissionMu.Unlock()
 
 	if c.admissionRetry != nil {
 		return c.admissionRetry, false
 	}
-	flight := &admissionRetryFlight{done: make(chan struct{})}
+	flight := &admissionRetryFlight{
+		done:     make(chan struct{}),
+		deadline: time.Now().Add(timeout),
+	}
 	c.admissionRetry = flight
 	return flight, true
 }

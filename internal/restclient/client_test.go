@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -883,6 +884,39 @@ func TestConfigHelperAdmissionTimeoutIsSharedByQueuedRequests(t *testing.T) {
 	_, err = Get[testItem](ctx, client, "/m/fleet-b/pipelines")
 	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
 		t.Fatalf("queued Get error = %v, expected cached HTTP 429 without another retry window", err)
+	}
+}
+
+func TestConfigHelperAdmissionDeadlineBoundsRetryRequest(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	var requestCount atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if requestCount.Add(1) == 1 {
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
+			return
+		}
+		<-r.Context().Done()
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:                  server.URL,
+		BearerToken:              "test-token",
+		ConfigHelperRetryTimeout: 20 * time.Millisecond,
+	})
+	started := time.Now()
+	_, err := Get[testItem](context.Background(), client, "/m/fleet-a/pipelines")
+	if err == nil {
+		t.Fatal("Get returned nil error, expected admission retry deadline")
+	}
+	if elapsed := time.Since(started); elapsed > 250*time.Millisecond {
+		t.Fatalf("Get took %s, expected the admission deadline to cancel the retry request", elapsed)
+	}
+	if requestCount.Load() != 2 {
+		t.Fatalf("request count = %d, expected initial request and one bounded retry", requestCount.Load())
 	}
 }
 
