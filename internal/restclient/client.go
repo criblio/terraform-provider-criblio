@@ -15,6 +15,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
@@ -49,13 +50,17 @@ type Config struct {
 
 // Client sends authenticated requests to Cribl APIs.
 type Client struct {
-	baseURL             string
-	providerCloudDomain string
-	credentials         *auth.CriblConfig
-	bearerToken         string
-	httpClient          *http.Client
-	userAgent           string
-	retryWaitBudget     time.Duration
+	baseURL              string
+	providerCloudDomain  string
+	credentials          *auth.CriblConfig
+	bearerToken          string
+	httpClient           *http.Client
+	userAgent            string
+	retryWaitBudget      time.Duration
+	retryWaitRemaining   time.Duration
+	retryWaitActive      int
+	retryWaitActiveSince time.Time
+	retryWaitMu          sync.Mutex
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
@@ -109,6 +114,7 @@ func New(config Config) *Client {
 		httpClient:          httpClient,
 		userAgent:           agent,
 		retryWaitBudget:     config.RetryWaitBudget,
+		retryWaitRemaining:  config.RetryWaitBudget,
 	}
 }
 
@@ -262,12 +268,11 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
-	var retryWaitUsed time.Duration
 	for attempt := 0; ; attempt++ {
 		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
 			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
-				if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, ""); waitErr != nil {
+				if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 						return nil, err
 					}
@@ -283,7 +288,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			responseBody, statusCode, responseHeader, _, err = c.send(ctx, method, path, contentType, body)
 			if err != nil {
 				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
-					if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, ""); waitErr != nil {
+					if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 						if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 							return nil, err
 						}
@@ -304,7 +309,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
 			}
-			if waitErr := waitBeforeAPIRetry(ctx, c, &retryWaitUsed, attempt, retryAfter); waitErr != nil {
+			if waitErr := waitBeforeAPIRetry(ctx, c, attempt, retryAfter); waitErr != nil {
 				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 					return responseBody, err
 				}
@@ -472,7 +477,7 @@ func responseBodyHasTransientError(body []byte) bool {
 		strings.Contains(message, "socket hang up")
 }
 
-func waitBeforeAPIRetry(ctx context.Context, client *Client, retryWaitUsed *time.Duration, attempt int, retryAfter string) error {
+func waitBeforeAPIRetry(ctx context.Context, client *Client, attempt int, retryAfter string) error {
 	wait, ok := retryAfterDelay(retryAfter, time.Now())
 	if !ok {
 		wait = apiRetryWaitMin << attempt
@@ -483,21 +488,64 @@ func waitBeforeAPIRetry(ctx context.Context, client *Client, retryWaitUsed *time
 	if wait > apiRetryAfterMaxDelay {
 		return errRetryAfterExceedsLimit
 	}
-	if client != nil && client.retryWaitBudget > 0 && retryWaitUsed != nil && wait > client.retryWaitBudget-*retryWaitUsed {
+	tracked := client != nil && client.retryWaitBudget > 0
+	if tracked && !client.beginRetryWait(wait) {
 		return errRetryWaitBudgetExhausted
+	}
+	if tracked {
+		defer client.endRetryWait()
 	}
 	timer := time.NewTimer(wait)
 	defer timer.Stop()
 
 	select {
 	case <-timer.C:
-		if retryWaitUsed != nil {
-			*retryWaitUsed += wait
-		}
 		return nil
 	case <-ctx.Done():
 		return ctx.Err()
 	}
+}
+
+func (c *Client) beginRetryWait(wait time.Duration) bool {
+	c.retryWaitMu.Lock()
+	defer c.retryWaitMu.Unlock()
+
+	now := time.Now()
+	c.accrueRetryWait(now)
+	if wait > c.retryWaitRemaining {
+		return false
+	}
+	if c.retryWaitActive == 0 {
+		c.retryWaitActiveSince = now
+	}
+	c.retryWaitActive++
+	return true
+}
+
+func (c *Client) endRetryWait() {
+	c.retryWaitMu.Lock()
+	defer c.retryWaitMu.Unlock()
+
+	c.accrueRetryWait(time.Now())
+	if c.retryWaitActive > 0 {
+		c.retryWaitActive--
+	}
+	if c.retryWaitActive == 0 {
+		c.retryWaitActiveSince = time.Time{}
+	}
+}
+
+func (c *Client) accrueRetryWait(now time.Time) {
+	if c.retryWaitActive == 0 {
+		return
+	}
+	elapsed := now.Sub(c.retryWaitActiveSince)
+	if elapsed >= c.retryWaitRemaining {
+		c.retryWaitRemaining = 0
+	} else {
+		c.retryWaitRemaining -= elapsed
+	}
+	c.retryWaitActiveSince = now
 }
 
 func retryAfterDelay(value string, now time.Time) (time.Duration, bool) {

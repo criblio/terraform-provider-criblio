@@ -541,7 +541,7 @@ func TestRetryAfterWaitHonorsContextCancellation(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	if err := waitBeforeAPIRetry(ctx, nil, nil, 0, "60"); !errors.Is(err, context.Canceled) {
+	if err := waitBeforeAPIRetry(ctx, nil, 0, "60"); !errors.Is(err, context.Canceled) {
 		t.Fatalf("waitBeforeAPIRetry error = %v, expected context cancellation", err)
 	}
 }
@@ -554,7 +554,7 @@ func TestRetryAfterOverLimitDoesNotWait(t *testing.T) {
 	}
 	for _, value := range values {
 		t.Run(value, func(t *testing.T) {
-			err := waitBeforeAPIRetry(context.Background(), nil, nil, 0, value)
+			err := waitBeforeAPIRetry(context.Background(), nil, 0, value)
 			if !errors.Is(err, errRetryAfterExceedsLimit) {
 				t.Fatalf("waitBeforeAPIRetry error = %v, expected maximum delay error", err)
 			}
@@ -588,7 +588,7 @@ func TestRetryWaitBudgetReturnsOriginalResponse(t *testing.T) {
 	}
 }
 
-func TestRetryWaitBudgetResetsForEachRequest(t *testing.T) {
+func TestRetryWaitBudgetAccumulatesAcrossRequests(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)
 
@@ -608,13 +608,39 @@ func TestRetryWaitBudgetResetsForEachRequest(t *testing.T) {
 		BearerToken:     "test-token",
 		RetryWaitBudget: time.Millisecond,
 	})
-	for _, path := range []string{"/first", "/second"} {
-		if _, err := Get[testItem](context.Background(), client, path); err != nil {
-			t.Fatalf("Get(%q) returned error: %v", path, err)
+	if _, err := Get[testItem](context.Background(), client, "/first"); err != nil {
+		t.Fatalf("first Get returned error: %v", err)
+	}
+	if _, err := Get[testItem](context.Background(), client, "/second"); err == nil {
+		t.Fatal("second Get returned nil error, expected exhausted retry budget")
+	}
+	if requestCounts["/api/v1/first"] != 2 {
+		t.Fatalf("first request count = %d, expected 2", requestCounts["/api/v1/first"])
+	}
+	if requestCounts["/api/v1/second"] != 1 {
+		t.Fatalf("second request count = %d, expected no retry", requestCounts["/api/v1/second"])
+	}
+}
+
+func TestConcurrentRetryWaitsCountWallClockOnce(t *testing.T) {
+	client := New(Config{RetryWaitBudget: 1100 * time.Millisecond})
+	start := make(chan struct{})
+	results := make(chan error, 5)
+
+	for range 5 {
+		go func() {
+			<-start
+			results <- waitBeforeAPIRetry(context.Background(), client, 0, "1")
+		}()
+	}
+	close(start)
+	for range 5 {
+		if err := <-results; err != nil {
+			t.Fatalf("concurrent retry wait returned error: %v", err)
 		}
-		if requestCounts["/api/v1"+path] != 2 {
-			t.Fatalf("request count for %q = %d, expected 2", path, requestCounts["/api/v1"+path])
-		}
+	}
+	if err := waitBeforeAPIRetry(context.Background(), client, 0, "1"); !errors.Is(err, errRetryWaitBudgetExhausted) {
+		t.Fatalf("subsequent retry wait error = %v, expected exhausted wall-clock budget", err)
 	}
 }
 
