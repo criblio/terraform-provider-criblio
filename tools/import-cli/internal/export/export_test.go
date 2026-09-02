@@ -50,6 +50,23 @@ func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	assert.Equal(t, "criblio_source", result.ListSkipped[0].TypeName)
 }
 
+func TestToResourceItemsDoesNotRelistCompletedEmptyInventory(t *testing.T) {
+	reg := buildTestRegistry(t)
+	results := []discovery.Result{
+		{
+			TypeName:          "criblio_source",
+			Count:             1,
+			Identifiers:       []map[string]string{},
+			InventoryComplete: true,
+		},
+	}
+
+	result, err := ToResourceItems(context.Background(), nil, reg, results, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	require.Len(t, result.ListSkipped, 1)
+	assert.Equal(t, "list returned 0 identifiers", result.ListSkipped[0].Reason)
+}
+
 func TestToResourceItemsLookupFileFetchesContentFromGet(t *testing.T) {
 	getCalled := false
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

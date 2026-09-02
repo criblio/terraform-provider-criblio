@@ -234,7 +234,8 @@ func TestDiscoverProcessesGroupScopedResourcesOneGroupAtATime(t *testing.T) {
 
 func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 	var groupRequests atomic.Int32
-	var groupPaths sync.Map
+	var fleetAPaths sync.Map
+	var fleetBRequests atomic.Int32
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch {
@@ -244,10 +245,15 @@ func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 			_, _ = w.Write([]byte(`{"items":[]}`))
 		default:
 			groupRequests.Add(1)
-			groupPaths.Store(r.URL.Path, true)
-			w.Header().Set("Retry-After", "0")
-			w.WriteHeader(http.StatusTooManyRequests)
-			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
+			if strings.Contains(r.URL.Path, "/m/fleet-a/") {
+				fleetAPaths.Store(r.URL.Path, true)
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
+				return
+			}
+			fleetBRequests.Add(1)
+			_, _ = w.Write([]byte(`{"items":[]}`))
 		}
 	}))
 	defer server.Close()
@@ -261,11 +267,12 @@ func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 	assert.NoError(t, results[1].Err)
 	assert.Error(t, results[0].GroupErrors["fleet-a"])
 	assert.Error(t, results[1].GroupErrors["fleet-a"])
-	assert.Error(t, results[0].GroupErrors["fleet-b"])
-	assert.Error(t, results[1].GroupErrors["fleet-b"])
+	assert.NoError(t, results[0].GroupErrors["fleet-b"])
+	assert.NoError(t, results[1].GroupErrors["fleet-b"])
+	assert.Positive(t, fleetBRequests.Load(), "healthy later fleet should still be discovered")
 	assert.GreaterOrEqual(t, groupRequests.Load(), int32(defaultRetryRequestCount))
 	uniquePaths := 0
-	groupPaths.Range(func(_, _ any) bool {
+	fleetAPaths.Range(func(_, _ any) bool {
 		uniquePaths++
 		return true
 	})

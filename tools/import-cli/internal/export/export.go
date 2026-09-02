@@ -114,7 +114,7 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			}
 			idMaps := r.Identifiers
 			var listErr error
-			if idMaps == nil {
+			if !r.InventoryComplete {
 				idMaps, listErr = discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
 			}
 			if listErr != nil {
@@ -151,7 +151,7 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 		}
 		idMaps := r.Identifiers
 		var listErr error
-		if idMaps == nil {
+		if !r.InventoryComplete {
 			idMaps, listErr = discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
 		}
 		if listErr != nil {

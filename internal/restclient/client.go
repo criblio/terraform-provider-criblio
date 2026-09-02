@@ -329,7 +329,8 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			}
 		}
 		admissionRetry := statusCode == http.StatusTooManyRequests &&
-			isConfigHelperAdmissionPath(method, path) && c.configHelperRetryTimeout > 0
+			isConfigHelperAdmissionPath(method, path) && isConfigHelperAdmissionResponse(responseBody) &&
+			c.configHelperRetryTimeout > 0
 		if admissionRetry && admissionDeadline.IsZero() {
 			admissionDeadline = time.Now().Add(c.configHelperRetryTimeout)
 		}
@@ -471,7 +472,8 @@ func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err
 		return false
 	}
 	if statusCode == http.StatusTooManyRequests {
-		return isIdempotentAPIMethod(method) || isConfigHelperAdmissionPath(method, path)
+		return isIdempotentAPIMethod(method) ||
+			(isConfigHelperAdmissionPath(method, path) && isConfigHelperAdmissionResponse(body))
 	}
 	if !isRetryableAPIMethod(method) {
 		return false
@@ -516,6 +518,16 @@ func isConfigHelperAdmissionPath(method, path string) bool {
 		return true
 	}
 	return len(parts) >= 4 && parts[0] == "a" && parts[2] == "m"
+}
+
+func isConfigHelperAdmissionResponse(body []byte) bool {
+	var response struct {
+		Message string `json:"message"`
+	}
+	if err := json.Unmarshal(body, &response); err != nil {
+		return false
+	}
+	return strings.Contains(strings.ToLower(response.Message), "config helper cannot be booted")
 }
 
 func isRetryableAPIMethod(method string) bool {

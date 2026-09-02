@@ -21,13 +21,14 @@ import (
 
 // Result holds the discovery result for one resource type.
 type Result struct {
-	TypeName       string
-	Count          int
-	Err            error
-	GroupErrors    map[string]error
-	Identifiers    []map[string]string
-	Details        []string
-	PerGroupCounts map[string]int
+	TypeName          string
+	Count             int
+	Err               error
+	GroupErrors       map[string]error
+	Identifiers       []map[string]string
+	InventoryComplete bool
+	Details           []string
+	PerGroupCounts    map[string]int
 }
 
 type groupDiscovery struct {
@@ -131,28 +132,36 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 			_, err := restclient.Get[map[string]json.RawMessage](ctx, client.REST, "/system/banners/custom-banner")
 			if restclient.IsNotFound(err) {
 				res.Count = 0
+				res.Identifiers = []map[string]string{}
+				res.InventoryComplete = true
 			} else if err != nil {
 				res.Err = err
 			} else {
 				res.Count = 1
 				res.Identifiers = []map[string]string{{"id": "custom-banner"}}
+				res.InventoryComplete = true
 			}
 		case e.TypeName == "criblio_lakehouse_dataset_connection":
 			ids, err := listLakehouseDatasetConnectionIdentifiers(ctx, client)
 			res.Count = len(ids)
 			res.Identifiers = ids
+			res.InventoryComplete = err == nil
 			res.Err = err
 		case e.TypeName == "criblio_pack_routes":
 			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex, packRoutes: true})
 		case e.TypeName == "criblio_search_dataset_ruleset":
+			res.InventoryComplete = true
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 2
 				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}, {"id": "metrics", "group_id": "default_search"}}
+				res.InventoryComplete = true
 			}
 		case e.TypeName == "criblio_search_datatype_ruleset":
+			res.InventoryComplete = true
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 1
 				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}}
+				res.InventoryComplete = true
 			}
 		case e.RESTListPath != "" && pathUsesRESTParam(e.RESTListPath, "group_id"):
 			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex})
@@ -160,6 +169,7 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 			ids, perGroup, err := listRESTIdentifiers(ctx, client, e, groupIDs)
 			res.Count = len(ids)
 			res.Identifiers = ids
+			res.InventoryComplete = err == nil
 			res.Err = err
 			if len(perGroup) > 0 {
 				res.PerGroupCounts = make(map[string]int)
@@ -181,7 +191,6 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 	// Process one group completely before moving to the next. Iterating resource
 	// types first repeatedly touches every group and keeps all Config Helpers
 	// active, which can prevent the leader from admitting another helper boot.
-	var admissionErr error
 	for groupIndex, gid := range groupIDs {
 		label := gid
 		if groupLabel, ok := idToLabel[gid]; ok {
@@ -191,12 +200,6 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 			progress("group %s (%d/%d)", label, groupIndex+1, len(groupIDs))
 		}
 		pending := eligibleGroupDiscoveries(groupDiscoveries, results, gid)
-		if admissionErr != nil {
-			for _, discovery := range pending {
-				addGroupError(&results[discovery.resultIndex], gid, admissionErr)
-			}
-			continue
-		}
 		if len(pending) == 0 {
 			continue
 		}
@@ -205,7 +208,6 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 		// reads for this group. This preserves one-at-a-time helper admission.
 		bootstrapErr := bootstrapGroup(ctx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
 		if isTooManyRequests(bootstrapErr) {
-			admissionErr = bootstrapErr
 			for _, discovery := range pending {
 				addGroupError(&results[discovery.resultIndex], gid, bootstrapErr)
 			}
@@ -303,6 +305,7 @@ func discoverGroupResource(ctx context.Context, client *importclient.Client, res
 
 	result.Count += len(ids)
 	result.Identifiers = append(result.Identifiers, ids...)
+	result.InventoryComplete = true
 	if len(perGroup) > 0 {
 		if result.PerGroupCounts == nil {
 			result.PerGroupCounts = make(map[string]int)
@@ -436,14 +439,6 @@ func fetchGroupsByProduct(ctx context.Context, client *importclient.Client, prod
 		}
 	}
 	return ids, names, nil
-}
-
-func listOneREST(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) (int, map[string]int, error) {
-	ids, perGroup, err := listRESTIdentifiers(ctx, client, e, groupIDs)
-	if err != nil {
-		return 0, nil, err
-	}
-	return len(ids), perGroup, nil
 }
 
 func listRESTIdentifiers(ctx context.Context, client *importclient.Client, e registry.Entry, groupIDs []string) ([]map[string]string, map[string]int, error) {

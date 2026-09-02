@@ -434,6 +434,7 @@ func TestReplaySafeRequestsRetryTooManyRequests(t *testing.T) {
 				if requestCount == 1 {
 					w.Header().Set("Retry-After", "0")
 					w.WriteHeader(http.StatusTooManyRequests)
+					_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 					return
 				}
 				writeJSON(t, w, testItem{ID: "retried", Name: "success"})
@@ -473,6 +474,33 @@ func TestUnsafePostDoesNotRetryTooManyRequests(t *testing.T) {
 	}
 }
 
+func TestFleetPostDoesNotRetryUnrelatedTooManyRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"status":"error","message":"tenant request quota exceeded"}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:                  server.URL,
+		BearerToken:              "test-token",
+		ConfigHelperRetryTimeout: time.Second,
+	})
+	_, err := Post[testItem, testItem](context.Background(), client, "/m/fleet-id/sources", testItem{Name: "request"})
+	if err == nil {
+		t.Fatal("Post returned nil error, expected HTTP 429")
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, expected 1", requestCount)
+	}
+}
+
 func TestFleetUploadRetriesTooManyRequestsWithBody(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)
@@ -497,6 +525,7 @@ func TestFleetUploadRetriesTooManyRequestsWithBody(t *testing.T) {
 		if requestCount == 1 {
 			w.Header().Set("Retry-After", "0")
 			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 			return
 		}
 		w.WriteHeader(http.StatusNoContent)
@@ -704,6 +733,7 @@ func TestRetryWaitsAtLeastRetryAfter(t *testing.T) {
 		if len(requestTimes) == 1 {
 			w.Header().Set("Retry-After", "1")
 			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 			return
 		}
 		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
@@ -731,6 +761,7 @@ func TestTooManyRequestsStopsAfterRetryLimit(t *testing.T) {
 		requestCount++
 		w.Header().Set("Retry-After", "0")
 		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 	}))
 	defer server.Close()
 
@@ -783,6 +814,7 @@ func TestConfigHelperAdmissionRetriesBeyondOrdinaryLimit(t *testing.T) {
 		if requestCount <= defaultAPIRetryMax+2 {
 			w.Header().Set("Retry-After", "0")
 			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 			return
 		}
 		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
@@ -809,6 +841,7 @@ func TestConfigHelperAdmissionTimeoutReturnsHTTPError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Retry-After", "1")
 		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 	}))
 	defer server.Close()
 
