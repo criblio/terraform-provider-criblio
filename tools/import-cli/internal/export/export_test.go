@@ -729,6 +729,17 @@ func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
 	assert.Empty(t, out.Items)
 }
 
+func TestSkipResourceByIDSkipsResourcesInInternalSearchWorkerGroup(t *testing.T) {
+	assert.True(t, skipResourceByID("criblio_pipeline", map[string]string{
+		"group_id": "search",
+		"id":       "user-visible-looking-pipeline",
+	}))
+	assert.False(t, skipResourceByID("criblio_search_pipeline", map[string]string{
+		"group_id": "default_search",
+		"id":       "user-search-pipeline",
+	}))
+}
+
 func TestLifecycleIgnoreChangesForConvertedResource_certificateUsesProviderStatePreservation(t *testing.T) {
 	ignored := lifecycleIgnoreChangesForConvertedResource("criblio_certificate", map[string]hcl.Value{
 		"cert":     {Kind: hcl.KindVariableRef, VarName: "certificate_cert"},

@@ -13,11 +13,17 @@ var NoExportTypes = []string{
 	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
 }
 
+// InternalGroupIDs are product-managed worker groups that must never be exported.
+// This does not include default_search, which backs user-managed Search resources.
+var InternalGroupIDs = map[string]bool{
+	"search": true,
+}
+
 // SkipExportIDs lists resource IDs to never export, by type.
 // Use for resources that fail apply (e.g. missing required attrs, API restrictions).
 var SkipExportIDs = map[string]map[string]bool{
 	"criblio_group": {
-		"search": true, // Local Search worker group: GetGroupsByID returns 400 / entity missing in many tenants; skip export.
+		"search": true, // Defense in depth for the internal Local Search worker group.
 	},
 	"criblio_notification_target": {
 		"system_email":         true, // smtp_target requires host/port; system_email is built-in placeholder

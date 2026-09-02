@@ -65,6 +65,13 @@ type Client struct {
 	retryWaitActive          int
 	retryWaitActiveSince     time.Time
 	retryWaitMu              sync.Mutex
+	admissionMu              sync.Mutex
+	admissionRetry           *admissionRetryFlight
+}
+
+type admissionRetryFlight struct {
+	done      chan struct{}
+	succeeded bool
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
@@ -282,6 +289,13 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 	}
 
 	var admissionDeadline time.Time
+	var admissionFlight *admissionRetryFlight
+	admissionOwner := false
+	defer func() {
+		if admissionOwner {
+			c.finishAdmissionRetry(admissionFlight, false)
+		}
+	}()
 	for attempt := 0; ; attempt++ {
 		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
@@ -316,6 +330,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 
 		err = responseError(path, statusCode, responseBody)
 		if err == nil {
+			if admissionOwner {
+				c.finishAdmissionRetry(admissionFlight, true)
+				admissionOwner = false
+			}
 			c.resetRetryWaitBudget()
 			return responseBody, nil
 		}
@@ -331,6 +349,23 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		admissionRetry := statusCode == http.StatusTooManyRequests &&
 			isConfigHelperAdmissionPath(method, path) && isConfigHelperAdmissionResponse(responseBody) &&
 			c.configHelperRetryTimeout > 0
+		if admissionRetry && admissionFlight == nil {
+			var owner bool
+			admissionFlight, owner = c.joinAdmissionRetry()
+			if !owner {
+				select {
+				case <-admissionFlight.done:
+					if admissionFlight.succeeded {
+						admissionFlight = nil
+						continue
+					}
+					return responseBody, err
+				case <-ctx.Done():
+					return nil, ctx.Err()
+				}
+			}
+			admissionOwner = true
+		}
 		if admissionRetry && admissionDeadline.IsZero() {
 			admissionDeadline = time.Now().Add(c.configHelperRetryTimeout)
 		}
@@ -362,6 +397,32 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			continue
 		}
 		return responseBody, err
+	}
+}
+
+func (c *Client) joinAdmissionRetry() (*admissionRetryFlight, bool) {
+	c.admissionMu.Lock()
+	defer c.admissionMu.Unlock()
+
+	if c.admissionRetry != nil {
+		return c.admissionRetry, false
+	}
+	flight := &admissionRetryFlight{done: make(chan struct{})}
+	c.admissionRetry = flight
+	return flight, true
+}
+
+func (c *Client) finishAdmissionRetry(flight *admissionRetryFlight, succeeded bool) {
+	c.admissionMu.Lock()
+	defer c.admissionMu.Unlock()
+
+	if flight == nil || c.admissionRetry != flight {
+		return
+	}
+	flight.succeeded = succeeded
+	close(flight.done)
+	if succeeded {
+		c.admissionRetry = nil
 	}
 }
 

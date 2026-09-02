@@ -857,6 +857,35 @@ func TestConfigHelperAdmissionTimeoutReturnsHTTPError(t *testing.T) {
 	}
 }
 
+func TestConfigHelperAdmissionTimeoutIsSharedByQueuedRequests(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "1")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:                  server.URL,
+		BearerToken:              "test-token",
+		ConfigHelperRetryTimeout: 10 * time.Millisecond,
+	})
+	_, err := Get[testItem](context.Background(), client, "/m/fleet-a/pipelines")
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("first Get error = %v, expected HTTP 429", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+	defer cancel()
+	_, err = Get[testItem](ctx, client, "/m/fleet-b/pipelines")
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("queued Get error = %v, expected cached HTTP 429 without another retry window", err)
+	}
+}
+
 func TestGatewayRouting(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 

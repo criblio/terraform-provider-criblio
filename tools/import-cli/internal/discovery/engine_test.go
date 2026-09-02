@@ -232,6 +232,41 @@ func TestDiscoverProcessesGroupScopedResourcesOneGroupAtATime(t *testing.T) {
 	}
 }
 
+func TestGetGroupIDsExcludesInternalSearchWorkerGroup(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"default","name":"default"},{"id":"search","name":"search"},{"id":"worker-a","name":"Worker A"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	groupIDs, err := GetGroupIDs(context.Background(), criblMockClient(server), nil, false)
+	require.NoError(t, err)
+	assert.Equal(t, []string{"default_search", "default", "worker-a"}, groupIDs)
+}
+
+func TestGetGroupIDsCannotExplicitlySelectInternalSearchWorkerGroup(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if strings.HasSuffix(r.URL.Path, "/products/stream/groups") {
+			_, _ = w.Write([]byte(`{"items":[{"id":"search","name":"search"}]}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"items":[]}`))
+	}))
+	defer server.Close()
+
+	groupIDs, err := GetGroupIDs(context.Background(), criblMockClient(server), []string{"search"}, false)
+	require.NoError(t, err)
+	assert.Empty(t, groupIDs)
+}
+
 func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 	var groupRequests atomic.Int32
 	var fleetAPaths sync.Map

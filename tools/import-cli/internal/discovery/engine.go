@@ -16,6 +16,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
 
@@ -79,6 +80,8 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 	if edgeErr != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", edgeErr)
 	}
+	streamIDs, streamNames = filterInternalGroups(streamIDs, streamNames)
+	edgeIDs, edgeNames = filterInternalGroups(edgeIDs, edgeNames)
 
 	streamIDs, streamNames = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, edgeNames = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
@@ -337,6 +340,8 @@ func GetGroupIDs(ctx context.Context, client *importclient.Client, groupFilter [
 	if err != nil {
 		return nil, fmt.Errorf("fetch edge groups: %w", err)
 	}
+	streamIDs, streamNames = filterInternalGroups(streamIDs, streamNames)
+	edgeIDs, edgeNames = filterInternalGroups(edgeIDs, edgeNames)
 	streamIDs, _ = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
 	edgeIDs, _ = filterGroups(edgeIDs, edgeNames, " (edge)", groupFilter)
 
@@ -797,6 +802,17 @@ func filterGroups(ids, names []string, suffix string, filter []string) (filtered
 			filteredIDs = append(filteredIDs, id)
 			filteredNames = append(filteredNames, names[i])
 		}
+	}
+	return filteredIDs, filteredNames
+}
+
+func filterInternalGroups(ids, names []string) (filteredIDs, filteredNames []string) {
+	for i, id := range ids {
+		if exclusions.InternalGroupIDs[id] {
+			continue
+		}
+		filteredIDs = append(filteredIDs, id)
+		filteredNames = append(filteredNames, names[i])
 	}
 	return filteredIDs, filteredNames
 }
