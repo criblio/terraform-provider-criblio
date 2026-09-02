@@ -24,10 +24,7 @@ var _ provider.ProviderWithActions = (*CriblioProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*CriblioProvider)(nil)
 var _ provider.ProviderWithFunctions = (*CriblioProvider)(nil)
 
-const (
-	configHelperRetryTimeout = 5 * time.Minute
-	providerRequestTimeout   = time.Minute
-)
+const providerRequestTimeout = time.Minute
 
 type CriblioProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -202,14 +199,13 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
-			BaseURL:                  providerRestBaseURL(serverUrl, restCredentials),
-			ProviderOrgID:            restCredentials.OrganizationID,
-			ProviderWorkspaceID:      restCredentials.Workspace,
-			ProviderCloudDomain:      restCredentials.CloudDomain,
-			Credentials:              restCredentials,
-			BearerToken:              data.BearerAuth.ValueString(),
-			HTTPClient:               httpClient,
-			ConfigHelperRetryTimeout: configHelperRetryTimeout,
+			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
+			ProviderOrgID:       restCredentials.OrganizationID,
+			ProviderWorkspaceID: restCredentials.Workspace,
+			ProviderCloudDomain: restCredentials.CloudDomain,
+			Credentials:         restCredentials,
+			BearerToken:         data.BearerAuth.ValueString(),
+			HTTPClient:          httpClient,
 		}),
 	}
 	resp.ActionData = clients

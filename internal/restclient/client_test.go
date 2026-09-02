@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"testing"
 	"time"
 
@@ -489,9 +488,8 @@ func TestFleetPostDoesNotRetryUnrelatedTooManyRequests(t *testing.T) {
 	defer server.Close()
 
 	client := New(Config{
-		BaseURL:                  server.URL,
-		BearerToken:              "test-token",
-		ConfigHelperRetryTimeout: time.Second,
+		BaseURL:     server.URL,
+		BearerToken: "test-token",
 	})
 	_, err := Post[testItem, testItem](context.Background(), client, "/m/fleet-id/sources", testItem{Name: "request"})
 	if err == nil {
@@ -805,118 +803,27 @@ func TestConfiguredRetryLimit(t *testing.T) {
 	}
 }
 
-func TestConfigHelperAdmissionRetriesBeyondOrdinaryLimit(t *testing.T) {
+func TestConfigHelperAdmissionGetStopsAtRetryLimit(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)
 
 	requestCount := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestCount++
-		if requestCount <= defaultAPIRetryMax+2 {
-			w.Header().Set("Retry-After", "0")
-			w.WriteHeader(http.StatusTooManyRequests)
-			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
-			return
-		}
-		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
-	}))
-	defer server.Close()
-
-	client := New(Config{
-		BaseURL:                  server.URL,
-		BearerToken:              "test-token",
-		ConfigHelperRetryTimeout: time.Second,
-	})
-	if _, err := Get[testItem](context.Background(), client, "/m/fleet-id/pipelines"); err != nil {
-		t.Fatalf("Get returned error: %v", err)
-	}
-	if requestCount != defaultAPIRetryMax+3 {
-		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+3)
-	}
-}
-
-func TestConfigHelperAdmissionTimeoutReturnsHTTPError(t *testing.T) {
-	t.Setenv("CRIBL_BEARER_TOKEN", "")
-	fastAPIRetry(t)
-
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Retry-After", "1")
+		w.Header().Set("Retry-After", "0")
 		w.WriteHeader(http.StatusTooManyRequests)
 		_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
 	}))
 	defer server.Close()
 
-	client := New(Config{
-		BaseURL:                  server.URL,
-		BearerToken:              "test-token",
-		ConfigHelperRetryTimeout: 10 * time.Millisecond,
-	})
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token"})
 	_, err := Get[testItem](context.Background(), client, "/m/fleet-id/pipelines")
 	var httpErr *HTTPError
 	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
 		t.Fatalf("Get error = %v, expected original HTTP 429", err)
 	}
-}
-
-func TestConfigHelperAdmissionTimeoutIsSharedByQueuedRequests(t *testing.T) {
-	t.Setenv("CRIBL_BEARER_TOKEN", "")
-
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Retry-After", "1")
-		w.WriteHeader(http.StatusTooManyRequests)
-		_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
-	}))
-	defer server.Close()
-
-	client := New(Config{
-		BaseURL:                  server.URL,
-		BearerToken:              "test-token",
-		ConfigHelperRetryTimeout: 10 * time.Millisecond,
-	})
-	_, err := Get[testItem](context.Background(), client, "/m/fleet-a/pipelines")
-	var httpErr *HTTPError
-	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
-		t.Fatalf("first Get error = %v, expected HTTP 429", err)
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
-	defer cancel()
-	_, err = Get[testItem](ctx, client, "/m/fleet-b/pipelines")
-	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
-		t.Fatalf("queued Get error = %v, expected cached HTTP 429 without another retry window", err)
-	}
-}
-
-func TestConfigHelperAdmissionDeadlineBoundsRetryRequest(t *testing.T) {
-	t.Setenv("CRIBL_BEARER_TOKEN", "")
-
-	var requestCount atomic.Int32
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if requestCount.Add(1) == 1 {
-			w.Header().Set("Retry-After", "0")
-			w.WriteHeader(http.StatusTooManyRequests)
-			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted due to insufficient memory headroom"}`))
-			return
-		}
-		<-r.Context().Done()
-	}))
-	defer server.Close()
-
-	client := New(Config{
-		BaseURL:                  server.URL,
-		BearerToken:              "test-token",
-		ConfigHelperRetryTimeout: 20 * time.Millisecond,
-	})
-	started := time.Now()
-	_, err := Get[testItem](context.Background(), client, "/m/fleet-a/pipelines")
-	if err == nil {
-		t.Fatal("Get returned nil error, expected admission retry deadline")
-	}
-	if elapsed := time.Since(started); elapsed > 250*time.Millisecond {
-		t.Fatalf("Get took %s, expected the admission deadline to cancel the retry request", elapsed)
-	}
-	if requestCount.Load() != 2 {
-		t.Fatalf("request count = %d, expected initial request and one bounded retry", requestCount.Load())
+	if requestCount != defaultAPIRetryMax+1 {
+		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+1)
 	}
 }
 

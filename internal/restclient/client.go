@@ -37,42 +37,32 @@ var (
 
 // Config holds REST client settings.
 type Config struct {
-	BaseURL                  string
-	ProviderOrgID            string
-	ProviderWorkspaceID      string
-	ProviderCloudDomain      string
-	Credentials              *auth.CriblConfig
-	BearerToken              string
-	HTTPClient               *http.Client
-	UserAgent                string
-	RetryWaitBudget          time.Duration
-	RetryMax                 int
-	ConfigHelperRetryTimeout time.Duration
+	BaseURL             string
+	ProviderOrgID       string
+	ProviderWorkspaceID string
+	ProviderCloudDomain string
+	Credentials         *auth.CriblConfig
+	BearerToken         string
+	HTTPClient          *http.Client
+	UserAgent           string
+	RetryWaitBudget     time.Duration
+	RetryMax            int
 }
 
 // Client sends authenticated requests to Cribl APIs.
 type Client struct {
-	baseURL                  string
-	providerCloudDomain      string
-	credentials              *auth.CriblConfig
-	bearerToken              string
-	httpClient               *http.Client
-	userAgent                string
-	retryMax                 int
-	configHelperRetryTimeout time.Duration
-	retryWaitBudget          time.Duration
-	retryWaitRemaining       time.Duration
-	retryWaitActive          int
-	retryWaitActiveSince     time.Time
-	retryWaitMu              sync.Mutex
-	admissionMu              sync.Mutex
-	admissionRetry           *admissionRetryFlight
-}
-
-type admissionRetryFlight struct {
-	done      chan struct{}
-	deadline  time.Time
-	succeeded bool
+	baseURL              string
+	providerCloudDomain  string
+	credentials          *auth.CriblConfig
+	bearerToken          string
+	httpClient           *http.Client
+	userAgent            string
+	retryMax             int
+	retryWaitBudget      time.Duration
+	retryWaitRemaining   time.Duration
+	retryWaitActive      int
+	retryWaitActiveSince time.Time
+	retryWaitMu          sync.Mutex
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
@@ -126,16 +116,15 @@ func New(config Config) *Client {
 	}
 
 	return &Client{
-		baseURL:                  strings.TrimRight(baseURL, "/"),
-		providerCloudDomain:      config.ProviderCloudDomain,
-		credentials:              config.Credentials,
-		bearerToken:              config.BearerToken,
-		httpClient:               httpClient,
-		userAgent:                agent,
-		retryMax:                 retryMax,
-		configHelperRetryTimeout: config.ConfigHelperRetryTimeout,
-		retryWaitBudget:          config.RetryWaitBudget,
-		retryWaitRemaining:       config.RetryWaitBudget,
+		baseURL:             strings.TrimRight(baseURL, "/"),
+		providerCloudDomain: config.ProviderCloudDomain,
+		credentials:         config.Credentials,
+		bearerToken:         config.BearerToken,
+		httpClient:          httpClient,
+		userAgent:           agent,
+		retryMax:            retryMax,
+		retryWaitBudget:     config.RetryWaitBudget,
+		retryWaitRemaining:  config.RetryWaitBudget,
 	}
 }
 
@@ -289,26 +278,9 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
-	var admissionDeadline time.Time
-	var admissionFlight *admissionRetryFlight
-	admissionOwner := false
-	defer func() {
-		if admissionOwner {
-			c.finishAdmissionRetry(admissionFlight, false)
-		}
-	}()
 	for attempt := 0; ; attempt++ {
-		requestCtx := ctx
-		cancelRequest := func() {}
-		if admissionOwner {
-			requestCtx, cancelRequest = context.WithDeadline(ctx, admissionDeadline)
-		}
-		responseBody, statusCode, responseHeader, token, err := c.send(requestCtx, method, path, contentType, body)
-		cancelRequest()
+		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
-			if admissionOwner && !time.Now().Before(admissionDeadline) {
-				return nil, err
-			}
 			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
 				if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
@@ -340,10 +312,6 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 
 		err = responseError(path, statusCode, responseBody)
 		if err == nil {
-			if admissionOwner {
-				c.finishAdmissionRetry(admissionFlight, true)
-				admissionOwner = false
-			}
 			c.resetRetryWaitBudget()
 			return responseBody, nil
 		}
@@ -356,57 +324,15 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 				}
 			}
 		}
-		admissionRetry := statusCode == http.StatusTooManyRequests &&
-			isConfigHelperAdmissionPath(method, path) && isConfigHelperAdmissionResponse(responseBody) &&
-			c.configHelperRetryTimeout > 0
-		if admissionRetry && admissionFlight == nil {
-			var owner bool
-			admissionFlight, owner = c.joinAdmissionRetry(c.configHelperRetryTimeout)
-			if !owner {
-				waitCtx, cancel := context.WithDeadline(ctx, admissionFlight.deadline)
-				select {
-				case <-admissionFlight.done:
-					cancel()
-					if admissionFlight.succeeded {
-						admissionFlight = nil
-						continue
-					}
-					return responseBody, err
-				case <-waitCtx.Done():
-					waitErr := waitCtx.Err()
-					cancel()
-					if errors.Is(waitErr, context.DeadlineExceeded) && ctx.Err() == nil {
-						return responseBody, err
-					}
-					return nil, waitErr
-				}
-			}
-			admissionOwner = true
-		}
-		if admissionRetry && admissionDeadline.IsZero() {
-			admissionDeadline = admissionFlight.deadline
-		}
 		shouldRetry := shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax)
-		if admissionRetry && time.Now().Before(admissionDeadline) {
-			shouldRetry = true
-		}
 		if shouldRetry {
 			retryAfter := ""
 			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
 			}
-			waitCtx := ctx
-			cancel := func() {}
-			if admissionRetry {
-				waitCtx, cancel = context.WithDeadline(ctx, admissionDeadline)
-			}
-			waitErr := waitBeforeAPIRetry(waitCtx, c, attempt, retryAfter)
-			cancel()
+			waitErr := waitBeforeAPIRetry(ctx, c, attempt, retryAfter)
 			if waitErr != nil {
 				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) {
-					return responseBody, err
-				}
-				if admissionRetry && errors.Is(waitErr, context.DeadlineExceeded) && ctx.Err() == nil {
 					return responseBody, err
 				}
 				return nil, waitErr
@@ -414,35 +340,6 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			continue
 		}
 		return responseBody, err
-	}
-}
-
-func (c *Client) joinAdmissionRetry(timeout time.Duration) (*admissionRetryFlight, bool) {
-	c.admissionMu.Lock()
-	defer c.admissionMu.Unlock()
-
-	if c.admissionRetry != nil {
-		return c.admissionRetry, false
-	}
-	flight := &admissionRetryFlight{
-		done:     make(chan struct{}),
-		deadline: time.Now().Add(timeout),
-	}
-	c.admissionRetry = flight
-	return flight, true
-}
-
-func (c *Client) finishAdmissionRetry(flight *admissionRetryFlight, succeeded bool) {
-	c.admissionMu.Lock()
-	defer c.admissionMu.Unlock()
-
-	if flight == nil || c.admissionRetry != flight {
-		return
-	}
-	flight.succeeded = succeeded
-	close(flight.done)
-	if succeeded {
-		c.admissionRetry = nil
 	}
 }
 
