@@ -112,7 +112,11 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			if progress != nil {
 				progress("criblio_lakehouse_dataset_connection: %d items", r.Count)
 			}
-			idMaps, listErr := discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
+			idMaps := r.Identifiers
+			var listErr error
+			if idMaps == nil {
+				idMaps, listErr = discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
+			}
 			if listErr != nil {
 				out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: listErr.Error(), Count: r.Count})
 				continue
@@ -145,7 +149,11 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			}
 			continue
 		}
-		idMaps, listErr := discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
+		idMaps := r.Identifiers
+		var listErr error
+		if idMaps == nil {
+			idMaps, listErr = discovery.ListItemIdentifiers(ctx, client, e, groupIDs)
+		}
 		if listErr != nil {
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: listErr.Error(), Count: r.Count})
 			continue

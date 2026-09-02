@@ -10,6 +10,8 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
@@ -22,6 +24,8 @@ type Result struct {
 	TypeName       string
 	Count          int
 	Err            error
+	GroupErrors    map[string]error
+	Identifiers    []map[string]string
 	Details        []string
 	PerGroupCounts map[string]int
 }
@@ -31,6 +35,12 @@ type groupDiscovery struct {
 	resultIndex int
 	packRoutes  bool
 }
+
+const groupDiscoveryParallel = 8
+
+// DefaultAdmissionTimeout bounds how long discovery waits for one Config
+// Helper to become admissible before reporting the group as unavailable.
+const DefaultAdmissionTimeout = 5 * time.Minute
 
 // IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
@@ -45,8 +55,16 @@ func IsRecoverableListDecodeError(err error) bool {
 
 // Discover enumerates resources through REST list endpoints.
 func Discover(ctx context.Context, client *importclient.Client, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool) ([]Result, error) {
+	return DiscoverWithProgress(ctx, client, reg, include, exclude, groupFilter, onPrem, groupDiscoveryParallel, DefaultAdmissionTimeout, nil)
+}
+
+// DiscoverWithProgress enumerates resources and reports group-level progress.
+func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool, parallel int, admissionTimeout time.Duration, progress func(string, ...any)) ([]Result, error) {
 	if client == nil || client.REST == nil {
 		return nil, fmt.Errorf("REST client is nil")
+	}
+	if parallel < 1 {
+		parallel = 1
 	}
 
 	includeSet := sliceToSet(include)
@@ -117,26 +135,31 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 				res.Err = err
 			} else {
 				res.Count = 1
+				res.Identifiers = []map[string]string{{"id": "custom-banner"}}
 			}
 		case e.TypeName == "criblio_lakehouse_dataset_connection":
 			ids, err := listLakehouseDatasetConnectionIdentifiers(ctx, client)
 			res.Count = len(ids)
+			res.Identifiers = ids
 			res.Err = err
 		case e.TypeName == "criblio_pack_routes":
 			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex, packRoutes: true})
 		case e.TypeName == "criblio_search_dataset_ruleset":
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 2
+				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}, {"id": "metrics", "group_id": "default_search"}}
 			}
 		case e.TypeName == "criblio_search_datatype_ruleset":
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 1
+				res.Identifiers = []map[string]string{{"id": "default", "group_id": "default_search"}}
 			}
 		case e.RESTListPath != "" && pathUsesRESTParam(e.RESTListPath, "group_id"):
 			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex})
 		case e.RESTListPath != "":
-			count, perGroup, err := listOneREST(ctx, client, e, groupIDs)
-			res.Count = count
+			ids, perGroup, err := listRESTIdentifiers(ctx, client, e, groupIDs)
+			res.Count = len(ids)
+			res.Identifiers = ids
 			res.Err = err
 			if len(perGroup) > 0 {
 				res.PerGroupCounts = make(map[string]int)
@@ -159,48 +182,141 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 	// types first repeatedly touches every group and keeps all Config Helpers
 	// active, which can prevent the leader from admitting another helper boot.
 	var admissionErr error
-	for _, gid := range groupIDs {
-		for _, discovery := range groupDiscoveries {
-			res := &results[discovery.resultIndex]
-			if res.Err != nil || skipGroupScopedSingleton(discovery.entry.TypeName, gid) {
-				continue
-			}
-			if admissionErr != nil {
-				res.Err = fmt.Errorf("%s: group %s unavailable: %w", discovery.entry.TypeName, gid, admissionErr)
-				continue
-			}
-
-			var count int
-			var err error
-			if discovery.packRoutes {
-				var ids []map[string]string
-				ids, err = listPackRoutesIdentifiers(ctx, client, []string{gid})
-				count = len(ids)
-			} else {
-				var perGroup map[string]int
-				count, perGroup, err = listOneREST(ctx, client, discovery.entry, []string{gid})
-				if err == nil && len(perGroup) > 0 {
-					if res.PerGroupCounts == nil {
-						res.PerGroupCounts = make(map[string]int)
-					}
-					label := gid
-					if groupLabel, ok := idToLabel[gid]; ok {
-						label = groupLabel
-					}
-					res.PerGroupCounts[label] = perGroup[gid]
-				}
-			}
-			if err != nil {
-				res.Err = fmt.Errorf("%s: %w", discovery.entry.TypeName, err)
-				if isTooManyRequests(err) {
-					admissionErr = err
-				}
-				continue
-			}
-			res.Count += count
+	for groupIndex, gid := range groupIDs {
+		label := gid
+		if groupLabel, ok := idToLabel[gid]; ok {
+			label = groupLabel
 		}
+		if progress != nil {
+			progress("group %s (%d/%d)", label, groupIndex+1, len(groupIDs))
+		}
+		pending := eligibleGroupDiscoveries(groupDiscoveries, results, gid)
+		if admissionErr != nil {
+			for _, discovery := range pending {
+				addGroupError(&results[discovery.resultIndex], gid, admissionErr)
+			}
+			continue
+		}
+		if len(pending) == 0 {
+			continue
+		}
+
+		// Bootstrap the Config Helper with one request before issuing concurrent
+		// reads for this group. This preserves one-at-a-time helper admission.
+		bootstrapErr := bootstrapGroup(ctx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
+		if isTooManyRequests(bootstrapErr) {
+			admissionErr = bootstrapErr
+			for _, discovery := range pending {
+				addGroupError(&results[discovery.resultIndex], gid, bootstrapErr)
+			}
+			if progress != nil {
+				progress("group %s unavailable after bounded retries", label)
+			}
+			continue
+		}
+
+		sem := make(chan struct{}, parallel)
+		var wg sync.WaitGroup
+		for _, discovery := range pending[1:] {
+			discovery := discovery
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				sem <- struct{}{}
+				defer func() { <-sem }()
+				res := &results[discovery.resultIndex]
+				if err := discoverGroupResource(ctx, client, res, discovery, gid, label); isTooManyRequests(err) {
+					addGroupError(res, gid, err)
+				}
+			}()
+		}
+		wg.Wait()
 	}
 	return results, nil
+}
+
+func eligibleGroupDiscoveries(discoveries []groupDiscovery, results []Result, groupID string) []groupDiscovery {
+	pending := make([]groupDiscovery, 0, len(discoveries))
+	for _, discovery := range discoveries {
+		if results[discovery.resultIndex].Err == nil && !skipGroupScopedSingleton(discovery.entry.TypeName, groupID) {
+			pending = append(pending, discovery)
+		}
+	}
+	return pending
+}
+
+func bootstrapGroup(ctx context.Context, client *importclient.Client, result *Result, discovery groupDiscovery, groupID, groupLabel string, timeout time.Duration, progress func(string, ...any)) error {
+	if timeout <= 0 {
+		timeout = DefaultAdmissionTimeout
+	}
+	bootstrapCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	var lastAdmissionErr error
+	for attempt := 1; ; attempt++ {
+		err := discoverGroupResource(bootstrapCtx, client, result, discovery, groupID, groupLabel)
+		if err == nil || !isTooManyRequests(err) {
+			if bootstrapCtx.Err() != nil && lastAdmissionErr != nil {
+				result.Err = nil
+				return lastAdmissionErr
+			}
+			return err
+		}
+		lastAdmissionErr = err
+		if progress != nil {
+			progress("group %s is admission-limited; retrying bootstrap (round %d, timeout %s)", groupLabel, attempt, timeout)
+		}
+		delay, ok := restclient.RetryAfter(err)
+		if !ok {
+			delay = time.Second
+		}
+		timer := time.NewTimer(delay)
+		select {
+		case <-timer.C:
+		case <-bootstrapCtx.Done():
+			if !timer.Stop() {
+				select {
+				case <-timer.C:
+				default:
+				}
+			}
+			return lastAdmissionErr
+		}
+	}
+}
+
+func discoverGroupResource(ctx context.Context, client *importclient.Client, result *Result, discovery groupDiscovery, groupID, groupLabel string) error {
+	var ids []map[string]string
+	var perGroup map[string]int
+	var err error
+	if discovery.packRoutes {
+		ids, err = listPackRoutesIdentifiers(ctx, client, []string{groupID})
+	} else {
+		ids, perGroup, err = listRESTIdentifiers(ctx, client, discovery.entry, []string{groupID})
+	}
+	if err != nil {
+		if !isTooManyRequests(err) {
+			result.Err = fmt.Errorf("%s: %w", discovery.entry.TypeName, err)
+		}
+		return err
+	}
+
+	result.Count += len(ids)
+	result.Identifiers = append(result.Identifiers, ids...)
+	if len(perGroup) > 0 {
+		if result.PerGroupCounts == nil {
+			result.PerGroupCounts = make(map[string]int)
+		}
+		result.PerGroupCounts[groupLabel] = perGroup[groupID]
+	}
+	return nil
+}
+
+func addGroupError(result *Result, groupID string, err error) {
+	if result.GroupErrors == nil {
+		result.GroupErrors = make(map[string]error)
+	}
+	result.GroupErrors[groupID] = err
 }
 
 func isTooManyRequests(err error) bool {

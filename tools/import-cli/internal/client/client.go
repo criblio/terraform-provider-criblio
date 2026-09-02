@@ -13,8 +13,7 @@ import (
 )
 
 const (
-	requestTimeout  = time.Minute
-	retryWaitBudget = 2 * time.Minute
+	requestTimeout = time.Minute
 )
 
 // Client carries the REST client used by import-cli discovery and export paths.
@@ -35,11 +34,10 @@ func NewFromConfig(cfg *config.Config) (*Client, error) {
 	userAgent := BulkExporterUserAgent()
 
 	restClient := restclient.New(restclient.Config{
-		Credentials:     credentialsFromConfig(cfg),
-		BearerToken:     cfg.Get(config.KeyBearerToken),
-		HTTPClient:      httpClient,
-		UserAgent:       userAgent,
-		RetryWaitBudget: retryWaitBudget,
+		Credentials: credentialsFromConfig(cfg),
+		BearerToken: cfg.Get(config.KeyBearerToken),
+		HTTPClient:  httpClient,
+		UserAgent:   userAgent,
 	})
 
 	return &Client{REST: restClient}, nil

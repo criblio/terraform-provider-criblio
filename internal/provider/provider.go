@@ -2,6 +2,9 @@ package provider
 
 import (
 	"context"
+	"net/http"
+	"os"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -14,14 +17,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"net/http"
-	"os"
 )
 
 var _ provider.Provider = (*CriblioProvider)(nil)
 var _ provider.ProviderWithActions = (*CriblioProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*CriblioProvider)(nil)
 var _ provider.ProviderWithFunctions = (*CriblioProvider)(nil)
+
+const configHelperRetryTimeout = 5 * time.Minute
 
 type CriblioProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -193,16 +196,16 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
-
 	clients := &ProviderClients{
 		RC: restclient.New(restclient.Config{
-			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
-			ProviderOrgID:       restCredentials.OrganizationID,
-			ProviderWorkspaceID: restCredentials.Workspace,
-			ProviderCloudDomain: restCredentials.CloudDomain,
-			Credentials:         restCredentials,
-			BearerToken:         data.BearerAuth.ValueString(),
-			HTTPClient:          httpClient,
+			BaseURL:                  providerRestBaseURL(serverUrl, restCredentials),
+			ProviderOrgID:            restCredentials.OrganizationID,
+			ProviderWorkspaceID:      restCredentials.Workspace,
+			ProviderCloudDomain:      restCredentials.CloudDomain,
+			Credentials:              restCredentials,
+			BearerToken:              data.BearerAuth.ValueString(),
+			HTTPClient:               httpClient,
+			ConfigHelperRetryTimeout: configHelperRetryTimeout,
 		}),
 	}
 	resp.ActionData = clients

@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -230,7 +233,8 @@ func TestDiscoverProcessesGroupScopedResourcesOneGroupAtATime(t *testing.T) {
 }
 
 func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
-	groupRequests := 0
+	var groupRequests atomic.Int32
+	var groupPaths sync.Map
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch {
@@ -239,7 +243,8 @@ func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
 			_, _ = w.Write([]byte(`{"items":[]}`))
 		default:
-			groupRequests++
+			groupRequests.Add(1)
+			groupPaths.Store(r.URL.Path, true)
 			w.Header().Set("Retry-After", "0")
 			w.WriteHeader(http.StatusTooManyRequests)
 			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
@@ -248,16 +253,57 @@ func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
 	defer server.Close()
 
 	reg := mustBuildRegistry(t, context.Background())
-	results, err := Discover(context.Background(), criblMockClient(server), reg,
-		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false)
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false, 2, 20*time.Millisecond, nil)
 	require.NoError(t, err)
 	require.Len(t, results, 2)
-	assert.Error(t, results[0].Err)
-	assert.Error(t, results[1].Err)
-	assert.Equal(t, defaultRetryRequestCount, groupRequests)
+	assert.NoError(t, results[0].Err)
+	assert.NoError(t, results[1].Err)
+	assert.Error(t, results[0].GroupErrors["fleet-a"])
+	assert.Error(t, results[1].GroupErrors["fleet-a"])
+	assert.Error(t, results[0].GroupErrors["fleet-b"])
+	assert.Error(t, results[1].GroupErrors["fleet-b"])
+	assert.GreaterOrEqual(t, groupRequests.Load(), int32(defaultRetryRequestCount))
+	uniquePaths := 0
+	groupPaths.Range(func(_, _ any) bool {
+		uniquePaths++
+		return true
+	})
+	assert.Equal(t, 1, uniquePaths, "only the bootstrap request should be retried")
 }
 
 const defaultRetryRequestCount = 4
+
+func TestDiscoverRetriesBootstrapUntilGroupBecomesAvailable(t *testing.T) {
+	var groupRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			requestNumber := groupRequests.Add(1)
+			if requestNumber <= defaultRetryRequestCount {
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				return
+			}
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a"}, false, 2, time.Second, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.Empty(t, results[0].GroupErrors)
+	assert.Empty(t, results[1].GroupErrors)
+	assert.Greater(t, groupRequests.Load(), int32(defaultRetryRequestCount))
+}
 
 func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 	t.Helper()

@@ -743,6 +743,9 @@ func TestTooManyRequestsStopsAfterRetryLimit(t *testing.T) {
 	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
 		t.Fatalf("Post error = %v, expected HTTP 429", err)
 	}
+	if delay, ok := RetryAfter(err); !ok || delay != 0 {
+		t.Fatalf("RetryAfter(error) = (%s, %t), expected (0, true)", delay, ok)
+	}
 	if requestCount != defaultAPIRetryMax+1 {
 		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+1)
 	}
@@ -767,6 +770,57 @@ func TestConfiguredRetryLimit(t *testing.T) {
 	}
 	if requestCount != 8 {
 		t.Fatalf("request count = %d, expected 8", requestCount)
+	}
+}
+
+func TestConfigHelperAdmissionRetriesBeyondOrdinaryLimit(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		if requestCount <= defaultAPIRetryMax+2 {
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		writeJSON(t, w, testItem{ID: "retried", Name: "success"})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:                  server.URL,
+		BearerToken:              "test-token",
+		ConfigHelperRetryTimeout: time.Second,
+	})
+	if _, err := Get[testItem](context.Background(), client, "/m/fleet-id/pipelines"); err != nil {
+		t.Fatalf("Get returned error: %v", err)
+	}
+	if requestCount != defaultAPIRetryMax+3 {
+		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+3)
+	}
+}
+
+func TestConfigHelperAdmissionTimeoutReturnsHTTPError(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "1")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:                  server.URL,
+		BearerToken:              "test-token",
+		ConfigHelperRetryTimeout: 10 * time.Millisecond,
+	})
+	_, err := Get[testItem](context.Background(), client, "/m/fleet-id/pipelines")
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("Get error = %v, expected original HTTP 429", err)
 	}
 }
 

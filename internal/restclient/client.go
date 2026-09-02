@@ -37,38 +37,42 @@ var (
 
 // Config holds REST client settings.
 type Config struct {
-	BaseURL             string
-	ProviderOrgID       string
-	ProviderWorkspaceID string
-	ProviderCloudDomain string
-	Credentials         *auth.CriblConfig
-	BearerToken         string
-	HTTPClient          *http.Client
-	UserAgent           string
-	RetryWaitBudget     time.Duration
-	RetryMax            int
+	BaseURL                  string
+	ProviderOrgID            string
+	ProviderWorkspaceID      string
+	ProviderCloudDomain      string
+	Credentials              *auth.CriblConfig
+	BearerToken              string
+	HTTPClient               *http.Client
+	UserAgent                string
+	RetryWaitBudget          time.Duration
+	RetryMax                 int
+	ConfigHelperRetryTimeout time.Duration
 }
 
 // Client sends authenticated requests to Cribl APIs.
 type Client struct {
-	baseURL              string
-	providerCloudDomain  string
-	credentials          *auth.CriblConfig
-	bearerToken          string
-	httpClient           *http.Client
-	userAgent            string
-	retryMax             int
-	retryWaitBudget      time.Duration
-	retryWaitRemaining   time.Duration
-	retryWaitActive      int
-	retryWaitActiveSince time.Time
-	retryWaitMu          sync.Mutex
+	baseURL                  string
+	providerCloudDomain      string
+	credentials              *auth.CriblConfig
+	bearerToken              string
+	httpClient               *http.Client
+	userAgent                string
+	retryMax                 int
+	configHelperRetryTimeout time.Duration
+	retryWaitBudget          time.Duration
+	retryWaitRemaining       time.Duration
+	retryWaitActive          int
+	retryWaitActiveSince     time.Time
+	retryWaitMu              sync.Mutex
 }
 
 // HTTPError is returned for non-2xx responses other than 404.
 type HTTPError struct {
-	StatusCode int
-	Body       string
+	StatusCode    int
+	Body          string
+	RetryAfter    time.Duration
+	HasRetryAfter bool
 }
 
 func (e *HTTPError) Error() string {
@@ -114,15 +118,16 @@ func New(config Config) *Client {
 	}
 
 	return &Client{
-		baseURL:             strings.TrimRight(baseURL, "/"),
-		providerCloudDomain: config.ProviderCloudDomain,
-		credentials:         config.Credentials,
-		bearerToken:         config.BearerToken,
-		httpClient:          httpClient,
-		userAgent:           agent,
-		retryMax:            retryMax,
-		retryWaitBudget:     config.RetryWaitBudget,
-		retryWaitRemaining:  config.RetryWaitBudget,
+		baseURL:                  strings.TrimRight(baseURL, "/"),
+		providerCloudDomain:      config.ProviderCloudDomain,
+		credentials:              config.Credentials,
+		bearerToken:              config.BearerToken,
+		httpClient:               httpClient,
+		userAgent:                agent,
+		retryMax:                 retryMax,
+		configHelperRetryTimeout: config.ConfigHelperRetryTimeout,
+		retryWaitBudget:          config.RetryWaitBudget,
+		retryWaitRemaining:       config.RetryWaitBudget,
 	}
 }
 
@@ -276,6 +281,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		return nil, fmt.Errorf("restclient client is required")
 	}
 
+	var admissionDeadline time.Time
 	for attempt := 0; ; attempt++ {
 		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
@@ -313,13 +319,41 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			c.resetRetryWaitBudget()
 			return responseBody, nil
 		}
-		if shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax) {
+		if statusCode == http.StatusTooManyRequests && responseHeader != nil {
+			if delay, ok := retryAfterDelay(responseHeader.Get("Retry-After"), time.Now()); ok {
+				var httpErr *HTTPError
+				if errors.As(err, &httpErr) {
+					httpErr.RetryAfter = delay
+					httpErr.HasRetryAfter = true
+				}
+			}
+		}
+		admissionRetry := statusCode == http.StatusTooManyRequests &&
+			isConfigHelperAdmissionPath(method, path) && c.configHelperRetryTimeout > 0
+		if admissionRetry && admissionDeadline.IsZero() {
+			admissionDeadline = time.Now().Add(c.configHelperRetryTimeout)
+		}
+		shouldRetry := shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax)
+		if admissionRetry && time.Now().Before(admissionDeadline) {
+			shouldRetry = true
+		}
+		if shouldRetry {
 			retryAfter := ""
 			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
 			}
-			if waitErr := waitBeforeAPIRetry(ctx, c, attempt, retryAfter); waitErr != nil {
+			waitCtx := ctx
+			cancel := func() {}
+			if admissionRetry {
+				waitCtx, cancel = context.WithDeadline(ctx, admissionDeadline)
+			}
+			waitErr := waitBeforeAPIRetry(waitCtx, c, attempt, retryAfter)
+			cancel()
+			if waitErr != nil {
 				if errors.Is(waitErr, errRetryAfterExceedsLimit) || errors.Is(waitErr, errRetryWaitBudgetExhausted) {
+					return responseBody, err
+				}
+				if admissionRetry && errors.Is(waitErr, context.DeadlineExceeded) && ctx.Err() == nil {
 					return responseBody, err
 				}
 				return nil, waitErr
@@ -328,6 +362,15 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 		}
 		return responseBody, err
 	}
+}
+
+// RetryAfter returns the server-requested delay carried by an HTTP error.
+func RetryAfter(err error) (time.Duration, bool) {
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || !httpErr.HasRetryAfter {
+		return 0, false
+	}
+	return httpErr.RetryAfter, true
 }
 
 func (c *Client) send(ctx context.Context, method, path, contentType string, body []byte) ([]byte, int, http.Header, string, error) {
@@ -489,9 +532,9 @@ func responseBodyHasTransientError(body []byte) bool {
 func waitBeforeAPIRetry(ctx context.Context, client *Client, attempt int, retryAfter string) error {
 	wait, ok := retryAfterDelay(retryAfter, time.Now())
 	if !ok {
-		wait = apiRetryWaitMin << attempt
-		if wait > apiRetryWaitMax {
-			wait = apiRetryWaitMax
+		wait = apiRetryWaitMax
+		if attempt < 3 {
+			wait = apiRetryWaitMin << attempt
 		}
 	}
 	if wait > apiRetryAfterMaxDelay {
