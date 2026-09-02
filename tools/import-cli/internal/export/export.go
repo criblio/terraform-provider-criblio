@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"sync"
 
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
@@ -40,6 +41,18 @@ type ExportResult struct {
 	DiscoveredTotal int              // sum of discovery counts for types we attempted (set by caller)
 }
 
+type conversionTask struct {
+	result discovery.Result
+	entry  registry.Entry
+	idMap  map[string]string
+}
+
+type conversionOutcome struct {
+	item            *generator.ResourceItem
+	skipMessage     string
+	defaultsSkipped int
+}
+
 // ProgressFunc reports progress to the user; nil means no progress output.
 type ProgressFunc func(format string, args ...interface{})
 
@@ -47,7 +60,7 @@ type ProgressFunc func(format string, args ...interface{})
 // that have GetMethod and ImportIDFormat. Uses groupIDs for list/get requests.
 // parallel limits concurrent API calls (default 5); use 1 for sequential.
 // excludeDefaults, when true, skips built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs).
-// progress, when non-nil, is called to report progress per resource type.
+// progress, when non-nil, is called to report progress for each group.
 // Continues on list-level and per-item errors so as many resources as possible are exported;
 // failed types or items are recorded in result.ListSkipped and result.ConvertSkipped.
 // Caller should set result.DiscoveredTotal to the sum of discovery counts for reporting.
@@ -58,6 +71,7 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 		parallel = 1
 	}
 	out := &ExportResult{}
+	tasksByGroup := make(map[string][]conversionTask)
 	for _, r := range results {
 		if r.Err != nil {
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: r.Err.Error(), Count: r.Count})
@@ -162,42 +176,16 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 			out.ListSkipped = append(out.ListSkipped, ListSkipReason{TypeName: r.TypeName, Reason: "list returned 0 identifiers", Count: 0})
 			continue
 		}
-		if progress != nil {
-			progress("%s: %d items", r.TypeName, len(idMaps))
-		}
-		if parallel <= 1 {
-			for _, idMap := range idMaps {
-				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, out)
-				if skipMsg != "" {
-					out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
-				} else if item != nil {
-					out.Items = append(out.Items, *item)
-				}
-			}
-		} else {
-			sem := make(chan struct{}, parallel)
-			var mu sync.Mutex
-			var wg sync.WaitGroup
-			for _, idMap := range idMaps {
-				idMap := idMap
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
-					sem <- struct{}{}
-					defer func() { <-sem }()
-					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, out)
-					mu.Lock()
-					if skipMsg != "" {
-						out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
-					} else if item != nil {
-						out.Items = append(out.Items, *item)
-					}
-					mu.Unlock()
-				}()
-			}
-			wg.Wait()
+		for _, idMap := range idMaps {
+			groupID := idMap["group_id"]
+			tasksByGroup[groupID] = append(tasksByGroup[groupID], conversionTask{
+				result: r,
+				entry:  e,
+				idMap:  idMap,
+			})
 		}
 	}
+	convertTasksByGroup(ctx, client, out, tasksByGroup, groupIDs, groupFilter, parallel, excludeDefaults, includeOverride, progress)
 	// ConvertSkipped is informational (oneOf unsupported, skip by config, etc.); do not treat as fatal error.
 	// printExportSummary reports skipped resources; export succeeds with best-effort output.
 
@@ -207,6 +195,87 @@ func ToResourceItems(ctx context.Context, client *importclient.Client, reg *regi
 	}
 
 	return out, nil
+}
+
+func convertTasksByGroup(ctx context.Context, client *importclient.Client, out *ExportResult, tasksByGroup map[string][]conversionTask, groupIDs, groupFilter []string, parallel int, excludeDefaults bool, includeOverride IncludeOverride, progress ProgressFunc) {
+	groupOrder := orderedTaskGroups(tasksByGroup, groupIDs)
+	for _, groupID := range groupOrder {
+		tasks := tasksByGroup[groupID]
+		if len(tasks) == 0 {
+			continue
+		}
+		if progress != nil {
+			label := groupID
+			if label == "" {
+				label = "global"
+			}
+			progress("group %s: exporting %d items", label, len(tasks))
+		}
+
+		first := runConversionTask(ctx, client, tasks[0], groupIDs, groupFilter, excludeDefaults, includeOverride)
+		mergeConversionOutcome(out, first)
+		if len(tasks) == 1 {
+			continue
+		}
+
+		outcomes := make(chan conversionOutcome, len(tasks)-1)
+		sem := make(chan struct{}, parallel)
+		var wg sync.WaitGroup
+		for _, task := range tasks[1:] {
+			task := task
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				sem <- struct{}{}
+				defer func() { <-sem }()
+				outcomes <- runConversionTask(ctx, client, task, groupIDs, groupFilter, excludeDefaults, includeOverride)
+			}()
+		}
+		wg.Wait()
+		close(outcomes)
+		for outcome := range outcomes {
+			mergeConversionOutcome(out, outcome)
+		}
+	}
+}
+
+func runConversionTask(ctx context.Context, client *importclient.Client, task conversionTask, groupIDs, groupFilter []string, excludeDefaults bool, includeOverride IncludeOverride) conversionOutcome {
+	local := &ExportResult{}
+	item, skipMessage := convertOneResource(ctx, client, task.result, task.entry, task.idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, local)
+	return conversionOutcome{item: item, skipMessage: skipMessage, defaultsSkipped: local.DefaultsSkipped}
+}
+
+func mergeConversionOutcome(out *ExportResult, outcome conversionOutcome) {
+	out.DefaultsSkipped += outcome.defaultsSkipped
+	if outcome.skipMessage != "" {
+		out.ConvertSkipped = append(out.ConvertSkipped, outcome.skipMessage)
+	} else if outcome.item != nil {
+		out.Items = append(out.Items, *outcome.item)
+	}
+}
+
+func orderedTaskGroups(tasksByGroup map[string][]conversionTask, groupIDs []string) []string {
+	order := make([]string, 0, len(tasksByGroup))
+	seen := make(map[string]bool, len(tasksByGroup))
+	for i := len(groupIDs) - 1; i >= 0; i-- {
+		groupID := groupIDs[i]
+		if len(tasksByGroup[groupID]) > 0 && !seen[groupID] {
+			order = append(order, groupID)
+			seen[groupID] = true
+		}
+	}
+	if len(tasksByGroup[""]) > 0 {
+		order = append(order, "")
+		seen[""] = true
+	}
+	var remaining []string
+	for groupID, tasks := range tasksByGroup {
+		if len(tasks) > 0 && !seen[groupID] {
+			remaining = append(remaining, groupID)
+		}
+	}
+	sort.Strings(remaining)
+	return append(order, remaining...)
 }
 
 // filterEmptyDefaultGroups removes criblio_group resources for default groups (default, default_fleet, defaultHybrid)

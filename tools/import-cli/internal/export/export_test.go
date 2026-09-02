@@ -35,6 +35,20 @@ func TestToResourceItems_empty_results(t *testing.T) {
 	assert.Empty(t, result.Items)
 }
 
+func TestOrderedTaskGroupsUsesReverseDiscoveryOrder(t *testing.T) {
+	tasks := map[string][]conversionTask{
+		"":        {{idMap: map[string]string{"id": "global"}}},
+		"fleet-a": {{idMap: map[string]string{"group_id": "fleet-a", "id": "a"}}},
+		"fleet-b": {{idMap: map[string]string{"group_id": "fleet-b", "id": "b"}}},
+		"unknown": {{idMap: map[string]string{"group_id": "unknown", "id": "u"}}},
+	}
+
+	assert.Equal(t,
+		[]string{"fleet-b", "fleet-a", "", "unknown"},
+		orderedTaskGroups(tasks, []string{"fleet-a", "fleet-b"}),
+	)
+}
+
 func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)
