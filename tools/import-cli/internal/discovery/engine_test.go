@@ -193,6 +193,72 @@ func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	assert.Empty(t, results)
 }
 
+func TestDiscoverProcessesGroupScopedResourcesOneGroupAtATime(t *testing.T) {
+	var groupPaths []string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			if strings.Contains(r.URL.Path, "/m/fleet-") {
+				groupPaths = append(groupPaths, r.URL.Path)
+			}
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	_, err := Discover(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false)
+	require.NoError(t, err)
+	require.NotEmpty(t, groupPaths)
+
+	seenFleetB := false
+	for _, path := range groupPaths {
+		if strings.Contains(path, "/m/fleet-b/") {
+			seenFleetB = true
+			continue
+		}
+		if seenFleetB && strings.Contains(path, "/m/fleet-a/") {
+			t.Fatalf("fleet-a request %q occurred after fleet-b discovery began: %v", path, groupPaths)
+		}
+	}
+}
+
+func TestDiscoverDoesNotRetryEveryResourceForUnavailableGroup(t *testing.T) {
+	groupRequests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"},{"id":"fleet-b"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		default:
+			groupRequests++
+			w.Header().Set("Retry-After", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"status":"error","message":"Config helper cannot be booted"}`))
+		}
+	}))
+	defer server.Close()
+
+	reg := mustBuildRegistry(t, context.Background())
+	results, err := Discover(context.Background(), criblMockClient(server), reg,
+		[]string{"criblio_source", "criblio_pipeline"}, nil, []string{"fleet-a", "fleet-b"}, false)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.Error(t, results[0].Err)
+	assert.Error(t, results[1].Err)
+	assert.Equal(t, defaultRetryRequestCount, groupRequests)
+}
+
+const defaultRetryRequestCount = 4
+
 func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 	t.Helper()
 	p := provider.New("test")()

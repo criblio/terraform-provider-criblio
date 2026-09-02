@@ -26,6 +26,12 @@ type Result struct {
 	PerGroupCounts map[string]int
 }
 
+type groupDiscovery struct {
+	entry       registry.Entry
+	resultIndex int
+	packRoutes  bool
+}
+
 // IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
 	for e := err; e != nil; e = errors.Unwrap(e) {
@@ -87,6 +93,7 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 	}
 
 	var results []Result
+	var groupDiscoveries []groupDiscovery
 	for _, e := range reg.Entries() {
 		if !matchesFilter(e.TypeName, includeSet, excludeSet) {
 			continue
@@ -96,6 +103,7 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			continue
 		}
 
+		resultIndex := len(results)
 		res := Result{TypeName: e.TypeName}
 		switch {
 		case e.TypeName == "criblio_group":
@@ -115,9 +123,7 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			res.Count = len(ids)
 			res.Err = err
 		case e.TypeName == "criblio_pack_routes":
-			ids, err := listPackRoutesIdentifiers(ctx, client, groupIDs)
-			res.Count = len(ids)
-			res.Err = err
+			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex, packRoutes: true})
 		case e.TypeName == "criblio_search_dataset_ruleset":
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 2
@@ -126,6 +132,8 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 			if slices.Contains(groupIDs, "default_search") {
 				res.Count = 1
 			}
+		case e.RESTListPath != "" && pathUsesRESTParam(e.RESTListPath, "group_id"):
+			groupDiscoveries = append(groupDiscoveries, groupDiscovery{entry: e, resultIndex: resultIndex})
 		case e.RESTListPath != "":
 			count, perGroup, err := listOneREST(ctx, client, e, groupIDs)
 			res.Count = count
@@ -146,7 +154,58 @@ func Discover(ctx context.Context, client *importclient.Client, reg *registry.Re
 		}
 		results = append(results, res)
 	}
+
+	// Process one group completely before moving to the next. Iterating resource
+	// types first repeatedly touches every group and keeps all Config Helpers
+	// active, which can prevent the leader from admitting another helper boot.
+	var admissionErr error
+	for _, gid := range groupIDs {
+		for _, discovery := range groupDiscoveries {
+			res := &results[discovery.resultIndex]
+			if res.Err != nil || skipGroupScopedSingleton(discovery.entry.TypeName, gid) {
+				continue
+			}
+			if admissionErr != nil {
+				res.Err = fmt.Errorf("%s: group %s unavailable: %w", discovery.entry.TypeName, gid, admissionErr)
+				continue
+			}
+
+			var count int
+			var err error
+			if discovery.packRoutes {
+				var ids []map[string]string
+				ids, err = listPackRoutesIdentifiers(ctx, client, []string{gid})
+				count = len(ids)
+			} else {
+				var perGroup map[string]int
+				count, perGroup, err = listOneREST(ctx, client, discovery.entry, []string{gid})
+				if err == nil && len(perGroup) > 0 {
+					if res.PerGroupCounts == nil {
+						res.PerGroupCounts = make(map[string]int)
+					}
+					label := gid
+					if groupLabel, ok := idToLabel[gid]; ok {
+						label = groupLabel
+					}
+					res.PerGroupCounts[label] = perGroup[gid]
+				}
+			}
+			if err != nil {
+				res.Err = fmt.Errorf("%s: %w", discovery.entry.TypeName, err)
+				if isTooManyRequests(err) {
+					admissionErr = err
+				}
+				continue
+			}
+			res.Count += count
+		}
+	}
 	return results, nil
+}
+
+func isTooManyRequests(err error) bool {
+	var httpErr *restclient.HTTPError
+	return errors.As(err, &httpErr) && httpErr.StatusCode == 429
 }
 
 // GetGroupIDs returns group IDs used for list/export.
@@ -537,6 +596,13 @@ func getRESTItems(ctx context.Context, client *importclient.Client, path string)
 	}
 	var notFound *restclient.NotFoundError
 	if errors.As(err, &notFound) {
+		return nil, err
+	}
+	var httpErr *restclient.HTTPError
+	if errors.As(err, &httpErr) {
+		return nil, err
+	}
+	if !IsRecoverableListDecodeError(err) {
 		return nil, err
 	}
 	item, itemErr := restclient.Get[map[string]json.RawMessage](ctx, client.REST, path)

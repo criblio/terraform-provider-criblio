@@ -217,7 +217,7 @@ jobs:
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: |
           make build-import-cli
-          go test -v -timeout 25m -tags=integration ./tools/import-cli/integration/...
+          go test -v -tags=integration ./tools/import-cli/integration/...
 
   staticcheck_test:
     runs-on: ubuntu-latest
