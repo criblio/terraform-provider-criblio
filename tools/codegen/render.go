@@ -612,6 +612,9 @@ func schemaAttribute(field parser.FieldDef) string {
 	if objectAsJSON(field) {
 		return "schema.StringAttribute"
 	}
+	if field.ListAttribute {
+		return "schema.ListAttribute"
+	}
 	if nestedObjectList(field) {
 		return "schema.ListNestedAttribute"
 	}
@@ -727,7 +730,9 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	if calls := listValidatorCalls(field); len(calls) > 0 {
 		writeValidatorCalls(output, indent, "List", calls)
 	}
-	if nestedObjectList(field) {
+	if field.ListAttribute {
+		fmt.Fprintf(output, "%s\tElementType: types.ObjectType{AttrTypes: %s()},\n", indent, field.NestedAttrTypes)
+	} else if nestedObjectList(field) {
 		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
 		if calls := nestedObjectPlanModifierCalls(field); len(calls) > 0 {
 			fmt.Fprintf(output, "%s\t\tPlanModifiers: []planmodifier.Object{\n", indent)

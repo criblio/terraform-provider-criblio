@@ -588,7 +588,7 @@ func TestRetryWaitBudgetReturnsOriginalResponse(t *testing.T) {
 	}
 }
 
-func TestRetryWaitBudgetAccumulatesAcrossRequests(t *testing.T) {
+func TestSuccessfulRequestResetsRetryWaitBudget(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 	fastAPIRetry(t)
 
@@ -611,14 +611,14 @@ func TestRetryWaitBudgetAccumulatesAcrossRequests(t *testing.T) {
 	if _, err := Get[testItem](context.Background(), client, "/first"); err != nil {
 		t.Fatalf("first Get returned error: %v", err)
 	}
-	if _, err := Get[testItem](context.Background(), client, "/second"); err == nil {
-		t.Fatal("second Get returned nil error, expected exhausted retry budget")
+	if _, err := Get[testItem](context.Background(), client, "/second"); err != nil {
+		t.Fatalf("second Get returned error after budget reset: %v", err)
 	}
 	if requestCounts["/api/v1/first"] != 2 {
 		t.Fatalf("first request count = %d, expected 2", requestCounts["/api/v1/first"])
 	}
-	if requestCounts["/api/v1/second"] != 1 {
-		t.Fatalf("second request count = %d, expected no retry", requestCounts["/api/v1/second"])
+	if requestCounts["/api/v1/second"] != 2 {
+		t.Fatalf("second request count = %d, expected 2", requestCounts["/api/v1/second"])
 	}
 }
 
@@ -743,8 +743,30 @@ func TestTooManyRequestsStopsAfterRetryLimit(t *testing.T) {
 	if !errors.As(err, &httpErr) || httpErr.StatusCode != http.StatusTooManyRequests {
 		t.Fatalf("Post error = %v, expected HTTP 429", err)
 	}
-	if requestCount != apiRetryMax+1 {
-		t.Fatalf("request count = %d, expected %d", requestCount, apiRetryMax+1)
+	if requestCount != defaultAPIRetryMax+1 {
+		t.Fatalf("request count = %d, expected %d", requestCount, defaultAPIRetryMax+1)
+	}
+}
+
+func TestConfiguredRetryLimit(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+	fastAPIRetry(t)
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	defer server.Close()
+
+	client := New(Config{BaseURL: server.URL, BearerToken: "test-token", RetryMax: 7})
+	_, err := Get[testItem](context.Background(), client, "/any/endpoint")
+	if err == nil {
+		t.Fatal("Get returned nil error, expected HTTP 429")
+	}
+	if requestCount != 8 {
+		t.Fatalf("request count = %d, expected 8", requestCount)
 	}
 }
 

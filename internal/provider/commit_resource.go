@@ -69,124 +69,12 @@ func (r *CommitResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
-			"items": schema.ListNestedAttribute{
+			"items": schema.ListAttribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
 				Description: `The commits created by this action.`,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"author": schema.SingleNestedAttribute{
-							Required:    false,
-							Optional:    false,
-							Computed:    true,
-							Description: `Author of the Git commit, including email and display name.`,
-							Attributes: map[string]schema.Attribute{
-								"email": schema.StringAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Email address of the commit author.`,
-								},
-								"name": schema.StringAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Display name of the commit author.`,
-								},
-							},
-						},
-						"branch": schema.StringAttribute{
-							Required:    false,
-							Optional:    false,
-							Computed:    true,
-							Description: `Name of the Git branch the commit was made on.`,
-						},
-						"commit": schema.StringAttribute{
-							Required:    false,
-							Optional:    false,
-							Computed:    true,
-							Description: `Full SHA-1 hash of the new commit.`,
-						},
-						"files": schema.SingleNestedAttribute{
-							Required:    false,
-							Optional:    false,
-							Computed:    true,
-							Description: `Files affected by the commit, grouped by change type.`,
-							Attributes: map[string]schema.Attribute{
-								"created": schema.ListAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Array of file paths that were created in the commit.`,
-									ElementType: types.StringType,
-								},
-								"deleted": schema.ListAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Array of file paths that were deleted in the commit.`,
-									ElementType: types.StringType,
-								},
-								"modified": schema.ListAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Array of file paths that were modified in the commit.`,
-									ElementType: types.StringType,
-								},
-								"renamed": schema.ListNestedAttribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Array of file rename operations, each containing the original path and the new path.`,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"from": schema.StringAttribute{
-												Required:    false,
-												Optional:    false,
-												Computed:    true,
-												Description: `Original file path before the rename.`,
-											},
-											"to": schema.StringAttribute{
-												Required:    false,
-												Optional:    false,
-												Computed:    true,
-												Description: `New file path after the rename.`,
-											},
-										},
-									},
-								},
-							},
-						},
-						"summary": schema.SingleNestedAttribute{
-							Required:    false,
-							Optional:    false,
-							Computed:    true,
-							Description: `Summary of line changes in the commit.`,
-							Attributes: map[string]schema.Attribute{
-								"changes": schema.Int64Attribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Total number of lines changed (insertions plus deletions).`,
-								},
-								"deletions": schema.Int64Attribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Number of lines deleted.`,
-								},
-								"insertions": schema.Int64Attribute{
-									Required:    false,
-									Optional:    false,
-									Computed:    true,
-									Description: `Number of lines inserted.`,
-								},
-							},
-						},
-					},
-				},
+				ElementType: types.ObjectType{AttrTypes: CommitItemsAttrTypes()},
 			},
 			"message": schema.StringAttribute{
 				Required:    true,

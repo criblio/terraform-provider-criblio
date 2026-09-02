@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	apiRetryMax           = 3
+	defaultAPIRetryMax    = 3
 	apiRetryAfterMaxDelay = time.Minute
 )
 
@@ -46,6 +46,7 @@ type Config struct {
 	HTTPClient          *http.Client
 	UserAgent           string
 	RetryWaitBudget     time.Duration
+	RetryMax            int
 }
 
 // Client sends authenticated requests to Cribl APIs.
@@ -56,6 +57,7 @@ type Client struct {
 	bearerToken          string
 	httpClient           *http.Client
 	userAgent            string
+	retryMax             int
 	retryWaitBudget      time.Duration
 	retryWaitRemaining   time.Duration
 	retryWaitActive      int
@@ -106,6 +108,11 @@ func New(config Config) *Client {
 		}, config.Credentials)
 	}
 
+	retryMax := config.RetryMax
+	if retryMax <= 0 {
+		retryMax = defaultAPIRetryMax
+	}
+
 	return &Client{
 		baseURL:             strings.TrimRight(baseURL, "/"),
 		providerCloudDomain: config.ProviderCloudDomain,
@@ -113,6 +120,7 @@ func New(config Config) *Client {
 		bearerToken:         config.BearerToken,
 		httpClient:          httpClient,
 		userAgent:           agent,
+		retryMax:            retryMax,
 		retryWaitBudget:     config.RetryWaitBudget,
 		retryWaitRemaining:  config.RetryWaitBudget,
 	}
@@ -271,7 +279,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 	for attempt := 0; ; attempt++ {
 		responseBody, statusCode, responseHeader, token, err := c.send(ctx, method, path, contentType, body)
 		if err != nil {
-			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
+			if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
 				if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 					if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 						return nil, err
@@ -287,7 +295,7 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 			auth.InvalidateTokenValue(c.credentials, token)
 			responseBody, statusCode, responseHeader, _, err = c.send(ctx, method, path, contentType, body)
 			if err != nil {
-				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt) {
+				if shouldRetryAPIRequest(method, path, 0, nil, err, attempt, c.retryMax) {
 					if waitErr := waitBeforeAPIRetry(ctx, c, attempt, ""); waitErr != nil {
 						if errors.Is(waitErr, errRetryWaitBudgetExhausted) {
 							return nil, err
@@ -302,9 +310,10 @@ func do(ctx context.Context, c *Client, method, path, contentType string, body [
 
 		err = responseError(path, statusCode, responseBody)
 		if err == nil {
+			c.resetRetryWaitBudget()
 			return responseBody, nil
 		}
-		if shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt) {
+		if shouldRetryAPIRequest(method, path, statusCode, responseBody, nil, attempt, c.retryMax) {
 			retryAfter := ""
 			if statusCode == http.StatusTooManyRequests && responseHeader != nil {
 				retryAfter = responseHeader.Get("Retry-After")
@@ -414,8 +423,8 @@ func responseError(path string, statusCode int, body []byte) error {
 	}
 }
 
-func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err error, attempt int) bool {
-	if attempt >= apiRetryMax {
+func shouldRetryAPIRequest(method, path string, statusCode int, body []byte, err error, attempt, retryMax int) bool {
+	if attempt >= retryMax {
 		return false
 	}
 	if statusCode == http.StatusTooManyRequests {
@@ -546,6 +555,17 @@ func (c *Client) accrueRetryWait(now time.Time) {
 		c.retryWaitRemaining -= elapsed
 	}
 	c.retryWaitActiveSince = now
+}
+
+func (c *Client) resetRetryWaitBudget() {
+	if c.retryWaitBudget <= 0 {
+		return
+	}
+	c.retryWaitMu.Lock()
+	defer c.retryWaitMu.Unlock()
+
+	c.accrueRetryWait(time.Now())
+	c.retryWaitRemaining = c.retryWaitBudget
 }
 
 func retryAfterDelay(value string, now time.Time) (time.Duration, bool) {

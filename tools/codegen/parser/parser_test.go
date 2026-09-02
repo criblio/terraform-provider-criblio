@@ -474,6 +474,7 @@ components:
           type: array
           x-terraform-computed: true
           x-terraform-computed-recursive: true
+          x-terraform-list-attribute: true
           items:
             type: object
             required: [commit]
@@ -492,6 +493,9 @@ components:
 		t.Fatalf("action flags = action:%v response:%v", commit.Action, commit.ActionResponse)
 	}
 	items := fieldByTFName(t, commit.Fields, "items")
+	if !items.ListAttribute {
+		t.Fatal("items list attribute = false")
+	}
 	createdCommit := fieldByTFName(t, items.Fields, "commit")
 	if !createdCommit.Computed || createdCommit.Required || createdCommit.Optional {
 		t.Fatalf("nested commit flags = required:%v optional:%v computed:%v", createdCommit.Required, createdCommit.Optional, createdCommit.Computed)
