@@ -500,12 +500,19 @@ func isConfigHelperAdmissionPath(method, path string) bool {
 
 func isConfigHelperAdmissionResponse(body []byte) bool {
 	var response struct {
-		Message string `json:"message"`
+		Error struct {
+			Reason string `json:"reason"`
+		} `json:"error"`
 	}
 	if err := json.Unmarshal(body, &response); err != nil {
 		return false
 	}
-	return strings.Contains(strings.ToLower(response.Message), "config helper cannot be booted")
+	switch response.Error.Reason {
+	case "memory", "in_flight", "under_load":
+		return true
+	default:
+		return false
+	}
 }
 
 func isRetryableAPIMethod(method string) bool {

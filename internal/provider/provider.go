@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -23,8 +22,6 @@ var _ provider.Provider = (*CriblioProvider)(nil)
 var _ provider.ProviderWithActions = (*CriblioProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*CriblioProvider)(nil)
 var _ provider.ProviderWithFunctions = (*CriblioProvider)(nil)
-
-const providerRequestTimeout = time.Minute
 
 type CriblioProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -193,7 +190,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	httpClient := &http.Client{
 		Transport: NewProviderHTTPTransport(providerHTTPTransportOpts),
-		Timeout:   providerRequestTimeout,
 	}
 
 	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
