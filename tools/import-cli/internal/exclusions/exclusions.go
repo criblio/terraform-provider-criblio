@@ -45,6 +45,11 @@ var SkipExportIDs = map[string]map[string]bool{
 	"criblio_project_pipeline": {
 		"metrics_ingest": true, // Internal Search metrics pipeline; contains provider-unsupported functions.
 	},
+	"criblio_search_source": {
+		"in_cribl_http":    true, // Product-managed default Search source.
+		"in_prometheus_rw": true, // Product-managed default Search source.
+		"in_splunk_hec":    true, // Product-managed default with a write-only required token.
+	},
 	"criblio_source": {
 		"in_syslog":         true, // provider marshal fails: union type Input all fields null
 		"in_syslog_default": true,

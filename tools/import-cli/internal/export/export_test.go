@@ -813,6 +813,9 @@ func TestSkipResourceByID(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_pipeline", map[string]string{"id": "metrics_ingest"}))
 		assert.True(t, skipResourceByID("criblio_pack_pipeline", map[string]string{"id": "metrics_ingest", "pack": "custom-pack"}))
 		assert.True(t, skipResourceByID("criblio_project_pipeline", map[string]string{"id": "metrics_ingest", "project_id": "custom-project"}))
+		for _, id := range []string{"in_cribl_http", "in_prometheus_rw", "in_splunk_hec"} {
+			assert.True(t, skipResourceByID("criblio_search_source", map[string]string{"id": id}))
+		}
 	})
 	t.Run("skip non singleton resource when id equals group_id", func(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default"}
