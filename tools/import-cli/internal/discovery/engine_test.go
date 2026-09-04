@@ -382,6 +382,36 @@ func TestDiscoverSharesAdmissionTimeoutAcrossGroups(t *testing.T) {
 	assert.ErrorIs(t, results[0].GroupErrors["fleet-b"], errAdmissionBudgetExhausted)
 }
 
+func TestDiscoverDoesNotFanOutAfterAdmissionDeadline(t *testing.T) {
+	var groupRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case strings.HasSuffix(r.URL.Path, "/products/stream/groups"):
+			_, _ = w.Write([]byte(`{"items":[{"id":"fleet-a"}]}`))
+		case strings.HasSuffix(r.URL.Path, "/products/edge/groups"):
+			_, _ = w.Write([]byte(`{"items":[]}`))
+		case strings.Contains(r.URL.Path, "/m/fleet-a/"):
+			groupRequests.Add(1)
+			w.Header().Set("Retry-After", "1")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	results, err := DiscoverWithProgress(context.Background(), criblMockClient(server), mustBuildRegistry(t, context.Background()),
+		[]string{"criblio_pipeline", "criblio_source"}, nil, []string{"fleet-a"}, false, 2, 20*time.Millisecond, nil)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	assert.Equal(t, int32(1), groupRequests.Load(), "resource requests must not fan out after bootstrap deadline")
+	for _, result := range results {
+		assert.ErrorIs(t, result.GroupErrors["fleet-a"], errAdmissionBudgetExhausted)
+	}
+}
+
 func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 	t.Helper()
 	p := provider.New("test")()

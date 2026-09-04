@@ -44,7 +44,7 @@ const groupDiscoveryParallel = 8
 // to become admissible across the complete discovery run.
 const DefaultAdmissionTimeout = 5 * time.Minute
 
-var errAdmissionBudgetExhausted = errors.New("Config Helper admission retry budget exhausted")
+var errAdmissionBudgetExhausted = errors.New("config helper admission retry budget exhausted")
 
 // IsRecoverableListDecodeError reports whether err should not abort export.
 func IsRecoverableListDecodeError(err error) bool {
@@ -227,12 +227,20 @@ func DiscoverWithProgress(ctx context.Context, client *importclient.Client, reg 
 		// Bootstrap the Config Helper with one request before issuing concurrent
 		// reads for this group. This preserves one-at-a-time helper admission.
 		bootstrapErr := bootstrapGroup(admissionCtx, client, &results[pending[0].resultIndex], pending[0], gid, label, admissionTimeout, progress)
-		if isTooManyRequests(bootstrapErr) {
+		if bootstrapErr != nil {
+			if ctx.Err() != nil {
+				return nil, ctx.Err()
+			}
+			groupErr := bootstrapErr
+			if admissionCtx.Err() != nil {
+				groupErr = errAdmissionBudgetExhausted
+				results[pending[0].resultIndex].Err = nil
+			}
 			for _, discovery := range pending {
-				addGroupError(&results[discovery.resultIndex], gid, bootstrapErr)
+				addGroupError(&results[discovery.resultIndex], gid, groupErr)
 			}
 			if progress != nil {
-				progress("group %s unavailable after bounded retries", label)
+				progress("group %s unavailable after bootstrap: %v", label, groupErr)
 			}
 			continue
 		}

@@ -18,7 +18,7 @@ import (
 )
 
 // convertOneResource fetches a single resource via the converter, builds HCL attrs, and returns a ResourceItem or skip message.
-func convertOneResource(ctx context.Context, client *importclient.Client, r discovery.Result, e registry.Entry, idMap map[string]string, groupFilter []string, groupIDs []string, excludeDefaults bool, includeOverride IncludeOverride, out *ExportResult) (item *generator.ResourceItem, skipMsg string) {
+func convertOneResource(ctx context.Context, client *importclient.Client, r discovery.Result, e registry.Entry, idMap map[string]string, groupFilter []string, groupIDs []string, excludeDefaults bool, includeOverride IncludeOverride, out *ExportResult, request *conversionRequest) (item *generator.ResourceItem, skipMsg string) {
 	if skipExportForGroupFilter(r.TypeName, idMap, groupFilter, groupIDs) {
 		return nil, ""
 	}
@@ -29,8 +29,10 @@ func convertOneResource(ctx context.Context, client *importclient.Client, r disc
 		return nil, fmt.Sprintf("%s %v: built-in default lookup (skip export)", r.TypeName, idMap)
 	}
 	requestParams := toRequestParams(idMap)
+	request.attempted = true
 	model, convErr := converter.Convert(ctx, client, e, requestParams)
 	if convErr != nil {
+		request.err = convErr
 		return nil, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr))
 	}
 	opts := hclOptionsForType(r.TypeName, e)

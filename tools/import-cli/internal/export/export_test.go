@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -79,6 +80,55 @@ func TestToResourceItemsDoesNotRelistCompletedEmptyInventory(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, result.ListSkipped, 1)
 	assert.Equal(t, "list returned 0 identifiers", result.ListSkipped[0].Reason)
+}
+
+func TestToResourceItemsBootstrapsGroupBeforeConcurrentExport(t *testing.T) {
+	var bootstrapRequests atomic.Int32
+	var prematureRequests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/api/v1/m/fleet-a/pipelines/bootstrap":
+			if bootstrapRequests.Add(1) == 1 {
+				w.Header().Set("Retry-After", "0")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_, _ = w.Write([]byte(`{"error":{"reason":"memory"}}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"items":[{"id":"bootstrap","conf":{}}]}`))
+		case "/api/v1/m/fleet-a/pipelines/other":
+			if bootstrapRequests.Load() < 2 {
+				prematureRequests.Add(1)
+			}
+			_, _ = w.Write([]byte(`{"items":[{"id":"other","conf":{}}]}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	client := &importclient.Client{REST: restclient.New(restclient.Config{
+		BaseURL:     server.URL,
+		BearerToken: "mock",
+		HTTPClient:  server.Client(),
+	})}
+	results := []discovery.Result{{
+		TypeName: "criblio_pipeline",
+		Count:    3,
+		Identifiers: []map[string]string{
+			{"group_id": "fleet-a", "id": "metrics_ingest"},
+			{"group_id": "fleet-a", "id": "bootstrap"},
+			{"group_id": "fleet-a", "id": "other"},
+		},
+		InventoryComplete: true,
+	}}
+
+	result, err := ToResourceItems(context.Background(), client, buildTestRegistry(t), results,
+		[]string{"fleet-a"}, nil, 4, false, IncludeOverride{}, nil)
+	require.NoError(t, err)
+	assert.Equal(t, int32(2), bootstrapRequests.Load())
+	assert.Zero(t, prematureRequests.Load())
+	require.Len(t, result.Items, 2)
 }
 
 func TestToResourceItemsLookupFileFetchesContentFromGet(t *testing.T) {

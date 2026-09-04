@@ -7,9 +7,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"sort"
 	"sync"
 
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
@@ -48,9 +50,16 @@ type conversionTask struct {
 }
 
 type conversionOutcome struct {
-	item            *generator.ResourceItem
-	skipMessage     string
-	defaultsSkipped int
+	item             *generator.ResourceItem
+	skipMessage      string
+	defaultsSkipped  int
+	requestAttempted bool
+	requestErr       error
+}
+
+type conversionRequest struct {
+	attempted bool
+	err       error
 }
 
 // ProgressFunc reports progress to the user; nil means no progress output.
@@ -212,16 +221,33 @@ func convertTasksByGroup(ctx context.Context, client *importclient.Client, out *
 			progress("group %s: exporting %d items", label, len(tasks))
 		}
 
-		first := runConversionTask(ctx, client, tasks[0], groupIDs, groupFilter, excludeDefaults, includeOverride)
-		mergeConversionOutcome(out, first)
-		if len(tasks) == 1 {
+		remaining := tasks
+		for len(remaining) > 0 {
+			first := runConversionTask(ctx, client, remaining[0], groupIDs, groupFilter, excludeDefaults, includeOverride)
+			mergeConversionOutcome(out, first)
+			remaining = remaining[1:]
+			if !first.requestAttempted {
+				continue
+			}
+			if first.requestErr == nil {
+				break
+			}
+			if isTooManyRequests(first.requestErr) {
+				for _, task := range remaining {
+					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: group bootstrap failed: %s", task.result.TypeName, task.idMap, sanitizeConvertError(first.requestErr)))
+				}
+				remaining = nil
+				break
+			}
+		}
+		if len(remaining) == 0 {
 			continue
 		}
 
-		outcomes := make(chan conversionOutcome, len(tasks)-1)
+		outcomes := make(chan conversionOutcome, len(remaining))
 		sem := make(chan struct{}, parallel)
 		var wg sync.WaitGroup
-		for _, task := range tasks[1:] {
+		for _, task := range remaining {
 			task := task
 			wg.Add(1)
 			go func() {
@@ -241,8 +267,20 @@ func convertTasksByGroup(ctx context.Context, client *importclient.Client, out *
 
 func runConversionTask(ctx context.Context, client *importclient.Client, task conversionTask, groupIDs, groupFilter []string, excludeDefaults bool, includeOverride IncludeOverride) conversionOutcome {
 	local := &ExportResult{}
-	item, skipMessage := convertOneResource(ctx, client, task.result, task.entry, task.idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, local)
-	return conversionOutcome{item: item, skipMessage: skipMessage, defaultsSkipped: local.DefaultsSkipped}
+	request := &conversionRequest{}
+	item, skipMessage := convertOneResource(ctx, client, task.result, task.entry, task.idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, local, request)
+	return conversionOutcome{
+		item:             item,
+		skipMessage:      skipMessage,
+		defaultsSkipped:  local.DefaultsSkipped,
+		requestAttempted: request.attempted,
+		requestErr:       request.err,
+	}
+}
+
+func isTooManyRequests(err error) bool {
+	var httpErr *restclient.HTTPError
+	return errors.As(err, &httpErr) && httpErr.StatusCode == http.StatusTooManyRequests
 }
 
 func mergeConversionOutcome(out *ExportResult, outcome conversionOutcome) {
