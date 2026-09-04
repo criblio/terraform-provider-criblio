@@ -192,7 +192,7 @@ jobs:
 
   integration_test_import_cli:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -217,7 +217,7 @@ jobs:
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: |
           make build-import-cli
-          go test -v -timeout 40m -tags=integration ./tools/import-cli/integration/...
+          go test -v -tags=integration ./tools/import-cli/integration/...
 
   staticcheck_test:
     runs-on: ubuntu-latest
