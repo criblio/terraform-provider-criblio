@@ -10,7 +10,6 @@ import (
 	"os"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -66,7 +65,6 @@ func NewExportCommand() *cobra.Command {
 		onPremToCloud     bool
 		groupMapValues    []string
 		packStrategy      string
-		admissionTimeout  time.Duration
 	)
 	v := viper.New()
 	cfg := config.NewConfig(v)
@@ -140,7 +138,7 @@ func NewExportCommand() *cobra.Command {
 			discoveryProgress := func(format string, args ...any) {
 				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
 			}
-			results, err := discovery.DiscoverWithProgress(ctx, apiClient, reg, include, excludeMerged, group, onPrem, parallel, admissionTimeout, discoveryProgress)
+			results, err := discovery.DiscoverWithProgress(ctx, apiClient, reg, include, excludeMerged, group, onPrem, parallel, discovery.DefaultAdmissionTimeout, discoveryProgress)
 			if err != nil {
 				return fmt.Errorf("discovery: %w", err)
 			}
@@ -267,7 +265,6 @@ func NewExportCommand() *cobra.Command {
 	exp.Flags().StringSliceVar(&group, "group", nil, "Restrict discovery and export to these groups only. Use group ID (e.g. default) or label (e.g. 'default (stream)'). Can be repeated. Empty = all groups.")
 	exp.Flags().BoolVar(&flat, "flat", false, "Use flat layout: <output-dir>/<type>/ instead of <output-dir>/<group_id>/<type>/ (default groups by worker group/fleet).")
 	exp.Flags().IntVar(&parallel, "parallel", 5, "Max concurrent API calls during export (default 5).")
-	exp.Flags().DurationVar(&admissionTimeout, "config-helper-timeout", discovery.DefaultAdmissionTimeout, "Maximum time to retry a group while its Config Helper is admission-limited")
 	exp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
 	exp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
 	exp.Flags().BoolVar(&excludeDefaults, "exclude-defaults", false, "Exclude built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs)")
